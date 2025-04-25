@@ -46,7 +46,7 @@ const Body = memo(() => {
           defaultValue={requestBodyType ?? bodyList[0].id}
           onValueChange={handleChangeRequestBodyType}
         >
-          <SelectTrigger className="min-w-[120px]">
+          <SelectTrigger className="min-w-[120px]" size="sm">
             <SelectValue placeholder="Select body type" />
           </SelectTrigger>
           <SelectContent>
