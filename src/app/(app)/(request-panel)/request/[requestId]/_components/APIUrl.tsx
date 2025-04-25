@@ -16,7 +16,7 @@ const methodList = ["get", "post", "patch", "put", "delete"];
 const APIUrl = () => {
   return (
     <div className="w-full flex items-center">
-      <Select>
+      <Select defaultValue={methodList[0]}>
         <SelectTrigger className="w-[180px] rounded-r-none">
           <SelectValue placeholder="Method" />
         </SelectTrigger>

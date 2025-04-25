@@ -51,7 +51,7 @@ const RequestTop = () => {
   );
 
   return (
-    <div className="w-full flex justify-between items-center gap-4">
+    <div className="w-full flex justify-between items-center gap-4 pb-2">
       <div className="flex items-center gap-1">
         <span className="bg-muted rounded-md px-3 py-1.5 select-none">
           HTTP
@@ -70,7 +70,7 @@ const RequestTop = () => {
           readOnly={!isFocused}
         />
       </div>
-      <div>
+      <div className="flex items-center">
         <Button variant={"ghost"} className="rounded-r-none">
           <SaveIcon /> Save
         </Button>
