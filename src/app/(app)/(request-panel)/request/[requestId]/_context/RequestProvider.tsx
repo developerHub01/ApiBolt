@@ -5,6 +5,8 @@ import React, { createContext, useCallback, useContext, useState } from "react";
 interface RequestContext {
   activeMetaTab: string;
   handleChangeActiveMetaTab: (id: string) => void;
+  selectedMethod: string;
+  handleChangeSelectedMethod: (id: string) => void;
 }
 
 const RequestContext = createContext<RequestContext | null>(null);
@@ -25,9 +27,13 @@ interface RequestProviderProps {
 
 const RequestProvider = ({ children }: RequestProviderProps) => {
   const [activeMetaTab, setActiveMetaTab] = useState<string>("");
+  const [selectedMethod, setSelectedMethod] = useState<string>("get");
 
   const handleChangeActiveMetaTab = useCallback((id: string) => {
     setActiveMetaTab(id);
+  }, []);
+  const handleChangeSelectedMethod = useCallback((id: string) => {
+    setSelectedMethod(id);
   }, []);
 
   return (
@@ -35,6 +41,8 @@ const RequestProvider = ({ children }: RequestProviderProps) => {
       value={{
         activeMetaTab,
         handleChangeActiveMetaTab,
+        selectedMethod,
+        handleChangeSelectedMethod,
       }}
     >
       {children}

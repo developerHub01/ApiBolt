@@ -9,26 +9,29 @@ import ResponsePanel from "@/app/(app)/(request-panel)/request/[requestId]/_comp
 import RequestTop from "@/app/(app)/(request-panel)/request/[requestId]/_components/RequestTop";
 import APIUrl from "@/app/(app)/(request-panel)/request/[requestId]/_components/APIUrl";
 import RequestMetaData from "@/app/(app)/(request-panel)/request/[requestId]/_components/metadata/RequestMetaData";
-import MetaDataContent from "./_components/metadata/MetaDataContent";
+import MetaDataContent from "@/app/(app)/(request-panel)/request/[requestId]/_components/metadata/MetaDataContent";
+import RequestBodyProvider from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestBodyProvider";
 
 const RequestPage = () => {
   return (
-    <div className="flex flex-col w-full h-full items-center justify-center">
-      <div className="w-full p-3 flex flex-col gap-2">
-        <RequestTop />
-        <APIUrl />
-        <RequestMetaData />
+    <RequestBodyProvider>
+      <div className="flex flex-col w-full h-full items-center justify-center">
+        <div className="w-full p-3 flex flex-col gap-2">
+          <RequestTop />
+          <APIUrl />
+          <RequestMetaData />
+        </div>
+        <ResizablePanelGroup className="h-full" direction="vertical">
+          <ResizablePanel defaultSize={60}>
+            <MetaDataContent />
+          </ResizablePanel>
+          <ResizableHandle />
+          <ResizablePanel defaultSize={40}>
+            <ResponsePanel />
+          </ResizablePanel>
+        </ResizablePanelGroup>
       </div>
-      <ResizablePanelGroup className="h-full" direction="vertical">
-        <ResizablePanel defaultSize={60}>
-          <MetaDataContent />
-        </ResizablePanel>
-        <ResizableHandle />
-        <ResizablePanel defaultSize={40}>
-          <ResponsePanel />
-        </ResizablePanel>
-      </ResizablePanelGroup>
-    </div>
+    </RequestBodyProvider>
   );
 };
 
