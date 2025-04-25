@@ -11,7 +11,7 @@ const MetaDataContent = () => {
   const { activeMetaTab } = useRequest();
 
   return (
-    <div className="h-full p-3 pt-1">
+    <div className="h-full p-2.5 pt-1">
       {activeMetaTab === "params" && <Params />}
       {activeMetaTab === "authorization" && <Authorization />}
       {activeMetaTab === "headers" && <Headers />}

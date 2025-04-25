@@ -5,7 +5,7 @@ import React from "react";
 
 const ListTopAction = () => {
   return (
-    <div className="flex items-center-safe gap-1 px-1 py-0.5">
+    <div className="flex items-center-safe gap-1 p-2.5">
       <Button size={"iconSm"}>
         <PlusIcon />
       </Button>

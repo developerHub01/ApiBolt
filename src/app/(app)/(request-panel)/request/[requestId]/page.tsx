@@ -15,7 +15,7 @@ const RequestPage = () => {
   return (
     <RequestBodyProvider>
       <div className="flex flex-col w-full h-full items-center justify-center">
-        <div className="w-full p-3 flex flex-col gap-2">
+        <div className="w-full p-2.5 flex flex-col gap-2">
           <RequestTop />
           <APIUrl />
           <RequestMetaData />
