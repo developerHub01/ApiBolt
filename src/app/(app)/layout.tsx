@@ -4,7 +4,7 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import React from "react";
-import Sidebar from "@/app/(app)/_components/Sidebar";
+import Sidebar from "@/app/(app)/_components/sidebar/Sidebar";
 import RequestListPanel from "@/app/(app)/_components/request-list/RequestListPanel";
 
 interface AppLayoutProps {
