@@ -26,7 +26,7 @@ interface RequestProviderProps {
 }
 
 const RequestProvider = ({ children }: RequestProviderProps) => {
-  const [activeMetaTab, setActiveMetaTab] = useState<string>("");
+  const [activeMetaTab, setActiveMetaTab] = useState<string>("params");
   const [selectedMethod, setSelectedMethod] = useState<string>("get");
 
   const handleChangeActiveMetaTab = useCallback((id: string) => {

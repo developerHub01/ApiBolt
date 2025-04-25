@@ -3,9 +3,9 @@ import MetaDataTab from "@/app/(app)/(request-panel)/request/[requestId]/_compon
 
 const RequestMetaData = () => {
   return (
-    <div className="">
+    <>
       <MetaDataTab />
-    </div>
+    </>
   );
 };
 

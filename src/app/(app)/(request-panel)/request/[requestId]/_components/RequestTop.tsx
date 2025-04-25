@@ -29,14 +29,14 @@ const RequestTop = () => {
 
   const handleInputFocus = useCallback(() => {
     setIsFocused(true);
-  }, [nameInputRef]);
+  }, []);
 
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     console.log(e.target.value);
 
     setRequestName(e.target.value);
   }, []);
-  const handleBlur = useCallback((e: FocusEvent<HTMLInputElement>) => {
+  const handleBlur = useCallback((_: FocusEvent<HTMLInputElement>) => {
     setIsFocused(false);
   }, []);
 

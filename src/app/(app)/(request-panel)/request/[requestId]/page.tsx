@@ -4,7 +4,6 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import RequestPanel from "@/app/(app)/(request-panel)/request/[requestId]/_components/RequestPanel";
 import ResponsePanel from "@/app/(app)/(request-panel)/request/[requestId]/_components/ResponsePanel";
 import RequestTop from "@/app/(app)/(request-panel)/request/[requestId]/_components/RequestTop";
 import APIUrl from "@/app/(app)/(request-panel)/request/[requestId]/_components/APIUrl";

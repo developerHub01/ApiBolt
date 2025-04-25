@@ -40,6 +40,7 @@ const MetaDataTab = memo(() => {
       <div className="block md:hidden">
         <Select
           defaultValue={activeMetaTab ?? tabList[0].id}
+          value={activeMetaTab ?? tabList[0].id}
           onValueChange={handleChangeActiveMetaTab}
         >
           <SelectTrigger className="min-w-[120px]">
@@ -56,7 +57,7 @@ const MetaDataTab = memo(() => {
           </SelectContent>
         </Select>
       </div>
-      <div className="hidden md:flex items-center gap-3">
+      <div className="hidden md:flex items-center gap-4">
         {tabList.map(({ id, label }) => (
           <Button
             key={id}
