@@ -43,11 +43,14 @@ const BodyCode = () => {
   const handleBlur = useCallback(() => handleChangeRawData(code), [code]);
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full border rounded-md overflow-hidden">
       <CodeMirror
-        className="w-full h-full"
+        className="w-full h-full [&>div]:bg-background!"
         height="100%"
         theme={theme}
+        style={{
+          fontSize: 14,
+        }}
         extensions={[SelectedLang(rawRequestBodyType)]}
         autoFocus={true}
         basicSetup={{
