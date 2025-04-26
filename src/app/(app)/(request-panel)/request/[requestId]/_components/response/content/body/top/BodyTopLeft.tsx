@@ -1,9 +1,36 @@
-import React from 'react'
+"use client";
 
-const BodyTopLeft = () => {
+import { Button } from "@/components/ui/button";
+import { Play as PreviewIcon } from "lucide-react";
+import React, { memo } from "react";
+import { useResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/ResponseProvider";
+import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
+import { getResponseType } from "@/utils";
+
+const BodyTopLeft = memo(() => {
+  const { responseTab } = useResponse();
+  const { response } = useRequestResponse();
+
+  const responseType = getResponseType(
+    response?.headers?.["content-type"] ?? ""
+  );
+
   return (
-    <div>BodyTopLeft</div>
-  )
-}
+    <div className="flex items-center gap-2">
+      <Button
+        size={"sm"}
+        variant={responseTab === "raw" ? "secondary" : "ghost"}
+      >
+        {responseType}
+      </Button>
+      <Button
+        size={"sm"}
+        variant={responseTab === "preview" ? "secondary" : "ghost"}
+      >
+        <PreviewIcon /> Preview
+      </Button>
+    </div>
+  );
+});
 
-export default BodyTopLeft
+export default BodyTopLeft;
