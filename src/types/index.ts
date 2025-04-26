@@ -1,0 +1,1 @@
+export type TContentType = "text" | "html" | "xml" | "json" | "javascript";
