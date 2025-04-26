@@ -3,7 +3,7 @@
 import axios, { AxiosResponse } from "axios";
 import React, { createContext, useCallback, useContext, useState } from "react";
 
-interface RequestContext {
+interface RequestResponseContext {
   activeMetaTab: string;
   handleChangeActiveMetaTab: (id: string) => void;
   selectedMethod: string;
@@ -18,23 +18,29 @@ interface RequestContext {
   isLoading: boolean;
 }
 
-const RequestContext = createContext<RequestContext | null>(null);
+const RequestResponseContext = createContext<RequestResponseContext | null>(
+  null
+);
 
-export const useRequest = () => {
-  const context = useContext(RequestContext);
+export const useRequestResponse = () => {
+  const context = useContext(RequestResponseContext);
 
   if (!context) {
-    throw new Error("useRequest must be used within a RequestProvider.");
+    throw new Error(
+      "useRequestResponse must be used within a RequestResponseProvider."
+    );
   }
 
   return context;
 };
 
-interface RequestProviderProps {
+interface RequestResponseProviderProps {
   children: React.ReactNode;
 }
 
-const RequestProvider = ({ children }: RequestProviderProps) => {
+const RequestResponseProvider = ({
+  children,
+}: RequestResponseProviderProps) => {
   const [activeMetaTab, setActiveMetaTab] = useState<string>("params");
   const [selectedMethod, setSelectedMethod] = useState<string>("get");
   const [isApiUrlError, setIsApiUrlError] = useState<boolean>(false);
@@ -77,7 +83,7 @@ const RequestProvider = ({ children }: RequestProviderProps) => {
   }, [apiUrl, selectedMethod]);
 
   return (
-    <RequestContext.Provider
+    <RequestResponseContext.Provider
       value={{
         activeMetaTab,
         handleChangeActiveMetaTab,
@@ -94,8 +100,8 @@ const RequestProvider = ({ children }: RequestProviderProps) => {
       }}
     >
       {children}
-    </RequestContext.Provider>
+    </RequestResponseContext.Provider>
   );
 };
 
-export default RequestProvider;
+export default RequestResponseProvider;

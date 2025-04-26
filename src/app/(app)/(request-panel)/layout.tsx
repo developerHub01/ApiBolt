@@ -1,5 +1,5 @@
 import React from "react";
-import RequestProvider from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestProvider";
+import RequestResponseProvider from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
 
 interface RequestPanelLayoutProps {
   children: React.ReactNode;
@@ -8,7 +8,7 @@ interface RequestPanelLayoutProps {
 const RequestPanelLayout = ({ children }: RequestPanelLayoutProps) => {
   return (
     <section className="w-full h-full min-h-screen flex flex-col">
-      <RequestProvider>{children}</RequestProvider>
+      <RequestResponseProvider>{children}</RequestResponseProvider>
     </section>
   );
 };

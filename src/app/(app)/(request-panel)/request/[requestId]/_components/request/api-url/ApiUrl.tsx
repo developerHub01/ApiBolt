@@ -1,13 +1,13 @@
 "use client";
 
 import React, { FormEvent, memo, useCallback } from "react";
-import { useRequest } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestProvider";
+import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
 import ApiMethodSelector from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/api-url/ApiMethodSelector";
 import ApiInput from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/api-url/ApiInput";
 import ApiCta from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/api-url/ApiCta";
 
 const ApiUrl = memo(() => {
-  const { apiUrl = "", handleIsInputError, handleFetchApi } = useRequest();
+  const { apiUrl = "", handleIsInputError, handleFetchApi } = useRequestResponse();
 
   const handleSubmit = useCallback(
     (e: FormEvent<HTMLFormElement>) => {

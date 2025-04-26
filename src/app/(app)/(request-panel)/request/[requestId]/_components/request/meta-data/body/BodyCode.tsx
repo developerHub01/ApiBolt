@@ -2,7 +2,7 @@
 
 import React, { memo, useCallback, useEffect, useState } from "react";
 import CodeMirror, { ViewUpdate } from "@uiw/react-codemirror";
-import { useRequestBody } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestBodyProvider";
+import { useRequestResponseBody } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestBodyProvider";
 import { html } from "@codemirror/lang-html";
 import { javascript } from "@codemirror/lang-javascript";
 import { json } from "@codemirror/lang-json";
@@ -29,7 +29,7 @@ const BodyCode = memo(() => {
     rawData = "",
     rawRequestBodyType,
     handleChangeRawData,
-  } = useRequestBody();
+  } = useRequestResponseBody();
   const [code, setCode] = useState<string>(rawData);
   const { resolvedTheme } = useTheme();
 

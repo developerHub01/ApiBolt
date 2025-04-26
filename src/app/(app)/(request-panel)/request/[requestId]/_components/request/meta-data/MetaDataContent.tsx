@@ -1,14 +1,14 @@
 "use client";
 
 import React from "react";
-import { useRequest } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestProvider";
+import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
 import Params from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/params/Params";
 import Authorization from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/authorization/Authorization";
 import Headers from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/headers/Headers";
 import Body from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/body/Body";
 
 const MetaDataContent = () => {
-  const { activeMetaTab } = useRequest();
+  const { activeMetaTab } = useRequestResponse();
 
   return (
     <div className="h-full p-2.5 pt-1">

@@ -10,7 +10,7 @@ import React, {
 } from "react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { useRequest } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestProvider";
+import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
 
 const ApiInput = memo(() => {
   const {
@@ -18,7 +18,7 @@ const ApiInput = memo(() => {
     handleChangeApiUrl,
     isApiUrlError,
     handleIsInputError,
-  } = useRequest();
+  } = useRequestResponse();
   const [url, setUrl] = useState<string>(apiUrl);
 
   useEffect(() => {

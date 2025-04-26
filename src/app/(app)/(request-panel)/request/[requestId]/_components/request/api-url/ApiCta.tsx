@@ -3,10 +3,10 @@
 import React, { memo } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader as LoaderIcon } from "lucide-react";
-import { useRequest } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestProvider";
+import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
 
 const ApiCta = memo(() => {
-  const { isLoading } = useRequest();
+  const { isLoading } = useRequestResponse();
 
   return (
     <Button disabled={isLoading} className="rounded-l-none uppercase">

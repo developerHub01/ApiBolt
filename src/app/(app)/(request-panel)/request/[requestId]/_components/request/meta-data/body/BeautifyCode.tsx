@@ -2,7 +2,7 @@
 
 import React, { memo, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { useRequestBody } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestBodyProvider";
+import { useRequestResponseBody } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestBodyProvider";
 import { formatCode } from "@/utils/prettierUtils";
 import { toast } from "sonner";
 
@@ -23,7 +23,7 @@ const BeautifyCode = memo(() => {
     rawData: code,
     rawRequestBodyType,
     handleChangeRawData,
-  } = useRequestBody();
+  } = useRequestResponseBody();
 
   const parser = useMemo(
     () => getParser(rawRequestBodyType),

@@ -13,12 +13,12 @@ interface RequestBodyContext {
 
 const RequestBodyContext = createContext<RequestBodyContext | null>(null);
 
-export const useRequestBody = () => {
+export const useRequestResponseBody = () => {
   const context = useContext(RequestBodyContext);
 
   if (!context) {
     throw new Error(
-      "useRequestBody must be used within a RequestBodyProvider."
+      "useRequestResponseBody must be used within a RequestBodyProvider."
     );
   }
 

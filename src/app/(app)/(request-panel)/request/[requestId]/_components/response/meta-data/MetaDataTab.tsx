@@ -15,20 +15,16 @@ import {
 
 const tabList = [
   {
-    id: "params",
-    label: "Params",
+    id: "body",
+    label: "Body",
   },
   {
-    id: "authorization",
-    label: "Authorization",
+    id: "cookies",
+    label: "Cookies",
   },
   {
     id: "headers",
     label: "Headers",
-  },
-  {
-    id: "body",
-    label: "Body",
   },
 ];
 

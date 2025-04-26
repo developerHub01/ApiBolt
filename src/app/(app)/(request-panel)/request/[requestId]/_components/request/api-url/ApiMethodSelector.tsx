@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useRequest } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestProvider";
+import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
 import { cn } from "@/lib/utils";
 
 const methodList = [
@@ -35,7 +35,7 @@ const methodList = [
 ];
 
 const ApiMethodSelector = memo(() => {
-  const { selectedMethod, handleChangeSelectedMethod } = useRequest();
+  const { selectedMethod, handleChangeSelectedMethod } = useRequestResponse();
   return (
     <Select
       defaultValue={selectedMethod ?? methodList[0].id}
