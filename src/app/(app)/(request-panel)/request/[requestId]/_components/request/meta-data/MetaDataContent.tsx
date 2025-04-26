@@ -1,13 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { memo } from "react";
 import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
 import Params from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/params/Params";
 import Authorization from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/authorization/Authorization";
 import Headers from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/headers/Headers";
 import Body from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/body/Body";
 
-const MetaDataContent = () => {
+const MetaDataContent = memo(() => {
   const { activeMetaTab } = useRequestResponse();
 
   return (
@@ -18,6 +18,6 @@ const MetaDataContent = () => {
       {activeMetaTab === "body" && <Body />}
     </div>
   );
-};
+});
 
 export default MetaDataContent;
