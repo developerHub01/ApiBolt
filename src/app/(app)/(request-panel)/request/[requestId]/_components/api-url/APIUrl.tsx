@@ -90,13 +90,16 @@ const APIUrl = memo(() => {
   const handleFetch = useCallback(async () => {
     setLoading(true);
 
-    const res = await axios.get(apiUrl);
+    const res = await axios({
+      method: selectedMethod,
+      url,
+    });
     console.log(res);
 
     handleResponse(res);
 
     setLoading(false);
-  }, [apiUrl]);
+  }, [url, selectedMethod]);
 
   const handleSubmit = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
@@ -106,7 +109,7 @@ const APIUrl = memo(() => {
 
       handleFetch();
     },
-    [apiUrl, setLoading]
+    [url]
   );
 
   return (
@@ -155,7 +158,7 @@ const APIUrl = memo(() => {
         onFocus={handleApiUrlFocus}
         onBlur={handleApiUrlBlur}
       />
-      <Button className="rounded-l-none uppercase">
+      <Button disabled={isLoading} className="rounded-l-none uppercase">
         {isLoading && <LoaderIcon size={16} />}
         Send
       </Button>
