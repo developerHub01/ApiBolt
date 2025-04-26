@@ -1,12 +1,13 @@
 "use client";
 
+import { TContentType } from "@/types";
 import React, { createContext, useCallback, useContext, useState } from "react";
 
 interface RequestBodyContext {
   requestBodyType: string;
   handleChangeRequestBodyType: (id: string) => void;
-  rawRequestBodyType: string;
-  handleChangeRawRequestBodyType: (id: string) => void;
+  rawRequestBodyType: TContentType;
+  handleChangeRawRequestBodyType: (id: TContentType) => void;
   rawData: string;
   handleChangeRawData: (data: string) => void;
 }
@@ -31,7 +32,7 @@ interface RequestBodyProviderProps {
 
 const RequestBodyProvider = ({ children }: RequestBodyProviderProps) => {
   const [requestBodyType, setRequestBodyType] = useState<string>("none");
-  const [rawRequestBodyType, setRawRequestBodyType] = useState<string>("json");
+  const [rawRequestBodyType, setRawRequestBodyType] = useState<TContentType>("json");
   const [rawData, setRawData] = useState<string>("");
 
   const handleChangeRequestBodyType = useCallback((id: string) => {
@@ -40,7 +41,7 @@ const RequestBodyProvider = ({ children }: RequestBodyProviderProps) => {
     setRequestBodyType(id);
   }, []);
 
-  const handleChangeRawRequestBodyType = useCallback((id: string) => {
+  const handleChangeRawRequestBodyType = useCallback((id: TContentType) => {
     setRawRequestBodyType(id);
   }, []);
 
