@@ -8,7 +8,7 @@ import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[request
 import { getResponseType } from "@/utils";
 
 const BodyTopLeft = memo(() => {
-  const { responseTab } = useResponse();
+  const { responseTab, handleChangeActiveResponseTab } = useResponse();
   const { response } = useRequestResponse();
 
   const responseType = getResponseType(
@@ -20,12 +20,14 @@ const BodyTopLeft = memo(() => {
       <Button
         size={"sm"}
         variant={responseTab === "raw" ? "secondary" : "ghost"}
+        onClick={() => handleChangeActiveResponseTab("raw")}
       >
         {responseType}
       </Button>
       <Button
         size={"sm"}
         variant={responseTab === "preview" ? "secondary" : "ghost"}
+        onClick={() => handleChangeActiveResponseTab("preview")}
       >
         <PreviewIcon /> Preview
       </Button>

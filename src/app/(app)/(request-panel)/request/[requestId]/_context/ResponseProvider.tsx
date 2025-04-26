@@ -33,13 +33,21 @@ const ResponseProvider = ({ children }: ResponseProviderProps) => {
   const [activeMetaTab, setActiveMetaTab] = useState<string>("body");
   const [responseTab, setResponseTab] = useState<TResponseTab>("raw");
 
-  const handleChangeActiveMetaTab = useCallback((id: string) => {
-    setActiveMetaTab(id);
-  }, []);
-  
-  const handleChangeActiveResponseTab = useCallback((id: TResponseTab) => {
-    setResponseTab(id);
-  }, []);
+  const handleChangeActiveMetaTab = useCallback(
+    (id: string) => {
+      if (id === activeMetaTab) return;
+      setActiveMetaTab(id);
+    },
+    [activeMetaTab]
+  );
+
+  const handleChangeActiveResponseTab = useCallback(
+    (id: TResponseTab) => {
+      if (id === responseTab) return;
+      setResponseTab(id);
+    },
+    [responseTab]
+  );
 
   return (
     <ResponseContext.Provider
