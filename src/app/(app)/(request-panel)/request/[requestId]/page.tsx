@@ -8,8 +8,8 @@ import ResponsePanel from "@/app/(app)/(request-panel)/request/[requestId]/_comp
 import RequestTop from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/RequestTop";
 import RequestBodyProvider from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestBodyProvider";
 import ApiUrl from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/api-url/ApiUrl";
-import RequestMetaData from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/metadata/RequestMetaData";
-import MetaDataContent from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/metadata/MetaDataContent";
+import RequestMetaData from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/RequestMetaData";
+import MetaDataContent from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/MetaDataContent";
 
 const RequestPage = () => {
   return (

@@ -1,8 +1,8 @@
 "use client";
 
 import React, { memo } from "react";
-import BodyNone from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/metadata/Body/BodyNone";
-import BodyCode from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/metadata/Body/BodyCode";
+import BodyNone from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/body/BodyNone";
+import BodyCode from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/body/BodyCode";
 
 interface BodyDetailsInterface {
   bodyType: string;
