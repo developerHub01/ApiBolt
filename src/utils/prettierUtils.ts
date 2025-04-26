@@ -24,18 +24,16 @@ export const formatCode = async (
   message?: string;
 }> => {
   const parser = getParser(parserType);
-  try {
-    if (parserType === "json") {
-      return {
-        success: true,
-        data: JSON.stringify(JSON.parse(code), null, 2),
-      };
-    }
 
-    const formatedCode = await prettier.format(code, {
-      parser: parser === "json" ? "babel" : parser,
-      plugins: [parserBabel, parserHtml, parserEstree],
-    });
+  try {
+    let formatedCode = "";
+    if (parserType === "json")
+      formatedCode = JSON.stringify(JSON.parse(code), null, 2);
+    else
+      formatedCode = await prettier.format(code, {
+        parser,
+        plugins: [parserBabel, parserHtml, parserEstree],
+      });
 
     return {
       success: true,
