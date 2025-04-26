@@ -1,6 +1,6 @@
 "use client";
 
-import { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import React, { createContext, useCallback, useContext, useState } from "react";
 
 interface RequestContext {
@@ -12,6 +12,9 @@ interface RequestContext {
   handleChangeApiUrl: (api: string) => void;
   response: AxiosResponse<any, any> | null;
   handleResponse: (res: AxiosResponse<any, any> | null) => void;
+  isApiUrlError: boolean;
+  handleIsInputError: (value: boolean) => void;
+  handleFetchApi: () => Promise<void>;
 }
 
 const RequestContext = createContext<RequestContext | null>(null);
@@ -33,6 +36,8 @@ interface RequestProviderProps {
 const RequestProvider = ({ children }: RequestProviderProps) => {
   const [activeMetaTab, setActiveMetaTab] = useState<string>("params");
   const [selectedMethod, setSelectedMethod] = useState<string>("get");
+  const [isApiUrlError, setIsApiUrlError] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [apiUrl, setApiUrl] = useState<string>("");
   const [response, setResponse] = useState<AxiosResponse<any, any> | null>(
     null
@@ -53,6 +58,22 @@ const RequestProvider = ({ children }: RequestProviderProps) => {
     []
   );
 
+  const handleIsInputError = useCallback((value: boolean) => {
+    setIsApiUrlError(value);
+  }, []);
+
+  const handleFetchApi = useCallback(async () => {
+    setIsLoading(true);
+
+    const res = await axios({
+      method: selectedMethod,
+      url: apiUrl,
+    });
+
+    handleResponse(res);
+    setIsLoading(false);
+  }, [apiUrl, selectedMethod]);
+
   return (
     <RequestContext.Provider
       value={{
@@ -64,6 +85,9 @@ const RequestProvider = ({ children }: RequestProviderProps) => {
         handleChangeApiUrl,
         response,
         handleResponse,
+        isApiUrlError,
+        handleIsInputError,
+        handleFetchApi,
       }}
     >
       {children}
