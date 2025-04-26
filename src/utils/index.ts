@@ -1,6 +1,4 @@
-import { TContentType } from "@/types";
-
-export const getResponseType = (contentType: string): TContentType => {
+export const getResponseType = (contentType: string) => {
   if (contentType.includes("application/json")) {
     return "JSON";
   } else if (contentType.includes("text/html")) {
