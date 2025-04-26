@@ -3,7 +3,7 @@ import MetaDataTab from "@/app/(app)/(request-panel)/request/[requestId]/_compon
 
 const ResponseMetaData = () => {
   return (
-    <div className="flex justify-between items-center gap-2">
+    <div className="flex justify-between items-center gap-2 p-2.5">
       <MetaDataTab />
     </div>
   );

@@ -2,7 +2,7 @@
 
 import React, { createContext, useCallback, useContext, useState } from "react";
 
-interface RequestBodyContext {
+interface ResponseBodyContext {
   requestBodyType: string;
   handleChangeRequestBodyType: (id: string) => void;
   rawRequestBodyType: string;
@@ -11,25 +11,25 @@ interface RequestBodyContext {
   handleChangeRawData: (data: string) => void;
 }
 
-const RequestBodyContext = createContext<RequestBodyContext | null>(null);
+const ResponseBodyContext = createContext<ResponseBodyContext | null>(null);
 
-export const useRequestBody = () => {
-  const context = useContext(RequestBodyContext);
+export const useResponseBody = () => {
+  const context = useContext(ResponseBodyContext);
 
   if (!context) {
     throw new Error(
-      "useRequestBody must be used within a RequestBodyProvider."
+      "useResponseBody must be used within a ResponseBodyProvider."
     );
   }
 
   return context;
 };
 
-interface RequestBodyProviderProps {
+interface ResponseBodyProviderProps {
   children: React.ReactNode;
 }
 
-const RequestBodyProvider = ({ children }: RequestBodyProviderProps) => {
+const ResponseBodyProvider = ({ children }: ResponseBodyProviderProps) => {
   const [requestBodyType, setRequestBodyType] = useState<string>("none");
   const [rawRequestBodyType, setRawRequestBodyType] = useState<string>("json");
   const [rawData, setRawData] = useState<string>("");
@@ -49,7 +49,7 @@ const RequestBodyProvider = ({ children }: RequestBodyProviderProps) => {
   }, []);
 
   return (
-    <RequestBodyContext.Provider
+    <ResponseBodyContext.Provider
       value={{
         requestBodyType,
         handleChangeRequestBodyType,
@@ -60,8 +60,8 @@ const RequestBodyProvider = ({ children }: RequestBodyProviderProps) => {
       }}
     >
       {children}
-    </RequestBodyContext.Provider>
+    </ResponseBodyContext.Provider>
   );
 };
 
-export default RequestBodyProvider;
+export default ResponseBodyProvider;

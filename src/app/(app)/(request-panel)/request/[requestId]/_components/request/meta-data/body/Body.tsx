@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useRequestResponseBody } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestBodyProvider";
+import { useRequestBody } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestBodyProvider";
 import BeautifyCode from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/body/BeautifyCode";
 import BodyDetails from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/body/BodyDetails";
 
@@ -67,7 +67,7 @@ const Body = memo(() => {
     handleChangeRequestBodyType,
     rawRequestBodyType,
     handleChangeRawRequestBodyType,
-  } = useRequestResponseBody();
+  } = useRequestBody();
 
   return (
     <div className="h-full flex flex-col gap-3">

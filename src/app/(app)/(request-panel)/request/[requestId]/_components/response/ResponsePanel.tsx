@@ -6,7 +6,7 @@ import ResposneContent from "@/app/(app)/(request-panel)/request/[requestId]/_co
 const ResponsePanel = () => {
   return (
     <ResponseProvider>
-      <div className="flex flex-col h-full p-2.5">
+      <div className="flex flex-col h-full">
         <ResponseMetaData />
         <ResposneContent />
       </div>

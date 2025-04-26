@@ -1,7 +1,7 @@
 "use client";
 
 import React, { memo } from "react";
-import BodyTop from "@/app/(app)/(request-panel)/request/[requestId]/_components/response/meta-data/body/top/BodyTop";
+import BodyTop from "@/app/(app)/(request-panel)/request/[requestId]/_components/response/content/body/top/BodyTop";
 
 const Body = memo(() => {
   return (
