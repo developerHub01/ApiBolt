@@ -3,6 +3,7 @@
 import React, {
   ChangeEvent,
   FocusEvent,
+  memo,
   useCallback,
   useEffect,
   useState,
@@ -11,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useRequest } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestProvider";
 
-const ApiInput = () => {
+const ApiInput = memo(() => {
   const {
     apiUrl = "",
     handleChangeApiUrl,
@@ -53,6 +54,6 @@ const ApiInput = () => {
       onBlur={handleApiUrlBlur}
     />
   );
-};
+});
 
 export default ApiInput;

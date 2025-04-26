@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { memo } from "react";
 import {
   Select,
   SelectContent,
@@ -34,16 +34,8 @@ const methodList = [
   },
 ];
 
-const ApiMethodSelector = () => {
-  const {
-    selectedMethod,
-    handleChangeSelectedMethod,
-    apiUrl = "",
-    handleChangeApiUrl,
-    handleResponse,
-    isApiUrlError,
-    handleIsInputError,
-  } = useRequest();
+const ApiMethodSelector = memo(() => {
+  const { selectedMethod, handleChangeSelectedMethod } = useRequest();
   return (
     <Select
       defaultValue={selectedMethod ?? methodList[0].id}
@@ -79,6 +71,6 @@ const ApiMethodSelector = () => {
       </SelectContent>
     </Select>
   );
-};
+});
 
 export default ApiMethodSelector;

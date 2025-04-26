@@ -15,6 +15,7 @@ interface RequestContext {
   isApiUrlError: boolean;
   handleIsInputError: (value: boolean) => void;
   handleFetchApi: () => Promise<void>;
+  isLoading: boolean;
 }
 
 const RequestContext = createContext<RequestContext | null>(null);
@@ -69,6 +70,7 @@ const RequestProvider = ({ children }: RequestProviderProps) => {
       method: selectedMethod,
       url: apiUrl,
     });
+    console.log(res);
 
     handleResponse(res);
     setIsLoading(false);
@@ -88,6 +90,7 @@ const RequestProvider = ({ children }: RequestProviderProps) => {
         isApiUrlError,
         handleIsInputError,
         handleFetchApi,
+        isLoading,
       }}
     >
       {children}

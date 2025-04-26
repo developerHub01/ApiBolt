@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useMemo } from "react";
+import React, { memo, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { useRequestBody } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestBodyProvider";
 import { formatCode } from "@/utils/prettierUtils";
@@ -18,7 +18,7 @@ const getParser = (type: string) => {
   }
 };
 
-const BeautifyCode = () => {
+const BeautifyCode = memo(() => {
   const {
     rawData: code,
     rawRequestBodyType,
@@ -48,6 +48,6 @@ const BeautifyCode = () => {
       Beautify
     </Button>
   );
-};
+});
 
 export default BeautifyCode;

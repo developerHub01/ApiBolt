@@ -2,10 +2,10 @@
 
 import React from "react";
 import { useRequest } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestProvider";
-import Params from "@/app/(app)/(request-panel)/request/[requestId]/_components/metadata/Params";
-import Headers from "@/app/(app)/(request-panel)/request/[requestId]/_components/metadata/Headers";
-import Body from "@/app/(app)/(request-panel)/request/[requestId]/_components/metadata/Body/Body";
-import Authorization from "@/app/(app)/(request-panel)/request/[requestId]/_components/metadata/Authorization";
+import Params from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/metadata/Params";
+import Authorization from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/metadata/Authorization";
+import Headers from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/metadata/Headers";
+import Body from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/metadata/Body/Body";
 
 const MetaDataContent = () => {
   const { activeMetaTab } = useRequest();

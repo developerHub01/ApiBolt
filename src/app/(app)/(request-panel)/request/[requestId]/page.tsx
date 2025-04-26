@@ -5,11 +5,11 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import ResponsePanel from "@/app/(app)/(request-panel)/request/[requestId]/_components/ResponsePanel";
-import RequestTop from "@/app/(app)/(request-panel)/request/[requestId]/_components/RequestTop";
-import ApiUrl from "@/app/(app)/(request-panel)/request/[requestId]/_components/api-url/ApiUrl";
-import RequestMetaData from "@/app/(app)/(request-panel)/request/[requestId]/_components/metadata/RequestMetaData";
-import MetaDataContent from "@/app/(app)/(request-panel)/request/[requestId]/_components/metadata/MetaDataContent";
+import RequestTop from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/RequestTop";
 import RequestBodyProvider from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestBodyProvider";
+import ApiUrl from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/api-url/ApiUrl";
+import RequestMetaData from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/metadata/RequestMetaData";
+import MetaDataContent from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/metadata/MetaDataContent";
 
 const RequestPage = () => {
   return (

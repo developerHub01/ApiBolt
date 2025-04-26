@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import CodeMirror, { ViewUpdate } from "@uiw/react-codemirror";
 import { useRequestBody } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestBodyProvider";
 import { html } from "@codemirror/lang-html";
@@ -24,7 +24,7 @@ const SelectedLang = (lang: string) => {
   }
 };
 
-const BodyCode = () => {
+const BodyCode = memo(() => {
   const {
     rawData = "",
     rawRequestBodyType,
@@ -66,6 +66,6 @@ const BodyCode = () => {
       />
     </div>
   );
-};
+});
 
 export default BodyCode;
