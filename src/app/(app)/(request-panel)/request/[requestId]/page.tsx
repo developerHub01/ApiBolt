@@ -4,7 +4,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import ResponsePanel from "@/app/(app)/(request-panel)/request/[requestId]/_components/ResponsePanel";
+import ResponsePanel from "@/app/(app)/(request-panel)/request/[requestId]/_components/response/ResponsePanel";
 import RequestTop from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/RequestTop";
 import RequestBodyProvider from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestBodyProvider";
 import ApiUrl from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/api-url/ApiUrl";
