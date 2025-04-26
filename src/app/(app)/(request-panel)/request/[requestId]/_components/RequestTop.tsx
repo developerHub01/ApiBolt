@@ -53,7 +53,7 @@ const RequestTop = () => {
   return (
     <div className="w-full flex justify-between items-center gap-4 pb-2">
       <div className="flex items-center gap-1">
-        <span className="bg-muted rounded-md px-3 py-1.5 select-none">
+        <span className="bg-muted rounded-md px-3 py-1.5 select-none border-2 text-sm">
           HTTP
         </span>
         <Input

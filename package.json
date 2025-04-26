@@ -26,6 +26,7 @@
     "@types/react-redux": "^7.1.34",
     "@uiw/react-codemirror": "^4.23.10",
     "angular-html-parser": "^9.1.0",
+    "axios": "^1.9.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.487.0",
