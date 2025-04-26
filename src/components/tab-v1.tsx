@@ -11,11 +11,12 @@ interface TabV1Props {
   }>;
   activeTab: string;
   handleSelect: (id: string) => void;
+  className?: string;
 }
 
-const TabV1 = ({ list, activeTab, handleSelect }: TabV1Props) => {
+const TabV1 = ({ list, activeTab, handleSelect, className }: TabV1Props) => {
   return (
-    <>
+    <div className={cn("flex items-center gap-4", className)}>
       {list.map(({ id, label }) => (
         <Button
           key={id}
@@ -31,7 +32,7 @@ const TabV1 = ({ list, activeTab, handleSelect }: TabV1Props) => {
           {label}
         </Button>
       ))}
-    </>
+    </div>
   );
 };
 

@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import TabV1 from "@/components/tab-v1";
 
 const tabList = [
   {
@@ -57,23 +58,12 @@ const MetaDataTab = memo(() => {
           </SelectContent>
         </Select>
       </div>
-      <div className="hidden md:flex items-center gap-4">
-        {tabList.map(({ id, label }) => (
-          <Button
-            key={id}
-            size={"sm"}
-            variant={"link"}
-            className={cn("px-0 underline-offset-8", {
-              "underline text-primary": activeMetaTab === id,
-              "no-underline text-foreground/70 hover:text-foreground hover:no-underline":
-                activeMetaTab !== id,
-            })}
-            onClick={() => handleChangeActiveMetaTab(id)}
-          >
-            {label}
-          </Button>
-        ))}
-      </div>
+      <TabV1
+        list={tabList}
+        activeTab={activeMetaTab}
+        handleSelect={handleChangeActiveMetaTab}
+        className="hidden md:flex"
+      />
     </>
   );
 });

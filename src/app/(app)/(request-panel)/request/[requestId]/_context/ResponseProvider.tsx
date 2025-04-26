@@ -26,8 +26,8 @@ interface ResponseProviderProps {
 }
 
 const ResponseProvider = ({ children }: ResponseProviderProps) => {
-  const [activeMetaTab, setActiveMetaTab] = useState<string>("params");
- 
+  const [activeMetaTab, setActiveMetaTab] = useState<string>("body");
+
   const handleChangeActiveMetaTab = useCallback((id: string) => {
     setActiveMetaTab(id);
   }, []);
