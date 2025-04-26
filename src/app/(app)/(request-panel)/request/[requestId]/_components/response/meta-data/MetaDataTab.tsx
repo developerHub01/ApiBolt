@@ -2,7 +2,6 @@
 
 import React, { memo } from "react";
 import { Button } from "@/components/ui/button";
-import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
 import { cn } from "@/lib/utils";
 import {
   Select,
@@ -12,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/ResponseProvider";
 
 const tabList = [
   {
@@ -29,7 +29,7 @@ const tabList = [
 ];
 
 const MetaDataTab = memo(() => {
-  const { activeMetaTab, handleChangeActiveMetaTab } = useRequestResponse();
+  const { activeMetaTab, handleChangeActiveMetaTab } = useResponse();
 
   return (
     <>
