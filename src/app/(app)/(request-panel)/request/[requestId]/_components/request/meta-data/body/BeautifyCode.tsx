@@ -3,20 +3,8 @@
 import React, { memo, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { useRequestBody } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestBodyProvider";
-import { formatCode } from "@/utils/prettierUtils";
+import { formatCode, getParser } from "@/utils/prettierUtils";
 import { toast } from "sonner";
-
-const getParser = (type: string) => {
-  switch (type) {
-    case "json":
-      return "json";
-    case "html":
-    case "xml":
-      return "html";
-    default:
-      return "babel";
-  }
-};
 
 const BeautifyCode = memo(() => {
   const {

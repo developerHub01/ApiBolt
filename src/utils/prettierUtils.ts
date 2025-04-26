@@ -3,7 +3,7 @@ import parserBabel from "prettier/plugins/babel";
 import parserHtml from "prettier/plugins/html";
 import parserEstree from "prettier/plugins/estree";
 
-const getParser = (type: string) => {
+export const getParser = (type: string) => {
   switch (type) {
     case "json":
       return "json";
@@ -23,9 +23,17 @@ export const formatCode = async (
   data?: string;
   message?: string;
 }> => {
+  const parser = getParser(parserType);
   try {
+    if (parserType === "json") {
+      return {
+        success: true,
+        data: JSON.stringify(JSON.parse(code), null, 2),
+      };
+    }
+
     const formatedCode = await prettier.format(code, {
-      parser: getParser(parserType),
+      parser: parser === "json" ? "babel" : parser,
       plugins: [parserBabel, parserHtml, parserEstree],
     });
 

@@ -77,6 +77,7 @@ const Code = ({
       style={{
         fontSize,
       }}
+      value={code}
       extensions={[SelectedLang(contentType)]}
       {...getEditableOptions(editable, onChange, onBlur)}
       readOnly={!editable}
