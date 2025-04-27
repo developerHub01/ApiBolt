@@ -1,4 +1,4 @@
-import { Table, TableBody, TableRow } from "@/components/ui/table";
+import { Table, TableBody, TableRow } from "@/components/ui/table-v2";
 import ArrayHeaderPreview from "@/app/(app)/(request-panel)/request/[requestId]/_components/response/content/body/content/body-json-preview/ArrayHeaderPreview";
 import CellPreview from "@/app/(app)/(request-panel)/request/[requestId]/_components/response/content/body/content/body-json-preview/CellPreview";
 
