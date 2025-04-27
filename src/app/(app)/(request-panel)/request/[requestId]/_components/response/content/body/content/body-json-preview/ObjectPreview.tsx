@@ -9,7 +9,7 @@ const ObjectPreview = ({ data }: ObjectPreviewProps) => {
   const tableData = Object.entries(data);
 
   return (
-    <Table>
+    <Table className="w-full h-full">
       <TableBody>
         {tableData.map(([key, value]) => (
           <TableRow key={key}>

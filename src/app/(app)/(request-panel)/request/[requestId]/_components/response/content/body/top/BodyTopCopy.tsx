@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback } from "react";
+import React, { memo, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -12,14 +12,14 @@ import { useResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_co
 import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
 import { toast } from "sonner";
 
-const BodyTopCopy = () => {
+const BodyTopCopy = memo(() => {
   const { responseTab } = useResponse();
   const { response } = useRequestResponse();
 
   if (responseTab !== "raw") return null;
 
   const handleCopy = useCallback(async () => {
-    const responseData = JSON.stringify(response?.data);
+    const responseData = response?.data ? JSON.stringify(response?.data) : "";
 
     await navigator.clipboard.writeText(responseData);
 
@@ -38,6 +38,6 @@ const BodyTopCopy = () => {
       </TooltipContent>
     </Tooltip>
   );
-};
+});
 
 export default BodyTopCopy;

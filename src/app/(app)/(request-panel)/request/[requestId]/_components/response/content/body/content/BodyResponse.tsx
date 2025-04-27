@@ -1,7 +1,7 @@
 "use client";
 
-import Code from "@/components/Code";
 import React, { memo, useEffect, useMemo, useState } from "react";
+import Code from "@/components/Code";
 import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
 import { getResponseType } from "@/utils";
 import { TContentType } from "@/types";

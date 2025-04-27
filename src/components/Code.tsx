@@ -8,6 +8,7 @@ import { json } from "@codemirror/lang-json";
 import { xml } from "@codemirror/lang-xml";
 import { useTheme } from "next-themes";
 import { TContentType } from "@/types";
+import { cn } from "@/lib/utils";
 
 const SelectedLang = (lang: string) => {
   switch (lang) {
@@ -54,6 +55,7 @@ interface CodeProps {
   onChange?: (code: string) => void;
   onBlur?: () => void;
   editable?: boolean;
+  className?: string;
 }
 
 const Code = ({
@@ -63,6 +65,7 @@ const Code = ({
   onChange,
   onBlur,
   editable = true,
+  className = "",
 }: CodeProps) => {
   const { resolvedTheme } = useTheme();
 
@@ -71,7 +74,7 @@ const Code = ({
   getEditableOptions(editable);
   return (
     <CodeMirror
-      className="w-full h-full [&>div]:bg-background!"
+      className={cn("w-full h-full [&>div]:bg-background!", className)}
       height="100%"
       theme={theme}
       style={{
