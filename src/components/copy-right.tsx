@@ -6,9 +6,13 @@ const githubLink = "https://github.com/developerHub01";
 const CopyRight = () => {
   return (
     <div className="p-1 pt-1">
-      <p className="text-center text-xs md:text-sm">
+      <p className="text-center text-xs md:text-sm select-none">
         All rights reserve for
-        <Link href={githubLink} className="text-primary underline ml-1">
+        <Link
+          href={githubLink}
+          target="_blank"
+          className="text-primary underline ml-1"
+        >
           Shakil
         </Link>
       </p>

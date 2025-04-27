@@ -7,7 +7,7 @@ interface RequestPanelLayoutProps {
 
 const RequestPanelLayout = ({ children }: RequestPanelLayoutProps) => {
   return (
-    <section className="w-full h-full min-h-screen flex flex-col">
+    <section className="w-full h-full flex flex-col">
       <RequestResponseProvider>{children}</RequestResponseProvider>
     </section>
   );
