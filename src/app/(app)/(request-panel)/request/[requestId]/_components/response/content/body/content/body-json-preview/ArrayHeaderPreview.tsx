@@ -1,10 +1,12 @@
-import { TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { TableHead, TableHeader, TableRow } from "@/components/ui/table-v2";
+import { cn } from "@/lib/utils";
 
 interface ArrayHeaderPreviewProps {
   data: Array<Record<string, any>>;
+  lavel?: number;
 }
 
-const ArrayHeaderPreview = ({ data }: ArrayHeaderPreviewProps) => {
+const ArrayHeaderPreview = ({ data, lavel }: ArrayHeaderPreviewProps) => {
   const headerList = Array.from(
     data.reduce<Set<string>>((acc, curr) => {
       return new Set([...acc, ...Object.keys(curr)]);
@@ -12,11 +14,17 @@ const ArrayHeaderPreview = ({ data }: ArrayHeaderPreviewProps) => {
   );
 
   return (
-    <TableHeader>
+    <TableHeader
+      className={cn("", {
+        // "sticky top-0": lavel === 0,
+      })}
+    >
       <TableRow>
         <TableHead></TableHead>
         {headerList.map((key) => (
-          <TableHead key={key}>{key}</TableHead>
+          <TableHead key={key} className="font-black">
+            {key}
+          </TableHead>
         ))}
       </TableRow>
     </TableHeader>
