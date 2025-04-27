@@ -4,21 +4,28 @@ import CellPreview from "@/app/(app)/(request-panel)/request/[requestId]/_compon
 
 interface ArrayBodyPreviewProps {
   data: Array<Record<string, any>>;
+  lavel?: number;
 }
 
-const ArrayBodyPreview = ({ data }: ArrayBodyPreviewProps) => {
+const ArrayBodyPreview = ({ data, lavel }: ArrayBodyPreviewProps) => {
   return (
     <Table className="w-full h-full">
-      {typeof data === "object" && Array.isArray(data) && (
-        <ArrayHeaderPreview data={data} />
+      {data.every((item) => typeof item === "object") && (
+        <ArrayHeaderPreview data={data} lavel={lavel} />
       )}
       <TableBody>
         {data.map((row, index) => (
           <TableRow key={index}>
+            {/* index of the array */}
             <CellPreview data={index} />
-            {Object.entries(row).map(([key, value]) => (
-              <CellPreview key={key} data={value} />
-            ))}
+
+            {typeof row === "object" ? (
+              Object.entries(row).map(([key, value]) => (
+                <CellPreview key={key} data={value} />
+              ))
+            ) : (
+              <CellPreview data={row} />
+            )}
           </TableRow>
         ))}
       </TableBody>
