@@ -2,7 +2,7 @@
 
 import React from "react";
 import BodyHTMLPreview from "@/app/(app)/(request-panel)/request/[requestId]/_components/response/content/body/content/BodyHTMLPreview";
-import BodyJSONPreview from "@/app/(app)/(request-panel)/request/[requestId]/_components/response/content/body/content//BodyJSONPreview";
+import BodyJSONPreview from "@/app/(app)/(request-panel)/request/[requestId]/_components/response/content/body/content/body-json-preview/BodyJSONPreview";
 import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
 import { getResponseType } from "@/utils";
 import { TContentType } from "@/types";

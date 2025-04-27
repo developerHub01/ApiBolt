@@ -72,14 +72,18 @@ const RequestResponseProvider = ({
   const handleFetchApi = useCallback(async () => {
     setIsLoading(true);
 
-    const res = await axios({
-      method: selectedMethod,
-      url: apiUrl,
-    });
-    console.log(res);
-
-    handleResponse(res);
-    setIsLoading(false);
+    try {
+      const res = await axios({
+        method: selectedMethod,
+        url: apiUrl,
+      });
+      console.log(res);
+      handleResponse(res);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
   }, [apiUrl, selectedMethod]);
 
   return (
