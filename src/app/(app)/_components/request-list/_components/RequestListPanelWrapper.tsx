@@ -1,0 +1,31 @@
+"use client";
+
+import { ResizablePanel } from "@/components/ui/resizable";
+import React, { memo } from "react";
+import { useSidebar } from "@/app/(app)/_context/SidebarProvider";
+
+interface RequestListPanelWrapperProps {
+  children: React.ReactNode;
+}
+
+const RequestListPanelWrapper = memo(
+  ({ children }: RequestListPanelWrapperProps) => {
+    const { activeTab } = useSidebar();
+
+    if (!activeTab) return null;
+
+    return (
+      <ResizablePanel
+        collapsible={true}
+        defaultSize={30}
+        style={{
+          maxWidth: "40vw",
+        }}
+      >
+        {children}
+      </ResizablePanel>
+    );
+  }
+);
+
+export default RequestListPanelWrapper;

@@ -5,8 +5,9 @@ import {
 } from "@/components/ui/resizable";
 import React from "react";
 import Sidebar from "@/app/(app)/_components/sidebar/Sidebar";
-import RequestListPanel from "@/app/(app)/_components/request-list/RequestListPanel";
+import RequestListPanel from "@/app/(app)/_components/request-list/_components/RequestListPanel";
 import CopyRight from "@/components/copy-right";
+import SidebarProvider from "@/app/(app)/_context/SidebarProvider";
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -16,29 +17,24 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   return (
     <section className="h-screen flex flex-col">
       <section className="h-full flex content-stretch">
-        <Sidebar />
-        <ResizablePanelGroup
-          direction="horizontal"
-          className="w-full rounded-lg border md:min-w-[450px]"
-          style={{
-            height: "auto",
-          }}
-        >
-          <ResizablePanel
-            defaultSize={30}
+        <SidebarProvider>
+          <Sidebar />
+          <ResizablePanelGroup
+            direction="horizontal"
+            className="w-full border md:min-w-[450px]"
             style={{
-              maxWidth: "40vw",
+              height: "auto",
             }}
           >
             <RequestListPanel />
-          </ResizablePanel>
-          <ResizableHandle />
-          <ResizablePanel defaultSize={70}>
-            <ResizablePanelGroup direction="vertical">
-              <ResizablePanel defaultSize={25}>{children}</ResizablePanel>
-            </ResizablePanelGroup>
-          </ResizablePanel>
-        </ResizablePanelGroup>
+            <ResizableHandle />
+            <ResizablePanel defaultSize={70}>
+              <ResizablePanelGroup direction="vertical">
+                <ResizablePanel defaultSize={25}>{children}</ResizablePanel>
+              </ResizablePanelGroup>
+            </ResizablePanel>
+          </ResizablePanelGroup>
+        </SidebarProvider>
       </section>
       <CopyRight />
     </section>

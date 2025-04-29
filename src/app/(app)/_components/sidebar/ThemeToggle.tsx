@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Sun as LightIcon, Moon as DarkIcon } from "lucide-react";
@@ -25,18 +24,21 @@ const ThemeToggle = () => {
   if (!mounted) return null;
 
   return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button size={"icon"} variant={"outline"} onClick={handleToggleTheme}>
-            {theme === "light" ? <DarkIcon /> : <LightIcon />}
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent side="right">
-          <p>Switch to {theme === "light" ? "dark" : "light"}</p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button
+          size={"icon"}
+          variant={"outline"}
+          onClick={handleToggleTheme}
+          className="mt-auto"
+        >
+          {theme === "light" ? <DarkIcon /> : <LightIcon />}
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent side="right">
+        <p>Switch to {theme === "light" ? "dark" : "light"}</p>
+      </TooltipContent>
+    </Tooltip>
   );
 };
 
