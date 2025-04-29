@@ -5,33 +5,35 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Trash2 as DeleteIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import ParamInput from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/params/ParamInput";
+import MetaItemInput from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/headers-params/MetaItemInput";
 
-interface ParamProps {
+interface MetaItemProps {
+  type?: "header" | "param";
   id: string;
   keyName?: string;
   value?: string;
   description?: string;
   hide?: boolean;
-  handleChangeParams: (id: string, key: string, value: string) => void;
-  handleDeleteParam: (id: string) => void;
-  handleParamCheckToggle: (id?: string) => void;
+  handleChangeItem: (id: string, key: string, value: string) => void;
+  handleDeleteItem: (id: string) => void;
+  handleCheckToggle: (id?: string) => void;
   cellList: Array<string>;
 }
 
-const Param = memo(
+const MetaItem = memo(
   ({
+    type,
     id,
     keyName = "",
     value = "",
     description = "",
     hide = false,
-    handleChangeParams,
-    handleDeleteParam,
-    handleParamCheckToggle,
+    handleChangeItem,
+    handleDeleteItem,
+    handleCheckToggle,
     cellList,
-  }: ParamProps) => {
-    const [paramState, setParamState] = useState<{
+  }: MetaItemProps) => {
+    const [metaItemState, setMetaItemState] = useState<{
       key: string;
       value: string;
       description: string;
@@ -42,7 +44,7 @@ const Param = memo(
     });
 
     useEffect(() => {
-      setParamState((prevState) => ({
+      setMetaItemState((prevState) => ({
         ...prevState,
         key: keyName,
         value,
@@ -51,7 +53,7 @@ const Param = memo(
     }, [keyName, value, description]);
 
     const handleChange = useCallback((key: string, value: string) => {
-      setParamState((prev) => ({
+      setMetaItemState((prev) => ({
         ...prev,
         [key]: value,
       }));
@@ -59,17 +61,18 @@ const Param = memo(
 
     const handleBlur = useCallback(
       (id: string, key: string) => {
-        handleChangeParams(id, key, paramState[key as keyof typeof paramState]);
+        handleChangeItem(
+          id,
+          key,
+          metaItemState[key as keyof typeof metaItemState]
+        );
       },
-      [id, paramState]
+      [id, metaItemState]
     );
 
-    const handleDelete = useCallback(() => handleDeleteParam(id), [id]);
+    const handleDelete = useCallback(() => handleDeleteItem(id), [id]);
 
-    const handleCheckChange = useCallback(
-      () => handleParamCheckToggle(id),
-      [id]
-    );
+    const handleCheckChange = useCallback(() => handleCheckToggle(id), [id]);
 
     return (
       <TableRow
@@ -80,7 +83,7 @@ const Param = memo(
           <div className="w-full flex justify-center items-center">
             <Checkbox
               className="cursor-pointer"
-              id={`param-hide-${id}`}
+              id={`${type}-hide-${id}`}
               checked={!hide}
               onCheckedChange={handleCheckChange}
             />
@@ -88,9 +91,9 @@ const Param = memo(
         </TableCell>
         {cellList.map((id) => (
           <TableCell className="p-1.5" key={id}>
-            <ParamInput
+            <MetaItemInput
               id={id}
-              value={paramState[id as keyof typeof paramState]}
+              value={metaItemState[id as keyof typeof metaItemState]}
               onChange={handleChange}
               onBlur={handleBlur}
             />
@@ -108,4 +111,4 @@ const Param = memo(
   }
 );
 
-export default Param;
+export default MetaItem;

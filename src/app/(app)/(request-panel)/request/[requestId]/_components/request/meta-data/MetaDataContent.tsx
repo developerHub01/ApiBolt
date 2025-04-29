@@ -2,9 +2,9 @@
 
 import React, { memo } from "react";
 import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
-import Params from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/params/Params";
+import Params from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/headers-params/params/Params";
 import Authorization from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/authorization/Authorization";
-import Headers from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/headers/Headers";
+import Headers from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/headers-params/headers/Headers";
 import Body from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/body/Body";
 
 const MetaDataContent = memo(() => {

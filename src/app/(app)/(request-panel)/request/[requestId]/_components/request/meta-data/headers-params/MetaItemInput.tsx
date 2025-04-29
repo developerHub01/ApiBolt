@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import React, { ChangeEvent, FocusEvent, memo, useCallback } from "react";
 
-interface ParamInputProps {
+interface MetaItemInputProps {
   id: string;
   value?: string;
   onChange: (key: string, value: string) => void;
@@ -11,21 +11,27 @@ interface ParamInputProps {
   className?: string;
 }
 
-const ParamInput = memo(
-  ({ id, value = "", onChange, onBlur, className = "" }: ParamInputProps) => {
+const MetaItemInput = memo(
+  ({
+    id,
+    value = "",
+    onChange,
+    onBlur,
+    className = "",
+  }: MetaItemInputProps) => {
     const handleChange = useCallback(
       (e: ChangeEvent<HTMLInputElement>) => {
-        if (!e.target.dataset.paramType) return;
+        if (!e.target.dataset.metaItemType) return;
 
-        onChange(e.target.dataset.paramType, e.target.value);
+        onChange(e.target.dataset.metaItemType, e.target.value);
       },
       [onChange]
     );
     const handleBlur = useCallback(
       (e: FocusEvent<HTMLInputElement>) => {
-        if (!e.target.dataset.paramType) return;
+        if (!e.target.dataset.metaItemType) return;
 
-        onBlur(id, e.target.dataset.paramType);
+        onBlur(id, e.target.dataset.metaItemType);
       },
       [onBlur]
     );
@@ -33,7 +39,7 @@ const ParamInput = memo(
     return (
       <input
         type="text"
-        data-param-type={id}
+        data-meta-item-type={id}
         value={value}
         onChange={handleChange}
         onBlur={handleBlur}
@@ -43,4 +49,4 @@ const ParamInput = memo(
   }
 );
 
-export default ParamInput;
+export default MetaItemInput;

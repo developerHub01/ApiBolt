@@ -1,8 +1,8 @@
 "use client";
 
 import React, { memo } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
 import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
+import MetaDataListCheckAll from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/headers-params/MetaDataListCheckAll";
 
 const ParamHeaderCheck = memo(() => {
   const { params, handleParamCheckToggle } = useRequestResponse();
@@ -12,13 +12,11 @@ const ParamHeaderCheck = memo(() => {
   const isAllChecked = params.every((param) => !param.hide);
 
   return (
-    <div className="w-full flex justify-center items-center">
-      <Checkbox
-        className="cursor-pointer"
-        checked={isAllChecked}
-        onCheckedChange={() => handleParamCheckToggle()}
-      />
-    </div>
+    <MetaDataListCheckAll
+      id="params-all"
+      checked={isAllChecked}
+      onChange={handleParamCheckToggle}
+    />
   );
 });
 

@@ -4,7 +4,7 @@ import React, { createContext, useCallback, useContext, useState } from "react";
 import axios, { AxiosResponse } from "axios";
 import { v4 as uuidv4 } from "uuid";
 
-const generateNewParam = () => ({
+const generateNewMetaDataItem = () => ({
   id: uuidv4(),
   key: "",
   value: "",
@@ -18,6 +18,7 @@ export interface ParamInterface {
   description?: string;
   hide?: boolean;
 }
+export interface HeaderInterface extends ParamInterface {}
 
 interface RequestResponseContext {
   activeMetaTab: string;
@@ -33,10 +34,15 @@ interface RequestResponseContext {
   handleFetchApi: () => Promise<void>;
   isLoading: boolean;
   params: Array<ParamInterface>;
-  handleChangeParams: (id: string, key: string, value: string) => void;
+  handleChangeParam: (id: string, key: string, value: string) => void;
   handleDeleteParam: (id: string) => void;
   handleAddNewParam: () => void;
   handleParamCheckToggle: (id?: string) => void;
+  headers: Array<HeaderInterface>;
+  handleChangeHeader: (id: string, key: string, value: string) => void;
+  handleDeleteHeader: (id: string) => void;
+  handleAddNewHeader: () => void;
+  handleHeaderCheckToggle: (id?: string) => void;
 }
 
 const RequestResponseContext = createContext<RequestResponseContext | null>(
@@ -55,6 +61,61 @@ export const useRequestResponse = () => {
   return context;
 };
 
+const useMetaDataManager = <T extends { id: string; hide?: boolean }>(
+  setState: React.Dispatch<React.SetStateAction<Array<T>>>,
+  generateNewItem: () => T
+) => {
+  const handleChange = useCallback((id: string, key: string, value: string) => {
+    setState((prev) =>
+      prev.map((item) => {
+        if (item.id !== id) return item;
+        return {
+          ...item,
+          [key]: value,
+        };
+      })
+    );
+  }, []);
+
+  const handleDelete = useCallback((id: string) => {
+    setState((prev) => prev.filter((item) => item.id !== id));
+  }, []);
+
+  const handleAdd = useCallback(() => {
+    setState((prev) => [...prev, generateNewItem()]);
+  }, []);
+
+  const handleCheckToggle = useCallback((id?: string) => {
+    if (id) {
+      setState((prev) =>
+        prev.map((item) => {
+          if (item.id !== id) return item;
+          return {
+            ...item,
+            hide: item.hide ? undefined : true,
+          };
+        })
+      );
+    } else {
+      setState((prev) => {
+        const isAllChecked = prev.every((item) => !item.hide);
+        console.log({ isAllChecked });
+        return prev.map((item) => ({
+          ...item,
+          hide: isAllChecked ? true : undefined,
+        }));
+      });
+    }
+  }, []);
+
+  return {
+    handleChange,
+    handleDelete,
+    handleAdd,
+    handleCheckToggle,
+  };
+};
+
 interface RequestResponseProviderProps {
   children: React.ReactNode;
 }
@@ -71,6 +132,19 @@ const RequestResponseProvider = ({
     null
   );
   const [params, setParams] = useState<Array<ParamInterface>>([]);
+  const [headers, setHeaders] = useState<Array<HeaderInterface>>([]);
+  const {
+    handleChange: handleChangeParam,
+    handleDelete: handleDeleteParam,
+    handleAdd: handleAddNewParam,
+    handleCheckToggle: handleParamCheckToggle,
+  } = useMetaDataManager<ParamInterface>(setParams, generateNewMetaDataItem);
+  const {
+    handleChange: handleChangeHeader,
+    handleDelete: handleDeleteHeader,
+    handleAdd: handleAddNewHeader,
+    handleCheckToggle: handleHeaderCheckToggle,
+  } = useMetaDataManager<HeaderInterface>(setHeaders, generateNewMetaDataItem);
 
   const handleChangeActiveMetaTab = useCallback((id: string) => {
     setActiveMetaTab(id);
@@ -90,60 +164,6 @@ const RequestResponseProvider = ({
   const handleIsInputError = useCallback((value: boolean) => {
     setIsApiUrlError(value);
   }, []);
-
-  /* params start ==================== */
-  const handleChangeParams = useCallback(
-    (id: string, key: string, value: string) => {
-      setParams((prev) =>
-        prev.map((param) => {
-          if (param.id !== id) return param;
-          return {
-            ...param,
-            [key]: value,
-          };
-        })
-      );
-    },
-    []
-  );
-
-  const handleDeleteParam = useCallback((id: string) => {
-    setParams((prev) => prev.filter((item) => item.id !== id));
-  }, []);
-
-  const handleAddNewParam = useCallback(() => {
-    setParams((prev) => [...prev, generateNewParam()]);
-  }, []);
-
-  const handleParamCheckToggle = useCallback((id?: string) => {
-    if (id) {
-      return setParams((prev) =>
-        prev.map((param) => {
-          if (param.id !== id) return param;
-          return {
-            ...param,
-            hide: param.hide ? undefined : true,
-          };
-        })
-      );
-    } else {
-      return setParams((prev) => {
-        const isAllChecked = prev.every((param) => !param.hide);
-
-        if (isAllChecked)
-          return prev.map((param) => ({
-            ...param,
-            hide: true,
-          }));
-        else
-          return prev.map((param) => {
-            if (param.hide) delete param.hide;
-            return param;
-          });
-      });
-    }
-  }, []);
-  /* params end ==================== */
 
   const handleFetchApi = useCallback(async () => {
     setIsLoading(true);
@@ -178,10 +198,15 @@ const RequestResponseProvider = ({
         handleFetchApi,
         isLoading,
         params,
-        handleChangeParams,
+        handleChangeParam,
         handleDeleteParam,
         handleAddNewParam,
         handleParamCheckToggle,
+        headers,
+        handleChangeHeader,
+        handleDeleteHeader,
+        handleAddNewHeader,
+        handleHeaderCheckToggle,
       }}
     >
       {children}

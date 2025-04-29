@@ -1,21 +1,24 @@
 import React from "react";
 import { Table, TableBody } from "@/components/ui/table";
-import ParamListHeader from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/params/ParamListHeader";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 
-interface ParamListWrapperProps {
+interface MetaDataListWrapperProps {
+  header?: React.ReactNode;
   children: React.ReactNode;
 }
 
-const ParamListWrapper = ({ children }: ParamListWrapperProps) => {
+const MetaDataListWrapper = ({
+  children,
+  header,
+}: MetaDataListWrapperProps) => {
   return (
     <ScrollArea className="w-full h-full">
       <Table className="border">
-        <ParamListHeader />
+        {header}
         <TableBody>{children}</TableBody>
       </Table>
     </ScrollArea>
   );
 };
 
-export default ParamListWrapper;
+export default MetaDataListWrapper;
