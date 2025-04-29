@@ -1,8 +1,6 @@
 "use client";
 
 import React, {
-  ChangeEvent,
-  FocusEvent,
   memo,
   useCallback,
   useEffect,
@@ -12,8 +10,10 @@ import React, {
 import { Checkbox } from "@/components/ui/checkbox";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
+import { useRequestParams } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestParamsProvider";
 import { Trash2 as DeleteIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import ParamInput from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/params/ParamInput";
 
 const cellList = ["key", "value", "description"];
 
@@ -29,6 +29,8 @@ const Param = memo(
   ({ id, keyName = "", value = "", description = "", hide }: ParamProps) => {
     const { handleChangeParams, handleDeleteParam, handleParamCheckToggle } =
       useRequestResponse();
+    const { showColumn } = useRequestParams();
+
     const [paramState, setParamState] = useState<{
       key: string;
       value: string;
@@ -69,13 +71,21 @@ const Param = memo(
       [id]
     );
 
+    const hiddenColumns = useMemo(() => {
+      const keyList = Object.entries(showColumn);
+      return keyList.reduce((acc, curr) => {
+        if (!curr[1]) acc.push(curr[0]);
+        return acc;
+      }, [] as Array<string>);
+    }, [showColumn]);
+
     return (
       <TableRow
         key={id}
         className="[&>td]:border-r [&>td]:last:border-r-0 [&>td>input]:outline-none"
       >
-        <TableCell>
-          <div className="w-full flex items-center">
+        <TableCell className="px-0">
+          <div className="w-full flex justify-center items-center">
             <Checkbox
               className="cursor-pointer"
               id={`param-hide-${id}`}
@@ -84,16 +94,20 @@ const Param = memo(
             />
           </div>
         </TableCell>
-        {cellList.map((id) => (
-          <TableCell className="p-1.5" key={id}>
-            <Input
-              id={id}
-              value={paramState[id as keyof typeof paramState]}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-          </TableCell>
-        ))}
+        {cellList.map((id) => {
+          if (hiddenColumns.includes(id)) return null;
+
+          return (
+            <TableCell className="p-1.5" key={id}>
+              <ParamInput
+                id={id}
+                value={paramState[id as keyof typeof paramState]}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+            </TableCell>
+          );
+        })}
         <TableCell className="p-0">
           <div className="flex justify-center items-center">
             <Button size={"iconXs"} variant={"ghost"} onClick={handleDelete}>
@@ -105,42 +119,5 @@ const Param = memo(
     );
   }
 );
-
-interface InputProps {
-  id: string;
-  value?: string;
-  onChange: (key: string, value: string) => void;
-  onBlur: (id: string, key: string) => void;
-}
-
-const Input = memo(({ id, value = "", onChange, onBlur }: InputProps) => {
-  const handleChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      if (!e.target.dataset.paramType) return;
-
-      onChange(e.target.dataset.paramType, e.target.value);
-    },
-    [onChange]
-  );
-  const handleBlur = useCallback(
-    (e: FocusEvent<HTMLInputElement>) => {
-      if (!e.target.dataset.paramType) return;
-
-      onBlur(id, e.target.dataset.paramType);
-    },
-    [onBlur]
-  );
-
-  return (
-    <input
-      type="text"
-      data-param-type={id}
-      value={value}
-      onChange={handleChange}
-      onBlur={handleBlur}
-      className="w-full focus:bg-background p-0.5"
-    />
-  );
-});
 
 export default Param;

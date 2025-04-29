@@ -1,9 +1,16 @@
-import React from "react";
+"use client";
+
+import React, { memo } from "react";
 import { TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import ParamsThreeDotAction from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/params/ParamsThreeDotAction";
 import ParamHeaderCheck from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/params/ParamHeaderCheck";
+import { useRequestParams } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestParamsProvider";
 
-const ParamListHeader = () => {
+const ParamListHeader = memo(() => {
+  const {
+    showColumn: { description, value },
+  } = useRequestParams();
+
   return (
     <TableHeader className="select-none">
       <TableRow className="[&>th]:border-r [&>th]:last:border-r-0">
@@ -11,18 +18,14 @@ const ParamListHeader = () => {
           <ParamHeaderCheck />
         </TableHead>
         <TableHead>Key</TableHead>
-        <TableHead>Value</TableHead>
-        <TableHead>
-          <div className="flex justify-between items-center">
-            <p>Description</p>
-          </div>
-        </TableHead>
+        {value && <TableHead>Value</TableHead>}
+        {description && <TableHead>Description</TableHead>}
         <TableHead className="p-0">
           <ParamsThreeDotAction />
         </TableHead>
       </TableRow>
     </TableHeader>
   );
-};
+});
 
 export default ParamListHeader;

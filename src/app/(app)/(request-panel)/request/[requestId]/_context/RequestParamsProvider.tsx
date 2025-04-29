@@ -1,9 +1,16 @@
 "use client";
 
-import { TContentType } from "@/types";
 import React, { createContext, useCallback, useContext, useState } from "react";
 
-interface RequestParamsContext {}
+export interface ShowColumnInterface {
+  value: boolean;
+  description: boolean;
+}
+
+interface RequestParamsContext {
+  showColumn: ShowColumnInterface;
+  toggleShowColumn: (key: keyof ShowColumnInterface) => void;
+}
 
 const RequestParamsContext = createContext<RequestParamsContext | null>(null);
 
@@ -24,9 +31,26 @@ interface RequestParamsProviderProps {
 }
 
 const RequestParamsProvider = ({ children }: RequestParamsProviderProps) => {
+  const [showColumn, setShowColumn] = useState<ShowColumnInterface>({
+    value: true,
+    description: true,
+  });
+
+  const toggleShowColumn = useCallback((key: keyof ShowColumnInterface) => {
+    console.log("==========");
+    setShowColumn((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  }, []);
 
   return (
-    <RequestParamsContext.Provider value={{}}>
+    <RequestParamsContext.Provider
+      value={{
+        showColumn,
+        toggleShowColumn,
+      }}
+    >
       {children}
     </RequestParamsContext.Provider>
   );
