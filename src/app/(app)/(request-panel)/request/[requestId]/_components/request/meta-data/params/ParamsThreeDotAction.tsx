@@ -13,12 +13,12 @@ import { Label } from "@/components/ui/label";
 import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
 import {
   ShowColumnInterface,
-  useRequestParams,
-} from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestParamsProvider";
+  useRequestParamsHeaders,
+} from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestParamsHeadersProvider";
 
 const ParamsThreeDotAction = memo(() => {
   const { handleAddNewParam } = useRequestResponse();
-  const { showColumn, toggleShowColumn } = useRequestParams();
+  const { showColumn, toggleShowColumn } = useRequestParamsHeaders();
 
   return (
     <Popover>

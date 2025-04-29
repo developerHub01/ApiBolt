@@ -3,7 +3,7 @@
 import React, { memo, useMemo } from "react";
 import ParamListWrapper from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/params/ParamListWrapper";
 import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
-import { useRequestParams } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestParamsProvider";
+import { useRequestParamsHeaders } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestParamsHeadersProvider";
 import Param from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/params/Param";
 
 const ParamList = memo(() => {
@@ -13,7 +13,7 @@ const ParamList = memo(() => {
     handleDeleteParam,
     handleParamCheckToggle,
   } = useRequestResponse();
-  const { showColumn } = useRequestParams();
+  const { showColumn } = useRequestParamsHeaders();
 
   /* ["key", "value", "description"] */
   const cellToShow = useMemo(() => {

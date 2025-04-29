@@ -7,37 +7,36 @@ export interface ShowColumnInterface {
   description: boolean;
 }
 
-interface RequestParamsContext {
+interface RequestParamsHeadersContext {
   showColumn: ShowColumnInterface;
   toggleShowColumn: (key: keyof ShowColumnInterface) => void;
 }
 
-const RequestParamsContext = createContext<RequestParamsContext | null>(null);
+const RequestParamsHeadersContext = createContext<RequestParamsHeadersContext | null>(null);
 
-export const useRequestParams = () => {
-  const context = useContext(RequestParamsContext);
+export const useRequestParamsHeaders = () => {
+  const context = useContext(RequestParamsHeadersContext);
 
   if (!context) {
     throw new Error(
-      "useRequestParams must be used within a RequestParamsProvider."
+      "useRequestParamsHeaders must be used within a RequestParamsHeadersProvider."
     );
   }
 
   return context;
 };
 
-interface RequestParamsProviderProps {
+interface RequestParamsHeadersProviderProps {
   children: React.ReactNode;
 }
 
-const RequestParamsProvider = ({ children }: RequestParamsProviderProps) => {
+const RequestParamsHeadersProvider = ({ children }: RequestParamsHeadersProviderProps) => {
   const [showColumn, setShowColumn] = useState<ShowColumnInterface>({
     value: true,
     description: true,
   });
 
   const toggleShowColumn = useCallback((key: keyof ShowColumnInterface) => {
-    console.log("==========");
     setShowColumn((prev) => ({
       ...prev,
       [key]: !prev[key],
@@ -45,15 +44,15 @@ const RequestParamsProvider = ({ children }: RequestParamsProviderProps) => {
   }, []);
 
   return (
-    <RequestParamsContext.Provider
+    <RequestParamsHeadersContext.Provider
       value={{
         showColumn,
         toggleShowColumn,
       }}
     >
       {children}
-    </RequestParamsContext.Provider>
+    </RequestParamsHeadersContext.Provider>
   );
 };
 
-export default RequestParamsProvider;
+export default RequestParamsHeadersProvider;

@@ -12,7 +12,7 @@ const ParamHeaderCheck = memo(() => {
   const isAllChecked = params.every((param) => !param.hide);
 
   return (
-    <div className="w-full min-w-7 flex justify-center items-center">
+    <div className="w-full flex justify-center items-center">
       <Checkbox
         className="cursor-pointer"
         checked={isAllChecked}
