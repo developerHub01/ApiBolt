@@ -1,21 +1,11 @@
 "use client";
 
-import React, {
-  memo,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { TableCell, TableRow } from "@/components/ui/table";
-import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
-import { useRequestParams } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestParamsProvider";
 import { Trash2 as DeleteIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ParamInput from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/params/ParamInput";
-
-const cellList = ["key", "value", "description"];
 
 interface ParamProps {
   id: string;
@@ -23,14 +13,24 @@ interface ParamProps {
   value?: string;
   description?: string;
   hide?: boolean;
+  handleChangeParams: (id: string, key: string, value: string) => void;
+  handleDeleteParam: (id: string) => void;
+  handleParamCheckToggle: (id?: string) => void;
+  cellList: Array<string>;
 }
 
 const Param = memo(
-  ({ id, keyName = "", value = "", description = "", hide }: ParamProps) => {
-    const { handleChangeParams, handleDeleteParam, handleParamCheckToggle } =
-      useRequestResponse();
-    const { showColumn } = useRequestParams();
-
+  ({
+    id,
+    keyName = "",
+    value = "",
+    description = "",
+    hide = false,
+    handleChangeParams,
+    handleDeleteParam,
+    handleParamCheckToggle,
+    cellList,
+  }: ParamProps) => {
     const [paramState, setParamState] = useState<{
       key: string;
       value: string;
@@ -71,14 +71,6 @@ const Param = memo(
       [id]
     );
 
-    const hiddenColumns = useMemo(() => {
-      const keyList = Object.entries(showColumn);
-      return keyList.reduce((acc, curr) => {
-        if (!curr[1]) acc.push(curr[0]);
-        return acc;
-      }, [] as Array<string>);
-    }, [showColumn]);
-
     return (
       <TableRow
         key={id}
@@ -94,20 +86,16 @@ const Param = memo(
             />
           </div>
         </TableCell>
-        {cellList.map((id) => {
-          if (hiddenColumns.includes(id)) return null;
-
-          return (
-            <TableCell className="p-1.5" key={id}>
-              <ParamInput
-                id={id}
-                value={paramState[id as keyof typeof paramState]}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-            </TableCell>
-          );
-        })}
+        {cellList.map((id) => (
+          <TableCell className="p-1.5" key={id}>
+            <ParamInput
+              id={id}
+              value={paramState[id as keyof typeof paramState]}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+          </TableCell>
+        ))}
         <TableCell className="p-0">
           <div className="flex justify-center items-center">
             <Button size={"iconXs"} variant={"ghost"} onClick={handleDelete}>
