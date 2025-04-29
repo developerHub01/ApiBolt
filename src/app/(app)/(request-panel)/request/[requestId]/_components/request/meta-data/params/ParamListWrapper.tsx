@@ -9,7 +9,7 @@ interface ParamListWrapperProps {
 
 const ParamListWrapper = ({ children }: ParamListWrapperProps) => {
   return (
-    <ScrollArea className="">
+    <ScrollArea className="w-full h-full">
       <Table className="border">
         <ParamListHeader />
         <TableBody>{children}</TableBody>
