@@ -14,7 +14,7 @@ const ParamListHeader = memo(() => {
   return (
     <TableHeader className="select-none">
       <TableRow className="[&>th]:border-r [&>th]:last:border-r-0">
-        <TableHead>
+        <TableHead className="px-0">
           <ParamHeaderCheck />
         </TableHead>
         <TableHead>Key</TableHead>
