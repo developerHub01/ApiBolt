@@ -16,7 +16,7 @@ interface TabV1Props {
 
 const TabV1 = ({ list, activeTab, handleSelect, className }: TabV1Props) => {
   return (
-    <div className={cn("flex items-center gap-4", className)}>
+    <div className={cn("flex items-center gap-4 select-none", className)}>
       {list.map(({ id, label }) => (
         <Button
           key={id}

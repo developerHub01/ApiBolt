@@ -39,7 +39,7 @@ const MetaDataTab = memo(() => {
         list={tabList}
         activeTab={activeMetaTab}
         handleSelect={handleChangeActiveMetaTab}
-        className="hidden md:flex"
+        className="hidden md:flex select-none"
       />
     </>
   );

@@ -23,7 +23,7 @@ interface SelectV1Props {
 
 const SelectV1 = ({ list, value, handleChange, className }: SelectV1Props) => {
   return (
-    <div className={cn("", className)}>
+    <div className={cn("select-none", className)}>
       <Select
         defaultValue={value ?? list[0].id}
         value={value ?? list[0].id}

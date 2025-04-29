@@ -37,39 +37,41 @@ const methodList = [
 const ApiMethodSelector = memo(() => {
   const { selectedMethod, handleChangeSelectedMethod } = useRequestResponse();
   return (
-    <Select
-      defaultValue={selectedMethod ?? methodList[0].id}
-      onValueChange={handleChangeSelectedMethod}
-    >
-      <SelectTrigger
-        className={cn("w-[150px] rounded-r-none font-semibold", {
-          "text-green-500": selectedMethod === "get",
-          "text-yellow-500": selectedMethod === "post",
-          "text-blue-500": selectedMethod === "put",
-          "text-pink-500": selectedMethod === "patch",
-          "text-red-500": selectedMethod === "delete",
-        })}
+    <div className="w-[150px] select-none">
+      <Select
+        defaultValue={selectedMethod ?? methodList[0].id}
+        onValueChange={handleChangeSelectedMethod}
       >
-        <SelectValue placeholder="Method" />
-      </SelectTrigger>
-      <SelectContent>
-        {methodList.map(({ id, label }) => (
-          <SelectItem
-            key={id}
-            value={id}
-            className={cn("font-semibold", {
-              "text-green-500": id === "get",
-              "text-yellow-500": id === "post",
-              "text-blue-500": id === "put",
-              "text-pink-500": id === "patch",
-              "text-red-500": id === "delete",
-            })}
-          >
-            {label}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+        <SelectTrigger
+          className={cn("w-full rounded-r-none font-semibold", {
+            "text-green-500": selectedMethod === "get",
+            "text-yellow-500": selectedMethod === "post",
+            "text-blue-500": selectedMethod === "put",
+            "text-pink-500": selectedMethod === "patch",
+            "text-red-500": selectedMethod === "delete",
+          })}
+        >
+          <SelectValue placeholder="Method" />
+        </SelectTrigger>
+        <SelectContent>
+          {methodList.map(({ id, label }) => (
+            <SelectItem
+              key={id}
+              value={id}
+              className={cn("font-semibold", {
+                "text-green-500": id === "get",
+                "text-yellow-500": id === "post",
+                "text-blue-500": id === "put",
+                "text-pink-500": id === "patch",
+                "text-red-500": id === "delete",
+              })}
+            >
+              {label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   );
 });
 
