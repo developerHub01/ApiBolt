@@ -19,6 +19,7 @@ const Empty = ({ label, children, className = "", ...props }: EmptyProps) => {
     >
       {label}
       {children && <>{children}</>}
+      {!label && !children && <p>Empty</p>}
     </div>
   );
 };
