@@ -10,7 +10,7 @@ const ResposneContent = memo(() => {
   const { activeMetaTab } = useResponse();
 
   return (
-    <div className="h-full p-2.5 pt-1">
+    <div className="p-2.5 pt-1 flex-1 min-h-0">
       {activeMetaTab === "body" && <Body />}
       {activeMetaTab === "cookies" && <Cookies />}
       {activeMetaTab === "headers" && <Headers />}
