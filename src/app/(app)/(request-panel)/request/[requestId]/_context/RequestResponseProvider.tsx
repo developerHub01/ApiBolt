@@ -43,6 +43,8 @@ interface RequestResponseContext {
   handleDeleteHeader: (id: string) => void;
   handleAddNewHeader: () => void;
   handleHeaderCheckToggle: (id?: string) => void;
+  binaryData: File | null;
+  handleChangeBinaryData: (file?: File | null) => void;
 }
 
 const RequestResponseContext = createContext<RequestResponseContext | null>(
@@ -131,6 +133,7 @@ const RequestResponseProvider = ({
   const [response, setResponse] = useState<AxiosResponse<any, any> | null>(
     null
   );
+  const [binaryData, setBinaryData] = useState<File | null>(null);
   const [params, setParams] = useState<Array<ParamInterface>>([]);
   const [headers, setHeaders] = useState<Array<HeaderInterface>>([]);
   const {
@@ -182,6 +185,11 @@ const RequestResponseProvider = ({
     }
   }, [apiUrl, selectedMethod]);
 
+  /* binary data */
+  const handleChangeBinaryData = useCallback((file: File | null = null) => {
+    setBinaryData(file);
+  }, []);
+
   return (
     <RequestResponseContext.Provider
       value={{
@@ -207,6 +215,8 @@ const RequestResponseProvider = ({
         handleDeleteHeader,
         handleAddNewHeader,
         handleHeaderCheckToggle,
+        binaryData,
+        handleChangeBinaryData,
       }}
     >
       {children}
