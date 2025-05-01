@@ -11,18 +11,25 @@ const generateNewMetaDataItem = () => ({
   description: "",
 });
 
-export interface ParamInterface {
+export type TActiveTabType = "params" | "headers" | "body" | "authorization";
+
+export interface ParamInterface<ValueT = string> {
   id: string;
   key: string;
-  value?: string;
+  value: ValueT;
   description?: string;
   hide?: boolean;
 }
 export interface HeaderInterface extends ParamInterface {}
+export interface XWWWFormUrlencodedInterface extends ParamInterface {}
+export interface FormDataInterface
+  extends ParamInterface<string | Array<File>> {
+  contentType?: string;
+}
 
 interface RequestResponseContext {
-  activeMetaTab: string;
-  handleChangeActiveMetaTab: (id: string) => void;
+  activeMetaTab: TActiveTabType;
+  handleChangeActiveMetaTab: (id: TActiveTabType) => void;
   selectedMethod: string;
   handleChangeSelectedMethod: (id: string) => void;
   apiUrl: string;
@@ -33,16 +40,31 @@ interface RequestResponseContext {
   handleIsInputError: (value: boolean) => void;
   handleFetchApi: () => Promise<void>;
   isLoading: boolean;
+
   params: Array<ParamInterface>;
   handleChangeParam: (id: string, key: string, value: string) => void;
   handleDeleteParam: (id: string) => void;
   handleAddNewParam: () => void;
   handleParamCheckToggle: (id?: string) => void;
+
   headers: Array<HeaderInterface>;
   handleChangeHeader: (id: string, key: string, value: string) => void;
   handleDeleteHeader: (id: string) => void;
   handleAddNewHeader: () => void;
   handleHeaderCheckToggle: (id?: string) => void;
+
+  formData: Array<FormDataInterface>;
+  handleChangeFormData: (id: string, key: string, value: File) => void;
+  handleDeleteFormData: (id: string) => void;
+  handleAddNewFormData: () => void;
+  handleFormDataCheckToggle: (id?: string) => void;
+
+  xWWWFormUrlencodedData: Array<XWWWFormUrlencodedInterface>;
+  handleChangeXWWWFormEncoded: (id: string, key: string, value: string) => void;
+  handleDeleteXWWWFormEncoded: (id: string) => void;
+  handleAddNewXWWWFormEncoded: () => void;
+  handleXWWWFormEncodedCheckToggle: (id?: string) => void;
+
   binaryData: File | null;
   handleChangeBinaryData: (file?: File | null) => void;
 }
@@ -63,21 +85,27 @@ export const useRequestResponse = () => {
   return context;
 };
 
-const useMetaDataManager = <T extends { id: string; hide?: boolean }>(
+const useMetaDataManager = <
+  T extends { id: string; hide?: boolean; value: any },
+>(
   setState: React.Dispatch<React.SetStateAction<Array<T>>>,
   generateNewItem: () => T
 ) => {
-  const handleChange = useCallback((id: string, key: string, value: string) => {
-    setState((prev) =>
-      prev.map((item) => {
-        if (item.id !== id) return item;
-        return {
-          ...item,
-          [key]: value,
-        };
-      })
-    );
-  }, []);
+  const handleChange = useCallback(
+    (id: string, key: string, value: any) => {
+      console.log({ id, key, value });
+      setState((prev) =>
+        prev.map((item) => {
+          if (item.id !== id) return item;
+          return {
+            ...item,
+            [key]: value,
+          };
+        })
+      );
+    },
+    [setState]
+  );
 
   const handleDelete = useCallback((id: string) => {
     setState((prev) => prev.filter((item) => item.id !== id));
@@ -101,7 +129,6 @@ const useMetaDataManager = <T extends { id: string; hide?: boolean }>(
     } else {
       setState((prev) => {
         const isAllChecked = prev.every((item) => !item.hide);
-        console.log({ isAllChecked });
         return prev.map((item) => ({
           ...item,
           hide: isAllChecked ? true : undefined,
@@ -125,7 +152,7 @@ interface RequestResponseProviderProps {
 const RequestResponseProvider = ({
   children,
 }: RequestResponseProviderProps) => {
-  const [activeMetaTab, setActiveMetaTab] = useState<string>("params");
+  const [activeMetaTab, setActiveMetaTab] = useState<TActiveTabType>("params");
   const [selectedMethod, setSelectedMethod] = useState<string>("get");
   const [isApiUrlError, setIsApiUrlError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -136,6 +163,11 @@ const RequestResponseProvider = ({
   const [binaryData, setBinaryData] = useState<File | null>(null);
   const [params, setParams] = useState<Array<ParamInterface>>([]);
   const [headers, setHeaders] = useState<Array<HeaderInterface>>([]);
+  console.log({ params });
+  const [formData, setFormData] = useState<Array<FormDataInterface>>([]);
+  const [xWWWFormUrlencodedData, setXWWWFormUrlencodedData] = useState<
+    Array<XWWWFormUrlencodedInterface>
+  >([]);
   const {
     handleChange: handleChangeParam,
     handleDelete: handleDeleteParam,
@@ -148,8 +180,26 @@ const RequestResponseProvider = ({
     handleAdd: handleAddNewHeader,
     handleCheckToggle: handleHeaderCheckToggle,
   } = useMetaDataManager<HeaderInterface>(setHeaders, generateNewMetaDataItem);
+  const {
+    handleChange: handleChangeFormData,
+    handleDelete: handleDeleteFormData,
+    handleAdd: handleAddNewFormData,
+    handleCheckToggle: handleFormDataCheckToggle,
+  } = useMetaDataManager<FormDataInterface>(
+    setFormData,
+    generateNewMetaDataItem
+  );
+  const {
+    handleChange: handleChangeXWWWFormEncoded,
+    handleDelete: handleDeleteXWWWFormEncoded,
+    handleAdd: handleAddNewXWWWFormEncoded,
+    handleCheckToggle: handleXWWWFormEncodedCheckToggle,
+  } = useMetaDataManager<HeaderInterface>(
+    setXWWWFormUrlencodedData,
+    generateNewMetaDataItem
+  );
 
-  const handleChangeActiveMetaTab = useCallback((id: string) => {
+  const handleChangeActiveMetaTab = useCallback((id: TActiveTabType) => {
     setActiveMetaTab(id);
   }, []);
   const handleChangeSelectedMethod = useCallback((id: string) => {
@@ -185,6 +235,8 @@ const RequestResponseProvider = ({
     }
   }, [apiUrl, selectedMethod]);
 
+  /* meta data end */
+
   /* binary data */
   const handleChangeBinaryData = useCallback((file: File | null = null) => {
     setBinaryData(file);
@@ -215,6 +267,16 @@ const RequestResponseProvider = ({
         handleDeleteHeader,
         handleAddNewHeader,
         handleHeaderCheckToggle,
+        formData,
+        handleChangeFormData,
+        handleDeleteFormData,
+        handleAddNewFormData,
+        handleFormDataCheckToggle,
+        xWWWFormUrlencodedData,
+        handleChangeXWWWFormEncoded,
+        handleDeleteXWWWFormEncoded,
+        handleAddNewXWWWFormEncoded,
+        handleXWWWFormEncodedCheckToggle,
         binaryData,
         handleChangeBinaryData,
       }}

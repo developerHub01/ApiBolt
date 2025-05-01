@@ -1,18 +1,20 @@
 "use client";
 
 import React, { memo } from "react";
-import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
+import {
+  TActiveTabType,
+  useRequestResponse,
+} from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
 import TabV1 from "@/components/tab-v1";
 import SelectV1 from "@/components/select-v1";
 
-const tabList = [
+const tabList: Array<{
+  id: TActiveTabType;
+  label: string;
+}> = [
   {
     id: "params",
     label: "Params",
-  },
-  {
-    id: "authorization",
-    label: "Authorization",
   },
   {
     id: "headers",
@@ -21,6 +23,10 @@ const tabList = [
   {
     id: "body",
     label: "Body",
+  },
+  {
+    id: "authorization",
+    label: "Authorization",
   },
 ];
 
@@ -32,13 +38,17 @@ const MetaDataTab = memo(() => {
       <SelectV1
         list={tabList}
         value={activeMetaTab}
-        handleChange={handleChangeActiveMetaTab}
+        handleChange={(value) =>
+          handleChangeActiveMetaTab(value as TActiveTabType)
+        }
         className="block md:hidden"
       />
       <TabV1
         list={tabList}
         activeTab={activeMetaTab}
-        handleSelect={handleChangeActiveMetaTab}
+        handleSelect={(value) =>
+          handleChangeActiveMetaTab(value as TActiveTabType)
+        }
         className="hidden md:flex select-none"
       />
     </>

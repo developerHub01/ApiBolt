@@ -1,11 +1,18 @@
 "use client";
 
-import { TContentType } from "@/types";
 import React, { createContext, useCallback, useContext, useState } from "react";
+import { TContentType } from "@/types";
+
+export type TRequestBodyType =
+  | "none"
+  | "form-data"
+  | "x-www-form-urlencoded"
+  | "raw"
+  | "binary";
 
 interface RequestBodyContext {
-  requestBodyType: string;
-  handleChangeRequestBodyType: (id: string) => void;
+  requestBodyType: TRequestBodyType;
+  handleChangeRequestBodyType: (id: TRequestBodyType) => void;
   rawRequestBodyType: TContentType;
   handleChangeRawRequestBodyType: (id: TContentType) => void;
   rawData: string;
@@ -31,11 +38,13 @@ interface RequestBodyProviderProps {
 }
 
 const RequestBodyProvider = ({ children }: RequestBodyProviderProps) => {
-  const [requestBodyType, setRequestBodyType] = useState<string>("none");
-  const [rawRequestBodyType, setRawRequestBodyType] = useState<TContentType>("json");
+  const [requestBodyType, setRequestBodyType] =
+    useState<TRequestBodyType>("none");
+  const [rawRequestBodyType, setRawRequestBodyType] =
+    useState<TContentType>("json");
   const [rawData, setRawData] = useState<string>("");
 
-  const handleChangeRequestBodyType = useCallback((id: string) => {
+  const handleChangeRequestBodyType = useCallback((id: TRequestBodyType) => {
     if (id !== "raw" && rawData) setRawData("");
 
     setRequestBodyType(id);

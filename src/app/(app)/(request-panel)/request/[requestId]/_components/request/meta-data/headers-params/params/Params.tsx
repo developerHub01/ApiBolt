@@ -1,14 +1,18 @@
+"use client";
+
 import React, { memo } from "react";
-import ParamList from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/headers-params/params/ParamList";
-import AddNewParam from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/headers-params/params/AddNewParam";
-import MetaDataWrapper from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/headers-params/MetaDataWrapper";
+import MetaDataWrapper from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/meta-table/MetaDataWrapper";
+import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
+import AddNew from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/meta-table/AddNew";
+import MetaTable from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/meta-table/MetaTable";
 
 const Params = memo(() => {
+  const { handleAddNewParam } = useRequestResponse();
+
   return (
-    <MetaDataWrapper>
-      <p className="text-foreground text-sm select-none">Query Params</p>
-      <ParamList />
-      <AddNewParam />
+    <MetaDataWrapper label="Query Params">
+      <MetaTable />
+      <AddNew onClick={handleAddNewParam} label="Add New Param" />
     </MetaDataWrapper>
   );
 });

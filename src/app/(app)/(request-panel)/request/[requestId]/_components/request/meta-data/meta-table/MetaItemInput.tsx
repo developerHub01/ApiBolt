@@ -1,0 +1,54 @@
+"use client";
+
+import React, {
+  ChangeEvent,
+  FocusEvent,
+  memo,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+import { cn } from "@/lib/utils";
+
+interface MetaItemInputProps {
+  id: string;
+  keyType: string;
+  value?: string;
+  onBlur: (id: string, key: string, value: string) => void;
+  className?: string;
+}
+
+const MetaItemInput = memo(
+  ({ id, keyType, value = "", onBlur, className = "" }: MetaItemInputProps) => {
+    const [valueState, setValueState] = useState<string>(value);
+
+    useEffect(() => {
+      if (value !== valueState) setValueState(value);
+    }, [value]);
+
+    const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+      setValueState(e.target.value);
+    }, []);
+
+    const handleBlur = useCallback(
+      (e: FocusEvent<HTMLInputElement>) => {
+        if (!e.target.dataset.metaItemType) return;
+        onBlur(id, e.target.dataset.metaItemType, e.target.value);
+      },
+      [onBlur]
+    );
+
+    return (
+      <input
+        type="text"
+        data-meta-item-type={keyType}
+        value={valueState}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        className={cn("w-full p-0.5", "focus:bg-background", className)}
+      />
+    );
+  }
+);
+
+export default MetaItemInput;

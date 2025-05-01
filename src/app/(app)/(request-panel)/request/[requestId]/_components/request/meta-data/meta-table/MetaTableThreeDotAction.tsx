@@ -13,17 +13,18 @@ import { Label } from "@/components/ui/label";
 import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
 import {
   ShowColumnInterface,
-  useRequestParamsHeaders,
-} from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestParamsHeadersProvider";
+  TMetaTableType,
+  useRequestMetaTable,
+} from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestMetaTableProvider";
 
-interface MetaDataListThreeDotActionProps {
-  type: "header" | "param";
+interface MetaTableThreeDotActionProps {
+  type: TMetaTableType;
 }
 
-const MetaDataListThreeDotAction = memo(
-  ({ type }: MetaDataListThreeDotActionProps) => {
+const MetaTableThreeDotAction = memo(
+  ({ type }: MetaTableThreeDotActionProps) => {
     const { handleAddNewParam, handleAddNewHeader } = useRequestResponse();
-    const { showColumn, toggleShowColumn } = useRequestParamsHeaders();
+    const { showColumn, toggleShowColumn } = useRequestMetaTable();
 
     return (
       <Popover>
@@ -41,12 +42,23 @@ const MetaDataListThreeDotAction = memo(
           <span className="text-xs px-2 pb-1">Show columns</span>
           <div className="flex flex-col pl-3">
             <CheckItem
+              type={type}
               id="value"
               label="Value"
               value={showColumn.value}
               onChange={toggleShowColumn}
             />
+            {type === "form-data" && (
+              <CheckItem
+                type={type}
+                id="contentType"
+                label="Content-Type"
+                value={showColumn.value}
+                onChange={toggleShowColumn}
+              />
+            )}
             <CheckItem
+              type={type}
               id="description"
               label="Description"
               value={showColumn.description}
@@ -56,9 +68,9 @@ const MetaDataListThreeDotAction = memo(
           <Button
             size={"sm"}
             variant={"ghost"}
-            onClick={type === "header" ? handleAddNewHeader : handleAddNewParam}
+            onClick={type === "headers" ? handleAddNewHeader : handleAddNewParam}
           >
-            <AddIcon /> Add New {type === "header" ? "Headers" : "Params"}
+            <AddIcon /> Add New {type === "headers" ? "Headers" : "Params"}
           </Button>
         </PopoverContent>
       </Popover>
@@ -67,20 +79,21 @@ const MetaDataListThreeDotAction = memo(
 );
 
 interface CheckItemProps {
+  type: TMetaTableType;
   id: keyof ShowColumnInterface;
   label: string;
   value: boolean;
   onChange: (id: keyof ShowColumnInterface) => void;
 }
 
-const CheckItem = ({ id, label, value, onChange }: CheckItemProps) => {
+const CheckItem = ({ type, id, label, value, onChange }: CheckItemProps) => {
   return (
     <Label
-      htmlFor={`params-${id}`}
+      htmlFor={`${type}-${id}`}
       className="w-full flex items-center gap-2 hover:bg-accent p-2 rounded-md cursor-pointer"
     >
       <Checkbox
-        id={`params-${id}`}
+        id={`${type}-${id}`}
         checked={value}
         className="cursor-pointer"
         onCheckedChange={() => onChange(id)}
@@ -90,4 +103,4 @@ const CheckItem = ({ id, label, value, onChange }: CheckItemProps) => {
   );
 };
 
-export default MetaDataListThreeDotAction;
+export default MetaTableThreeDotAction;

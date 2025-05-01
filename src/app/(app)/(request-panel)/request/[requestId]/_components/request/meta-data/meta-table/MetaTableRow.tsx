@@ -1,26 +1,27 @@
 "use client";
 
-import React, { memo, useCallback, useEffect, useState } from "react";
+import React, { memo, useCallback } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Trash2 as DeleteIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import MetaItemInput from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/headers-params/MetaItemInput";
+import MetaItemInput from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/meta-table/MetaItemInput";
+import { TMetaTableType } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestMetaTableProvider";
 
-interface MetaItemProps {
-  type?: "header" | "param";
+interface MetaTableRowProps {
+  type?: TMetaTableType;
   id: string;
   keyName?: string;
-  value?: string;
+  value: string | Array<File>;
   description?: string;
   hide?: boolean;
-  handleChangeItem: (id: string, key: string, value: string) => void;
+  handleChangeItem: (id: string, key: string, value: string | File) => void;
   handleDeleteItem: (id: string) => void;
   handleCheckToggle: (id?: string) => void;
   cellList: Array<string>;
 }
 
-const MetaItem = memo(
+const MetaTableRow = memo(
   ({
     type,
     id,
@@ -32,43 +33,12 @@ const MetaItem = memo(
     handleDeleteItem,
     handleCheckToggle,
     cellList,
-  }: MetaItemProps) => {
-    const [metaItemState, setMetaItemState] = useState<{
-      key: string;
-      value: string;
-      description: string;
-    }>({
+  }: MetaTableRowProps) => {
+    const data: Record<string, string | Array<File>> = {
       key: keyName,
       value,
       description,
-    });
-
-    useEffect(() => {
-      setMetaItemState((prevState) => ({
-        ...prevState,
-        key: keyName,
-        value,
-        description,
-      }));
-    }, [keyName, value, description]);
-
-    const handleChange = useCallback((key: string, value: string) => {
-      setMetaItemState((prev) => ({
-        ...prev,
-        [key]: value,
-      }));
-    }, []);
-
-    const handleBlur = useCallback(
-      (id: string, key: string) => {
-        handleChangeItem(
-          id,
-          key,
-          metaItemState[key as keyof typeof metaItemState]
-        );
-      },
-      [id, metaItemState]
-    );
+    };
 
     const handleDelete = useCallback(() => handleDeleteItem(id), [id]);
 
@@ -89,16 +59,21 @@ const MetaItem = memo(
             />
           </div>
         </TableCell>
-        {cellList.map((id) => (
-          <TableCell className="p-1.5" key={id}>
-            <MetaItemInput
-              id={id}
-              value={metaItemState[id as keyof typeof metaItemState]}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-          </TableCell>
-        ))}
+        {cellList.map((keyType) => {
+          const value = data[keyType];
+          return (
+            <TableCell className="p-1.5" key={keyType}>
+              {typeof value === "string" && (
+                <MetaItemInput
+                  keyType={keyType}
+                  id={id}
+                  value={value}
+                  onBlur={handleChangeItem}
+                />
+              )}
+            </TableCell>
+          );
+        })}
         <TableCell className="p-0">
           <div className="flex justify-center items-center">
             <Button size={"iconXs"} variant={"ghost"} onClick={handleDelete}>
@@ -111,4 +86,4 @@ const MetaItem = memo(
   }
 );
 
-export default MetaItem;
+export default MetaTableRow;

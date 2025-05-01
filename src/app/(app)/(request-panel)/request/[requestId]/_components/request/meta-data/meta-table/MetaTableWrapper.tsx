@@ -2,15 +2,12 @@ import React from "react";
 import { Table, TableBody } from "@/components/ui/table";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 
-interface MetaDataListWrapperProps {
+interface MetaTableWrapperProps {
   header?: React.ReactNode;
   children: React.ReactNode;
 }
 
-const MetaDataListWrapper = ({
-  children,
-  header,
-}: MetaDataListWrapperProps) => {
+const MetaTableWrapper = ({ children, header }: MetaTableWrapperProps) => {
   return (
     <ScrollArea className="w-full h-full">
       <Table className="border">
@@ -21,4 +18,4 @@ const MetaDataListWrapper = ({
   );
 };
 
-export default MetaDataListWrapper;
+export default MetaTableWrapper;
