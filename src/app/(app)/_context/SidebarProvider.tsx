@@ -8,6 +8,7 @@ interface SidebarContext {
   activeTab: TSidebarTab;
   lastActiveTab: TSidebarTab;
   handleChangeActiveTab: (id?: TSidebarTab) => void;
+  handleToggleSidebar: () => void;
 }
 
 const SidebarContext = createContext<SidebarContext | null>(null);
@@ -41,12 +42,20 @@ const SidebarProvider = ({ children }: SidebarProviderProps) => {
     [activeTab, setActiveTab]
   );
 
+  const handleToggleSidebar = useCallback(() => {
+    if (!activeTab) return setActiveTab(lastActiveTab);
+
+    setLastActiveTab(activeTab);
+    setActiveTab(null);
+  }, [activeTab, lastActiveTab]);
+
   return (
     <SidebarContext.Provider
       value={{
         activeTab,
         lastActiveTab,
         handleChangeActiveTab,
+        handleToggleSidebar,
       }}
     >
       {children}
