@@ -1,6 +1,6 @@
 "use client";
 
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { X as CloseIcon } from "lucide-react";
 import Link from "next/link";
 import useMounted from "@/hooks/use-mounted";
@@ -8,19 +8,31 @@ import useMounted from "@/hooks/use-mounted";
 const githubLink = "https://github.com/developerHub01";
 
 const CopyRight = memo(() => {
-  const [show, setShow] = useState<boolean>(true);
+  const [isVisible, setIsVisible] = useState<boolean>(true);
   const mounted = useMounted();
 
-  const handleClick = useCallback(() => {
-    setShow(false);
+  useEffect(() => {
+    try {
+      setIsVisible(!sessionStorage.getItem("copy-right-hide"));
+    } catch (err) {
+      // fallback if sessionStorage not available
+      setIsVisible(true);
+    }
   }, []);
 
-  if (!mounted || !show) return null;
+  const handleClick = useCallback(() => {
+    try {
+      sessionStorage.setItem("copy-right-hide", "true");
+    } catch {}
+    setIsVisible(false);
+  }, []);
+
+  if (!mounted || !isVisible) return null;
 
   return (
     <div className="p-1 pt-1 bg-accent relative">
       <p className="text-center text-xs md:text-sm select-none">
-        All rights reserve for
+        All rights reserved for
         <Link
           href={githubLink}
           target="_blank"
