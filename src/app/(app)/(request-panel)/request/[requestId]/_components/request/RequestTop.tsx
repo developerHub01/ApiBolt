@@ -3,6 +3,7 @@
 import React, {
   ChangeEvent,
   FocusEvent,
+  memo,
   useCallback,
   useEffect,
   useRef,
@@ -18,7 +19,7 @@ import {
 import { cn } from "@/lib/utils";
 import { ChevronDown as DownIcon, Save as SaveIcon } from "lucide-react";
 
-const RequestTop = () => {
+const RequestTop = memo(() => {
   const [requestName, setRequestName] = useState<string>("Request name");
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -32,10 +33,9 @@ const RequestTop = () => {
   }, []);
 
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
-
     setRequestName(e.target.value);
   }, []);
+
   const handleBlur = useCallback((_: FocusEvent<HTMLInputElement>) => {
     setIsFocused(false);
   }, []);
@@ -89,6 +89,6 @@ const RequestTop = () => {
       </div>
     </div>
   );
-};
+});
 
 export default RequestTop;
