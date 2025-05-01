@@ -83,22 +83,25 @@ const MetaTableThreeDotAction = memo(
               onChange={toggleShowColumn}
             />
           </div>
-          <Button
-            size={"sm"}
-            variant={"ghost"}
-            onClick={handleAddNewData}
-            className="justify-start"
-          >
-            <AddIcon /> Add New
-          </Button>
-          <Button
-            size={"sm"}
-            variant={"ghost"}
-            onClick={handleDeleteAllData}
-            className="justify-start"
-          >
-            <DeleteIcon /> Delete All
-          </Button>
+          <span className="text-xs px-2 pb-1">Actions</span>
+          <div className="flex flex-col pl-3">
+            <Button
+              size={"sm"}
+              variant={"ghost"}
+              onClick={handleAddNewData}
+              className="justify-start"
+            >
+              <AddIcon /> Add New
+            </Button>
+            <Button
+              size={"sm"}
+              variant={"ghost"}
+              onClick={handleDeleteAllData}
+              className="justify-start"
+            >
+              <DeleteIcon /> Delete All
+            </Button>
+          </div>
         </PopoverContent>
       </Popover>
     );
