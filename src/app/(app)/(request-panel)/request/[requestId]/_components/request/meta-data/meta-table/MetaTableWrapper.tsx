@@ -1,6 +1,5 @@
 import React from "react";
 import { Table, TableBody } from "@/components/ui/table";
-import { ScrollArea } from "@radix-ui/react-scroll-area";
 
 interface MetaTableWrapperProps {
   header?: React.ReactNode;
@@ -9,12 +8,10 @@ interface MetaTableWrapperProps {
 
 const MetaTableWrapper = ({ children, header }: MetaTableWrapperProps) => {
   return (
-    <ScrollArea className="w-full h-full">
-      <Table className="border">
-        {header}
-        <TableBody>{children}</TableBody>
-      </Table>
-    </ScrollArea>
+    <Table className="border w-full h-full">
+      {header}
+      <TableBody>{children}</TableBody>
+    </Table>
   );
 };
 

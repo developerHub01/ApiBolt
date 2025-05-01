@@ -11,7 +11,7 @@ const MetaDataWrapper = ({ label, children }: MetaDataWrapperProps) => {
   return (
     <RequestParamsHeadersProvider>
       <ScrollArea className="min-h-0 h-full">
-        <div className="h-full flex flex-col gap-3">
+        <div className="h-full flex flex-col gap-3 pb-5">
           {label && (
             <p className="text-foreground text-sm select-none">{label}</p>
           )}
