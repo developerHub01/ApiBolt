@@ -67,6 +67,7 @@ interface RequestResponseContext {
   handleAddNewXWWWFormEncoded: () => void;
   handleXWWWFormEncodedCheckToggle: (id?: string) => void;
   handleRemoveAllMetaData: (type: TMetaTableType) => void;
+  handleRemoveFormDataFile: (id: string, index: number) => void;
 
   binaryData: File | null;
   handleChangeBinaryData: (file?: File | null) => void;
@@ -98,6 +99,18 @@ const useMetaDataManager = <
     setState((prev) =>
       prev.map((item) => {
         if (item.id !== id) return item;
+
+        if (value instanceof File) {
+          const existingFiles = (
+            Array.isArray(item[key as keyof T]) ? item[key as keyof T] : []
+          ) as Array<any>;
+
+          return {
+            ...item,
+            [key]: [...existingFiles, value],
+          };
+        }
+
         return {
           ...item,
           [key]: value,
@@ -162,7 +175,6 @@ const RequestResponseProvider = ({
   const [binaryData, setBinaryData] = useState<File | null>(null);
   const [params, setParams] = useState<Array<ParamInterface>>([]);
   const [headers, setHeaders] = useState<Array<HeaderInterface>>([]);
-  console.log({ params });
   const [formData, setFormData] = useState<Array<FormDataInterface>>([]);
   const [xWWWFormUrlencodedData, setXWWWFormUrlencodedData] = useState<
     Array<XWWWFormUrlencodedInterface>
@@ -246,6 +258,19 @@ const RequestResponseProvider = ({
     }
   }, []);
 
+  const handleRemoveFormDataFile = useCallback((id: string, index: number) => {
+    setFormData((prev) =>
+      prev.map((item) => {
+        if (item.id !== id || typeof item.value === "string") return item;
+
+        return {
+          ...item,
+          value: item.value.filter((_, i) => i !== index),
+        };
+      })
+    );
+  }, []);
+
   /* binary data */
   const handleChangeBinaryData = useCallback((file: File | null = null) => {
     setBinaryData(file);
@@ -287,6 +312,7 @@ const RequestResponseProvider = ({
         handleAddNewXWWWFormEncoded,
         handleXWWWFormEncodedCheckToggle,
         handleRemoveAllMetaData,
+        handleRemoveFormDataFile,
         binaryData,
         handleChangeBinaryData,
       }}

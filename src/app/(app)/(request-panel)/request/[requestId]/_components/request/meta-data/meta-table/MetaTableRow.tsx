@@ -1,12 +1,12 @@
 "use client";
 
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useMemo } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Trash2 as DeleteIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import MetaItemInput from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/meta-table/MetaItemInput";
 import { TMetaTableType } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestMetaTableProvider";
+import MetaTableCell from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/meta-table/MetaTableCell";
 
 interface MetaTableRowProps {
   type?: TMetaTableType;
@@ -14,6 +14,7 @@ interface MetaTableRowProps {
   keyName?: string;
   value: string | Array<File>;
   description?: string;
+  contentType?: string;
   hide?: boolean;
   handleChangeItem: (id: string, key: string, value: string | File) => void;
   handleDeleteItem: (id: string) => void;
@@ -28,17 +29,22 @@ const MetaTableRow = memo(
     keyName = "",
     value = "",
     description = "",
+    contentType = "",
     hide = false,
     handleChangeItem,
     handleDeleteItem,
     handleCheckToggle,
     cellList,
   }: MetaTableRowProps) => {
-    const data: Record<string, string | Array<File>> = {
-      key: keyName,
-      value,
-      description,
-    };
+    const data: Record<string, string | Array<File>> = useMemo(
+      () => ({
+        key: keyName,
+        value,
+        contentType,
+        description,
+      }),
+      [keyName, value, contentType, description]
+    );
 
     const handleDelete = useCallback(() => handleDeleteItem(id), [id]);
 
@@ -47,7 +53,7 @@ const MetaTableRow = memo(
     return (
       <TableRow
         key={id}
-        className="[&>td]:border-r [&>td]:last:border-r-0 [&>td>input]:outline-none"
+        className="[&>td]:border-r [&>td]:last:border-r-0 [&>td>input]:outline-none [&>td>div>input]:outline-none [&>td>input]:rounded-md [&>td>div>input]:rounded-md"
       >
         <TableCell className="px-0">
           <div className="w-full flex justify-center items-center">
@@ -62,16 +68,14 @@ const MetaTableRow = memo(
         {cellList.map((keyType) => {
           const value = data[keyType];
           return (
-            <TableCell className="p-1.5" key={keyType}>
-              {typeof value === "string" && (
-                <MetaItemInput
-                  keyType={keyType}
-                  id={id}
-                  value={value}
-                  onBlur={handleChangeItem}
-                />
-              )}
-            </TableCell>
+            <MetaTableCell
+              key={keyType}
+              id={id}
+              type={type}
+              keyType={keyType}
+              value={value}
+              onBlur={handleChangeItem}
+            />
           );
         })}
         <TableCell className="p-0">
