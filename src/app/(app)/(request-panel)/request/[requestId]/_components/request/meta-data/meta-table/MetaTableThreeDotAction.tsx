@@ -48,12 +48,12 @@ const MetaTableThreeDotAction = memo(
               value={showColumn.value}
               onChange={toggleShowColumn}
             />
-            {type === "form-data" && (
+            {type === "form-data" && showColumn.contentType !== undefined && (
               <CheckItem
                 type={type}
                 id="contentType"
                 label="Content-Type"
-                value={showColumn.value}
+                value={showColumn.contentType}
                 onChange={toggleShowColumn}
               />
             )}

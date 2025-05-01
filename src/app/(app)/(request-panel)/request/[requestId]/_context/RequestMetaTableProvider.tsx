@@ -117,6 +117,7 @@ const RequestMetaTableProvider = ({
   const [showColumn, setShowColumn] = useState<ShowColumnInterface>({
     value: true,
     description: true,
+    contentType: false,
   });
   const {
     handleChangeParam,
