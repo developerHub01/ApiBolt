@@ -68,9 +68,12 @@ const MetaTableThreeDotAction = memo(
           <Button
             size={"sm"}
             variant={"ghost"}
-            onClick={type === "headers" ? handleAddNewHeader : handleAddNewParam}
+            onClick={
+              type === "headers" ? handleAddNewHeader : handleAddNewParam
+            }
+            className="justify-start"
           >
-            <AddIcon /> Add New {type === "headers" ? "Headers" : "Params"}
+            <AddIcon /> Add New
           </Button>
         </PopoverContent>
       </Popover>

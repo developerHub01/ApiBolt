@@ -35,7 +35,7 @@ interface RequestMetaTableContext {
     type: TMetaTableType,
     params: [id: string, key: string, value: string | File]
   ) => void;
-  handleAddNewMetaData: (type: TMetaTableType, id: string) => void;
+  handleAddNewMetaData: (type: TMetaTableType) => void;
   handleCheckToggleMetaData: (type: TMetaTableType, id?: string) => void;
   handleDeleteMetaData: (type: TMetaTableType, id: string) => void;
   getMetaData: (
