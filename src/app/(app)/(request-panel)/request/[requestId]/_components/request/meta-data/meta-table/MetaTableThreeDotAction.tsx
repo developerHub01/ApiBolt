@@ -14,13 +14,11 @@ import {
 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-
 import {
   ShowColumnInterface,
   TMetaTableType,
   useRequestMetaTable,
 } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestMetaTableProvider";
-import { useRequestResponse } from "../../../../_context/RequestResponseProvider";
 
 interface MetaTableThreeDotActionProps {
   type: TMetaTableType;
