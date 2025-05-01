@@ -1,16 +1,18 @@
 "use client";
 
-import React, { memo } from "react";
+import React, { memo, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Ellipsis as ThreeDotIcon, Plus as AddIcon } from "lucide-react";
+import {
+  Ellipsis as ThreeDotIcon,
+  Plus as AddIcon,
+} from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
 import {
   ShowColumnInterface,
   TMetaTableType,
@@ -23,8 +25,13 @@ interface MetaTableThreeDotActionProps {
 
 const MetaTableThreeDotAction = memo(
   ({ type }: MetaTableThreeDotActionProps) => {
-    const { handleAddNewParam, handleAddNewHeader } = useRequestResponse();
-    const { showColumn, toggleShowColumn } = useRequestMetaTable();
+    const { showColumn, toggleShowColumn, handleAddNewMetaData } =
+      useRequestMetaTable();
+
+    const handleAddNewData = useCallback(
+      () => handleAddNewMetaData(type),
+      [type]
+    );
 
     return (
       <Popover>
@@ -68,9 +75,7 @@ const MetaTableThreeDotAction = memo(
           <Button
             size={"sm"}
             variant={"ghost"}
-            onClick={
-              type === "headers" ? handleAddNewHeader : handleAddNewParam
-            }
+            onClick={handleAddNewData}
             className="justify-start"
           >
             <AddIcon /> Add New
