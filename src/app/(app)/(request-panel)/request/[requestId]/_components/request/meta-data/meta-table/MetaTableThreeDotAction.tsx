@@ -10,14 +10,17 @@ import {
 import {
   Ellipsis as ThreeDotIcon,
   Plus as AddIcon,
+  Trash2 as DeleteIcon,
 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+
 import {
   ShowColumnInterface,
   TMetaTableType,
   useRequestMetaTable,
 } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestMetaTableProvider";
+import { useRequestResponse } from "../../../../_context/RequestResponseProvider";
 
 interface MetaTableThreeDotActionProps {
   type: TMetaTableType;
@@ -25,11 +28,19 @@ interface MetaTableThreeDotActionProps {
 
 const MetaTableThreeDotAction = memo(
   ({ type }: MetaTableThreeDotActionProps) => {
-    const { showColumn, toggleShowColumn, handleAddNewMetaData } =
-      useRequestMetaTable();
+    const {
+      showColumn,
+      toggleShowColumn,
+      handleAddNewMetaData,
+      handleRemoveAllMetaData,
+    } = useRequestMetaTable();
 
     const handleAddNewData = useCallback(
       () => handleAddNewMetaData(type),
+      [type]
+    );
+    const handleDeleteAllData = useCallback(
+      () => handleRemoveAllMetaData(type),
       [type]
     );
 
@@ -79,6 +90,14 @@ const MetaTableThreeDotAction = memo(
             className="justify-start"
           >
             <AddIcon /> Add New
+          </Button>
+          <Button
+            size={"sm"}
+            variant={"ghost"}
+            onClick={handleDeleteAllData}
+            className="justify-start"
+          >
+            <DeleteIcon /> Delete All
           </Button>
         </PopoverContent>
       </Popover>

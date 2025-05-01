@@ -38,6 +38,7 @@ interface RequestMetaTableContext {
   handleAddNewMetaData: (type: TMetaTableType) => void;
   handleCheckToggleMetaData: (type: TMetaTableType, id?: string) => void;
   handleDeleteMetaData: (type: TMetaTableType, id: string) => void;
+  handleRemoveAllMetaData: (type: TMetaTableType) => void;
   getMetaData: (
     tpe: TMetaTableType
   ) => Array<
@@ -140,6 +141,8 @@ const RequestMetaTableProvider = ({
     handleFormDataCheckToggle,
     handleXWWWFormEncodedCheckToggle,
 
+    handleRemoveAllMetaData,
+
     params,
     headers,
     formData,
@@ -190,10 +193,8 @@ const RequestMetaTableProvider = ({
           if (typeof value !== "string") return;
           return handleChangeHeader(id, key, value);
         }
-        case "form-data": {
-          if (typeof value === "string") return;
+        case "form-data":
           return handleChangeFormData(id, key, value);
-        }
         case "x-www-form-urlencoded": {
           if (typeof value !== "string") return;
           return handleChangeXWWWFormEncoded(id, key, value);
@@ -254,6 +255,7 @@ const RequestMetaTableProvider = ({
         handleAddNewMetaData,
         handleCheckToggleMetaData,
         handleDeleteMetaData,
+        handleRemoveAllMetaData,
         getMetaData,
       }}
     >

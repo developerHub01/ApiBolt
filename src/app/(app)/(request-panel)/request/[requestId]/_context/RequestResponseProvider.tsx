@@ -3,11 +3,13 @@
 import React, { createContext, useCallback, useContext, useState } from "react";
 import axios, { AxiosResponse } from "axios";
 import { v4 as uuidv4 } from "uuid";
+import { TMetaTableType } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestMetaTableProvider";
 
-const generateNewMetaDataItem = () => ({
+const generateNewMetaDataItem = (type?: TMetaTableType) => ({
   id: uuidv4(),
   key: "",
   value: "",
+  contentType: type !== "form-data" ? undefined : "",
   description: "",
 });
 
@@ -54,7 +56,7 @@ interface RequestResponseContext {
   handleHeaderCheckToggle: (id?: string) => void;
 
   formData: Array<FormDataInterface>;
-  handleChangeFormData: (id: string, key: string, value: File) => void;
+  handleChangeFormData: (id: string, key: string, value: File | string) => void;
   handleDeleteFormData: (id: string) => void;
   handleAddNewFormData: () => void;
   handleFormDataCheckToggle: (id?: string) => void;
@@ -64,6 +66,7 @@ interface RequestResponseContext {
   handleDeleteXWWWFormEncoded: (id: string) => void;
   handleAddNewXWWWFormEncoded: () => void;
   handleXWWWFormEncodedCheckToggle: (id?: string) => void;
+  handleRemoveAllMetaData: (type: TMetaTableType) => void;
 
   binaryData: File | null;
   handleChangeBinaryData: (file?: File | null) => void;
@@ -91,21 +94,17 @@ const useMetaDataManager = <
   setState: React.Dispatch<React.SetStateAction<Array<T>>>,
   generateNewItem: () => T
 ) => {
-  const handleChange = useCallback(
-    (id: string, key: string, value: any) => {
-      console.log({ id, key, value });
-      setState((prev) =>
-        prev.map((item) => {
-          if (item.id !== id) return item;
-          return {
-            ...item,
-            [key]: value,
-          };
-        })
-      );
-    },
-    [setState]
-  );
+  const handleChange = useCallback((id: string, key: string, value: any) => {
+    setState((prev) =>
+      prev.map((item) => {
+        if (item.id !== id) return item;
+        return {
+          ...item,
+          [key]: value,
+        };
+      })
+    );
+  }, []);
 
   const handleDelete = useCallback((id: string) => {
     setState((prev) => prev.filter((item) => item.id !== id));
@@ -185,16 +184,15 @@ const RequestResponseProvider = ({
     handleDelete: handleDeleteFormData,
     handleAdd: handleAddNewFormData,
     handleCheckToggle: handleFormDataCheckToggle,
-  } = useMetaDataManager<FormDataInterface>(
-    setFormData,
-    generateNewMetaDataItem
+  } = useMetaDataManager<FormDataInterface>(setFormData, () =>
+    generateNewMetaDataItem("form-data")
   );
   const {
     handleChange: handleChangeXWWWFormEncoded,
     handleDelete: handleDeleteXWWWFormEncoded,
     handleAdd: handleAddNewXWWWFormEncoded,
     handleCheckToggle: handleXWWWFormEncodedCheckToggle,
-  } = useMetaDataManager<HeaderInterface>(
+  } = useMetaDataManager<XWWWFormUrlencodedInterface>(
     setXWWWFormUrlencodedData,
     generateNewMetaDataItem
   );
@@ -235,7 +233,18 @@ const RequestResponseProvider = ({
     }
   }, [apiUrl, selectedMethod]);
 
-  /* meta data end */
+  const handleRemoveAllMetaData = useCallback((type: TMetaTableType) => {
+    switch (type) {
+      case "params":
+        return setParams([]);
+      case "headers":
+        return setHeaders([]);
+      case "form-data":
+        return setFormData([]);
+      case "x-www-form-urlencoded":
+        return setXWWWFormUrlencodedData([]);
+    }
+  }, []);
 
   /* binary data */
   const handleChangeBinaryData = useCallback((file: File | null = null) => {
@@ -277,6 +286,7 @@ const RequestResponseProvider = ({
         handleDeleteXWWWFormEncoded,
         handleAddNewXWWWFormEncoded,
         handleXWWWFormEncodedCheckToggle,
+        handleRemoveAllMetaData,
         binaryData,
         handleChangeBinaryData,
       }}
