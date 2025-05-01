@@ -9,6 +9,7 @@ import { toast } from "sonner";
 const BeautifyCode = memo(() => {
   const {
     rawData: code,
+    requestBodyType,
     rawRequestBodyType,
     handleChangeRawData,
   } = useRequestBody();
@@ -21,10 +22,12 @@ const BeautifyCode = memo(() => {
   const handleClick = useCallback(async () => {
     const { success, data, message } = await formatCode(code, parser);
 
-    if (!success || !data) return toast(message);
+    if (!success || !data) return message && toast(message);
 
     handleChangeRawData(data);
   }, [code, parser]);
+
+  if (requestBodyType !== "raw" || rawRequestBodyType === "text") return null;
 
   return (
     <Button
