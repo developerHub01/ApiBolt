@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useRequestBody } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestBodyProvider";
-import BeautifyCode from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/body/BeautifyCode";
+import BeautifyCode from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/body/raw/BeautifyCode";
 import BodyDetails from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/body/BodyDetails";
 
 const bodyList = [

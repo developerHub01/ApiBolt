@@ -1,9 +1,9 @@
 "use client";
 
 import React, { memo } from "react";
-import BodyCode from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/body/BodyCode";
+import BodyCode from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/body/raw/BodyCode";
 import Empty from "@/components/Empty";
-import BodyBinary from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/body/BodyBinary";
+import BodyBinary from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/body/binary/BodyBinary";
 
 interface BodyDetailsInterface {
   bodyType: string;
