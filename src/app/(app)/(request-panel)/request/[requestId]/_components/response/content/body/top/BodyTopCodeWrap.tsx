@@ -6,6 +6,7 @@ import { useResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_co
 
 const BodyTopCodeWrap = memo(() => {
   const { responseCodeWrap, handleToggleResponseCodeWrap } = useResponse();
+  
   return (
     <Button
       size={"sm"}

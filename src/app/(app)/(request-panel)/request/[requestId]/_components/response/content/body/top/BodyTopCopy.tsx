@@ -8,15 +8,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Copy as CopyIcon } from "lucide-react";
-import { useResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/ResponseProvider";
 import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
 import { toast } from "sonner";
 
 const BodyTopCopy = memo(() => {
-  const { responseTab } = useResponse();
   const { response } = useRequestResponse();
-
-  if (responseTab !== "raw") return null;
 
   const handleCopy = useCallback(async () => {
     const responseData = response?.data ? JSON.stringify(response?.data) : "";
