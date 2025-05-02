@@ -1,7 +1,7 @@
 "use client";
 
 import React, { FocusEvent, useEffect, useRef, useState } from "react";
-import CodeMirror, { ViewUpdate } from "@uiw/react-codemirror";
+import CodeMirror, { Extension, ViewUpdate } from "@uiw/react-codemirror";
 import { EditorView } from "@codemirror/view";
 import { html } from "@codemirror/lang-html";
 import { javascript } from "@codemirror/lang-javascript";
@@ -64,6 +64,8 @@ interface CodeProps {
   className?: string;
   zoomable?: boolean;
   lineWrap?: boolean;
+  [key: string]: unknown;
+  handleFormat?: () => void;
 }
 
 const Code = ({
@@ -76,12 +78,14 @@ const Code = ({
   className = "",
   zoomable = false,
   lineWrap = false,
+  handleFormat,
+  ...props
 }: CodeProps) => {
   const [fontSizeState, setFontSizeState] = useState(fontSize);
   const { resolvedTheme } = useTheme();
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  const extensions: Array<any> = [selectedLang(contentType)];
+  const extensions: Array<Extension> = [selectedLang(contentType)];
   if (lineWrap) extensions.push(EditorView.lineWrapping);
 
   const theme = resolvedTheme as "dark" | "light";
@@ -90,22 +94,27 @@ const Code = ({
     if (!zoomable || !wrapperRef.current) return;
 
     const handleKeydownEvent = (e: globalThis.KeyboardEvent) => {
-      if (!e.ctrlKey) return;
-
-      switch (e.key.toLowerCase()) {
-        case "0":
-          return setFontSizeState(fontSize);
-        case "+":
-        case "=":
-          return setFontSizeState((prev) =>
-            Math.min(prev + 1, fontSizeLimit.max)
-          );
-        case "-":
-          return setFontSizeState((prev) =>
-            Math.max(prev - 1, fontSizeLimit.min)
-          );
+      if (e.ctrlKey) {
+        switch (e.key.toLowerCase()) {
+          case "0":
+            return setFontSizeState(fontSize);
+          case "+":
+          case "=":
+            return setFontSizeState((prev) =>
+              Math.min(prev + 1, fontSizeLimit.max)
+            );
+          case "-":
+            return setFontSizeState((prev) =>
+              Math.max(prev - 1, fontSizeLimit.min)
+            );
+        }
+      }
+      if (e.altKey && e.shiftKey && e.key.toLowerCase() === "f") {
+        e.preventDefault();
+        handleFormat && handleFormat();
       }
     };
+
     const handleWheellEvent = (e: globalThis.WheelEvent) => {
       if (!e.ctrlKey) return;
 
@@ -126,11 +135,10 @@ const Code = ({
       wrapperRef.current?.removeEventListener("keydown", handleKeydownEvent);
       wrapperRef.current?.removeEventListener("wheel", handleWheellEvent);
     };
-  }, []);
+  }, [zoomable, fontSize, handleFormat]);
 
-  getEditableOptions(editable);
   return (
-    <div className="w-full h-full" tabIndex={0} ref={wrapperRef}>
+    <div className="w-full h-full" tabIndex={0} ref={wrapperRef} {...props}>
       <CodeMirror
         className={cn("w-full h-full [&>div]:bg-background!", className)}
         height="100%"
