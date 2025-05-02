@@ -7,6 +7,7 @@ import { getResponseType } from "@/utils";
 import { TContentType } from "@/types";
 import { formatCode, getParser } from "@/utils/prettierUtils";
 import { useResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/ResponseProvider";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 const BodyResponse = memo(() => {
   const { response } = useRequestResponse();
@@ -39,13 +40,16 @@ const BodyResponse = memo(() => {
   if (!response) return;
 
   return (
-    <Code
-      code={formattedCode}
-      contentType={responseType}
-      editable={false}
-      zoomable={true}
-      lineWrap={responseCodeWrap}
-    />
+    <ScrollArea className="flex-1 min-h-0 h-full overflow-hidden">
+      <Code
+        code={formattedCode}
+        contentType={responseType}
+        editable={false}
+        zoomable={true}
+        lineWrap={responseCodeWrap}
+      />
+      <ScrollBar orientation="horizontal" />
+    </ScrollArea>
   );
 });
 

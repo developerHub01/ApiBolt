@@ -6,11 +6,13 @@ interface BodyHTMLPreviewProps {
 
 const BodyHTMLPreview = ({ data }: BodyHTMLPreviewProps) => {
   return (
-    <iframe
-      srcDoc={data}
-      style={{ width: "100%", height: "100%", border: "none" }}
-      sandbox="allow-scripts allow-same-origin"
-    />
+    <div className="w-full h-full">
+      <iframe
+        srcDoc={data}
+        style={{ width: "100%", height: "100%", border: "none" }}
+        sandbox="allow-scripts allow-same-origin"
+      />
+    </div>
   );
 };
 
