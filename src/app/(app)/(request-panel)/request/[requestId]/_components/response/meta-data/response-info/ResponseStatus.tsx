@@ -3,8 +3,6 @@
 import React, { memo } from "react";
 import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
 import { Badge } from "@/components/ui/badge";
-import useHttpStatusDetail from "@/hooks/use-http-status-detail";
-import { Skeleton } from "@/components/ui/skeleton";
 import {
   HoverCard,
   HoverCardContent,
@@ -14,15 +12,9 @@ import { cn } from "@/lib/utils";
 
 const ResponseStatus = memo(() => {
   const { response } = useRequestResponse();
+  if (!response) return null;
 
-  const { status, statusText } = response || { status: 0, statusText: "" };
-
-  const { loading, detail, error } = useHttpStatusDetail(status);
-
-  console.log({ loading, detail, status, statusText, error });
-
-  if (loading) return <Skeleton className="h-6 w-12 rounded-md" />;
-  if (error || [detail, status].some((item) => !item)) return null;
+  const { status, statusText, statusDescription } = response;
 
   return (
     <HoverCard>
@@ -43,11 +35,9 @@ const ResponseStatus = memo(() => {
         align="end"
       >
         <h4 className="text-base font-semibold">
-          {status} {statusText ?? detail?.reason}
+          {status} {statusText}
         </h4>
-        <p className="text-sm text-muted-foreground">
-          {detail?.description || "Unknown status code"}
-        </p>
+        <p className="text-sm text-muted-foreground">{statusDescription}</p>
       </HoverCardContent>
     </HoverCard>
   );
