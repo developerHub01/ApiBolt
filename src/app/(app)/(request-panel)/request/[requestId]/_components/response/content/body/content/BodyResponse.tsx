@@ -6,9 +6,11 @@ import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[request
 import { getResponseType } from "@/utils";
 import { TContentType } from "@/types";
 import { formatCode, getParser } from "@/utils/prettierUtils";
+import { useResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/ResponseProvider";
 
 const BodyResponse = memo(() => {
   const { response } = useRequestResponse();
+  const { responseCodeWrap } = useResponse();
   const [formattedCode, setFormattedCode] = useState("");
 
   const responseType = getResponseType(
@@ -45,6 +47,7 @@ const BodyResponse = memo(() => {
       contentType={responseType}
       editable={false}
       zoomable={true}
+      lineWrap={responseCodeWrap}
     />
   );
 });

@@ -9,6 +9,8 @@ interface ResponseContext {
   handleChangeActiveMetaTab: (id: string) => void;
   responseTab: TResponseTab;
   handleChangeActiveResponseTab: (value: TResponseTab) => void;
+  responseCodeWrap: boolean;
+  handleToggleResponseCodeWrap: () => void;
 }
 
 const ResponseContext = createContext<ResponseContext | null>(null);
@@ -32,6 +34,7 @@ interface ResponseProviderProps {
 const ResponseProvider = ({ children }: ResponseProviderProps) => {
   const [activeMetaTab, setActiveMetaTab] = useState<string>("body");
   const [responseTab, setResponseTab] = useState<TResponseTab>("raw");
+  const [responseCodeWrap, setResponseCodeWrap] = useState<boolean>(false);
 
   const handleChangeActiveMetaTab = useCallback(
     (id: string) => {
@@ -49,6 +52,11 @@ const ResponseProvider = ({ children }: ResponseProviderProps) => {
     [responseTab]
   );
 
+  const handleToggleResponseCodeWrap = useCallback(
+    () => setResponseCodeWrap((prev) => !prev),
+    []
+  );
+
   return (
     <ResponseContext.Provider
       value={{
@@ -56,6 +64,8 @@ const ResponseProvider = ({ children }: ResponseProviderProps) => {
         handleChangeActiveMetaTab,
         responseTab,
         handleChangeActiveResponseTab,
+        responseCodeWrap,
+        handleToggleResponseCodeWrap,
       }}
     >
       {children}
