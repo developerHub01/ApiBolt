@@ -15,7 +15,7 @@ interface AppLayoutProps {
 
 const AppLayout = ({ children }: AppLayoutProps) => {
   return (
-    <section className="h-screen flex flex-col">
+    <section className="h-dvh flex flex-col">
       <section className="h-full flex content-stretch">
         <SidebarProvider>
           <Sidebar />
