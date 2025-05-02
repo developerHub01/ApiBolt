@@ -16,7 +16,7 @@ const fontSizeLimit = {
   min: 5,
 };
 
-const SelectedLang = (lang: string) => {
+const selectedLang = (lang: string) => {
   switch (lang) {
     case "javascript":
       return javascript();
@@ -81,7 +81,7 @@ const Code = ({
   const { resolvedTheme } = useTheme();
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  const extensions: Array<any> = [SelectedLang(contentType)];
+  const extensions: Array<any> = [selectedLang(contentType)];
   if (lineWrap) extensions.push(EditorView.lineWrapping);
 
   const theme = resolvedTheme as "dark" | "light";
