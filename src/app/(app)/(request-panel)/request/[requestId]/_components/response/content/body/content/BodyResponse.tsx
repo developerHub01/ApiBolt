@@ -40,7 +40,12 @@ const BodyResponse = memo(() => {
   if (!response) return;
 
   return (
-    <Code code={formattedCode} contentType={responseType} editable={false} />
+    <Code
+      code={formattedCode}
+      contentType={responseType}
+      editable={false}
+      zoomable={true}
+    />
   );
 });
 

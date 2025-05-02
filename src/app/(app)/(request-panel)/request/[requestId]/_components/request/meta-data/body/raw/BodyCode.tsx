@@ -26,6 +26,7 @@ const BodyCode = memo(() => {
         contentType={rawRequestBodyType}
         onChange={handleChange}
         onBlur={handleBlur}
+        zoomable={true}
       />
     </div>
   );
