@@ -115,7 +115,7 @@ const Code = ({
         );
       else
         return setFontSizeState((prev) =>
-          Math.max(prev + 1, fontSizeLimit.min)
+          Math.max(prev - 1, fontSizeLimit.min)
         );
     };
 
