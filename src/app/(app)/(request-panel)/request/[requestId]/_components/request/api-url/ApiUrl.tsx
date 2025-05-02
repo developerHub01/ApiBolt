@@ -7,7 +7,11 @@ import ApiInput from "@/app/(app)/(request-panel)/request/[requestId]/_component
 import ApiCta from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/api-url/ApiCta";
 
 const ApiUrl = memo(() => {
-  const { apiUrl = "", handleIsInputError, handleFetchApi } = useRequestResponse();
+  const {
+    apiUrl = "",
+    handleIsInputError,
+    handleRequestSend,
+  } = useRequestResponse();
 
   const handleSubmit = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
@@ -15,7 +19,7 @@ const ApiUrl = memo(() => {
 
       if (!apiUrl) return handleIsInputError(true);
 
-      handleFetchApi();
+      handleRequestSend();
     },
     [apiUrl]
   );

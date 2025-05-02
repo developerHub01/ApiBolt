@@ -2,6 +2,7 @@
 
 import React, { createContext, useCallback, useContext, useState } from "react";
 import { TContentType } from "@/types";
+import { useRequestResponse } from "./RequestResponseProvider";
 
 export type TRequestBodyType =
   | "none"
@@ -40,25 +41,24 @@ interface RequestBodyProviderProps {
 }
 
 const RequestBodyProvider = ({ children }: RequestBodyProviderProps) => {
+  const { rawData, handleChangeRawData: changeRawData } = useRequestResponse();
   const [requestBodyType, setRequestBodyType] =
     useState<TRequestBodyType>("none");
   const [rawRequestBodyType, setRawRequestBodyType] =
     useState<TContentType>("json");
-  const [rawData, setRawData] = useState<string>("");
   const [codeLineWrap, setCodeLineWrap] = useState<boolean>(false);
 
-  const handleChangeRequestBodyType = useCallback((id: TRequestBodyType) => {
-    if (id !== "raw" && rawData) setRawData("");
+  const handleChangeRequestBodyType = useCallback(
+    (id: TRequestBodyType) => {
+      if (id !== "raw" && rawData) changeRawData("");
 
-    setRequestBodyType(id);
-  }, []);
+      setRequestBodyType(id);
+    },
+    [changeRawData]
+  );
 
   const handleChangeRawRequestBodyType = useCallback((id: TContentType) => {
     setRawRequestBodyType(id);
-  }, []);
-
-  const handleChangeRawData = useCallback((data: string) => {
-    setRawData(data);
   }, []);
 
   const handleToggleCodeLineWrap = useCallback(() => {
@@ -73,7 +73,7 @@ const RequestBodyProvider = ({ children }: RequestBodyProviderProps) => {
         rawRequestBodyType,
         handleChangeRawRequestBodyType,
         rawData,
-        handleChangeRawData,
+        handleChangeRawData: changeRawData,
         codeLineWrap,
         handleToggleCodeLineWrap,
       }}

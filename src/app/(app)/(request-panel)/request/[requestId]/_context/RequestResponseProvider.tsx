@@ -1,9 +1,16 @@
 "use client";
 
-import React, { createContext, useCallback, useContext, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { TMetaTableType } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestMetaTableProvider";
+import { getPayloadSize } from "@/utils";
 
 const generateNewMetaDataItem = (type?: TMetaTableType) => ({
   id: uuidv4(),
@@ -37,6 +44,11 @@ interface ResponseInterface {
   statusDescription: string;
 }
 
+interface RequestResponseSizeInterface {
+  header: number;
+  body: number;
+}
+
 interface RequestResponseContext {
   activeMetaTab: TActiveTabType;
   handleChangeActiveMetaTab: (id: TActiveTabType) => void;
@@ -47,9 +59,14 @@ interface RequestResponseContext {
   response: ResponseInterface | null;
   isApiUrlError: boolean;
   handleIsInputError: (value: boolean) => void;
-  handleFetchApi: () => Promise<void>;
+  handleRequestSend: () => void;
   isResposneError: boolean;
   isLoading: boolean;
+  requestSize: RequestResponseSizeInterface;
+  responseSize: RequestResponseSizeInterface;
+
+  rawData: string;
+  handleChangeRawData: (value: string) => void;
 
   params: Array<ParamInterface>;
   handleChangeParam: (id: string, key: string, value: string) => void;
@@ -177,7 +194,17 @@ const RequestResponseProvider = ({
   const [isApiUrlError, setIsApiUrlError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [apiUrl, setApiUrl] = useState<string>("");
+  const [rawData, setRawData] = useState<string>("");
   const [response, setResponse] = useState<ResponseInterface | null>(null);
+  const [requestSize, setRequestSize] = useState<RequestResponseSizeInterface>({
+    header: 0,
+    body: 0,
+  });
+  const [responseSize, setResponseSize] =
+    useState<RequestResponseSizeInterface>({
+      header: 0,
+      body: 0,
+    });
   const [isResposneError, setIsResposneError] = useState<boolean>(false);
   const [binaryData, setBinaryData] = useState<File | null>(null);
   const [params, setParams] = useState<Array<ParamInterface>>([]);
@@ -186,6 +213,8 @@ const RequestResponseProvider = ({
   const [xWWWFormUrlencodedData, setXWWWFormUrlencodedData] = useState<
     Array<XWWWFormUrlencodedInterface>
   >([]);
+  const [shouldFetch, setShouldFetch] = useState<boolean>(false);
+
   const {
     handleChange: handleChangeParam,
     handleDelete: handleDeleteParam,
@@ -216,20 +245,46 @@ const RequestResponseProvider = ({
     generateNewMetaDataItem
   );
 
+  useEffect(() => {
+    if (!shouldFetch) return;
+    handleFetchApi();
+    setShouldFetch(false);
+  }, [shouldFetch]);
+
   const handleChangeActiveMetaTab = useCallback((id: TActiveTabType) => {
     setActiveMetaTab(id);
   }, []);
+
   const handleChangeSelectedMethod = useCallback((id: string) => {
     setSelectedMethod(id);
   }, []);
+
   const handleChangeApiUrl = useCallback((api: string) => setApiUrl(api), []);
 
   const handleIsInputError = useCallback((value: boolean) => {
     setIsApiUrlError(value);
   }, []);
 
+  const handleChangeRawData = useCallback((value: string) => {
+    setRawData(value);
+  }, []);
+
+  const handleRequestSend = useCallback(() => {
+    setShouldFetch(true);
+  }, [apiUrl, selectedMethod, rawData]);
+
   const handleFetchApi = useCallback(async () => {
     setIsLoading(true);
+
+    setRequestSize({
+      header:
+        getPayloadSize(
+          headers
+            ?.filter((item) => !item.hide)
+            ?.map(({ key, value }) => ({ key, value }))
+        ) ?? 0,
+      body: getPayloadSize(rawData) ?? 0,
+    });
 
     let responseData = {
       data: undefined,
@@ -238,7 +293,6 @@ const RequestResponseProvider = ({
       statusText: "",
       statusDescription: "",
     };
-
     try {
       const res = await axios({
         method: selectedMethod,
@@ -258,8 +312,6 @@ const RequestResponseProvider = ({
           statusList[res.status].description ?? "Unknown status code",
       };
     } catch (error) {
-      console.log(error);
-
       const statusRes = await axios.get("/data/http_status_details.json");
       const statusList = statusRes.data;
 
@@ -280,8 +332,13 @@ const RequestResponseProvider = ({
     } finally {
       setIsLoading(false);
       setResponse(responseData);
+
+      setResponseSize({
+        header: getPayloadSize(responseData?.headers) ?? 0,
+        body: getPayloadSize(responseData?.data) ?? 0,
+      });
     }
-  }, [apiUrl, selectedMethod]);
+  }, [apiUrl, selectedMethod, rawData]);
 
   const handleRemoveAllMetaData = useCallback((type: TMetaTableType) => {
     switch (type) {
@@ -326,9 +383,13 @@ const RequestResponseProvider = ({
         response,
         isApiUrlError,
         handleIsInputError,
-        handleFetchApi,
+        handleRequestSend,
         isResposneError,
+        requestSize,
+        responseSize,
         isLoading,
+        rawData,
+        handleChangeRawData,
         params,
         handleChangeParam,
         handleDeleteParam,

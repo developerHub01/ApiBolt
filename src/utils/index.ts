@@ -19,3 +19,15 @@ export const getResponseType = (contentType: string) => {
     return "TEXT";
   }
 };
+
+export const getPayloadSize = (data: any): number => {
+  console.log({ data });
+  try {
+    const str = typeof data === "string" ? data : JSON.stringify(data);
+    // return new TextEncoder().encode(str).length;
+    return new Blob([str]).size;
+  } catch (err) {
+    console.error("getPayloadSize error:", err);
+    return 0;
+  }
+};
