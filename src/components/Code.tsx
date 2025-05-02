@@ -1,12 +1,8 @@
 "use client";
 
-import React, {
-  FocusEvent,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { FocusEvent, useEffect, useRef, useState } from "react";
 import CodeMirror, { ViewUpdate } from "@uiw/react-codemirror";
+import { EditorView } from "@codemirror/view";
 import { html } from "@codemirror/lang-html";
 import { javascript } from "@codemirror/lang-javascript";
 import { json } from "@codemirror/lang-json";
@@ -67,6 +63,7 @@ interface CodeProps {
   editable?: boolean;
   className?: string;
   zoomable?: boolean;
+  lineWrap?: boolean;
 }
 
 const Code = ({
@@ -78,10 +75,14 @@ const Code = ({
   editable = true,
   className = "",
   zoomable = false,
+  lineWrap = false,
 }: CodeProps) => {
   const [fontSizeState, setFontSizeState] = useState(fontSize);
   const { resolvedTheme } = useTheme();
   const wrapperRef = useRef<HTMLDivElement>(null);
+
+  const extensions: Array<any> = [SelectedLang(contentType)];
+  if (lineWrap) extensions.push(EditorView.lineWrapping);
 
   const theme = resolvedTheme as "dark" | "light";
 
@@ -138,7 +139,7 @@ const Code = ({
           fontSize: fontSizeState,
         }}
         value={code}
-        extensions={[SelectedLang(contentType)]}
+        extensions={extensions}
         {...getEditableOptions(editable, onChange, onBlur)}
         readOnly={!editable}
       />
