@@ -10,7 +10,8 @@ const PreventDefaultActions = () => {
           ["=", "+", "-", "0", "s", "p", "u", "r", "f"].includes(
             e.key.toLowerCase()
           )) ||
-        (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "c") ||
+        (e.ctrlKey && e.shiftKey && ["c"].includes(e.key.toLowerCase())) ||
+        (e.altKey && e.shiftKey && ["f"].includes(e.key.toLowerCase())) ||
         ["F12", "F5", "F3", "F10"].includes(e.key)
       )
         e.preventDefault();
