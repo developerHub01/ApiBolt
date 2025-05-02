@@ -30,12 +30,7 @@ const BeautifyCode = memo(() => {
   if (requestBodyType !== "raw" || rawRequestBodyType === "text") return null;
 
   return (
-    <Button
-      size={"sm"}
-      variant={"ghost"}
-      className="ml-auto"
-      onClick={handleClick}
-    >
+    <Button size={"sm"} variant={"secondary"} onClick={handleClick}>
       Beautify
     </Button>
   );

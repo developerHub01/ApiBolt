@@ -17,6 +17,8 @@ interface RequestBodyContext {
   handleChangeRawRequestBodyType: (id: TContentType) => void;
   rawData: string;
   handleChangeRawData: (data: string) => void;
+  codeLineWrap: boolean;
+  handleToggleCodeLineWrap: () => void;
 }
 
 const RequestBodyContext = createContext<RequestBodyContext | null>(null);
@@ -43,6 +45,7 @@ const RequestBodyProvider = ({ children }: RequestBodyProviderProps) => {
   const [rawRequestBodyType, setRawRequestBodyType] =
     useState<TContentType>("json");
   const [rawData, setRawData] = useState<string>("");
+  const [codeLineWrap, setCodeLineWrap] = useState<boolean>(false);
 
   const handleChangeRequestBodyType = useCallback((id: TRequestBodyType) => {
     if (id !== "raw" && rawData) setRawData("");
@@ -58,6 +61,10 @@ const RequestBodyProvider = ({ children }: RequestBodyProviderProps) => {
     setRawData(data);
   }, []);
 
+  const handleToggleCodeLineWrap = useCallback(() => {
+    setCodeLineWrap((prev) => !prev);
+  }, []);
+
   return (
     <RequestBodyContext.Provider
       value={{
@@ -67,6 +74,8 @@ const RequestBodyProvider = ({ children }: RequestBodyProviderProps) => {
         handleChangeRawRequestBodyType,
         rawData,
         handleChangeRawData,
+        codeLineWrap,
+        handleToggleCodeLineWrap,
       }}
     >
       {children}

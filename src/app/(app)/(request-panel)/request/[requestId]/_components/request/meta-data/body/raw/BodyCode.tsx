@@ -9,6 +9,7 @@ const BodyCode = memo(() => {
     rawData = "",
     rawRequestBodyType,
     handleChangeRawData,
+    codeLineWrap,
   } = useRequestBody();
   const [code, setCode] = useState<string>(rawData);
 
@@ -27,6 +28,7 @@ const BodyCode = memo(() => {
         onChange={handleChange}
         onBlur={handleBlur}
         zoomable={true}
+        lineWrap={codeLineWrap}
       />
     </div>
   );

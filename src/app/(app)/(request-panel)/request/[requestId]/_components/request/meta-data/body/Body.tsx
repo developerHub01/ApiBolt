@@ -1,8 +1,8 @@
 import React from "react";
-import BeautifyCode from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/body/raw/BeautifyCode";
 import BodyDetails from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/body/BodyDetails";
 import BodyTypeSelector from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/body/BodyTypeSelector";
 import BodyRawDataTypeSelector from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/body/BodyRawDataTypeSelector";
+import CodeFormatter from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/body/raw/CodeFormatter";
 
 const Body = () => {
   return (
@@ -10,8 +10,9 @@ const Body = () => {
       <div className="flex gap-3 items-center flex-wrap">
         <BodyTypeSelector />
         <BodyRawDataTypeSelector />
+        <span className="ml-auto"></span>
         {/* format code block */}
-        <BeautifyCode />
+        <CodeFormatter />
       </div>
       <BodyDetails />
     </div>
