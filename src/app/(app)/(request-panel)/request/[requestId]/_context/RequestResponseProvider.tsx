@@ -41,6 +41,7 @@ interface RequestResponseContext {
   isApiUrlError: boolean;
   handleIsInputError: (value: boolean) => void;
   handleFetchApi: () => Promise<void>;
+  isResposneError: boolean;
   isLoading: boolean;
 
   params: Array<ParamInterface>;
@@ -172,6 +173,7 @@ const RequestResponseProvider = ({
   const [response, setResponse] = useState<AxiosResponse<any, any> | null>(
     null
   );
+  const [isResposneError, setIsResposneError] = useState<boolean>(false);
   const [binaryData, setBinaryData] = useState<File | null>(null);
   const [params, setParams] = useState<Array<ParamInterface>>([]);
   const [headers, setHeaders] = useState<Array<HeaderInterface>>([]);
@@ -237,9 +239,13 @@ const RequestResponseProvider = ({
         url: apiUrl,
       });
       console.log(res);
+      setIsResposneError(false);
       handleResponse(res);
     } catch (error) {
+      console.log("error ============= ");
       console.log(error);
+      setIsResposneError(true);
+      handleResponse(error as any);
     } finally {
       setIsLoading(false);
     }
@@ -290,6 +296,7 @@ const RequestResponseProvider = ({
         isApiUrlError,
         handleIsInputError,
         handleFetchApi,
+        isResposneError,
         isLoading,
         params,
         handleChangeParam,

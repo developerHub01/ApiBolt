@@ -21,11 +21,15 @@ const RequestPage = () => {
           <RequestMetaData />
         </div>
         <ResizablePanelGroup className="h-full" direction="vertical">
-          <ResizablePanel defaultSize={60}>
+          <ResizablePanel id="request-panel" defaultSize={100}>
             <MetaDataContent />
           </ResizablePanel>
           <ResizableHandle />
-          <ResizablePanel defaultSize={40}>
+          <ResizablePanel
+            id="response-panel"
+            className="min-h-12"
+            defaultSize={0}
+          >
             <ResponsePanel />
           </ResizablePanel>
         </ResizablePanelGroup>

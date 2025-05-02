@@ -18,16 +18,16 @@ const PreventDefaultActions = () => {
     const wheelEventHandler = (e: WheelEvent) => {
       if (e.ctrlKey) e.preventDefault();
     };
-    const contextMenuHandler = (e: MouseEvent) => e.preventDefault();
+    // const contextMenuHandler = (e: MouseEvent) => e.preventDefault();
 
     window.addEventListener("keydown", keyboardHandler, { passive: false });
     window.addEventListener("wheel", wheelEventHandler, { passive: false });
-    window.addEventListener("contextmenu", contextMenuHandler);
+    // window.addEventListener("contextmenu", contextMenuHandler);
 
     return () => {
       window.removeEventListener("keydown", keyboardHandler);
       window.removeEventListener("wheel", wheelEventHandler);
-      window.removeEventListener("contextmenu", contextMenuHandler);
+      // window.removeEventListener("contextmenu", contextMenuHandler);
     };
   }, []);
 

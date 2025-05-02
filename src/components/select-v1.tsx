@@ -29,7 +29,7 @@ const SelectV1 = ({ list, value, handleChange, className }: SelectV1Props) => {
         value={value ?? list[0].id}
         onValueChange={handleChange}
       >
-        <SelectTrigger className="min-w-[120px]">
+        <SelectTrigger size="sm" className="min-w-[120px]">
           <SelectValue placeholder="Select Tab" />
         </SelectTrigger>
         <SelectContent>
