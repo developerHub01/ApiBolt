@@ -29,6 +29,14 @@ export interface FormDataInterface
   contentType?: string;
 }
 
+interface ResponseInterface {
+  data: any;
+  headers: Record<string, any>;
+  status: number;
+  statusText: string;
+  statusDescription: string;
+}
+
 interface RequestResponseContext {
   activeMetaTab: TActiveTabType;
   handleChangeActiveMetaTab: (id: TActiveTabType) => void;
@@ -36,8 +44,7 @@ interface RequestResponseContext {
   handleChangeSelectedMethod: (id: string) => void;
   apiUrl: string;
   handleChangeApiUrl: (api: string) => void;
-  response: AxiosResponse<any, any> | null;
-  handleResponse: (res: AxiosResponse<any, any> | null) => void;
+  response: ResponseInterface | null;
   isApiUrlError: boolean;
   handleIsInputError: (value: boolean) => void;
   handleFetchApi: () => Promise<void>;
@@ -170,9 +177,7 @@ const RequestResponseProvider = ({
   const [isApiUrlError, setIsApiUrlError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [apiUrl, setApiUrl] = useState<string>("");
-  const [response, setResponse] = useState<AxiosResponse<any, any> | null>(
-    null
-  );
+  const [response, setResponse] = useState<ResponseInterface | null>(null);
   const [isResposneError, setIsResposneError] = useState<boolean>(false);
   const [binaryData, setBinaryData] = useState<File | null>(null);
   const [params, setParams] = useState<Array<ParamInterface>>([]);
@@ -219,13 +224,6 @@ const RequestResponseProvider = ({
   }, []);
   const handleChangeApiUrl = useCallback((api: string) => setApiUrl(api), []);
 
-  const handleResponse = useCallback(
-    (res: AxiosResponse<any, any> | null = null) => {
-      setResponse(res);
-    },
-    []
-  );
-
   const handleIsInputError = useCallback((value: boolean) => {
     setIsApiUrlError(value);
   }, []);
@@ -233,21 +231,55 @@ const RequestResponseProvider = ({
   const handleFetchApi = useCallback(async () => {
     setIsLoading(true);
 
+    let responseData = {
+      data: undefined,
+      headers: {},
+      status: 0,
+      statusText: "",
+      statusDescription: "",
+    };
+    
     try {
       const res = await axios({
         method: selectedMethod,
         url: apiUrl,
       });
-      console.log(res);
       setIsResposneError(false);
-      handleResponse(res);
+
+      const statusRes = await axios.get("/data/http_status_details.json");
+      const statusList = statusRes.data;
+
+      responseData = {
+        data: res.data,
+        headers: res.headers,
+        status: res.status,
+        statusText: res.statusText ?? statusList[res.status].reason,
+        statusDescription:
+          statusList[res.status].description ?? "Unknown status code",
+      };
     } catch (error) {
-      console.log("error ============= ");
       console.log(error);
+
+      const statusRes = await axios.get("/data/http_status_details.json");
+      const statusList = statusRes.data;
+
+      if (axios.isAxiosError(error) && error.response) {
+        responseData = {
+          data: error.response.data,
+          headers: error.response.headers,
+          status: error.response.status,
+          statusText:
+            error.response.statusText ??
+            statusList[error.response.status].reason,
+          statusDescription:
+            statusList[error.response.status].description ??
+            "Unknown status code",
+        };
+      }
       setIsResposneError(true);
-      handleResponse(error as any);
     } finally {
       setIsLoading(false);
+      setResponse(responseData);
     }
   }, [apiUrl, selectedMethod]);
 
@@ -292,7 +324,6 @@ const RequestResponseProvider = ({
         apiUrl,
         handleChangeApiUrl,
         response,
-        handleResponse,
         isApiUrlError,
         handleIsInputError,
         handleFetchApi,
