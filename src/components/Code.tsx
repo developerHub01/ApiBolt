@@ -1,6 +1,11 @@
 "use client";
 
-import React, { FocusEvent } from "react";
+import React, {
+  FocusEvent,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import CodeMirror, { ViewUpdate } from "@uiw/react-codemirror";
 import { html } from "@codemirror/lang-html";
 import { javascript } from "@codemirror/lang-javascript";
@@ -9,6 +14,11 @@ import { xml } from "@codemirror/lang-xml";
 import { useTheme } from "next-themes";
 import { TContentType } from "@/types";
 import { cn } from "@/lib/utils";
+
+const fontSizeLimit = {
+  max: 40,
+  min: 5,
+};
 
 const SelectedLang = (lang: string) => {
   switch (lang) {
@@ -56,6 +66,7 @@ interface CodeProps {
   onBlur?: () => void;
   editable?: boolean;
   className?: string;
+  zoomable?: boolean;
 }
 
 const Code = ({
@@ -66,25 +77,72 @@ const Code = ({
   onBlur,
   editable = true,
   className = "",
+  zoomable = false,
 }: CodeProps) => {
+  const [fontSizeState, setFontSizeState] = useState(fontSize);
   const { resolvedTheme } = useTheme();
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
   const theme = resolvedTheme as "dark" | "light";
 
+  useEffect(() => {
+    if (!zoomable || !wrapperRef.current) return;
+
+    const handleKeydownEvent = (e: globalThis.KeyboardEvent) => {
+      if (!e.ctrlKey) return;
+
+      switch (e.key.toLowerCase()) {
+        case "0":
+          return setFontSizeState(fontSize);
+        case "+":
+        case "=":
+          return setFontSizeState((prev) =>
+            Math.min(prev + 1, fontSizeLimit.max)
+          );
+        case "-":
+          return setFontSizeState((prev) =>
+            Math.max(prev - 1, fontSizeLimit.min)
+          );
+      }
+    };
+    const handleWheellEvent = (e: globalThis.WheelEvent) => {
+      if (!e.ctrlKey) return;
+
+      if (e.deltaY < 0)
+        return setFontSizeState((prev) =>
+          Math.min(prev + 1, fontSizeLimit.max)
+        );
+      else
+        return setFontSizeState((prev) =>
+          Math.max(prev + 1, fontSizeLimit.min)
+        );
+    };
+
+    wrapperRef.current.addEventListener("keydown", handleKeydownEvent);
+    wrapperRef.current.addEventListener("wheel", handleWheellEvent);
+
+    return () => {
+      wrapperRef.current?.removeEventListener("keydown", handleKeydownEvent);
+      wrapperRef.current?.removeEventListener("wheel", handleWheellEvent);
+    };
+  }, []);
+
   getEditableOptions(editable);
   return (
-    <CodeMirror
-      className={cn("w-full h-full [&>div]:bg-background!", className)}
-      height="100%"
-      theme={theme}
-      style={{
-        fontSize,
-      }}
-      value={code}
-      extensions={[SelectedLang(contentType)]}
-      {...getEditableOptions(editable, onChange, onBlur)}
-      readOnly={!editable}
-    />
+    <div className="w-full h-full" tabIndex={0} ref={wrapperRef}>
+      <CodeMirror
+        className={cn("w-full h-full [&>div]:bg-background!", className)}
+        height="100%"
+        theme={theme}
+        style={{
+          fontSize: fontSizeState,
+        }}
+        value={code}
+        extensions={[SelectedLang(contentType)]}
+        {...getEditableOptions(editable, onChange, onBlur)}
+        readOnly={!editable}
+      />
+    </div>
   );
 };
 
