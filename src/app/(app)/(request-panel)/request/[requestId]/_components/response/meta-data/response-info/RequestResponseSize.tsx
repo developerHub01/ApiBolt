@@ -13,14 +13,14 @@ import { Separator } from "@/components/ui/separator";
 import {
   ArrowUpToLine as UpIcon,
   ArrowDownToLine as DownIcon,
+  Info as InfoIcon,
 } from "lucide-react";
+import { formatSize } from "@/utils";
 
 const RequestResponseSize = memo(() => {
   const { response, requestSize, responseSize } = useRequestResponse();
 
   if (!response) return null;
-
-  console.log({ requestSize, responseSize });
 
   return (
     <HoverCard>
@@ -31,12 +31,16 @@ const RequestResponseSize = memo(() => {
       </HoverCardTrigger>
       <HoverCardContent
         className="w-60 flex flex-col gap-2 bg-background p-2.5"
-        side="top"
+        side="bottom"
         align="end"
       >
         <SizeDetails type="request" {...requestSize} />
         <Separator />
         <SizeDetails type="response" {...responseSize} />
+        <p className="text-sm pt-0.5 leading-relaxed">
+          <InfoIcon size={18} className="inline-block mr-1" />
+          These values are approximate, not exact network size.
+        </p>
       </HoverCardContent>
     </HoverCard>
   );
@@ -50,7 +54,7 @@ interface SizeDetailsProps {
 
 const SizeDetails = memo(({ type, header, body }: SizeDetailsProps) => {
   return (
-    <div className="w-full flex gap-1.5">
+    <div className="w-full flex gap-2">
       <span
         className={cn(
           "w-[22px] h-[22px] bg-green-500 text-white grid place-items-center rounded-md shrink-0",
@@ -65,15 +69,15 @@ const SizeDetails = memo(({ type, header, body }: SizeDetailsProps) => {
       <ul className="w-full flex flex-col gap-1 capitalize [&>li]:text-sm [&>li]:flex [&>li]:justify-between">
         <li className="font-semibold">
           <p>{type} Size</p>
-          <p>{header + body} B</p>
+          <p>{formatSize(header + body)}</p>
         </li>
         <li>
           <p>Headers</p>
-          <p>{header} B</p>
+          <p>{formatSize(header)}</p>
         </li>
         <li>
           <p>Body</p>
-          <p>{body} B</p>
+          <p>{formatSize(body)}</p>
         </li>
       </ul>
     </div>

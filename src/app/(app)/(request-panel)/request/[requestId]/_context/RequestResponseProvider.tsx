@@ -276,13 +276,16 @@ const RequestResponseProvider = ({
   const handleFetchApi = useCallback(async () => {
     setIsLoading(true);
 
+    const headersPayload = headers.reduce(
+      (acc, { key, value, hide }) => {
+        if (!hide && key) acc[key] = value;
+        return acc;
+      },
+      {} as Record<string, string>
+    );
+
     setRequestSize({
-      header:
-        getPayloadSize(
-          headers
-            ?.filter((item) => !item.hide)
-            ?.map(({ key, value }) => ({ key, value }))
-        ) ?? 0,
+      header: getPayloadSize(headersPayload) ?? 0,
       body: getPayloadSize(rawData) ?? 0,
     });
 
@@ -297,6 +300,7 @@ const RequestResponseProvider = ({
       const res = await axios({
         method: selectedMethod,
         url: apiUrl,
+        headers: headersPayload,
       });
       setIsResposneError(false);
 
@@ -338,7 +342,7 @@ const RequestResponseProvider = ({
         body: getPayloadSize(responseData?.data) ?? 0,
       });
     }
-  }, [apiUrl, selectedMethod, rawData]);
+  }, [apiUrl, selectedMethod, rawData, headers]);
 
   const handleRemoveAllMetaData = useCallback((type: TMetaTableType) => {
     switch (type) {

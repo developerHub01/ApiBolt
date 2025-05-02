@@ -21,13 +21,14 @@ export const getResponseType = (contentType: string) => {
 };
 
 export const getPayloadSize = (data: any): number => {
-  console.log({ data });
   try {
     const str = typeof data === "string" ? data : JSON.stringify(data);
-    // return new TextEncoder().encode(str).length;
-    return new Blob([str]).size;
+    return new TextEncoder().encode(str).length;
   } catch (err) {
     console.error("getPayloadSize error:", err);
     return 0;
   }
 };
+
+export const formatSize = (size: number) =>
+  size > 1024 ? `${(size / 1024).toFixed(2)} KB` : `${size} B`;
