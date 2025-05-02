@@ -43,10 +43,7 @@ const bodyList: Array<{
 ];
 
 const BodyTypeSelector = () => {
-  const {
-    requestBodyType,
-    handleChangeRequestBodyType,
-  } = useRequestBody();
+  const { requestBodyType, handleChangeRequestBodyType } = useRequestBody();
 
   return (
     <>
@@ -77,15 +74,14 @@ const BodyTypeSelector = () => {
         className="hidden md:flex items-center flex-wrap gap-3"
       >
         {bodyList.map(({ id, label }) => (
-          <div
+          <Label
             key={id}
-            className="flex items-center justify-center gap-2 [&>label]:cursor-pointer [&>button]:cursor-pointer"
+            htmlFor={id}
+            className="whitespace-nowrap inline-flex items-center justify-center gap-2 cursor-pointer [&>button]:cursor-pointer"
           >
             <RadioGroupItem value={id} id={id} />
-            <Label htmlFor={id} className="inline-block pb-1 whitespace-nowrap">
-              {label}
-            </Label>
-          </div>
+            <p className="pb-1">{label}</p>
+          </Label>
         ))}
       </RadioGroup>
     </>

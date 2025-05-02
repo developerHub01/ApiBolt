@@ -10,7 +10,7 @@ const Body = () => {
       <div className="flex gap-3 items-center flex-wrap">
         <BodyTypeSelector />
         <BodyRawDataTypeSelector />
-        <span className="ml-auto"></span>
+        
         {/* format code block */}
         <CodeFormatter />
       </div>

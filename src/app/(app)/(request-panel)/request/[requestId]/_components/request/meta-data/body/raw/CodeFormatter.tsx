@@ -4,10 +4,10 @@ import BeautifyCode from "@/app/(app)/(request-panel)/request/[requestId]/_compo
 
 const CodeFormatter = () => {
   return (
-    <>
+    <div className="flex items-center gap-3 ml-auto">
       <ToggleCodeLineWrap />
       <BeautifyCode />
-    </>
+    </div>
   );
 };
 
