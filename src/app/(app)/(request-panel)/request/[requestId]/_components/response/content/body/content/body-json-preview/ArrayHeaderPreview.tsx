@@ -22,7 +22,7 @@ const ArrayHeaderPreview = ({ data, lavel }: ArrayHeaderPreviewProps) => {
       <TableRow>
         <TableHead></TableHead>
         {headerList.map((key) => (
-          <TableHead key={key} className="font-black">
+          <TableHead key={key} className="font-semibold">
             {key}
           </TableHead>
         ))}
