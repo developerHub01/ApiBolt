@@ -9,7 +9,10 @@ export const getParser = (type: string) => {
       return "json";
     case "html":
     case "xml":
+    case "text":
       return "html";
+    case "javascript":
+      return "babel";
     default:
       return "babel";
   }
@@ -24,7 +27,6 @@ export const formatCode = async (
   message?: string;
 }> => {
   const parser = getParser(parserType);
-
   try {
     let formatedCode = "";
     if (parserType === "json")

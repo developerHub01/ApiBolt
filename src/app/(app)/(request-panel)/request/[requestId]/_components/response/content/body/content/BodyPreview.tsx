@@ -20,7 +20,9 @@ const BodyPreview = () => {
 
   return (
     <>
-      {responseType === "html" && <BodyHTMLPreview data={responseData} />}
+      {["html", "text"].includes(responseType) && (
+        <BodyHTMLPreview data={responseData} />
+      )}
       {responseType === "json" && <BodyJSONPreview data={responseData} />}
     </>
   );

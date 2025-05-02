@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useCallback, useContext, useState } from "react";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { TMetaTableType } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestMetaTableProvider";
 
@@ -238,7 +238,7 @@ const RequestResponseProvider = ({
       statusText: "",
       statusDescription: "",
     };
-    
+
     try {
       const res = await axios({
         method: selectedMethod,

@@ -29,11 +29,8 @@ const BodyResponse = memo(() => {
 
     const format = async () => {
       const { success, data } = await formatCode(stringCode, parser);
-      if (!success || !data) {
-        setFormattedCode(stringCode);
-      } else {
-        setFormattedCode(data);
-      }
+      if (!success || !data) setFormattedCode(stringCode);
+      else setFormattedCode(data);
     };
 
     format();
