@@ -331,8 +331,6 @@ const RequestResponseProvider = ({
       value,
     }));
 
-    console.log({ urlParams });
-
     setParams((prev) => {
       if (prev.length < urlParams.length)
         return urlParams.map(({ key, value }, index) => ({

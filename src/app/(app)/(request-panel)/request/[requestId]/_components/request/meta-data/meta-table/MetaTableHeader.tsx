@@ -24,7 +24,7 @@ const MetaTableHeader = memo(({ type }: MetaTableHeaderProps) => {
     <TableHeader className="select-none">
       <TableRow className="[&>th]:border-r [&>th]:last:border-r-0">
         <TableHead
-          className="px-0 min-w-5"
+          className="px-0"
           style={{
             minWidth: 40,
           }}
@@ -35,7 +35,12 @@ const MetaTableHeader = memo(({ type }: MetaTableHeaderProps) => {
         {value && <TableHead>Value</TableHead>}
         {showContentType && <TableHead>Content-Type</TableHead>}
         {description && <TableHead>Description</TableHead>}
-        <TableHead className="p-0">
+        <TableHead
+          className="p-0"
+          style={{
+            minWidth: 40,
+          }}
+        >
           <MetaDataListThreeDotAction type={type} />
         </TableHead>
       </TableRow>
