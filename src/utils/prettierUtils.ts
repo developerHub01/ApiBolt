@@ -42,7 +42,6 @@ export const formatCode = async (
       data: formatedCode,
     };
   } catch (error) {
-    console.log(error);
     return {
       success: false,
       message: "Formatting error. Please check the input.",

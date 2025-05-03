@@ -6,6 +6,7 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import axios from "axios";
@@ -18,6 +19,7 @@ import {
   sendRequest,
 } from "@/utils";
 import { TContentType } from "@/types";
+import { getStatusMessage } from "@/utils/statusCode";
 
 const generateNewMetaDataItem = (type?: TMetaTableType) => ({
   id: uuidv4(),
@@ -242,6 +244,7 @@ const RequestResponseProvider = ({
     Array<XWWWFormUrlencodedInterface>
   >([]);
   const [shouldFetch, setShouldFetch] = useState<boolean>(false);
+  const previousFinalUrlRef = useRef<string>("");
 
   const {
     handleChange: handleChangeParam,
@@ -303,6 +306,9 @@ const RequestResponseProvider = ({
       else finalUrl = cleanUrl + (queryString ? `?${queryString}` : "");
     }
 
+    if (previousFinalUrlRef.current === finalUrl) return;
+
+    previousFinalUrlRef.current = finalUrl;
     setApiUrl(finalUrl);
   }, [params]);
 
@@ -333,11 +339,10 @@ const RequestResponseProvider = ({
 
     setParams((prev) => {
       if (prev.length < urlParams.length)
-        return urlParams.map(({ key, value }, index) => ({
+        return urlParams.map((param, index) => ({
           ...generateNewMetaDataItem("params"),
           ...prev[index],
-          key,
-          value,
+          ...param,
         }));
 
       /* 
@@ -433,33 +438,27 @@ const RequestResponseProvider = ({
       console.log(res);
       setIsResposneError(false);
 
-      const statusRes = await axios.get("/data/http_status_details.json");
-      const statusList = statusRes.data;
+      const statusDetails = await getStatusMessage(res.status);
 
       responseData = {
         data: res.data,
         headers: res.headers,
         status: res.status,
-        statusText: res.statusText ?? statusList[res.status].reason,
-        statusDescription:
-          statusList[res.status].description ?? "Unknown status code",
+        statusText: res.statusText ?? statusDetails.reason,
+        statusDescription: statusDetails.description ?? "Unknown status code",
       };
     } catch (error) {
       console.log(error);
-      const statusRes = await axios.get("/data/http_status_details.json");
-      const statusList = statusRes.data;
 
       if (axios.isAxiosError(error) && error.response) {
+        const statusDetails = await getStatusMessage(error.response.status);
+
         responseData = {
           data: error.response.data,
           headers: error.response.headers,
           status: error.response.status,
-          statusText:
-            error.response.statusText ??
-            statusList[error.response.status].reason,
-          statusDescription:
-            statusList[error.response.status].description ??
-            "Unknown status code",
+          statusText: error.response.statusText ?? statusDetails.reason,
+          statusDescription: statusDetails.description ?? "Unknown status code",
         };
       }
       setIsResposneError(true);
