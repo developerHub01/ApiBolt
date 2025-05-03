@@ -8,6 +8,7 @@ interface TabV1Props {
   list: Array<{
     id: string;
     label: string;
+    isActive?: boolean;
   }>;
   activeTab: string;
   handleSelect: (id: string) => void;
@@ -17,19 +18,26 @@ interface TabV1Props {
 const TabV1 = ({ list, activeTab, handleSelect, className }: TabV1Props) => {
   return (
     <div className={cn("flex items-center gap-4 select-none", className)}>
-      {list.map(({ id, label }) => (
+      {list.map(({ id, label, isActive }) => (
         <Button
           key={id}
           size={"sm"}
           variant={"link"}
-          className={cn("px-0 underline-offset-8", {
-            "underline text-primary": activeTab === id,
-            "no-underline text-foreground/70 hover:text-foreground hover:no-underline":
-              activeTab !== id,
-          })}
+          className={cn(
+            "px-0 border-b-[1.5px] rounded-none flex justify-between items-center",
+            "hover:no-underline",
+            {
+              "border-primary text-primary": activeTab === id,
+              "border-transparent text-foreground/70 hover:text-foreground":
+                activeTab !== id,
+            }
+          )}
           onClick={() => handleSelect(id)}
         >
           {label}
+          {isActive && (
+            <span className="inline-block size-1.5 rounded-full bg-green-500 mt-1"></span>
+          )}
         </Button>
       ))}
     </div>

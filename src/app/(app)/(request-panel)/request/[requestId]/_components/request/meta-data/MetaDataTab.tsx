@@ -11,22 +11,27 @@ import SelectV1 from "@/components/select-v1";
 const tabList: Array<{
   id: TActiveTabType;
   label: string;
+  isActive: boolean;
 }> = [
   {
     id: "params",
     label: "Params",
+    isActive: true,
   },
   {
     id: "headers",
     label: "Headers",
+    isActive: false,
   },
   {
     id: "body",
     label: "Body",
+    isActive: true,
   },
   {
     id: "authorization",
     label: "Authorization",
+    isActive: false,
   },
 ];
 
