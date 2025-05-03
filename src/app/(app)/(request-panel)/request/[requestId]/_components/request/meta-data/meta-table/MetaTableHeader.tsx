@@ -23,7 +23,12 @@ const MetaTableHeader = memo(({ type }: MetaTableHeaderProps) => {
   return (
     <TableHeader className="select-none">
       <TableRow className="[&>th]:border-r [&>th]:last:border-r-0">
-        <TableHead className="px-0 min-w-5">
+        <TableHead
+          className="px-0 min-w-5"
+          style={{
+            minWidth: 40,
+          }}
+        >
           <MetaTableCheckAll />
         </TableHead>
         <TableHead>Key</TableHead>
