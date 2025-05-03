@@ -10,7 +10,7 @@ import React, {
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { TMetaTableType } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestMetaTableProvider";
-import { getPayloadSize } from "@/utils";
+import { getPayloadSize, parseUrlParams } from "@/utils";
 
 const generateNewMetaDataItem = (type?: TMetaTableType) => ({
   id: uuidv4(),
@@ -265,7 +265,6 @@ const RequestResponseProvider = ({
       const url = new URL(apiUrl);
       url.search = queryString;
       finalUrl = url.toString();
-      console.log({ url, queryString });
     } catch {
       /* If baseUrl is invalid (like just "?name=abc"), just return query only */
 
@@ -287,7 +286,37 @@ const RequestResponseProvider = ({
     setSelectedMethod(id);
   }, []);
 
-  const handleChangeApiUrl = useCallback((api: string) => setApiUrl(api), []);
+  const handleChangeApiUrl = useCallback((api: string) => {
+    const urlParams: Array<{
+      key: string;
+      value: string;
+    }> = parseUrlParams(api).map(([key, value]) => ({
+      key,
+      value,
+    }));
+
+    setParams((prev) => {
+      if (prev.length < urlParams.length)
+        return urlParams.map(({ key, value }, index) => ({
+          ...generateNewMetaDataItem("params"),
+          ...prev[index],
+          key,
+          value,
+        }));
+
+      let index = 0;
+      return prev.map((param) =>
+        param.hide
+          ? param
+          : {
+              ...param,
+              ...urlParams[index++],
+            }
+      );
+    });
+
+    setApiUrl(api);
+  }, []);
 
   const handleIsInputError = useCallback((value: boolean) => {
     setIsApiUrlError(value);
