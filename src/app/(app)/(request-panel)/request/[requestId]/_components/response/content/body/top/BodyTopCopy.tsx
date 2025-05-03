@@ -29,7 +29,7 @@ const BodyTopCopy = memo(() => {
           <CopyIcon />
         </Button>
       </TooltipTrigger>
-      <TooltipContent side="top">
+      <TooltipContent side="bottom">
         <p>Copy</p>
       </TooltipContent>
     </Tooltip>

@@ -5,6 +5,12 @@ import { Button } from "@/components/ui/button";
 import { useRequestBody } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestBodyProvider";
 import { formatCode, getParser } from "@/utils/prettierUtils";
 import { toast } from "sonner";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const BeautifyCode = memo(() => {
   const {
@@ -30,9 +36,18 @@ const BeautifyCode = memo(() => {
   if (requestBodyType !== "raw" || rawRequestBodyType === "text") return null;
 
   return (
-    <Button size={"sm"} variant={"secondary"} onClick={handleClick}>
-      Beautify
-    </Button>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button size={"sm"} variant={"secondary"} onClick={handleClick}>
+            Beautify
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side="bottom" align="end">
+          <p>Alt + Shift + F</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 });
 

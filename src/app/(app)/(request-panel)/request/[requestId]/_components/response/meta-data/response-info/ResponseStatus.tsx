@@ -31,7 +31,7 @@ const ResponseStatus = memo(() => {
       </HoverCardTrigger>
       <HoverCardContent
         className="w-60 flex flex-col gap-1.5 bg-background p-2.5"
-        side="top"
+        side="bottom"
         align="end"
       >
         <h4 className="text-base font-semibold">
