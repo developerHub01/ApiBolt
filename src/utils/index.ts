@@ -32,3 +32,13 @@ export const getPayloadSize = (data: any): number => {
 
 export const formatSize = (size: number) =>
   size > 1024 ? `${(size / 1024).toFixed(2)} KB` : `${size} B`;
+
+export const parseUrlParams = (api: string) => {
+  try {
+    const url = new URL(api);
+    return Array.from(url.searchParams.entries());
+  } catch {
+    const queryParams = api.split("?")[1] ?? "";
+    return Array.from(new URLSearchParams(queryParams).entries());
+  }
+};
