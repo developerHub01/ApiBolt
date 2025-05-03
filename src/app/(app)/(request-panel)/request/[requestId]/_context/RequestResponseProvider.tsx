@@ -11,7 +11,12 @@ import React, {
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { TMetaTableType } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestMetaTableProvider";
-import { getPayloadSize, parseUrlParams, sendRequest } from "@/utils";
+import {
+  getPayloadSize,
+  parseUrlParams,
+  requestDataSize,
+  sendRequest,
+} from "@/utils";
 import { TContentType } from "@/types";
 
 const generateNewMetaDataItem = (type?: TMetaTableType) => ({
@@ -382,7 +387,13 @@ const RequestResponseProvider = ({
 
     setRequestSize({
       header: getPayloadSize(headersPayload) ?? 0,
-      body: getPayloadSize(rawData) ?? 0,
+      body: requestDataSize({
+        bodyType: requestBodyType,
+        rawData,
+        binaryData: binaryData ?? undefined,
+        formData: formDataPayload,
+        xWWWformDataUrlencoded: xWWWFormDataUrlencodedPayload,
+      }),
     });
 
     let responseData = {
@@ -406,23 +417,23 @@ const RequestResponseProvider = ({
       });
       // console.log(res);
       setIsResposneError(false);
-      
+
       const statusRes = await axios.get("/data/http_status_details.json");
       const statusList = statusRes.data;
-      
+
       responseData = {
         data: res.data,
         headers: res.headers,
         status: res.status,
         statusText: res.statusText ?? statusList[res.status].reason,
         statusDescription:
-        statusList[res.status].description ?? "Unknown status code",
+          statusList[res.status].description ?? "Unknown status code",
       };
     } catch (error) {
       console.log(error);
       const statusRes = await axios.get("/data/http_status_details.json");
       const statusList = statusRes.data;
-      
+
       if (axios.isAxiosError(error) && error.response) {
         responseData = {
           data: error.response.data,

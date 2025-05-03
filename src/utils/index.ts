@@ -155,3 +155,36 @@ export const sendRequest = async ({
     data,
   });
 };
+
+export const requestDataSize = ({
+  bodyType,
+  formData,
+  xWWWformDataUrlencoded,
+  rawData,
+  binaryData,
+}: {
+  bodyType: TRequestBodyType;
+  formData?: Array<{
+    key: string;
+    value: string | Array<File>;
+  }>;
+  xWWWformDataUrlencoded?: Array<{
+    key: string;
+    value: string;
+  }>;
+  rawData?: string;
+  binaryData?: File;
+}) => {
+  switch (bodyType) {
+    case "binary":
+      return getPayloadSize(binaryData);
+    case "raw":
+      return getPayloadSize(rawData);
+    case "form-data":
+      return getPayloadSize(formData);
+    case "x-www-form-urlencoded":
+      return getPayloadSize(xWWWformDataUrlencoded);
+    default:
+      return 0;
+  }
+};
