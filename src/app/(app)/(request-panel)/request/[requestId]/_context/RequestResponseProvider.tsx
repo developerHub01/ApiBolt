@@ -331,6 +331,8 @@ const RequestResponseProvider = ({
       value,
     }));
 
+    console.log({ urlParams });
+
     setParams((prev) => {
       if (prev.length < urlParams.length)
         return urlParams.map(({ key, value }, index) => ({
@@ -340,14 +342,29 @@ const RequestResponseProvider = ({
           value,
         }));
 
+      /* 
+      if new params size less then previous means some of them have to filter out
+      
+      so we keep hidden params as it is but for others we checked that is it exist in new param list
+
+      if exist then update it
+      else filter out it.
+      */
       let index = 0;
-      return prev.map((param) =>
-        param.hide
-          ? param
-          : {
-              ...param,
-              ...urlParams[index++],
-            }
+      return prev.reduce(
+        (acc, curr) =>
+          curr.hide
+            ? [...acc, curr]
+            : urlParams[index]
+              ? [
+                  ...acc,
+                  {
+                    ...curr,
+                    ...urlParams[index++],
+                  },
+                ]
+              : acc,
+        [] as Array<ParamInterface>
       );
     });
 
@@ -415,7 +432,7 @@ const RequestResponseProvider = ({
         rawData,
         rawSubType: rawRequestBodyType,
       });
-      // console.log(res);
+      console.log(res);
       setIsResposneError(false);
 
       const statusRes = await axios.get("/data/http_status_details.json");
