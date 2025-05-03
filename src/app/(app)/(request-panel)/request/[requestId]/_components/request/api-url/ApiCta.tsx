@@ -10,7 +10,7 @@ const ApiCta = memo(() => {
 
   return (
     <Button disabled={isLoading} className="rounded-l-none uppercase">
-      {isLoading && <LoaderIcon size={16} />}
+      {isLoading && <LoaderIcon className="animate-spin" size={16} />}
       Send
     </Button>
   );
