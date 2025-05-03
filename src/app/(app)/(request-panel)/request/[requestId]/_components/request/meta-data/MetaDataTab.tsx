@@ -1,6 +1,6 @@
 "use client";
 
-import React, { memo } from "react";
+import React, { memo, useMemo } from "react";
 import {
   TActiveTabType,
   useRequestResponse,
@@ -35,7 +35,14 @@ const MetaDataTab = memo(() => {
   const { activeMetaTab, handleChangeActiveMetaTab, activeTabList } =
     useRequestResponse();
 
-  console.log({ activeTabList });
+  const tabListWithActivity = useMemo(
+    () =>
+      tabList.map((item) => ({
+        ...item,
+        isActive: !!activeTabList[item.id],
+      })),
+    [activeTabList]
+  );
 
   return (
     <>
@@ -48,10 +55,7 @@ const MetaDataTab = memo(() => {
         className="block md:hidden"
       />
       <TabV1
-        list={tabList.map((item) => ({
-          ...item,
-          isActive: !!activeTabList[item.id],
-        }))}
+        list={tabListWithActivity}
         activeTab={activeMetaTab}
         handleSelect={(value) =>
           handleChangeActiveMetaTab(value as TActiveTabType)
