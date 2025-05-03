@@ -11,32 +11,31 @@ import SelectV1 from "@/components/select-v1";
 const tabList: Array<{
   id: TActiveTabType;
   label: string;
-  isActive: boolean;
+  isActive?: boolean;
 }> = [
   {
     id: "params",
     label: "Params",
-    isActive: true,
   },
   {
     id: "headers",
     label: "Headers",
-    isActive: false,
   },
   {
     id: "body",
     label: "Body",
-    isActive: true,
   },
   {
     id: "authorization",
     label: "Authorization",
-    isActive: false,
   },
 ];
 
 const MetaDataTab = memo(() => {
-  const { activeMetaTab, handleChangeActiveMetaTab } = useRequestResponse();
+  const { activeMetaTab, handleChangeActiveMetaTab, activeTabList } =
+    useRequestResponse();
+
+  console.log({ activeTabList });
 
   return (
     <>
@@ -49,7 +48,10 @@ const MetaDataTab = memo(() => {
         className="block md:hidden"
       />
       <TabV1
-        list={tabList}
+        list={tabList.map((item) => ({
+          ...item,
+          isActive: !!activeTabList[item.id],
+        }))}
         activeTab={activeMetaTab}
         handleSelect={(value) =>
           handleChangeActiveMetaTab(value as TActiveTabType)

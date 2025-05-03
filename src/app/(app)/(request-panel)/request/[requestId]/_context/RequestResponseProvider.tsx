@@ -5,6 +5,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import axios from "axios";
@@ -96,6 +97,8 @@ interface RequestResponseContext {
 
   binaryData: File | null;
   handleChangeBinaryData: (file?: File | null) => void;
+
+  activeTabList: Partial<Record<TActiveTabType, boolean>>;
 }
 
 const RequestResponseContext = createContext<RequestResponseContext | null>(
@@ -432,6 +435,28 @@ const RequestResponseProvider = ({
     setBinaryData(file);
   }, []);
 
+  const activeTabList = useMemo(() => {
+    const tabList: Partial<Record<TActiveTabType, boolean>> = {};
+
+    if (params.length && !tabList["params"]) tabList["params"] = true;
+    else tabList["params"] = false;
+
+    if (headers.length && !tabList["headers"]) tabList["headers"] = true;
+    else tabList["headers"] = false;
+
+    if (
+      (formData.length ||
+        xWWWFormUrlencodedData.length ||
+        rawData ||
+        binaryData) &&
+      !tabList["body"]
+    ) {
+      tabList["body"] = true;
+    } else tabList["body"] = false;
+
+    return tabList;
+  }, [params, headers, formData, xWWWFormUrlencodedData, rawData, binaryData]);
+
   return (
     <RequestResponseContext.Provider
       value={{
@@ -475,6 +500,7 @@ const RequestResponseProvider = ({
         handleRemoveFormDataFile,
         binaryData,
         handleChangeBinaryData,
+        activeTabList,
       }}
     >
       {children}
