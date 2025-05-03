@@ -251,6 +251,34 @@ const RequestResponseProvider = ({
     setShouldFetch(false);
   }, [shouldFetch]);
 
+  useEffect(() => {
+    let finalUrl = "";
+
+    /* finding query params */
+    const queryString = params
+      .filter(({ hide }) => !hide)
+      .map(({ key = "", value = "" }) => `${key}=${encodeURIComponent(value)}`)
+      .join("&");
+
+    try {
+      /* If baseUrl is valid, construct normally */
+      const url = new URL(apiUrl);
+      url.search = queryString;
+      finalUrl = url.toString();
+      console.log({ url, queryString });
+    } catch {
+      /* If baseUrl is invalid (like just "?name=abc"), just return query only */
+
+      /* finding url without any query params and # */
+      const cleanUrl = apiUrl.split("?")[0].split("#")[0];
+
+      if (!cleanUrl.trim()) finalUrl = queryString ? `?${queryString}` : "";
+      else finalUrl = cleanUrl + (queryString ? `?${queryString}` : "");
+    }
+
+    setApiUrl(finalUrl);
+  }, [params]);
+
   const handleChangeActiveMetaTab = useCallback((id: TActiveTabType) => {
     setActiveMetaTab(id);
   }, []);
