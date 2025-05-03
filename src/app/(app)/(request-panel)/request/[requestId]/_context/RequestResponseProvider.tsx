@@ -23,6 +23,13 @@ const generateNewMetaDataItem = (type?: TMetaTableType) => ({
 
 export type TActiveTabType = "params" | "headers" | "body" | "authorization";
 
+export type TRequestBodyType =
+  | "none"
+  | "form-data"
+  | "x-www-form-urlencoded"
+  | "raw"
+  | "binary";
+
 export interface ParamInterface<ValueT = string> {
   id: string;
   key: string;
@@ -55,6 +62,8 @@ interface RequestResponseContext {
   handleChangeActiveMetaTab: (id: TActiveTabType) => void;
   selectedMethod: string;
   handleChangeSelectedMethod: (id: string) => void;
+  requestBodyType: TRequestBodyType;
+  handleChangeRequestBodyType: (id: TRequestBodyType) => void;
   apiUrl: string;
   handleChangeApiUrl: (api: string) => void;
   response: ResponseInterface | null;
@@ -209,9 +218,11 @@ const RequestResponseProvider = ({
       body: 0,
     });
   const [isResposneError, setIsResposneError] = useState<boolean>(false);
-  const [binaryData, setBinaryData] = useState<File | null>(null);
+  const [requestBodyType, setRequestBodyType] =
+    useState<TRequestBodyType>("none");
   const [params, setParams] = useState<Array<ParamInterface>>([]);
   const [headers, setHeaders] = useState<Array<HeaderInterface>>([]);
+  const [binaryData, setBinaryData] = useState<File | null>(null);
   const [formData, setFormData] = useState<Array<FormDataInterface>>([]);
   const [xWWWFormUrlencodedData, setXWWWFormUrlencodedData] = useState<
     Array<XWWWFormUrlencodedInterface>
@@ -287,6 +298,10 @@ const RequestResponseProvider = ({
 
   const handleChangeSelectedMethod = useCallback((id: string) => {
     setSelectedMethod(id);
+  }, []);
+
+  const handleChangeRequestBodyType = useCallback((id: TRequestBodyType) => {
+    setRequestBodyType(id);
   }, []);
 
   const handleChangeApiUrl = useCallback((api: string) => {
@@ -464,6 +479,8 @@ const RequestResponseProvider = ({
         handleChangeActiveMetaTab,
         selectedMethod,
         handleChangeSelectedMethod,
+        requestBodyType,
+        handleChangeRequestBodyType,
         apiUrl,
         handleChangeApiUrl,
         response,

@@ -2,14 +2,10 @@
 
 import React, { createContext, useCallback, useContext, useState } from "react";
 import { TContentType } from "@/types";
-import { useRequestResponse } from "./RequestResponseProvider";
-
-export type TRequestBodyType =
-  | "none"
-  | "form-data"
-  | "x-www-form-urlencoded"
-  | "raw"
-  | "binary";
+import {
+  TRequestBodyType,
+  useRequestResponse,
+} from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
 
 interface RequestBodyContext {
   requestBodyType: TRequestBodyType;
@@ -41,21 +37,15 @@ interface RequestBodyProviderProps {
 }
 
 const RequestBodyProvider = ({ children }: RequestBodyProviderProps) => {
-  const { rawData, handleChangeRawData: changeRawData } = useRequestResponse();
-  const [requestBodyType, setRequestBodyType] =
-    useState<TRequestBodyType>("none");
+  const {
+    rawData,
+    handleChangeRawData: changeRawData,
+    requestBodyType,
+    handleChangeRequestBodyType,
+  } = useRequestResponse();
   const [rawRequestBodyType, setRawRequestBodyType] =
     useState<TContentType>("json");
   const [codeLineWrap, setCodeLineWrap] = useState<boolean>(false);
-
-  const handleChangeRequestBodyType = useCallback(
-    (id: TRequestBodyType) => {
-      if (id !== "raw" && rawData) changeRawData("");
-
-      setRequestBodyType(id);
-    },
-    [changeRawData]
-  );
 
   const handleChangeRawRequestBodyType = useCallback((id: TContentType) => {
     setRawRequestBodyType(id);
