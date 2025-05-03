@@ -42,14 +42,10 @@ const RequestBodyProvider = ({ children }: RequestBodyProviderProps) => {
     handleChangeRawData: changeRawData,
     requestBodyType,
     handleChangeRequestBodyType,
+    rawRequestBodyType,
+    handleChangeRawRequestBodyType,
   } = useRequestResponse();
-  const [rawRequestBodyType, setRawRequestBodyType] =
-    useState<TContentType>("json");
   const [codeLineWrap, setCodeLineWrap] = useState<boolean>(false);
-
-  const handleChangeRawRequestBodyType = useCallback((id: TContentType) => {
-    setRawRequestBodyType(id);
-  }, []);
 
   const handleToggleCodeLineWrap = useCallback(() => {
     setCodeLineWrap((prev) => !prev);

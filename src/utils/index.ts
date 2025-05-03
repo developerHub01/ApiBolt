@@ -1,3 +1,9 @@
+import axios from "axios";
+import {
+  THTTPMethods,
+  TRequestBodyType,
+} from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
+
 export const getResponseType = (contentType: string) => {
   if (contentType.includes("application/json")) {
     return "JSON";
@@ -41,4 +47,111 @@ export const parseUrlParams = (api: string) => {
     const queryParams = api.split("?")[1] ?? "";
     return Array.from(new URLSearchParams(queryParams).entries());
   }
+};
+
+export const getRawContentType = (
+  subtype: "json" | "xml" | "html" | "text" | "javascript"
+) => {
+  switch (subtype) {
+    case "json":
+      return "application/json";
+    case "xml":
+      return "application/xml";
+    case "html":
+      return "text/html";
+    case "text":
+      return "text/plain";
+    case "javascript":
+      return "application/javascript";
+    default:
+      return "text/plain";
+  }
+};
+
+export const sendRequest = async ({
+  method,
+  url,
+  headers,
+  bodyType,
+  formData,
+  xWWWformDataUrlencoded,
+  rawData,
+  binaryData,
+  rawSubType,
+}: {
+  method: THTTPMethods;
+  url: string;
+  headers: Record<string, string>;
+  bodyType: TRequestBodyType;
+  formData?: Array<{
+    key: string;
+    value: string | Array<File>;
+  }>;
+  xWWWformDataUrlencoded?: Array<{
+    key: string;
+    value: string;
+  }>;
+  rawData?: string;
+  binaryData?: File;
+  rawSubType?: "text" | "javascript" | "json" | "html" | "xml";
+}) => {
+  let data = null;
+
+  switch (bodyType) {
+    case "none":
+      data = null;
+      break;
+
+    case "raw":
+      headers["Content-Type"] = getRawContentType(rawSubType ?? "text");
+      data = rawData;
+      break;
+
+    case "form-data":
+      if (!formData) break;
+      const formPayload = new FormData();
+      for (const { key, value } of formData) {
+        if (value instanceof File) {
+          // Single file
+          formPayload.append(key, value);
+        } else if (Array.isArray(value) && value[0] instanceof File) {
+          // Multiple files
+          value.forEach((file) => formPayload.append(key, file));
+        } else if (typeof value === "string") {
+          // Plain string or number
+          formPayload.append(key, value);
+        }
+      }
+      data = formPayload;
+      delete headers["Content-Type"];
+      break;
+
+    case "x-www-form-urlencoded":
+      if (!xWWWformDataUrlencoded) break;
+
+      const urlSearchParams = new URLSearchParams();
+      xWWWformDataUrlencoded.forEach(({ key, value }) => {
+        urlSearchParams.append(key, value);
+      });
+      data = urlSearchParams;
+      headers["Content-Type"] = "application/x-www-form-urlencoded";
+      break;
+
+    case "binary":
+      headers["Content-Type"] = "application/octet-stream";
+      data = binaryData;
+      break;
+
+    default:
+      throw new Error("Unsupported body type");
+  }
+
+  console.log({ data, headers, method, url });
+
+  return axios({
+    method,
+    url,
+    headers,
+    data,
+  });
 };

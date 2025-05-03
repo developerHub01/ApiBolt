@@ -11,7 +11,8 @@ import React, {
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { TMetaTableType } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestMetaTableProvider";
-import { getPayloadSize, parseUrlParams } from "@/utils";
+import { getPayloadSize, parseUrlParams, sendRequest } from "@/utils";
+import { TContentType } from "@/types";
 
 const generateNewMetaDataItem = (type?: TMetaTableType) => ({
   id: uuidv4(),
@@ -29,6 +30,8 @@ export type TRequestBodyType =
   | "x-www-form-urlencoded"
   | "raw"
   | "binary";
+
+export type THTTPMethods = "get" | "post" | "put" | "patch" | "delete";
 
 export interface ParamInterface<ValueT = string> {
   id: string;
@@ -61,9 +64,11 @@ interface RequestResponseContext {
   activeMetaTab: TActiveTabType;
   handleChangeActiveMetaTab: (id: TActiveTabType) => void;
   selectedMethod: string;
-  handleChangeSelectedMethod: (id: string) => void;
+  handleChangeSelectedMethod: (id: THTTPMethods) => void;
   requestBodyType: TRequestBodyType;
   handleChangeRequestBodyType: (id: TRequestBodyType) => void;
+  rawRequestBodyType: TContentType;
+  handleChangeRawRequestBodyType: (id: TContentType) => void;
   apiUrl: string;
   handleChangeApiUrl: (api: string) => void;
   response: ResponseInterface | null;
@@ -202,7 +207,7 @@ const RequestResponseProvider = ({
   children,
 }: RequestResponseProviderProps) => {
   const [activeMetaTab, setActiveMetaTab] = useState<TActiveTabType>("params");
-  const [selectedMethod, setSelectedMethod] = useState<string>("get");
+  const [selectedMethod, setSelectedMethod] = useState<THTTPMethods>("get");
   const [isApiUrlError, setIsApiUrlError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [apiUrl, setApiUrl] = useState<string>("");
@@ -220,7 +225,11 @@ const RequestResponseProvider = ({
   const [isResposneError, setIsResposneError] = useState<boolean>(false);
   const [requestBodyType, setRequestBodyType] =
     useState<TRequestBodyType>("none");
+  const [rawRequestBodyType, setRawRequestBodyType] =
+    useState<TContentType>("json");
+
   const [params, setParams] = useState<Array<ParamInterface>>([]);
+
   const [headers, setHeaders] = useState<Array<HeaderInterface>>([]);
   const [binaryData, setBinaryData] = useState<File | null>(null);
   const [formData, setFormData] = useState<Array<FormDataInterface>>([]);
@@ -296,12 +305,16 @@ const RequestResponseProvider = ({
     setActiveMetaTab(id);
   }, []);
 
-  const handleChangeSelectedMethod = useCallback((id: string) => {
+  const handleChangeSelectedMethod = useCallback((id: THTTPMethods) => {
     setSelectedMethod(id);
   }, []);
 
   const handleChangeRequestBodyType = useCallback((id: TRequestBodyType) => {
     setRequestBodyType(id);
+  }, []);
+
+  const handleChangeRawRequestBodyType = useCallback((id: TContentType) => {
+    setRawRequestBodyType(id);
   }, []);
 
   const handleChangeApiUrl = useCallback((api: string) => {
@@ -359,6 +372,14 @@ const RequestResponseProvider = ({
       {} as Record<string, string>
     );
 
+    const formDataPayload = formData
+      .filter((item) => !item.hide)
+      .map(({ key, value }) => ({ key, value }));
+
+    const xWWWFormDataUrlencodedPayload = xWWWFormUrlencodedData
+      .filter((item) => !item.hide)
+      .map(({ key, value }) => ({ key, value }));
+
     setRequestSize({
       header: getPayloadSize(headersPayload) ?? 0,
       body: getPayloadSize(rawData) ?? 0,
@@ -372,28 +393,36 @@ const RequestResponseProvider = ({
       statusDescription: "",
     };
     try {
-      const res = await axios({
+      const res = await sendRequest({
         method: selectedMethod,
         url: apiUrl,
         headers: headersPayload,
+        bodyType: requestBodyType,
+        binaryData: binaryData ?? undefined,
+        formData: formDataPayload,
+        xWWWformDataUrlencoded: xWWWFormDataUrlencodedPayload,
+        rawData,
+        rawSubType: rawRequestBodyType,
       });
+      // console.log(res);
       setIsResposneError(false);
-
+      
       const statusRes = await axios.get("/data/http_status_details.json");
       const statusList = statusRes.data;
-
+      
       responseData = {
         data: res.data,
         headers: res.headers,
         status: res.status,
         statusText: res.statusText ?? statusList[res.status].reason,
         statusDescription:
-          statusList[res.status].description ?? "Unknown status code",
+        statusList[res.status].description ?? "Unknown status code",
       };
     } catch (error) {
+      console.log(error);
       const statusRes = await axios.get("/data/http_status_details.json");
       const statusList = statusRes.data;
-
+      
       if (axios.isAxiosError(error) && error.response) {
         responseData = {
           data: error.response.data,
@@ -417,7 +446,17 @@ const RequestResponseProvider = ({
         body: getPayloadSize(responseData?.data) ?? 0,
       });
     }
-  }, [apiUrl, selectedMethod, rawData, headers]);
+  }, [
+    apiUrl,
+    selectedMethod,
+    headers,
+    requestBodyType,
+    rawRequestBodyType,
+    rawData,
+    formData,
+    xWWWFormUrlencodedData,
+    binaryData,
+  ]);
 
   const handleRemoveAllMetaData = useCallback((type: TMetaTableType) => {
     switch (type) {
@@ -481,6 +520,8 @@ const RequestResponseProvider = ({
         handleChangeSelectedMethod,
         requestBodyType,
         handleChangeRequestBodyType,
+        rawRequestBodyType,
+        handleChangeRawRequestBodyType,
         apiUrl,
         handleChangeApiUrl,
         response,

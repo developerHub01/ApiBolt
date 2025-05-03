@@ -22,7 +22,6 @@ interface SelectV1Props {
 }
 
 const SelectV1 = ({ list, value, handleChange, className }: SelectV1Props) => {
-  console.log({ list });
   return (
     <div className={cn("select-none", className)}>
       <Select
