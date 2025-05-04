@@ -187,13 +187,29 @@ export const requestDataSize = ({
   }
 };
 
-export const converterFileToMetadata = (file: File) => {
-  return {
+export const fileToBase64 = (file: File): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+
+export const converterFileToMetadata = async (
+  file: File,
+  supportBase64: boolean = false
+) => {
+  const fileData = {
     name: file.name,
     size: file.size,
     type: file.type,
     lastModified: file.lastModified,
     fileName: file.name,
     mimeType: file.type,
+  };
+
+  return {
+    ...fileData,
+    base64: supportBase64 ? await fileToBase64(file) : undefined,
   };
 };

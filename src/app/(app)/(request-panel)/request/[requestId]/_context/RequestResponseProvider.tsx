@@ -71,6 +71,8 @@ interface RequestResponseContext {
   handleToggleCollapse: () => void;
   requestName: string;
   handleChangeRequestName: (name: string) => void;
+  isDownloadRequestWithBase64: boolean;
+  handleIsDownloadRequestWithBase64: (value: boolean) => void;
   handleDownloadRequest: () => void;
   activeMetaTab: TActiveTabType;
   handleChangeActiveMetaTab: (id: TActiveTabType) => void;
@@ -258,6 +260,10 @@ const RequestResponseProvider = ({
   const [xWWWFormUrlencodedData, setXWWWFormUrlencodedData] = useState<
     Array<ParamInterface>
   >([]);
+
+  const [isDownloadRequestWithBase64, setIsDownloadRequestWithBase64] =
+    useState<boolean>(false);
+
   const [shouldFetch, setShouldFetch] = useState<boolean>(false);
   const previousFinalUrlRef = useRef<string>("");
 
@@ -300,25 +306,37 @@ const RequestResponseProvider = ({
     setRequestname(name);
   }, []);
 
-  const handleDownloadRequest = useCallback(() => {
-    const formDataWithMetadata = formData.map((data) => {
-      let value = null;
-      if (
-        Array.isArray(data.value) &&
-        data.value.every((v) => v instanceof File)
-      ) {
-        value = data.value.map((file) => converterFileToMetadata(file));
-      } else if (data.value instanceof File) {
-        value = converterFileToMetadata(data.value);
-      } else return (value = data.value);
+  const handleIsDownloadRequestWithBase64 = useCallback(
+    (value: boolean) => setIsDownloadRequestWithBase64(value),
+    []
+  );
 
-      return {
-        ...data,
-        value,
-      };
-    });
+  const handleDownloadRequest = useCallback(async () => {
+    const formDataWithMetadata = await Promise.all(
+      formData.map(async (data) => {
+        let value = null;
+        if (
+          Array.isArray(data.value) &&
+          data.value.every((v) => v instanceof File)
+        ) {
+          value = await Promise.all(
+            data.value.map((file) =>
+              converterFileToMetadata(file, isDownloadRequestWithBase64)
+            )
+          );
+        } else if (data.value instanceof File) {
+          value = await converterFileToMetadata(
+            data.value,
+            isDownloadRequestWithBase64
+          );
+        } else return (value = data.value);
 
-    console.log({ formDataWithMetadata });
+        return {
+          ...data,
+          value,
+        };
+      })
+    );
 
     const downloadData = {
       name: requestName,
@@ -362,6 +380,7 @@ const RequestResponseProvider = ({
     binaryData,
     rawRequestBodyType,
     response,
+    isDownloadRequestWithBase64,
   ]);
 
   const handleFetchApi = useCallback(async () => {
@@ -640,6 +659,8 @@ const RequestResponseProvider = ({
         handleToggleCollapse,
         requestName,
         handleChangeRequestName,
+        isDownloadRequestWithBase64,
+        handleIsDownloadRequestWithBase64,
         handleDownloadRequest,
         activeMetaTab,
         handleChangeActiveMetaTab,
