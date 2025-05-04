@@ -2,6 +2,7 @@
 
 import React, {
   ChangeEvent,
+  FocusEvent,
   memo,
   useCallback,
   useEffect,
@@ -16,10 +17,20 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { ChevronDown as DownIcon, Save as SaveIcon } from "lucide-react";
+import {
+  ChevronDown as DownIcon,
+  Download as DownloadIcon,
+  Save as SaveIcon,
+} from "lucide-react";
+import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
 
 const RequestTop = memo(() => {
-  const [requestName, setRequestName] = useState<string>("Request name");
+  const {
+    requestName = "Request",
+    handleChangeRequestName,
+    handleDownloadRequest,
+  } = useRequestResponse();
+  const [requestNameState, setRequestNameState] = useState<string>(requestName);
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const nameInputRef = useRef<HTMLInputElement>(null);
 
@@ -27,17 +38,25 @@ const RequestTop = memo(() => {
     if (isFocused && nameInputRef.current) nameInputRef.current.focus();
   }, [isFocused]);
 
+  useEffect(() => {
+    setRequestNameState(requestName);
+  }, [requestName]);
+
   const handleInputFocus = useCallback(() => {
     setIsFocused(true);
   }, []);
 
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setRequestName(e.target.value);
+    setRequestNameState(e.target.value);
   }, []);
 
-  const handleBlur = useCallback(() => {
-    setIsFocused(false);
-  }, []);
+  const handleBlur = useCallback(
+    (e: FocusEvent<HTMLInputElement>) => {
+      setIsFocused(false);
+      handleChangeRequestName(e.target.value);
+    },
+    [handleChangeRequestName]
+  );
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -60,7 +79,7 @@ const RequestTop = memo(() => {
             "": isFocused,
             "border-transparent bg-transparent": !isFocused,
           })}
-          value={requestName}
+          value={requestNameState}
           onChange={handleChange}
           onFocus={handleInputFocus}
           onBlur={handleBlur}
@@ -79,9 +98,20 @@ const RequestTop = memo(() => {
               <DownIcon />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="p-0 w-fit" side="bottom" align="end">
+          <PopoverContent
+            className="p-0 w-fit flex flex-col [&>button]:justify-start"
+            side="bottom"
+            align="end"
+          >
             <Button variant={"ghost"} size={"lg"}>
               <SaveIcon /> Save As
+            </Button>
+            <Button
+              variant={"ghost"}
+              size={"lg"}
+              onClick={handleDownloadRequest}
+            >
+              <DownloadIcon /> Download
             </Button>
           </PopoverContent>
         </Popover>

@@ -68,6 +68,9 @@ interface RequestResponseSizeInterface {
 interface RequestResponseContext {
   isResponseCollapsed: boolean;
   handleToggleCollapse: () => void;
+  requestName: string;
+  handleChangeRequestName: (name: string) => void;
+  handleDownloadRequest: () => void;
   activeMetaTab: TActiveTabType;
   handleChangeActiveMetaTab: (id: TActiveTabType) => void;
   selectedMethod: string;
@@ -222,6 +225,7 @@ interface RequestResponseProviderProps {
 const RequestResponseProvider = ({
   children,
 }: RequestResponseProviderProps) => {
+  const [requestName, setRequestname] = useState<string>("");
   const [isResponseCollapsed, setIsResponseCollapsed] = useState<boolean>(true);
   const [activeMetaTab, setActiveMetaTab] = useState<TActiveTabType>("params");
   const [selectedMethod, setSelectedMethod] = useState<THTTPMethods>("get");
@@ -290,6 +294,55 @@ const RequestResponseProvider = ({
     () => setIsResponseCollapsed((prev) => !prev),
     []
   );
+
+  const handleChangeRequestName = useCallback((name: string) => {
+    setRequestname(name);
+  }, []);
+
+  const handleDownloadRequest = useCallback(() => {
+    const downloadData = {
+      name: requestName,
+      url: apiUrl,
+      method: selectedMethod,
+      params,
+      headers,
+      body: {
+        selected: requestBodyType,
+        rawData,
+        formData,
+        xWWWFormUrlencodedData,
+        binaryData,
+        rawRequestBodyType,
+      },
+      response,
+    };
+
+    const blob = new Blob([JSON.stringify(downloadData)], {
+      type: "application/json",
+    });
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${requestName || "request"}.json`;
+    link.click();
+
+    URL.revokeObjectURL(url);
+  }, [
+    requestName,
+    apiUrl,
+    selectedMethod,
+    params,
+    headers,
+    requestBodyType,
+    rawData,
+    formData,
+    xWWWFormUrlencodedData,
+    binaryData,
+    rawRequestBodyType,
+    response,
+  ]);
 
   const handleFetchApi = useCallback(async () => {
     setIsLoading(true);
@@ -565,6 +618,9 @@ const RequestResponseProvider = ({
       value={{
         isResponseCollapsed,
         handleToggleCollapse,
+        requestName,
+        handleChangeRequestName,
+        handleDownloadRequest,
         activeMetaTab,
         handleChangeActiveMetaTab,
         selectedMethod,
