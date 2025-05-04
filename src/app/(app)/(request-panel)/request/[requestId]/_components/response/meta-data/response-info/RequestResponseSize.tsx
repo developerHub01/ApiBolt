@@ -13,9 +13,9 @@ import { Separator } from "@/components/ui/separator";
 import {
   ArrowUpToLine as UpIcon,
   ArrowDownToLine as DownIcon,
-  Info as InfoIcon,
 } from "lucide-react";
 import { formatSize } from "@/utils";
+import Warning from "@/components/Warning";
 
 const RequestResponseSize = memo(() => {
   const { response, requestSize, responseSize } = useRequestResponse();
@@ -37,10 +37,7 @@ const RequestResponseSize = memo(() => {
         <SizeDetails type="request" {...requestSize} />
         <Separator />
         <SizeDetails type="response" {...responseSize} />
-        <p className="text-[13px] pt-0.5 leading-relaxed select-none">
-          <InfoIcon size={14} className="inline-block mr-1" />
-          These values are approximate, not exact network size.
-        </p>
+        <Warning label="These values are approximate, not exact network size." />
       </HoverCardContent>
     </HoverCard>
   );
