@@ -4,6 +4,7 @@ import Logo from "@/app/(app)/_components/sidebar/Logo";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import SidebarMenu from "@/app/(app)/_components/sidebar/SidebarMenu";
 import SidbarToggler from "@/app/(app)/_components/sidebar/SidbarToggler";
+import FullScreenToggle from "@/app/(app)/_components/sidebar/FullScreenToggle";
 
 const Sidebar = () => {
   return (
@@ -12,7 +13,7 @@ const Sidebar = () => {
         <Logo />
         <SidbarToggler />
         <SidebarMenu />
-
+        <FullScreenToggle />
         <ThemeToggle />
       </div>
     </TooltipProvider>
