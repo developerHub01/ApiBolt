@@ -332,7 +332,7 @@ const RequestResponseProvider = ({
         rawData,
         rawSubType: rawRequestBodyType,
       });
-      console.log(res);
+      // console.log(res);
       setIsResposneError(false);
 
       const statusDetails = await getStatusMessage(res.status);
@@ -341,12 +341,11 @@ const RequestResponseProvider = ({
         data: res.data,
         headers: res.headers,
         status: res.status,
-        statusText: res.statusText ?? statusDetails.reason,
-        statusDescription: statusDetails.description ?? "Unknown status code",
+        statusText: res.statusText ?? statusDetails?.reason,
+        statusDescription: statusDetails?.description ?? "Unknown status code",
       };
     } catch (error) {
-      console.log(error);
-
+      // console.log(error);
       if (axios.isAxiosError(error) && error.response) {
         const statusDetails = await getStatusMessage(error.response.status);
 
@@ -354,8 +353,9 @@ const RequestResponseProvider = ({
           data: error.response.data,
           headers: error.response.headers,
           status: error.response.status,
-          statusText: error.response.statusText ?? statusDetails.reason,
-          statusDescription: statusDetails.description ?? "Unknown status code",
+          statusText: error.response.statusText ?? statusDetails?.reason,
+          statusDescription:
+            statusDetails?.description ?? "Unknown status code",
         };
       }
       setIsResposneError(true);
@@ -387,6 +387,7 @@ const RequestResponseProvider = ({
   }, [shouldFetch, handleFetchApi]);
 
   useEffect(() => {
+    console.log("==========");
     let finalUrl = "";
 
     /* finding query params */
