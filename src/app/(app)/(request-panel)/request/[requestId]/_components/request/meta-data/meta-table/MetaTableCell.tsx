@@ -29,13 +29,16 @@ const MetaTableCell = memo(
   ({ keyType, type, id, value = "", onBlur }: MetaTableCellProps) => {
     const { handleRemoveFormDataFile } = useRequestMetaTable();
 
-    const handleUploadFile = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
+    const handleUploadFile = useCallback(
+      (e: ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
 
-      if (!file) return;
+        if (!file) return;
 
-      onBlur(id, keyType, file);
-    }, []);
+        onBlur(id, keyType, file);
+      },
+      [onBlur, id, keyType]
+    );
 
     return (
       <TableCell className="p-1.5 relative overflow-visible min-w-auto md:min-w-24">
@@ -105,6 +108,7 @@ const MetaTableCell = memo(
     );
   }
 );
+MetaTableCell.displayName = "Meta table cell";
 
 interface FileTagProps {
   name: string;
@@ -138,5 +142,6 @@ const FileTag = ({ name, onClose, className = "", ...props }: FileTagProps) => {
     </div>
   );
 };
+FileTag.displayName = "File tag";
 
 export default MetaTableCell;

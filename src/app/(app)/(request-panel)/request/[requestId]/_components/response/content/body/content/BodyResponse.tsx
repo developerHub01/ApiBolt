@@ -15,7 +15,7 @@ const BodyResponse = memo(() => {
   const [formattedCode, setFormattedCode] = useState("");
 
   const responseType = getResponseType(
-    response?.headers?.["content-type"] ?? ""
+    String(response?.headers?.["content-type"] ?? "")
   ).toLowerCase() as TContentType;
 
   const parser = useMemo(() => getParser(responseType), [responseType]);
@@ -53,5 +53,6 @@ const BodyResponse = memo(() => {
     </ScrollArea>
   );
 });
+BodyResponse.displayName = "Body response";
 
 export default BodyResponse;

@@ -16,5 +16,6 @@ const ToggleCodeLineWrap = memo(() => {
     </Button>
   );
 });
+ToggleCodeLineWrap.displayName = "Toggle code line wrap";
 
 export default ToggleCodeLineWrap;

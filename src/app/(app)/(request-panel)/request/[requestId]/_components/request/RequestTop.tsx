@@ -2,7 +2,6 @@
 
 import React, {
   ChangeEvent,
-  FocusEvent,
   memo,
   useCallback,
   useEffect,
@@ -36,7 +35,7 @@ const RequestTop = memo(() => {
     setRequestName(e.target.value);
   }, []);
 
-  const handleBlur = useCallback((_: FocusEvent<HTMLInputElement>) => {
+  const handleBlur = useCallback(() => {
     setIsFocused(false);
   }, []);
 
@@ -90,5 +89,6 @@ const RequestTop = memo(() => {
     </div>
   );
 });
+RequestTop.displayName = "Request top";
 
 export default RequestTop;

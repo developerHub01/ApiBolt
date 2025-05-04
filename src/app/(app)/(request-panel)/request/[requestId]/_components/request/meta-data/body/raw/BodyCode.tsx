@@ -30,7 +30,7 @@ const BodyCode = memo(() => {
 
   const handleFormat = useCallback(
     () => codeFormatter(rawRequestBodyType, code, setCode),
-    [code]
+    [rawRequestBodyType, code]
   );
 
   useEffect(() => {
@@ -38,7 +38,10 @@ const BodyCode = memo(() => {
   }, [rawData]);
 
   const handleChange = useCallback((value: string) => setCode(value), []);
-  const handleBlur = useCallback(() => handleChangeRawData(code), [code]);
+  const handleBlur = useCallback(
+    () => handleChangeRawData(code),
+    [code, handleChangeRawData]
+  );
 
   return (
     <div className="w-full h-full border rounded-md overflow-hidden">
@@ -54,5 +57,7 @@ const BodyCode = memo(() => {
     </div>
   );
 });
+
+BodyCode.displayName = "Request data code area";
 
 export default BodyCode;

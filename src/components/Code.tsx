@@ -1,7 +1,7 @@
 "use client";
 
-import React, { FocusEvent, useEffect, useRef, useState } from "react";
-import CodeMirror, { Extension, ViewUpdate } from "@uiw/react-codemirror";
+import React, { useEffect, useRef, useState } from "react";
+import CodeMirror, { Extension } from "@uiw/react-codemirror";
 import { EditorView } from "@codemirror/view";
 import { html } from "@codemirror/lang-html";
 import { javascript } from "@codemirror/lang-javascript";
@@ -45,10 +45,10 @@ const getEditableOptions = (
       bracketMatching: true,
       closeBrackets: true,
     },
-    onChange: (value: string, _viewUpdate: ViewUpdate) => {
+    onChange: (value: string) => {
       if (onChange) onChange(value);
     },
-    onBlur: (e: FocusEvent<HTMLDivElement>) => {
+    onBlur: () => {
       if (onBlur) onBlur();
     },
   };
@@ -91,7 +91,9 @@ const Code = ({
   const theme = resolvedTheme as "dark" | "light";
 
   useEffect(() => {
-    if (!zoomable || !wrapperRef.current) return;
+    const wrapper = wrapperRef.current;
+
+    if (!zoomable || !wrapper) return;
 
     const handleKeydownEvent = (e: globalThis.KeyboardEvent) => {
       if (e.ctrlKey) {
@@ -111,7 +113,7 @@ const Code = ({
       }
       if (e.altKey && e.shiftKey && e.key.toLowerCase() === "f") {
         e.preventDefault();
-        handleFormat && handleFormat();
+        if (handleFormat) handleFormat();
       }
     };
 
@@ -128,12 +130,12 @@ const Code = ({
         );
     };
 
-    wrapperRef.current.addEventListener("keydown", handleKeydownEvent);
-    wrapperRef.current.addEventListener("wheel", handleWheellEvent);
+    wrapper.addEventListener("keydown", handleKeydownEvent);
+    wrapper.addEventListener("wheel", handleWheellEvent);
 
     return () => {
-      wrapperRef.current?.removeEventListener("keydown", handleKeydownEvent);
-      wrapperRef.current?.removeEventListener("wheel", handleWheellEvent);
+      wrapper.removeEventListener("keydown", handleKeydownEvent);
+      wrapper.removeEventListener("wheel", handleWheellEvent);
     };
   }, [zoomable, fontSize, handleFormat]);
 

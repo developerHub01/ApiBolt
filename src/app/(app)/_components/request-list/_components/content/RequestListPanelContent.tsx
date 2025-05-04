@@ -9,4 +9,6 @@ const RequestListPanelContent = memo(() => {
   return <div>{activeTab}</div>;
 });
 
+RequestListPanelContent.displayName = "Request list panel content";
+
 export default RequestListPanelContent;

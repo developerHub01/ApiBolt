@@ -18,5 +18,6 @@ const XWWWFormUrlencodedContent = memo(() => {
     </>
   );
 });
+XWWWFormUrlencodedContent.displayName = "X www form urlencoded content";
 
 export default XWWWFormUrlencodedContent;

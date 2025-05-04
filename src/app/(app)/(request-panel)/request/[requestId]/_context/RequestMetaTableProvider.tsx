@@ -9,10 +9,8 @@ import React, {
 } from "react";
 import {
   FormDataInterface,
-  HeaderInterface,
   ParamInterface,
   useRequestResponse,
-  XWWWFormUrlencodedInterface,
 } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
 import { useRequestBody } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestBodyProvider";
 
@@ -43,10 +41,7 @@ interface RequestMetaTableContext {
   getMetaData: (
     tpe: TMetaTableType
   ) => Array<
-    | ParamInterface
-    | HeaderInterface
-    | FormDataInterface
-    | XWWWFormUrlencodedInterface
+    ParamInterface | ParamInterface | FormDataInterface | ParamInterface
   >;
 }
 
@@ -162,10 +157,7 @@ const RequestMetaTableProvider = ({
     (
       type: TMetaTableType
     ): Array<
-      | ParamInterface
-      | HeaderInterface
-      | FormDataInterface
-      | XWWWFormUrlencodedInterface
+      ParamInterface | ParamInterface | FormDataInterface | ParamInterface
     > => {
       switch (type) {
         case "params":
@@ -203,20 +195,33 @@ const RequestMetaTableProvider = ({
         }
       }
     },
-    []
+    [
+      handleChangeParam,
+      handleChangeHeader,
+      handleChangeFormData,
+      handleChangeXWWWFormEncoded,
+    ]
   );
-  const handleAddNewMetaData = useCallback((type: TMetaTableType) => {
-    switch (type) {
-      case "params":
-        return handleAddNewParam();
-      case "headers":
-        return handleAddNewHeader();
-      case "form-data":
-        return handleAddNewFormData();
-      case "x-www-form-urlencoded":
-        return handleAddNewXWWWFormEncoded();
-    }
-  }, []);
+  const handleAddNewMetaData = useCallback(
+    (type: TMetaTableType) => {
+      switch (type) {
+        case "params":
+          return handleAddNewParam();
+        case "headers":
+          return handleAddNewHeader();
+        case "form-data":
+          return handleAddNewFormData();
+        case "x-www-form-urlencoded":
+          return handleAddNewXWWWFormEncoded();
+      }
+    },
+    [
+      handleAddNewParam,
+      handleAddNewHeader,
+      handleAddNewFormData,
+      handleAddNewXWWWFormEncoded,
+    ]
+  );
   const handleCheckToggleMetaData = useCallback(
     (type: TMetaTableType, id?: string) => {
       switch (type) {
@@ -230,7 +235,12 @@ const RequestMetaTableProvider = ({
           return handleXWWWFormEncodedCheckToggle(id);
       }
     },
-    []
+    [
+      handleParamCheckToggle,
+      handleHeaderCheckToggle,
+      handleFormDataCheckToggle,
+      handleXWWWFormEncodedCheckToggle,
+    ]
   );
   const handleDeleteMetaData = useCallback(
     (type: TMetaTableType, id: string) => {
@@ -245,7 +255,12 @@ const RequestMetaTableProvider = ({
           return handleDeleteXWWWFormEncoded(id);
       }
     },
-    []
+    [
+      handleDeleteParam,
+      handleDeleteHeader,
+      handleDeleteFormData,
+      handleDeleteXWWWFormEncoded,
+    ]
   );
 
   return (

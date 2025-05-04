@@ -5,7 +5,7 @@ import ObjectPreview from "@/app/(app)/(request-panel)/request/[requestId]/_comp
 import { cn } from "@/lib/utils";
 
 interface CellPreviewProps {
-  data?: Array<Record<string, any>> | Record<string, any> | any;
+  data?: Array<Record<string, unknown>> | Record<string, unknown> | unknown;
 }
 
 type TCellDataType = "array" | "object" | "raw";
@@ -27,11 +27,11 @@ const CellPreview = ({ data }: CellPreviewProps) => {
       })}
     >
       {cellDataType == "array" ? (
-        <ArrayBodyPreview data={data} />
+        <ArrayBodyPreview data={data as Array<Record<string, unknown>>} />
       ) : cellDataType === "object" ? (
-        <ObjectPreview data={data} />
+        <ObjectPreview data={data as Record<string, unknown>} />
       ) : (
-        data
+        String(data)
       )}
     </TableCell>
   );

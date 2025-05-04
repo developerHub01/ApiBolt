@@ -31,7 +31,7 @@ const BeautifyCode = memo(() => {
     if (!success || !data) return message && toast(message);
 
     handleChangeRawData(data);
-  }, [code, parser]);
+  }, [code, parser, handleChangeRawData]);
 
   if (requestBodyType !== "raw" || rawRequestBodyType === "text") return null;
 
@@ -50,5 +50,7 @@ const BeautifyCode = memo(() => {
     </TooltipProvider>
   );
 });
+
+BeautifyCode.displayName = "BautifyCode";
 
 export default BeautifyCode;

@@ -5,7 +5,7 @@ interface EmptyProps {
   label?: string;
   children?: React.ReactNode;
   className?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 const Empty = ({ label, children, className = "", ...props }: EmptyProps) => {

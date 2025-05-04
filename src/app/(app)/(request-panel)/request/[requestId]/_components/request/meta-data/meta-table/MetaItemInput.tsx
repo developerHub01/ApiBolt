@@ -24,7 +24,7 @@ const MetaItemInput = memo(
 
     useEffect(() => {
       if (value !== valueState) setValueState(value);
-    }, [value]);
+    }, [value, valueState]);
 
     const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
       setValueState(e.target.value);
@@ -35,7 +35,7 @@ const MetaItemInput = memo(
         if (!e.target.dataset.metaItemType) return;
         onBlur(id, e.target.dataset.metaItemType, e.target.value);
       },
-      [onBlur]
+      [onBlur, id]
     );
 
     return (
@@ -50,5 +50,6 @@ const MetaItemInput = memo(
     );
   }
 );
+MetaItemInput.displayName = "Meta item input";
 
 export default MetaItemInput;

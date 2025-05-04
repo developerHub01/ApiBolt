@@ -1,12 +1,12 @@
 "use client";
 
-import React, { memo } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { useResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/ResponseProvider";
 
-const BodyTopCodeWrap = memo(() => {
+const BodyTopCodeWrap = () => {
   const { responseCodeWrap, handleToggleResponseCodeWrap } = useResponse();
-  
+
   return (
     <Button
       size={"sm"}
@@ -16,6 +16,7 @@ const BodyTopCodeWrap = memo(() => {
       {responseCodeWrap ? "Unwrap" : "Wrap"}
     </Button>
   );
-});
+};
+BodyTopCodeWrap.displayName = "Body top code wrap";
 
 export default BodyTopCodeWrap;

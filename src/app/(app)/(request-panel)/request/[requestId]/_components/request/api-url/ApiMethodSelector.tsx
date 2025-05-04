@@ -75,4 +75,6 @@ const ApiMethodSelector = memo(() => {
   );
 });
 
+ApiMethodSelector.displayName = "API method selector";
+
 export default ApiMethodSelector;

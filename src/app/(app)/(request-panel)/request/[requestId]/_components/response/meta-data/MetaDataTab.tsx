@@ -40,5 +40,6 @@ const MetaDataTab = memo(() => {
     </>
   );
 });
+MetaDataTab.displayName = "MetaData tab";
 
 export default MetaDataTab;

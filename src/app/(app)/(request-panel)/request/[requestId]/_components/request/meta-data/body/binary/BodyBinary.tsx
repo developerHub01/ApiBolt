@@ -9,12 +9,15 @@ import { Separator } from "@/components/ui/separator";
 const BodyBinary = memo(() => {
   const { binaryData, handleChangeBinaryData } = useRequestResponse();
 
-  const handleFile = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    
-    handleChangeBinaryData(file);
-  }, []);
+  const handleFile = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      handleChangeBinaryData(file);
+    },
+    [handleChangeBinaryData]
+  );
 
   return (
     <div className="w-full h-full flex justify-center items-center p-2.5">
@@ -53,5 +56,7 @@ const BodyBinary = memo(() => {
     </div>
   );
 });
+
+BodyBinary.displayName = "Request body binary data";
 
 export default BodyBinary;

@@ -43,4 +43,6 @@ const ResponseStatus = memo(() => {
   );
 });
 
+ResponseStatus.displayName = "Response status";
+
 export default ResponseStatus;

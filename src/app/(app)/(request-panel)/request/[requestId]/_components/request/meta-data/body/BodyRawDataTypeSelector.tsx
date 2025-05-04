@@ -65,4 +65,6 @@ const BodyRawDataTypeSelector = memo(() => {
   );
 });
 
+BodyRawDataTypeSelector.displayName = "Request body raw data type selector";
+
 export default BodyRawDataTypeSelector;

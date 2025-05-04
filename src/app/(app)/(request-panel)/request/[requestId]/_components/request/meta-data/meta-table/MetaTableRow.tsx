@@ -46,9 +46,15 @@ const MetaTableRow = memo(
       [keyName, value, contentType, description]
     );
 
-    const handleDelete = useCallback(() => handleDeleteItem(id), [id]);
+    const handleDelete = useCallback(
+      () => handleDeleteItem(id),
+      [handleDeleteItem, id]
+    );
 
-    const handleCheckChange = useCallback(() => handleCheckToggle(id), [id]);
+    const handleCheckChange = useCallback(
+      () => handleCheckToggle(id),
+      [id, handleCheckToggle]
+    );
 
     return (
       <TableRow
@@ -89,5 +95,6 @@ const MetaTableRow = memo(
     );
   }
 );
+MetaTableRow.displayName = "Meta table row";
 
 export default MetaTableRow;

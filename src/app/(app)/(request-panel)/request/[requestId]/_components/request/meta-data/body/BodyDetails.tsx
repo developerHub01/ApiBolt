@@ -23,4 +23,6 @@ const BodyDetails = memo(() => {
   );
 });
 
+BodyDetails.displayName = "Request body details";
+
 export default BodyDetails;

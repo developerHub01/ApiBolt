@@ -11,10 +11,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  TRequestBodyType,
-  useRequestBody,
-} from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestBodyProvider";
+import { useRequestBody } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestBodyProvider";
+import { TRequestBodyType } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
 
 const bodyList: Array<{
   id: TRequestBodyType;

@@ -15,4 +15,6 @@ const SidbarToggler = memo(() => {
   );
 });
 
+SidbarToggler.displayName = "Sidebar toggler";
+
 export default SidbarToggler;

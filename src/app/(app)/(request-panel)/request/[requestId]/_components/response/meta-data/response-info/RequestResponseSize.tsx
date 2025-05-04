@@ -45,6 +45,7 @@ const RequestResponseSize = memo(() => {
     </HoverCard>
   );
 });
+RequestResponseSize.displayName = "Request response size";
 
 interface SizeDetailsProps {
   type: "request" | "response";
@@ -83,5 +84,6 @@ const SizeDetails = memo(({ type, header, body }: SizeDetailsProps) => {
     </div>
   );
 });
+SizeDetails.displayName = "Size details";
 
 export default RequestResponseSize;

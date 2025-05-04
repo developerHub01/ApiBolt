@@ -47,5 +47,6 @@ const MetaTableHeader = memo(({ type }: MetaTableHeaderProps) => {
     </TableHeader>
   );
 });
+MetaTableHeader.displayName = "Meta table header";
 
 export default MetaTableHeader;

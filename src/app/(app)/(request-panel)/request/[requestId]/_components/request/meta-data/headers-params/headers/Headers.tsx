@@ -16,5 +16,6 @@ const Headers = memo(() => {
     </MetaDataWrapper>
   );
 });
+Headers.displayName = "Headers";
 
 export default Headers;

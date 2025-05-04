@@ -26,7 +26,7 @@ export const getResponseType = (contentType: string) => {
   }
 };
 
-export const getPayloadSize = (data: any): number => {
+export const getPayloadSize = (data: unknown): number => {
   try {
     const str = typeof data === "string" ? data : JSON.stringify(data);
     return new TextEncoder().encode(str).length;

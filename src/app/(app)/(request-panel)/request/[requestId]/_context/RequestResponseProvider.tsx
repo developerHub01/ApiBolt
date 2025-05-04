@@ -47,16 +47,14 @@ export interface ParamInterface<ValueT = string> {
   description?: string;
   hide?: boolean;
 }
-export interface HeaderInterface extends ParamInterface {}
-export interface XWWWFormUrlencodedInterface extends ParamInterface {}
 export interface FormDataInterface
   extends ParamInterface<string | Array<File>> {
   contentType?: string;
 }
 
 interface ResponseInterface {
-  data: any;
-  headers: Record<string, any>;
+  data: unknown;
+  headers: Record<string, unknown>;
   status: number;
   statusText: string;
   statusDescription: string;
@@ -96,7 +94,7 @@ interface RequestResponseContext {
   handleAddNewParam: () => void;
   handleParamCheckToggle: (id?: string) => void;
 
-  headers: Array<HeaderInterface>;
+  headers: Array<ParamInterface>;
   handleChangeHeader: (id: string, key: string, value: string) => void;
   handleDeleteHeader: (id: string) => void;
   handleAddNewHeader: () => void;
@@ -108,7 +106,7 @@ interface RequestResponseContext {
   handleAddNewFormData: () => void;
   handleFormDataCheckToggle: (id?: string) => void;
 
-  xWWWFormUrlencodedData: Array<XWWWFormUrlencodedInterface>;
+  xWWWFormUrlencodedData: Array<ParamInterface>;
   handleChangeXWWWFormEncoded: (id: string, key: string, value: string) => void;
   handleDeleteXWWWFormEncoded: (id: string) => void;
   handleAddNewXWWWFormEncoded: () => void;
@@ -139,64 +137,73 @@ export const useRequestResponse = () => {
 };
 
 const useMetaDataManager = <
-  T extends { id: string; hide?: boolean; value: any },
+  T extends { id: string; hide?: boolean; value: unknown },
 >(
   setState: React.Dispatch<React.SetStateAction<Array<T>>>,
   generateNewItem: () => T
 ) => {
-  const handleChange = useCallback((id: string, key: string, value: any) => {
-    setState((prev) =>
-      prev.map((item) => {
-        if (item.id !== id) return item;
-
-        if (value instanceof File) {
-          const existingFiles = (
-            Array.isArray(item[key as keyof T]) ? item[key as keyof T] : []
-          ) as Array<any>;
-
-          return {
-            ...item,
-            [key]: [...existingFiles, value],
-          };
-        }
-
-        return {
-          ...item,
-          [key]: value,
-        };
-      })
-    );
-  }, []);
-
-  const handleDelete = useCallback((id: string) => {
-    setState((prev) => prev.filter((item) => item.id !== id));
-  }, []);
-
-  const handleAdd = useCallback(() => {
-    setState((prev) => [...prev, generateNewItem()]);
-  }, []);
-
-  const handleCheckToggle = useCallback((id?: string) => {
-    if (id) {
+  const handleChange = useCallback(
+    (id: string, key: string, value: unknown) => {
       setState((prev) =>
         prev.map((item) => {
           if (item.id !== id) return item;
+
+          if (value instanceof File) {
+            const existingFiles = (
+              Array.isArray(item[key as keyof T]) ? item[key as keyof T] : []
+            ) as Array<unknown>;
+
+            return {
+              ...item,
+              [key]: [...existingFiles, value],
+            };
+          }
+
           return {
             ...item,
-            hide: item.hide ? undefined : true,
+            [key]: value,
           };
         })
       );
-    } else {
-      setState((prev) => {
-        const isAllChecked = prev.every((item) => !item.hide);
-        return prev.map((item) => ({
-          ...item,
-          hide: isAllChecked ? true : undefined,
-        }));
-      });
-    }
-  }, []);
+    },
+    [setState]
+  );
+
+  const handleDelete = useCallback(
+    (id: string) => {
+      setState((prev) => prev.filter((item) => item.id !== id));
+    },
+    [setState]
+  );
+
+  const handleAdd = useCallback(() => {
+    setState((prev) => [...prev, generateNewItem()]);
+  }, [setState, generateNewItem]);
+
+  const handleCheckToggle = useCallback(
+    (id?: string) => {
+      if (id) {
+        setState((prev) =>
+          prev.map((item) => {
+            if (item.id !== id) return item;
+            return {
+              ...item,
+              hide: item.hide ? undefined : true,
+            };
+          })
+        );
+      } else {
+        setState((prev) => {
+          const isAllChecked = prev.every((item) => !item.hide);
+          return prev.map((item) => ({
+            ...item,
+            hide: isAllChecked ? true : undefined,
+          }));
+        });
+      }
+    },
+    [setState]
+  );
 
   return {
     handleChange,
@@ -237,11 +244,11 @@ const RequestResponseProvider = ({
 
   const [params, setParams] = useState<Array<ParamInterface>>([]);
 
-  const [headers, setHeaders] = useState<Array<HeaderInterface>>([]);
+  const [headers, setHeaders] = useState<Array<ParamInterface>>([]);
   const [binaryData, setBinaryData] = useState<File | null>(null);
   const [formData, setFormData] = useState<Array<FormDataInterface>>([]);
   const [xWWWFormUrlencodedData, setXWWWFormUrlencodedData] = useState<
-    Array<XWWWFormUrlencodedInterface>
+    Array<ParamInterface>
   >([]);
   const [shouldFetch, setShouldFetch] = useState<boolean>(false);
   const previousFinalUrlRef = useRef<string>("");
@@ -257,7 +264,7 @@ const RequestResponseProvider = ({
     handleDelete: handleDeleteHeader,
     handleAdd: handleAddNewHeader,
     handleCheckToggle: handleHeaderCheckToggle,
-  } = useMetaDataManager<HeaderInterface>(setHeaders, generateNewMetaDataItem);
+  } = useMetaDataManager<ParamInterface>(setHeaders, generateNewMetaDataItem);
   const {
     handleChange: handleChangeFormData,
     handleDelete: handleDeleteFormData,
@@ -271,120 +278,10 @@ const RequestResponseProvider = ({
     handleDelete: handleDeleteXWWWFormEncoded,
     handleAdd: handleAddNewXWWWFormEncoded,
     handleCheckToggle: handleXWWWFormEncodedCheckToggle,
-  } = useMetaDataManager<XWWWFormUrlencodedInterface>(
+  } = useMetaDataManager<ParamInterface>(
     setXWWWFormUrlencodedData,
     generateNewMetaDataItem
   );
-
-  useEffect(() => {
-    if (!shouldFetch) return;
-    handleFetchApi();
-    setShouldFetch(false);
-  }, [shouldFetch]);
-
-  useEffect(() => {
-    let finalUrl = "";
-
-    /* finding query params */
-    const queryString = params
-      .filter(({ hide }) => !hide)
-      .map(({ key = "", value = "" }) => `${key}=${encodeURIComponent(value)}`)
-      .join("&");
-
-    try {
-      /* If baseUrl is valid, construct normally */
-      const url = new URL(apiUrl);
-      url.search = queryString;
-      finalUrl = url.toString();
-    } catch {
-      /* If baseUrl is invalid (like just "?name=abc"), just return query only */
-
-      /* finding url without any query params and # */
-      const cleanUrl = apiUrl.split("?")[0].split("#")[0];
-
-      if (!cleanUrl.trim()) finalUrl = queryString ? `?${queryString}` : "";
-      else finalUrl = cleanUrl + (queryString ? `?${queryString}` : "");
-    }
-
-    if (previousFinalUrlRef.current === finalUrl) return;
-
-    previousFinalUrlRef.current = finalUrl;
-    setApiUrl(finalUrl);
-  }, [params]);
-
-  const handleChangeActiveMetaTab = useCallback((id: TActiveTabType) => {
-    setActiveMetaTab(id);
-  }, []);
-
-  const handleChangeSelectedMethod = useCallback((id: THTTPMethods) => {
-    setSelectedMethod(id);
-  }, []);
-
-  const handleChangeRequestBodyType = useCallback((id: TRequestBodyType) => {
-    setRequestBodyType(id);
-  }, []);
-
-  const handleChangeRawRequestBodyType = useCallback((id: TContentType) => {
-    setRawRequestBodyType(id);
-  }, []);
-
-  const handleChangeApiUrl = useCallback((api: string) => {
-    const urlParams: Array<{
-      key: string;
-      value: string;
-    }> = parseUrlParams(api).map(([key, value]) => ({
-      key,
-      value,
-    }));
-
-    setParams((prev) => {
-      if (prev.length < urlParams.length)
-        return urlParams.map((param, index) => ({
-          ...generateNewMetaDataItem("params"),
-          ...prev[index],
-          ...param,
-        }));
-
-      /* 
-      if new params size less then previous means some of them have to filter out
-      
-      so we keep hidden params as it is but for others we checked that is it exist in new param list
-
-      if exist then update it
-      else filter out it.
-      */
-      let index = 0;
-      return prev.reduce(
-        (acc, curr) =>
-          curr.hide
-            ? [...acc, curr]
-            : urlParams[index]
-              ? [
-                  ...acc,
-                  {
-                    ...curr,
-                    ...urlParams[index++],
-                  },
-                ]
-              : acc,
-        [] as Array<ParamInterface>
-      );
-    });
-
-    setApiUrl(api);
-  }, []);
-
-  const handleIsInputError = useCallback((value: boolean) => {
-    setIsApiUrlError(value);
-  }, []);
-
-  const handleChangeRawData = useCallback((value: string) => {
-    setRawData(value);
-  }, []);
-
-  const handleRequestSend = useCallback(() => {
-    setShouldFetch(true);
-  }, [apiUrl, selectedMethod, rawData]);
 
   const handleFetchApi = useCallback(async () => {
     setIsLoading(true);
@@ -482,6 +379,116 @@ const RequestResponseProvider = ({
     xWWWFormUrlencodedData,
     binaryData,
   ]);
+
+  useEffect(() => {
+    if (!shouldFetch) return;
+    handleFetchApi();
+    setShouldFetch(false);
+  }, [shouldFetch, handleFetchApi]);
+
+  useEffect(() => {
+    let finalUrl = "";
+
+    /* finding query params */
+    const queryString = params
+      .filter(({ hide }) => !hide)
+      .map(({ key = "", value = "" }) => `${key}=${encodeURIComponent(value)}`)
+      .join("&");
+
+    try {
+      /* If baseUrl is valid, construct normally */
+      const url = new URL(apiUrl);
+      url.search = queryString;
+      finalUrl = url.toString();
+    } catch {
+      /* If baseUrl is invalid (like just "?name=abc"), just return query only */
+
+      /* finding url without any query params and # */
+      const cleanUrl = apiUrl.split("?")[0].split("#")[0];
+
+      if (!cleanUrl.trim()) finalUrl = queryString ? `?${queryString}` : "";
+      else finalUrl = cleanUrl + (queryString ? `?${queryString}` : "");
+    }
+
+    if (previousFinalUrlRef.current === finalUrl) return;
+
+    previousFinalUrlRef.current = finalUrl;
+    setApiUrl(finalUrl);
+  }, [apiUrl, params]);
+
+  const handleChangeActiveMetaTab = useCallback((id: TActiveTabType) => {
+    setActiveMetaTab(id);
+  }, []);
+
+  const handleChangeSelectedMethod = useCallback((id: THTTPMethods) => {
+    setSelectedMethod(id);
+  }, []);
+
+  const handleChangeRequestBodyType = useCallback((id: TRequestBodyType) => {
+    setRequestBodyType(id);
+  }, []);
+
+  const handleChangeRawRequestBodyType = useCallback((id: TContentType) => {
+    setRawRequestBodyType(id);
+  }, []);
+
+  const handleChangeApiUrl = useCallback((api: string) => {
+    const urlParams: Array<{
+      key: string;
+      value: string;
+    }> = parseUrlParams(api).map(([key, value]) => ({
+      key,
+      value,
+    }));
+
+    setParams((prev) => {
+      if (prev.length < urlParams.length)
+        return urlParams.map((param, index) => ({
+          ...generateNewMetaDataItem("params"),
+          ...prev[index],
+          ...param,
+        }));
+
+      /* 
+      if new params size less then previous means some of them have to filter out
+      
+      so we keep hidden params as it is but for others we checked that is it exist in new param list
+
+      if exist then update it
+      else filter out it.
+      */
+      let index = 0;
+      return prev.reduce(
+        (acc, curr) =>
+          curr.hide
+            ? [...acc, curr]
+            : urlParams[index]
+              ? [
+                  ...acc,
+                  {
+                    ...curr,
+                    ...urlParams[index++],
+                  },
+                ]
+              : acc,
+        [] as Array<ParamInterface>
+      );
+    });
+
+    setApiUrl(api);
+  }, []);
+
+  const handleIsInputError = useCallback((value: boolean) => {
+    setIsApiUrlError(value);
+  }, []);
+
+  const handleChangeRawData = useCallback((value: string) => {
+    setRawData(value);
+  }, []);
+
+  const handleRequestSend = useCallback(() => {
+    setShouldFetch(true);
+  }, []);
 
   const handleRemoveAllMetaData = useCallback((type: TMetaTableType) => {
     switch (type) {

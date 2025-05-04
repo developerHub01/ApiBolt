@@ -16,5 +16,6 @@ const Params = memo(() => {
     </MetaDataWrapper>
   );
 });
+Params.displayName = "Params";
 
 export default Params;

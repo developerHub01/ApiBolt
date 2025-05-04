@@ -57,4 +57,6 @@ const SidebarMenu = memo(() => {
   );
 });
 
+SidebarMenu.displayName = "Sidebar menu";
+
 export default SidebarMenu;

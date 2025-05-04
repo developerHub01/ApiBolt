@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -16,10 +16,8 @@ const ThemeToggle = () => {
 
   useEffect(() => setMounted(true), []);
 
-  const handleToggleTheme = useCallback(
-    () => setTheme(theme === "light" ? "dark" : "light"),
-    [theme]
-  );
+  const handleToggleTheme = () =>
+    setTheme(theme === "light" ? "dark" : "light");
 
   if (!mounted) return null;
 

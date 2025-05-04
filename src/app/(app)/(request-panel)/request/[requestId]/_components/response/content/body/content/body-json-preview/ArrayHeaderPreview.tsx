@@ -2,11 +2,11 @@ import { TableHead, TableHeader, TableRow } from "@/components/ui/table-v2";
 import { cn } from "@/lib/utils";
 
 interface ArrayHeaderPreviewProps {
-  data: Array<Record<string, any>>;
+  data: Array<Record<string, unknown>>;
   lavel?: number;
 }
 
-const ArrayHeaderPreview = ({ data, lavel }: ArrayHeaderPreviewProps) => {
+const ArrayHeaderPreview = ({ data }: ArrayHeaderPreviewProps) => {
   const headerList = Array.from(
     data.reduce<Set<string>>((acc, curr) => {
       return new Set([...acc, ...Object.keys(curr)]);

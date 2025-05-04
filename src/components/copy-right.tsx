@@ -14,7 +14,7 @@ const CopyRight = memo(() => {
   useEffect(() => {
     try {
       setIsVisible(!sessionStorage.getItem("copy-right-hide"));
-    } catch (err) {
+    } catch {
       // fallback if sessionStorage not available
       setIsVisible(true);
     }
@@ -50,5 +50,7 @@ const CopyRight = memo(() => {
     </div>
   );
 });
+
+CopyRight.displayName = "Copyright bar";
 
 export default CopyRight;

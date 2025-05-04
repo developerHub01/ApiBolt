@@ -20,4 +20,6 @@ const ResponseMetaData = memo(() => {
   );
 });
 
+ResponseMetaData.displayName = "Response meta data";
+
 export default ResponseMetaData;

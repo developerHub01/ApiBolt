@@ -43,5 +43,6 @@ const MetaTable = memo(() => {
     </MetaDataListWrapper>
   );
 });
+MetaTable.displayName = "Meta table";
 
 export default MetaTable;

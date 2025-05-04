@@ -34,5 +34,6 @@ const MetaTableCheckAll = memo(
     );
   }
 );
+MetaTableCheckAll.displayName = "Meta table check all";
 
 export default MetaTableCheckAll;

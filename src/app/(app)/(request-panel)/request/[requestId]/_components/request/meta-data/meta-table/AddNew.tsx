@@ -28,5 +28,6 @@ const AddNew = memo(
     );
   }
 );
+AddNew.displayName = "Add new";
 
 export default AddNew;

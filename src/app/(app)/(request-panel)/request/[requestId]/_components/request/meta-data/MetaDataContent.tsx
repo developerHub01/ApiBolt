@@ -19,5 +19,6 @@ const MetaDataContent = memo(() => {
     </div>
   );
 });
+MetaDataContent.displayName = "Meta data content";
 
 export default MetaDataContent;

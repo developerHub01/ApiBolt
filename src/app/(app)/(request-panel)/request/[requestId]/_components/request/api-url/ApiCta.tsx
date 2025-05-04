@@ -16,4 +16,6 @@ const ApiCta = memo(() => {
   );
 });
 
+ApiCta.displayName = "Api call to action aka send button";
+
 export default ApiCta;

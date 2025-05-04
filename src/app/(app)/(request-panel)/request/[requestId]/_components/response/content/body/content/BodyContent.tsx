@@ -1,11 +1,11 @@
 "use client";
 
-import React, { memo } from "react";
+import React from "react";
 import { useResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/ResponseProvider";
 import BodyResponse from "@/app/(app)/(request-panel)/request/[requestId]/_components/response/content/body/content/BodyResponse";
 import BodyPreview from "@/app/(app)/(request-panel)/request/[requestId]/_components/response/content/body/content/BodyPreview";
 
-const BodyContent = memo(() => {
+const BodyContent = () => {
   const { responseTab } = useResponse();
 
   return (
@@ -14,6 +14,7 @@ const BodyContent = memo(() => {
       {responseTab === "preview" && <BodyPreview />}
     </>
   );
-});
+};
+BodyContent.displayName = "Body content";
 
 export default BodyContent;

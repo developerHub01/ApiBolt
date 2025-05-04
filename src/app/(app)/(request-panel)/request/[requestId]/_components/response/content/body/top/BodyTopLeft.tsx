@@ -2,17 +2,17 @@
 
 import { Button } from "@/components/ui/button";
 import { Play as PreviewIcon } from "lucide-react";
-import React, { memo } from "react";
+import React from "react";
 import { useResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/ResponseProvider";
 import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
 import { getResponseType } from "@/utils";
 
-const BodyTopLeft = memo(() => {
+const BodyTopLeft = () => {
   const { responseTab, handleChangeActiveResponseTab } = useResponse();
   const { response } = useRequestResponse();
 
   const responseType = getResponseType(
-    response?.headers?.["content-type"] ?? ""
+    String(response?.headers?.["content-type"] ?? "")
   );
 
   return (
@@ -33,6 +33,8 @@ const BodyTopLeft = memo(() => {
       </Button>
     </div>
   );
-});
+};
+
+BodyTopLeft.displayName = "Body top left";
 
 export default BodyTopLeft;

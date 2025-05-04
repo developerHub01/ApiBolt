@@ -21,7 +21,7 @@ const ApiUrl = memo(() => {
 
       handleRequestSend();
     },
-    [apiUrl]
+    [apiUrl, handleIsInputError, handleRequestSend]
   );
 
   return (
@@ -32,5 +32,7 @@ const ApiUrl = memo(() => {
     </form>
   );
 });
+
+ApiUrl.displayName = "API url form";
 
 export default ApiUrl;

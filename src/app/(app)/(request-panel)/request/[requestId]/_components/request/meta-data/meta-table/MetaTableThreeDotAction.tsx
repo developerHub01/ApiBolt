@@ -35,11 +35,11 @@ const MetaTableThreeDotAction = memo(
 
     const handleAddNewData = useCallback(
       () => handleAddNewMetaData(type),
-      [type]
+      [type, handleAddNewMetaData]
     );
     const handleDeleteAllData = useCallback(
       () => handleRemoveAllMetaData(type),
-      [type]
+      [type, handleRemoveAllMetaData]
     );
 
     return (
@@ -105,6 +105,7 @@ const MetaTableThreeDotAction = memo(
     );
   }
 );
+MetaTableThreeDotAction.displayName = "Meta table three dot action";
 
 interface CheckItemProps {
   type: TMetaTableType;

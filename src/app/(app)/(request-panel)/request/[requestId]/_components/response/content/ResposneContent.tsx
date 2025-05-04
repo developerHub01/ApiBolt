@@ -22,5 +22,6 @@ const ResposneContent = memo(() => {
     </div>
   );
 });
+ResposneContent.displayName = "Resposne content";
 
 export default ResposneContent;

@@ -1,12 +1,12 @@
 "use client";
 
-import React, { memo } from "react";
+import React from "react";
 import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
 import HeaderContent from "@/app/(app)/(request-panel)/request/[requestId]/_components/response/content/headers/HeaderContent";
 import Empty from "@/components/Empty";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-const Headers = memo(() => {
+const Headers = () => {
   const { response } = useRequestResponse();
   const headers = response?.headers as Record<string, string>;
 
@@ -19,6 +19,7 @@ const Headers = memo(() => {
       )}
     </ScrollArea>
   );
-});
+};
+Headers.displayName = "Headers";
 
 export default Headers;

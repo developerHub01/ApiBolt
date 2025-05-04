@@ -2,7 +2,7 @@ import { Table, TableBody, TableRow } from "@/components/ui/table-v2";
 import CellPreview from "@/app/(app)/(request-panel)/request/[requestId]/_components/response/content/body/content/body-json-preview/CellPreview";
 
 interface ObjectPreviewProps {
-  data: Record<string, any>;
+  data: Record<string, unknown>;
 }
 
 const ObjectPreview = ({ data }: ObjectPreviewProps) => {

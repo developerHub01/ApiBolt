@@ -1,6 +1,6 @@
 "use client";
 
-import React, { memo, useCallback } from "react";
+import React, { useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -11,7 +11,7 @@ import { Copy as CopyIcon } from "lucide-react";
 import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
 import { toast } from "sonner";
 
-const BodyTopCopy = memo(() => {
+const BodyTopCopy = () => {
   const { response } = useRequestResponse();
 
   const handleCopy = useCallback(async () => {
@@ -34,6 +34,7 @@ const BodyTopCopy = memo(() => {
       </TooltipContent>
     </Tooltip>
   );
-});
+};
+BodyTopCopy.dispalyName = "Body top copy";
 
 export default BodyTopCopy;

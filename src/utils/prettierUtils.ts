@@ -41,7 +41,7 @@ export const formatCode = async (
       success: true,
       data: formatedCode,
     };
-  } catch (error) {
+  } catch {
     return {
       success: false,
       message: "Formatting error. Please check the input.",

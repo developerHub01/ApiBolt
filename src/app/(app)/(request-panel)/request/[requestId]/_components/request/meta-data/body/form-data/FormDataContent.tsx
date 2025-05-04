@@ -19,4 +19,6 @@ const FormDataContent = memo(() => {
   );
 });
 
+FormDataContent.displayName = "Request body FormData";
+
 export default FormDataContent;

@@ -33,13 +33,16 @@ const ApiInput = memo(() => {
 
   const handleApiUrlFocus = useCallback(() => {
     if (isApiUrlError) handleIsInputError(false);
-  }, [isApiUrlError]);
+  }, [isApiUrlError, handleIsInputError]);
 
-  const handleApiUrlBlur = useCallback((e: FocusEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+  const handleApiUrlBlur = useCallback(
+    (e: FocusEvent<HTMLInputElement>) => {
+      const value = e.target.value;
 
-    handleChangeApiUrl(value);
-  }, []);
+      handleChangeApiUrl(value);
+    },
+    [handleChangeApiUrl]
+  );
 
   return (
     <Input
@@ -55,5 +58,7 @@ const ApiInput = memo(() => {
     />
   );
 });
+
+ApiInput.displayName = "API input box";
 
 export default ApiInput;

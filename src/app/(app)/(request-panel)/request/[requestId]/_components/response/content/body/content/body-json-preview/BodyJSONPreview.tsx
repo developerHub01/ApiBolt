@@ -4,7 +4,7 @@ import ObjectPreview from "@/app/(app)/(request-panel)/request/[requestId]/_comp
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 interface BodyJSONPreviewProps {
-  data: Record<string, any>;
+  data: Record<string, unknown>;
 }
 
 const BodyJSONPreview = ({ data }: BodyJSONPreviewProps) => {

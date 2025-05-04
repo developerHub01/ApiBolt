@@ -3,7 +3,7 @@ import ArrayHeaderPreview from "@/app/(app)/(request-panel)/request/[requestId]/
 import CellPreview from "@/app/(app)/(request-panel)/request/[requestId]/_components/response/content/body/content/body-json-preview/CellPreview";
 
 interface ArrayBodyPreviewProps {
-  data: Array<Record<string, any>>;
+  data: Array<Record<string, unknown>>;
   lavel?: number;
 }
 
