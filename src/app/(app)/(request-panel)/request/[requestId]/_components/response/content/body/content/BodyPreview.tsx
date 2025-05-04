@@ -13,7 +13,7 @@ const BodyPreview = () => {
   if (!response) return null;
 
   const responseType = getResponseType(
-    response?.headers?.["content-type"] ?? ""
+    String(response?.headers?.["content-type"] ?? "")
   ).toLowerCase() as TContentType;
 
   const responseData = response?.data;
@@ -21,9 +21,11 @@ const BodyPreview = () => {
   return (
     <>
       {["html", "text"].includes(responseType) && (
-        <BodyHTMLPreview data={responseData} />
+        <BodyHTMLPreview data={responseData as string} />
       )}
-      {responseType === "json" && <BodyJSONPreview data={responseData} />}
+      {responseType === "json" && (
+        <BodyJSONPreview data={responseData as Record<string, unknown>} />
+      )}
     </>
   );
 };
