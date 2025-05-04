@@ -186,3 +186,14 @@ export const requestDataSize = ({
       return 0;
   }
 };
+
+export const converterFileToMetadata = (file: File) => {
+  return {
+    name: file.name,
+    size: file.size,
+    type: file.type,
+    lastModified: file.lastModified,
+    fileName: file.name,
+    mimeType: file.type,
+  };
+};
