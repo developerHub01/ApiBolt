@@ -13,6 +13,7 @@ import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { TMetaTableType } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestMetaTableProvider";
 import {
+  base64ToFileObject,
   converterFileToMetadata,
   getPayloadSize,
   parseUrlParams,
@@ -66,6 +67,42 @@ interface RequestResponseSizeInterface {
   body: number;
 }
 
+export interface FileMetadataInterface {
+  name: string;
+  size: number;
+  type: string;
+  lastModified: number;
+  fileName: string;
+  mimeType: string;
+  base64?: string;
+}
+
+interface FormDataFileMetadataInterface
+  extends Omit<FormDataInterface, "value"> {
+  value: Array<FileMetadataInterface> | string;
+}
+
+export interface ResponseFileDataInterface {
+  name: string;
+  url: string;
+  method: THTTPMethods;
+  params: Array<ParamInterface>;
+  headers: Array<ParamInterface>;
+  body: {
+    selected: TRequestBodyType;
+    rawData: string;
+    formData: Array<FormDataFileMetadataInterface>;
+    xWWWFormUrlencodedData: Array<ParamInterface>;
+    binaryData: FileMetadataInterface | null;
+    rawRequestBodyType: TContentType;
+  };
+  response: ResponseInterface | null;
+  size: {
+    requestSize: RequestResponseSizeInterface;
+    responseSize: RequestResponseSizeInterface;
+  };
+}
+
 interface RequestResponseContext {
   isResponseCollapsed: boolean;
   handleToggleCollapse: () => void;
@@ -74,6 +111,10 @@ interface RequestResponseContext {
   isDownloadRequestWithBase64: boolean;
   handleIsDownloadRequestWithBase64: (value: boolean) => void;
   handleDownloadRequest: () => Promise<void>;
+  handleImportRequest: (
+    file: File,
+    cb?: (message: string) => void
+  ) => Promise<void>;
   activeMetaTab: TActiveTabType;
   handleChangeActiveMetaTab: (id: TActiveTabType) => void;
   selectedMethod: string;
@@ -131,6 +172,97 @@ interface RequestResponseContext {
 const RequestResponseContext = createContext<RequestResponseContext | null>(
   null
 );
+
+const handleCheckImportedRequestFileValidator = (
+  data: ResponseFileDataInterface
+): boolean => {
+  // Basic checks
+  if ([data.name, data.url].some((v) => typeof v === "undefined")) return false;
+  if (!["get", "post", "put", "patch", "delete"].includes(data.method))
+    return false;
+  if (!data.body || !data.body.selected) return false;
+
+  // Validate params
+  if (
+    data.params &&
+    !data.params.every(
+      (v) =>
+        typeof v === "object" &&
+        "id" in v &&
+        "key" in v &&
+        "value" in v &&
+        "description" in v
+    )
+  )
+    return false;
+
+  // Validate headers
+  if (
+    data.headers &&
+    !data.headers.every(
+      (v) =>
+        typeof v === "object" &&
+        "id" in v &&
+        "value" in v &&
+        "key" in v &&
+        "description" in v
+    )
+  )
+    return false;
+
+  // Validate formData
+  if (
+    data.body.formData &&
+    !data.body.formData.every((formDataItem) => {
+      const isStringValue = typeof formDataItem.value === "string";
+      const isFileArray =
+        Array.isArray(formDataItem.value) &&
+        formDataItem.value.every(
+          (file) =>
+            file &&
+            typeof file.name === "string" &&
+            typeof file.size === "number" &&
+            typeof file.type === "string" &&
+            typeof file.lastModified === "number" &&
+            typeof file.fileName === "string" &&
+            typeof file.mimeType === "string" &&
+            (typeof file.base64 === "string" ||
+              typeof file.base64 === "undefined")
+        );
+
+      return (
+        typeof formDataItem === "object" &&
+        "id" in formDataItem &&
+        "key" in formDataItem &&
+        "value" in formDataItem &&
+        (isStringValue || isFileArray) &&
+        (typeof formDataItem.description === "undefined" ||
+          typeof formDataItem.description === "string")
+      );
+    })
+  )
+    return false;
+
+  // Validate binaryData
+  if (
+    data.body.binaryData &&
+    !(
+      typeof data.body.binaryData === "object" &&
+      typeof data.body.binaryData.name === "string" &&
+      typeof data.body.binaryData.size === "number" &&
+      typeof data.body.binaryData.type === "string" &&
+      typeof data.body.binaryData.lastModified === "number" &&
+      typeof data.body.binaryData.fileName === "string" &&
+      typeof data.body.binaryData.mimeType === "string" &&
+      (typeof data.body.binaryData.base64 === "string" ||
+        typeof data.body.binaryData.base64 === "undefined")
+    )
+  )
+    return false;
+
+  // Everything passed
+  return true;
+};
 
 export const useRequestResponse = () => {
   const context = useContext(RequestResponseContext);
@@ -312,33 +444,31 @@ const RequestResponseProvider = ({
   );
 
   const handleDownloadRequest = useCallback(async () => {
-    const formDataWithMetadata = await Promise.all(
-      formData.map(async (data) => {
-        let value = null;
-        if (
-          Array.isArray(data.value) &&
-          data.value.every((v) => v instanceof File)
-        ) {
-          value = await Promise.all(
-            data.value.map((file) =>
-              converterFileToMetadata(file, isDownloadRequestWithBase64)
-            )
-          );
-        } else if (data.value instanceof File) {
-          value = await converterFileToMetadata(
-            data.value,
-            isDownloadRequestWithBase64
-          );
-        } else return (value = data.value);
+    const formDataWithMetadata: Array<FormDataFileMetadataInterface> =
+      await Promise.all(
+        formData.map(async (data) => {
+          let value: Array<FileMetadataInterface> | string = "";
+          if (
+            Array.isArray(data.value) &&
+            data.value.every((v) => v instanceof File)
+          ) {
+            value = await Promise.all(
+              data.value.map((file) =>
+                converterFileToMetadata(file, isDownloadRequestWithBase64)
+              )
+            );
+          } else if (typeof data.value === "string") {
+            value = data.value;
+          }
 
-        return {
-          ...data,
-          value,
-        };
-      })
-    );
+          return {
+            ...data,
+            value,
+          };
+        })
+      );
 
-    const downloadData = {
+    const downloadData: ResponseFileDataInterface = {
       name: requestName,
       url: apiUrl,
       method: selectedMethod,
@@ -358,6 +488,10 @@ const RequestResponseProvider = ({
         rawRequestBodyType,
       },
       response,
+      size: {
+        requestSize,
+        responseSize,
+      },
     };
 
     const blob = new Blob([JSON.stringify(downloadData)], {
@@ -386,7 +520,79 @@ const RequestResponseProvider = ({
     rawRequestBodyType,
     response,
     isDownloadRequestWithBase64,
+    requestSize,
+    responseSize,
   ]);
+
+  const handleImportRequest = useCallback(
+    async (file: File, cb?: (message: string) => void) => {
+      try {
+        const text = await file.text();
+        const jsonData: ResponseFileDataInterface = JSON.parse(text);
+
+        if (!handleCheckImportedRequestFileValidator(jsonData))
+          throw new Error("File json are not valid");
+
+        const formData: Array<FormDataInterface> = jsonData.body.formData.map(
+          (data): FormDataInterface => {
+            if (typeof data.value === "string")
+              return data as FormDataInterface;
+
+            if (Array.isArray(data.value)) {
+              if (data.value.some((v) => !v.base64)) {
+                return {
+                  ...data,
+                  value: "",
+                };
+              }
+
+              const files = data.value.map((file) =>
+                base64ToFileObject(file.base64!, file.fileName, file.mimeType)
+              );
+
+              return {
+                ...data,
+                value: files,
+              };
+            }
+
+            return {
+              ...data,
+              value: "",
+            };
+          }
+        );
+
+        const binaryData = jsonData.body.binaryData?.base64
+          ? base64ToFileObject(
+              jsonData.body.binaryData?.base64,
+              jsonData.body.binaryData?.fileName,
+              jsonData.body.binaryData?.mimeType
+            )
+          : null;
+
+        setRequestname(jsonData.name);
+        setSelectedMethod(jsonData.method);
+        setParams(jsonData.params);
+        setResponse(jsonData.response);
+        setFormData(formData);
+        setBinaryData(binaryData);
+        setRawData(jsonData.body.rawData);
+        setRequestBodyType(jsonData.body.selected);
+        setXWWWFormUrlencodedData(jsonData.body.xWWWFormUrlencodedData);
+        setRawRequestBodyType(jsonData.body.rawRequestBodyType);
+        setApiUrl(jsonData.url);
+        setHeaders(jsonData.headers);
+        setRequestSize(jsonData.size.requestSize);
+        setResponseSize(jsonData.size.responseSize);
+
+        if (cb) cb("Successfully imported");
+      } catch {
+        if (cb) cb("Request JSON file is not valid");
+      }
+    },
+    []
+  );
 
   const handleFetchApi = useCallback(async () => {
     setIsLoading(true);
@@ -667,6 +873,7 @@ const RequestResponseProvider = ({
         isDownloadRequestWithBase64,
         handleIsDownloadRequestWithBase64,
         handleDownloadRequest,
+        handleImportRequest,
         activeMetaTab,
         handleChangeActiveMetaTab,
         selectedMethod,

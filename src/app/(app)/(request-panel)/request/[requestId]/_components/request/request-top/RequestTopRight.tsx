@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback } from "react";
+import React, { ChangeEvent, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -13,6 +13,7 @@ import {
   Download as DownloadIcon,
   Save as SaveIcon,
   EllipsisVertical as ThreeDotIcon,
+  FileDown as ImportIcon,
 } from "lucide-react";
 import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
 import Warning from "@/components/Warning";
@@ -25,6 +26,7 @@ const RequestTopRight = () => {
     isDownloadRequestWithBase64,
     handleIsDownloadRequestWithBase64,
     handleDownloadRequest,
+    handleImportRequest,
   } = useRequestResponse();
 
   const handleDownload = useCallback(async () => {
@@ -35,9 +37,35 @@ const RequestTopRight = () => {
     });
   }, [requestName, handleDownloadRequest]);
 
+  const handleImport = useCallback(
+    async (e: ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+
+      if (!file) return toast("Please select a valid JSON file.");
+      await handleImportRequest(file, (message) => {
+        toast(message);
+      });
+    },
+    [handleImportRequest]
+  );
+
   return (
     <div className="flex items-center">
-      <Button variant={"ghost"} className="rounded-r-none">
+      <div>
+        <label htmlFor="import-request" className="cursor-pointer">
+          <input
+            type="file"
+            id="import-request"
+            accept="application/json"
+            onChange={handleImport}
+            hidden
+          />
+          <Button variant={"outline"} className="mr-1 pointer-events-none">
+            <ImportIcon /> import
+          </Button>
+        </label>
+      </div>
+      <Button variant={"outline"} className="rounded-r-none">
         <SaveIcon /> Save
       </Button>
       <Popover>
