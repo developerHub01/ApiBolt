@@ -13,6 +13,7 @@ import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { TMetaTableType } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestMetaTableProvider";
 import {
+  converterFileToMetadata,
   getPayloadSize,
   parseUrlParams,
   requestDataSize,
@@ -300,6 +301,25 @@ const RequestResponseProvider = ({
   }, []);
 
   const handleDownloadRequest = useCallback(() => {
+    const formDataWithMetadata = formData.map((data) => {
+      let value = null;
+      if (
+        Array.isArray(data.value) &&
+        data.value.every((v) => v instanceof File)
+      ) {
+        value = data.value.map((file) => converterFileToMetadata(file));
+      } else if (data.value instanceof File) {
+        value = converterFileToMetadata(data.value);
+      } else return (value = data.value);
+
+      return {
+        ...data,
+        value,
+      };
+    });
+
+    console.log({ formDataWithMetadata });
+
     const downloadData = {
       name: requestName,
       url: apiUrl,
@@ -309,9 +329,9 @@ const RequestResponseProvider = ({
       body: {
         selected: requestBodyType,
         rawData,
-        formData,
+        formData: formDataWithMetadata,
         xWWWFormUrlencodedData,
-        binaryData,
+        binaryData: binaryData && converterFileToMetadata(binaryData),
         rawRequestBodyType,
       },
       response,
