@@ -1,7 +1,7 @@
 import React from "react";
 import { ResizableHandle } from "@/components/ui/resizable";
 import ResponsePanel from "@/app/(app)/(request-panel)/request/[requestId]/_components/response/ResponsePanel";
-import RequestTop from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/RequestTop";
+import RequestTop from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/request-top/RequestTop";
 import ApiUrl from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/api-url/ApiUrl";
 import RequestMetaData from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/RequestMetaData";
 import ResizableWrapper from "@/app/(app)/(request-panel)/request/[requestId]/_components/ResizableWrapper";
