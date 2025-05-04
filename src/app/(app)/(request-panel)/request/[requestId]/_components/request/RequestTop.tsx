@@ -27,10 +27,11 @@ import {
 import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
 import Warning from "@/components/Warning";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 const RequestTop = memo(() => {
   const {
-    requestName = "Request",
+    requestName,
     handleChangeRequestName,
     isDownloadRequestWithBase64,
     handleIsDownloadRequestWithBase64,
@@ -74,6 +75,14 @@ const RequestTop = memo(() => {
     []
   );
 
+  const handleDownload = async () => {
+    await handleDownloadRequest();
+
+    toast("Successfully downloaded!!", {
+      description: `${requestName}.json downloaded successfully`,
+    });
+  };
+
   return (
     <div className="w-full flex justify-between items-center gap-4 pb-2">
       <div className="flex items-center gap-1">
@@ -113,7 +122,7 @@ const RequestTop = memo(() => {
               <SaveIcon /> Save As
             </Button>
             <div className="flex items-center gap-1">
-              <Button variant={"ghost"} onClick={handleDownloadRequest}>
+              <Button variant={"ghost"} onClick={handleDownload}>
                 <DownloadIcon /> Download
               </Button>
               <Popover>
@@ -140,7 +149,10 @@ const RequestTop = memo(() => {
                       <p>Also download Base64</p>
                     </Label>
                   </div>
-                  <Warning label="Base64 may slow download" className="items-center" />
+                  <Warning
+                    label="Base64 may slow download"
+                    className="items-center"
+                  />
                 </PopoverContent>
               </Popover>
             </div>

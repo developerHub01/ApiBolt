@@ -73,7 +73,7 @@ interface RequestResponseContext {
   handleChangeRequestName: (name: string) => void;
   isDownloadRequestWithBase64: boolean;
   handleIsDownloadRequestWithBase64: (value: boolean) => void;
-  handleDownloadRequest: () => void;
+  handleDownloadRequest: () => Promise<void>;
   activeMetaTab: TActiveTabType;
   handleChangeActiveMetaTab: (id: TActiveTabType) => void;
   selectedMethod: string;
@@ -228,7 +228,7 @@ interface RequestResponseProviderProps {
 const RequestResponseProvider = ({
   children,
 }: RequestResponseProviderProps) => {
-  const [requestName, setRequestname] = useState<string>("");
+  const [requestName, setRequestname] = useState<string>("Request");
   const [isResponseCollapsed, setIsResponseCollapsed] = useState<boolean>(true);
   const [activeMetaTab, setActiveMetaTab] = useState<TActiveTabType>("params");
   const [selectedMethod, setSelectedMethod] = useState<THTTPMethods>("get");
@@ -349,7 +349,12 @@ const RequestResponseProvider = ({
         rawData,
         formData: formDataWithMetadata,
         xWWWFormUrlencodedData,
-        binaryData: binaryData && converterFileToMetadata(binaryData),
+        binaryData:
+          binaryData &&
+          (await converterFileToMetadata(
+            binaryData,
+            isDownloadRequestWithBase64
+          )),
         rawRequestBodyType,
       },
       response,
