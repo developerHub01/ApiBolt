@@ -34,6 +34,16 @@ export default function RootLayout({
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
+          themes={[
+            "nature-light",
+            "nature-dark",
+            "ocean-light",
+            "ocean-dark",
+            "violate-light",
+            "violate-dark",
+            "black-light",
+            "black-dark",
+          ]}
           enableSystem
           disableTransitionOnChange
         >

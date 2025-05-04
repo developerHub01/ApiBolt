@@ -1,5 +1,5 @@
 import React from "react";
-import ThemeToggle from "@/app/(app)/_components/sidebar/ThemeToggle";
+import ThemeToggle from "@/app/(app)/_components/sidebar/theme/ThemeToggle";
 import Logo from "@/app/(app)/_components/sidebar/Logo";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import SidebarMenu from "@/app/(app)/_components/sidebar/SidebarMenu";
