@@ -18,8 +18,8 @@ const ResizableWrapper = ({ children }: ResizableWrapperProps) => {
 
     if (!layout) return;
 
-    if (isResponseCollapsed) layout.setLayout([70, 30]);
-    else layout.setLayout([100, 0]);
+    if (isResponseCollapsed) layout.setLayout([100, 0]);
+    else layout.setLayout([70, 30]);
   }, [isResponseCollapsed]);
 
   return (

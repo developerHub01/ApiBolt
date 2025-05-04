@@ -9,36 +9,36 @@ import { cn } from "@/lib/utils";
 
 const themeList = [
   {
-    id: "black-light",
-    label: "Black Light",
+    id: "forest-light",
+    label: "Forest Light",
   },
   {
-    id: "black-dark",
-    label: "Black Dark",
+    id: "forest-dark",
+    label: "Forest Dark",
   },
   {
-    id: "nature-light",
-    label: "Nature Light",
+    id: "ice-wave",
+    label: "Ice Wave",
   },
   {
-    id: "nature-dark",
-    label: "Nature Dark",
+    id: "storm-blue",
+    label: "Storm Blue",
   },
   {
-    id: "ocean-light",
-    label: "Ocean Light",
+    id: "violet-blaze",
+    label: "Violet Blaze",
   },
   {
-    id: "ocean-dark",
-    label: "Ocean Dark",
+    id: "void-violet",
+    label: "Void Violet",
   },
   {
-    id: "violate-light",
-    label: "Violate Light",
+    id: "white-smoke",
+    label: "White Smoke",
   },
   {
-    id: "violate-dark",
-    label: "Violate Dark",
+    id: "blackout",
+    label: "Blackout",
   },
 ];
 

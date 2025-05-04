@@ -35,14 +35,14 @@ export default function RootLayout({
           attribute="class"
           defaultTheme="system"
           themes={[
-            "nature-light",
-            "nature-dark",
-            "ocean-light",
-            "ocean-dark",
-            "violate-light",
-            "violate-dark",
-            "black-light",
-            "black-dark",
+            "forest-light",
+            "forest-dark",
+            "ice-wave",
+            "storm-blue",
+            "violet-blaze",
+            "void-violet",
+            "white-smoke",
+            "blackout",
           ]}
           enableSystem
           disableTransitionOnChange
