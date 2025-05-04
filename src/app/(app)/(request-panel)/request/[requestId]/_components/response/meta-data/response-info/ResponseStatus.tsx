@@ -22,7 +22,7 @@ const ResponseStatus = memo(() => {
       <HoverCardTrigger asChild>
         <Badge
           className={cn("select-none text-foreground bg-secondary", {
-            "bg-primary": status < 300 && status >= 200,
+            "bg-green-500": status < 300 && status >= 200,
             "bg-amber-500": status < 500 && status >= 400,
             "bg-destructive": status >= 500,
           })}

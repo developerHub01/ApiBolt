@@ -88,7 +88,15 @@ const Code = ({
   const extensions: Array<Extension> = [selectedLang(contentType)];
   if (lineWrap) extensions.push(EditorView.lineWrapping);
 
-  const theme = resolvedTheme as "dark" | "light";
+  const theme = [
+    "light",
+    "forest-light",
+    "ice-wave",
+    "violet-blaze",
+    "white-smoke",
+  ].includes(resolvedTheme ?? "")
+    ? "light"
+    : "dark";
 
   useEffect(() => {
     const wrapper = wrapperRef.current;

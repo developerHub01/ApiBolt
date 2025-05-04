@@ -33,7 +33,7 @@ export default function RootLayout({
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="forest-light"
           themes={[
             "forest-light",
             "forest-dark",
