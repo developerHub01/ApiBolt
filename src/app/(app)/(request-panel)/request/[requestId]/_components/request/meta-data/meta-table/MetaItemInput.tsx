@@ -23,8 +23,8 @@ const MetaItemInput = memo(
     const [valueState, setValueState] = useState<string>(value);
 
     useEffect(() => {
-      if (value !== valueState) setValueState(value);
-    }, [value, valueState]);
+      setValueState(value);
+    }, [value]);
 
     const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
       setValueState(e.target.value);
