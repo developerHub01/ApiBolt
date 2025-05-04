@@ -37,8 +37,8 @@ const RequestResponseSize = memo(() => {
         <SizeDetails type="request" {...requestSize} />
         <Separator />
         <SizeDetails type="response" {...responseSize} />
-        <p className="text-sm pt-0.5 leading-relaxed">
-          <InfoIcon size={18} className="inline-block mr-1" />
+        <p className="text-[13px] pt-0.5 leading-relaxed select-none">
+          <InfoIcon size={14} className="inline-block mr-1" />
           These values are approximate, not exact network size.
         </p>
       </HoverCardContent>

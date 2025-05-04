@@ -314,7 +314,7 @@ const RequestResponseProvider = ({
     });
 
     let responseData = {
-      data: undefined,
+      data: null,
       headers: {},
       status: 0,
       statusText: "",
@@ -357,6 +357,15 @@ const RequestResponseProvider = ({
           statusDescription:
             statusDetails?.description ?? "Unknown status code",
         };
+      } else {
+        responseData = {
+          data: null,
+          headers: {},
+          status: 0,
+          statusText: "Network Error",
+          statusDescription:
+            "Could not connect to the server. Check your internet or API URL.",
+        };
       }
       setIsResposneError(true);
     } finally {
@@ -387,7 +396,6 @@ const RequestResponseProvider = ({
   }, [shouldFetch, handleFetchApi]);
 
   useEffect(() => {
-    console.log("==========");
     let finalUrl = "";
 
     /* finding query params */

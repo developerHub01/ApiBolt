@@ -15,6 +15,7 @@ const ResponseStatus = memo(() => {
   if (!response) return null;
 
   const { status, statusText, statusDescription } = response;
+  if (!status || !statusText) return null;
 
   return (
     <HoverCard>
@@ -26,7 +27,8 @@ const ResponseStatus = memo(() => {
             "bg-destructive": status >= 500,
           })}
         >
-          {status} {statusText}
+          {status && <span>{status}</span>}
+          {statusText && <span>{statusText}</span>}{" "}
         </Badge>
       </HoverCardTrigger>
       <HoverCardContent
