@@ -89,7 +89,7 @@ const MetaTableCell = memo(
                       </div>
                     </ScrollArea>
                   )}
-                  <label>
+                  <label className="cursor-pointer">
                     <input type="file" hidden onChange={handleUploadFile} />
                     <Button
                       className="w-full pointer-events-none"

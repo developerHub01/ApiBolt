@@ -40,7 +40,7 @@ const BodyResponse = memo(() => {
   if (!response) return;
 
   return (
-    <ScrollArea className="flex-1 min-h-0 h-full overflow-hidden">
+    <ScrollArea className="flex-1 min-h-0 h-full overflow-hidden [&>div>div]:h-full">
       <Code
         code={formattedCode}
         contentType={responseType}
