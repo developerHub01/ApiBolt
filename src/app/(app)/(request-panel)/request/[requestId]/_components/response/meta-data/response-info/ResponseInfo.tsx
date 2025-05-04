@@ -4,7 +4,7 @@ import RequestResponseSize from "@/app/(app)/(request-panel)/request/[requestId]
 
 const ResponseInfo = () => {
   return (
-    <div className="flex items-center gap-1.5">
+    <div className="flex items-center gap-1.5 ml-auto">
       <ResponseStatus />
       <RequestResponseSize />
     </div>

@@ -1,40 +1,26 @@
 import React from "react";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
+import { ResizableHandle } from "@/components/ui/resizable";
 import ResponsePanel from "@/app/(app)/(request-panel)/request/[requestId]/_components/response/ResponsePanel";
 import RequestTop from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/RequestTop";
-import RequestBodyProvider from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestBodyProvider";
 import ApiUrl from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/api-url/ApiUrl";
 import RequestMetaData from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/RequestMetaData";
-import MetaDataContent from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/meta-data/MetaDataContent";
+import ResizableWrapper from "@/app/(app)/(request-panel)/request/[requestId]/_components/ResizableWrapper";
+import RequestPanel from "@/app/(app)/(request-panel)/request/[requestId]/_components/request/RequestPanel";
 
 const RequestPage = () => {
   return (
-    <RequestBodyProvider>
-      <div className="flex flex-col w-full h-full items-center justify-center">
-        <div className="w-full p-2.5 flex flex-col gap-2">
-          <RequestTop />
-          <ApiUrl />
-          <RequestMetaData />
-        </div>
-        <ResizablePanelGroup className="h-full" direction="vertical">
-          <ResizablePanel id="request-panel" defaultSize={100}>
-            <MetaDataContent />
-          </ResizablePanel>
-          <ResizableHandle />
-          <ResizablePanel
-            id="response-panel"
-            className="min-h-12"
-            defaultSize={0}
-          >
-            <ResponsePanel />
-          </ResizablePanel>
-        </ResizablePanelGroup>
+    <div className="flex flex-col w-full h-full items-center justify-center">
+      <div className="w-full p-2.5 flex flex-col gap-2">
+        <RequestTop />
+        <ApiUrl />
+        <RequestMetaData />
       </div>
-    </RequestBodyProvider>
+      <ResizableWrapper>
+        <RequestPanel />
+        <ResizableHandle />
+        <ResponsePanel />
+      </ResizableWrapper>
+    </div>
   );
 };
 

@@ -4,6 +4,7 @@ import React, { memo } from "react";
 import MetaDataTab from "@/app/(app)/(request-panel)/request/[requestId]/_components/response/meta-data/MetaDataTab";
 import { useRequestResponse } from "@/app/(app)/(request-panel)/request/[requestId]/_context/RequestResponseProvider";
 import ResponseInfo from "@/app/(app)/(request-panel)/request/[requestId]/_components/response/meta-data/response-info/ResponseInfo";
+import ResponsCollapseButton from "@/app/(app)/(request-panel)/request/[requestId]/_components/response/ResponsCollapseButton";
 
 const ResponseMetaData = memo(() => {
   const { response } = useRequestResponse();
@@ -16,6 +17,7 @@ const ResponseMetaData = memo(() => {
         <p className="select-none text-secondary-foreground">Response</p>
       )}
       <ResponseInfo />
+      <ResponsCollapseButton />
     </div>
   );
 });

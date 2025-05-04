@@ -66,6 +66,8 @@ interface RequestResponseSizeInterface {
 }
 
 interface RequestResponseContext {
+  isResponseCollapsed: boolean;
+  handleToggleCollapse: () => void;
   activeMetaTab: TActiveTabType;
   handleChangeActiveMetaTab: (id: TActiveTabType) => void;
   selectedMethod: string;
@@ -220,6 +222,7 @@ interface RequestResponseProviderProps {
 const RequestResponseProvider = ({
   children,
 }: RequestResponseProviderProps) => {
+  const [isResponseCollapsed, setIsResponseCollapsed] = useState<boolean>(true);
   const [activeMetaTab, setActiveMetaTab] = useState<TActiveTabType>("params");
   const [selectedMethod, setSelectedMethod] = useState<THTTPMethods>("get");
   const [isApiUrlError, setIsApiUrlError] = useState<boolean>(false);
@@ -281,6 +284,11 @@ const RequestResponseProvider = ({
   } = useMetaDataManager<ParamInterface>(
     setXWWWFormUrlencodedData,
     generateNewMetaDataItem
+  );
+
+  const handleToggleCollapse = useCallback(
+    () => setIsResponseCollapsed((prev) => !prev),
+    []
   );
 
   const handleFetchApi = useCallback(async () => {
@@ -555,6 +563,8 @@ const RequestResponseProvider = ({
   return (
     <RequestResponseContext.Provider
       value={{
+        isResponseCollapsed,
+        handleToggleCollapse,
         activeMetaTab,
         handleChangeActiveMetaTab,
         selectedMethod,
