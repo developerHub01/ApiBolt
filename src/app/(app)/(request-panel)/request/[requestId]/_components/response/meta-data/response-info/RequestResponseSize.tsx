@@ -26,7 +26,7 @@ const RequestResponseSize = memo(() => {
     <HoverCard>
       <HoverCardTrigger asChild>
         <Badge className={cn("select-none text-foreground bg-secondary")}>
-          {responseSize.header + responseSize.body} B
+          {formatSize(responseSize.header + responseSize.body)}
         </Badge>
       </HoverCardTrigger>
       <HoverCardContent
