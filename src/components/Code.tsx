@@ -1,22 +1,29 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import CodeMirror, { Extension } from "@uiw/react-codemirror";
 import { EditorView } from "@codemirror/view";
 import { html } from "@codemirror/lang-html";
 import { javascript } from "@codemirror/lang-javascript";
 import { json } from "@codemirror/lang-json";
 import { xml } from "@codemirror/lang-xml";
+import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
+import { languages } from "@codemirror/language-data";
 import { useTheme } from "next-themes";
 import { TContentType } from "@/types";
 import { cn } from "@/lib/utils";
+import useMounted from "@/hooks/use-mounted";
+import { Button } from "@/components/ui/button";
+import { Copy as CopyIcon } from "lucide-react";
+
+type TLanguageType = TContentType | "markdown";
 
 const fontSizeLimit = {
   max: 40,
   min: 5,
 };
 
-const selectedLang = (lang: string) => {
+const selectedLang = (lang: TLanguageType) => {
   switch (lang) {
     case "javascript":
       return javascript();
@@ -26,16 +33,26 @@ const selectedLang = (lang: string) => {
       return html();
     case "xml":
       return xml();
+    case "markdown":
+      return markdown({ base: markdownLanguage, codeLanguages: languages });
     default:
       return [];
   }
 };
 
-const getEditableOptions = (
-  editable: boolean,
-  onChange?: (code: string) => void,
-  onBlur?: () => void
-) => {
+const getEditableOptions = ({
+  editable,
+  onChange,
+  onBlur,
+  lineNumbers,
+  foldLine,
+}: {
+  editable: boolean;
+  onChange?: (code: string) => void;
+  onBlur?: () => void;
+  lineNumbers: boolean;
+  foldLine: boolean;
+}) => {
   if (!editable) return {};
 
   return {
@@ -44,6 +61,8 @@ const getEditableOptions = (
       autocompletion: true,
       bracketMatching: true,
       closeBrackets: true,
+      lineNumbers,
+      foldGutter: foldLine,
     },
     onChange: (value: string) => {
       if (onChange) onChange(value);
@@ -55,7 +74,7 @@ const getEditableOptions = (
 };
 
 interface CodeProps {
-  contentType: TContentType;
+  contentType: TLanguageType;
   fontSize?: number;
   code: string;
   onChange?: (code: string) => void;
@@ -64,6 +83,9 @@ interface CodeProps {
   className?: string;
   zoomable?: boolean;
   lineWrap?: boolean;
+  lineNumbers?: boolean;
+  foldLine?: boolean;
+  copy?: boolean;
   [key: string]: unknown;
   handleFormat?: () => void;
 }
@@ -78,25 +100,19 @@ const Code = ({
   className = "",
   zoomable = false,
   lineWrap = false,
+  lineNumbers = true,
+  foldLine = true,
+  copy = true,
   handleFormat,
   ...props
 }: CodeProps) => {
   const [fontSizeState, setFontSizeState] = useState(fontSize);
   const { resolvedTheme } = useTheme();
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const isMounted = useMounted();
 
   const extensions: Array<Extension> = [selectedLang(contentType)];
   if (lineWrap) extensions.push(EditorView.lineWrapping);
-
-  const theme = [
-    "light",
-    "forest-light",
-    "ice-wave",
-    "violet-blaze",
-    "white-smoke",
-  ].includes(resolvedTheme ?? "")
-    ? "light"
-    : "dark";
 
   useEffect(() => {
     const wrapper = wrapperRef.current;
@@ -147,8 +163,42 @@ const Code = ({
     };
   }, [zoomable, fontSize, handleFormat]);
 
+  const handleCopy = useCallback(() => {
+    navigator.clipboard.writeText(JSON.stringify(code));
+  }, [code]);
+
+  if (!isMounted) return null;
+
+  const theme = [
+    "light",
+    "forest-light",
+    "ice-wave",
+    "violet-blaze",
+    "white-smoke",
+  ].includes(resolvedTheme ?? "")
+    ? "light"
+    : "dark";
+
   return (
-    <div className="w-full h-full" tabIndex={0} ref={wrapperRef} {...props}>
+    <div
+      className={cn("w-full h-full relative", {
+        "pt-2": copy,
+        "pt-0": !copy,
+      })}
+      tabIndex={0}
+      ref={wrapperRef}
+      {...props}
+    >
+      {copy && (
+        <Button
+          size={"iconSm"}
+          variant={"outline"}
+          className="absolute top-1.5 right-1.5 z-50"
+          onClick={handleCopy}
+        >
+          <CopyIcon />
+        </Button>
+      )}
       <CodeMirror
         className={cn("w-full h-full [&>div]:bg-background!", className)}
         height="100%"
@@ -158,7 +208,13 @@ const Code = ({
         }}
         value={code}
         extensions={extensions}
-        {...getEditableOptions(editable, onChange, onBlur)}
+        {...getEditableOptions({
+          editable,
+          onChange,
+          onBlur,
+          lineNumbers,
+          foldLine,
+        })}
         readOnly={!editable}
       />
     </div>
