@@ -18,52 +18,44 @@ const MarkdownPreview = ({
   ...props
 }: MarkdownPreviewProps) => {
   return (
-    <div
-      className={cn(
-        "text-sm leading-relaxed text-foreground break-words",
-        className
-      )}
-      {...props}
-    >
+    <div className={cn("text-sm text-foreground", className)} {...props}>
       <Markdown
         remarkPlugins={[remarkGfm]}
         components={{
           h1: ({ children }) => (
-            <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+            <h1 className="text-3xl font-bold tracking-tight mt-6 mb-4 first:mt-0">
               {children}
             </h1>
           ),
           h2: ({ children }) => (
-            <h2 className="mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
+            <h2 className="text-2xl font-semibold tracking-tight mt-6 mb-3 pb-1 border-b first:mt-0">
               {children}
             </h2>
           ),
           h3: ({ children }) => (
-            <h3 className="mt-8 scroll-m-20 text-2xl font-semibold tracking-tight">
+            <h3 className="text-xl font-semibold tracking-tight mt-5 mb-3">
               {children}
             </h3>
           ),
           h4: ({ children }) => (
-            <h4 className="text-base font-medium mb-1">{children}</h4>
+            <h4 className="text-lg font-medium mt-4 mb-2">{children}</h4>
           ),
           h5: ({ children }) => (
-            <h5 className="text-sm font-medium mb-1">{children}</h5>
+            <h5 className="text-base font-medium mt-4 mb-2">{children}</h5>
           ),
           h6: ({ children }) => (
-            <h6 className="text-sm font-medium mb-1">{children}</h6>
+            <h6 className="text-sm font-medium mt-4 mb-2">{children}</h6>
           ),
-          p: ({ children }) => (
-            <p className="leading-7 [&:not(:first-child)]:mt-6">{children}</p>
-          ),
+          p: ({ children }) => <p className="leading-7 my-3">{children}</p>,
           ul: ({ children }) => (
-            <ul className="my-6 ml-6 list-disc [&>li]:mt-2">{children}</ul>
+            <ul className="list-disc pl-6 my-4">{children}</ul>
           ),
           ol: ({ children }) => (
-            <ol className="list-decimal my-6 ml-6 [&>li]:mt-2">{children}</ol>
+            <ol className="list-decimal pl-6 my-4">{children}</ol>
           ),
-          li: ({ children }) => <li>{children}</li>,
+          li: ({ children }) => <li className="mt-1">{children}</li>,
           blockquote: ({ children }) => (
-            <blockquote className="mt-6 border-l-2 pl-6 italic">
+            <blockquote className="border-l-2 pl-4 italic my-4 text-muted-foreground">
               {children}
             </blockquote>
           ),
@@ -75,7 +67,7 @@ const MarkdownPreview = ({
             if (!language) {
               return (
                 <code
-                  className="bg-muted px-1.5 py-1 rounded text-xs font-mono"
+                  className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono"
                   {...rest}
                 >
                   {children}
@@ -87,23 +79,24 @@ const MarkdownPreview = ({
                   code={`\`\`\`${language}\n${children}\`\`\``}
                   contentType="markdown"
                   editable={false}
-                  className="rounded-md overflow-hidden"
+                  copy={true}
+                  className="rounded-md overflow-hidden border"
                 />
               );
             } else
               return (
-                <pre className="bg-muted p-3 rounded overflow-x-auto text-xs font-mono mb-2">
+                <pre className="bg-muted p-3 rounded overflow-x-auto text-xs font-mono my-4">
                   <code {...rest}>{children}</code>
                 </pre>
               );
           },
-          hr: () => <hr className="my-2 border-muted" />,
+          hr: () => <hr className="my-6 border-muted" />,
           a: ({ href, children }) => (
             <a
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary underline hover:opacity-80"
+              className="text-primary underline underline-offset-2 hover:opacity-80"
             >
               {children}
             </a>
@@ -115,7 +108,7 @@ const MarkdownPreview = ({
               alt={alt || ""}
               width={400}
               height={300}
-              className="my-2 rounded max-w-full h-auto"
+              className="my-4 rounded max-w-full h-auto"
             />
           ),
           table: ({ children }: React.ComponentProps<"table">) => (

@@ -164,7 +164,9 @@ const Code = ({
   }, [zoomable, fontSize, handleFormat]);
 
   const handleCopy = useCallback(() => {
-    navigator.clipboard.writeText(JSON.stringify(code));
+    navigator.clipboard.writeText(
+      typeof code === "string" ? code : JSON.stringify(code)
+    );
   }, [code]);
 
   if (!isMounted) return null;
@@ -181,10 +183,7 @@ const Code = ({
 
   return (
     <div
-      className={cn("w-full h-full relative", {
-        "pt-2": copy,
-        "pt-0": !copy,
-      })}
+      className={cn("w-full h-full relative", className)}
       tabIndex={0}
       ref={wrapperRef}
       {...props}
@@ -200,7 +199,7 @@ const Code = ({
         </Button>
       )}
       <CodeMirror
-        className={cn("w-full h-full [&>div]:bg-background!", className)}
+        className={"w-full h-full [&>div]:bg-background!"}
         height="100%"
         theme={theme}
         style={{
