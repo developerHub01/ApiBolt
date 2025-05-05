@@ -32,7 +32,7 @@ const DescriptionEditor = () => {
         zoomable={true}
         lineNumbers={false}
         foldLine={false}
-        className="p-3 h-full"
+        className="p-3 h-full pt-4"
       />
     </div>
   );

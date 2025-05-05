@@ -9,7 +9,7 @@ const DescriptionPreview = () => {
   return (
     <MarkdownPreview
       code={description}
-      className="w-full h-full min-h-96 p-3 overflow-hidden whitespace-break-spaces border rounded-md"
+      className="w-full h-full min-h-96 p-3 overflow-hidden border rounded-md"
     />
   );
 };
