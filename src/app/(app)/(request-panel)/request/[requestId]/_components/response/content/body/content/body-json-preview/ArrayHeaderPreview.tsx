@@ -1,5 +1,4 @@
 import { TableHead, TableHeader, TableRow } from "@/components/ui/table-v2";
-import { cn } from "@/lib/utils";
 
 interface ArrayHeaderPreviewProps {
   data: Array<Record<string, unknown>>;
@@ -12,14 +11,15 @@ const ArrayHeaderPreview = ({ data }: ArrayHeaderPreviewProps) => {
       return new Set([...acc, ...Object.keys(curr)]);
     }, new Set())
   );
+  console.log("ArrayHeaderPreview");
 
   return (
-    <TableHeader
-      className={cn("", {
-        // "sticky top-0": lavel === 0,
-      })}
-    >
-      <TableRow>
+    <TableHeader>
+      <TableRow
+        style={{
+          borderBottomWidth: 1,
+        }}
+      >
         <TableHead></TableHead>
         {headerList.map((key) => (
           <TableHead key={key} className="font-semibold">

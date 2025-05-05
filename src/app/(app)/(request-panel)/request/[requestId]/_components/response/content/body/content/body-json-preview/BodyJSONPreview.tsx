@@ -15,7 +15,7 @@ const BodyJSONPreview = ({ data }: BodyJSONPreviewProps) => {
           <ArrayBodyPreview data={data} lavel={0} />
         )}
         {typeof data === "object" && !Array.isArray(data) && (
-          <ObjectPreview data={data} />
+          <ObjectPreview data={data} lavel={0} />
         )}
       </div>
       <ScrollBar orientation="horizontal" />
