@@ -16,6 +16,7 @@ import {
   base64ToFileObject,
   converterFileToMetadata,
   getPayloadSize,
+  isLocalhost,
   parseUrlParams,
   requestDataSize,
   sendRequest,
@@ -101,6 +102,24 @@ export interface ResponseFileDataInterface {
     requestSize: RequestResponseSizeInterface;
     responseSize: RequestResponseSizeInterface;
   };
+}
+
+export interface APIPayloadBody {
+  method: THTTPMethods;
+  url: string;
+  headers: Record<string, string>;
+  bodyType: TRequestBodyType;
+  formData?: Array<{
+    key: string;
+    value: string | Array<File>;
+  }>;
+  xWWWformDataUrlencoded?: Array<{
+    key: string;
+    value: string;
+  }>;
+  rawData?: string;
+  binaryData?: File;
+  rawSubType?: TContentType;
 }
 
 interface RequestResponseContext {
@@ -274,6 +293,43 @@ export const useRequestResponse = () => {
   }
 
   return context;
+};
+
+const fetchApiAndExtractData = async (payload: APIPayloadBody) => {
+  const res = await sendRequest(payload);
+
+  return {
+    headers: res.headers,
+    status: res.status,
+    statusText: res.statusText,
+    data: res.data,
+  };
+};
+
+const fetchApiAndExtractDataWithProxy = async (payload: APIPayloadBody) => {
+  const res = await axios.post("/api/proxy", payload);
+  return res.data;
+};
+
+export const fetchApiUniformError = (error: unknown): ResponseInterface => {
+  if (axios.isAxiosError(error) && error.response) {
+    return {
+      data: error.response.data,
+      headers: error.response.headers,
+      status: error.response.status,
+      statusText: error.response.statusText,
+      statusDescription: "",
+    };
+  } else {
+    return {
+      data: null,
+      headers: {},
+      status: 0,
+      statusText: "Network Error",
+      statusDescription:
+        "Could not connect to the server. Check your internet or API URL.",
+    };
+  }
 };
 
 const useMetaDataManager = <
@@ -624,70 +680,51 @@ const RequestResponseProvider = ({
       }),
     });
 
-    let responseData = {
-      data: null,
-      headers: {},
-      status: 0,
-      statusText: "",
-      statusDescription: "",
+    const online = navigator.onLine;
+    const isLocalServer = isLocalhost(apiUrl);
+
+    const useProxy = online && !isLocalServer;
+
+    console.log({
+      online,
+      isLocalServer,
+      useProxy,
+    });
+
+    const payload = {
+      method: selectedMethod,
+      url: apiUrl,
+      headers: headersPayload,
+      bodyType: requestBodyType,
+      binaryData: binaryData ?? undefined,
+      formData: formDataPayload,
+      xWWWformDataUrlencoded: xWWWFormDataUrlencodedPayload,
+      rawData,
+      rawSubType: rawRequestBodyType,
     };
+
+    let responseData: ResponseInterface | null = null;
+
     try {
-      const res = await sendRequest({
-        method: selectedMethod,
-        url: apiUrl,
-        headers: headersPayload,
-        bodyType: requestBodyType,
-        binaryData: binaryData ?? undefined,
-        formData: formDataPayload,
-        xWWWformDataUrlencoded: xWWWFormDataUrlencodedPayload,
-        rawData,
-        rawSubType: rawRequestBodyType,
-      });
-      // console.log(res);
-      setIsResposneError(false);
-
-      const statusDetails = await getStatusMessage(res.status);
-
-      responseData = {
-        data: res.data,
-        headers: res.headers,
-        status: res.status,
-        statusText: res.statusText ?? statusDetails?.reason,
-        statusDescription: statusDetails?.description ?? "Unknown status code",
-      };
+      responseData = useProxy
+        ? await fetchApiAndExtractDataWithProxy(payload)
+        : await fetchApiAndExtractData(payload);
     } catch (error) {
-      // console.log(error);
-      if (axios.isAxiosError(error) && error.response) {
-        const statusDetails = await getStatusMessage(error.response.status);
-
-        responseData = {
-          data: error.response.data,
-          headers: error.response.headers,
-          status: error.response.status,
-          statusText: error.response.statusText ?? statusDetails?.reason,
-          statusDescription:
-            statusDetails?.description ?? "Unknown status code",
-        };
-      } else {
-        responseData = {
-          data: null,
-          headers: {},
-          status: 0,
-          statusText: "Network Error",
-          statusDescription:
-            "Could not connect to the server. Check your internet or API URL.",
-        };
-      }
-      setIsResposneError(true);
-    } finally {
-      setIsLoading(false);
-      setResponse(responseData);
-
-      setResponseSize({
-        header: getPayloadSize(responseData?.headers) ?? 0,
-        body: getPayloadSize(responseData?.data) ?? 0,
-      });
+      responseData = fetchApiUniformError(error);
     }
+
+    setIsResposneError(false);
+
+    const statusDetails = await getStatusMessage(responseData!.status);
+    responseData!.statusDescription = statusDetails?.description;
+
+    setIsLoading(false);
+    setResponse(responseData);
+
+    setResponseSize({
+      header: getPayloadSize(responseData?.headers) ?? 0,
+      body: getPayloadSize(responseData?.data) ?? 0,
+    });
   }, [
     apiUrl,
     selectedMethod,

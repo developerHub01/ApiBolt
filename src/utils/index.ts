@@ -146,6 +146,13 @@ export const sendRequest = async ({
       throw new Error("Unsupported body type");
   }
 
+  console.log({
+    method,
+    url,
+    headers,
+    data,
+  });
+
   return axios({
     method,
     url,
@@ -227,4 +234,18 @@ export const base64ToFileObject = (
   }
 
   return new File([ab], filename, { type: mimeType });
+};
+
+export const isLocalhost = (url: string) => {
+  try {
+    const parsedUrl = new URL(url);
+    const hostname = parsedUrl.hostname;
+
+    return (
+      hostname === "localhost" || hostname === "127.0.0.1" || hostname === "::1"
+    );
+  } catch {
+    console.error("Invalid URL");
+    return false;
+  }
 };
