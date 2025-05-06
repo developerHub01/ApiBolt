@@ -47,7 +47,8 @@ const BodyResponse = memo(() => {
         editable={false}
         zoomable={true}
         lineWrap={responseCodeWrap}
-        className="pb-3"
+        copy={false}
+        innerClassName="pb-3"
       />
       <ScrollBar orientation="horizontal" />
     </ScrollArea>

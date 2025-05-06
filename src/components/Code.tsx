@@ -81,6 +81,7 @@ interface CodeProps {
   onBlur?: () => void;
   editable?: boolean;
   className?: string;
+  innerClassName?: string;
   zoomable?: boolean;
   lineWrap?: boolean;
   lineNumbers?: boolean;
@@ -98,6 +99,7 @@ const Code = ({
   onBlur,
   editable = true,
   className = "",
+  innerClassName = "",
   zoomable = false,
   lineWrap = false,
   lineNumbers = true,
@@ -199,7 +201,7 @@ const Code = ({
         </Button>
       )}
       <CodeMirror
-        className={"w-full h-full [&>div]:bg-background!"}
+        className={cn("w-full h-full [&>div]:bg-background!", innerClassName)}
         height="100%"
         theme={theme}
         style={{
