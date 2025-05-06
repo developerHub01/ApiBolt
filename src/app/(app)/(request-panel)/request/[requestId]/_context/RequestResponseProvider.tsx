@@ -124,7 +124,7 @@ export interface APIPayloadBody {
 
 interface RequestResponseContext {
   isResponseCollapsed: boolean;
-  handleToggleCollapse: () => void;
+  handleToggleCollapse: (size?: number) => void;
   requestName: string;
   handleChangeRequestName: (name: string) => void;
   isDownloadRequestWithBase64: boolean;
@@ -332,6 +332,8 @@ export const fetchApiUniformError = (error: unknown): ResponseInterface => {
   }
 };
 
+export const ResponsePanelMinLimit = 15;
+
 const useMetaDataManager = <
   T extends { id: string; hide?: boolean; value: unknown },
 >(
@@ -486,8 +488,17 @@ const RequestResponseProvider = ({
   );
 
   const handleToggleCollapse = useCallback(
-    () => setIsResponseCollapsed((prev) => !prev),
-    []
+    (size?: number) => {
+      if (
+        size !== undefined &&
+        ((size > ResponsePanelMinLimit && !isResponseCollapsed) ||
+          (size <= ResponsePanelMinLimit && isResponseCollapsed))
+      )
+        return;
+
+      setIsResponseCollapsed((prev) => !prev);
+    },
+    [isResponseCollapsed]
   );
 
   const handleChangeRequestName = useCallback((name: string) => {
