@@ -21,7 +21,7 @@ const ResponsCollapseButton = () => {
           <Button
             size={"iconSm"}
             variant={"ghost"}
-            onClick={handleToggleCollapse}
+            onClick={() => handleToggleCollapse()}
           >
             <ArrowIcon
               className={cn("transition-transform duration-500 ease-in-out", {

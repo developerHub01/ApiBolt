@@ -12,7 +12,6 @@ const ResponsePanelWrapper = memo(({ children }: ResponsePanelWrapperProps) => {
   const { handleToggleCollapse } = useRequestResponse();
   const handleResize = useCallback(
     (size: number) => {
-      // console.log({ size });
       handleToggleCollapse(size);
     },
     [handleToggleCollapse]
