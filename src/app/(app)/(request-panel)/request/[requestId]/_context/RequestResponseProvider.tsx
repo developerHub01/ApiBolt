@@ -297,6 +297,7 @@ export const useRequestResponse = () => {
 
 const fetchApiAndExtractData = async (payload: APIPayloadBody) => {
   const res = await sendRequest(payload);
+  console.log("response", res);
 
   return {
     headers: res.headers,
@@ -312,6 +313,7 @@ const fetchApiAndExtractDataWithProxy = async (payload: APIPayloadBody) => {
 };
 
 export const fetchApiUniformError = (error: unknown): ResponseInterface => {
+  console.log("error", error);
   if (axios.isAxiosError(error) && error.response) {
     return {
       data: error.response.data,
@@ -694,7 +696,8 @@ const RequestResponseProvider = ({
     const online = navigator.onLine;
     const isLocalServer = isLocalhost(apiUrl);
 
-    const useProxy = online && !isLocalServer;
+    // const useProxy = online && !isLocalServer;
+    const useProxy = online;
 
     console.log({
       online,
@@ -721,8 +724,11 @@ const RequestResponseProvider = ({
         ? await fetchApiAndExtractDataWithProxy(payload)
         : await fetchApiAndExtractData(payload);
     } catch (error) {
+      // console.error("Error fetching API:", error);
       responseData = fetchApiUniformError(error);
     }
+
+    console.log("responseData", responseData);
 
     setIsResposneError(false);
 
