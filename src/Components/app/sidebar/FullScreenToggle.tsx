@@ -16,7 +16,7 @@ const FullScreenToggle = () => {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Button variant="outline" onClick={toggleFullscreen} size="sm">
+        <Button variant="outline" onClick={toggleFullscreen} size="icon">
           {isFullscreen ? (
             <SmallScreenIcon size={18} />
           ) : (

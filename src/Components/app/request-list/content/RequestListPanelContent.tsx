@@ -1,5 +1,5 @@
-
 import { memo } from "react";
+import { useSidebar } from "@/context/sidebar/SidebarProvider";
 
 const RequestListPanelContent = memo(() => {
   const { activeTab } = useSidebar();

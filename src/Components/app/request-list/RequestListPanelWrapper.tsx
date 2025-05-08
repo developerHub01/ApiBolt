@@ -1,5 +1,6 @@
-import { ResizablePanel } from "@/components/ui/resizable";
 import React, { memo } from "react";
+import { ResizablePanel } from "@/components/ui/resizable";
+import { useSidebar } from "@/context/sidebar/SidebarProvider";
 
 interface RequestListPanelWrapperProps {
   children: React.ReactNode;

@@ -13,7 +13,6 @@ import {
   base64ToFileObject,
   converterFileToMetadata,
   getPayloadSize,
-  isLocalhost,
   parseUrlParams,
   requestDataSize,
   sendRequest,
@@ -58,7 +57,7 @@ interface ResponseInterface {
   headers: Record<string, unknown>;
   status: number;
   statusText: string;
-  statusDescription: string;
+  statusDescription?: string;
 }
 
 interface RequestResponseSizeInterface {
@@ -306,11 +305,6 @@ const fetchApiAndExtractData = async (payload: APIPayloadBody) => {
   };
 };
 
-const fetchApiAndExtractDataWithProxy = async (payload: APIPayloadBody) => {
-  const res = await axios.post("/api/proxy", payload);
-  return res.data;
-};
-
 export const fetchApiUniformError = (error: unknown): ResponseInterface => {
   console.log("error", error);
   if (axios.isAxiosError(error) && error.response) {
@@ -336,7 +330,7 @@ export const fetchApiUniformError = (error: unknown): ResponseInterface => {
 export const ResponsePanelMinLimit = 15;
 
 const useMetaDataManager = <
-  T extends { id: string; hide?: boolean; value: unknown }
+  T extends { id: string; hide?: boolean; value: unknown },
 >(
   setState: React.Dispatch<React.SetStateAction<Array<T>>>,
   generateNewItem: () => T
@@ -665,10 +659,13 @@ const RequestResponseProvider = ({
   const handleFetchApi = useCallback(async () => {
     setIsLoading(true);
 
-    const headersPayload = headers.reduce((acc, { key, value, hide }) => {
-      if (!hide && key) acc[key] = value;
-      return acc;
-    }, {} as Record<string, string>);
+    const headersPayload = headers.reduce(
+      (acc, { key, value, hide }) => {
+        if (!hide && key) acc[key] = value;
+        return acc;
+      },
+      {} as Record<string, string>
+    );
 
     const formDataPayload = formData
       .filter((item) => !item.hide)
@@ -689,18 +686,6 @@ const RequestResponseProvider = ({
       }),
     });
 
-    const online = navigator.onLine;
-    const isLocalServer = isLocalhost(apiUrl);
-
-    // const useProxy = online && !isLocalServer;
-    const useProxy = online;
-
-    console.log({
-      online,
-      isLocalServer,
-      useProxy,
-    });
-
     const payload = {
       method: selectedMethod,
       url: apiUrl,
@@ -716,20 +701,19 @@ const RequestResponseProvider = ({
     let responseData: ResponseInterface | null = null;
 
     try {
-      responseData = useProxy
-        ? await fetchApiAndExtractDataWithProxy(payload)
-        : await fetchApiAndExtractData(payload);
+      responseData = await fetchApiAndExtractData(payload);
     } catch (error) {
       // console.error("Error fetching API:", error);
       responseData = fetchApiUniformError(error);
     }
 
-    console.log("responseData", responseData);
-
     setIsResposneError(false);
 
     const statusDetails = await getStatusMessage(responseData!.status);
+
     responseData!.statusDescription = statusDetails?.description;
+    if (!responseData!.statusText)
+      responseData!.statusText = statusDetails?.reason;
 
     setIsLoading(false);
     setResponse(responseData);
@@ -833,14 +817,14 @@ const RequestResponseProvider = ({
           curr.hide
             ? [...acc, curr]
             : urlParams[index]
-            ? [
-                ...acc,
-                {
-                  ...curr,
-                  ...urlParams[index++],
-                },
-              ]
-            : acc,
+              ? [
+                  ...acc,
+                  {
+                    ...curr,
+                    ...urlParams[index++],
+                  },
+                ]
+              : acc,
         [] as Array<ParamInterface>
       );
     });

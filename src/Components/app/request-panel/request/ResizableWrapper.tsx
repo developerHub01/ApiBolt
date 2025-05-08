@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { ResizablePanelGroup } from "@/components/ui/resizable";
-import type { ImperativePanelGroupHandle } from "react-resizable-panels";
+import { type ImperativePanelGroupHandle } from "react-resizable-panels";
 import { useRequestResponse } from "@/context/request/RequestResponseProvider";
 
 interface ResizableWrapperProps {

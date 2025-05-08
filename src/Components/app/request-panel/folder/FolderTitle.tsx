@@ -1,4 +1,3 @@
-import { useFolder } from "@/context/folder/FolderProvider";
 import {
   useCallback,
   useEffect,
@@ -6,6 +5,7 @@ import {
   type FocusEvent,
   type KeyboardEvent,
 } from "react";
+import { useFolder } from "@/context/folder/FolderProvider";
 
 const FolderTitle = () => {
   const { title, handleChangeTitle } = useFolder();

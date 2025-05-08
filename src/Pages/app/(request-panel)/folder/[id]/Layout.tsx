@@ -1,10 +1,11 @@
+import FolderProvider from "@/context/folder/FolderProvider";
 import { Outlet } from "react-router-dom";
 
 const FolderLayout = () => {
   return (
-    <div>
+    <FolderProvider>
       <Outlet />
-    </div>
+    </FolderProvider>
   );
 };
 

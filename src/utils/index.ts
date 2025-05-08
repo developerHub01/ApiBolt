@@ -151,13 +151,6 @@ export const sendRequest = async ({
       throw new Error("Unsupported body type");
   }
 
-  console.log({
-    method,
-    url,
-    headers,
-    data,
-  });
-
   return axios({
     method,
     url,

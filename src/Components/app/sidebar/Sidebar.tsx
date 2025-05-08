@@ -3,7 +3,7 @@ import Logo from "@/components/app/sidebar/Logo";
 import SidbarToggler from "@/components/app/sidebar/SidbarToggler";
 import SidebarMenu from "@/components/app/sidebar/SidebarMenu";
 import FullScreenToggle from "@/components/app/sidebar/FullScreenToggle";
-import ThemeToggle from "@/components/app/sidebar/theme/ThemeToggle";
+import ThemeToggle from "@/components/app/sidebar/ThemeToggle";
 
 const Sidebar = () => {
   return (

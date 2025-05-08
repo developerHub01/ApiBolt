@@ -1,47 +1,43 @@
-import SingleFolderLayout from "@/Pages/folder/[id]/Layout";
-import SingleFoldePage from "@/Pages/folder/[id]/Page";
-import FolderLayout from "@/Pages/folder/Layout";
-import SingleRequestLayout from "@/Pages/request/[id]/Layout";
-import SingleRequestPage from "@/Pages/request/[id]/Page";
-import RequestLayout from "@/Pages/request/Layout";
+import RootLayout from "@/Pages/Layout";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import AppLayout from "@/Pages/app/Layout";
+import AppPage from "@/Pages/app/Page";
+import FolderLayout from "@/Pages/app/(request-panel)/folder/[id]/Layout";
+import FolderPage from "@/Pages/app/(request-panel)/folder/[id]/Page";
+import RequestLayout from "@/Pages/app/(request-panel)/request/[id]/Layout";
+import RequestPage from "@/Pages/app/(request-panel)/request/[id]/Page";
 
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <RootLayout />,
     children: [
       {
+        /* app layout */
         path: "",
+        element: <AppLayout />,
         children: [
           {
-            path: "folder",
+            path: "",
+            element: <AppPage />,
+          },
+          {
+            path: "folder/:id",
             element: <FolderLayout />,
             children: [
               {
-                path: ":id",
-                element: <SingleFolderLayout />,
-                children: [
-                  {
-                    path: "",
-                    element: <SingleFoldePage />,
-                  },
-                ],
+                path: "",
+                element: <FolderPage />,
               },
             ],
           },
           {
-            path: "request",
+            path: "request/:id",
             element: <RequestLayout />,
             children: [
               {
-                path: ":id",
-                element: <SingleRequestLayout />,
-                children: [
-                  {
-                    path: "",
-                    element: <SingleRequestPage />,
-                  },
-                ],
+                path: "",
+                element: <RequestPage />,
               },
             ],
           },
