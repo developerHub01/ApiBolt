@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu as MenuIcon } from "lucide-react";
+import { useSidebar } from "@/context/sidebar/SidebarProvider";
 
 const SidbarToggler = memo(() => {
   const { handleToggleSidebar } = useSidebar();

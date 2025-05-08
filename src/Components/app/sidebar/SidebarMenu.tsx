@@ -10,6 +10,10 @@ import {
   Container as EnvironmentsIcon,
   type LucideIcon,
 } from "lucide-react";
+import {
+  useSidebar,
+  type TSidebarTab,
+} from "@/context/sidebar/SidebarProvider";
 
 const menuList: Array<{
   id: TSidebarTab;
