@@ -15,6 +15,7 @@ import { useRequestBody } from "@/context/request/RequestBodyProvider";
 export type TMetaTableType =
   | "params"
   | "headers"
+  | "hiddenHeaders"
   | "form-data"
   | "x-www-form-urlencoded";
 
@@ -120,6 +121,7 @@ const RequestMetaTableProvider = ({
   const {
     handleChangeParam,
     handleChangeHeader,
+    handleChangeHiddenHeader,
     handleChangeFormData,
     handleChangeXWWWFormEncoded,
 
@@ -135,6 +137,7 @@ const RequestMetaTableProvider = ({
 
     handleParamCheckToggle,
     handleHeaderCheckToggle,
+    handleHiddenHeaderCheckToggle,
     handleFormDataCheckToggle,
     handleXWWWFormEncodedCheckToggle,
 
@@ -143,6 +146,7 @@ const RequestMetaTableProvider = ({
 
     params,
     headers,
+    hiddenHeaders,
     formData,
     xWWWFormUrlencodedData,
   } = useRequestResponse();
@@ -165,13 +169,15 @@ const RequestMetaTableProvider = ({
           return params;
         case "headers":
           return headers;
+        case "hiddenHeaders":
+          return hiddenHeaders;
         case "form-data":
           return formData;
         case "x-www-form-urlencoded":
           return xWWWFormUrlencodedData;
       }
     },
-    [params, headers, formData, xWWWFormUrlencodedData]
+    [params, headers, hiddenHeaders, formData, xWWWFormUrlencodedData]
   );
 
   const handleChangeMetaData = useCallback(
@@ -179,14 +185,21 @@ const RequestMetaTableProvider = ({
       type: TMetaTableType,
       [id, key, value]: [id: string, key: string, value: string | File]
     ) => {
+      console.log({ type });
       switch (type) {
         case "params": {
           if (typeof value !== "string") return;
           return handleChangeParam(id, key, value);
         }
         case "headers": {
+          console.log("headers", { id, key, value });
           if (typeof value !== "string") return;
           return handleChangeHeader(id, key, value);
+        }
+        case "hiddenHeaders": {
+          console.log("hiddenHeaders", { id, key, value });
+          if (typeof value !== "string") return;
+          return handleChangeHiddenHeader(id, key, value);
         }
         case "form-data":
           return handleChangeFormData(id, key, value);
@@ -199,6 +212,7 @@ const RequestMetaTableProvider = ({
     [
       handleChangeParam,
       handleChangeHeader,
+      handleChangeHiddenHeader,
       handleChangeFormData,
       handleChangeXWWWFormEncoded,
     ]
@@ -230,6 +244,8 @@ const RequestMetaTableProvider = ({
           return handleParamCheckToggle(id);
         case "headers":
           return handleHeaderCheckToggle(id);
+        case "hiddenHeaders":
+          return handleHiddenHeaderCheckToggle(id);
         case "form-data":
           return handleFormDataCheckToggle(id);
         case "x-www-form-urlencoded":
@@ -239,6 +255,7 @@ const RequestMetaTableProvider = ({
     [
       handleParamCheckToggle,
       handleHeaderCheckToggle,
+      handleHiddenHeaderCheckToggle,
       handleFormDataCheckToggle,
       handleXWWWFormEncodedCheckToggle,
     ]

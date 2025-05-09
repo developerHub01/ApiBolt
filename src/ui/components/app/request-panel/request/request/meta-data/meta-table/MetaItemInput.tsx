@@ -8,7 +8,11 @@ import {
 } from "react";
 import { cn } from "@/lib/utils";
 
-interface MetaItemInputProps {
+interface MetaItemInputProps
+  extends Omit<
+    React.ComponentProps<"input">,
+    "id" | "value" | "onBlur" | "className"
+  > {
   id: string;
   keyType: string;
   value?: string;
@@ -17,7 +21,14 @@ interface MetaItemInputProps {
 }
 
 const MetaItemInput = memo(
-  ({ id, keyType, value = "", onBlur, className = "" }: MetaItemInputProps) => {
+  ({
+    id,
+    keyType,
+    value = "",
+    onBlur,
+    className = "",
+    ...props
+  }: MetaItemInputProps) => {
     const [valueState, setValueState] = useState<string>(value);
 
     useEffect(() => {
@@ -44,6 +55,7 @@ const MetaItemInput = memo(
         onChange={handleChange}
         onBlur={handleBlur}
         className={cn("w-full p-0.5", "focus:bg-background", className)}
+        {...props}
       />
     );
   }

@@ -21,10 +21,18 @@ interface MetaTableCellProps {
   id: string;
   value: string | Array<File>;
   onBlur: (id: string, key: string, value: string | File) => void;
+  prevent?: boolean;
 }
 
 const MetaTableCell = memo(
-  ({ keyType, type, id, value = "", onBlur }: MetaTableCellProps) => {
+  ({
+    keyType,
+    type,
+    id,
+    value = "",
+    onBlur,
+    prevent = false,
+  }: MetaTableCellProps) => {
     const { handleRemoveFormDataFile } = useRequestMetaTable();
 
     const handleUploadFile = useCallback(
@@ -49,6 +57,7 @@ const MetaTableCell = memo(
                 id={id}
                 value={Array.isArray(value) ? "" : value}
                 onBlur={onBlur}
+                disabled={prevent}
               />
             ) : (
               <PopoverTrigger asChild>
@@ -58,7 +67,7 @@ const MetaTableCell = memo(
                 />
               </PopoverTrigger>
             )}
-            {type === "form-data" && keyType === "value" && (
+            {type === "form-data" && keyType === "value" && !prevent && (
               <>
                 <PopoverTrigger asChild>
                   <Button

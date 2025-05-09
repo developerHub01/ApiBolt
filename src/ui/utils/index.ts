@@ -3,6 +3,7 @@ import type {
   TRequestBodyType,
 } from "@/context/request/RequestResponseProvider";
 import axios from "axios";
+import { isElectron } from "@/utils/electron";
 
 export const getResponseType = (contentType: string) => {
   if (contentType.includes("application/json")) {
@@ -72,6 +73,7 @@ export const sendRequest = async ({
   method,
   url,
   headers,
+  hiddenHeaders,
   bodyType,
   formData,
   xWWWformDataUrlencoded,
@@ -81,6 +83,10 @@ export const sendRequest = async ({
 }: APIPayloadBody) => {
   let data = null;
   url = ensureAbsoluteUrl(url);
+  headers = {
+    ...headers,
+    ...hiddenHeaders,
+  };
 
   switch (bodyType) {
     case "none": {
@@ -135,12 +141,14 @@ export const sendRequest = async ({
     default:
       throw new Error("Unsupported body type");
   }
-
+  
   return axios({
     method,
     url,
     headers,
     data,
+    withCredentials: isElectron(),
+    maxRedirects: 5,
   });
 };
 

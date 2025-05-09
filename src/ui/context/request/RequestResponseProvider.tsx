@@ -46,6 +46,8 @@ export interface ParamInterface<ValueT = string> {
   value: ValueT;
   description?: string;
   hide?: boolean;
+  prevent?: boolean;
+  calculateDynamicly?: boolean;
 }
 export interface FormDataInterface
   extends ParamInterface<string | Array<File>> {
@@ -105,6 +107,7 @@ export interface APIPayloadBody {
   method: THTTPMethods;
   url: string;
   headers: Record<string, string>;
+  hiddenHeaders: Record<string, string>;
   bodyType: TRequestBodyType;
   formData?: Array<{
     key: string;
@@ -171,6 +174,10 @@ interface RequestResponseContext {
   handleDeleteHeader: (id: string) => void;
   handleAddNewHeader: () => void;
   handleHeaderCheckToggle: (id?: string) => void;
+
+  hiddenHeaders: Array<ParamInterface>;
+  handleChangeHiddenHeader: (id: string, key: string, value: string) => void;
+  handleHiddenHeaderCheckToggle: (id?: string) => void;
 
   formData: Array<FormDataInterface>;
   handleChangeFormData: (id: string, key: string, value: File | string) => void;
@@ -302,7 +309,9 @@ export const useRequestResponse = () => {
 
 const fetchApiAndExtractData = async (payload: APIPayloadBody) => {
   const res = await sendRequest(payload);
-  // console.log("response", res);
+  console.log("response", res);
+  const cookies = res.headers["set-cookie"];
+  console.log("cookies", cookies);
 
   return {
     headers: res.headers,
@@ -447,6 +456,37 @@ const RequestResponseProvider = ({
   const [params, setParams] = useState<Array<ParamInterface>>([]);
 
   const [headers, setHeaders] = useState<Array<ParamInterface>>([]);
+  const [hiddenHeaders, setHiddenHeaders] = useState<Array<ParamInterface>>([
+    {
+      id: uuidv4(),
+      key: "Cookie",
+      value: "",
+      description: "",
+      prevent: true,
+      calculateDynamicly: true,
+    },
+    {
+      id: uuidv4(),
+      key: "User-Agent",
+      value: `${import.meta.env.VITE_APP_NAME}/${import.meta.env.VITE_APP_VERSION}`,
+      description: "",
+      prevent: true,
+    },
+    {
+      id: uuidv4(),
+      key: "Accept",
+      value: "*/*",
+      description: "",
+      prevent: true,
+    },
+    {
+      id: uuidv4(),
+      key: "Connection",
+      value: "keep-alive",
+      description: "",
+      prevent: true,
+    },
+  ]);
   const [binaryData, setBinaryData] = useState<File | null>(null);
   const [formData, setFormData] = useState<Array<FormDataInterface>>([]);
   const [xWWWFormUrlencodedData, setXWWWFormUrlencodedData] = useState<
@@ -471,6 +511,13 @@ const RequestResponseProvider = ({
     handleAdd: handleAddNewHeader,
     handleCheckToggle: handleHeaderCheckToggle,
   } = useMetaDataManager<ParamInterface>(setHeaders, generateNewMetaDataItem);
+  const {
+    handleChange: handleChangeHiddenHeader,
+    handleCheckToggle: handleHiddenHeaderCheckToggle,
+  } = useMetaDataManager<ParamInterface>(
+    setHiddenHeaders,
+    generateNewMetaDataItem
+  );
   const {
     handleChange: handleChangeFormData,
     handleDelete: handleDeleteFormData,
@@ -673,6 +720,13 @@ const RequestResponseProvider = ({
       },
       {} as Record<string, string>
     );
+    const hiddenHeadersPayload = hiddenHeaders.reduce(
+      (acc, { key, value, hide }) => {
+        if (!hide && key) acc[key] = value;
+        return acc;
+      },
+      {} as Record<string, string>
+    );
 
     const formDataPayload = formData
       .filter((item) => !item.hide)
@@ -697,6 +751,7 @@ const RequestResponseProvider = ({
       method: selectedMethod,
       url: apiUrl,
       headers: headersPayload,
+      hiddenHeaders: hiddenHeadersPayload,
       bodyType: requestBodyType,
       binaryData: binaryData ?? undefined,
       formData: formDataPayload,
@@ -710,7 +765,7 @@ const RequestResponseProvider = ({
     try {
       responseData = await fetchApiAndExtractData(payload);
     } catch (error) {
-      // console.error("Error fetching API:", error);
+      console.error("Error fetching API:", error);
       responseData = fetchApiUniformError(error);
     }
 
@@ -735,6 +790,7 @@ const RequestResponseProvider = ({
     apiUrl,
     selectedMethod,
     headers,
+    hiddenHeaders,
     requestBodyType,
     rawRequestBodyType,
     rawData,
@@ -778,6 +834,28 @@ const RequestResponseProvider = ({
     previousFinalUrlRef.current = finalUrl;
     setApiUrl(finalUrl);
   }, [apiUrl, params]);
+
+  // const handleSetCookies = useCallback(async (apiUrl: string) => {
+  //   const cookies = await getCookiesFromUrl(apiUrl);
+
+  //   console.log("cookies", cookies);
+
+  //   // setHiddenHeaders((prev) =>
+  //   //   prev.map((item) =>
+  //   //     item.key === "Cookie" ? { ...item, value: cookies } : item
+  //   //   )
+  //   // );
+  // }, []);
+
+  // useEffect(() => {
+  //   if (!apiUrl)
+  //     return setHiddenHeaders((prev) =>
+  //       prev.map((item) =>
+  //         item.key === "Cookie" ? { ...item, value: "" } : item
+  //       )
+  //     );
+  //   handleSetCookies(apiUrl);
+  // }, [apiUrl, handleSetCookies]);
 
   const handleChangeActiveMetaTab = useCallback((id: TActiveTabType) => {
     setActiveMetaTab(id);
@@ -947,6 +1025,11 @@ const RequestResponseProvider = ({
         handleDeleteHeader,
         handleAddNewHeader,
         handleHeaderCheckToggle,
+
+        hiddenHeaders,
+        handleChangeHiddenHeader,
+        handleHiddenHeaderCheckToggle,
+
         formData,
         handleChangeFormData,
         handleDeleteFormData,

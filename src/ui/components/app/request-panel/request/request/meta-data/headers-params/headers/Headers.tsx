@@ -10,7 +10,7 @@ const Headers = memo(() => {
   return (
     <MetaDataWrapper label="Headers">
       <MetaTable />
-      <AddNew onClick={handleAddNewHeader} label="Add New Param" />
+      <AddNew onClick={handleAddNewHeader} label="Add New Headers" />
     </MetaDataWrapper>
   );
 });

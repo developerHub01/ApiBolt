@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import type { TMetaTableType } from "@/context/request/RequestMetaTableProvider";
 import MetaTableCell from "@/components/app/request-panel/request/request/meta-data/meta-table/MetaTableCell";
 
+const calculateDynamicText = "<calculated when request is sent>";
+
 interface MetaTableRowProps {
   type?: TMetaTableType;
   id: string;
@@ -14,6 +16,9 @@ interface MetaTableRowProps {
   description?: string;
   contentType?: string;
   hide?: boolean;
+  preventCheck?: boolean;
+  prevent?: boolean;
+  calculateDynamicly?: boolean;
   handleChangeItem: (id: string, key: string, value: string | File) => void;
   handleDeleteItem: (id: string) => void;
   handleCheckToggle: (id?: string) => void;
@@ -29,6 +34,9 @@ const MetaTableRow = memo(
     description = "",
     contentType = "",
     hide = false,
+    preventCheck = false,
+    prevent = false,
+    calculateDynamicly = false,
     handleChangeItem,
     handleDeleteItem,
     handleCheckToggle,
@@ -65,6 +73,7 @@ const MetaTableRow = memo(
               className="cursor-pointer"
               id={`${type}-hide-${id}`}
               checked={!hide}
+              disabled={preventCheck}
               onCheckedChange={handleCheckChange}
             />
           </div>
@@ -77,17 +86,24 @@ const MetaTableRow = memo(
               id={id}
               type={type}
               keyType={keyType}
-              value={value}
+              value={
+                calculateDynamicly && keyType === "value"
+                  ? calculateDynamicText
+                  : value
+              }
+              prevent={prevent}
               onBlur={handleChangeItem}
             />
           );
         })}
         <TableCell className="p-0">
-          <div className="flex justify-center items-center">
-            <Button size={"iconXs"} variant={"ghost"} onClick={handleDelete}>
-              <DeleteIcon size={16} />
-            </Button>
-          </div>
+          {!prevent && (
+            <div className="flex justify-center items-center">
+              <Button size={"iconXs"} variant={"ghost"} onClick={handleDelete}>
+                <DeleteIcon size={16} />
+              </Button>
+            </div>
+          )}
         </TableCell>
       </TableRow>
     );
