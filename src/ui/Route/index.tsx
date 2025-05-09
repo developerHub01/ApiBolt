@@ -1,13 +1,18 @@
 import RootLayout from "@/Pages/Layout";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  createHashRouter,
+  RouterProvider,
+} from "react-router-dom";
 import AppLayout from "@/Pages/app/Layout";
 import AppPage from "@/Pages/app/Page";
 import FolderLayout from "@/Pages/app/(request-panel)/folder/[id]/Layout";
 import FolderPage from "@/Pages/app/(request-panel)/folder/[id]/Page";
 import RequestLayout from "@/Pages/app/(request-panel)/request/[id]/Layout";
 import RequestPage from "@/Pages/app/(request-panel)/request/[id]/Page";
+import { isElectron } from "@/utils/electron";
 
-const router = createBrowserRouter([
+const routes = [
   {
     path: "/",
     element: <RootLayout />,
@@ -45,7 +50,11 @@ const router = createBrowserRouter([
       },
     ],
   },
-]);
+];
+
+const router = isElectron()
+  ? createHashRouter(routes)
+  : createBrowserRouter(routes);
 
 const Router = () => <RouterProvider router={router} />;
 

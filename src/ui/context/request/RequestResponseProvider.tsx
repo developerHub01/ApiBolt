@@ -17,7 +17,7 @@ import {
   requestDataSize,
   sendRequest,
 } from "@/utils";
-import { getStatusMessage } from "@/utils/statusCode";
+import statusData from "@/data/http_status_details.json";
 import type { TMetaTableType } from "@/context/request/RequestMetaTableProvider";
 import type { TContentType } from "@/types";
 
@@ -117,6 +117,13 @@ export interface APIPayloadBody {
   rawData?: string;
   binaryData?: File;
   rawSubType?: TContentType;
+}
+
+export interface StatusDataInterface {
+  [key: string]: {
+    reason: string;
+    description: string;
+  };
 }
 
 interface RequestResponseContext {
@@ -295,7 +302,7 @@ export const useRequestResponse = () => {
 
 const fetchApiAndExtractData = async (payload: APIPayloadBody) => {
   const res = await sendRequest(payload);
-  console.log("response", res);
+  // console.log("response", res);
 
   return {
     headers: res.headers,
@@ -306,7 +313,7 @@ const fetchApiAndExtractData = async (payload: APIPayloadBody) => {
 };
 
 export const fetchApiUniformError = (error: unknown): ResponseInterface => {
-  console.log("error", error);
+  // console.log("error", error);
   if (axios.isAxiosError(error) && error.response) {
     return {
       data: error.response.data,
@@ -709,7 +716,9 @@ const RequestResponseProvider = ({
 
     setIsResposneError(false);
 
-    const statusDetails = await getStatusMessage(responseData!.status);
+    const statusDetails = (statusData as StatusDataInterface)[
+      responseData.status
+    ];
 
     responseData!.statusDescription = statusDetails?.description;
     if (!responseData!.statusText)

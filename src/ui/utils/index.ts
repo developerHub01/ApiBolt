@@ -1,5 +1,5 @@
 import type {
-  THTTPMethods,
+  APIPayloadBody,
   TRequestBodyType,
 } from "@/context/request/RequestResponseProvider";
 import axios from "axios";
@@ -78,24 +78,9 @@ export const sendRequest = async ({
   rawData,
   binaryData,
   rawSubType,
-}: {
-  method: THTTPMethods;
-  url: string;
-  headers: Record<string, string>;
-  bodyType: TRequestBodyType;
-  formData?: Array<{
-    key: string;
-    value: string | Array<File>;
-  }>;
-  xWWWformDataUrlencoded?: Array<{
-    key: string;
-    value: string;
-  }>;
-  rawData?: string;
-  binaryData?: File;
-  rawSubType?: "text" | "javascript" | "json" | "html" | "xml";
-}) => {
+}: APIPayloadBody) => {
   let data = null;
+  url = ensureAbsoluteUrl(url);
 
   switch (bodyType) {
     case "none": {
@@ -246,4 +231,11 @@ export const isLocalhost = (url: string) => {
     console.error("Invalid URL");
     return false;
   }
+};
+
+export const ensureAbsoluteUrl = (url: string): string => {
+  if (/^https?:\/\//i.test(url)) {
+    return url; // already absolute
+  }
+  return `http://${url}`; // fallback (you can choose https if needed)
 };

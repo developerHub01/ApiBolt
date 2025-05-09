@@ -109,6 +109,29 @@
   --sidebar-ring: oklch(0.552 0.016 285.938);
 }
 
+@theme {
+  --animate-loader-v1: loader 2s linear infinite alternate;
+  @keyframes loader {
+    0% {
+      left: -50%;
+      transform: scaleX(1);
+    }
+    30% {
+      transform: scaleX(1.5);
+    }
+    50% {
+      transform: scaleX(0);
+      left: 120%;
+    }
+    70% {
+      transform: scaleX(0.5);
+    }
+    100% {
+      transform: scaleX(2);
+    }
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

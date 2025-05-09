@@ -7,7 +7,11 @@ const ApiCta = memo(() => {
   const { isLoading } = useRequestResponse();
 
   return (
-    <Button disabled={isLoading} className="rounded-l-none uppercase">
+    <Button
+      type="submit"
+      disabled={isLoading}
+      className="rounded-l-none uppercase"
+    >
       {isLoading && <LoaderIcon className="animate-spin" size={16} />}
       Send
     </Button>
