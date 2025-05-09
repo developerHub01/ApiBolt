@@ -12,14 +12,17 @@ import { v4 as uuidv4 } from "uuid";
 import {
   base64ToFileObject,
   converterFileToMetadata,
+  ensureAbsoluteUrl,
   getPayloadSize,
   parseUrlParams,
   requestDataSize,
   sendRequest,
+  // sendRequest,
 } from "@/utils";
 import statusData from "@/data/http_status_details.json";
 import type { TMetaTableType } from "@/context/request/RequestMetaTableProvider";
 import type { TContentType } from "@/types";
+import { isElectron } from "@/utils/electron";
 
 const generateNewMetaDataItem = (type?: TMetaTableType) => ({
   id: uuidv4(),
@@ -54,9 +57,21 @@ export interface FormDataInterface
   contentType?: string;
 }
 
-interface ResponseInterface {
+export interface CookieInterface {
+  name: string;
+  value: string;
+  domain?: string;
+  path?: string;
+  expires?: string;
+  HttpOnly?: boolean;
+  secure?: boolean;
+  samesite?: string;
+}
+
+export interface ResponseInterface {
   data: unknown;
   headers: Record<string, unknown>;
+  cookies?: Array<CookieInterface>;
   status: number;
   statusText: string;
   statusDescription?: string;
@@ -308,17 +323,26 @@ export const useRequestResponse = () => {
 };
 
 const fetchApiAndExtractData = async (payload: APIPayloadBody) => {
-  const res = await sendRequest(payload);
-  console.log("response", res);
-  const cookies = res.headers["set-cookie"];
-  console.log("cookies", cookies);
+  if (isElectron()) {
+    console.log("electronAPI ========= ", window.electronAPI);
+    const res = await window.electronAPI?.fetchApi(payload);
+    return res;
+  }
+  try {
+    const res = await sendRequest(payload);
+    console.log("response", res);
+    const cookies = res.headers["set-cookie"];
+    console.log("cookies", cookies);
 
-  return {
-    headers: res.headers,
-    status: res.status,
-    statusText: res.statusText,
-    data: res.data,
-  };
+    return {
+      headers: res.headers,
+      status: res.status,
+      statusText: res.statusText,
+      data: res.data,
+    };
+  } catch (error) {
+    return fetchApiUniformError(error);
+  }
 };
 
 export const fetchApiUniformError = (error: unknown): ResponseInterface => {
@@ -749,7 +773,7 @@ const RequestResponseProvider = ({
 
     const payload = {
       method: selectedMethod,
-      url: apiUrl,
+      url: ensureAbsoluteUrl(apiUrl),
       headers: headersPayload,
       hiddenHeaders: hiddenHeadersPayload,
       bodyType: requestBodyType,
@@ -760,14 +784,8 @@ const RequestResponseProvider = ({
       rawSubType: rawRequestBodyType,
     };
 
-    let responseData: ResponseInterface | null = null;
-
-    try {
-      responseData = await fetchApiAndExtractData(payload);
-    } catch (error) {
-      console.error("Error fetching API:", error);
-      responseData = fetchApiUniformError(error);
-    }
+    const responseData: ResponseInterface =
+      await fetchApiAndExtractData(payload);
 
     setIsResposneError(false);
 
@@ -835,27 +853,30 @@ const RequestResponseProvider = ({
     setApiUrl(finalUrl);
   }, [apiUrl, params]);
 
-  // const handleSetCookies = useCallback(async (apiUrl: string) => {
-  //   const cookies = await getCookiesFromUrl(apiUrl);
+  const handleSetCookies = useCallback(async (apiUrl: string) => {
+    console.log("cookie ======= ", document.cookie);
+    const cookies = isElectron()
+      ? await window.electronAPI?.getCookiesFromUrl(apiUrl)
+      : document.cookie;
 
-  //   console.log("cookies", cookies);
+    console.log("cookies", cookies);
 
-  //   // setHiddenHeaders((prev) =>
-  //   //   prev.map((item) =>
-  //   //     item.key === "Cookie" ? { ...item, value: cookies } : item
-  //   //   )
-  //   // );
-  // }, []);
+    // setHiddenHeaders((prev) =>
+    //   prev.map((item) =>
+    //     item.key === "Cookie" ? { ...item, value: cookies } : item
+    //   )
+    // );
+  }, []);
 
-  // useEffect(() => {
-  //   if (!apiUrl)
-  //     return setHiddenHeaders((prev) =>
-  //       prev.map((item) =>
-  //         item.key === "Cookie" ? { ...item, value: "" } : item
-  //       )
-  //     );
-  //   handleSetCookies(apiUrl);
-  // }, [apiUrl, handleSetCookies]);
+  useEffect(() => {
+    if (!apiUrl)
+      return setHiddenHeaders((prev) =>
+        prev.map((item) =>
+          item.key === "Cookie" ? { ...item, value: "" } : item
+        )
+      );
+    handleSetCookies(apiUrl);
+  }, [apiUrl, handleSetCookies]);
 
   const handleChangeActiveMetaTab = useCallback((id: TActiveTabType) => {
     setActiveMetaTab(id);
