@@ -7,6 +7,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { CookieInterface } from "@/context/request/RequestResponseProvider";
+import DataTableCellContent from "@/components/app/request-panel/request/response/content/DataTableCellContent";
 
 interface CookieListProps {
   cookies: Array<CookieInterface>;
@@ -14,8 +15,8 @@ interface CookieListProps {
 
 const CookieList = ({ cookies }: CookieListProps) => {
   return (
-    <Table>
-      <TableHeader>
+    <Table className="w-full h-full border">
+      <TableHeader className="[&>tr>th]:border-r [&>tr>th]:last:border-r-0">
         <TableRow>
           <TableHead>Name</TableHead>
           <TableHead>Value</TableHead>
@@ -27,27 +28,33 @@ const CookieList = ({ cookies }: CookieListProps) => {
           <TableHead>SameSite</TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody>
+      <TableBody className="[&>tr>td]:border-r [&>tr>td]:last:border-r-0">
         {cookies.map(
           ({
-            name,
-            value,
-            domain,
-            path,
-            expires,
-            HttpOnly,
-            secure,
-            samesite,
+            name = "",
+            value = "",
+            domain = "",
+            path = "",
+            expires = "",
+            HttpOnly = "",
+            secure = "",
+            samesite = "",
           }) => (
-            <TableRow key={name}>
-              <TableCell>{name}</TableCell>
-              <TableCell>{value}</TableCell>
-              <TableCell>{domain}</TableCell>
-              <TableCell>{path}</TableCell>
-              <TableCell>{expires}</TableCell>
-              <TableCell>{HttpOnly}</TableCell>
-              <TableCell>{secure}</TableCell>
-              <TableCell>{samesite}</TableCell>
+            <TableRow key={name} className="break-words whitespace-pre-wrap">
+              {[
+                name,
+                value,
+                domain,
+                path,
+                expires,
+                HttpOnly,
+                secure,
+                samesite,
+              ].map((value, index) => (
+                <TableCell key={index}>
+                  <DataTableCellContent value={value} />
+                </TableCell>
+              ))}
             </TableRow>
           )
         )}

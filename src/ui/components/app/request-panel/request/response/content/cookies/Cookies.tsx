@@ -10,13 +10,13 @@ const Cookies = () => {
   const { response } = useRequestResponse();
   const cookies = response?.cookies as Array<CookieInterface>;
 
-  console.log(cookies);
-
-  if (!cookies || !cookies.length) return <Empty label="No cookies found" />;
-
   return (
     <ScrollArea className="h-full">
-      <CookieList cookies={cookies} />
+      {!cookies || !cookies.length ? (
+        <Empty label="No cookies found" />
+      ) : (
+        <CookieList cookies={cookies} />
+      )}
     </ScrollArea>
   );
 };

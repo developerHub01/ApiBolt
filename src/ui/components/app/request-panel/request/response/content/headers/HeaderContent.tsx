@@ -6,6 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import DataTableCellContent from "@/components/app/request-panel/request/response/content/DataTableCellContent";
 
 interface HeaderContentProps {
   headers: Record<string, string>;
@@ -23,10 +24,11 @@ const HeaderContent = ({ headers }: HeaderContentProps) => {
       <TableBody className="[&>tr>td]:border-r [&>tr>td]:last:border-r-0">
         {Object.entries(headers).map(([key, value]) => (
           <TableRow key={key}>
-            <TableCell className="capitalize">{key}</TableCell>
-            <TableCell className="break-words whitespace-pre-wrap">
-              {value}
-            </TableCell>
+            {[key, value].map((value, index) => (
+              <TableCell key={index} className="capitalize">
+                <DataTableCellContent value={value} />
+              </TableCell>
+            ))}
           </TableRow>
         ))}
       </TableBody>
