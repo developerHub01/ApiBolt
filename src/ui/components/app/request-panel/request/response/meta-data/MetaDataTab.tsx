@@ -1,9 +1,14 @@
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import TabV1 from "@/components/tab-v1";
 import SelectV1 from "@/components/select-v1";
 import { useResponse } from "@/context/request/ResponseProvider";
+import { useRequestResponse } from "@/context/request/RequestResponseProvider";
 
-const tabList = [
+const tabList: Array<{
+  id: string;
+  label: string;
+  count?: number;
+}> = [
   {
     id: "body",
     label: "Body",
@@ -20,6 +25,20 @@ const tabList = [
 
 const MetaDataTab = memo(() => {
   const { activeMetaTab, handleChangeActiveMetaTab } = useResponse();
+  const { response } = useRequestResponse();
+
+  const tabListWithActivity = useMemo(
+    () =>
+      tabList.map((item) => {
+        if (item.id === "cookies") {
+          item.count = response?.cookies?.length ?? 0;
+        } else if (item.id === "headers") {
+          item.count = Object.keys(response?.headers ?? {}).length;
+        }
+        return item;
+      }),
+    [response]
+  );
 
   return (
     <>
@@ -30,7 +49,7 @@ const MetaDataTab = memo(() => {
         className="block md:hidden"
       />
       <TabV1
-        list={tabList}
+        list={tabListWithActivity}
         activeTab={activeMetaTab}
         handleSelect={handleChangeActiveMetaTab}
         className="hidden md:flex"

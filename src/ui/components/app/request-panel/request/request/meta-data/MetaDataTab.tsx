@@ -10,6 +10,7 @@ const tabList: Array<{
   id: TActiveTabType;
   label: string;
   isActive?: boolean;
+  count?: number;
 }> = [
   {
     id: "params",
@@ -30,16 +31,35 @@ const tabList: Array<{
 ];
 
 const MetaDataTab = memo(() => {
-  const { activeMetaTab, handleChangeActiveMetaTab, activeTabList } =
-    useRequestResponse();
+  const {
+    activeMetaTab,
+    handleChangeActiveMetaTab,
+    activeTabList,
+    params,
+    hiddenHeaders,
+    headers,
+  } = useRequestResponse();
 
   const tabListWithActivity = useMemo(
     () =>
-      tabList.map((item) => ({
-        ...item,
-        isActive: !!activeTabList[item.id],
-      })),
-    [activeTabList]
+      tabList
+        .map((item) => ({
+          ...item,
+          isActive: !!activeTabList[item.id],
+        }))
+        .map((item) => {
+          if (item.id === "params") {
+            if (item.count && !params.length) delete item.count;
+            else if (item.count !== params.length) item.count = params.length;
+          } else if (item.id === "headers") {
+            const totalHeaders = headers.length + hiddenHeaders.length;
+            if (item.count && !totalHeaders) delete item.count;
+            else if (item.count !== totalHeaders) item.count = totalHeaders;
+          }
+
+          return item;
+        }),
+    [activeTabList, params, headers, hiddenHeaders]
   );
 
   return (

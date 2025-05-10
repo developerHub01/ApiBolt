@@ -6,6 +6,7 @@ interface TabV1Props {
     id: string;
     label: string;
     isActive?: boolean;
+    count?: number;
   }>;
   activeTab: string;
   handleSelect: (id: string) => void;
@@ -15,7 +16,7 @@ interface TabV1Props {
 const TabV1 = ({ list, activeTab, handleSelect, className }: TabV1Props) => {
   return (
     <div className={cn("flex items-center gap-4 select-none", className)}>
-      {list.map(({ id, label, isActive }) => (
+      {list.map(({ id, label, isActive, count }) => (
         <Button
           key={id}
           size={"sm"}
@@ -32,6 +33,7 @@ const TabV1 = ({ list, activeTab, handleSelect, className }: TabV1Props) => {
           onClick={() => handleSelect(id)}
         >
           {label}
+          {Boolean(count) && <p className="text-primary">({count})</p>}
           {isActive && (
             <span className="inline-block size-1.5 rounded-full bg-green-500 mt-1"></span>
           )}
