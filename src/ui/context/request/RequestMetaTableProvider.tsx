@@ -185,19 +185,16 @@ const RequestMetaTableProvider = ({
       type: TMetaTableType,
       [id, key, value]: [id: string, key: string, value: string | File]
     ) => {
-      console.log({ type });
       switch (type) {
         case "params": {
           if (typeof value !== "string") return;
           return handleChangeParam(id, key, value);
         }
         case "headers": {
-          console.log("headers", { id, key, value });
           if (typeof value !== "string") return;
           return handleChangeHeader(id, key, value);
         }
         case "hiddenHeaders": {
-          console.log("hiddenHeaders", { id, key, value });
           if (typeof value !== "string") return;
           return handleChangeHiddenHeader(id, key, value);
         }

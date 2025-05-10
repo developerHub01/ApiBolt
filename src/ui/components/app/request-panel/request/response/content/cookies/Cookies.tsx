@@ -10,8 +10,6 @@ const Cookies = () => {
   const { response } = useRequestResponse();
   const cookies = response?.cookies as Array<CookieInterface>;
 
-  console.log({ cookies });
-
   return (
     <ScrollArea className="flex-1 min-h-0 h-full overflow-hidden">
       <div className="w-full h-full pb-3">

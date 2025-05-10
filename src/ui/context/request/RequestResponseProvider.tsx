@@ -324,15 +324,12 @@ export const useRequestResponse = () => {
 
 const fetchApiAndExtractData = async (payload: APIPayloadBody) => {
   if (isElectron()) {
-    console.log("electronAPI ========= ", window.electronAPI);
     const res = await window.electronAPI?.fetchApi(payload);
     return res;
   }
   try {
     const res = await sendRequest(payload);
-    console.log("response", res);
-    const cookies = res.headers["set-cookie"];
-    console.log("cookies", cookies);
+    console.log(res);
 
     return {
       headers: res.headers,
@@ -853,21 +850,6 @@ const RequestResponseProvider = ({
     setApiUrl(finalUrl);
   }, [apiUrl, params]);
 
-  const handleSetCookies = useCallback(async (apiUrl: string) => {
-    console.log("cookie ======= ", document.cookie);
-    const cookies = isElectron()
-      ? await window.electronAPI?.getCookiesFromUrl(apiUrl)
-      : document.cookie;
-
-    console.log("cookies", cookies);
-
-    // setHiddenHeaders((prev) =>
-    //   prev.map((item) =>
-    //     item.key === "Cookie" ? { ...item, value: cookies } : item
-    //   )
-    // );
-  }, []);
-
   useEffect(() => {
     if (!apiUrl)
       return setHiddenHeaders((prev) =>
@@ -875,8 +857,7 @@ const RequestResponseProvider = ({
           item.key === "Cookie" ? { ...item, value: "" } : item
         )
       );
-    handleSetCookies(apiUrl);
-  }, [apiUrl, handleSetCookies]);
+  }, [apiUrl]);
 
   const handleChangeActiveMetaTab = useCallback((id: TActiveTabType) => {
     setActiveMetaTab(id);
