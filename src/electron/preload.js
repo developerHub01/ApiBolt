@@ -11,7 +11,12 @@ contextBridge.exposeInMainWorld("electronAPI", {
     console.log("Hello from the preload script!");
   },
   fetchApi: async (payload) => {
-    console.log("Fetching API with payload:", payload);
     return await ipcRenderer.invoke("fetchApi", payload);
+  },
+  getAllCookies: async () => {
+    return await ipcRenderer.invoke("getAllCookies");
+  },
+  getCookieByDomain: async (domain) => {
+    return await ipcRenderer.invoke("getCookieByDomain", domain);
   },
 });

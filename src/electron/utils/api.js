@@ -1,18 +1,29 @@
 import axios from "axios";
 import { getRawContentType } from "./utils.js";
 import { parseSetCookie } from "./cookies.js";
-import { client } from "../main.js";
+import { jar } from "../main.js";
 import { saveCookiesToFile } from "./cookieManager.js";
 
 export const fetchApi = async (_, payload) => {
   payload = apiPayloadHandler(payload);
 
   try {
-    const res = await client(payload);
+    const normalizedUrl = new URL(payload.url).origin;
+
+    const cookieHeader = await jar.getCookieString(normalizedUrl);
+    // payload.headers.Cookie = cookieHeader;
+
+    const res = await axios(payload);
+
+    const setCookies = res.headers["set-cookie"] || [];
+
+    await Promise.all(
+      setCookies.map((cookie) => jar.setCookie(cookie, normalizedUrl))
+    );
 
     saveCookiesToFile();
 
-    const cookies = parseSetCookie(res.headers["set-cookie"]);
+    const cookies = parseSetCookie(setCookies);
 
     return {
       headers: res.headers,
@@ -22,6 +33,7 @@ export const fetchApi = async (_, payload) => {
       cookies,
     };
   } catch (error) {
+    console.log(error);
     if (axios.isAxiosError(error) && error.response) {
       return {
         data: error.response.data,

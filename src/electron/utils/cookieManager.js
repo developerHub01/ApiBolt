@@ -1,7 +1,10 @@
+import { app } from "electron";
 import fs from "fs";
-import { promisify } from "util";
 import { CookieJar } from "tough-cookie";
-import { COOKIE_FILE, jar } from "../main.js";
+import { jar } from "../main.js";
+import path from "path";
+
+const COOKIE_FILE = path.join(app.getAppPath(), "cookies.json");
 
 /*
  * This function initializes a cookie jar by checking if a cookie file exists.
@@ -43,14 +46,10 @@ export const clearCookies = () => {
   console.log("🧹 Cookie jar cleared");
 };
 
-// promisify the callback functions
-const getAllCookiesAsync = promisify(jar.store.getAllCookies).bind(jar.store);
-const getCookiesByDomainAsync = promisify(jar.getCookies).bind(jar);
-
 export const getAllCookies = async () => {
-  return await getAllCookiesAsync();
+  return await jar.store.getAllCookies();
 };
 
 export const getCookiesByDomain = async (domain) => {
-  return await getCookiesByDomainAsync(domain);
+  return await jar.getCookies(domain);
 };

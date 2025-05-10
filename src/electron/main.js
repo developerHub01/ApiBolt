@@ -4,15 +4,12 @@ import { getCookies } from "./utils/cookies.js";
 import { fetchApi } from "./utils/api.js";
 import { wrapper } from "axios-cookiejar-support";
 import axios from "axios";
-import { initialCookieJar } from "./utils/cookieManager.js";
-import path from "path";
+import { getAllCookies, initialCookieJar } from "./utils/cookieManager.js";
 
 // browser style cookies holder by domain/path
-export const jar = initialCookieJar();
+export const jar = initialCookieJar(undefined, { rejectPublicSuffixes: false });
 // axios client with cookie jar support
 export const client = wrapper(axios.create({ jar }));
-
-export const COOKIE_FILE = path.join(app.getAppPath(), "cookies.json");
 
 app.whenReady().then(() => {
   createWindow();
@@ -24,6 +21,9 @@ app.whenReady().then(() => {
   ipcMain.handle("getCookies", getCookies);
 
   ipcMain.handle("fetchApi", fetchApi);
+
+  ipcMain.handle("getAllCookies", getAllCookies);
+  ipcMain.handle("getCookieByDomain", async(_, domain) => await fetchApi(domain));
 });
 
 app.on("window-all-closed", () => {

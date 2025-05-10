@@ -38,7 +38,8 @@ export const parseCookie = (cookie) => {
 };
 
 export const parseSetCookie = (setCookieArray) => {
-  return setCookieArray.map(parseCookie);
+  console.log({ setCookieArray });
+  return setCookieArray?.map(parseCookie);
 };
 
 export const getCookies = async (_event, originUrl) => {

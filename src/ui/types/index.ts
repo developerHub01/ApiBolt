@@ -9,6 +9,8 @@ declare global {
       getCookiesFromUrl: (url: string) => Promise<string>;
       sayHello: () => void;
       fetchApi: (payload: APIPayloadBody) => Promise<ResponseInterface>;
+      getAllCookies: () => Promise<unknown>;
+      getCookieByDomain: (domain: string) => Promise<unknown>;
     };
   }
 }
