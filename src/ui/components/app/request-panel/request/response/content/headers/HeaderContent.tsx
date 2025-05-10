@@ -7,6 +7,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import DataTableCellContent from "@/components/app/request-panel/request/response/content/DataTableCellContent";
+import { cn } from "@/lib/utils";
 
 interface HeaderContentProps {
   headers: Record<string, string>;
@@ -25,7 +26,12 @@ const HeaderContent = ({ headers }: HeaderContentProps) => {
         {Object.entries(headers).map(([key, value]) => (
           <TableRow key={key}>
             {[key, value].map((value, index) => (
-              <TableCell key={index} className="capitalize">
+              <TableCell
+                key={index}
+                className={cn("whitespace-normal break-words", {
+                  capitalize: !index,
+                })}
+              >
                 <DataTableCellContent value={value} />
               </TableCell>
             ))}

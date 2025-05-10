@@ -43,7 +43,7 @@ const CookieList = ({ cookies }: CookieListProps) => {
             className="break-words whitespace-pre-wrap"
           >
             {colList.map((item) => (
-              <TableCell key={item}>
+              <TableCell key={item} className="whitespace-normal break-words">
                 <DataTableCellContent
                   value={cookie[item as keyof typeof cookie] ?? ""}
                 />
