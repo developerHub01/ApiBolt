@@ -1,5 +1,5 @@
 import Empty from "@/components/ui/empty";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useRequestResponse } from "@/context/request/RequestResponseProvider";
 import HeaderContent from "@/components/app/request-panel/request/response/content/headers/HeaderContent";
 
@@ -8,12 +8,15 @@ const Headers = () => {
   const headers = response?.headers as Record<string, string>;
 
   return (
-    <ScrollArea className="h-full">
-      {headers ? (
-        <HeaderContent headers={headers} />
-      ) : (
-        <Empty label="No headers found" />
-      )}
+    <ScrollArea className="flex-1 min-h-0 h-full overflow-hidden">
+      <div className="w-full h-full pb-3">
+        {headers ? (
+          <HeaderContent headers={headers} />
+        ) : (
+          <Empty label="No headers found" />
+        )}
+      </div>
+      <ScrollBar orientation="horizontal" />
     </ScrollArea>
   );
 };
