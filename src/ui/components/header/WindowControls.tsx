@@ -13,6 +13,9 @@ import type { TWindowControl } from "@/types";
 const WindowControls = () => {
   const [isMaximized, setIsMaximized] = useState<boolean>(true);
 
+  const handleIsMaximised = async () =>
+    setIsMaximized(await window.electronAPI.isWindowMaximized());
+
   return (
     <div
       style={{
@@ -28,11 +31,11 @@ const WindowControls = () => {
         <MinimizeIcon />
       </ActionButton>
       {isMaximized ? (
-        <ActionButton id={"unmaximize"} onClick={() => setIsMaximized(false)}>
+        <ActionButton id={"unmaximize"} onClick={handleIsMaximised}>
           <UnMaximizeIcon />
         </ActionButton>
       ) : (
-        <ActionButton id={"maximize"} onClick={() => setIsMaximized(true)}>
+        <ActionButton id={"maximize"} onClick={handleIsMaximised}>
           <MaximizeIcon />
         </ActionButton>
       )}

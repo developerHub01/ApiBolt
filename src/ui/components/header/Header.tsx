@@ -17,9 +17,12 @@ const Header = () => {
       }}
     >
       <div className="flex items-center justify-between gap-2 w-full flex-1 px-2 py-1.5">
-        <p className="select-none text-xl font-bold tracking-wide">ApiBolt</p>
+        <p className="select-none text-lg md:text-xl font-bold tracking-wide">
+          ApiBolt
+        </p>
         <Button
           size={"iconSm"}
+          variant={"ghost"}
           style={{
             ...(isElectron()
               ? ({
