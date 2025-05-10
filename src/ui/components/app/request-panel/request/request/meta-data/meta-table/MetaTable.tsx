@@ -10,7 +10,11 @@ import MetaTableRow from "@/components/app/request-panel/request/request/meta-da
 
 const headersToPreventCheckList = ["Cookie"];
 
-const MetaTable = memo(() => {
+interface MetaTableInterface {
+  showHiddenData?: boolean;
+}
+
+const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
   const {
     handleChangeMetaData,
     handleDeleteMetaData,
@@ -28,7 +32,8 @@ const MetaTable = memo(() => {
 
   if (!type || !data) return null;
 
-  if (type === "headers") data = [...getMetaData("hiddenHeaders"), ...data];
+  if (type === "headers" && showHiddenData)
+    data = [...getMetaData("hiddenHeaders"), ...data];
 
   return (
     <MetaTableWrapper header={<MetaTableHeader type={type} />}>
