@@ -1,5 +1,3 @@
-import { session } from "electron";
-
 export const parseCookie = (cookie) => {
   const parsedCookie = {};
   const cookieParts = cookie.split(";");
@@ -37,14 +35,5 @@ export const parseCookie = (cookie) => {
   return parsedCookie;
 };
 
-export const parseSetCookie = (setCookieArray) => {
-  console.log({ setCookieArray });
-  return setCookieArray?.map(parseCookie);
-};
-
-export const getCookies = async (_event, originUrl) => {
-  const cookies = await session.defaultSession.cookies.get({
-    url: originUrl,
-  });
-  return cookies.map((c) => `${c.name}=${c.value}`).join("; ");
-};
+export const parseSetCookie = (setCookieArray) =>
+  setCookieArray?.map(parseCookie);

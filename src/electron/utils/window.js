@@ -1,5 +1,6 @@
 import { app, BrowserWindow } from "electron";
 import path from "path";
+import isDev from "is-dev";
 
 export const createWindow = () => {
   const win = new BrowserWindow({
@@ -24,7 +25,7 @@ export const createWindow = () => {
 
   win.loadFile(path.join(app.getAppPath(), "dist-react", "index.html"));
 
-  // win.webContents.openDevTools();
+  // if (isDev) win.webContents.openDevTools();
 
   return win;
 };
