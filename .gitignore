@@ -13,6 +13,8 @@ dist-ssr
 dist-react
 *.local
 
+cookies.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

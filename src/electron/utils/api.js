@@ -1,8 +1,49 @@
-import axios from 'axios';
-import { getRawContentType } from './utils.js';
-import { parseSetCookie } from './cookies.js';
+import axios from "axios";
+import { getRawContentType } from "./utils.js";
+import { parseSetCookie } from "./cookies.js";
+import { client } from "../main.js";
+import { saveCookiesToFile } from "./cookieManager.js";
 
 export const fetchApi = async (_, payload) => {
+  payload = apiPayloadHandler(payload);
+
+  try {
+    const res = await client(payload);
+
+    saveCookiesToFile();
+
+    const cookies = parseSetCookie(res.headers["set-cookie"]);
+
+    return {
+      headers: res.headers,
+      status: res.status,
+      statusText: res.statusText,
+      data: res.data,
+      cookies,
+    };
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      return {
+        data: error.response.data,
+        headers: error.response.headers,
+        status: error.response.status,
+        statusText: error.response.statusText,
+        statusDescription: "",
+      };
+    } else {
+      return {
+        data: null,
+        headers: {},
+        status: 0,
+        statusText: "Network Error",
+        statusDescription:
+          "Could not connect to the server. Check your internet or API URL.",
+      };
+    }
+  }
+};
+
+const apiPayloadHandler = (payload) => {
   const {
     method,
     url,
@@ -63,43 +104,11 @@ export const fetchApi = async (_, payload) => {
       throw new Error("Unsupported body type");
   }
 
-  try {
-    const res = await axios({
-      method,
-      url,
-      headers,
-      data,
-      withCredentials: true,
-      maxRedirects: 5,
-    });
-    
-    const cookies = parseSetCookie(res.headers["set-cookie"]);
-
-    return {
-      headers: res.headers,
-      status: res.status,
-      statusText: res.statusText,
-      data: res.data,
-      cookies,
-    };
-  } catch (error) {
-    if (axios.isAxiosError(error) && error.response) {
-      return {
-        data: error.response.data,
-        headers: error.response.headers,
-        status: error.response.status,
-        statusText: error.response.statusText,
-        statusDescription: "",
-      };
-    } else {
-      return {
-        data: null,
-        headers: {},
-        status: 0,
-        statusText: "Network Error",
-        statusDescription:
-          "Could not connect to the server. Check your internet or API URL.",
-      };
-    }
-  }
+  return {
+    method,
+    url,
+    headers,
+    data,
+    withCredentials: true,
+  };
 };

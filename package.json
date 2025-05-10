@@ -9,6 +9,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+    "electron-nodemon": "nodemon --exec electron .",
     "electron": "electron ."
   },
   "dependencies": {
@@ -34,6 +35,7 @@
     "@tailwindcss/vite": "^4.1.5",
     "@uiw/react-codemirror": "^4.23.12",
     "axios": "^1.9.0",
+    "axios-cookiejar-support": "^6.0.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.507.0",
@@ -49,6 +51,7 @@
     "sonner": "^2.0.3",
     "tailwind-merge": "^3.2.0",
     "tailwindcss": "^4.1.5",
+    "tough-cookie": "^5.1.2",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
@@ -62,6 +65,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
+    "nodemon": "^3.1.10",
     "tw-animate-css": "^1.2.9",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.30.1",
