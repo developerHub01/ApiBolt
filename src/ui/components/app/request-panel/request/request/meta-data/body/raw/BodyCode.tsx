@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import type { TContentType } from "@/types";
 import { useRequestBody } from "@/context/request/RequestBodyProvider";
 import Code from "@/components/ui/code";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 const codeFormatter = async (
   rawRequestBodyType: TContentType,
@@ -42,7 +43,7 @@ const BodyCode = memo(() => {
   );
 
   return (
-    <div className="w-full h-full border rounded-md overflow-hidden">
+    <ScrollArea className="flex-1 min-h-0 h-full overflow-hidden [&>div>div]:h-full relative">
       <Code
         code={code}
         contentType={rawRequestBodyType}
@@ -51,8 +52,10 @@ const BodyCode = memo(() => {
         zoomable={true}
         lineWrap={codeLineWrap}
         handleFormat={handleFormat}
+        className="static"
       />
-    </div>
+      <ScrollBar orientation="horizontal" />
+    </ScrollArea>
   );
 });
 
