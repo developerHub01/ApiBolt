@@ -3,6 +3,9 @@ import path from "path";
 
 export const createWindow = () => {
   const win = new BrowserWindow({
+    minHeight: 500,
+    minWidth: 600,
+
     titleBarStyle: "hidden",
     // expose window controls in Windows/Linux
     ...(process.platform !== "darwin"
@@ -21,7 +24,7 @@ export const createWindow = () => {
 
   win.loadFile(path.join(app.getAppPath(), "dist-react", "index.html"));
 
-  win.webContents.openDevTools();
-  
+  // win.webContents.openDevTools();
+
   return win;
 };
