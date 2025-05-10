@@ -19,4 +19,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
   getCookieByDomain: async (domain) => {
     return await ipcRenderer.invoke("getCookieByDomain", domain);
   },
+  windowControls: (type) => ipcRenderer.invoke("windowControls", type),
+  isWindowMaximized: () => ipcRenderer.invoke("isWindowMaximized"),
 });

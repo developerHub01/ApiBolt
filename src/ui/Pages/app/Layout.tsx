@@ -1,6 +1,7 @@
 import RequestListPanel from "@/components/app/request-list/RequestListPanel";
 import Sidebar from "@/components/app/sidebar/Sidebar";
 import CopyRight from "@/components/copy-right";
+import Header from "@/components/header/Header";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -12,6 +13,7 @@ import { Outlet } from "react-router-dom";
 const AppLayout = () => {
   return (
     <section className="h-dvh flex flex-col">
+      <Header />
       <section className="h-full flex content-stretch">
         <SidebarProvider>
           <Sidebar />

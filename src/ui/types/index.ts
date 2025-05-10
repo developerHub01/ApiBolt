@@ -11,8 +11,11 @@ declare global {
       fetchApi: (payload: APIPayloadBody) => Promise<ResponseInterface>;
       getAllCookies: () => Promise<unknown>;
       getCookieByDomain: (domain: string) => Promise<unknown>;
+      windowControls: (type: TWindowControl) => Promise<void>;
+      isWindowMaximized: () => Promise<boolean>;
     };
   }
 }
 
+export type TWindowControl = "minimize" | "maximize" | "unmaximize" | "close";
 export type TContentType = "text" | "html" | "xml" | "json" | "javascript";
