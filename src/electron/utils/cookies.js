@@ -1,4 +1,5 @@
 export const parseCookie = (cookie) => {
+  cookie = String(cookie);
   const parsedCookie = {};
   const cookieParts = cookie.split(";");
 

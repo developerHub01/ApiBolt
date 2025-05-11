@@ -1,4 +1,4 @@
-import { app, ipcMain } from "electron";
+import { app } from "electron";
 import { createWindow } from "./utils/window.js";
 import { wrapper } from "axios-cookiejar-support";
 import axios from "axios";

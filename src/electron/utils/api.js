@@ -2,16 +2,13 @@ import axios from "axios";
 import { getRawContentType } from "./utils.js";
 import { parseSetCookie } from "./cookies.js";
 import { jar } from "../main.js";
-import { saveCookiesToFile } from "./cookieManager.js";
+import { getCookiesByDomain, saveCookiesToFile } from "./cookieManager.js";
 
 export const fetchApi = async (_, payload) => {
   payload = apiPayloadHandler(payload);
 
   try {
     const normalizedUrl = new URL(payload.url).origin;
-
-    const cookieHeader = await jar.getCookieString(normalizedUrl);
-    payload.headers.Cookie = cookieHeader;
 
     const res = await axios(payload);
 
@@ -23,7 +20,9 @@ export const fetchApi = async (_, payload) => {
 
     saveCookiesToFile();
 
-    const cookies = parseSetCookie(setCookies);
+    const cookies = parseSetCookie(
+      Array.from(await getCookiesByDomain(normalizedUrl))
+    );
 
     return {
       headers: res.headers,
