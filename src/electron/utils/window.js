@@ -5,7 +5,7 @@ import isDev from "is-dev";
 export const createWindow = () => {
   const win = new BrowserWindow({
     minHeight: 500,
-    minWidth: 600,
+    minWidth: 650,
 
     titleBarStyle: "hidden",
     // expose window controls in Windows/Linux
