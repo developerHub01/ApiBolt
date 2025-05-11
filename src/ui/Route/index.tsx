@@ -1,15 +1,15 @@
-import RootLayout from "@/Pages/Layout";
+import RootLayout from "@/pages/Layout";
 import {
   createBrowserRouter,
   createHashRouter,
   RouterProvider,
 } from "react-router-dom";
-import AppLayout from "@/Pages/app/Layout";
-import AppPage from "@/Pages/app/Page";
-import FolderLayout from "@/Pages/app/(request-panel)/folder/[id]/Layout";
-import FolderPage from "@/Pages/app/(request-panel)/folder/[id]/Page";
-import RequestLayout from "@/Pages/app/(request-panel)/request/[id]/Layout";
-import RequestPage from "@/Pages/app/(request-panel)/request/[id]/Page";
+import AppLayout from "@/pages/app/Layout";
+import AppPage from "@/pages/app/Page";
+import FolderLayout from "@/pages/app/(request-panel)/folder/[id]/Layout";
+import FolderPage from "@/pages/app/(request-panel)/folder/[id]/Page";
+import RequestLayout from "@/pages/app/(request-panel)/request/[id]/Layout";
+import RequestPage from "@/pages/app/(request-panel)/request/[id]/Page";
 import { isElectron } from "@/utils/electron";
 
 const routes = [
