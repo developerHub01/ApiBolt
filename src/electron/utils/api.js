@@ -11,7 +11,7 @@ export const fetchApi = async (_, payload) => {
     const normalizedUrl = new URL(payload.url).origin;
 
     const cookieHeader = await jar.getCookieString(normalizedUrl);
-    // payload.headers.Cookie = cookieHeader;
+    payload.headers.Cookie = cookieHeader;
 
     const res = await axios(payload);
 

@@ -1,11 +1,20 @@
 import { ipcMain } from "electron";
 import { fetchApi } from "../utils/api.js";
-import { getAllCookies, getCookiesByDomain } from "../utils/cookieManager.js";
+import {
+  getAllCookies,
+  getCookiesByDomain,
+  getCookiesStringByDomain,
+} from "../utils/cookieManager.js";
 
 export const registerCookieHandlers = () => {
   ipcMain.handle("fetchApi", fetchApi);
   ipcMain.handle("getAllCookies", getAllCookies);
-  ipcMain.handle("getCookieByDomain", async (_, domain) => {
-    return await getCookiesByDomain(domain);
+  ipcMain.handle("getCookieByDomain", async (_, url) => {
+    const normalizedUrl = new URL(url).origin;
+    return await getCookiesByDomain(normalizedUrl);
+  });
+  ipcMain.handle("getCookieStringByDomain", async (_, url) => {
+    const normalizedUrl = new URL(url).origin;
+    return await getCookiesStringByDomain(normalizedUrl);
   });
 };

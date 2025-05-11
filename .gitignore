@@ -14,6 +14,7 @@ dist-react
 *.local
 .env
 cookies.json
+test
 
 # Editor directories and files
 .vscode/*

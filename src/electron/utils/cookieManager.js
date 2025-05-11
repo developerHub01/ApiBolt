@@ -16,11 +16,9 @@ const COOKIE_FILE = path.join(app.getAppPath(), "cookies.json");
 export const initialCookieJar = () => {
   if (fs.existsSync(COOKIE_FILE)) {
     const cookieData = JSON.parse(fs.readFileSync(COOKIE_FILE));
-    console.log("✅ Cookie jar loaded from file");
     return CookieJar.fromJSON(cookieData);
   }
 
-  console.log("🆕 New cookie jar created");
   return new CookieJar();
 };
 
@@ -33,7 +31,6 @@ export const saveCookiesToFile = () => {
 
   const json = jar.toJSON();
   fs.writeFileSync(COOKIE_FILE, JSON.stringify(json, null, 2));
-  console.log("💾 Cookie jar saved to file");
 };
 
 /**
@@ -43,7 +40,6 @@ export const saveCookiesToFile = () => {
 export const clearCookies = () => {
   jar = new CookieJar();
   fs.unlinkSync(COOKIE_FILE);
-  console.log("🧹 Cookie jar cleared");
 };
 
 export const getAllCookies = async () => {
@@ -52,4 +48,7 @@ export const getAllCookies = async () => {
 
 export const getCookiesByDomain = async (domain) => {
   return await jar.getCookies(domain);
+};
+export const getCookiesStringByDomain = async (domain) => {
+  return await jar.getCookieString(domain);
 };

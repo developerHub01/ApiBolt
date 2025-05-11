@@ -8,12 +8,17 @@ contextBridge.exposeInMainWorld("electronAPI", {
   fetchApi: async (payload) => {
     return await ipcRenderer.invoke("fetchApi", payload);
   },
+
   getAllCookies: async () => {
     return await ipcRenderer.invoke("getAllCookies");
   },
-  getCookieByDomain: async (domain) => {
-    return await ipcRenderer.invoke("getCookieByDomain", domain);
+  getCookieByDomain: async (url) => {
+    return await ipcRenderer.invoke("getCookieByDomain", url);
   },
+  getCookieStringByDomain: async (url) => {
+    return await ipcRenderer.invoke("getCookieStringByDomain", url);
+  },
+
   windowControls: (type) => ipcRenderer.invoke("windowControls", type),
   isWindowMaximized: () => ipcRenderer.invoke("isWindowMaximized"),
 });
