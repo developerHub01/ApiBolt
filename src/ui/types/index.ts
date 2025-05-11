@@ -8,8 +8,11 @@ declare global {
     electronAPI: {
       getCookiesFromUrl: (url: string) => Promise<string>;
       fetchApi: (payload: APIPayloadBody) => Promise<ResponseInterface>;
+
       getAllCookies: () => Promise<unknown>;
-      getCookieByDomain: (domain: string) => Promise<unknown>;
+      getCookieByDomain: (url: string) => Promise<unknown>;
+      getCookieStringByDomain: (url: string) => Promise<unknown>;
+
       windowControls: (type: TWindowControl) => Promise<void>;
       isWindowMaximized: () => Promise<boolean>;
     };

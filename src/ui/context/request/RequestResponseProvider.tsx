@@ -364,6 +364,14 @@ export const fetchApiUniformError = (error: unknown): ResponseInterface => {
   }
 };
 
+export const getCookiesByDomain = async (url: string) => {
+  return await window.electronAPI.getCookieByDomain(url);
+};
+
+export const getCookiesStringByDomain = async (url: string) => {
+  return await window.electronAPI.getCookieStringByDomain(url);
+};
+
 export const ResponsePanelMinLimit = 15;
 
 const useMetaDataManager = <
@@ -857,6 +865,22 @@ const RequestResponseProvider = ({
           item.key === "Cookie" ? { ...item, value: "" } : item
         )
       );
+
+    /* load cookies in header */
+    const handleDomainCookie = async (url: string) => {
+      const cookies = ((await getCookiesStringByDomain(
+        ensureAbsoluteUrl(url)
+      )) ?? "") as string;
+
+      setHiddenHeaders((prev) =>
+        prev.map((header) => ({
+          ...header,
+          ...(header.key === "Cookie" ? { value: cookies } : {}),
+        }))
+      );
+    };
+
+    handleDomainCookie(apiUrl);
   }, [apiUrl]);
 
   const handleChangeActiveMetaTab = useCallback((id: TActiveTabType) => {

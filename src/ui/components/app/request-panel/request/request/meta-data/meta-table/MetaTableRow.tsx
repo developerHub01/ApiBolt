@@ -87,7 +87,7 @@ const MetaTableRow = memo(
               type={type}
               keyType={keyType}
               value={
-                calculateDynamicly && keyType === "value"
+                calculateDynamicly && keyType === "value" && !value
                   ? calculateDynamicText
                   : value
               }
