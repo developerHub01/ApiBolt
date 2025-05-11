@@ -881,7 +881,7 @@ const RequestResponseProvider = ({
     };
 
     handleDomainCookie(apiUrl);
-  }, [apiUrl]);
+  }, [apiUrl, response]);
 
   const handleChangeActiveMetaTab = useCallback((id: TActiveTabType) => {
     setActiveMetaTab(id);
