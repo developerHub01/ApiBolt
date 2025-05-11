@@ -9,6 +9,7 @@ import {
 import type { CookieInterface } from "@/context/request/RequestResponseProvider";
 import DataTableCellContent from "@/components/app/request-panel/request/response/content/DataTableCellContent";
 import { useMemo } from "react";
+import { getCookiePropertyList } from "@/utils/cookie";
 
 interface CookieListProps {
   cookies: Array<CookieInterface>;
@@ -17,13 +18,17 @@ interface CookieListProps {
 const CookieList = ({ cookies }: CookieListProps) => {
   const colList = useMemo(
     () =>
-      Array.from(
-        cookies.reduce<Set<string>>((acc, curr) => {
-          return new Set([...acc, ...Object.keys(curr)]);
-        }, new Set())
+      getCookiePropertyList(
+        Array.from(
+          cookies.reduce<Set<string>>((acc, curr) => {
+            return new Set([...acc, ...Object.keys(curr)]);
+          }, new Set())
+        )
       ),
     [cookies]
   );
+
+  console.log({ colList });
 
   return (
     <Table className="w-full h-full border select-text">
