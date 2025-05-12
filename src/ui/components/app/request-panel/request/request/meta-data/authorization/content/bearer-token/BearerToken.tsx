@@ -2,8 +2,11 @@ import ContentWrapper from "@/components/app/request-panel/request/request/meta-
 import AuthKeyValueWrapper from "@/components/app/request-panel/request/request/meta-data/authorization/content/AuthKeyValueWrapper";
 import AuthContentInput from "@/components/app/request-panel/request/request/meta-data/authorization/content/AuthContentInput";
 import AuthContentInoutLabel from "@/components/app/request-panel/request/request/meta-data/authorization/content/AuthContentInoutLabel";
+import { useRequestResponse } from "@/context/request/RequestResponseProvider";
 
 const BearerToken = () => {
+  const { bearerTokenAuth, handleChangeBearerTokenAuth } = useRequestResponse();
+  
   return (
     <ContentWrapper>
       <AuthKeyValueWrapper>
@@ -13,8 +16,8 @@ const BearerToken = () => {
         <AuthContentInput
           id="bearer-token"
           placeholder="Token"
-          value={""}
-          onBlur={() => {}}
+          value={bearerTokenAuth}
+          onBlur={handleChangeBearerTokenAuth}
         />
       </AuthKeyValueWrapper>
     </ContentWrapper>

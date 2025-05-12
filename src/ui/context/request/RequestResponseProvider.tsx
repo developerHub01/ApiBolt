@@ -159,6 +159,8 @@ interface RequestResponseContext {
   handleChangeAuthType: (authType: TAuthType) => void;
   apiKeyAuth: APIKeyInterface;
   handleChangeAPIKey: (ey: "key" | "value" | "addTo", value: string) => void;
+  bearerTokenAuth: string;
+  handleChangeBearerTokenAuth: (token: string) => void;
   isDownloadRequestWithBase64: boolean;
   handleIsDownloadRequestWithBase64: (value: boolean) => void;
   handleDownloadRequest: () => Promise<void>;
@@ -556,6 +558,7 @@ const RequestResponseProvider = ({
     value: "",
     addTo: "header",
   });
+  const [bearerTokenAuth, setBearerTokenAuth] = useState<string>("");
 
   const previousFinalUrlRef = useRef<string>("");
 
@@ -627,6 +630,9 @@ const RequestResponseProvider = ({
     },
     []
   );
+  const handleChangeBearerTokenAuth = useCallback((token: string) => {
+    setBearerTokenAuth(token);
+  }, []);
 
   const handleIsDownloadRequestWithBase64 = useCallback(
     (value: boolean) => setIsDownloadRequestWithBase64(value),
@@ -929,14 +935,20 @@ const RequestResponseProvider = ({
   }, [apiUrl, response]);
 
   useEffect(() => {
-    const addHiddenData = (type: "param" | "header") => {
+    const addHiddenData = (
+      type: "param" | "header",
+      keyName: string,
+      payload: Record<string, string> = {}
+    ) => {
       if (type === "param") {
-        if (hiddenParams.find((param) => param.id === "api-key")) {
+        if (hiddenParams.find((param) => param.id === keyName)) {
           setHiddenParams((prev) =>
             prev.map((param) => {
-              if (param.id === "api-key") {
-                param.key = apiKeyAuth.key;
-                param.value = apiKeyAuth.value;
+              if (param.id === keyName) {
+                param = {
+                  ...param,
+                  ...payload,
+                };
               }
               return param;
             })
@@ -946,19 +958,20 @@ const RequestResponseProvider = ({
             ...prev,
             {
               ...generateNextHiddenHeaderOrParam(),
-              id: "api-key",
-              key: apiKeyAuth.key,
-              value: apiKeyAuth.value,
+              id: keyName,
+              ...payload,
             },
           ]);
         }
       } else {
-        if (hiddenHeaders.find((header) => header.id === "api-key")) {
+        if (hiddenHeaders.find((header) => header.id === keyName)) {
           setHiddenHeaders((prev) =>
             prev.map((header) => {
-              if (header.id === "api-key") {
-                header.key = apiKeyAuth.key;
-                header.value = apiKeyAuth.value;
+              if (header.id === keyName) {
+                header = {
+                  ...header,
+                  ...payload,
+                };
               }
               return header;
             })
@@ -968,22 +981,33 @@ const RequestResponseProvider = ({
             ...prev,
             {
               ...generateNextHiddenHeaderOrParam(),
-              id: "api-key",
-              key: apiKeyAuth.key,
-              value: apiKeyAuth.value,
+              id: keyName,
+              ...payload,
             },
           ]);
         }
       }
     };
-    const removeHiddenData = (type: "param" | "header") => {
+    const removeHiddenData = (
+      type: "param" | "header",
+      keyName: string | Array<string>
+    ) => {
+      /* filter out those data which are not in keyName list or not keyName */
       if (type === "param") {
         setHiddenParams((prev) =>
-          prev.filter((param) => param.id !== "api-key")
+          prev.filter(
+            (param) =>
+              !(Array.isArray(keyName) ? keyName : [keyName]).includes(param.id)
+          )
         );
       } else {
         setHiddenHeaders((prev) =>
-          prev.filter((header) => header.id !== "api-key")
+          prev.filter(
+            (header) =>
+              !(Array.isArray(keyName) ? keyName : [keyName]).includes(
+                header.id
+              )
+          )
         );
       }
     };
@@ -996,17 +1020,28 @@ const RequestResponseProvider = ({
      * else remove from both header and params
      * **/
     if (authType === "api-key" && apiKeyAuth.addTo === "query") {
-      removeHiddenData("header");
-      addHiddenData("param");
+      removeHiddenData("header", "api-key");
+      addHiddenData("param", "api-key", {
+        key: apiKeyAuth.key,
+        value: apiKeyAuth.value,
+      });
     } else if (authType === "api-key" && apiKeyAuth.addTo === "header") {
-      removeHiddenData("param");
-      addHiddenData("header");
+      removeHiddenData("param", "api-key");
+      addHiddenData("header", "api-key", {
+        key: apiKeyAuth.key,
+        value: apiKeyAuth.value,
+      });
+    } else if (authType === "bearer-token") {
+      addHiddenData("header", "bearer-token", {
+        key: "Authorization",
+        value: apiKeyAuth.value,
+      });
     } else {
-      removeHiddenData("param");
-      removeHiddenData("header");
+      removeHiddenData("param", "api-key");
+      removeHiddenData("header", ["api-key", "bearer-token"]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [apiKeyAuth, authType]);
+  }, [apiKeyAuth, bearerTokenAuth, authType]);
 
   const handleChangeActiveMetaTab = useCallback((id: TActiveTabType) => {
     setActiveMetaTab(id);
@@ -1146,6 +1181,8 @@ const RequestResponseProvider = ({
         handleChangeAuthType,
         apiKeyAuth,
         handleChangeAPIKey,
+        bearerTokenAuth,
+        handleChangeBearerTokenAuth,
         isDownloadRequestWithBase64,
         handleIsDownloadRequestWithBase64,
         handleDownloadRequest,
