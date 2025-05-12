@@ -1,4 +1,10 @@
-import React, { createContext, useCallback, useContext, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 export type TSidebarTab = "collections" | "environments" | null;
 
@@ -8,6 +14,21 @@ interface SidebarContext {
   handleChangeActiveTab: (id?: TSidebarTab) => void;
   handleToggleSidebar: () => void;
 }
+
+const localStorageSidebarActiveTabKey = "sidebar-active-tab";
+const localStorageSidebarLastActiveTabKey = "sidebar-last-active-tab";
+
+const handleLocalStorageOnSidebarToggle = (
+  currentActiveTab: string | null,
+  lastActiveTab: string | null
+) => {
+  if (currentActiveTab)
+    localStorage.setItem(localStorageSidebarActiveTabKey, currentActiveTab);
+  else localStorage.removeItem(localStorageSidebarActiveTabKey);
+  if (lastActiveTab)
+    localStorage.setItem(localStorageSidebarLastActiveTabKey, lastActiveTab);
+  else localStorage.removeItem(localStorageSidebarLastActiveTabKey);
+};
 
 const SidebarContext = createContext<SidebarContext | null>(null);
 
@@ -33,20 +54,37 @@ const SidebarProvider = ({ children }: SidebarProviderProps) => {
 
   const handleChangeActiveTab = useCallback(
     (id: TSidebarTab = null) => {
-      setLastActiveTab(id);
+      setLastActiveTab(activeTab);
 
-      if (id === activeTab) return setActiveTab(null);
-      setActiveTab(id);
+      let currentActiveTab = id;
+      if (id === activeTab) currentActiveTab = null;
+
+      setActiveTab(currentActiveTab);
+
+      handleLocalStorageOnSidebarToggle(currentActiveTab, id);
     },
     [activeTab, setActiveTab]
   );
 
   const handleToggleSidebar = useCallback(() => {
-    if (!activeTab) return setActiveTab(lastActiveTab);
+    let currentActiveTab: TSidebarTab = null;
+
+    if (!activeTab) currentActiveTab = lastActiveTab;
 
     setLastActiveTab(activeTab);
-    setActiveTab(null);
+    setActiveTab(currentActiveTab);
+
+    handleLocalStorageOnSidebarToggle(currentActiveTab, activeTab);
   }, [activeTab, lastActiveTab]);
+
+  useEffect(() => {
+    setActiveTab(
+      localStorage.getItem(localStorageSidebarActiveTabKey) as TSidebarTab
+    );
+    setLastActiveTab(
+      localStorage.getItem(localStorageSidebarLastActiveTabKey) as TSidebarTab
+    );
+  }, []);
 
   return (
     <SidebarContext.Provider

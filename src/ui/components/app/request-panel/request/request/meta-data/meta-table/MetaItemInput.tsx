@@ -65,7 +65,11 @@ const MetaItemInput = memo(
           }
           onChange={handleChange}
           onBlur={handleBlur}
-          className={cn("w-full p-0.5", "focus:bg-background", className)}
+          className={cn(
+            "w-full p-0.5 outline-none",
+            "focus:bg-background",
+            className
+          )}
           {...props}
         />
         {type === "password" && (
