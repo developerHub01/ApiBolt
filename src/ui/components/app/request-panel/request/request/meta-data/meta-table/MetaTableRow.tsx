@@ -19,6 +19,7 @@ interface MetaTableRowProps {
   preventCheck?: boolean;
   prevent?: boolean;
   calculateDynamicly?: boolean;
+  inputType?: "text" | "password";
   handleChangeItem: (id: string, key: string, value: string | File) => void;
   handleDeleteItem: (id: string) => void;
   handleCheckToggle: (id?: string) => void;
@@ -37,6 +38,7 @@ const MetaTableRow = memo(
     preventCheck = false,
     prevent = false,
     calculateDynamicly = false,
+    inputType = "text",
     handleChangeItem,
     handleDeleteItem,
     handleCheckToggle,
@@ -86,6 +88,7 @@ const MetaTableRow = memo(
               id={id}
               type={type}
               keyType={keyType}
+              inputType={keyType === "value" ? inputType : "text"}
               value={
                 calculateDynamicly && keyType === "value" && !value
                   ? calculateDynamicText

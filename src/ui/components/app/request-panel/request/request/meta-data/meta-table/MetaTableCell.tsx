@@ -20,6 +20,7 @@ interface MetaTableCellProps {
   type?: TMetaTableType;
   id: string;
   value: string | Array<File>;
+  inputType: "text" | "password";
   onBlur: (id: string, key: string, value: string | File) => void;
   prevent?: boolean;
 }
@@ -31,6 +32,7 @@ const MetaTableCell = memo(
     id,
     value = "",
     onBlur,
+    inputType = "text",
     prevent = false,
   }: MetaTableCellProps) => {
     const { handleRemoveFormDataFile } = useRequestMetaTable();
@@ -58,6 +60,7 @@ const MetaTableCell = memo(
                 value={Array.isArray(value) ? "" : value}
                 onBlur={onBlur}
                 disabled={prevent}
+                type={inputType}
               />
             ) : (
               <PopoverTrigger asChild>

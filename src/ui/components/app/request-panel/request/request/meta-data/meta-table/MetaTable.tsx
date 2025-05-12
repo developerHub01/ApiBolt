@@ -14,6 +14,8 @@ interface MetaTableInterface {
   showHiddenData?: boolean;
 }
 
+const passwordTypeKeyList = ["api-key", "bearer-token"];
+
 const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
   const {
     handleChangeMetaData,
@@ -32,9 +34,21 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
 
   if (!type || !data) return null;
 
-  if (type === "headers" && showHiddenData)
-    data = [...getMetaData("hiddenHeaders"), ...data];
-  if (type === "params") data = [...getMetaData("hiddenParams"), ...data];
+  if (type === "headers" && showHiddenData) {
+    data = [...getMetaData("hiddenHeaders"), ...data].map((header) => ({
+      ...header,
+      ...(passwordTypeKeyList.includes(header.id)
+        ? { inputType: "password" }
+        : {}),
+    }));
+  }
+  if (type === "params")
+    data = [...getMetaData("hiddenParams"), ...data].map((header) => ({
+      ...header,
+      ...(passwordTypeKeyList.includes(header.id)
+        ? { inputType: "password" }
+        : {}),
+    }));
 
   return (
     <MetaTableWrapper header={<MetaTableHeader type={type} />}>
