@@ -18,7 +18,10 @@ declare global {
       isWindowMaximized: () => Promise<boolean>;
 
       generateJWTToken: (
-        data: Omit<JWTBearerAuthInterface, "headerPrefix" | "algo"> & {
+        data: Omit<
+          JWTBearerAuthInterface,
+          "headerPrefix" | "algo" | "addTo"
+        > & {
           algorithm: string;
         }
       ) => Promise<string>;

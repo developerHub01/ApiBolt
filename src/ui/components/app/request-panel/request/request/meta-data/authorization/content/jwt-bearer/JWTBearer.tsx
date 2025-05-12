@@ -12,6 +12,17 @@ const algoList = JWT_ALGO_LIST.map((algo) => ({
   label: algo.toUpperCase(),
 }));
 
+const addToList = [
+  {
+    id: "header",
+    label: "Header",
+  },
+  {
+    id: "query",
+    label: "Query Params",
+  },
+];
+
 const JWTBearer = () => {
   const { jwtBearerAuth, handleChangeJWTBearerAuth } = useRequestResponse();
 
@@ -58,6 +69,18 @@ const JWTBearer = () => {
           className="max-w-80"
           value={jwtBearerAuth.headerPrefix}
           onBlur={(value) => handleChangeJWTBearerAuth("headerPrefix", value)}
+        />
+      </AuthKeyValueWrapper>
+      <AuthKeyValueWrapper>
+        <AuthContentInoutLabel htmlFor="api-add-to">
+          Add to
+        </AuthContentInoutLabel>
+        <AuthContentSelect
+          id="api-key"
+          className="w-full"
+          items={addToList}
+          value={jwtBearerAuth.addTo ?? addToList[0].id}
+          onChange={(value) => handleChangeJWTBearerAuth("addTo", value)}
         />
       </AuthKeyValueWrapper>
     </ContentWrapper>

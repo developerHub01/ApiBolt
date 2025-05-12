@@ -157,6 +157,7 @@ export interface JWTBearerAuthInterface {
   secret: string;
   payload: string;
   headerPrefix: string;
+  addTo: "header" | "query";
 }
 
 interface RequestResponseContext {
@@ -174,7 +175,7 @@ interface RequestResponseContext {
   handleChangeBearerTokenAuth: (token: string) => void;
   jwtBearerAuth: JWTBearerAuthInterface;
   handleChangeJWTBearerAuth: (
-    key: "algo" | "secret" | "payload" | "headerPrefix",
+    key: "algo" | "secret" | "payload" | "headerPrefix" | "addTo",
     value: string
   ) => void;
   isDownloadRequestWithBase64: boolean;
@@ -623,6 +624,7 @@ const RequestResponseProvider = ({
     secret: "",
     payload: JSON.stringify({}),
     headerPrefix: "Bearer",
+    addTo: "header",
   });
 
   const previousFinalUrlRef = useRef<string>("");
@@ -711,7 +713,10 @@ const RequestResponseProvider = ({
   }, []);
 
   const handleChangeJWTBearerAuth = useCallback(
-    (key: "algo" | "secret" | "payload" | "headerPrefix", value: string) => {
+    (
+      key: "algo" | "secret" | "payload" | "headerPrefix" | "addTo",
+      value: string
+    ) => {
       setJwtBearerAuth((prev) => ({
         ...prev,
         [key]: value,
@@ -1061,25 +1066,33 @@ const RequestResponseProvider = ({
     /* if jwt-bearer */
     const handleJWTBearer = async () => {
       try {
-        if (!jwtBearerAuth.secret)
-          return removeHiddenData(
-            setHiddenHeaders,
-            getRestOfAuthType("jwt-bearer")
-          );
+        removeHiddenData(setHiddenHeaders, getRestOfAuthType());
+        removeHiddenData(setHiddenParams, "jwt-bearer");
 
-        removeHiddenData(setHiddenHeaders, getRestOfAuthType("jwt-bearer"));
+        if (!jwtBearerAuth.secret) return;
+
         const token = await window.electronAPI.generateJWTToken({
           payload: jwtBearerAuth.payload,
           secret: jwtBearerAuth.secret,
           algorithm: jwtBearerAuth.algo,
         });
 
-        addHiddenData(setHiddenHeaders, "jwt-bearer", {
-          key: "Authorization",
-          value: `${jwtBearerAuth.headerPrefix} ${token}`,
-        });
+        if (jwtBearerAuth.addTo === "header") {
+          removeHiddenData(setHiddenParams, "jwt-bearer");
+          addHiddenData(setHiddenHeaders, "jwt-bearer", {
+            key: "Authorization",
+            value: `${jwtBearerAuth.headerPrefix} ${token}`,
+          });
+        } else {
+          removeHiddenData(setHiddenHeaders, getRestOfAuthType("jwt-bearer"));
+          addHiddenData(setHiddenParams, "jwt-bearer", {
+            key: "Authorization",
+            value: token,
+          });
+        }
       } catch (error) {
         removeHiddenData(setHiddenHeaders, getRestOfAuthType());
+        removeHiddenData(setHiddenParams, "jwt-bearer");
         console.log(error);
       }
     };
@@ -1122,7 +1135,7 @@ const RequestResponseProvider = ({
         await handleJWTBearer();
       })();
     } else {
-      removeHiddenData(setHiddenParams, "api-key");
+      removeHiddenData(setHiddenParams, ["api-key", "jwt-bearer"]);
       removeHiddenData(setHiddenHeaders, getRestOfAuthType());
     }
 

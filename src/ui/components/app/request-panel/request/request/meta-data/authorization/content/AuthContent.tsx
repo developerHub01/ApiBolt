@@ -9,7 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 const AuthContent = () => {
   const { authType } = useRequestResponse();
   return (
-    <ScrollArea className="w-full h-full pl-2">
+    <ScrollArea className="w-full h-full pl-2 md:pl-2.5 ">
       {authType === "no-auth" && <NoAuth />}
       {authType === "basic-auth" && <BasicAuth />}
       {authType === "bearer-token" && <BearerToken />}

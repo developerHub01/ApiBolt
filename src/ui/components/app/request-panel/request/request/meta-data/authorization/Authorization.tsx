@@ -5,7 +5,7 @@ import AuthDetails from "@/components/app/request-panel/request/request/meta-dat
 const Authorization = () => {
   return (
     <div className="w-full h-full flex">
-      <div className="w-72 h-full border-r pr-2 flex flex-col gap-1.5">
+      <div className="w-72 h-full border-r pr-2 md:pr-2.5 flex flex-col gap-1.5">
         <p className="text-sm">Auth Type</p>
         <AuthTypeTab />
         <AuthDetails />
