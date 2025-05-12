@@ -10,7 +10,12 @@ const BearerToken = () => {
         <AuthContentInoutLabel htmlFor="bearer-token">
           Token
         </AuthContentInoutLabel>
-        <AuthContentInput id="bearer-token" placeholder="Token" />
+        <AuthContentInput
+          id="bearer-token"
+          placeholder="Token"
+          value={""}
+          onBlur={() => {}}
+        />
       </AuthKeyValueWrapper>
     </ContentWrapper>
   );

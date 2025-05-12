@@ -10,13 +10,23 @@ const BasicAuth = () => {
         <AuthContentInoutLabel htmlFor="basic-auth-username">
           Username
         </AuthContentInoutLabel>
-        <AuthContentInput id="basic-auth-username" placeholder="Username" />
+        <AuthContentInput
+          id="basic-auth-username"
+          placeholder="Username"
+          value={""}
+          onBlur={() => {}}
+        />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
         <AuthContentInoutLabel htmlFor="basic-auth-password">
           Password
         </AuthContentInoutLabel>
-        <AuthContentInput id="basic-auth-password" placeholder="Password" />
+        <AuthContentInput
+          id="basic-auth-password"
+          placeholder="Password"
+          value={""}
+          onBlur={() => {}}
+        />
       </AuthKeyValueWrapper>
     </ContentWrapper>
   );
