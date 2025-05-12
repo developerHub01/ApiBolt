@@ -1096,7 +1096,7 @@ const RequestResponseProvider = ({
     } else if (authType === "bearer-token") {
       addHiddenData("header", "bearer-token", {
         key: "Authorization",
-        value: bearerTokenAuth,
+        value: `Bearer ${bearerTokenAuth}`,
       });
       removeHiddenData("header", getRestOfAuthType("bearer-token"));
     } else {
