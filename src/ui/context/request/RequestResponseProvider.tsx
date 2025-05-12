@@ -396,6 +396,22 @@ const generateNextHiddenHeaderOrParam = () => {
   };
 };
 
+export const AuthTypeList = [
+  "no-auth",
+  "basic-auth",
+  "bearer-token",
+  "jwt-bearer",
+  "api-key",
+];
+
+const getRestOfAuthType = (excludes?: string | Array<string>) => {
+  if (!excludes) return AuthTypeList;
+
+  return AuthTypeList.filter(
+    (item) => !(Array.isArray(excludes) ? excludes : [excludes]).includes(item)
+  );
+};
+
 export const ResponsePanelMinLimit = 15;
 
 const useMetaDataManager = <
@@ -1020,7 +1036,7 @@ const RequestResponseProvider = ({
      * else remove from both header and params
      * **/
     if (authType === "api-key" && apiKeyAuth.addTo === "query") {
-      removeHiddenData("header", "api-key");
+      removeHiddenData("header", getRestOfAuthType());
       addHiddenData("param", "api-key", {
         key: apiKeyAuth.key,
         value: apiKeyAuth.value,
@@ -1031,14 +1047,16 @@ const RequestResponseProvider = ({
         key: apiKeyAuth.key,
         value: apiKeyAuth.value,
       });
+      removeHiddenData("header", getRestOfAuthType("api-key"));
     } else if (authType === "bearer-token") {
       addHiddenData("header", "bearer-token", {
         key: "Authorization",
-        value: apiKeyAuth.value,
+        value: bearerTokenAuth,
       });
+      removeHiddenData("header", getRestOfAuthType("bearer-token"));
     } else {
       removeHiddenData("param", "api-key");
-      removeHiddenData("header", ["api-key", "bearer-token"]);
+      removeHiddenData("header", getRestOfAuthType());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiKeyAuth, bearerTokenAuth, authType]);
