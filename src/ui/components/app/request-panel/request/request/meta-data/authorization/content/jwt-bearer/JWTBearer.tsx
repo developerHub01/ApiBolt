@@ -23,7 +23,7 @@ const JWTBearer = () => {
         </AuthContentInoutLabel>
         <AuthContentSelect
           id="api-key"
-          className="max-w-80"
+          className="w-full"
           items={algoList}
           value={jwtBearerAuth.algo ?? algoList[0].id}
           onChange={(value) => handleChangeJWTBearerAuth("algo", value)}
@@ -35,7 +35,7 @@ const JWTBearer = () => {
         </AuthContentInoutLabel>
         <AuthContentInput
           id="api-key"
-          className="max-w-80"
+          className="w-full"
           value={jwtBearerAuth.secret}
           onBlur={(value) => handleChangeJWTBearerAuth("secret", value)}
         />

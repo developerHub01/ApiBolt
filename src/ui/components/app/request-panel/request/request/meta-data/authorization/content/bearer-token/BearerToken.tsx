@@ -6,7 +6,7 @@ import { useRequestResponse } from "@/context/request/RequestResponseProvider";
 
 const BearerToken = () => {
   const { bearerTokenAuth, handleChangeBearerTokenAuth } = useRequestResponse();
-  
+
   return (
     <ContentWrapper>
       <AuthKeyValueWrapper>
@@ -18,6 +18,7 @@ const BearerToken = () => {
           placeholder="Token"
           value={bearerTokenAuth}
           onBlur={handleChangeBearerTokenAuth}
+          className="w-full"
         />
       </AuthKeyValueWrapper>
     </ContentWrapper>

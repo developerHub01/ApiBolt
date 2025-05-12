@@ -30,7 +30,7 @@ const AuthContentSelect = ({
 }: AuthContentSelectProps) => {
   return (
     <Select value={value} onValueChange={onChange}>
-      <SelectTrigger className={cn("w-full", className)} {...props}>
+      <SelectTrigger className={cn("w-full max-w-80", className)} {...props}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent align="end">

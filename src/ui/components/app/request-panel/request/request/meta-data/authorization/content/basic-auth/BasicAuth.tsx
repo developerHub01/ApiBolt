@@ -18,6 +18,7 @@ const BasicAuth = () => {
           placeholder="Username"
           value={basicAuth.username}
           onBlur={(value) => handleChangeBasicAuth("username", value)}
+          className="w-full"
         />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
@@ -29,6 +30,7 @@ const BasicAuth = () => {
           placeholder="Password"
           value={basicAuth.password}
           onBlur={(value) => handleChangeBasicAuth("password", value)}
+          className="w-full"
         />
       </AuthKeyValueWrapper>
     </ContentWrapper>

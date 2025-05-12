@@ -45,7 +45,7 @@ const APIKey = () => {
         </AuthContentInoutLabel>
         <AuthContentSelect
           id="api-key"
-          className="w-auto"
+          className="w-full"
           items={addToList}
           value={apiKeyAuth.addTo ?? addToList[0].id}
           onChange={(value) => handleChangeAPIKey("addTo", value)}
