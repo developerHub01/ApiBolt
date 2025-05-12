@@ -1,5 +1,5 @@
+import { type FormEvent, memo, useEffect, useState } from "react";
 import { useRequestResponse } from "@/context/request/RequestResponseProvider";
-import { type FormEvent, memo, useCallback } from "react";
 import ApiMethodSelector from "@/components/app/request-panel/request/request/api-url/ApiMethodSelector";
 import ApiInput from "@/components/app/request-panel/request/request/api-url/ApiInput";
 import ApiCta from "@/components/app/request-panel/request/request/api-url/ApiCta";
@@ -9,23 +9,40 @@ const ApiUrl = memo(() => {
     apiUrl = "",
     handleIsInputError,
     handleRequestSend,
+    handleChangeApiUrl,
+    isApiUrlError,
   } = useRequestResponse();
+  const [url, setUrl] = useState<string>(apiUrl);
 
-  const handleSubmit = useCallback(
-    (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
+  useEffect(() => {
+    setUrl(apiUrl);
+  }, [apiUrl]);
 
-      if (!apiUrl) return handleIsInputError(true);
+  const handleApiUrlChange = (value: string) => setUrl(value);
 
-      handleRequestSend();
-    },
-    [apiUrl, handleIsInputError, handleRequestSend]
-  );
+  const handleApiUrlFocus = () => {
+    if (isApiUrlError) handleIsInputError(false);
+  };
+
+  const handleApiUrlBlur = (value: string) => handleChangeApiUrl(value);
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!url) return handleIsInputError(true);
+
+    handleRequestSend();
+  };
 
   return (
     <form onSubmit={handleSubmit} className="w-full flex items-center">
       <ApiMethodSelector />
-      <ApiInput />
+      <ApiInput
+        value={url}
+        onChange={handleApiUrlChange}
+        onBlur={handleApiUrlBlur}
+        onFocus={handleApiUrlFocus}
+      />
       <ApiCta />
     </form>
   );

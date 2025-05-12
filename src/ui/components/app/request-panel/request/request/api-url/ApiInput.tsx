@@ -1,46 +1,25 @@
-import {
-  memo,
-  useCallback,
-  useEffect,
-  useState,
-  type ChangeEvent,
-  type FocusEvent,
-} from "react";
+import { memo, type ChangeEvent, type FocusEvent } from "react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useRequestResponse } from "@/context/request/RequestResponseProvider";
 
-const ApiInput = memo(() => {
-  const {
-    apiUrl = "",
-    handleChangeApiUrl,
-    isApiUrlError,
-    handleIsInputError,
-  } = useRequestResponse();
-  const [url, setUrl] = useState<string>(apiUrl);
+interface ApiInputProps {
+  value: string;
+  onChange: (value: string) => void;
+  onFocus: () => void;
+  onBlur: (value: string) => void;
+}
 
-  useEffect(() => {
-    setUrl(apiUrl);
-  }, [apiUrl]);
+const ApiInput = memo(({ value, onChange, onFocus, onBlur }: ApiInputProps) => {
+  const { isApiUrlError } = useRequestResponse();
 
-  const handleApiUrlChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+  const handleApiUrlChange = (e: ChangeEvent<HTMLInputElement>) =>
+    onChange(e.target.value);
 
-    setUrl(value);
-  }, []);
+  const handleApiUrlFocus = () => onFocus();
 
-  const handleApiUrlFocus = useCallback(() => {
-    if (isApiUrlError) handleIsInputError(false);
-  }, [isApiUrlError, handleIsInputError]);
-
-  const handleApiUrlBlur = useCallback(
-    (e: FocusEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-
-      handleChangeApiUrl(value);
-    },
-    [handleChangeApiUrl]
-  );
+  const handleApiUrlBlur = (e: FocusEvent<HTMLInputElement>) =>
+    onBlur(e.target.value);
 
   return (
     <Input
@@ -49,7 +28,7 @@ const ApiInput = memo(() => {
         "border-destructive": isApiUrlError,
         "border-input": !isApiUrlError,
       })}
-      value={url}
+      value={value}
       onChange={handleApiUrlChange}
       onFocus={handleApiUrlFocus}
       onBlur={handleApiUrlBlur}
