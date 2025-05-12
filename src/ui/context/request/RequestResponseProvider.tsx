@@ -1126,7 +1126,7 @@ const RequestResponseProvider = ({
       removeHiddenData(setHiddenHeaders, getRestOfAuthType());
     }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    //// eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiKeyAuth, basicAuth, bearerTokenAuth, jwtBearerAuth, authType]);
 
   const handleChangeActiveMetaTab = useCallback((id: TActiveTabType) => {
