@@ -34,7 +34,7 @@ const PayloadCode = ({ code = "", onBlur }: PayloadCodeProps) => {
 
   return (
     <Code
-      className="max-w-80 h-60 rounded-lg overflow-hidden border"
+      className="max-w-80 h-52 rounded-lg overflow-hidden border"
       contentType="json"
       code={code}
       onChange={handleChange}

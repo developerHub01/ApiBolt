@@ -359,7 +359,6 @@ const fetchApiAndExtractData = async (payload: APIPayloadBody) => {
   }
   try {
     const res = await sendRequest(payload);
-    console.log(res);
 
     return {
       headers: res.headers,
@@ -1023,100 +1022,64 @@ const RequestResponseProvider = ({
 
   useEffect(() => {
     const addHiddenData = (
-      type: "param" | "header",
+      setState: React.Dispatch<React.SetStateAction<Array<ParamInterface>>>,
       keyName: string,
       payload: Record<string, string> = {}
     ) => {
-      if (type === "param") {
-        if (hiddenParams.some((param) => param.id === keyName)) {
-          setHiddenParams((prev) =>
-            prev.map((param) =>
-              param.id === keyName ? { ...param, ...payload } : param
-            )
+      setState((prev) => {
+        if (prev.some((item) => item.id === keyName)) {
+          return prev.map((item) =>
+            item.id === keyName ? { ...item, ...payload } : item
           );
         } else {
-          setHiddenParams((prev) => {
-            const filtered = prev.filter((h) => h.id !== keyName);
-            return [
-              {
-                ...generateNextHiddenHeaderOrParam(),
-                id: keyName,
-                ...payload,
-              },
-              ...filtered,
-            ];
-          });
+          const filtered = prev.filter((h) => h.id !== keyName);
+          return [
+            {
+              ...generateNextHiddenHeaderOrParam(),
+              id: keyName,
+              ...payload,
+            },
+            ...filtered,
+          ];
         }
-      } else {
-        console.log({ keyName });
-        console.log({ hiddenHeaders });
-        console.log(hiddenHeaders.some((header) => header.id === keyName));
-        console.log(
-          hiddenHeaders.map((header) =>
-            header.id === keyName ? { ...header, ...payload } : header
-          )
-        );
-        if (hiddenHeaders.some((header) => header.id === keyName)) {
-          setHiddenHeaders((prev) =>
-            prev.map((header) =>
-              header.id === keyName ? { ...header, ...payload } : header
-            )
-          );
-        } else {
-          setHiddenHeaders((prev) => {
-            const filtered = prev.filter((h) => h.id !== keyName);
-            return [
-              {
-                ...generateNextHiddenHeaderOrParam(),
-                id: keyName,
-                ...payload,
-              },
-              ...filtered,
-            ];
-          });
-        }
-      }
+      });
     };
+
     const removeHiddenData = (
-      type: "param" | "header",
+      setState: React.Dispatch<React.SetStateAction<Array<ParamInterface>>>,
       keyName: string | Array<string>
     ) => {
       /* filter out those data which are not in keyName list or not keyName */
-      if (type === "param") {
-        setHiddenParams((prev) =>
-          prev.filter(
-            (param) =>
-              !(Array.isArray(keyName) ? keyName : [keyName]).includes(param.id)
-          )
-        );
-      } else {
-        setHiddenHeaders((prev) =>
-          prev.filter(
-            (header) =>
-              !(Array.isArray(keyName) ? keyName : [keyName]).includes(
-                header.id
-              )
-          )
-        );
-      }
+      setState((prev) =>
+        prev.filter(
+          (param) =>
+            !(Array.isArray(keyName) ? keyName : [keyName]).includes(param.id)
+        )
+      );
     };
 
     /* if jwt-bearer */
     const handleJWTBearer = async () => {
       try {
-        removeHiddenData("header", getRestOfAuthType("jwt-bearer"));
+        if (!jwtBearerAuth.secret)
+          return removeHiddenData(
+            setHiddenHeaders,
+            getRestOfAuthType("jwt-bearer")
+          );
+
+        removeHiddenData(setHiddenHeaders, getRestOfAuthType("jwt-bearer"));
         const token = await window.electronAPI.generateJWTToken({
           payload: jwtBearerAuth.payload,
           secret: jwtBearerAuth.secret,
           algorithm: jwtBearerAuth.algo,
         });
 
-        addHiddenData("header", "jwt-bearer", {
+        addHiddenData(setHiddenHeaders, "jwt-bearer", {
           key: "Authorization",
           value: `${jwtBearerAuth.headerPrefix} ${token}`,
         });
       } catch (error) {
-        removeHiddenData("header", getRestOfAuthType());
+        removeHiddenData(setHiddenHeaders, getRestOfAuthType());
         console.log(error);
       }
     };
@@ -1129,28 +1092,28 @@ const RequestResponseProvider = ({
      * else remove from both header and params
      * **/
     if (authType === "api-key" && apiKeyAuth.addTo === "query") {
-      removeHiddenData("header", getRestOfAuthType());
-      addHiddenData("param", "api-key", {
+      removeHiddenData(setHiddenHeaders, getRestOfAuthType());
+      addHiddenData(setHiddenParams, "api-key", {
         key: apiKeyAuth.key,
         value: apiKeyAuth.value,
       });
     } else if (authType === "api-key" && apiKeyAuth.addTo === "header") {
-      removeHiddenData("param", "api-key");
-      addHiddenData("header", "api-key", {
+      removeHiddenData(setHiddenParams, "api-key");
+      addHiddenData(setHiddenHeaders, "api-key", {
         key: apiKeyAuth.key,
         value: apiKeyAuth.value,
       });
-      removeHiddenData("header", getRestOfAuthType("api-key"));
+      removeHiddenData(setHiddenHeaders, getRestOfAuthType("api-key"));
     } else if (authType === "basic-auth") {
-      removeHiddenData("header", getRestOfAuthType("basic-auth"));
+      removeHiddenData(setHiddenHeaders, getRestOfAuthType("basic-auth"));
       const token = btoa(`${basicAuth.username}:${basicAuth.password}`);
-      addHiddenData("header", "basic-auth", {
+      addHiddenData(setHiddenHeaders, "basic-auth", {
         key: "Authorization",
         value: `Basic ${token}`,
       });
     } else if (authType === "bearer-token") {
-      removeHiddenData("header", getRestOfAuthType("bearer-token"));
-      addHiddenData("header", "bearer-token", {
+      removeHiddenData(setHiddenHeaders, getRestOfAuthType("bearer-token"));
+      addHiddenData(setHiddenHeaders, "bearer-token", {
         key: "Authorization",
         value: `Bearer ${bearerTokenAuth}`,
       });
@@ -1159,8 +1122,8 @@ const RequestResponseProvider = ({
         await handleJWTBearer();
       })();
     } else {
-      removeHiddenData("param", "api-key");
-      removeHiddenData("header", getRestOfAuthType());
+      removeHiddenData(setHiddenParams, "api-key");
+      removeHiddenData(setHiddenHeaders, getRestOfAuthType());
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

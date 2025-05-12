@@ -55,8 +55,6 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
         : {}),
     }));
 
-  console.log(data);
-
   return (
     <MetaTableWrapper header={<MetaTableHeader type={type} />}>
       {data.map(({ key, ...param }) => (

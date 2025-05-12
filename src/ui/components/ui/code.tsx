@@ -138,7 +138,6 @@ const Code = ({
       }
       if (e.altKey && e.shiftKey && e.key.toLowerCase() === "f") {
         e.preventDefault();
-        console.log({ handleFormat });
         if (handleFormat) handleFormat();
       }
     };
