@@ -149,6 +149,10 @@ export interface APIKeyInterface {
   value: string;
   addTo: "header" | "query";
 }
+export interface BasicAuthInterface {
+  username: string;
+  password: string;
+}
 
 interface RequestResponseContext {
   isResponseCollapsed: boolean;
@@ -159,6 +163,8 @@ interface RequestResponseContext {
   handleChangeAuthType: (authType: TAuthType) => void;
   apiKeyAuth: APIKeyInterface;
   handleChangeAPIKey: (ey: "key" | "value" | "addTo", value: string) => void;
+  basicAuth: BasicAuthInterface;
+  handleChangeBasicAuth: (ey: "username" | "password", value: string) => void;
   bearerTokenAuth: string;
   handleChangeBearerTokenAuth: (token: string) => void;
   isDownloadRequestWithBase64: boolean;
@@ -414,6 +420,38 @@ const getRestOfAuthType = (excludes?: string | Array<string>) => {
 
 export const ResponsePanelMinLimit = 15;
 
+const initialHiddenHeaderData = () => [
+  {
+    id: uuidv4(),
+    key: "Cookie",
+    value: "",
+    description: "",
+    prevent: true,
+    calculateDynamicly: true,
+  },
+  {
+    id: uuidv4(),
+    key: "User-Agent",
+    value: `${import.meta.env.VITE_APP_NAME}/${import.meta.env.VITE_APP_VERSION}`,
+    description: "",
+    prevent: true,
+  },
+  {
+    id: uuidv4(),
+    key: "Accept",
+    value: "*/*",
+    description: "",
+    prevent: true,
+  },
+  {
+    id: uuidv4(),
+    key: "Connection",
+    value: "keep-alive",
+    description: "",
+    prevent: true,
+  },
+];
+
 const useMetaDataManager = <
   T extends { id: string; hide?: boolean; value: unknown },
 >(
@@ -526,37 +564,9 @@ const RequestResponseProvider = ({
   const [hiddenParams, setHiddenParams] = useState<Array<ParamInterface>>([]);
 
   const [headers, setHeaders] = useState<Array<ParamInterface>>([]);
-  const [hiddenHeaders, setHiddenHeaders] = useState<Array<ParamInterface>>([
-    {
-      id: uuidv4(),
-      key: "Cookie",
-      value: "",
-      description: "",
-      prevent: true,
-      calculateDynamicly: true,
-    },
-    {
-      id: uuidv4(),
-      key: "User-Agent",
-      value: `${import.meta.env.VITE_APP_NAME}/${import.meta.env.VITE_APP_VERSION}`,
-      description: "",
-      prevent: true,
-    },
-    {
-      id: uuidv4(),
-      key: "Accept",
-      value: "*/*",
-      description: "",
-      prevent: true,
-    },
-    {
-      id: uuidv4(),
-      key: "Connection",
-      value: "keep-alive",
-      description: "",
-      prevent: true,
-    },
-  ]);
+  const [hiddenHeaders, setHiddenHeaders] = useState<Array<ParamInterface>>(
+    initialHiddenHeaderData()
+  );
   const [binaryData, setBinaryData] = useState<File | null>(null);
   const [formData, setFormData] = useState<Array<FormDataInterface>>([]);
   const [xWWWFormUrlencodedData, setXWWWFormUrlencodedData] = useState<
@@ -574,6 +584,23 @@ const RequestResponseProvider = ({
     value: "",
     addTo: "header",
   });
+
+  /**
+   * convert
+   * const token = btoa(`${username}:${password}`);
+   * headers["Authorization"] = `Basic ${token}`;
+   * when to request the API
+   */
+  const [basicAuth, setBasicAuth] = useState<BasicAuthInterface>({
+    username: "",
+    password: "",
+  });
+
+  /**
+   * convert
+   * Authorization: `Bearer ${bearerToken}`
+   * when to request the API
+   */
   const [bearerTokenAuth, setBearerTokenAuth] = useState<string>("");
 
   const previousFinalUrlRef = useRef<string>("");
@@ -646,6 +673,17 @@ const RequestResponseProvider = ({
     },
     []
   );
+
+  const handleChangeBasicAuth = useCallback(
+    (key: "username" | "password", value: string) => {
+      setBasicAuth((prev) => ({
+        ...prev,
+        [key]: value,
+      }));
+    },
+    []
+  );
+
   const handleChangeBearerTokenAuth = useCallback((token: string) => {
     setBearerTokenAuth(token);
   }, []);
@@ -1048,6 +1086,13 @@ const RequestResponseProvider = ({
         value: apiKeyAuth.value,
       });
       removeHiddenData("header", getRestOfAuthType("api-key"));
+    } else if (authType === "basic-auth") {
+      const token = btoa(`${basicAuth.username}:${basicAuth.password}`);
+      addHiddenData("header", "basic-auth", {
+        key: "Authorization",
+        value: `Basic ${token}`,
+      });
+      removeHiddenData("header", getRestOfAuthType("basic-auth"));
     } else if (authType === "bearer-token") {
       addHiddenData("header", "bearer-token", {
         key: "Authorization",
@@ -1059,7 +1104,7 @@ const RequestResponseProvider = ({
       removeHiddenData("header", getRestOfAuthType());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [apiKeyAuth, bearerTokenAuth, authType]);
+  }, [apiKeyAuth, basicAuth, bearerTokenAuth, authType]);
 
   const handleChangeActiveMetaTab = useCallback((id: TActiveTabType) => {
     setActiveMetaTab(id);
@@ -1199,6 +1244,8 @@ const RequestResponseProvider = ({
         handleChangeAuthType,
         apiKeyAuth,
         handleChangeAPIKey,
+        basicAuth,
+        handleChangeBasicAuth,
         bearerTokenAuth,
         handleChangeBearerTokenAuth,
         isDownloadRequestWithBase64,

@@ -8,13 +8,13 @@ import MetaTableHeader from "@/components/app/request-panel/request/request/meta
 import MetaTableWrapper from "@/components/app/request-panel/request/request/meta-data/meta-table/MetaTableWrapper";
 import MetaTableRow from "@/components/app/request-panel/request/request/meta-data/meta-table/MetaTableRow";
 
-const headersToPreventCheckList = ["Cookie"];
+const headersToPreventCheckList = ["Cookie", "Authorization"];
 
 interface MetaTableInterface {
   showHiddenData?: boolean;
 }
 
-const passwordTypeKeyList = ["api-key", "bearer-token"];
+const passwordTypeKeyList = ["api-key", "basic-auth", "bearer-token"];
 
 const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
   const {
