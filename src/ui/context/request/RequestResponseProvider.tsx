@@ -1009,12 +1009,12 @@ const RequestResponseProvider = ({
           );
         } else {
           setHiddenParams((prev) => [
-            ...prev,
             {
               ...generateNextHiddenHeaderOrParam(),
               id: keyName,
               ...payload,
             },
+            ...prev,
           ]);
         }
       } else {
@@ -1032,12 +1032,12 @@ const RequestResponseProvider = ({
           );
         } else {
           setHiddenHeaders((prev) => [
-            ...prev,
             {
               ...generateNextHiddenHeaderOrParam(),
               id: keyName,
               ...payload,
             },
+            ...prev,
           ]);
         }
       }
