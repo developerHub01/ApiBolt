@@ -14,6 +14,7 @@ import { useRequestBody } from "@/context/request/RequestBodyProvider";
 
 export type TMetaTableType =
   | "params"
+  | "hiddenParams"
   | "headers"
   | "hiddenHeaders"
   | "form-data"
@@ -145,6 +146,7 @@ const RequestMetaTableProvider = ({
     handleRemoveFormDataFile,
 
     params,
+    hiddenParams,
     headers,
     hiddenHeaders,
     formData,
@@ -167,6 +169,8 @@ const RequestMetaTableProvider = ({
       switch (type) {
         case "params":
           return params;
+        case "hiddenParams":
+          return hiddenParams;
         case "headers":
           return headers;
         case "hiddenHeaders":
@@ -177,7 +181,14 @@ const RequestMetaTableProvider = ({
           return xWWWFormUrlencodedData;
       }
     },
-    [params, headers, hiddenHeaders, formData, xWWWFormUrlencodedData]
+    [
+      params,
+      hiddenParams,
+      headers,
+      hiddenHeaders,
+      formData,
+      xWWWFormUrlencodedData,
+    ]
   );
 
   const handleChangeMetaData = useCallback(

@@ -34,6 +34,7 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
 
   if (type === "headers" && showHiddenData)
     data = [...getMetaData("hiddenHeaders"), ...data];
+  if (type === "params") data = [...getMetaData("hiddenParams"), ...data];
 
   return (
     <MetaTableWrapper header={<MetaTableHeader type={type} />}>
@@ -50,7 +51,11 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
           handleDeleteItem={(id) => handleDeleteMetaData(type, id)}
           handleCheckToggle={(id?: string) =>
             handleCheckToggleMetaData(
-              param.prevent ? "hiddenHeaders" : type,
+              param.prevent && type === "params"
+                ? "hiddenParams"
+                : param.prevent && type === "headers"
+                  ? "hiddenHeaders"
+                  : type,
               id
             )
           }

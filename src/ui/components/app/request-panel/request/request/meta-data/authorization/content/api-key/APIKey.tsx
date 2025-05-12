@@ -3,6 +3,7 @@ import AuthKeyValueWrapper from "@/components/app/request-panel/request/request/
 import AuthContentInput from "@/components/app/request-panel/request/request/meta-data/authorization/content/AuthContentInput";
 import AuthContentInoutLabel from "@/components/app/request-panel/request/request/meta-data/authorization/content/AuthContentInoutLabel";
 import AuthContentSelect from "@/components/app/request-panel/request/request/meta-data/authorization/content/AuthContentSelect";
+import { useRequestResponse } from "@/context/request/RequestResponseProvider";
 
 const addToList = [
   {
@@ -16,16 +17,27 @@ const addToList = [
 ];
 
 const APIKey = () => {
-  const handleAddToChange = () => {};
+  const { apiKeyAuth, handleChangeAPIKey } = useRequestResponse();
+
   return (
     <ContentWrapper>
       <AuthKeyValueWrapper>
         <AuthContentInoutLabel htmlFor="api-key">Key</AuthContentInoutLabel>
-        <AuthContentInput id="api-key" placeholder="Key" />
+        <AuthContentInput
+          id="api-key"
+          placeholder="Key"
+          value={apiKeyAuth.key}
+          onBlur={(value) => handleChangeAPIKey("key", value)}
+        />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
         <AuthContentInoutLabel htmlFor="api-value">Value</AuthContentInoutLabel>
-        <AuthContentInput id="api-key" placeholder="Value" />
+        <AuthContentInput
+          id="api-key"
+          placeholder="Value"
+          value={apiKeyAuth.value}
+          onBlur={(value) => handleChangeAPIKey("value", value)}
+        />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
         <AuthContentInoutLabel htmlFor="api-add-to">
@@ -35,8 +47,8 @@ const APIKey = () => {
           id="api-key"
           className="w-auto"
           items={addToList}
-          value={addToList[0].id}
-          onChange={handleAddToChange}
+          value={apiKeyAuth.addTo ?? addToList[0].id}
+          onChange={(value) => handleChangeAPIKey("addTo", value)}
         />
       </AuthKeyValueWrapper>
     </ContentWrapper>

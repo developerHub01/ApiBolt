@@ -21,12 +21,12 @@ const tabList: Array<{
     label: "Headers",
   },
   {
-    id: "body",
-    label: "Body",
-  },
-  {
     id: "authorization",
     label: "Authorization",
+  },
+  {
+    id: "body",
+    label: "Body",
   },
 ];
 

@@ -144,6 +144,12 @@ export interface StatusDataInterface {
   };
 }
 
+export interface APIKeyInterface {
+  key: string;
+  value: string;
+  addTo: "header" | "query";
+}
+
 interface RequestResponseContext {
   isResponseCollapsed: boolean;
   handleToggleCollapse: (size?: number) => void;
@@ -151,6 +157,8 @@ interface RequestResponseContext {
   handleChangeRequestName: (name: string) => void;
   authType: TAuthType;
   handleChangeAuthType: (authType: TAuthType) => void;
+  apiKeyAuth: APIKeyInterface;
+  handleChangeAPIKey: (ey: "key" | "value" | "addTo", value: string) => void;
   isDownloadRequestWithBase64: boolean;
   handleIsDownloadRequestWithBase64: (value: boolean) => void;
   handleDownloadRequest: () => Promise<void>;
@@ -185,6 +193,8 @@ interface RequestResponseContext {
   handleDeleteParam: (id: string) => void;
   handleAddNewParam: () => void;
   handleParamCheckToggle: (id?: string) => void;
+
+  hiddenParams: Array<ParamInterface>;
 
   headers: Array<ParamInterface>;
   handleChangeHeader: (id: string, key: string, value: string) => void;
@@ -374,6 +384,16 @@ export const getCookiesStringByDomain = async (url: string) => {
   return await window.electronAPI.getCookieStringByDomain(url);
 };
 
+const generateNextHiddenHeaderOrParam = () => {
+  return {
+    id: uuidv4(),
+    key: "",
+    value: "",
+    description: "",
+    prevent: true,
+  };
+};
+
 export const ResponsePanelMinLimit = 15;
 
 const useMetaDataManager = <
@@ -485,6 +505,7 @@ const RequestResponseProvider = ({
     useState<TContentType>("json");
 
   const [params, setParams] = useState<Array<ParamInterface>>([]);
+  const [hiddenParams, setHiddenParams] = useState<Array<ParamInterface>>([]);
 
   const [headers, setHeaders] = useState<Array<ParamInterface>>([]);
   const [hiddenHeaders, setHiddenHeaders] = useState<Array<ParamInterface>>([
@@ -530,6 +551,11 @@ const RequestResponseProvider = ({
   const [shouldFetch, setShouldFetch] = useState<boolean>(false);
 
   const [authType, setAuthType] = useState<TAuthType>("no-auth");
+  const [apiKeyAuth, setApiKeyAuth] = useState<APIKeyInterface>({
+    key: "",
+    value: "",
+    addTo: "header",
+  });
 
   const previousFinalUrlRef = useRef<string>("");
 
@@ -591,6 +617,16 @@ const RequestResponseProvider = ({
   const handleChangeAuthType = useCallback((authType: TAuthType) => {
     setAuthType(authType);
   }, []);
+
+  const handleChangeAPIKey = useCallback(
+    (key: "key" | "value" | "addTo", value: string) => {
+      setApiKeyAuth((prev) => ({
+        ...prev,
+        [key]: value,
+      }));
+    },
+    []
+  );
 
   const handleIsDownloadRequestWithBase64 = useCallback(
     (value: boolean) => setIsDownloadRequestWithBase64(value),
@@ -892,6 +928,86 @@ const RequestResponseProvider = ({
     handleDomainCookie(apiUrl);
   }, [apiUrl, response]);
 
+  useEffect(() => {
+    const addHiddenData = (type: "param" | "header") => {
+      if (type === "param") {
+        if (hiddenParams.find((param) => param.id === "api-key")) {
+          setHiddenParams((prev) =>
+            prev.map((param) => {
+              if (param.id === "api-key") {
+                param.key = apiKeyAuth.key;
+                param.value = apiKeyAuth.value;
+              }
+              return param;
+            })
+          );
+        } else {
+          setHiddenParams((prev) => [
+            ...prev,
+            {
+              ...generateNextHiddenHeaderOrParam(),
+              id: "api-key",
+              key: apiKeyAuth.key,
+              value: apiKeyAuth.value,
+            },
+          ]);
+        }
+      } else {
+        if (hiddenHeaders.find((header) => header.id === "api-key")) {
+          setHiddenHeaders((prev) =>
+            prev.map((header) => {
+              if (header.id === "api-key") {
+                header.key = apiKeyAuth.key;
+                header.value = apiKeyAuth.value;
+              }
+              return header;
+            })
+          );
+        } else {
+          setHiddenHeaders((prev) => [
+            ...prev,
+            {
+              ...generateNextHiddenHeaderOrParam(),
+              id: "api-key",
+              key: apiKeyAuth.key,
+              value: apiKeyAuth.value,
+            },
+          ]);
+        }
+      }
+    };
+    const removeHiddenData = (type: "param" | "header") => {
+      if (type === "param") {
+        setHiddenParams((prev) =>
+          prev.filter((param) => param.id !== "api-key")
+        );
+      } else {
+        setHiddenHeaders((prev) =>
+          prev.filter((header) => header.id !== "api-key")
+        );
+      }
+    };
+
+    /**
+     * if api-key active and query params
+     * --- remove from header add into header
+     * else if api-key active and header
+     * --- add in header and remove from params
+     * else remove from both header and params
+     * **/
+    if (authType === "api-key" && apiKeyAuth.addTo === "query") {
+      removeHiddenData("header");
+      addHiddenData("param");
+    } else if (authType === "api-key" && apiKeyAuth.addTo === "header") {
+      removeHiddenData("param");
+      addHiddenData("header");
+    } else {
+      removeHiddenData("param");
+      removeHiddenData("header");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [apiKeyAuth, authType]);
+
   const handleChangeActiveMetaTab = useCallback((id: TActiveTabType) => {
     setActiveMetaTab(id);
   }, []);
@@ -1028,6 +1144,8 @@ const RequestResponseProvider = ({
         handleChangeRequestName,
         authType,
         handleChangeAuthType,
+        apiKeyAuth,
+        handleChangeAPIKey,
         isDownloadRequestWithBase64,
         handleIsDownloadRequestWithBase64,
         handleDownloadRequest,
@@ -1057,6 +1175,7 @@ const RequestResponseProvider = ({
         handleDeleteParam,
         handleAddNewParam,
         handleParamCheckToggle,
+        hiddenParams,
         headers,
         handleChangeHeader,
         handleDeleteHeader,
