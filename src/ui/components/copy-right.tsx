@@ -16,6 +16,17 @@ const CopyRight = memo(() => {
       // fallback if sessionStorage not available
       setIsVisible(true);
     }
+
+    const handleKeydown = (e: KeyboardEvent) => {
+      if (e.code === "Escape") {
+        sessionStorage.setItem("copy-right-hide", "true");
+        setIsVisible(false);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeydown);
+
+    return () => document.removeEventListener("keydown", handleKeydown);
   }, []);
 
   const handleClick = useCallback(() => {
