@@ -4,17 +4,18 @@ import BasicAuth from "@/components/app/request-panel/request/request/meta-data/
 import BearerToken from "@/components/app/request-panel/request/request/meta-data/authorization/content/bearer-token/BearerToken";
 import JWTBearer from "@/components/app/request-panel/request/request/meta-data/authorization/content/jwt-bearer/JWTBearer";
 import APIKey from "@/components/app/request-panel/request/request/meta-data/authorization/content/api-key/APIKey";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const AuthContent = () => {
   const { authType } = useRequestResponse();
   return (
-    <div className="w-full h-full pl-2">
+    <ScrollArea className="w-full h-full pl-2">
       {authType === "no-auth" && <NoAuth />}
       {authType === "basic-auth" && <BasicAuth />}
       {authType === "bearer-token" && <BearerToken />}
       {authType === "jwt-bearer" && <JWTBearer />}
       {authType === "api-key" && <APIKey />}
-    </div>
+    </ScrollArea>
   );
 };
 

@@ -37,6 +37,7 @@ const BodyCode = memo(() => {
   }, [rawData]);
 
   const handleChange = useCallback((value: string) => setCode(value), []);
+  
   const handleBlur = useCallback(
     () => handleChangeRawData(code),
     [code, handleChangeRawData]

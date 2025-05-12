@@ -1,5 +1,6 @@
 import type {
   APIPayloadBody,
+  JWTBearerAuthInterface,
   ResponseInterface,
 } from "@/context/request/RequestResponseProvider";
 
@@ -15,6 +16,12 @@ declare global {
 
       windowControls: (type: TWindowControl) => Promise<void>;
       isWindowMaximized: () => Promise<boolean>;
+
+      generateJWTToken: (
+        data: Omit<JWTBearerAuthInterface, "headerPrefix" | "algo"> & {
+          algorithm: string;
+        }
+      ) => Promise<string>;
     };
   }
 }

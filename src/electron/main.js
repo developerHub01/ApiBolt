@@ -5,6 +5,7 @@ import axios from "axios";
 import { initialCookieJar } from "./utils/cookieManager.js";
 import { registerCookieHandlers } from "./ipc/cookies.js";
 import { registerWindowHandlers } from "./ipc/windowControls.js";
+import { jsonWebTokenHandlers } from "./ipc/jsonWebToken.js";
 
 // browser style cookies holder by domain/path
 export const jar = initialCookieJar(undefined, { rejectPublicSuffixes: false });
@@ -21,6 +22,8 @@ app.whenReady().then(() => {
   registerCookieHandlers();
 
   registerWindowHandlers(mainWindow);
+
+  jsonWebTokenHandlers();
 });
 
 app.on("window-all-closed", () => {

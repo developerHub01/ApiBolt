@@ -17,7 +17,6 @@ import {
   parseUrlParams,
   requestDataSize,
   sendRequest,
-  // sendRequest,
 } from "@/utils";
 import statusData from "@/data/http_status_details.json";
 import type { TMetaTableType } from "@/context/request/RequestMetaTableProvider";
@@ -153,6 +152,12 @@ export interface BasicAuthInterface {
   username: string;
   password: string;
 }
+export interface JWTBearerAuthInterface {
+  algo: string;
+  secret: string;
+  payload: string;
+  headerPrefix: string;
+}
 
 interface RequestResponseContext {
   isResponseCollapsed: boolean;
@@ -167,6 +172,11 @@ interface RequestResponseContext {
   handleChangeBasicAuth: (ey: "username" | "password", value: string) => void;
   bearerTokenAuth: string;
   handleChangeBearerTokenAuth: (token: string) => void;
+  jwtBearerAuth: JWTBearerAuthInterface;
+  handleChangeJWTBearerAuth: (
+    key: "algo" | "secret" | "payload" | "headerPrefix",
+    value: string
+  ) => void;
   isDownloadRequestWithBase64: boolean;
   handleIsDownloadRequestWithBase64: (value: boolean) => void;
   handleDownloadRequest: () => Promise<void>;
@@ -603,6 +613,19 @@ const RequestResponseProvider = ({
    */
   const [bearerTokenAuth, setBearerTokenAuth] = useState<string>("");
 
+  /**
+   * convert
+   * Authorization: `Bearer ${bearerToken}`
+   * based on the data
+   * when to request the API
+   */
+  const [jwtBearerAuth, setJwtBearerAuth] = useState<JWTBearerAuthInterface>({
+    algo: "HS256",
+    secret: "",
+    payload: JSON.stringify({}),
+    headerPrefix: "Bearer",
+  });
+
   const previousFinalUrlRef = useRef<string>("");
 
   const {
@@ -687,6 +710,16 @@ const RequestResponseProvider = ({
   const handleChangeBearerTokenAuth = useCallback((token: string) => {
     setBearerTokenAuth(token);
   }, []);
+
+  const handleChangeJWTBearerAuth = useCallback(
+    (key: "algo" | "secret" | "payload" | "headerPrefix", value: string) => {
+      setJwtBearerAuth((prev) => ({
+        ...prev,
+        [key]: value,
+      }));
+    },
+    []
+  );
 
   const handleIsDownloadRequestWithBase64 = useCallback(
     (value: boolean) => setIsDownloadRequestWithBase64(value),
@@ -995,50 +1028,52 @@ const RequestResponseProvider = ({
       payload: Record<string, string> = {}
     ) => {
       if (type === "param") {
-        if (hiddenParams.find((param) => param.id === keyName)) {
+        if (hiddenParams.some((param) => param.id === keyName)) {
           setHiddenParams((prev) =>
-            prev.map((param) => {
-              if (param.id === keyName) {
-                param = {
-                  ...param,
-                  ...payload,
-                };
-              }
-              return param;
-            })
+            prev.map((param) =>
+              param.id === keyName ? { ...param, ...payload } : param
+            )
           );
         } else {
-          setHiddenParams((prev) => [
-            {
-              ...generateNextHiddenHeaderOrParam(),
-              id: keyName,
-              ...payload,
-            },
-            ...prev,
-          ]);
+          setHiddenParams((prev) => {
+            const filtered = prev.filter((h) => h.id !== keyName);
+            return [
+              {
+                ...generateNextHiddenHeaderOrParam(),
+                id: keyName,
+                ...payload,
+              },
+              ...filtered,
+            ];
+          });
         }
       } else {
-        if (hiddenHeaders.find((header) => header.id === keyName)) {
+        console.log({ keyName });
+        console.log({ hiddenHeaders });
+        console.log(hiddenHeaders.some((header) => header.id === keyName));
+        console.log(
+          hiddenHeaders.map((header) =>
+            header.id === keyName ? { ...header, ...payload } : header
+          )
+        );
+        if (hiddenHeaders.some((header) => header.id === keyName)) {
           setHiddenHeaders((prev) =>
-            prev.map((header) => {
-              if (header.id === keyName) {
-                header = {
-                  ...header,
-                  ...payload,
-                };
-              }
-              return header;
-            })
+            prev.map((header) =>
+              header.id === keyName ? { ...header, ...payload } : header
+            )
           );
         } else {
-          setHiddenHeaders((prev) => [
-            {
-              ...generateNextHiddenHeaderOrParam(),
-              id: keyName,
-              ...payload,
-            },
-            ...prev,
-          ]);
+          setHiddenHeaders((prev) => {
+            const filtered = prev.filter((h) => h.id !== keyName);
+            return [
+              {
+                ...generateNextHiddenHeaderOrParam(),
+                id: keyName,
+                ...payload,
+              },
+              ...filtered,
+            ];
+          });
         }
       }
     };
@@ -1066,6 +1101,26 @@ const RequestResponseProvider = ({
       }
     };
 
+    /* if jwt-bearer */
+    const handleJWTBearer = async () => {
+      try {
+        removeHiddenData("header", getRestOfAuthType("jwt-bearer"));
+        const token = await window.electronAPI.generateJWTToken({
+          payload: jwtBearerAuth.payload,
+          secret: jwtBearerAuth.secret,
+          algorithm: jwtBearerAuth.algo,
+        });
+
+        addHiddenData("header", "jwt-bearer", {
+          key: "Authorization",
+          value: `${jwtBearerAuth.headerPrefix} ${token}`,
+        });
+      } catch (error) {
+        removeHiddenData("header", getRestOfAuthType());
+        console.log(error);
+      }
+    };
+
     /**
      * if api-key active and query params
      * --- remove from header add into header
@@ -1087,24 +1142,29 @@ const RequestResponseProvider = ({
       });
       removeHiddenData("header", getRestOfAuthType("api-key"));
     } else if (authType === "basic-auth") {
+      removeHiddenData("header", getRestOfAuthType("basic-auth"));
       const token = btoa(`${basicAuth.username}:${basicAuth.password}`);
       addHiddenData("header", "basic-auth", {
         key: "Authorization",
         value: `Basic ${token}`,
       });
-      removeHiddenData("header", getRestOfAuthType("basic-auth"));
     } else if (authType === "bearer-token") {
+      removeHiddenData("header", getRestOfAuthType("bearer-token"));
       addHiddenData("header", "bearer-token", {
         key: "Authorization",
         value: `Bearer ${bearerTokenAuth}`,
       });
-      removeHiddenData("header", getRestOfAuthType("bearer-token"));
+    } else if (authType === "jwt-bearer") {
+      (async () => {
+        await handleJWTBearer();
+      })();
     } else {
       removeHiddenData("param", "api-key");
       removeHiddenData("header", getRestOfAuthType());
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [apiKeyAuth, basicAuth, bearerTokenAuth, authType]);
+  }, [apiKeyAuth, basicAuth, bearerTokenAuth, jwtBearerAuth, authType]);
 
   const handleChangeActiveMetaTab = useCallback((id: TActiveTabType) => {
     setActiveMetaTab(id);
@@ -1248,6 +1308,8 @@ const RequestResponseProvider = ({
         handleChangeBasicAuth,
         bearerTokenAuth,
         handleChangeBearerTokenAuth,
+        jwtBearerAuth,
+        handleChangeJWTBearerAuth,
         isDownloadRequestWithBase64,
         handleIsDownloadRequestWithBase64,
         handleDownloadRequest,

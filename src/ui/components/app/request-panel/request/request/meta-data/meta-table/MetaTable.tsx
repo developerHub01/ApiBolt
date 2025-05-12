@@ -14,7 +14,12 @@ interface MetaTableInterface {
   showHiddenData?: boolean;
 }
 
-const passwordTypeKeyList = ["api-key", "basic-auth", "bearer-token"];
+const passwordTypeKeyList = [
+  "api-key",
+  "basic-auth",
+  "bearer-token",
+  "jwt-bearer",
+];
 
 const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
   const {
@@ -49,6 +54,8 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
         ? { inputType: "password" }
         : {}),
     }));
+
+  console.log(data);
 
   return (
     <MetaTableWrapper header={<MetaTableHeader type={type} />}>

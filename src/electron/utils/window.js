@@ -25,7 +25,7 @@ export const createWindow = () => {
 
   win.loadFile(path.join(app.getAppPath(), "dist-react", "index.html"));
 
-  // if (isDev) win.webContents.openDevTools();
+  if (isDev) win.webContents.openDevTools();
 
   return win;
 };
