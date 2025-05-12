@@ -18,6 +18,18 @@ const ApiUrl = memo(() => {
     setUrl(apiUrl);
   }, [apiUrl]);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.code === "Enter") handleRequestSend();
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => document.removeEventListener("keydown", handleKeyDown);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleApiUrlChange = (value: string) => setUrl(value);
 
   const handleApiUrlFocus = () => {
