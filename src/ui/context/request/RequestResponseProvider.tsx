@@ -21,7 +21,7 @@ import {
 } from "@/utils";
 import statusData from "@/data/http_status_details.json";
 import type { TMetaTableType } from "@/context/request/RequestMetaTableProvider";
-import type { TContentType } from "@/types";
+import type { TAuthType, TContentType } from "@/types";
 import { isElectron } from "@/utils/electron";
 
 const generateNewMetaDataItem = (type?: TMetaTableType) => ({
@@ -149,6 +149,8 @@ interface RequestResponseContext {
   handleToggleCollapse: (size?: number) => void;
   requestName: string;
   handleChangeRequestName: (name: string) => void;
+  authType: TAuthType;
+  handleChangeAuthType: (authType: TAuthType) => void;
   isDownloadRequestWithBase64: boolean;
   handleIsDownloadRequestWithBase64: (value: boolean) => void;
   handleDownloadRequest: () => Promise<void>;
@@ -526,6 +528,9 @@ const RequestResponseProvider = ({
     useState<boolean>(false);
 
   const [shouldFetch, setShouldFetch] = useState<boolean>(false);
+
+  const [authType, setAuthType] = useState<TAuthType>("no-auth");
+
   const previousFinalUrlRef = useRef<string>("");
 
   const {
@@ -581,6 +586,10 @@ const RequestResponseProvider = ({
 
   const handleChangeRequestName = useCallback((name: string) => {
     setRequestname(name);
+  }, []);
+
+  const handleChangeAuthType = useCallback((authType: TAuthType) => {
+    setAuthType(authType);
   }, []);
 
   const handleIsDownloadRequestWithBase64 = useCallback(
@@ -1017,6 +1026,8 @@ const RequestResponseProvider = ({
         handleToggleCollapse,
         requestName,
         handleChangeRequestName,
+        authType,
+        handleChangeAuthType,
         isDownloadRequestWithBase64,
         handleIsDownloadRequestWithBase64,
         handleDownloadRequest,

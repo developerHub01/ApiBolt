@@ -21,3 +21,9 @@ declare global {
 
 export type TWindowControl = "minimize" | "maximize" | "unmaximize" | "close";
 export type TContentType = "text" | "html" | "xml" | "json" | "javascript";
+export type TAuthType =
+  | "no-auth"
+  | "basic-auth"
+  | "bearer-token"
+  | "jwt-bearer"
+  | "api-key";
