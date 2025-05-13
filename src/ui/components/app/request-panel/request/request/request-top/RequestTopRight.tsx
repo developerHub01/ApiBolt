@@ -27,7 +27,7 @@ const RequestTopRight = () => {
     handleImportRequest,
   } = useRequestResponse();
 
-  const handleDownload = useCallback(async () => {
+  const handleExport = useCallback(async () => {
     await handleDownloadRequest();
 
     toast("Successfully downloaded!!", {
@@ -36,9 +36,7 @@ const RequestTopRight = () => {
   }, [requestName, handleDownloadRequest]);
 
   const handleImport = useCallback(
-    async (e: ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
-
+    async (file: File | undefined) => {
       if (!file) return toast("Please select a valid JSON file.");
       await handleImportRequest(file, (message) => {
         toast(message);
@@ -49,20 +47,6 @@ const RequestTopRight = () => {
 
   return (
     <div className="flex items-center">
-      <div>
-        <label htmlFor="import-request" className="cursor-pointer">
-          <input
-            type="file"
-            id="import-request"
-            accept="application/json"
-            onChange={handleImport}
-            hidden
-          />
-          <Button variant={"outline"} className="mr-1 pointer-events-none">
-            <ImportIcon /> import
-          </Button>
-        </label>
-      </div>
       <Button variant={"outline"} className="rounded-r-none">
         <SaveIcon /> Save
       </Button>
@@ -80,46 +64,95 @@ const RequestTopRight = () => {
           <Button variant={"ghost"}>
             <SaveIcon /> Save As
           </Button>
-          <div className="flex items-center gap-1">
-            <Button variant={"ghost"} onClick={handleDownload}>
-              <DownloadIcon /> Download
-            </Button>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="ghost" size={"iconXs"} className="mr-2">
-                  <ThreeDotIcon />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent
-                className="w-60 p-2 flex flex-col gap-1"
-                side="bottom"
-                align="end"
-              >
-                <div className="w-full flex items-center gap-2">
-                  <Label
-                    htmlFor="terms"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    <Checkbox
-                      id="terms"
-                      checked={isDownloadRequestWithBase64}
-                      onCheckedChange={handleIsDownloadRequestWithBase64}
-                    />
-                    <p>Also download Base64</p>
-                  </Label>
-                </div>
-                <Warning
-                  label="Base64 may slow download"
-                  className="items-center"
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
+          <ImportButton handleImport={handleImport} />
+          <ExportButton
+            handleExport={handleExport}
+            isChecked={isDownloadRequestWithBase64}
+            handleChangeCheck={handleIsDownloadRequestWithBase64}
+          />
         </PopoverContent>
       </Popover>
     </div>
   );
 };
 RequestTopRight.displayName = "Request top right";
+
+interface ExportButtonProps {
+  handleExport: () => void;
+  isChecked: boolean;
+  handleChangeCheck: (value: boolean) => void;
+}
+
+const ExportButton = ({
+  handleExport,
+  isChecked,
+  handleChangeCheck,
+}: ExportButtonProps) => {
+  return (
+    <div className="flex items-center gap-1">
+      <Button variant={"ghost"} onClick={handleExport}>
+        <DownloadIcon /> Export
+      </Button>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button variant="ghost" size={"iconXs"} className="mr-2">
+            <ThreeDotIcon />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent
+          className="w-60 p-2 flex flex-col gap-1"
+          side="bottom"
+          align="end"
+        >
+          <div className="w-full flex items-center gap-2">
+            <Label
+              htmlFor="terms"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              <Checkbox
+                id="terms"
+                checked={isChecked}
+                onCheckedChange={handleChangeCheck}
+              />
+              <p>Also download Base64</p>
+            </Label>
+          </div>
+          <Warning label="Base64 may slow download" className="items-center" />
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+};
+
+interface ImportButtonProps {
+  handleImport: (file: File | undefined) => void;
+}
+
+const ImportButton = ({ handleImport }: ImportButtonProps) => {
+  const handleChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      handleImport(e.target.files?.[0]);
+    },
+    [handleImport]
+  );
+
+  return (
+    <label htmlFor="import-request" className="cursor-pointer">
+      <input
+        type="file"
+        id="import-request"
+        accept="application/json"
+        onChange={handleChange}
+        hidden
+      />
+      <Button
+        variant={"ghost"}
+        className="pointer-events-none w-full justify-start"
+      >
+        <ImportIcon /> import
+      </Button>
+    </label>
+  );
+};
 
 export default RequestTopRight;
