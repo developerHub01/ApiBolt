@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 import { cn } from "@/lib/utils";
-import { Eye as ShowIcon, EyeClosed as HideIcon } from "lucide-react";
+import { Eye as ShowIcon, EyeOff as HideIcon } from "lucide-react";
 
 interface MetaItemInputProps
   extends Omit<

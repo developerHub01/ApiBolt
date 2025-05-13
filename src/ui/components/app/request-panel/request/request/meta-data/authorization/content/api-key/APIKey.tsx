@@ -35,6 +35,7 @@ const APIKey = () => {
         <AuthContentInput
           id="api-key"
           placeholder="Value"
+          type="password"
           value={apiKeyAuth.value}
           onBlur={(value) => handleChangeAPIKey("value", value)}
         />

@@ -16,6 +16,7 @@ const BearerToken = () => {
         <AuthContentInput
           id="bearer-token"
           placeholder="Token"
+          type="password"
           value={bearerTokenAuth}
           onBlur={handleChangeBearerTokenAuth}
           className="w-full"

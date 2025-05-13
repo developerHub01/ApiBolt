@@ -47,6 +47,7 @@ const JWTBearer = () => {
         <AuthContentInput
           id="api-key"
           className="w-full"
+          type="password"
           value={jwtBearerAuth.secret}
           onBlur={(value) => handleChangeJWTBearerAuth("secret", value)}
         />

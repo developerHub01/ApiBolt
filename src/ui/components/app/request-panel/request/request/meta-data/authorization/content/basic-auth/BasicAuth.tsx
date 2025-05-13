@@ -28,6 +28,7 @@ const BasicAuth = () => {
         <AuthContentInput
           id="basic-auth-password"
           placeholder="Password"
+          type="password"
           value={basicAuth.password}
           onBlur={(value) => handleChangeBasicAuth("password", value)}
           className="w-full"
