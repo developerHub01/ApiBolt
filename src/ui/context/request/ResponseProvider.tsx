@@ -1,4 +1,10 @@
-import React, { createContext, useCallback, useContext, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 export type TResponseTab = "raw" | "preview";
 
@@ -26,14 +32,27 @@ export const useResponse = () => {
   return context;
 };
 
+const localStorageResponseActiveTabKey = "response-active-tab";
+
 interface ResponseProviderProps {
   children: React.ReactNode;
 }
 
 const ResponseProvider = ({ children }: ResponseProviderProps) => {
-  const [activeMetaTab, setActiveMetaTab] = useState<string>("body");
+  const [activeMetaTab, setActiveMetaTab] = useState<string>(
+    () => localStorage.getItem(localStorageResponseActiveTabKey) ?? "body"
+  );
   const [responseTab, setResponseTab] = useState<TResponseTab>("raw");
   const [responseCodeWrap, setResponseCodeWrap] = useState<boolean>(false);
+
+  useEffect(() => {
+    setActiveMetaTab(
+      localStorage.getItem(localStorageResponseActiveTabKey) ?? "body"
+    );
+  }, []);
+  useEffect(() => {
+    localStorage.setItem(localStorageResponseActiveTabKey, activeMetaTab);
+  }, [activeMetaTab]);
 
   const handleChangeActiveMetaTab = useCallback(
     (id: string) => {

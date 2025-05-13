@@ -420,6 +420,8 @@ export const AuthTypeList = [
   "api-key",
 ];
 
+const localStorageRequestActiveTabKey = "request-active-tab";
+
 const getRestOfAuthType = (excludes?: string | Array<string>) => {
   if (!excludes) return AuthTypeList;
 
@@ -548,7 +550,11 @@ const RequestResponseProvider = ({
 }: RequestResponseProviderProps) => {
   const [requestName, setRequestname] = useState<string>("Request");
   const [isResponseCollapsed, setIsResponseCollapsed] = useState<boolean>(true);
-  const [activeMetaTab, setActiveMetaTab] = useState<TActiveTabType>("params");
+  const [activeMetaTab, setActiveMetaTab] = useState<TActiveTabType>(
+    () =>
+      (localStorage.getItem(localStorageRequestActiveTabKey) ??
+        "params") as TActiveTabType
+  );
   const [selectedMethod, setSelectedMethod] = useState<THTTPMethods>("get");
   const [isApiUrlError, setIsApiUrlError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -665,6 +671,15 @@ const RequestResponseProvider = ({
     setXWWWFormUrlencodedData,
     generateNewMetaDataItem
   );
+
+  useEffect(() => {
+    setActiveMetaTab(
+      localStorage.getItem(localStorageRequestActiveTabKey) as TActiveTabType
+    );
+  }, []);
+  useEffect(() => {
+    localStorage.setItem(localStorageRequestActiveTabKey, activeMetaTab);
+  }, [activeMetaTab]);
 
   const handleToggleCollapse = useCallback(
     (size?: number) => {
