@@ -12,6 +12,7 @@ import {
   Save as SaveIcon,
   EllipsisVertical as ThreeDotIcon,
   FileDown as ImportIcon,
+  BrushCleaning as ClearIcon,
 } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
@@ -25,6 +26,7 @@ const RequestTopRight = () => {
     handleIsDownloadRequestWithBase64,
     handleDownloadRequest,
     handleImportRequest,
+    handleClearRequestResponse,
   } = useRequestResponse();
 
   const handleExport = useCallback(async () => {
@@ -57,13 +59,16 @@ const RequestTopRight = () => {
           </Button>
         </PopoverTrigger>
         <PopoverContent
-          className="p-0 w-fit flex flex-col [&>button]:justify-start"
+          className="p-0 w-fit min-w-40 flex flex-col [&>button]:justify-start"
           side="bottom"
           align="end"
         >
           <Button variant={"ghost"}>
             <SaveIcon /> Save As
           </Button>
+          <ClearRequestResponseButton
+            handleClear={handleClearRequestResponse}
+          />
           <ImportButton handleImport={handleImport} />
           <ExportButton
             handleExport={handleExport}
@@ -89,8 +94,8 @@ const ExportButton = ({
   handleChangeCheck,
 }: ExportButtonProps) => {
   return (
-    <div className="flex items-center gap-1">
-      <Button variant={"ghost"} onClick={handleExport}>
+    <div className="w-full flex justify-between items-center gap-1">
+      <Button variant={"ghost"} onClick={handleExport} className="flex-1 justify-start">
         <DownloadIcon /> Export
       </Button>
       <Popover>
@@ -152,6 +157,20 @@ const ImportButton = ({ handleImport }: ImportButtonProps) => {
         <ImportIcon /> import
       </Button>
     </label>
+  );
+};
+
+interface ClearRequestResponseButtonProps {
+  handleClear: () => void;
+}
+
+const ClearRequestResponseButton = ({
+  handleClear,
+}: ClearRequestResponseButtonProps) => {
+  return (
+    <Button variant={"ghost"} onClick={handleClear}>
+      <ClearIcon /> Clear All
+    </Button>
   );
 };
 

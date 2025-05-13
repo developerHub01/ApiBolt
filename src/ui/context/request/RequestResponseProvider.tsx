@@ -165,6 +165,7 @@ interface RequestResponseContext {
   handleToggleCollapse: (size?: number) => void;
   requestName: string;
   handleChangeRequestName: (name: string) => void;
+  handleClearRequestResponse: () => void;
   authType: TAuthType;
   handleChangeAuthType: (authType: TAuthType) => void;
   apiKeyAuth: APIKeyInterface;
@@ -697,6 +698,51 @@ const RequestResponseProvider = ({
 
   const handleChangeRequestName = useCallback((name: string) => {
     setRequestname(name);
+  }, []);
+
+  const handleClearRequestResponse = useCallback(() => {
+    setIsLoading(false);
+    setIsApiUrlError(false);
+    setIsResposneError(false);
+    setSelectedMethod("get");
+    setApiUrl("");
+    setParams([]);
+    setHeaders([]);
+    setAuthType("no-auth");
+    setBasicAuth({
+      username: "",
+      password: "",
+    });
+    setBearerTokenAuth("");
+    setJwtBearerAuth({
+      algo: "HS256",
+      secret: "",
+      payload: "",
+      headerPrefix: "Bearer",
+      addTo: "header",
+    });
+    setApiKeyAuth({
+      key: "",
+      value: "",
+      addTo: "header",
+    });
+    setRequestBodyType("none");
+    setRawData("");
+    setRawRequestBodyType("json");
+    setFormData([]);
+    setBinaryData(null);
+    setXWWWFormUrlencodedData([]);
+    setResponse(null);
+    setRequestSize({
+      header: 0,
+      body: 0,
+    });
+    setResponseSize({
+      header: 0,
+      body: 0,
+    });
+    setHiddenParams([]);
+    setHiddenHeaders(initialHiddenHeaderData());
   }, []);
 
   const handleChangeAuthType = useCallback((authType: TAuthType) => {
@@ -1291,6 +1337,7 @@ const RequestResponseProvider = ({
         handleToggleCollapse,
         requestName,
         handleChangeRequestName,
+        handleClearRequestResponse,
         authType,
         handleChangeAuthType,
         apiKeyAuth,

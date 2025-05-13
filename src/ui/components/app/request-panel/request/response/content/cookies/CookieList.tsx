@@ -28,8 +28,6 @@ const CookieList = ({ cookies }: CookieListProps) => {
     [cookies]
   );
 
-  console.log({ colList });
-
   return (
     <Table className="w-full h-full border select-text">
       <TableHeader className="[&>tr>th]:border-r [&>tr>th]:last:border-r-0">
