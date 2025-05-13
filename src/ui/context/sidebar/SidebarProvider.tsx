@@ -69,7 +69,7 @@ const SidebarProvider = ({ children }: SidebarProviderProps) => {
   const handleToggleSidebar = useCallback(() => {
     let currentActiveTab: TSidebarTab = null;
 
-    if (!activeTab) currentActiveTab = lastActiveTab;
+    if (!activeTab) currentActiveTab = lastActiveTab ?? "collections";
 
     setLastActiveTab(activeTab);
     setActiveTab(currentActiveTab);
