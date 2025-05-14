@@ -11,6 +11,8 @@ import FolderPage from "@/pages/app/(request-panel)/folder/[id]/Page";
 import RequestLayout from "@/pages/app/(request-panel)/request/[id]/Layout";
 import RequestPage from "@/pages/app/(request-panel)/request/[id]/Page";
 import { isElectron } from "@/utils/electron";
+import EnvironmentLayout from "@/pages/app/(request-panel)/environment/[id]/Layout";
+import EnvironmentPage from "@/pages/app/(request-panel)/environment/[id]/Page";
 
 const routes = [
   {
@@ -43,6 +45,16 @@ const routes = [
               {
                 path: "",
                 element: <RequestPage />,
+              },
+            ],
+          },
+          {
+            path: "environment/:id",
+            element: <EnvironmentLayout />,
+            children: [
+              {
+                path: "",
+                element: <EnvironmentPage />,
               },
             ],
           },
