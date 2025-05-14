@@ -102,6 +102,14 @@ export interface ResponseFileDataInterface {
   method: THTTPMethods;
   params: Array<ParamInterface>;
   headers: Array<ParamInterface>;
+  authorization: {
+    type: TAuthType;
+    data?:
+      | BasicAuthInterface
+      | TBearerToken
+      | JWTBearerAuthInterface
+      | APIKeyInterface;
+  };
   body: {
     selected: TRequestBodyType;
     rawData: string;
@@ -148,6 +156,7 @@ export interface APIKeyInterface {
   value: string;
   addTo: "header" | "query";
 }
+export type TBearerToken = string;
 export interface BasicAuthInterface {
   username: string;
   password: string;
@@ -618,7 +627,7 @@ const RequestResponseProvider = ({
    * Authorization: `Bearer ${bearerToken}`
    * when to request the API
    */
-  const [bearerTokenAuth, setBearerTokenAuth] = useState<string>("");
+  const [bearerTokenAuth, setBearerTokenAuth] = useState<TBearerToken>("");
 
   /**
    * convert
@@ -816,12 +825,27 @@ const RequestResponseProvider = ({
         })
       );
 
+    const authorizationData =
+      authType === "api-key"
+        ? apiKeyAuth
+        : authType === "basic-auth"
+          ? basicAuth
+          : authType === "bearer-token"
+            ? bearerTokenAuth
+            : authType === "jwt-bearer"
+              ? jwtBearerAuth
+              : undefined;
+
     const downloadData: ResponseFileDataInterface = {
       name: requestName,
       url: apiUrl,
       method: selectedMethod,
       params,
       headers,
+      authorization: {
+        type: authType,
+        data: authorizationData,
+      },
       body: {
         selected: requestBodyType,
         rawData,
@@ -860,6 +884,11 @@ const RequestResponseProvider = ({
     selectedMethod,
     params,
     headers,
+    authType,
+    basicAuth,
+    bearerTokenAuth,
+    jwtBearerAuth,
+    apiKeyAuth,
     requestBodyType,
     rawData,
     formData,
@@ -919,6 +948,9 @@ const RequestResponseProvider = ({
             )
           : null;
 
+        const authorizationType = jsonData.authorization.type;
+        const authorizationData = jsonData.authorization.data;
+
         setRequestname(jsonData.name);
         setSelectedMethod(jsonData.method);
         setParams(jsonData.params);
@@ -933,6 +965,26 @@ const RequestResponseProvider = ({
         setHeaders(jsonData.headers);
         setRequestSize(jsonData.size.requestSize);
         setResponseSize(jsonData.size.responseSize);
+        setAuthType(authorizationType);
+
+        switch (authorizationType as TAuthType) {
+          case "api-key": {
+            setApiKeyAuth(authorizationData as APIKeyInterface);
+            break;
+          }
+          case "basic-auth": {
+            setBasicAuth(authorizationData as BasicAuthInterface);
+            break;
+          }
+          case "bearer-token": {
+            setBearerTokenAuth(authorizationData as TBearerToken);
+            break;
+          }
+          case "jwt-bearer": {
+            setJwtBearerAuth(authorizationData as JWTBearerAuthInterface);
+            break;
+          }
+        }
 
         if (cb) cb("Successfully imported");
       } catch {
