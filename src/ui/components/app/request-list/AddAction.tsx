@@ -1,14 +1,22 @@
 import { Button } from "@/components/ui/button";
 import { Plus as PlusIcon } from "lucide-react";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { v4 as uuidv4 } from "uuid";
 
-const actionsList = [
+type TAction = "blank_collection" | "single_request" | "rest_api_basics";
+
+const actionsList: Array<{
+  id: TAction;
+  label: string;
+}> = [
   {
-    id: "clank_collection",
+    id: "blank_collection",
     label: "Blank Collection",
   },
   {
@@ -22,25 +30,58 @@ const actionsList = [
 ];
 
 const AddAction = () => {
+  const handleAction = (id: TAction) => {
+    console.log({ id });
+
+    switch (id) {
+      case "single_request":
+        return createSingleRequest();
+      case "blank_collection":
+        return createCollection();
+    }
+  };
+
+  const createSingleRequest = async () => {
+    const payload = {
+      id: uuidv4(),
+      name: "Request",
+      method: "get",
+    };
+
+    await window.electronAPIDB.addBoltCore(payload);
+  };
+
+  const createCollection = async () => {
+    const payload = {
+      id: uuidv4(),
+      name: "Collection",
+      children: [],
+    };
+
+    await window.electronAPIDB.addBoltCore(payload);
+  };
+
   return (
-    <Popover>
-      <PopoverTrigger asChild>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
         <Button size={"iconSm"}>
           <PlusIcon />
         </Button>
-      </PopoverTrigger>
-      <PopoverContent
-        className="w-40 p-0 flex flex-col [&>button]:rounded-none [&>button]:justify-start"
-        align="start"
-        sideOffset={10}
-      >
-        {actionsList.map(({ id, label }) => (
-          <Button key={id} variant={"ghost"}>
-            {label}
-          </Button>
-        ))}
-      </PopoverContent>
-    </Popover>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-40" align="start" sideOffset={10}>
+        <DropdownMenuGroup>
+          {actionsList.map(({ id, label }) => (
+            <DropdownMenuItem
+              key={id}
+              className="cursor-pointer"
+              onClick={() => handleAction(id)}
+            >
+              {label}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 

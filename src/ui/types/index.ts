@@ -26,7 +26,19 @@ declare global {
         }
       ) => Promise<string>;
     };
+    electronAPIDB: {
+      addBoltCore: (payload: BoltCoreInterface) => Promise<unknown>;
+      getAllBoltCore: () => Promise<unknown>;
+    };
   }
+}
+
+export interface BoltCoreInterface {
+  id: string;
+  name: string;
+  method?: string;
+  children?: Array<string>; // if children have then it is a folder
+  parent?: string; // if parent dont have then root level
 }
 
 export type TWindowControl = "minimize" | "maximize" | "unmaximize" | "close";

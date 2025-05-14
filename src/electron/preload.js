@@ -24,3 +24,16 @@ contextBridge.exposeInMainWorld("electronAPI", {
 
   generateJWTToken: (data) => ipcRenderer.invoke("generateJWTToken", data),
 });
+
+contextBridge.exposeInMainWorld("electronAPIDB", {
+  addBoltCore: async (payload) => {
+    if (typeof payload !== "object") return;
+
+    payload._id = payload.id;
+    delete payload.id;
+    return await ipcRenderer.invoke("addBoltCore", payload);
+  },
+  getAllBoltCore: async () => {
+    return await ipcRenderer.invoke("getAllBoltCore");
+  },
+});

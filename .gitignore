@@ -15,6 +15,7 @@ dist-react
 .env
 cookies.json
 test
+boltcore
 out
 
 # Editor directories and files

@@ -24,7 +24,6 @@
   "description": "An REST API client",
   "license": "MIT",
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.1",
     "@babel/parser": "^7.27.2",
     "@codemirror/lang-html": "^6.4.9",
     "@codemirror/lang-javascript": "^6.2.3",
@@ -51,10 +50,12 @@
     "axios-cookiejar-support": "^6.0.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "electron-squirrel-startup": "^1.0.1",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.507.0",
     "motion": "^12.10.3",
     "next-themes": "^0.4.6",
+    "pouchdb": "^9.0.0",
     "prettier": "^3.5.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
@@ -69,6 +70,14 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
+    "@electron-forge/cli": "^7.8.1",
+    "@electron-forge/maker-deb": "^7.8.1",
+    "@electron-forge/maker-rpm": "^7.8.1",
+    "@electron-forge/maker-squirrel": "^7.8.1",
+    "@electron-forge/maker-zip": "^7.8.1",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.8.1",
+    "@electron-forge/plugin-fuses": "^7.8.1",
+    "@electron/fuses": "^1.8.0",
     "@eslint/js": "^9.25.0",
     "@types/node": "^22.15.14",
     "@types/react": "^19.1.2",
@@ -83,15 +92,7 @@
     "tw-animate-css": "^1.2.9",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.30.1",
-    "vite": "^6.3.5",
-    "@electron-forge/cli": "^7.8.1",
-    "@electron-forge/maker-deb": "^7.8.1",
-    "@electron-forge/maker-rpm": "^7.8.1",
-    "@electron-forge/maker-squirrel": "^7.8.1",
-    "@electron-forge/maker-zip": "^7.8.1",
-    "@electron-forge/plugin-auto-unpack-natives": "^7.8.1",
-    "@electron-forge/plugin-fuses": "^7.8.1",
-    "@electron/fuses": "^1.8.0"
+    "vite": "^6.3.5"
   },
   "config": {
     "forge": {

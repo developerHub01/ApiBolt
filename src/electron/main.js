@@ -7,6 +7,9 @@ import { initialCookieJar } from "./utils/cookieManager.js";
 import { registerCookieHandlers } from "./ipc/cookies.js";
 import { registerWindowHandlers } from "./ipc/windowControls.js";
 import { jsonWebTokenHandlers } from "./ipc/jsonWebToken.js";
+import "./db/boltcoreDB.js";
+import "./ipc/boltCoreDB.js";
+import { boltCoreDBHandlers } from "./ipc/boltCoreDB.js";
 
 // browser style cookies holder by domain/path
 export const jar = initialCookieJar(undefined, { rejectPublicSuffixes: false });
@@ -30,6 +33,8 @@ app.whenReady().then(() => {
   registerWindowHandlers(mainWindow);
 
   jsonWebTokenHandlers();
+
+  boltCoreDBHandlers();
 });
 
 app.on("window-all-closed", () => {
