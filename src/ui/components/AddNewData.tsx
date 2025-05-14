@@ -3,15 +3,15 @@ import { Button } from "@/components/ui/button";
 import { Plus as AddIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-interface AddNewProps {
+interface AddNewDataProps {
   label?: string;
   onClick: () => void;
   className?: string;
   [key: string]: unknown;
 }
 
-const AddNew = memo(
-  ({ label = "", onClick, className, ...props }: AddNewProps) => {
+const AddNewData = memo(
+  ({ label = "", onClick, className, ...props }: AddNewDataProps) => {
     return (
       <Button
         variant={"secondary"}
@@ -26,6 +26,6 @@ const AddNew = memo(
     );
   }
 );
-AddNew.displayName = "Add new";
+AddNewData.displayName = "Add New Data";
 
-export default AddNew;
+export default AddNewData;

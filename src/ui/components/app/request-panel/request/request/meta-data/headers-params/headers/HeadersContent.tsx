@@ -1,10 +1,10 @@
 import { useRequestResponse } from "@/context/request/RequestResponseProvider";
 import MetaDataWrapper from "@/components/app/request-panel/request/request/meta-data/meta-table/MetaDataWrapper";
 import MetaTable from "@/components/app/request-panel/request/request/meta-data/meta-table/MetaTable";
-import AddNew from "@/components/app/request-panel/request/request/meta-data/meta-table/AddNew";
 import { useRequestHeader } from "@/context/request/RequestHeaderProvider";
 import { Eye as ShowIcon, EyeOff as HideIcon } from "lucide-react";
 import { useRequestMetaTable } from "@/context/request/RequestMetaTableProvider";
+import AddNewData from "@/components/AddNewData";
 
 const HeadersContent = () => {
   const { handleAddNewHeader } = useRequestResponse();
@@ -13,7 +13,7 @@ const HeadersContent = () => {
   return (
     <MetaDataWrapper label="Headers" labelPrefix={<LabelPrefix />}>
       <MetaTable showHiddenData={showHiddenHeader} />
-      <AddNew onClick={handleAddNewHeader} label="Add New Headers" />
+      <AddNewData onClick={handleAddNewHeader} label="Add New Headers" />
     </MetaDataWrapper>
   );
 };

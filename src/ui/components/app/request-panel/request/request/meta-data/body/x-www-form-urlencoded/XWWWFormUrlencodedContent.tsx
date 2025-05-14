@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { useRequestMetaTable } from "@/context/request/RequestMetaTableProvider";
 import MetaTable from "@/components/app/request-panel/request/request/meta-data/meta-table/MetaTable";
-import AddNew from "@/components/app/request-panel/request/request/meta-data/meta-table/AddNew";
+import AddNewData from "@/components/AddNewData";
 
 const XWWWFormUrlencodedContent = memo(() => {
   const { handleAddNewMetaData } = useRequestMetaTable();
@@ -9,7 +9,7 @@ const XWWWFormUrlencodedContent = memo(() => {
   return (
     <>
       <MetaTable />
-      <AddNew
+      <AddNewData
         onClick={() => handleAddNewMetaData("x-www-form-urlencoded")}
         label="Add Form Data"
       />

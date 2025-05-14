@@ -1,8 +1,8 @@
 import { memo } from "react";
 import { useRequestResponse } from "@/context/request/RequestResponseProvider";
 import MetaTable from "@/components/app/request-panel/request/request/meta-data/meta-table/MetaTable";
-import AddNew from "@/components/app/request-panel/request/request/meta-data/meta-table/AddNew";
 import MetaDataWrapper from "@/components/app/request-panel/request/request/meta-data/meta-table/MetaDataWrapper";
+import AddNewData from "@/components/AddNewData";
 
 const Params = memo(() => {
   const { handleAddNewParam } = useRequestResponse();
@@ -10,7 +10,7 @@ const Params = memo(() => {
   return (
     <MetaDataWrapper label="Query Params">
       <MetaTable />
-      <AddNew onClick={handleAddNewParam} label="Add New Param" />
+      <AddNewData onClick={handleAddNewParam} label="Add New Param" />
     </MetaDataWrapper>
   );
 });
