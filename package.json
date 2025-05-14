@@ -3,16 +3,28 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "main": "src/electron/main",
+  "main": "src/electron/main.js",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "electron-nodemon": "nodemon --exec electron .",
-    "electron": "electron ."
+    "electron": "electron .",
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish"
   },
+  "keywords": [],
+  "author": {
+    "name": "developerHub01",
+    "email": "shakil102043@gmail.com"
+  },
+  "description": "An REST API client",
+  "license": "MIT",
   "dependencies": {
+    "electron-squirrel-startup": "^1.0.1",
     "@babel/parser": "^7.27.2",
     "@codemirror/lang-html": "^6.4.9",
     "@codemirror/lang-javascript": "^6.2.3",
@@ -39,7 +51,6 @@
     "axios-cookiejar-support": "^6.0.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "is-dev": "^0.1.4",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.507.0",
     "motion": "^12.10.3",
@@ -72,6 +83,24 @@
     "tw-animate-css": "^1.2.9",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.30.1",
-    "vite": "^6.3.5"
+    "vite": "^6.3.5",
+    "@electron-forge/cli": "^7.8.1",
+    "@electron-forge/maker-deb": "^7.8.1",
+    "@electron-forge/maker-rpm": "^7.8.1",
+    "@electron-forge/maker-squirrel": "^7.8.1",
+    "@electron-forge/maker-zip": "^7.8.1",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.8.1",
+    "@electron-forge/plugin-fuses": "^7.8.1",
+    "@electron/fuses": "^1.8.0"
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-zip"
+        }
+      ]
+    }
   }
 }

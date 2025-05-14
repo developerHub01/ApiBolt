@@ -2,6 +2,7 @@ import { app } from "electron";
 import { createWindow } from "./utils/window.js";
 import { wrapper } from "axios-cookiejar-support";
 import axios from "axios";
+import electronSquirrelStartup from "electron-squirrel-startup";
 import { initialCookieJar } from "./utils/cookieManager.js";
 import { registerCookieHandlers } from "./ipc/cookies.js";
 import { registerWindowHandlers } from "./ipc/windowControls.js";
@@ -11,6 +12,11 @@ import { jsonWebTokenHandlers } from "./ipc/jsonWebToken.js";
 export const jar = initialCookieJar(undefined, { rejectPublicSuffixes: false });
 // axios client with cookie jar support
 export const client = wrapper(axios.create({ jar }));
+
+// Handle creating/removing shortcuts on Windows when installing/uninstalling.
+if (electronSquirrelStartup) {
+  app.quit();
+}
 
 app.whenReady().then(() => {
   let mainWindow = createWindow();
