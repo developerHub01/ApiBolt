@@ -135,12 +135,12 @@ const RequestListItemContent = ({
                 )}
               />
             ) : (
-              <p
-                className="p-1 text-sm w-full"
+              <input
+                value={name}
+                readOnly
                 onDoubleClick={handleRenameAction}
-              >
-                {name}
-              </p>
+                className="w-full h-full outline-0 px-1 rounded-md text-sm p-1 whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer"
+              />
             )}
             <ItemCTA type={type} id={id} />
           </div>

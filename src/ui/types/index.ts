@@ -29,6 +29,9 @@ declare global {
     };
     electronAPIDB: {
       addBoltCore: (payload: RequestListItemInterface) => Promise<unknown>;
+      addMultipleBoltCore: (
+        payload: Array<RequestListItemInterface>
+      ) => Promise<unknown>;
       updateBoltCore: (
         id: string,
         payload: Partial<RequestListItemInterface>

@@ -14,31 +14,51 @@ export const boltcoreDB = new PouchDB("boltcore");
 export const addBoltCore = async (event, payload) => {
   if (typeof payload !== "object") return;
 
-  const result = await boltcoreDB.put({
-    ...payload,
-  });
+  try {
+    const result = await boltcoreDB.put({
+      ...payload,
+    });
 
-  if (result.ok && payload.parent) {
-    const parentId = payload.parent;
-    const parentData = await boltcoreDB.get(parentId);
-    parentData.children?.push(payload._id);
-    await updateBoltCore(event, parentId, parentData);
+    if (result.ok && payload.parent) {
+      const parentId = payload.parent;
+      const parentData = await boltcoreDB.get(parentId);
+      parentData.children?.push(payload._id);
+      await updateBoltCore(event, parentId, parentData);
+    }
+  } catch (error) {
+    console.log(error);
+  } finally {
+    boltCoreHaveChange(event);
   }
+};
 
-  boltCoreHaveChange(event);
+export const addMultipleBoltCore = async (event, payload) => {
+  if (typeof payload !== "object") return;
+
+  try {
+    await boltcoreDB.bulkDocs(payload);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    boltCoreHaveChange(event);
+  }
 };
 
 export const updateBoltCore = async (event, id, payload) => {
   if (typeof payload !== "object") return;
 
-  const oldData = await boltcoreDB.get(id);
+  try {
+    const oldData = await boltcoreDB.get(id);
 
-  await boltcoreDB.put({
-    ...oldData,
-    ...payload,
-  });
-
-  boltCoreHaveChange(event);
+    await boltcoreDB.put({
+      ...oldData,
+      ...payload,
+    });
+  } catch (error) {
+    console.log(error);
+  } finally {
+    boltCoreHaveChange(event);
+  }
 };
 
 export const deleteBoltCore = async (event, id) => {
@@ -49,9 +69,9 @@ export const deleteBoltCore = async (event, id) => {
     console.log({ response });
   } catch (error) {
     console.log(error);
+  } finally {
+    boltCoreHaveChange(event);
   }
-
-  boltCoreHaveChange(event);
 };
 
 /**

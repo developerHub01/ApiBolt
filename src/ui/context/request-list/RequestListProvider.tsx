@@ -23,6 +23,7 @@ interface RequestListContext {
   listData: Record<string, RequestListItemInterface>;
   createSingleRequest: (parent?: string) => Promise<void>;
   createCollection: (parent?: string) => Promise<void>;
+  createRestApiBasic: () => Promise<void>;
   deleteFolderOrRequestId: string;
   handleChangeDeleteFolderOrRequestId: (value: string) => void;
   handleDeleteFolderOrRequest: (value: boolean) => void;
@@ -105,6 +106,51 @@ const RequestListProvider = ({ children }: RequestListProviderProps) => {
 
     await window.electronAPIDB.addBoltCore(payload);
   };
+  const createRestApiBasic = async () => {
+    const parentFolder: RequestListItemInterface = {
+      id: uuidv4(),
+      name: "REST API basics: CRUD, test & variable",
+      method: "get",
+      children: [],
+    };
+
+    const payload: Array<RequestListItemInterface> = [
+      {
+        id: uuidv4(),
+        name: "Get data",
+        method: "get",
+      },
+      {
+        id: uuidv4(),
+        name: "Post data",
+        method: "post",
+      },
+      {
+        id: uuidv4(),
+        name: "Update data",
+        method: "put",
+      },
+      {
+        id: uuidv4(),
+        name: "Update data",
+        method: "patch",
+      },
+      {
+        id: uuidv4(),
+        name: "Delete data",
+        method: "delete",
+      },
+    ];
+    parentFolder.children = payload.map((item) => item.id);
+
+    await window.electronAPIDB.addMultipleBoltCore([
+      parentFolder,
+      ...payload.map((item) => ({
+        ...item,
+        parent: parentFolder.id,
+      })),
+    ]);
+  };
 
   return (
     <RequestListContext.Provider
@@ -112,6 +158,7 @@ const RequestListProvider = ({ children }: RequestListProviderProps) => {
         listData,
         createSingleRequest,
         createCollection,
+        createRestApiBasic,
         deleteFolderOrRequestId,
         handleChangeDeleteFolderOrRequestId,
         handleDeleteFolderOrRequest,

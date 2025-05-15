@@ -30,13 +30,16 @@ const actionsList: Array<{
 ];
 
 const AddAction = () => {
-  const { createCollection, createSingleRequest } = useRequestList();
+  const { createCollection, createSingleRequest, createRestApiBasic } =
+    useRequestList();
   const handleAction = (id: TAction) => {
     switch (id) {
       case "single_request":
         return createSingleRequest();
       case "blank_collection":
         return createCollection();
+      case "rest_api_basics":
+        return createRestApiBasic();
     }
   };
 

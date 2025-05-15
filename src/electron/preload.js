@@ -33,6 +33,18 @@ contextBridge.exposeInMainWorld("electronAPIDB", {
     delete payload.id;
     return await ipcRenderer.invoke("addBoltCore", payload);
   },
+  addMultipleBoltCore: async (payload) => {
+    if (typeof payload !== "object") return;
+
+    payload = payload.map((item) => ({
+      ...item,
+      _id: item.id,
+      id: undefined,
+    }));
+
+    console.log({ payload });
+    return await ipcRenderer.invoke("addMultipleBoltCore", payload);
+  },
   updateBoltCore: async (id, payload) => {
     if (typeof payload !== "object" || !id) return;
 
