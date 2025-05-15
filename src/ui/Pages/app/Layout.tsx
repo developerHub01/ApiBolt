@@ -1,4 +1,4 @@
-import RequestListPanel from "@/components/app/request-list/RequestListPanel";
+import RequestListPanelWrapper from "@/components/app/request-list/RequestListPanelWrapper";
 import Sidebar from "@/components/app/sidebar/Sidebar";
 import CopyRight from "@/components/copy-right";
 import Header from "@/components/header/Header";
@@ -7,6 +7,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import RequestFolderProvider from "@/context/request-list/RequestFolderProvider";
 import SidebarProvider from "@/context/sidebar/SidebarProvider";
 import { Outlet } from "react-router-dom";
 
@@ -24,12 +25,14 @@ const AppLayout = () => {
               height: "auto",
             }}
           >
-            <RequestListPanel />
+            <RequestListPanelWrapper />
             <ResizableHandle />
             <ResizablePanel defaultSize={70}>
               <ResizablePanelGroup direction="vertical">
                 <ResizablePanel defaultSize={25}>
-                  <Outlet />
+                  <RequestFolderProvider>
+                    <Outlet />
+                  </RequestFolderProvider>
                 </ResizablePanel>
               </ResizablePanelGroup>
             </ResizablePanel>

@@ -8,6 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { v4 as uuidv4 } from "uuid";
+import type { RequestListItemInterface } from "@/context/request-list/RequestListProvider";
 
 type TAction = "blank_collection" | "single_request" | "rest_api_basics";
 
@@ -42,7 +43,7 @@ const AddAction = () => {
   };
 
   const createSingleRequest = async () => {
-    const payload = {
+    const payload: RequestListItemInterface = {
       id: uuidv4(),
       name: "Request",
       method: "get",

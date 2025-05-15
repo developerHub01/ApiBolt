@@ -19,18 +19,47 @@ export const boltcoreDB = new PouchDB("boltcore");
  * }
  *
  * **/
-export const addBoltCore = async (_, payload) => {
+export const addBoltCore = async (event, payload) => {
   if (typeof payload !== "object") return;
 
   await boltcoreDB.put({
     ...payload,
   });
 
-  console.log(JSON.stringify(await getAllBoltCore(), null, 2));
+  boltCoreHaveChange(event);
 };
 
-export const getAllBoltCore = async () => {
-  return await boltcoreDB.allDocs({
-    include_docs: true,
+export const updateBoltCore = async (event, id, payload) => {
+  console.log({ id, payload });
+  if (typeof payload !== "object") return;
+
+  const oldData = await boltcoreDB.get(id);
+
+  await boltcoreDB.put({
+    ...oldData,
+    ...payload,
   });
+
+  boltCoreHaveChange(event);
 };
+
+/**
+ * key as id and value rest of the
+ * **/
+export const getAllBoltCore = async () => {
+  return (
+    await boltcoreDB.allDocs({
+      include_docs: true,
+    })
+  ).rows.reduce((acc, curr) => {
+    acc[curr.id] = {
+      ...curr.doc,
+      id: curr.doc._id,
+    };
+    delete acc[curr.id]._id;
+    return acc;
+  }, {});
+};
+
+export const boltCoreHaveChange = (event) =>
+  event.sender.send("boltCoreChange");
