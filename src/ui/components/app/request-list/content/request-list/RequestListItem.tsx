@@ -80,6 +80,7 @@ const RequestListItemContent = ({
     const value = e.target.value;
     if (!value) return setNameState(name);
     handleChangeName(id, e.target.value);
+    window.getSelection()?.removeAllRanges();
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -87,6 +88,10 @@ const RequestListItemContent = ({
   };
 
   const handleAddRequest = () => createSingleRequest(id);
+
+  const handleDblClick = () => {
+    handleRenameAction();
+  };
 
   return (
     <>
@@ -138,8 +143,8 @@ const RequestListItemContent = ({
               <input
                 value={name}
                 readOnly
-                onDoubleClick={handleRenameAction}
-                className="w-full h-full outline-0 px-1 rounded-md text-sm p-1 whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer"
+                onDoubleClick={handleDblClick}
+                className="w-full h-full outline-0 px-1 rounded-md text-sm p-1 whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer select-none"
               />
             )}
             <ItemCTA type={type} id={id} />

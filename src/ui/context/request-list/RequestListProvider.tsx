@@ -75,7 +75,6 @@ const RequestListProvider = ({ children }: RequestListProviderProps) => {
 
   const handleDeleteFolderOrRequest = useCallback(
     async (value: boolean) => {
-      console.log({ value });
       if (value)
         await window.electronAPIDB.deleteBoltCore(deleteFolderOrRequestId);
 
@@ -91,8 +90,6 @@ const RequestListProvider = ({ children }: RequestListProviderProps) => {
       method: "get",
       ...(parent ? { parent } : {}),
     };
-    console.log({ payload });
-
     await window.electronAPIDB.addBoltCore(payload);
   };
 
@@ -103,7 +100,6 @@ const RequestListProvider = ({ children }: RequestListProviderProps) => {
       children: [],
       ...(parent ? { parent } : {}),
     };
-
     await window.electronAPIDB.addBoltCore(payload);
   };
   const createRestApiBasic = async () => {

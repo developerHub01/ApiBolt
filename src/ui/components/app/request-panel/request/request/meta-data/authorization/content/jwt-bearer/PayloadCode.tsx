@@ -8,11 +8,9 @@ const codeFormatter = async (
   callback: (code: string) => void
 ) => {
   const { success, data, message } = await formatCode(code, "json");
-  console.log({ success, data, message });
   if (!code) return;
   if (!success || !data) return message && toast(message);
   callback(data);
-  console.log(callback);
 };
 
 interface PayloadCodeProps {

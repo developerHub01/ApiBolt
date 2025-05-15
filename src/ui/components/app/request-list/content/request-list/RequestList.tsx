@@ -10,8 +10,6 @@ const RequestList = () => {
     return Object.values(listData).filter((item) => !item.parent);
   }, [listData]);
 
-  console.log({ rootList });
-
   return (
     <div>
       {rootList.map(({ id }) => (
