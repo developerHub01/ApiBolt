@@ -10,6 +10,7 @@ interface RequestFolderContext {
   isExpend: boolean;
   handleToggleExpend: () => void;
   handleChangeName: (id: string, name: string) => void;
+  handleDeleteFolderOrRequest: (id: string) => void;
 }
 
 const RequestFolderContext = createContext<RequestFolderContext | null>(null);
@@ -64,6 +65,11 @@ const RequestFolderProvider = ({ children }: RequestFolderProviderProps) => {
     });
   }, []);
 
+  const handleDeleteFolderOrRequest = useCallback(async (id: string) => {
+    setIsRenameActive(false);
+    await window.electronAPIDB.deleteBoltCore(id);
+  }, []);
+
   return (
     <RequestFolderContext.Provider
       value={{
@@ -76,6 +82,7 @@ const RequestFolderProvider = ({ children }: RequestFolderProviderProps) => {
         isExpend,
         handleToggleExpend,
         handleChangeName,
+        handleDeleteFolderOrRequest,
       }}
     >
       {children}

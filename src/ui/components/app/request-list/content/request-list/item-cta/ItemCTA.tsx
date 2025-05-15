@@ -1,21 +1,102 @@
-import FolderCTA from "@/components/app/request-list/content/request-list/item-cta/FolderCTA";
-import RequestCTA from "@/components/app/request-list/content/request-list/item-cta/RequestCTA";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { EllipsisVertical as ThreeDotIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRequestFolder } from "@/context/request-list/RequestFolderProvider";
+import { useRequestList } from "@/context/request-list/RequestListProvider";
+
+type TActionType =
+  | "add_request"
+  | "add_folder"
+  | "rename"
+  | "duplicate"
+  | "delete";
+
+const folderCTAList: Array<{
+  id: TActionType;
+  label: string;
+}> = [
+  {
+    id: "add_request",
+    label: "Add Request",
+  },
+  {
+    id: "add_folder",
+    label: "Add Folder",
+  },
+  {
+    id: "rename",
+    label: "Rename",
+  },
+  {
+    id: "duplicate",
+    label: "Duplicate",
+  },
+  {
+    id: "delete",
+    label: "Delete",
+  },
+];
+
+const requestCTAList: Array<{
+  id: TActionType;
+  label: string;
+}> = [
+  {
+    id: "rename",
+    label: "Rename",
+  },
+  {
+    id: "duplicate",
+    label: "Duplicate",
+  },
+  {
+    id: "delete",
+    label: "Delete",
+  },
+];
 
 interface ItemCTAProps {
   type: "request" | "folder";
+  id: string;
 }
 
-const ItemCTA = ({ type }: ItemCTAProps) => {
+const ItemCTA = ({ type, id }: ItemCTAProps) => {
   const { isContextMenuOpen, handleToggleContextMenu } = useRequestFolder();
+  const {
+    handleChangeDeleteFolderOrRequestId,
+    createSingleRequest,
+    createCollection,
+  } = useRequestList();
+
+  const handleCTAAction = (actionType: string) => {
+    switch (actionType as TActionType) {
+      case "delete": {
+        handleChangeDeleteFolderOrRequestId(id);
+        break;
+      }
+      case "add_folder": {
+        createCollection(id);
+        break;
+      }
+      case "add_request": {
+        createSingleRequest(id);
+        break;
+      }
+      case "rename": {
+        break;
+      }
+      case "duplicate": {
+        break;
+      }
+    }
+  };
+
   return (
     <DropdownMenu
       open={isContextMenuOpen}
@@ -40,10 +121,29 @@ const ItemCTA = ({ type }: ItemCTAProps) => {
         className="w-40 [&>div]:cursor-pointer"
         align="start"
       >
-        {type === "folder" ? <FolderCTA /> : <RequestCTA />}
+        <CTAList
+          list={type === "folder" ? folderCTAList : requestCTAList}
+          onClick={handleCTAAction}
+        />
       </DropdownMenuContent>
     </DropdownMenu>
   );
+};
+
+interface CTAListProps {
+  list: Array<{
+    id: string;
+    label: string;
+  }>;
+  onClick: (id: string) => void;
+}
+
+const CTAList = ({ list, onClick }: CTAListProps) => {
+  return list.map(({ id, label }) => (
+    <DropdownMenuItem key={id} onClick={() => onClick(id)}>
+      {label}
+    </DropdownMenuItem>
+  ));
 };
 
 export default ItemCTA;

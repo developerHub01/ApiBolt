@@ -7,8 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { v4 as uuidv4 } from "uuid";
-import type { RequestListItemInterface } from "@/context/request-list/RequestListProvider";
+import { useRequestList } from "@/context/request-list/RequestListProvider";
 
 type TAction = "blank_collection" | "single_request" | "rest_api_basics";
 
@@ -31,35 +30,14 @@ const actionsList: Array<{
 ];
 
 const AddAction = () => {
+  const { createCollection, createSingleRequest } = useRequestList();
   const handleAction = (id: TAction) => {
-    console.log({ id });
-
     switch (id) {
       case "single_request":
         return createSingleRequest();
       case "blank_collection":
         return createCollection();
     }
-  };
-
-  const createSingleRequest = async () => {
-    const payload: RequestListItemInterface = {
-      id: uuidv4(),
-      name: "Request",
-      method: "get",
-    };
-
-    await window.electronAPIDB.addBoltCore(payload);
-  };
-
-  const createCollection = async () => {
-    const payload = {
-      id: uuidv4(),
-      name: "Collection",
-      children: [],
-    };
-
-    await window.electronAPIDB.addBoltCore(payload);
   };
 
   return (

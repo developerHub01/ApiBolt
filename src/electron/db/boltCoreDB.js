@@ -1,14 +1,6 @@
 import PouchDB from "pouchdb";
 export const boltcoreDB = new PouchDB("boltcore");
 
-// boltcoreDB.put({
-//   _id: "1",
-//   name: "name1",
-//   description: "desc1",
-// });
-// const docs = await boltcoreDB.allDocs({ include_docs: true });
-// console.log(docs);
-
 /**
  * params {
  *  id: string
@@ -22,15 +14,21 @@ export const boltcoreDB = new PouchDB("boltcore");
 export const addBoltCore = async (event, payload) => {
   if (typeof payload !== "object") return;
 
-  await boltcoreDB.put({
+  const result = await boltcoreDB.put({
     ...payload,
   });
+
+  if (result.ok && payload.parent) {
+    const parentId = payload.parent;
+    const parentData = await boltcoreDB.get(parentId);
+    parentData.children?.push(payload._id);
+    await updateBoltCore(event, parentId, parentData);
+  }
 
   boltCoreHaveChange(event);
 };
 
 export const updateBoltCore = async (event, id, payload) => {
-  console.log({ id, payload });
   if (typeof payload !== "object") return;
 
   const oldData = await boltcoreDB.get(id);
@@ -39,6 +37,19 @@ export const updateBoltCore = async (event, id, payload) => {
     ...oldData,
     ...payload,
   });
+
+  boltCoreHaveChange(event);
+};
+
+export const deleteBoltCore = async (event, id) => {
+  const deleteCandidateList = await getNestedChildList(id);
+
+  try {
+    const response = await boltcoreDB.bulkDocs(deleteCandidateList);
+    console.log({ response });
+  } catch (error) {
+    console.log(error);
+  }
 
   boltCoreHaveChange(event);
 };
@@ -63,3 +74,27 @@ export const getAllBoltCore = async () => {
 
 export const boltCoreHaveChange = (event) =>
   event.sender.send("boltCoreChange");
+
+const getNestedChildList = async (id, list = []) => {
+  try {
+    const requestData = await boltcoreDB.get(id);
+    if (!requestData) return list;
+
+    list.push({
+      _id: requestData._id,
+      _rev: requestData._rev,
+      _deleted: true,
+    });
+
+    if (!requestData.children || !Array.isArray(requestData.children))
+      return list;
+
+    for (const child of requestData.children) {
+      await getNestedChildList(child, list);
+    }
+  } catch (error) {
+    console.log(error);
+  } finally {
+    return list;
+  }
+};
