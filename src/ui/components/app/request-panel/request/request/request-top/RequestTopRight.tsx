@@ -5,6 +5,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   ChevronDown as DownIcon,
@@ -52,31 +59,37 @@ const RequestTopRight = () => {
       <Button variant={"outline"} className="rounded-r-none">
         <SaveIcon /> Save
       </Button>
-      <Popover>
-        <PopoverTrigger asChild>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
           <Button size={"icon"} variant={"ghost"} className="rounded-l-none">
             <DownIcon />
           </Button>
-        </PopoverTrigger>
-        <PopoverContent
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
           className="p-0 w-fit min-w-40 flex flex-col [&>button]:justify-start"
           side="bottom"
           align="end"
         >
-          <Button variant={"ghost"}>
-            <SaveIcon /> Save As
-          </Button>
-          <ClearRequestResponseButton
-            handleClear={handleClearRequestResponse}
-          />
-          <ImportButton handleImport={handleImport} />
-          <ExportButton
-            handleExport={handleExport}
-            isChecked={isDownloadRequestWithBase64}
-            handleChangeCheck={handleIsDownloadRequestWithBase64}
-          />
-        </PopoverContent>
-      </Popover>
+          <DropdownMenuGroup>
+            <DropdownMenuItem>
+              <SaveIcon /> Save As
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <ImportButton handleImport={handleImport} />
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <ExportButton
+                handleExport={handleExport}
+                isChecked={isDownloadRequestWithBase64}
+                handleChangeCheck={handleIsDownloadRequestWithBase64}
+              />
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleClearRequestResponse}>
+              <ClearIcon /> Clear All
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };
@@ -95,7 +108,11 @@ const ExportButton = ({
 }: ExportButtonProps) => {
   return (
     <div className="w-full flex justify-between items-center gap-1">
-      <Button variant={"ghost"} onClick={handleExport} className="flex-1 justify-start">
+      <Button
+        variant={"ghost"}
+        onClick={handleExport}
+        className="flex-1 justify-start"
+      >
         <DownloadIcon /> Export
       </Button>
       <Popover>
@@ -157,20 +174,6 @@ const ImportButton = ({ handleImport }: ImportButtonProps) => {
         <ImportIcon /> import
       </Button>
     </label>
-  );
-};
-
-interface ClearRequestResponseButtonProps {
-  handleClear: () => void;
-}
-
-const ClearRequestResponseButton = ({
-  handleClear,
-}: ClearRequestResponseButtonProps) => {
-  return (
-    <Button variant={"ghost"} onClick={handleClear}>
-      <ClearIcon /> Clear All
-    </Button>
   );
 };
 
