@@ -67,7 +67,11 @@ interface ItemCTAProps {
 }
 
 const ItemCTA = ({ type, id }: ItemCTAProps) => {
-  const { isContextMenuOpen, handleToggleContextMenu } = useRequestFolder();
+  const {
+    isContextMenuOpen,
+    handleToggleContextMenu,
+    handleRenameAction,
+  } = useRequestFolder();
   const {
     handleChangeDeleteFolderOrRequestId,
     createSingleRequest,
@@ -89,6 +93,7 @@ const ItemCTA = ({ type, id }: ItemCTAProps) => {
         break;
       }
       case "rename": {
+        handleRenameAction();
         break;
       }
       case "duplicate": {

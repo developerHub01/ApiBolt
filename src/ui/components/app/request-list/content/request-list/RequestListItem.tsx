@@ -1,5 +1,6 @@
 import {
   useEffect,
+  useRef,
   useState,
   type ChangeEvent,
   type FocusEvent,
@@ -49,16 +50,28 @@ const RequestListItemContent = ({
   children,
   lavel,
 }: RequestListItemProps) => {
-  const { isRenameActive, isExpend, handleToggleExpend, handleChangeName } =
-    useRequestFolder();
+  const {
+    isRenameActive,
+    isExpend,
+    handleToggleExpend,
+    handleChangeName,
+    handleRenameAction,
+  } = useRequestFolder();
   const { createSingleRequest } = useRequestList();
   const [nameState, setNameState] = useState(name ?? "");
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (name === nameState) return;
     setNameState(name);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name]);
+
+  useEffect(() => {
+    if (isRenameActive) {
+      inputRef.current?.focus();
+    }
+  }, [isRenameActive]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
     setNameState(e.target.value);
@@ -98,26 +111,37 @@ const RequestListItemContent = ({
               <ArrowIcon size={18} />
             </button>
           ) : (
-            <div className="w-12 flex justify-end items-center pl-1">
+            <div className="w-9 flex justify-end items-center pl-1">
               <RequestMethodTag method={method ?? "get"} className="w-full" />
             </div>
           )}
         </div>
         <div className="w-full flex flex-col gap-1">
           <div className="w-full text-sm h-7 flex justify-between items-center gap-1">
-            <input
-              value={nameState}
-              onChange={handleChange}
-              onKeyDown={handleKeyDown}
-              onBlur={handleBlur}
-              className={cn(
-                "w-full h-full outline-0 focus:bg-background px-1 rounded-md",
-                {
-                  "bg-background cursor-text": isRenameActive,
-                  "bg-transparent cursor-pointer": !isRenameActive,
-                }
-              )}
-            />
+            {isRenameActive ? (
+              <input
+                value={nameState}
+                onChange={handleChange}
+                onKeyDown={handleKeyDown}
+                onBlur={handleBlur}
+                id={`request_list_item_input_${id}`}
+                ref={inputRef}
+                className={cn(
+                  "w-full h-full outline-0 focus:bg-background px-1 rounded-md text-sm",
+                  {
+                    "bg-background cursor-text": isRenameActive,
+                    "bg-transparent cursor-pointer": !isRenameActive,
+                  }
+                )}
+              />
+            ) : (
+              <p
+                className="p-1 text-sm w-full"
+                onDoubleClick={handleRenameAction}
+              >
+                {name}
+              </p>
+            )}
             <ItemCTA type={type} id={id} />
           </div>
         </div>

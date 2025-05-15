@@ -22,7 +22,7 @@ const RequestMethodTag = ({ method, className = "" }: Props) => {
         className
       )}
     >
-      {method}
+      {method.slice(0, 4)}
     </Badge>
   );
 };
