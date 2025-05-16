@@ -52,14 +52,15 @@ const RequestListItemContent = ({
 }: RequestListItemProps) => {
   const {
     isRenameActive,
-    isExpend,
-    handleToggleExpend,
     handleChangeName,
     handleRenameAction,
   } = useRequestFolder();
-  const { createSingleRequest } = useRequestList();
+  const { createSingleRequest, handleToggleOpenFolder, handleIsFolderOpen } =
+    useRequestList();
   const [nameState, setNameState] = useState(name ?? "");
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const isExpend = handleIsFolderOpen(id);
 
   useEffect(() => {
     if (name === nameState) return;
@@ -111,7 +112,7 @@ const RequestListItemContent = ({
                   "rotate-0": !isExpend,
                 }
               )}
-              onClick={handleToggleExpend}
+              onClick={() => handleToggleOpenFolder(id)}
             >
               <ArrowIcon size={18} />
             </button>

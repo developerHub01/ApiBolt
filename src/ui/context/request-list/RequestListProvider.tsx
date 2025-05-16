@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import type { TMethod } from "@/types";
 import { v4 as uuidv4 } from "uuid";
+import { isElectron } from "@/utils/electron";
 
 export interface RequestListItemInterface {
   id: string;
@@ -27,6 +28,9 @@ interface RequestListContext {
   deleteFolderOrRequestId: string;
   handleChangeDeleteFolderOrRequestId: (value: string) => void;
   handleDeleteFolderOrRequest: (value: boolean) => void;
+  openFolderList: Set<string>;
+  handleToggleOpenFolder: (id: string) => void;
+  handleIsFolderOpen: (id: string) => boolean;
 }
 
 const RequestListContext = createContext<RequestListContext | null>(null);
@@ -54,8 +58,11 @@ const RequestListProvider = ({ children }: RequestListProviderProps) => {
   >({});
   const [deleteFolderOrRequestId, setDeleteFolderOrRequestId] =
     useState<string>("");
+  const [openFolderList, setOpenFolder] = useState<Set<string>>(new Set([]));
 
   useEffect(() => {
+    if (!isElectron()) return;
+
     (async () => await handleLoadList())();
     window.electronAPIDB.onBoltCoreChange(() => {
       (async () => await handleLoadList())();
@@ -148,6 +155,24 @@ const RequestListProvider = ({ children }: RequestListProviderProps) => {
     ]);
   };
 
+  const handleToggleOpenFolder = useCallback((id: string) => {
+    setOpenFolder((prev) => {
+      const newSet = new Set(prev);
+
+      if (prev.has(id)) newSet.delete(id);
+      else newSet.add(id);
+
+      return newSet;
+    });
+  }, []);
+
+  const handleIsFolderOpen = useCallback(
+    (id: string) => {
+      return openFolderList.has(id);
+    },
+    [openFolderList]
+  );
+
   return (
     <RequestListContext.Provider
       value={{
@@ -158,6 +183,9 @@ const RequestListProvider = ({ children }: RequestListProviderProps) => {
         deleteFolderOrRequestId,
         handleChangeDeleteFolderOrRequestId,
         handleDeleteFolderOrRequest,
+        openFolderList,
+        handleToggleOpenFolder,
+        handleIsFolderOpen,
       }}
     >
       {children}
