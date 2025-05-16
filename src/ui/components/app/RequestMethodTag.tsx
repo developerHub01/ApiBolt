@@ -5,9 +5,14 @@ import { cn } from "@/lib/utils";
 interface Props {
   method: TMethod;
   className?: string;
+  shortCut?: boolean;
 }
 
-const RequestMethodTag = ({ method, className = "" }: Props) => {
+const RequestMethodTag = ({
+  method,
+  className = "",
+  shortCut = false,
+}: Props) => {
   return (
     <Badge
       className={cn(
@@ -22,7 +27,7 @@ const RequestMethodTag = ({ method, className = "" }: Props) => {
         className
       )}
     >
-      {method.slice(0, 4)}
+      {shortCut && method === "delete" ? "del" : method}
     </Badge>
   );
 };
