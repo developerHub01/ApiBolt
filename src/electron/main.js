@@ -10,6 +10,7 @@ import { jsonWebTokenHandlers } from "./ipc/jsonWebToken.js";
 import "./db/boltcoreDB.js";
 import "./ipc/boltCoreDB.js";
 import { boltCoreDBHandlers } from "./ipc/boltCoreDB.js";
+import { openFoldersDBHandlers } from "./ipc/openFoldersDB.js";
 
 // browser style cookies holder by domain/path
 export const jar = initialCookieJar(undefined, { rejectPublicSuffixes: false });
@@ -35,6 +36,7 @@ app.whenReady().then(() => {
   jsonWebTokenHandlers();
 
   boltCoreDBHandlers();
+  openFoldersDBHandlers();
 });
 
 app.on("window-all-closed", () => {

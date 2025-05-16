@@ -26,6 +26,9 @@ contextBridge.exposeInMainWorld("electronAPI", {
 });
 
 contextBridge.exposeInMainWorld("electronAPIDB", {
+  toggleFolder: async (id) => await ipcRenderer.invoke("toggleFolder", id),
+  getAllOpenFolder: async () => await ipcRenderer.invoke("getAllOpenFolder"),
+
   addBoltCore: async (payload) => {
     if (typeof payload !== "object") return;
 

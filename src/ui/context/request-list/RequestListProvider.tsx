@@ -67,6 +67,8 @@ const RequestListProvider = ({ children }: RequestListProviderProps) => {
     window.electronAPIDB.onBoltCoreChange(() => {
       (async () => await handleLoadList())();
     });
+
+    (async () => await handleLoadOpenFolderList())();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -74,6 +76,16 @@ const RequestListProvider = ({ children }: RequestListProviderProps) => {
     async () => setListData(await window.electronAPIDB.getAllBoltCore()),
     []
   );
+
+  const handleToggleFolderInBackend = useCallback(async (id: string) => {
+    await window.electronAPIDB.toggleFolder(id);
+  }, []);
+
+  const handleLoadOpenFolderList = useCallback(async () => {
+    setOpenFolder(
+      new Set((await window.electronAPIDB.getAllOpenFolder()) ?? [])
+    );
+  }, []);
 
   const handleChangeDeleteFolderOrRequestId = useCallback(
     (value: string) => setDeleteFolderOrRequestId(value),
@@ -155,21 +167,24 @@ const RequestListProvider = ({ children }: RequestListProviderProps) => {
     ]);
   };
 
-  const handleToggleOpenFolder = useCallback((id: string) => {
-    setOpenFolder((prev) => {
-      const newSet = new Set(prev);
+  const handleToggleOpenFolder = useCallback(
+    (id: string) => {
+      setOpenFolder((prev) => {
+        const newSet = new Set(prev);
 
-      if (prev.has(id)) newSet.delete(id);
-      else newSet.add(id);
+        if (prev.has(id)) newSet.delete(id);
+        else newSet.add(id);
 
-      return newSet;
-    });
-  }, []);
+        return newSet;
+      });
+
+      (async () => await handleToggleFolderInBackend(id))();
+    },
+    [handleToggleFolderInBackend]
+  );
 
   const handleIsFolderOpen = useCallback(
-    (id: string) => {
-      return openFolderList.has(id);
-    },
+    (id: string) => openFolderList.has(id),
     [openFolderList]
   );
 

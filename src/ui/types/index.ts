@@ -28,6 +28,9 @@ declare global {
       ) => Promise<string>;
     };
     electronAPIDB: {
+      toggleFolder: (id: string) => Promise<void>;
+      getAllOpenFolder: () => Promise<void>;
+
       addBoltCore: (payload: RequestListItemInterface) => Promise<unknown>;
       addMultipleBoltCore: (
         payload: Array<RequestListItemInterface>

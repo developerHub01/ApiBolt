@@ -1,5 +1,5 @@
 import PouchDB from "pouchdb";
-export const boltcoreDB = new PouchDB("boltcore");
+export const boltcoreDB = new PouchDB("boltCore");
 
 /**
  * params {
@@ -66,7 +66,6 @@ export const deleteBoltCore = async (event, id) => {
 
   try {
     const response = await boltcoreDB.bulkDocs(deleteCandidateList);
-    console.log({ response });
   } catch (error) {
     console.log(error);
   } finally {
