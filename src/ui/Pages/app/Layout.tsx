@@ -13,14 +13,14 @@ import { Outlet } from "react-router-dom";
 
 const AppLayout = () => {
   return (
-    <section className="h-dvh flex flex-col">
+    <section className="h-dvh overflow-hidden flex flex-col">
       <Header />
-      <section className="h-full flex content-stretch">
+      <section className="min-h-0 flex-1 flex content-stretch">
         <SidebarProvider>
           <Sidebar />
           <ResizablePanelGroup
             direction="horizontal"
-            className="w-full border md:min-w-[450px]"
+            className="w-full h-full border md:min-w-[450px]"
             style={{
               height: "auto",
             }}

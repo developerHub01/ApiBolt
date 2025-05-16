@@ -12,6 +12,7 @@ const RequestListPanelWrapper = () => {
     <ResizablePanel
       collapsible={true}
       defaultSize={30}
+      className="h-full"
       style={{
         maxWidth: "40vw",
       }}
