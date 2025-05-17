@@ -197,6 +197,8 @@ const duplicateRequestOrFolder = async ({ id, parent, level = 0, newId }) => {
       node.parent = parent;
       delete node._rev;
 
+      if (!level) node.name += " copy";
+
       const childrenList = node.children;
       const newChildrenList = Array.isArray(node.children)
         ? node.children.map(() => uuidv4())
