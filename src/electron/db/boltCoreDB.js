@@ -27,7 +27,7 @@ export const addBoltCore = async (event, payload) => {
       await updateBoltCore(event, parentId, parentData);
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   } finally {
     boltCoreHaveChange(event);
   }
@@ -39,7 +39,7 @@ export const addMultipleBoltCore = async (event, payload) => {
   try {
     await boltcoreDB.bulkDocs(payload);
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   } finally {
     boltCoreHaveChange(event);
   }
@@ -56,7 +56,7 @@ export const updateBoltCore = async (event, id, payload) => {
       ...payload,
     });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   } finally {
     boltCoreHaveChange(event);
   }
@@ -67,10 +67,14 @@ export const duplicateBoltCore = async (event, id) => {
 
   try {
     const node = await boltcoreDB.get(id);
-    console.log({ node });
-    await duplicateRequestOrFolder({ id, parent: node?.parent });
+
+    await duplicateRequestOrFolder({
+      id,
+      parent: node?.parent,
+      newId: uuidv4(),
+    });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   } finally {
     boltCoreHaveChange(event);
   }
@@ -82,7 +86,7 @@ export const deleteBoltCore = async (event, id) => {
   try {
     await boltcoreDB.bulkDocs(deleteCandidateList);
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   } finally {
     boltCoreHaveChange(event);
   }
@@ -127,77 +131,64 @@ const getNestedChildList = async (id, list = []) => {
       await getNestedChildList(child, list);
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   } finally {
     return list;
   }
 };
 
-const duplicateRequestOrFolder = async ({ id, parent, lavel = 0 }) => {
+/**
+ * Mainly we for each node we are making copy of its and copied id list of its children and passing them for each child id with its new id.
+ * and in next traverse just making that new id node and if it have children then repeating same process again and again. Thats why in first call we passed a newId
+ *
+ * **/
+
+const duplicateRequestOrFolder = async ({ id, parent, level = 0, newId }) => {
   try {
     const node = await boltcoreDB.get(id);
-
-    console.log("=====before node=======");
-    console.log(node);
-
     if (node) {
-      const duplicatedId = uuidv4();
-      node._id = duplicatedId;
+      node._id = newId;
       node.parent = parent;
       delete node._rev;
 
-      console.log("=====after node=======");
-      console.log(node);
+      const childrenList = node.children;
+      const newChildrenList = Array.isArray(node.children)
+        ? node.children.map(() => uuidv4())
+        : [];
 
       await boltcoreDB.put({
         ...node,
+        ...(Array.isArray(childrenList)
+          ? {
+              children: newChildrenList,
+            }
+          : {}),
       });
-
-      const children = node.children ?? [];
 
       if (parent) {
         const parentNode = await boltcoreDB.get(parent);
-
-        console.log({ parentNode });
-
         const parentNodeChildren = parentNode?.children ?? [];
 
-        console.log({ parentNodeChildren, lavel });
-        console.log([...parentNodeChildren, duplicatedId]);
-
-        if (Array.isArray(parentNodeChildren)) {
-          if (!lavel) {
-            await boltcoreDB.put({
-              ...parentNode,
-              children: [...parentNodeChildren, duplicatedId],
-            });
-          } else {
-            const index = parentNodeChildren.findIndex(
-              (childId) => childId === id
-            );
-            console.log({ index });
-            if (index >= 0) {
-              parentNodeChildren[index] = duplicatedId;
-              await boltcoreDB.put({
-                ...parentNode,
-                children: parentNodeChildren,
-              });
-            }
-          }
+        if (parentNode && Array.isArray(parentNodeChildren) && !level) {
+          await boltcoreDB.put({
+            ...parentNode,
+            children: [...parentNodeChildren, newId],
+          });
         }
       }
 
-      if (Array.isArray(children)) {
-        for (const child of children) {
+      if (childrenList) {
+        for (const [index, child] of childrenList.entries()) {
           await duplicateRequestOrFolder({
             id: child,
-            parentId: duplicatedId,
-            lavel: lavel + 1,
+            newId: newChildrenList[index],
+            parent: newId,
+            level: level + 1,
           });
         }
       }
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
 };
