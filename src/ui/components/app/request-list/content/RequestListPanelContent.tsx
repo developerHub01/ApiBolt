@@ -7,7 +7,7 @@ const RequestListPanelContent = memo(() => {
   const { activeTab } = useSidebar();
 
   return (
-    <ScrollArea className="flex-1 w-full min-h-0 px-2 text-sm pb-3">
+    <ScrollArea className="flex-1 w-full min-h-0 text-sm">
       {activeTab === "collections" && <RequestList />}
       {activeTab !== "collections" && activeTab}
     </ScrollArea>
