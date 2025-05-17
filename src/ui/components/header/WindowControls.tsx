@@ -1,4 +1,4 @@
-import { useState, type CSSProperties } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { isElectron } from "@/utils/electron";
 import {
   Minus as MinimizeIcon,
@@ -13,8 +13,13 @@ import type { TWindowControl } from "@/types";
 const WindowControls = () => {
   const [isMaximized, setIsMaximized] = useState<boolean>(true);
 
-  const handleIsMaximised = async () =>
-    setIsMaximized(await window.electronAPI.isWindowMaximized());
+  useEffect(() => {
+    if (!isElectron()) return;
+
+    window.electronAPI.onWindowMaximizeChange((value) => {
+      setIsMaximized(value);
+    });
+  }, []);
 
   return (
     <div
@@ -31,11 +36,11 @@ const WindowControls = () => {
         <MinimizeIcon />
       </ActionButton>
       {isMaximized ? (
-        <ActionButton id={"unmaximize"} onClick={handleIsMaximised}>
+        <ActionButton id={"unmaximize"}>
           <UnMaximizeIcon />
         </ActionButton>
       ) : (
-        <ActionButton id={"maximize"} onClick={handleIsMaximised}>
+        <ActionButton id={"maximize"}>
           <MaximizeIcon />
         </ActionButton>
       )}

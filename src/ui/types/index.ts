@@ -17,6 +17,9 @@ declare global {
 
       windowControls: (type: TWindowControl) => Promise<void>;
       isWindowMaximized: () => Promise<boolean>;
+      onWindowMaximizeChange: (
+        cb: (value: boolean) => void
+      ) => Promise<boolean>;
 
       generateJWTToken: (
         data: Omit<

@@ -11,4 +11,11 @@ export const registerWindowHandlers = (mainWindow) => {
   ipcMain.handle("isWindowMaximized", () => {
     return mainWindow.isMaximized();
   });
+
+  mainWindow.on("maximize", () => {
+    mainWindow.webContents.send("windowMaximizeChange", true);
+  });
+  mainWindow.on("unmaximize", () => {
+    mainWindow.webContents.send("windowMaximizeChange", false);
+  });
 };

@@ -21,6 +21,11 @@ contextBridge.exposeInMainWorld("electronAPI", {
 
   windowControls: (type) => ipcRenderer.invoke("windowControls", type),
   isWindowMaximized: () => ipcRenderer.invoke("isWindowMaximized"),
+  onWindowMaximizeChange: (callback) => {
+    ipcRenderer.on("windowMaximizeChange", (_, isMaximized) => {
+      callback(isMaximized);
+    });
+  },
 
   generateJWTToken: (data) => ipcRenderer.invoke("generateJWTToken", data),
 });
