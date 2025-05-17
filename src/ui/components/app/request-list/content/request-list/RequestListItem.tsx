@@ -18,6 +18,7 @@ import {
 } from "@/context/request-list/RequestListProvider";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { AnimatePresence } from "motion/react";
 
 interface RequestListItemProps extends RequestListItemInterface {
   type: "folder" | "request";
@@ -50,11 +51,16 @@ const RequestListItemContent = ({
   children,
   lavel,
 }: RequestListItemProps) => {
-  const { isRenameActive, handleChangeName, handleRenameAction } =
-    useRequestFolder();
+  const {
+    isRenameActive,
+    handleChangeName,
+    handleRenameAction,
+    isContextMenuOpen,
+  } = useRequestFolder();
   const { createSingleRequest, handleToggleOpenFolder, handleIsFolderOpen } =
     useRequestList();
-  const [nameState, setNameState] = useState(name ?? "");
+  const [nameState, setNameState] = useState<string>(name ?? "");
+  const [isHovering, setIsHovering] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const isExpend = handleIsFolderOpen(id);
@@ -90,10 +96,6 @@ const RequestListItemContent = ({
 
   const handleAddRequest = () => createSingleRequest(id);
 
-  const handleDblClick = () => {
-    handleRenameAction();
-  };
-
   return (
     <>
       <div
@@ -111,6 +113,8 @@ const RequestListItemContent = ({
         style={{
           paddingLeft: lavel * 8 + Number(Boolean(lavel)) * 8,
         }}
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
       >
         <div className="h-7 flex items-center">
           {type === "folder" ? (
@@ -147,7 +151,7 @@ const RequestListItemContent = ({
                 id={`request_list_item_input_${id}`}
                 ref={inputRef}
                 className={cn(
-                  "w-full h-full outline-0 focus:bg-background px-1 rounded-md text-sm",
+                  "w-full h-full outline-0 focus:bg-background px-1 rounded-md text-sm ring-1 ring-primary/80",
                   {
                     "bg-background cursor-text": isRenameActive,
                     "bg-transparent cursor-pointer": !isRenameActive,
@@ -159,11 +163,16 @@ const RequestListItemContent = ({
                 id={`request_list_item_${id}`}
                 value={name}
                 readOnly
-                onDoubleClick={handleDblClick}
+                onDoubleClick={() => handleRenameAction()}
                 className="w-full h-full outline-0 px-1 rounded-md text-sm p-1 whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer select-none"
               />
             )}
-            <ItemCTA type={type} id={id} />
+
+            <AnimatePresence>
+              {(isHovering || isContextMenuOpen) && (
+                <ItemCTA type={type} id={id} />
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>

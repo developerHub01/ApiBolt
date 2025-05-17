@@ -9,6 +9,7 @@ import { EllipsisVertical as ThreeDotIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRequestFolder } from "@/context/request-list/RequestFolderProvider";
 import { useRequestList } from "@/context/request-list/RequestListProvider";
+import { motion } from "motion/react";
 
 type TActionType =
   | "add_request"
@@ -102,35 +103,43 @@ const ItemCTA = ({ type, id }: ItemCTAProps) => {
   };
 
   return (
-    <DropdownMenu
-      open={isContextMenuOpen}
-      onOpenChange={handleToggleContextMenu}
+    <motion.div
+      key={`request-item-cta-${id}`}
+      animate={{
+        opacity: 1,
+      }}
+      exit={{ opacity: 0 }}
     >
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size={"iconXs"}
-          className={cn(
-            "opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto",
-            {
-              "opacity-100 pointer-events-auto": isContextMenuOpen,
-              "opacity-0 pointer-events-none": !isContextMenuOpen,
-            }
-          )}
-        >
-          <ThreeDotIcon />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent
-        className="w-40 [&>div]:cursor-pointer"
-        align="start"
+      <DropdownMenu
+        open={isContextMenuOpen}
+        onOpenChange={handleToggleContextMenu}
       >
-        <CTAList
-          list={type === "folder" ? folderCTAList : requestCTAList}
-          onClick={handleCTAAction}
-        />
-      </DropdownMenuContent>
-    </DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            size={"iconXs"}
+            className={cn(
+              "opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto",
+              {
+                "opacity-100 pointer-events-auto": isContextMenuOpen,
+                "opacity-0 pointer-events-none": !isContextMenuOpen,
+              }
+            )}
+          >
+            <ThreeDotIcon />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          className="w-40 [&>div]:cursor-pointer"
+          align="start"
+        >
+          <CTAList
+            list={type === "folder" ? folderCTAList : requestCTAList}
+            onClick={handleCTAAction}
+          />
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </motion.div>
   );
 };
 
