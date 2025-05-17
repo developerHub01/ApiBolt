@@ -9,9 +9,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
+import { isElectron } from "@/utils/electron";
 
 const FullScreenToggle = () => {
   const { isFullscreen, toggleFullscreen } = useFullScreen();
+
+  if (isElectron()) return null;
 
   return (
     <Tooltip>

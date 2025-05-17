@@ -82,7 +82,10 @@ const RequestListItemContent = ({
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.code === "Enter") handleChangeName(id, nameState.trim() || name);
+    if (e.key === "Enter") {
+      window.getSelection()?.removeAllRanges();
+      handleChangeName(id, nameState.trim() || name);
+    }
   };
 
   const handleAddRequest = () => createSingleRequest(id);
@@ -125,7 +128,11 @@ const RequestListItemContent = ({
             </button>
           ) : (
             <div className="w-10 flex justify-end items-center pl-1">
-              <RequestMethodTag method={method ?? "get"} shortCut={true} />
+              <RequestMethodTag
+                method={method ?? "get"}
+                shortCut={true}
+                className="w-full"
+              />
             </div>
           )}
         </div>
@@ -149,6 +156,7 @@ const RequestListItemContent = ({
               />
             ) : (
               <input
+                id={`request_list_item_${id}`}
                 value={name}
                 readOnly
                 onDoubleClick={handleDblClick}
