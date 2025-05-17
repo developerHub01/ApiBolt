@@ -11,9 +11,9 @@ const RequestList = () => {
   }, [listData]);
 
   return (
-    <div>
-      {rootList.map(({ id }) => (
-        <RequestListItem key={id} id={id} lavel={0} />
+    <div className="flex flex-col w-full py-1">
+      {rootList.map(({ id }, index) => (
+        <RequestListItem key={id} id={id} lavel={0} index={index} />
       ))}
       <RequestListDeleteAlertDialog />
     </div>

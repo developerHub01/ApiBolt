@@ -32,6 +32,11 @@ interface RequestListContext {
   openFolderList: Set<string>;
   handleToggleOpenFolder: (id: string) => void;
   handleIsFolderOpen: (id: string) => boolean;
+  handleMoveRequest: (
+    requestId: string,
+    folderId: string | undefined,
+    index?: number
+  ) => Promise<void>;
 }
 
 const RequestListContext = createContext<RequestListContext | null>(null);
@@ -192,6 +197,17 @@ const RequestListProvider = ({ children }: RequestListProviderProps) => {
     [openFolderList]
   );
 
+  const handleMoveRequest = useCallback(
+    async (
+      requestId: string,
+      folderId: string | undefined,
+      index: number = 0
+    ) => {
+      await window.electronAPIDB.moveBoltCore(requestId, folderId, index);
+    },
+    []
+  );
+
   return (
     <RequestListContext.Provider
       value={{
@@ -206,6 +222,7 @@ const RequestListProvider = ({ children }: RequestListProviderProps) => {
         openFolderList,
         handleToggleOpenFolder,
         handleIsFolderOpen,
+        handleMoveRequest,
       }}
     >
       {children}

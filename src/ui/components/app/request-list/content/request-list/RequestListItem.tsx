@@ -3,6 +3,7 @@ import {
   useRef,
   useState,
   type ChangeEvent,
+  type DragEvent,
   type FocusEvent,
   type KeyboardEvent,
 } from "react";
@@ -23,9 +24,18 @@ import { AnimatePresence } from "motion/react";
 interface RequestListItemProps extends RequestListItemInterface {
   type: "folder" | "request";
   lavel: number;
+  index: number;
 }
 
-const RequestListItem = ({ id, lavel = 0 }: { id: string; lavel: number }) => {
+const RequestListItem = ({
+  id,
+  lavel = 0,
+  index = 0,
+}: {
+  id: string;
+  lavel: number;
+  index: number;
+}) => {
   const { listData } = useRequestList();
 
   const props = listData[id];
@@ -38,6 +48,7 @@ const RequestListItem = ({ id, lavel = 0 }: { id: string; lavel: number }) => {
         {...props}
         type={props.children ? "folder" : "request"}
         lavel={lavel}
+        index={index}
       />
     </RequestFolderProvider>
   );
@@ -49,7 +60,9 @@ const RequestListItemContent = ({
   name,
   method,
   children,
+  parent,
   lavel,
+  index,
 }: RequestListItemProps) => {
   const {
     isRenameActive,
@@ -57,10 +70,15 @@ const RequestListItemContent = ({
     handleRenameAction,
     isContextMenuOpen,
   } = useRequestFolder();
-  const { createSingleRequest, handleToggleOpenFolder, handleIsFolderOpen } =
-    useRequestList();
+  const {
+    createSingleRequest,
+    handleToggleOpenFolder,
+    handleIsFolderOpen,
+    handleMoveRequest,
+  } = useRequestList();
   const [nameState, setNameState] = useState<string>(name ?? "");
   const [isHovering, setIsHovering] = useState<boolean>(false);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const isExpend = handleIsFolderOpen(id);
@@ -96,83 +114,121 @@ const RequestListItemContent = ({
 
   const handleAddRequest = () => createSingleRequest(id);
 
+  const handleDragStart = (e: DragEvent<HTMLDivElement>) => {
+    e.dataTransfer.setData("text/plain", id);
+    e.dataTransfer.effectAllowed = "move";
+  };
+
+  const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+
+    setIsDragging(true);
+  };
+
+  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const draggedId = e.dataTransfer.getData("text/plain");
+
+    setIsDragging(false);
+    if (draggedId === id) return;
+    
+    (async () =>
+      await handleMoveRequest(draggedId, children ? id : parent, index))();
+  };
+
+  const handleDragLeave = () => setIsDragging(false);
+
   return (
     <>
-      <div
-        className="hover:bg-accent/50 focus-within:bg-accent/50 duration-100 transition-all pr-0.5 py-0.5 flex gap-1 items-start justify-between cursor-pointer select-none group"
-        /**
-         * level wise padding will increase and if not 0 then 8 will add
-         *
-         * for example level 0
-         * = 0 * 8 + 0 * 8 = 0 so that root folder or request don't get extra padding
-         * if level 1
-         * = 1 * 8 + 1 * 8 = 16
-         * for level 2
-         * = 2 * 8 + 1 * 8 = 24
-         */
-        style={{
-          paddingLeft: lavel * 8 + Number(Boolean(lavel)) * 8,
-        }}
-        onMouseEnter={() => setIsHovering(true)}
-        onMouseLeave={() => setIsHovering(false)}
-      >
-        <div className="h-7 flex items-center">
-          {type === "folder" ? (
-            <button
-              className={cn(
-                "p-0.5 aspect-square cursor-pointer duration-100 transition-all",
-                {
-                  "rotate-90": isExpend,
-                  "rotate-0": !isExpend,
-                }
-              )}
-              onClick={() => handleToggleOpenFolder(id)}
-            >
-              <ArrowIcon size={18} />
-            </button>
-          ) : (
-            <div className="w-10 flex justify-end items-center pl-1">
-              <RequestMethodTag
-                method={method ?? "get"}
-                shortCut={true}
-                className="w-full"
-              />
-            </div>
+      <div className="hover:bg-accent/50 focus-within:bg-accent/50 duration-100 transition-all px-2">
+        <div
+          className={cn(
+            "pr-0.5 py-0.5 flex gap-1 items-start justify-between cursor-pointer select-none group ring-2 rounded-md",
+            {
+              "ring-primary/50": isDragging,
+              "ring-transparent": !isDragging,
+            }
           )}
-        </div>
-        <div className="w-full flex flex-col gap-1">
-          <div className="w-full text-sm h-7 flex justify-between items-center gap-1">
-            {isRenameActive ? (
-              <input
-                value={nameState}
-                onChange={handleChange}
-                onKeyDown={handleKeyDown}
-                onBlur={handleBlur}
-                id={`request_list_item_input_${id}`}
-                ref={inputRef}
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
+          draggable
+          onDragStart={handleDragStart}
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+          onDragLeave={handleDragLeave}
+          /**
+           * level wise padding will increase and if not 0 then 8 will add
+           *
+           * for example level 0
+           * = 0 * 8 + 0 * 8 = 0 so that root folder or request don't get extra padding
+           * if level 1
+           * = 1 * 8 + 1 * 8 = 16
+           * for level 2
+           * = 2 * 8 + 1 * 8 = 24
+           */
+          style={{
+            paddingLeft: lavel * 8 + Number(Boolean(lavel)) * 8,
+          }}
+        >
+          <div className="h-7 flex items-center">
+            {type === "folder" ? (
+              <button
                 className={cn(
-                  "w-full h-full outline-0 focus:bg-background px-1 rounded-md text-sm ring-1 ring-primary/80",
+                  "p-0.5 aspect-square cursor-pointer duration-100 transition-all",
                   {
-                    "bg-background cursor-text": isRenameActive,
-                    "bg-transparent cursor-pointer": !isRenameActive,
+                    "rotate-90": isExpend,
+                    "rotate-0": !isExpend,
                   }
                 )}
-              />
+                onClick={() => handleToggleOpenFolder(id)}
+              >
+                <ArrowIcon size={18} />
+              </button>
             ) : (
-              <input
-                id={`request_list_item_${id}`}
-                value={name}
-                readOnly
-                onDoubleClick={() => handleRenameAction()}
-                className="w-full h-full outline-0 px-1 rounded-md text-sm p-1 whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer select-none"
-              />
+              <div className="w-10 flex justify-end items-center pl-1">
+                <RequestMethodTag
+                  method={method ?? "get"}
+                  shortCut={true}
+                  className="w-full"
+                />
+              </div>
             )}
-
-            <AnimatePresence>
-              {(isHovering || isContextMenuOpen) && (
-                <ItemCTA type={type} id={id} />
+          </div>
+          <div className="w-full flex flex-col gap-0.5">
+            <div className="w-full text-sm h-7 flex justify-between items-center gap-1">
+              {isRenameActive ? (
+                <input
+                  value={nameState}
+                  onChange={handleChange}
+                  onKeyDown={handleKeyDown}
+                  onBlur={handleBlur}
+                  id={`request_list_item_input_${id}`}
+                  ref={inputRef}
+                  className={cn(
+                    "w-full h-full outline-0 focus:bg-background px-1 rounded-md text-sm ring-1 ring-primary/80",
+                    {
+                      "bg-background cursor-text": isRenameActive,
+                      "bg-transparent cursor-pointer": !isRenameActive,
+                    }
+                  )}
+                />
+              ) : (
+                <input
+                  id={`request_list_item_${id}`}
+                  value={name}
+                  readOnly
+                  onDoubleClick={() => handleRenameAction()}
+                  className="w-full h-full outline-0 px-1 rounded-md text-sm p-1 whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer select-none"
+                />
               )}
-            </AnimatePresence>
+
+              <AnimatePresence>
+                {(isHovering || isContextMenuOpen) && (
+                  <ItemCTA type={type} id={id} />
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </div>
       </div>
@@ -198,8 +254,13 @@ const RequestListItemContent = ({
             </div>
           ) : (
             <div>
-              {children.map((id) => (
-                <RequestListItem key={id} id={id} lavel={lavel + 1} />
+              {children.map((id, index) => (
+                <RequestListItem
+                  key={id}
+                  id={id}
+                  lavel={lavel + 1}
+                  index={index}
+                />
               ))}
             </div>
           )}
