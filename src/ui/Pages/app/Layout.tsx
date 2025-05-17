@@ -1,3 +1,4 @@
+import AppMainContentLayoutWrapper from "@/components/app/AppMainContentLayoutWrapper";
 import RequestListPanelWrapper from "@/components/app/request-list/RequestListPanelWrapper";
 import Sidebar from "@/components/app/sidebar/Sidebar";
 import CopyRight from "@/components/copy-right";
@@ -18,13 +19,7 @@ const AppLayout = () => {
       <section className="min-h-0 flex-1 flex content-stretch">
         <SidebarProvider>
           <Sidebar />
-          <ResizablePanelGroup
-            direction="horizontal"
-            className="w-full h-full border md:min-w-[450px]"
-            style={{
-              height: "auto",
-            }}
-          >
+          <AppMainContentLayoutWrapper>
             <RequestListPanelWrapper />
             <ResizableHandle />
             <ResizablePanel defaultSize={70}>
@@ -36,7 +31,7 @@ const AppLayout = () => {
                 </ResizablePanel>
               </ResizablePanelGroup>
             </ResizablePanel>
-          </ResizablePanelGroup>
+          </AppMainContentLayoutWrapper>
         </SidebarProvider>
       </section>
       <CopyRight />
