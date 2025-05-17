@@ -53,6 +53,11 @@ contextBridge.exposeInMainWorld("electronAPIDB", {
     delete payload.id;
     return await ipcRenderer.invoke("updateBoltCore", id, payload);
   },
+  duplicateBoltCore: async (id) => {
+    if (!id) return;
+
+    return await ipcRenderer.invoke("duplicateBoltCore", id);
+  },
   deleteBoltCore: async (id) => {
     if (!id) return;
     return await ipcRenderer.invoke("deleteBoltCore", id);

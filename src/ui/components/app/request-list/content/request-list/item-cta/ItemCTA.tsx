@@ -67,15 +67,13 @@ interface ItemCTAProps {
 }
 
 const ItemCTA = ({ type, id }: ItemCTAProps) => {
-  const {
-    isContextMenuOpen,
-    handleToggleContextMenu,
-    handleRenameAction,
-  } = useRequestFolder();
+  const { isContextMenuOpen, handleToggleContextMenu, handleRenameAction } =
+    useRequestFolder();
   const {
     handleChangeDeleteFolderOrRequestId,
     createSingleRequest,
     createCollection,
+    duplicateBoltCore,
   } = useRequestList();
 
   const handleCTAAction = (actionType: string) => {
@@ -97,6 +95,7 @@ const ItemCTA = ({ type, id }: ItemCTAProps) => {
         break;
       }
       case "duplicate": {
+        duplicateBoltCore(id);
         break;
       }
     }

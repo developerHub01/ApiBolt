@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from "uuid";
 import PouchDB from "pouchdb";
 export const boltcoreDB = new PouchDB("boltCore");
 
@@ -61,11 +62,25 @@ export const updateBoltCore = async (event, id, payload) => {
   }
 };
 
+export const duplicateBoltCore = async (event, id) => {
+  if (!id) return;
+
+  try {
+    const node = await boltcoreDB.get(id);
+    console.log({ node });
+    await duplicateRequestOrFolder({ id, parent: node?.parent });
+  } catch (error) {
+    console.log(error);
+  } finally {
+    boltCoreHaveChange(event);
+  }
+};
+
 export const deleteBoltCore = async (event, id) => {
   const deleteCandidateList = await getNestedChildList(id);
 
   try {
-    const response = await boltcoreDB.bulkDocs(deleteCandidateList);
+    await boltcoreDB.bulkDocs(deleteCandidateList);
   } catch (error) {
     console.log(error);
   } finally {
@@ -115,5 +130,74 @@ const getNestedChildList = async (id, list = []) => {
     console.log(error);
   } finally {
     return list;
+  }
+};
+
+const duplicateRequestOrFolder = async ({ id, parent, lavel = 0 }) => {
+  try {
+    const node = await boltcoreDB.get(id);
+
+    console.log("=====before node=======");
+    console.log(node);
+
+    if (node) {
+      const duplicatedId = uuidv4();
+      node._id = duplicatedId;
+      node.parent = parent;
+      delete node._rev;
+
+      console.log("=====after node=======");
+      console.log(node);
+
+      await boltcoreDB.put({
+        ...node,
+      });
+
+      const children = node.children ?? [];
+
+      if (parent) {
+        const parentNode = await boltcoreDB.get(parent);
+
+        console.log({ parentNode });
+
+        const parentNodeChildren = parentNode?.children ?? [];
+
+        console.log({ parentNodeChildren, lavel });
+        console.log([...parentNodeChildren, duplicatedId]);
+
+        if (Array.isArray(parentNodeChildren)) {
+          if (!lavel) {
+            await boltcoreDB.put({
+              ...parentNode,
+              children: [...parentNodeChildren, duplicatedId],
+            });
+          } else {
+            const index = parentNodeChildren.findIndex(
+              (childId) => childId === id
+            );
+            console.log({ index });
+            if (index >= 0) {
+              parentNodeChildren[index] = duplicatedId;
+              await boltcoreDB.put({
+                ...parentNode,
+                children: parentNodeChildren,
+              });
+            }
+          }
+        }
+      }
+
+      if (Array.isArray(children)) {
+        for (const child of children) {
+          await duplicateRequestOrFolder({
+            id: child,
+            parentId: duplicatedId,
+            lavel: lavel + 1,
+          });
+        }
+      }
+    }
+  } catch (error) {
+    console.log(error);
   }
 };

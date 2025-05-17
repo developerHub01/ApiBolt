@@ -25,6 +25,7 @@ interface RequestListContext {
   createSingleRequest: (parent?: string) => Promise<void>;
   createCollection: (parent?: string) => Promise<void>;
   createRestApiBasic: () => Promise<void>;
+  duplicateBoltCore: (id: string) => Promise<void>;
   deleteFolderOrRequestId: string;
   handleChangeDeleteFolderOrRequestId: (value: string) => void;
   handleDeleteFolderOrRequest: (value: boolean) => void;
@@ -115,7 +116,7 @@ const RequestListProvider = ({ children }: RequestListProviderProps) => {
   const createCollection = async (parent?: string) => {
     const payload = {
       id: uuidv4(),
-      name: "Collection",
+      name: parent ? "Folder" : "Collection",
       children: [],
       ...(parent ? { parent } : {}),
     };
@@ -125,7 +126,6 @@ const RequestListProvider = ({ children }: RequestListProviderProps) => {
     const parentFolder: RequestListItemInterface = {
       id: uuidv4(),
       name: "REST API basics: CRUD, test & variable",
-      method: "get",
       children: [],
     };
 
@@ -167,6 +167,10 @@ const RequestListProvider = ({ children }: RequestListProviderProps) => {
     ]);
   };
 
+  const duplicateBoltCore = async (id: string) => {
+    await window.electronAPIDB.duplicateBoltCore(id);
+  };
+
   const handleToggleOpenFolder = useCallback(
     (id: string) => {
       setOpenFolder((prev) => {
@@ -195,6 +199,7 @@ const RequestListProvider = ({ children }: RequestListProviderProps) => {
         createSingleRequest,
         createCollection,
         createRestApiBasic,
+        duplicateBoltCore,
         deleteFolderOrRequestId,
         handleChangeDeleteFolderOrRequestId,
         handleDeleteFolderOrRequest,

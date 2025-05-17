@@ -35,6 +35,7 @@ declare global {
       addMultipleBoltCore: (
         payload: Array<RequestListItemInterface>
       ) => Promise<unknown>;
+      duplicateBoltCore: (id: string) => Promise<unknown>;
       updateBoltCore: (
         id: string,
         payload: Partial<RequestListItemInterface>
