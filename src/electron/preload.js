@@ -67,6 +67,10 @@ contextBridge.exposeInMainWorld("electronAPIDB", {
     if (!id) return;
     return await ipcRenderer.invoke("deleteBoltCore", id);
   },
+  moveBoltCore: async (id, folderId, index) => {
+    if (!id) return;
+    return await ipcRenderer.invoke("moveBoltCore", id, folderId, index ?? 0);
+  },
   getAllBoltCore: async () => {
     return await ipcRenderer.invoke("getAllBoltCore");
   },

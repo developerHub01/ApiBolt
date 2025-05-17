@@ -5,6 +5,7 @@ import {
   deleteBoltCore,
   duplicateBoltCore,
   getAllBoltCore,
+  moveBoltCore,
   updateBoltCore,
 } from "../db/boltCoreDB.js";
 
@@ -14,5 +15,6 @@ export const boltCoreDBHandlers = () => {
   ipcMain.handle("updateBoltCore", updateBoltCore);
   ipcMain.handle("duplicateBoltCore", duplicateBoltCore);
   ipcMain.handle("deleteBoltCore", deleteBoltCore);
+  ipcMain.handle("moveBoltCore", moveBoltCore);
   ipcMain.handle("getAllBoltCore", getAllBoltCore);
 };

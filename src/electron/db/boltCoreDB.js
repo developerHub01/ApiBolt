@@ -92,6 +92,52 @@ export const deleteBoltCore = async (event, id) => {
   }
 };
 
+export const moveBoltCore = async (event, id, folderId, index = 0) => {
+  try {
+    if (id === folderId) return;
+
+    const currentData = await boltcoreDB.get(id);
+
+    if (!currentData) return;
+
+    /* remove id from its parent children */
+    if (currentData?.parent) {
+      const currentParentData = await boltcoreDB.get(currentData.parent);
+      currentParentData.children = (currentParentData.children ?? []).filter(
+        (item) => item !== id
+      );
+      await boltcoreDB.put({
+        ...currentParentData,
+      });
+    }
+
+    /* make id under given folderId */
+    if (folderId) {
+      await boltcoreDB.put({
+        ...currentData,
+        parent: folderId,
+      });
+    }
+
+    const folderData = await boltcoreDB.get(folderId);
+
+    const newFolderChildren = folderData.children ?? [];
+    newFolderChildren.splice(index, 0, id);
+    folderData.children = newFolderChildren;
+
+    /* add id into parent children nth index */
+    if (folderData) {
+      await boltcoreDB.put({
+        ...folderData,
+      });
+    }
+  } catch (error) {
+    // console.log(error);
+  } finally {
+    boltCoreHaveChange(event);
+  }
+};
+
 /**
  * key as id and value rest of the
  * **/

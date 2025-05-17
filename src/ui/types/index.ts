@@ -44,6 +44,11 @@ declare global {
         payload: Partial<RequestListItemInterface>
       ) => Promise<unknown>;
       deleteBoltCore: (id: string) => Promise<void>;
+      moveBoltCore: (
+        id: string,
+        folderId: string | undefined,
+        index: number
+      ) => Promise<void>;
       getAllBoltCore: () => Promise<Record<string, RequestListItemInterface>>;
       onBoltCoreChange: (cb: () => void) => void;
     };
