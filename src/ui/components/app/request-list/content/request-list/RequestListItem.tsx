@@ -69,6 +69,7 @@ const RequestListItemContent = ({
     handleChangeName,
     handleRenameAction,
     isContextMenuOpen,
+    handleToggleContextMenu,
   } = useRequestFolder();
   const {
     createSingleRequest,
@@ -132,7 +133,7 @@ const RequestListItemContent = ({
 
     setIsDragging(false);
     if (draggedId === id) return;
-    
+
     (async () =>
       await handleMoveRequest(draggedId, children ? id : parent, index))();
   };
@@ -141,7 +142,10 @@ const RequestListItemContent = ({
 
   return (
     <>
-      <div className="hover:bg-accent/50 focus-within:bg-accent/50 duration-100 transition-all px-2">
+      <div
+        className="hover:bg-accent/50 focus-within:bg-accent/50 duration-100 transition-all px-2"
+        onContextMenu={() => handleToggleContextMenu(true)}
+      >
         <div
           className={cn(
             "pr-0.5 py-0.5 flex gap-1 items-start justify-between cursor-pointer select-none group ring-2 rounded-md",

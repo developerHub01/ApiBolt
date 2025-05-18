@@ -2,7 +2,7 @@ import React, { createContext, useCallback, useContext, useState } from "react";
 
 interface RequestFolderContext {
   isContextMenuOpen: boolean;
-  handleToggleContextMenu: () => void;
+  handleToggleContextMenu: (value?: boolean) => void;
   isRenameActive: boolean;
   handleRenameAction: () => void;
   handleChangeName: (id: string, name: string) => void;
@@ -33,7 +33,8 @@ const RequestFolderProvider = ({ children }: RequestFolderProviderProps) => {
   const [isRenameActive, setIsRenameActive] = useState<boolean>(false);
 
   const handleToggleContextMenu = useCallback(
-    () => setIsContextMenuOpen((prev) => !prev),
+    (value?: boolean) =>
+      setIsContextMenuOpen((prev) => (value === undefined ? !prev : value)),
     []
   );
 
