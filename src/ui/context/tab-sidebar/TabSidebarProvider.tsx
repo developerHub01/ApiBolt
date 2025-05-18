@@ -1,4 +1,10 @@
-import React, { createContext, useCallback, useContext, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import type { THTTPMethods } from "../request/RequestResponseProvider";
 
 export interface TabInterface {
@@ -190,10 +196,15 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
   const [tabListState] = useState<Array<TabInterface>>(tabList);
   const [isTabListHovering, setIsTabListHovering] = useState<boolean>(false);
 
+  useEffect(() => {
+    if (isTabListHovering) setIsTabListHovering(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleTabListHovering = useCallback(
     (value: boolean) => {
       if (isTabListHovering !== value)
-        setTimeout(() => setIsTabListHovering(value), 100);
+        setTimeout(() => setIsTabListHovering(value), 50);
     },
     [isTabListHovering]
   );
