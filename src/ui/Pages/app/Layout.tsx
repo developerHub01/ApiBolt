@@ -1,6 +1,7 @@
 import AppMainContentLayoutWrapper from "@/components/app/AppMainContentLayoutWrapper";
 import RequestListPanelWrapper from "@/components/app/request-list/RequestListPanelWrapper";
 import Sidebar from "@/components/app/sidebar/Sidebar";
+import TabSidebar from "@/components/app/tab-sidebar/TabSidebar";
 import CopyRight from "@/components/copy-right";
 import Header from "@/components/header/Header";
 import {
@@ -32,6 +33,7 @@ const AppLayout = () => {
               </ResizablePanelGroup>
             </ResizablePanel>
           </AppMainContentLayoutWrapper>
+          <TabSidebar />
         </SidebarProvider>
       </section>
       <CopyRight />

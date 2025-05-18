@@ -6,17 +6,21 @@ interface Props {
   method: TMethod;
   className?: string;
   shortCut?: boolean;
+  shortCutSizeForAll?: number;
 }
 
 const RequestMethodTag = ({
   method,
   className = "",
   shortCut = false,
+  shortCutSizeForAll = 5,
 }: Props) => {
+  const modifiedMethod = method.substring(0, shortCutSizeForAll);
+
   return (
     <Badge
       className={cn(
-        "uppercase text-[10px] px-1 font-semibold rounded-md border",
+        "uppercase text-[10px] px-1 font-semibold rounded-md border select-none",
         {
           "bg-green-500/80 text-white backdrop-blur-lg": method === "get",
           "bg-blue-500/80 text-white backdrop-blur-lg": method === "post",
@@ -27,7 +31,7 @@ const RequestMethodTag = ({
         className
       )}
     >
-      {shortCut && method === "delete" ? "del" : method}
+      {shortCut && modifiedMethod === "delete" ? "del" : modifiedMethod}
     </Badge>
   );
 };
