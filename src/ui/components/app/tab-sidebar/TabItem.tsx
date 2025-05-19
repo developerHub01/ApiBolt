@@ -37,6 +37,7 @@ const TabItem = ({ id, index }: { id: string; index: number }) => {
 
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
+    e.stopPropagation();
     const draggedId = e.dataTransfer.getData("text/plain");
 
     setIsDragging(false);

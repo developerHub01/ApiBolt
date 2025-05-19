@@ -26,7 +26,7 @@ interface TabSidebarContext {
   handleTabListHovering: (value: boolean) => void;
   addTab: (id: string) => void;
   removeTab: (id: string) => void;
-  moveTab: (id: string, index: number) => void;
+  moveTab: (id: string, index?: number) => void;
   changeSelectedTab: (id: string) => void;
   changeTabsData: () => Promise<void>;
 }
@@ -269,13 +269,12 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
     [tabListState]
   );
 
-  const moveTab = useCallback((id: string, index: number) => {
+  const moveTab = useCallback((id: string, index?: number) => {
     setTabListState((prev) => {
       const idIndex = prev.findIndex((tabId) => tabId === id);
-
       if (idIndex >= 0) prev = prev.filter((tabId) => tabId !== id);
 
-      prev.splice(index, 0, id);
+      prev.splice(index ?? prev.length, 0, id);
       return [...prev];
     });
   }, []);
