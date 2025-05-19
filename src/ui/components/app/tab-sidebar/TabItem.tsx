@@ -1,27 +1,38 @@
+import { useState } from "react";
 import RequestMethodTag from "@/components/app/RequestMethodTag";
 import { Button } from "@/components/ui/button";
-import {
-  useTabSidebar,
-  type TabInterface,
-} from "@/context/tab-sidebar/TabSidebarProvider";
+import { useRequestList } from "@/context/request-list/RequestListProvider";
+import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 import { cn } from "@/lib/utils";
 import type { TMethod } from "@/types";
 import { FolderClosed as FolderIcon, X as CloseIcon } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { useState } from "react";
 
-const TabItem = ({ id, name, children, method }: TabInterface) => {
-  const { isTabListHovering } = useTabSidebar();
+const TabItem = ({ id }: { id: string }) => {
+  const { handleGetRequestOrFolderDetails } = useRequestList();
+
+  const tabDetails = handleGetRequestOrFolderDetails(id) ?? {};
+
+  const { isTabListHovering, selectedTab, changeSelectedTab } = useTabSidebar();
   const [isTabHovering, setIsTabHovering] = useState<boolean>(false);
+
+  if (!tabDetails) return null;
+
+  const { name, children, method } = tabDetails;
 
   return (
     <div
       key={id}
-      className={
-        "w-full h-8 flex gap-1 items-center justify-center cursor-pointer hover:bg-accent px-2"
-      }
+      className={cn(
+        "w-full h-8 flex items-center justify-center cursor-pointer hover:bg-accent px-2",
+        {
+          "bg-accent": selectedTab === id,
+          "bg-transparent": selectedTab !== id,
+        }
+      )}
       onMouseEnter={() => setIsTabHovering(true)}
       onMouseLeave={() => setIsTabHovering(false)}
+      onClick={() => changeSelectedTab(id)}
     >
       {(children || method) && (
         <div

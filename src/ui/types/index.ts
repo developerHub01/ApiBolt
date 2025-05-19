@@ -4,6 +4,7 @@ import type {
   JWTBearerAuthInterface,
   ResponseInterface,
 } from "@/context/request/RequestResponseProvider";
+import type { TabsDataInterface } from "@/context/tab-sidebar/TabSidebarProvider";
 
 declare global {
   interface Window {
@@ -51,6 +52,10 @@ declare global {
       ) => Promise<void>;
       getAllBoltCore: () => Promise<Record<string, RequestListItemInterface>>;
       onBoltCoreChange: (cb: () => void) => void;
+
+      /* Tabs ============== */
+      getTabList: () => Promise<TabsDataInterface>;
+      changeTabsData: (payload: TabsDataInterface) => Promise<void>;
     };
   }
 }

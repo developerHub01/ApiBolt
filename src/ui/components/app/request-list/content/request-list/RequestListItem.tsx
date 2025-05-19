@@ -6,6 +6,7 @@ import {
   type DragEvent,
   type FocusEvent,
   type KeyboardEvent,
+  type MouseEvent,
 } from "react";
 import RequestFolderProvider, {
   useRequestFolder,
@@ -20,6 +21,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { AnimatePresence } from "motion/react";
+import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 
 interface RequestListItemProps extends RequestListItemInterface {
   type: "folder" | "request";
@@ -77,6 +79,7 @@ const RequestListItemContent = ({
     handleIsFolderOpen,
     handleMoveRequest,
   } = useRequestList();
+  const { changeSelectedTab } = useTabSidebar();
   const [nameState, setNameState] = useState<string>(name ?? "");
   const [isHovering, setIsHovering] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
@@ -140,11 +143,24 @@ const RequestListItemContent = ({
 
   const handleDragLeave = () => setIsDragging(false);
 
+  const handleArrowButtonClick = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    handleToggleOpenFolder(id);
+  };
+
+  const handleNameDoubleClick = (e: MouseEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+    handleRenameAction();
+  };
+
+  const handleRequestClick = () => changeSelectedTab(id);
+
   return (
     <>
       <div
         className="hover:bg-accent/50 focus-within:bg-accent/50 duration-100 transition-all px-2"
         onContextMenu={() => handleToggleContextMenu(true)}
+        onClick={handleRequestClick}
       >
         <div
           className={cn(
@@ -185,7 +201,7 @@ const RequestListItemContent = ({
                     "rotate-0": !isExpend,
                   }
                 )}
-                onClick={() => handleToggleOpenFolder(id)}
+                onClick={handleArrowButtonClick}
               >
                 <ArrowIcon size={18} />
               </button>
@@ -222,7 +238,7 @@ const RequestListItemContent = ({
                   id={`request_list_item_${id}`}
                   value={name}
                   readOnly
-                  onDoubleClick={() => handleRenameAction()}
+                  onDoubleClick={handleNameDoubleClick}
                   className="w-full h-full outline-0 px-1 rounded-md text-sm p-1 whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer select-none"
                 />
               )}

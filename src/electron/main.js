@@ -11,6 +11,7 @@ import "./db/boltcoreDB.js";
 import "./ipc/boltCoreDB.js";
 import { boltCoreDBHandlers } from "./ipc/boltCoreDB.js";
 import { openFoldersDBHandlers } from "./ipc/openFoldersDB.js";
+import { tabsDBHandlers } from "./ipc/tabsDB.js";
 
 // browser style cookies holder by domain/path
 export const jar = initialCookieJar(undefined, { rejectPublicSuffixes: false });
@@ -37,6 +38,7 @@ app.whenReady().then(() => {
 
   boltCoreDBHandlers();
   openFoldersDBHandlers();
+  tabsDBHandlers();
 });
 
 app.on("window-all-closed", () => {

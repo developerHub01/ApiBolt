@@ -22,6 +22,7 @@ export interface RequestListInterface {
 
 interface RequestListContext {
   listData: Record<string, RequestListItemInterface>;
+  handleGetRequestOrFolderDetails: (id: string) => RequestListItemInterface;
   createSingleRequest: (parent?: string) => Promise<void>;
   createCollection: (parent?: string) => Promise<void>;
   createRestApiBasic: () => Promise<void>;
@@ -77,6 +78,13 @@ const RequestListProvider = ({ children }: RequestListProviderProps) => {
     (async () => await handleLoadOpenFolderList())();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleGetRequestOrFolderDetails = useCallback(
+    (id: string) => {
+      return listData[id];
+    },
+    [listData]
+  );
 
   const handleLoadList = useCallback(
     async () => setListData(await window.electronAPIDB.getAllBoltCore()),
@@ -212,6 +220,7 @@ const RequestListProvider = ({ children }: RequestListProviderProps) => {
     <RequestListContext.Provider
       value={{
         listData,
+        handleGetRequestOrFolderDetails,
         createSingleRequest,
         createCollection,
         createRestApiBasic,

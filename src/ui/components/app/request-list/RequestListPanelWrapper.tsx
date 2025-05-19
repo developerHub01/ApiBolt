@@ -1,8 +1,7 @@
+import { useRef } from "react";
 import { ResizablePanel } from "@/components/ui/resizable";
 import { useSidebar } from "@/context/sidebar/SidebarProvider";
 import RequestListPanel from "@/components/app/request-list/RequestListPanel";
-import RequestListProvider from "@/context/request-list/RequestListProvider";
-import { useRef } from "react";
 import type { ImperativePanelHandle } from "react-resizable-panels";
 
 const RequestListPanelWrapper = () => {
@@ -31,9 +30,7 @@ const RequestListPanelWrapper = () => {
       onResize={handleResize}
       ref={resizablePanelRef}
     >
-      <RequestListProvider>
-        <RequestListPanel />
-      </RequestListProvider>
+      <RequestListPanel />
     </ResizablePanel>
   );
 };

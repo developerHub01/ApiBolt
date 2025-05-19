@@ -75,4 +75,12 @@ contextBridge.exposeInMainWorld("electronAPIDB", {
     return await ipcRenderer.invoke("getAllBoltCore");
   },
   onBoltCoreChange: (cb) => ipcRenderer.on("boltCoreChange", cb),
+
+  /* Tabs ============== */
+  getTabList: async () => {
+    return await ipcRenderer.invoke("getTabList");
+  },
+  changeTabsData: async (payload) => {
+    return await ipcRenderer.invoke("changeTabsData", payload);
+  },
 });

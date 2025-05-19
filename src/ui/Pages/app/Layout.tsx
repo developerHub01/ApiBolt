@@ -10,7 +10,9 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import RequestFolderProvider from "@/context/request-list/RequestFolderProvider";
+import RequestListProvider from "@/context/request-list/RequestListProvider";
 import SidebarProvider from "@/context/sidebar/SidebarProvider";
+import TabSidebarProvider from "@/context/tab-sidebar/TabSidebarProvider";
 import { Outlet } from "react-router-dom";
 
 const AppLayout = () => {
@@ -18,7 +20,7 @@ const AppLayout = () => {
     <section className="h-dvh overflow-hidden flex flex-col">
       <Header />
       <section className="min-h-0 flex-1 flex content-stretch">
-        <SidebarProvider>
+        <ProviderStack>
           <Sidebar />
           <AppMainContentLayoutWrapper>
             <RequestListPanelWrapper />
@@ -34,10 +36,20 @@ const AppLayout = () => {
             </ResizablePanel>
           </AppMainContentLayoutWrapper>
           <TabSidebar />
-        </SidebarProvider>
+        </ProviderStack>
       </section>
       <CopyRight />
     </section>
+  );
+};
+
+const ProviderStack = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <SidebarProvider>
+      <RequestListProvider>
+        <TabSidebarProvider>{children}</TabSidebarProvider>
+      </RequestListProvider>
+    </SidebarProvider>
   );
 };
 

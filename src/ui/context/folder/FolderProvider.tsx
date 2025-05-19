@@ -31,6 +31,7 @@ const FolderProvider = ({ children }: FolderProviderProps) => {
   const handleChangeTitle = useCallback((title: string) => {
     setTitle(title.trim());
   }, []);
+  
   const handleChangeDescription = useCallback((title: string) => {
     setDescription(title.trim());
   }, []);

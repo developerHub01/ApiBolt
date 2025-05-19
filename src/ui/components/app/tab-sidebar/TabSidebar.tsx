@@ -1,18 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Plus as AddIcon } from "lucide-react";
-import TabSidebarProvider, {
-  useTabSidebar,
-} from "@/context/tab-sidebar/TabSidebarProvider";
+import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 import TabItem from "@/components/app/tab-sidebar/TabItem";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 
 const TabSidebar = () => {
   return (
-    <TabSidebarProvider>
+    <>
       <TabSidebarContent />
-    </TabSidebarProvider>
+    </>
   );
 };
 
@@ -36,8 +34,8 @@ const TabSidebarContent = () => {
       >
         <ScrollArea className="w-full h-full min-h-0 flex-1 pt-2 pb-0">
           <div className="w-full flex flex-col gap-1 pb-1">
-            {tabListState.map((tab) => (
-              <TabItem {...tab} />
+            {tabListState.map((tabId) => (
+              <TabItem id={tabId} />
             ))}
           </div>
         </ScrollArea>
