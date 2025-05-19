@@ -3,7 +3,7 @@ import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 import TabItem from "@/components/app/tab-sidebar/TabItem";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
-import { AddNewTab } from "@/components/app/tab-sidebar/AddNewTab";
+// import { AddNewTab } from "@/components/app/tab-sidebar/AddNewTab";
 import Empty from "@/components/ui/empty";
 
 const TabSidebar = () => {
@@ -37,7 +37,7 @@ const TabSidebar = () => {
             )}
           </div>
         </ScrollArea>
-        <AddNewTab />
+        {/* <AddNewTab /> */}
       </motion.div>
     </div>
   );
