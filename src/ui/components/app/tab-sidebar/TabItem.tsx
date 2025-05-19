@@ -13,7 +13,8 @@ const TabItem = ({ id }: { id: string }) => {
 
   const tabDetails = handleGetRequestOrFolderDetails(id) ?? {};
 
-  const { isTabListHovering, selectedTab, changeSelectedTab } = useTabSidebar();
+  const { isTabListHovering, selectedTab, changeSelectedTab, removeTab } =
+    useTabSidebar();
   const [isTabHovering, setIsTabHovering] = useState<boolean>(false);
 
   if (!tabDetails) return null;
@@ -79,7 +80,11 @@ const TabItem = ({ id }: { id: string }) => {
               exit={{ opacity: 0, scale: 0.85 }}
               transition={{ duration: 0.15, ease: "easeInOut" }}
             >
-              <Button size={"iconXs"} variant={"ghost"}>
+              <Button
+                size={"iconXs"}
+                variant={"ghost"}
+                onClick={() => removeTab(id)}
+              >
                 <CloseIcon />
               </Button>
             </motion.div>

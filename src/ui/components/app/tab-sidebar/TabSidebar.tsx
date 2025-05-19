@@ -4,6 +4,7 @@ import TabItem from "@/components/app/tab-sidebar/TabItem";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 import { AddNewTab } from "@/components/app/tab-sidebar/AddNewTab";
+import Empty from "@/components/ui/empty";
 
 const TabSidebar = () => {
   const { tabListState, isTabListHovering, handleTabListHovering } =
@@ -25,9 +26,15 @@ const TabSidebar = () => {
       >
         <ScrollArea className="w-full h-full min-h-0 flex-1 pt-2 pb-0">
           <div className="w-full flex flex-col gap-1 pb-1">
-            {tabListState.map((tabId) => (
-              <TabItem id={tabId} />
-            ))}
+            {tabListState.length ? (
+              <>
+                {tabListState.map((tabId) => (
+                  <TabItem id={tabId} />
+                ))}
+              </>
+            ) : (
+              <Empty label="No tab open" />
+            )}
           </div>
         </ScrollArea>
         <AddNewTab />
