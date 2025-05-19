@@ -1,4 +1,4 @@
-import { useState, type DragEvent } from "react";
+import { useState, type DragEvent, type MouseEvent } from "react";
 import RequestMethodTag from "@/components/app/RequestMethodTag";
 import { Button } from "@/components/ui/button";
 import { useRequestList } from "@/context/request-list/RequestListProvider";
@@ -52,6 +52,11 @@ const TabItem = ({ id, index }: { id: string; index: number }) => {
 
   const { name, children, method } = tabDetails;
 
+  const handleCloseBtnClick = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    removeTab(id);
+  };
+
   return (
     <div
       key={id}
@@ -101,7 +106,7 @@ const TabItem = ({ id, index }: { id: string; index: number }) => {
           animate={{
             opacity: isTabListHovering ? 1 : 0,
             width: isTabListHovering ? "100%" : "0px",
-            paddingLeft: isTabListHovering ? "4px" : "0px",
+            paddingLeft: isTabListHovering ? "8px" : "0px",
             scaleX: isTabListHovering ? 1 : 0.8,
           }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
@@ -125,7 +130,7 @@ const TabItem = ({ id, index }: { id: string; index: number }) => {
                 <Button
                   size={"iconXs"}
                   variant={"ghost"}
-                  onClick={() => removeTab(id)}
+                  onClick={handleCloseBtnClick}
                 >
                   <CloseIcon />
                 </Button>

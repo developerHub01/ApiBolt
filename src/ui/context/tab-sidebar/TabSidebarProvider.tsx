@@ -5,7 +5,9 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import type { THTTPMethods } from "../request/RequestResponseProvider";
+import { useNavigate } from "react-router";
+import type { THTTPMethods } from "@/context/request/RequestResponseProvider";
+import { useRequestList } from "@/context/request-list/RequestListProvider";
 
 export interface TabInterface {
   id: string;
@@ -205,6 +207,8 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
   const [tabListState, setTabListState] = useState<Array<string>>([]);
   const [selectedTab, setSelectedTab] = useState<string | null>(null);
   const [isTabListHovering, setIsTabListHovering] = useState<boolean>(false);
+  const { listData } = useRequestList();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isTabListHovering) setIsTabListHovering(false);
@@ -237,6 +241,23 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
     [isTabListHovering]
   );
 
+  useEffect(() => {
+    const defaultPath = "/";
+
+    if (!selectedTab || !tabListState.length) {
+      navigate(defaultPath);
+      return;
+    }
+
+    const tabDetails = listData[selectedTab];
+
+    if (!tabDetails) navigate(defaultPath);
+    else
+      navigate(`/${tabDetails.children ? "folder" : "request"}/${selectedTab}`);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedTab, tabListState]);
+
   const addTab = useCallback(
     (id: string) => {
       let addIndex = tabListState.length;
@@ -260,13 +281,24 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
 
   const removeTab = useCallback(
     (id: string) => {
-      const idIndex = tabListState.findIndex((tabId) => tabId === id);
-      setTabListState((prev) => prev.filter((tabId) => tabId !== id));
+      const newTabList = tabListState.filter((tabId) => tabId !== id);
+      setTabListState(newTabList);
 
-      /* if id is selected then select next one else last one */
-      setSelectedTab(tabListState[Math.min(idIndex + 1, tabListState.length)]);
+      if (id !== selectedTab) return;
+
+      const idIndex = tabListState.findIndex((tabId) => tabId === id);
+
+      let nextSelectedTabIndex = Math.max(
+        Math.min(idIndex, newTabList.length - 1),
+        0
+      );
+
+      if (tabListState.length <= 1) nextSelectedTabIndex = -1;
+
+      const nextSelectedTabId = newTabList[nextSelectedTabIndex] ?? null;
+      setSelectedTab(nextSelectedTabId);
     },
-    [tabListState]
+    [selectedTab, tabListState]
   );
 
   const moveTab = useCallback((id: string, index?: number) => {
