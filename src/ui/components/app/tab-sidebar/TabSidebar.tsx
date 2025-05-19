@@ -28,12 +28,16 @@ const TabSidebar = () => {
           <div className="w-full flex flex-col gap-1 pb-1">
             {tabListState.length ? (
               <>
-                {tabListState.map((tabId) => (
-                  <TabItem id={tabId} />
+                {tabListState.map((tabId, index) => (
+                  <TabItem id={tabId} index={index} />
                 ))}
               </>
             ) : (
-              <Empty label="No tab open" />
+              <div className="p-2.5">
+                {isTabListHovering && (
+                  <Empty label="No tab open" className="min-h-52" />
+                )}
+              </div>
             )}
           </div>
         </ScrollArea>
