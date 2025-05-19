@@ -35,7 +35,7 @@ const TabSidebar = () => {
             ) : (
               <div className="p-2.5">
                 {isTabListHovering && (
-                  <Empty label="No tab open" className="min-h-52" />
+                  <Empty label="No tab open" className="min-h-36" />
                 )}
               </div>
             )}
