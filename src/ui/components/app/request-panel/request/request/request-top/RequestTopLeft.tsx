@@ -11,8 +11,11 @@ import { cn } from "@/lib/utils";
 import { useRequestResponse } from "@/context/request/RequestResponseProvider";
 
 const RequestTopLeft = () => {
-  const { requestName, handleChangeRequestName } = useRequestResponse();
-  const [requestNameState, setRequestNameState] = useState<string>(requestName);
+  const { selectedTab, requestName, handleChangeRequestName } =
+    useRequestResponse();
+  const [requestNameState, setRequestNameState] = useState<string>(
+    requestName[selectedTab] ?? "Request"
+  );
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const nameInputRef = useRef<HTMLInputElement>(null);
 
@@ -21,7 +24,8 @@ const RequestTopLeft = () => {
   }, [isFocused]);
 
   useEffect(() => {
-    setRequestNameState(requestName);
+    setRequestNameState(requestName[selectedTab] ?? "");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [requestName]);
 
   const handleInputFocus = useCallback(() => {

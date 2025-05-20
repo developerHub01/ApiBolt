@@ -5,11 +5,11 @@ import ResponsCollapseButton from "@/components/app/request-panel/request/respon
 import ResponseInfo from "@/components/app/request-panel/request/response/meta-data/response-info/ResponseInfo";
 
 const ResponseMetaData = memo(() => {
-  const { response } = useRequestResponse();
+  const { response, selectedTab } = useRequestResponse();
 
   return (
     <div className="flex justify-between items-center gap-2 px-2.5 h-12 min-h-12">
-      {response ? (
+      {response[selectedTab] ? (
         <MetaDataTab />
       ) : (
         <p className="select-none text-secondary-foreground">Response</p>

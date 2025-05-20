@@ -7,9 +7,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { useRequestResponse } from "@/context/request/RequestResponseProvider";
+import {
+  useRequestResponse,
+  type THTTPMethods,
+} from "@/context/request/RequestResponseProvider";
 
-const methodList = [
+const methodList: Array<{
+  id: THTTPMethods;
+  label: string;
+}> = [
   {
     id: "get",
     label: "GET",
@@ -33,20 +39,24 @@ const methodList = [
 ];
 
 const ApiMethodSelector = memo(() => {
-  const { selectedMethod, handleChangeSelectedMethod } = useRequestResponse();
+  const { selectedTab, selectedMethod, handleChangeSelectedMethod } =
+    useRequestResponse();
+
+  const methodType = selectedMethod[selectedTab];
+
   return (
     <div className="w-[150px] select-none">
       <Select
-        defaultValue={selectedMethod ?? methodList[0].id}
+        defaultValue={methodType ?? methodList[0].id}
         onValueChange={handleChangeSelectedMethod}
       >
         <SelectTrigger
           className={cn("w-full rounded-r-none font-semibold", {
-            "text-green-500": selectedMethod === "get",
-            "text-yellow-500": selectedMethod === "post",
-            "text-blue-500": selectedMethod === "put",
-            "text-pink-500": selectedMethod === "patch",
-            "text-red-500": selectedMethod === "delete",
+            "text-green-500": methodType === "get",
+            "text-yellow-500": methodType === "post",
+            "text-blue-500": methodType === "put",
+            "text-pink-500": methodType === "patch",
+            "text-red-500": methodType === "delete",
           })}
         >
           <SelectValue placeholder="Method" />

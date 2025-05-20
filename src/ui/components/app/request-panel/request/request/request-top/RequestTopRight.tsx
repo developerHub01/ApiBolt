@@ -28,6 +28,7 @@ import Warning from "@/components/warning";
 
 const RequestTopRight = () => {
   const {
+    selectedTab,
     requestName,
     isDownloadRequestWithBase64,
     handleIsDownloadRequestWithBase64,
@@ -42,7 +43,7 @@ const RequestTopRight = () => {
     toast("Successfully downloaded!!", {
       description: `${requestName}.json downloaded successfully`,
     });
-  }, [requestName, handleDownloadRequest]);
+  }, [handleDownloadRequest, requestName]);
 
   const handleImport = useCallback(
     async (file: File | undefined) => {
@@ -80,7 +81,7 @@ const RequestTopRight = () => {
             <DropdownMenuItem asChild>
               <ExportButton
                 handleExport={handleExport}
-                isChecked={isDownloadRequestWithBase64}
+                isChecked={Boolean(isDownloadRequestWithBase64[selectedTab])}
                 handleChangeCheck={handleIsDownloadRequestWithBase64}
               />
             </DropdownMenuItem>

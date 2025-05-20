@@ -5,8 +5,19 @@ import RequestPanel from "@/components/app/request-panel/request/request/Request
 import ResizableWrapper from "@/components/app/request-panel/request/ResizableWrapper";
 import ResponsePanel from "@/components/app/request-panel/request/response/ResponsePanel";
 import { ResizableHandle } from "@/components/ui/resizable";
+import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
+import { useNavigate, useParams } from "react-router-dom";
 
 const RequestPage = () => {
+  const { selectedTab } = useTabSidebar();
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  if (!selectedTab || !id) {
+    navigate("/");
+    return;
+  }
+
   return (
     <div className="flex flex-col w-full h-full items-center justify-center">
       <div className="w-full p-2.5 flex flex-col gap-2">

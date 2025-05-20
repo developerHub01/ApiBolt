@@ -11,6 +11,7 @@ import {
   type ParamInterface,
 } from "@/context/request/RequestResponseProvider";
 import { useRequestBody } from "@/context/request/RequestBodyProvider";
+import { useParams } from "react-router-dom";
 
 export type TMetaTableType =
   | "params"
@@ -80,24 +81,27 @@ export const useCellListToShow = () => {
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useGetTableData = () => {
+  const { id } = useParams();
   const { activeMetaTab } = useRequestResponse();
   const { requestBodyType } = useRequestBody();
   const { getMetaData } = useRequestMetaTable();
 
   const type: TMetaTableType | null = useMemo(() => {
-    if (["params", "headers"].includes(activeMetaTab))
-      return activeMetaTab as TMetaTableType;
+    if (!id) return null;
+
+    if (["params", "headers"].includes(activeMetaTab[id]))
+      return activeMetaTab[id] as TMetaTableType;
 
     if (
-      activeMetaTab === "body" &&
+      activeMetaTab[id] === "body" &&
       ["x-www-form-urlencoded", "form-data"].includes(requestBodyType)
     )
       return requestBodyType as TMetaTableType;
 
     return null;
-  }, [activeMetaTab, requestBodyType]);
+  }, [activeMetaTab, id, requestBodyType]);
 
-  if (!type) return null;
+  if (!type || !id) return null;
 
   const data = getMetaData(type);
 
@@ -114,6 +118,8 @@ interface RequestMetaTableProviderProps {
 const RequestMetaTableProvider = ({
   children,
 }: RequestMetaTableProviderProps) => {
+  const { id = "" } = useParams();
+
   const [showColumn, setShowColumn] = useState<ShowColumnInterface>({
     value: true,
     description: true,
@@ -168,27 +174,20 @@ const RequestMetaTableProvider = ({
     > => {
       switch (type) {
         case "params":
-          return params;
+          return params[id];
         case "hiddenParams":
-          return hiddenParams;
+          return hiddenParams[id];
         case "headers":
-          return headers;
+          return headers[id];
         case "hiddenHeaders":
-          return hiddenHeaders;
+          return hiddenHeaders[id];
         case "form-data":
-          return formData;
+          return formData[id];
         case "x-www-form-urlencoded":
-          return xWWWFormUrlencodedData;
+          return xWWWFormUrlencodedData[id];
       }
     },
-    [
-      params,
-      hiddenParams,
-      headers,
-      hiddenHeaders,
-      formData,
-      xWWWFormUrlencodedData,
-    ]
+    [params, id, hiddenParams, headers, hiddenHeaders, formData, xWWWFormUrlencodedData]
   );
 
   const handleChangeMetaData = useCallback(
@@ -288,6 +287,8 @@ const RequestMetaTableProvider = ({
       handleDeleteXWWWFormEncoded,
     ]
   );
+
+  if (!id) return null;
 
   return (
     <RequestMetaTableContext.Provider

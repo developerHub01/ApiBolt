@@ -24,6 +24,8 @@ const LabelPrefix = () => {
 
   const hiddenHeader = getMetaData("hiddenHeaders") ?? [];
 
+  console.log("========LabelPrefix======")
+  console.log("hiddenHeader  == ", hiddenHeader)
   if (!hiddenHeader.length) return;
 
   return (

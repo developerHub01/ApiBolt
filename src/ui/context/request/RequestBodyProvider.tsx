@@ -4,6 +4,7 @@ import {
   type TRequestBodyType,
 } from "@/context/request/RequestResponseProvider";
 import type { TContentType } from "@/types";
+import { useParams } from "react-router-dom";
 
 interface RequestBodyContext {
   requestBodyType: TRequestBodyType;
@@ -36,6 +37,8 @@ interface RequestBodyProviderProps {
 }
 
 const RequestBodyProvider = ({ children }: RequestBodyProviderProps) => {
+  const { id } = useParams();
+
   const {
     rawData,
     handleChangeRawData: changeRawData,
@@ -50,14 +53,16 @@ const RequestBodyProvider = ({ children }: RequestBodyProviderProps) => {
     setCodeLineWrap((prev) => !prev);
   }, []);
 
+  if (!id) return null;
+
   return (
     <RequestBodyContext.Provider
       value={{
-        requestBodyType,
+        requestBodyType: requestBodyType[id],
         handleChangeRequestBodyType,
-        rawRequestBodyType,
+        rawRequestBodyType: rawRequestBodyType[id],
         handleChangeRawRequestBodyType,
-        rawData,
+        rawData: rawData[id],
         handleChangeRawData: changeRawData,
         codeLineWrap,
         handleToggleCodeLineWrap,

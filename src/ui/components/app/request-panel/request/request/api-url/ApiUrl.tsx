@@ -6,16 +6,18 @@ import ApiCta from "@/components/app/request-panel/request/request/api-url/ApiCt
 
 const ApiUrl = memo(() => {
   const {
-    apiUrl = "",
+    selectedTab,
+    apiUrl,
     handleIsInputError,
     handleRequestSend,
     handleChangeApiUrl,
     isApiUrlError,
   } = useRequestResponse();
-  const [url, setUrl] = useState<string>(apiUrl);
+  const [url, setUrl] = useState<string>(apiUrl[selectedTab] ?? "");
 
   useEffect(() => {
-    setUrl(apiUrl);
+    setUrl(apiUrl[selectedTab]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiUrl]);
 
   useEffect(() => {
@@ -36,8 +38,6 @@ const ApiUrl = memo(() => {
     if (isApiUrlError) handleIsInputError(false);
   };
 
-  const handleApiUrlBlur = (value: string) => handleChangeApiUrl(value);
-
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -52,7 +52,7 @@ const ApiUrl = memo(() => {
       <ApiInput
         value={url}
         onChange={handleApiUrlChange}
-        onBlur={handleApiUrlBlur}
+        onBlur={handleChangeApiUrl}
         onFocus={handleApiUrlFocus}
       />
       <ApiCta />

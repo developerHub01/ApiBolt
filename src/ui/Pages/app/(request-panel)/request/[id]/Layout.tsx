@@ -1,17 +1,19 @@
 import RequestBodyProvider from "@/context/request/RequestBodyProvider";
 import RequestHeaderProvider from "@/context/request/RequestHeaderProvider";
-import RequestResponseProvider from "@/context/request/RequestResponseProvider";
+import SingleRequestProvider from "@/context/request/single-request/SingleRequestProvider";
 import { Outlet } from "react-router-dom";
 
 const RequestLayout = () => {
   return (
-    <RequestResponseProvider>
-      <RequestBodyProvider>
-        <RequestHeaderProvider>
-          <Outlet />
-        </RequestHeaderProvider>
-      </RequestBodyProvider>
-    </RequestResponseProvider>
+    <>
+      <SingleRequestProvider>
+        <RequestBodyProvider>
+          <RequestHeaderProvider>
+            <Outlet />
+          </RequestHeaderProvider>
+        </RequestBodyProvider>
+      </SingleRequestProvider>
+    </>
   );
 };
 

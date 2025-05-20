@@ -5,7 +5,10 @@ import AuthContentInoutLabel from "@/components/app/request-panel/request/reques
 import { useRequestResponse } from "@/context/request/RequestResponseProvider";
 
 const BearerToken = () => {
-  const { bearerTokenAuth, handleChangeBearerTokenAuth } = useRequestResponse();
+  const { bearerTokenAuth, selectedTab, handleChangeBearerTokenAuth } =
+    useRequestResponse();
+
+  const authData = bearerTokenAuth[selectedTab] ?? "";
 
   return (
     <ContentWrapper>
@@ -17,7 +20,7 @@ const BearerToken = () => {
           id="bearer-token"
           placeholder="Token"
           type="password"
-          value={bearerTokenAuth}
+          value={authData}
           onBlur={handleChangeBearerTokenAuth}
           className="w-full"
         />

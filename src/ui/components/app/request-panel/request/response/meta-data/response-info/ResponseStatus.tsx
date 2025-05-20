@@ -9,11 +9,11 @@ import { cn } from "@/lib/utils";
 import { useRequestResponse } from "@/context/request/RequestResponseProvider";
 
 const ResponseStatus = memo(() => {
-  const { response } = useRequestResponse();
-  if (!response) return null;
-  
-  const { status, statusText, statusDescription } = response;
-  
+  const { response, selectedTab } = useRequestResponse();
+  if (!response || !response[selectedTab]) return null;
+
+  const { status, statusText, statusDescription } = response[selectedTab];
+
   if (!status) return null;
 
   return (

@@ -1,4 +1,3 @@
-
 import { memo } from "react";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -17,15 +16,18 @@ import { useRequestResponse } from "@/context/request/RequestResponseProvider";
 import Warning from "@/components/warning";
 
 const RequestResponseSize = memo(() => {
-  const { response, requestSize, responseSize } = useRequestResponse();
+  const { response, requestSize, responseSize, selectedTab } =
+    useRequestResponse();
 
-  if (!response) return null;
+  if (!response || !selectedTab) return null;
 
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
         <Badge className={cn("select-none text-foreground bg-secondary")}>
-          {formatSize(responseSize.header + responseSize.body)}
+          {formatSize(
+            responseSize[selectedTab].header + responseSize[selectedTab].body
+          )}
         </Badge>
       </HoverCardTrigger>
       <HoverCardContent
@@ -33,9 +35,9 @@ const RequestResponseSize = memo(() => {
         side="bottom"
         align="end"
       >
-        <SizeDetails type="request" {...requestSize} />
+        <SizeDetails type="request" {...requestSize[selectedTab]} />
         <Separator />
-        <SizeDetails type="response" {...responseSize} />
+        <SizeDetails type="response" {...responseSize[selectedTab]} />
         <Warning label="These values are approximate, not exact network size." />
       </HoverCardContent>
     </HoverCard>

@@ -7,8 +7,12 @@ import {
 import CookieList from "@/components/app/request-panel/request/response/content/cookies/CookieList";
 
 const Cookies = () => {
-  const { response } = useRequestResponse();
-  const cookies = response?.cookies as Array<CookieInterface>;
+  const { response, selectedTab } = useRequestResponse();
+  console.log("============Cookies==========");
+
+  if (!response || !response[selectedTab]) return null;
+
+  const cookies = response[selectedTab]?.cookies as Array<CookieInterface>;
 
   return (
     <ScrollArea className="flex-1 min-h-0 h-full overflow-hidden">

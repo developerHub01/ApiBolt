@@ -11,6 +11,8 @@ const TabSidebar = () => {
   const { tabListState, isTabListHovering, handleTabListHovering, moveTab } =
     useTabSidebar();
 
+  console.log("============TabSidebar==========");
+
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const draggedId = e.dataTransfer.getData("text/plain");

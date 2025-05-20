@@ -2,10 +2,16 @@ import ContentWrapper from "@/components/app/request-panel/request/request/meta-
 import AuthKeyValueWrapper from "@/components/app/request-panel/request/request/meta-data/authorization/content/AuthKeyValueWrapper";
 import AuthContentInput from "@/components/app/request-panel/request/request/meta-data/authorization/content/AuthContentInput";
 import AuthContentInoutLabel from "@/components/app/request-panel/request/request/meta-data/authorization/content/AuthContentInoutLabel";
-import { useRequestResponse } from "@/context/request/RequestResponseProvider";
+import {
+  defaultBasicAuth,
+  useRequestResponse,
+} from "@/context/request/RequestResponseProvider";
 
 const BasicAuth = () => {
-  const { basicAuth, handleChangeBasicAuth } = useRequestResponse();
+  const { basicAuth, selectedTab, handleChangeBasicAuth } =
+    useRequestResponse();
+
+  const authData = basicAuth[selectedTab] ?? defaultBasicAuth;
 
   return (
     <ContentWrapper>
@@ -16,7 +22,7 @@ const BasicAuth = () => {
         <AuthContentInput
           id="basic-auth-username"
           placeholder="Username"
-          value={basicAuth.username}
+          value={authData.username}
           onBlur={(value) => handleChangeBasicAuth("username", value)}
           className="w-full"
         />
@@ -29,7 +35,7 @@ const BasicAuth = () => {
           id="basic-auth-password"
           placeholder="Password"
           type="password"
-          value={basicAuth.password}
+          value={authData.password}
           onBlur={(value) => handleChangeBasicAuth("password", value)}
           className="w-full"
         />

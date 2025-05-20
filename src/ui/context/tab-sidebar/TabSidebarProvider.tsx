@@ -235,8 +235,7 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
 
   const handleTabListHovering = useCallback(
     (value: boolean) => {
-      if (isTabListHovering !== value)
-        setTimeout(() => setIsTabListHovering(value), 50);
+      if (isTabListHovering !== value) setIsTabListHovering(value);
     },
     [isTabListHovering]
   );

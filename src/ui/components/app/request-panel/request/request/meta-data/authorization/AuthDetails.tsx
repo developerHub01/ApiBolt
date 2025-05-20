@@ -1,9 +1,9 @@
 import { useRequestResponse } from "@/context/request/RequestResponseProvider";
 
 const AuthDetails = () => {
-  const { authType } = useRequestResponse();
+  const { authType, selectedTab } = useRequestResponse();
 
-  if (authType === "no-auth") return null;
+  if (authType[selectedTab] === "no-auth") return null;
 
   return (
     <div>

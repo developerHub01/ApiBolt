@@ -6,10 +6,12 @@ import { useRequestResponse } from "@/context/request/RequestResponseProvider";
 
 const BodyTopLeft = () => {
   const { responseTab, handleChangeActiveResponseTab } = useResponse();
-  const { response } = useRequestResponse();
+  const { response, selectedTab } = useRequestResponse();
+
+  if (!response || !response[selectedTab]) return null;
 
   const responseType = getResponseType(
-    String(response?.headers?.["content-type"] ?? "")
+    String(response[selectedTab]?.headers?.["content-type"] ?? "")
   );
 
   return (

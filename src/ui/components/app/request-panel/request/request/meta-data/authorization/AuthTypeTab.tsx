@@ -36,10 +36,10 @@ const authTypeList: Array<{
 ];
 
 const AuthTypeTab = () => {
-  const { authType, handleChangeAuthType } = useRequestResponse();
+  const { authType, selectedTab, handleChangeAuthType } = useRequestResponse();
   return (
     <Select
-      value={authType ?? authTypeList[0].id}
+      value={authType[selectedTab] ?? authTypeList[0].id}
       onValueChange={handleChangeAuthType}
     >
       <SelectTrigger className="w-full capitalize">

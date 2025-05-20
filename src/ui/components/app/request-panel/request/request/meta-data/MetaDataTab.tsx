@@ -32,6 +32,7 @@ const tabList: Array<{
 
 const MetaDataTab = memo(() => {
   const {
+    selectedTab,
     activeMetaTab,
     handleChangeActiveMetaTab,
     activeTabList,
@@ -49,27 +50,29 @@ const MetaDataTab = memo(() => {
         }))
         .map((item) => {
           if (item.id === "params") {
-            if (item.count && !params.length) delete item.count;
-            else if (item.count !== params.length)
-              item.count = params.filter((param) => !param.hide).length;
+            if (item.count && !params[selectedTab]?.length) delete item.count;
+            else if (item.count !== params[selectedTab]?.length)
+              item.count = params[selectedTab].filter(
+                (param) => !param.hide
+              )?.length;
           } else if (item.id === "headers") {
             const totalHeaders =
-              headers.filter((header) => !header.hide).length +
-              hiddenHeaders.length;
+              headers[selectedTab]?.filter((header) => !header.hide)?.length +
+              hiddenHeaders[selectedTab]?.length;
             if (item.count && !totalHeaders) delete item.count;
             else if (item.count !== totalHeaders) item.count = totalHeaders;
           }
 
           return item;
         }),
-    [activeTabList, params, headers, hiddenHeaders]
+    [activeTabList, params, selectedTab, headers, hiddenHeaders]
   );
 
   return (
     <>
       <SelectV1
         list={tabList}
-        value={activeMetaTab}
+        value={activeMetaTab[selectedTab] ?? "params"}
         handleChange={(value) =>
           handleChangeActiveMetaTab(value as TActiveTabType)
         }
@@ -77,7 +80,7 @@ const MetaDataTab = memo(() => {
       />
       <TabV1
         list={tabListWithActivity}
-        activeTab={activeMetaTab}
+        activeTab={activeMetaTab[selectedTab] ?? "params"}
         handleSelect={(value) =>
           handleChangeActiveMetaTab(value as TActiveTabType)
         }

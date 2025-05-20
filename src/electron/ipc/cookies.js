@@ -14,7 +14,11 @@ export const registerCookieHandlers = () => {
     return await getCookiesByDomain(normalizedUrl);
   });
   ipcMain.handle("getCookieStringByDomain", async (_, url) => {
-    const normalizedUrl = new URL(url).origin;
-    return await getCookiesStringByDomain(normalizedUrl);
+    try {
+      const normalizedUrl = new URL(url).origin;
+      return await getCookiesStringByDomain(normalizedUrl);
+    } catch (error) {
+      // console.log(error);
+    }
   });
 };

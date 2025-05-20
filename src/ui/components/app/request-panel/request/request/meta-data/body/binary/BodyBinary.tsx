@@ -5,7 +5,8 @@ import { Separator } from "@/components/ui/separator";
 import { useRequestResponse } from "@/context/request/RequestResponseProvider";
 
 const BodyBinary = memo(() => {
-  const { binaryData, handleChangeBinaryData } = useRequestResponse();
+  const { binaryData, selectedTab, handleChangeBinaryData } =
+    useRequestResponse();
 
   const handleFile = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -20,14 +21,14 @@ const BodyBinary = memo(() => {
   return (
     <div className="w-full h-full flex justify-center items-center p-2.5">
       <div className="flex justify-center items-center max-w-4/5">
-        {binaryData ? (
+        {binaryData[selectedTab] ? (
           <>
             <Button
               variant={"secondary"}
               className="rounded-r-none w-full max-w-96 cursor-auto"
             >
               <span className="w-full overflow-hidden truncate">
-                {binaryData?.name}
+                {binaryData[selectedTab]?.name}
               </span>
             </Button>
             <Separator orientation="vertical" />

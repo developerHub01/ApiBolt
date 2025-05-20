@@ -22,6 +22,7 @@ import statusData from "@/data/http_status_details.json";
 import type { TMetaTableType } from "@/context/request/RequestMetaTableProvider";
 import type { TAuthType, TContentType } from "@/types";
 import { isElectron } from "@/utils/electron";
+import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 
 const generateNewMetaDataItem = (type?: TMetaTableType) => ({
   id: uuidv4(),
@@ -170,78 +171,79 @@ export interface JWTBearerAuthInterface {
 }
 
 interface RequestResponseContext {
-  isResponseCollapsed: boolean;
+  selectedTab: string;
+  isResponseCollapsed: Record<string, boolean>;
   handleToggleCollapse: (size?: number) => void;
-  requestName: string;
+  requestName: Record<string, string>;
   handleChangeRequestName: (name: string) => void;
   handleClearRequestResponse: () => void;
-  authType: TAuthType;
+  authType: Record<string, TAuthType>;
   handleChangeAuthType: (authType: TAuthType) => void;
-  apiKeyAuth: APIKeyInterface;
-  handleChangeAPIKey: (ey: "key" | "value" | "addTo", value: string) => void;
-  basicAuth: BasicAuthInterface;
-  handleChangeBasicAuth: (ey: "username" | "password", value: string) => void;
-  bearerTokenAuth: string;
+  apiKeyAuth: Record<string, APIKeyInterface>;
+  handleChangeAPIKey: (key: "key" | "value" | "addTo", value: string) => void;
+  basicAuth: Record<string, BasicAuthInterface>;
+  handleChangeBasicAuth: (key: "username" | "password", value: string) => void;
+  bearerTokenAuth: Record<string, string>;
   handleChangeBearerTokenAuth: (token: string) => void;
-  jwtBearerAuth: JWTBearerAuthInterface;
+  jwtBearerAuth: Record<string, JWTBearerAuthInterface>;
   handleChangeJWTBearerAuth: (
     key: "algo" | "secret" | "payload" | "headerPrefix" | "addTo",
     value: string
   ) => void;
-  isDownloadRequestWithBase64: boolean;
+  isDownloadRequestWithBase64: Record<string, boolean>;
   handleIsDownloadRequestWithBase64: (value: boolean) => void;
   handleDownloadRequest: () => Promise<void>;
   handleImportRequest: (
     file: File,
     cb?: (message: string) => void
   ) => Promise<void>;
-  activeMetaTab: TActiveTabType;
+  activeMetaTab: Record<string, TActiveTabType>;
   handleChangeActiveMetaTab: (id: TActiveTabType) => void;
-  selectedMethod: string;
+  selectedMethod: Record<string, string>;
   handleChangeSelectedMethod: (id: THTTPMethods) => void;
-  requestBodyType: TRequestBodyType;
+  requestBodyType: Record<string, TRequestBodyType>;
   handleChangeRequestBodyType: (id: TRequestBodyType) => void;
-  rawRequestBodyType: TContentType;
+  rawRequestBodyType: Record<string, TContentType>;
   handleChangeRawRequestBodyType: (id: TContentType) => void;
-  apiUrl: string;
+  apiUrl: Record<string, string>;
   handleChangeApiUrl: (api: string) => void;
-  response: ResponseInterface | null;
-  isApiUrlError: boolean;
+  response: Record<string, ResponseInterface | null>;
+  isApiUrlError: Record<string, boolean>;
   handleIsInputError: (value: boolean) => void;
   handleRequestSend: () => void;
-  isResposneError: boolean;
-  isLoading: boolean;
-  requestSize: RequestResponseSizeInterface;
-  responseSize: RequestResponseSizeInterface;
+  isResposneError: Record<string, boolean>;
+  isLoading: Record<string, boolean>;
+  requestSize: Record<string, RequestResponseSizeInterface>;
+  responseSize: Record<string, RequestResponseSizeInterface>;
 
-  rawData: string;
+  rawData: Record<string, string>;
   handleChangeRawData: (value: string) => void;
 
-  params: Array<ParamInterface>;
+  params: Record<string, Array<ParamInterface>>;
   handleChangeParam: (id: string, key: string, value: string) => void;
   handleDeleteParam: (id: string) => void;
   handleAddNewParam: () => void;
   handleParamCheckToggle: (id?: string) => void;
 
-  hiddenParams: Array<ParamInterface>;
+  hiddenParams: Record<string, Array<ParamInterface>>;
 
-  headers: Array<ParamInterface>;
+  headers: Record<string, Array<ParamInterface>>;
   handleChangeHeader: (id: string, key: string, value: string) => void;
   handleDeleteHeader: (id: string) => void;
   handleAddNewHeader: () => void;
   handleHeaderCheckToggle: (id?: string) => void;
 
-  hiddenHeaders: Array<ParamInterface>;
+  hiddenHeaders: Record<string, Array<ParamInterface>>;
   handleChangeHiddenHeader: (id: string, key: string, value: string) => void;
   handleHiddenHeaderCheckToggle: (id?: string) => void;
 
-  formData: Array<FormDataInterface>;
+  formData: Record<string, Array<FormDataInterface>>;
   handleChangeFormData: (id: string, key: string, value: File | string) => void;
   handleDeleteFormData: (id: string) => void;
   handleAddNewFormData: () => void;
   handleFormDataCheckToggle: (id?: string) => void;
 
-  xWWWFormUrlencodedData: Array<ParamInterface>;
+  xWWWFormUrlencodedData: Record<string, Array<ParamInterface>>;
   handleChangeXWWWFormEncoded: (id: string, key: string, value: string) => void;
   handleDeleteXWWWFormEncoded: (id: string) => void;
   handleAddNewXWWWFormEncoded: () => void;
@@ -249,7 +251,7 @@ interface RequestResponseContext {
   handleRemoveAllMetaData: (type: TMetaTableType) => void;
   handleRemoveFormDataFile: (id: string, index: number) => void;
 
-  binaryData: File | null;
+  binaryData: Record<string, File | null>;
   handleChangeBinaryData: (file?: File | null) => void;
 
   activeTabList: Partial<Record<TActiveTabType, boolean>>;
@@ -430,7 +432,8 @@ export const AuthTypeList = [
   "api-key",
 ];
 
-const localStorageRequestActiveTabKey = "request-active-tab";
+export const localStorageRequestActiveTabKey = (requestId: string) =>
+  `request-active-tab-${requestId}`;
 
 const getRestOfAuthType = (excludes?: string | Array<string>) => {
   if (!excludes) return AuthTypeList;
@@ -441,6 +444,29 @@ const getRestOfAuthType = (excludes?: string | Array<string>) => {
 };
 
 export const ResponsePanelMinLimit = 15;
+
+export const defaultRequestResponseSize = {
+  header: 0,
+  body: 0,
+};
+
+export const defaultApiKey: APIKeyInterface = {
+  key: "",
+  value: "",
+  addTo: "header",
+};
+
+export const defaultBasicAuth: BasicAuthInterface = {
+  username: "",
+  password: "",
+};
+export const defaultJWTBearerAuth: JWTBearerAuthInterface = {
+  algo: "HS256",
+  secret: "",
+  payload: JSON.stringify({}),
+  headerPrefix: "Bearer",
+  addTo: "header",
+};
 
 const initialHiddenHeaderData = () => [
   {
@@ -474,16 +500,35 @@ const initialHiddenHeaderData = () => [
   },
 ];
 
+const setStatekeyValue = <T,>(
+  setState: React.Dispatch<React.SetStateAction<Record<string, T>>>,
+  key: string,
+  value: T | ((prev: Record<string, T>) => T)
+) => {
+  if (!key) return;
+
+  return setState((prev) => ({
+    ...prev,
+    [key]:
+      typeof value === "function"
+        ? (value as (prev: Record<string, T>) => T)(prev)
+        : value,
+  }));
+};
+
 const useMetaDataManager = <
   T extends { id: string; hide?: boolean; value: unknown },
 >(
-  setState: React.Dispatch<React.SetStateAction<Array<T>>>,
+  setState: React.Dispatch<React.SetStateAction<Record<string, Array<T>>>>,
   generateNewItem: () => T
 ) => {
   const handleChange = useCallback(
-    (id: string, key: string, value: unknown) => {
-      setState((prev) =>
-        prev.map((item) => {
+    (requestId: string | null, id: string, key: string, value: unknown) => {
+      if (!requestId) return;
+
+      setState((prev) => ({
+        ...prev,
+        [requestId]: (prev[requestId] ?? []).map((item) => {
           if (item.id !== id) return item;
 
           if (value instanceof File) {
@@ -501,42 +546,64 @@ const useMetaDataManager = <
             ...item,
             [key]: value,
           };
-        })
-      );
+        }),
+      }));
     },
     [setState]
   );
 
   const handleDelete = useCallback(
-    (id: string) => {
-      setState((prev) => prev.filter((item) => item.id !== id));
+    (requestId: string | null, id: string) => {
+      if (!requestId) return;
+
+      setState((prev) => ({
+        ...prev,
+        [requestId]: prev[requestId]?.filter((item) => item.id !== id),
+      }));
     },
     [setState]
   );
 
-  const handleAdd = useCallback(() => {
-    setState((prev) => [...prev, generateNewItem()]);
-  }, [setState, generateNewItem]);
+  const handleAdd = useCallback(
+    (requestId: string | null) => {
+      if (!requestId) return;
+
+      setState((prev) => ({
+        ...prev,
+        [requestId]: [...(prev[requestId] ?? []), generateNewItem()],
+      }));
+    },
+    [setState, generateNewItem]
+  );
 
   const handleCheckToggle = useCallback(
-    (id?: string) => {
+    (requestId: string | null, id?: string) => {
+      if (!requestId) return;
+
       if (id) {
-        setState((prev) =>
-          prev.map((item) => {
+        setState((prev) => ({
+          ...prev,
+          [requestId]: (prev[requestId] ?? []).map((item) => {
             if (item.id !== id) return item;
             return {
               ...item,
               hide: item.hide ? undefined : true,
             };
-          })
-        );
+          }),
+        }));
       } else {
         setState((prev) => {
-          const isAllChecked = prev.every((item) => !item.hide);
-          return prev.map((item) => ({
-            ...item,
-            hide: isAllChecked ? true : undefined,
-          }));
+          const isAllChecked = Boolean(
+            (prev[requestId] ?? [])?.every((item) => !item.hide)
+          );
+
+          return {
+            ...prev,
+            [requestId]: (prev[requestId] ?? []).map((item) => ({
+              ...item,
+              hide: isAllChecked ? true : undefined,
+            })),
+          };
         });
       }
     },
@@ -558,58 +625,75 @@ interface RequestResponseProviderProps {
 const RequestResponseProvider = ({
   children,
 }: RequestResponseProviderProps) => {
-  const [requestName, setRequestname] = useState<string>("Request");
-  const [isResponseCollapsed, setIsResponseCollapsed] = useState<boolean>(true);
-  const [activeMetaTab, setActiveMetaTab] = useState<TActiveTabType>(
-    () =>
-      (localStorage.getItem(localStorageRequestActiveTabKey) ??
-        "params") as TActiveTabType
+  const { selectedTab } = useTabSidebar();
+  const [requestName, setRequestname] = useState<Record<string, string>>({});
+  const [isResponseCollapsed, setIsResponseCollapsed] = useState<
+    Record<string, boolean>
+  >({});
+  const [activeMetaTab, setActiveMetaTab] = useState<
+    Record<string, TActiveTabType>
+  >({});
+  const [selectedMethod, setSelectedMethod] = useState<
+    Record<string, THTTPMethods>
+  >({});
+  const [isApiUrlError, setIsApiUrlError] = useState<Record<string, boolean>>(
+    {}
   );
-  const [selectedMethod, setSelectedMethod] = useState<THTTPMethods>("get");
-  const [isApiUrlError, setIsApiUrlError] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [apiUrl, setApiUrl] = useState<string>("");
-  const [rawData, setRawData] = useState<string>("");
-  const [response, setResponse] = useState<ResponseInterface | null>(null);
-  const [requestSize, setRequestSize] = useState<RequestResponseSizeInterface>({
-    header: 0,
-    body: 0,
-  });
-  const [responseSize, setResponseSize] =
-    useState<RequestResponseSizeInterface>({
-      header: 0,
-      body: 0,
-    });
-  const [isResposneError, setIsResposneError] = useState<boolean>(false);
-  const [requestBodyType, setRequestBodyType] =
-    useState<TRequestBodyType>("none");
-  const [rawRequestBodyType, setRawRequestBodyType] =
-    useState<TContentType>("json");
+  const [isLoading, setIsLoading] = useState<Record<string, boolean>>({});
+  const [apiUrl, setApiUrl] = useState<Record<string, string>>({});
+  const [rawData, setRawData] = useState<Record<string, string>>({});
+  const [response, setResponse] = useState<
+    Record<string, ResponseInterface | null>
+  >({});
+  const [requestSize, setRequestSize] = useState<
+    Record<string, RequestResponseSizeInterface>
+  >({});
+  const [responseSize, setResponseSize] = useState<
+    Record<string, RequestResponseSizeInterface>
+  >({});
+  const [isResposneError, setIsResposneError] = useState<
+    Record<string, boolean>
+  >({});
+  const [requestBodyType, setRequestBodyType] = useState<
+    Record<string, TRequestBodyType>
+  >({});
+  const [rawRequestBodyType, setRawRequestBodyType] = useState<
+    Record<string, TContentType>
+  >({});
 
-  const [params, setParams] = useState<Array<ParamInterface>>([]);
-  const [hiddenParams, setHiddenParams] = useState<Array<ParamInterface>>([]);
-
-  const [headers, setHeaders] = useState<Array<ParamInterface>>([]);
-  const [hiddenHeaders, setHiddenHeaders] = useState<Array<ParamInterface>>(
-    initialHiddenHeaderData()
+  const [params, setParams] = useState<Record<string, Array<ParamInterface>>>(
+    {}
   );
-  const [binaryData, setBinaryData] = useState<File | null>(null);
-  const [formData, setFormData] = useState<Array<FormDataInterface>>([]);
+  const [hiddenParams, setHiddenParams] = useState<
+    Record<string, Array<ParamInterface>>
+  >({});
+
+  const [headers, setHeaders] = useState<Record<string, Array<ParamInterface>>>(
+    {}
+  );
+  const [hiddenHeaders, setHiddenHeaders] = useState<
+    Record<string, Array<ParamInterface>>
+  >(
+    {}
+    // initialHiddenHeaderData()
+  );
+  const [binaryData, setBinaryData] = useState<Record<string, File | null>>({});
+  const [formData, setFormData] = useState<
+    Record<string, Array<FormDataInterface>>
+  >({});
   const [xWWWFormUrlencodedData, setXWWWFormUrlencodedData] = useState<
-    Array<ParamInterface>
-  >([]);
+    Record<string, Array<ParamInterface>>
+  >({});
 
   const [isDownloadRequestWithBase64, setIsDownloadRequestWithBase64] =
-    useState<boolean>(false);
+    useState<Record<string, boolean>>({});
 
-  const [shouldFetch, setShouldFetch] = useState<boolean>(false);
+  const [requestIdShouldFetch, setRequestIdShouldFetch] = useState<string>("");
 
-  const [authType, setAuthType] = useState<TAuthType>("no-auth");
-  const [apiKeyAuth, setApiKeyAuth] = useState<APIKeyInterface>({
-    key: "",
-    value: "",
-    addTo: "header",
-  });
+  const [authType, setAuthType] = useState<Record<string, TAuthType>>({});
+  const [apiKeyAuth, setApiKeyAuth] = useState<Record<string, APIKeyInterface>>(
+    {}
+  );
 
   /**
    * convert
@@ -617,17 +701,18 @@ const RequestResponseProvider = ({
    * headers["Authorization"] = `Basic ${token}`;
    * when to request the API
    */
-  const [basicAuth, setBasicAuth] = useState<BasicAuthInterface>({
-    username: "",
-    password: "",
-  });
+  const [basicAuth, setBasicAuth] = useState<
+    Record<string, BasicAuthInterface>
+  >({});
 
   /**
    * convert
    * Authorization: `Bearer ${bearerToken}`
    * when to request the API
    */
-  const [bearerTokenAuth, setBearerTokenAuth] = useState<TBearerToken>("");
+  const [bearerTokenAuth, setBearerTokenAuth] = useState<
+    Record<string, TBearerToken>
+  >({});
 
   /**
    * convert
@@ -635,64 +720,94 @@ const RequestResponseProvider = ({
    * based on the data
    * when to request the API
    */
-  const [jwtBearerAuth, setJwtBearerAuth] = useState<JWTBearerAuthInterface>({
-    algo: "HS256",
-    secret: "",
-    payload: JSON.stringify({}),
-    headerPrefix: "Bearer",
-    addTo: "header",
-  });
+  const [jwtBearerAuth, setJwtBearerAuth] = useState<
+    Record<string, JWTBearerAuthInterface>
+  >({});
 
-  const previousFinalUrlRef = useRef<string>("");
+  const previousFinalUrlRef = useRef<Record<string, string>>({});
 
-  const {
-    handleChange: handleChangeParam,
-    handleDelete: handleDeleteParam,
-    handleAdd: handleAddNewParam,
-    handleCheckToggle: handleParamCheckToggle,
-  } = useMetaDataManager<ParamInterface>(setParams, generateNewMetaDataItem);
-  const {
-    handleChange: handleChangeHeader,
-    handleDelete: handleDeleteHeader,
-    handleAdd: handleAddNewHeader,
-    handleCheckToggle: handleHeaderCheckToggle,
-  } = useMetaDataManager<ParamInterface>(setHeaders, generateNewMetaDataItem);
-  const {
-    handleChange: handleChangeHiddenHeader,
-    handleCheckToggle: handleHiddenHeaderCheckToggle,
-  } = useMetaDataManager<ParamInterface>(
+  /* params =========== */
+  const pamrasMetaDataManager = useMetaDataManager<ParamInterface>(
+    setParams,
+    generateNewMetaDataItem
+  );
+  const handleChangeParam = (id: string, key: string, value: string) =>
+    pamrasMetaDataManager.handleChange(selectedTab, id, key, value);
+  const handleDeleteParam = (id: string) =>
+    pamrasMetaDataManager.handleDelete(selectedTab, id);
+  const handleAddNewParam = () => pamrasMetaDataManager.handleAdd(selectedTab);
+  const handleParamCheckToggle = (id?: string) =>
+    pamrasMetaDataManager.handleCheckToggle(selectedTab, id);
+
+  /* header =========== */
+  const headersMetaDataManager = useMetaDataManager<ParamInterface>(
+    setHeaders,
+    generateNewMetaDataItem
+  );
+  const handleChangeHeader = (id: string, key: string, value: string) =>
+    headersMetaDataManager.handleChange(selectedTab, id, key, value);
+  const handleDeleteHeader = (id: string) =>
+    headersMetaDataManager.handleDelete(selectedTab, id);
+  const handleAddNewHeader = () =>
+    headersMetaDataManager.handleAdd(selectedTab);
+  const handleHeaderCheckToggle = (id?: string) =>
+    headersMetaDataManager.handleCheckToggle(selectedTab, id);
+
+  /* hidden header =========== */
+  const hiddenHeadersMetaDataManager = useMetaDataManager<ParamInterface>(
     setHiddenHeaders,
     generateNewMetaDataItem
   );
-  const {
-    handleChange: handleChangeFormData,
-    handleDelete: handleDeleteFormData,
-    handleAdd: handleAddNewFormData,
-    handleCheckToggle: handleFormDataCheckToggle,
-  } = useMetaDataManager<FormDataInterface>(setFormData, () =>
-    generateNewMetaDataItem("form-data")
-  );
-  const {
-    handleChange: handleChangeXWWWFormEncoded,
-    handleDelete: handleDeleteXWWWFormEncoded,
-    handleAdd: handleAddNewXWWWFormEncoded,
-    handleCheckToggle: handleXWWWFormEncodedCheckToggle,
-  } = useMetaDataManager<ParamInterface>(
-    setXWWWFormUrlencodedData,
-    generateNewMetaDataItem
-  );
+  const handleChangeHiddenHeader = (id: string, key: string, value: string) =>
+    hiddenHeadersMetaDataManager.handleChange(selectedTab, id, key, value);
+  const handleHiddenHeaderCheckToggle = (id?: string) =>
+    hiddenHeadersMetaDataManager.handleCheckToggle(selectedTab, id);
 
-  useEffect(() => {
-    setActiveMetaTab(
-      localStorage.getItem(localStorageRequestActiveTabKey) as TActiveTabType
+  /* form data =========== */
+  const formDataMetaDataManager = useMetaDataManager<FormDataInterface>(
+    setFormData,
+    () => generateNewMetaDataItem("form-data")
+  );
+  const handleChangeFormData = (
+    id: string,
+    key: string,
+    value: string | File
+  ) => formDataMetaDataManager.handleChange(selectedTab, id, key, value);
+  const handleDeleteFormData = (id: string) =>
+    formDataMetaDataManager.handleDelete(selectedTab, id);
+  const handleAddNewFormData = () =>
+    formDataMetaDataManager.handleAdd(selectedTab);
+  const handleFormDataCheckToggle = (id?: string) =>
+    formDataMetaDataManager.handleCheckToggle(selectedTab, id);
+
+  /* xWWW Form UrlencodedData =========== */
+  const xWWWFormUrlencodedDataMetaDataManager =
+    useMetaDataManager<ParamInterface>(
+      setXWWWFormUrlencodedData,
+      generateNewMetaDataItem
     );
-  }, []);
-  useEffect(() => {
-    localStorage.setItem(localStorageRequestActiveTabKey, activeMetaTab);
-  }, [activeMetaTab]);
+  const handleChangeXWWWFormEncoded = (
+    id: string,
+    key: string,
+    value: string
+  ) =>
+    xWWWFormUrlencodedDataMetaDataManager.handleChange(
+      selectedTab,
+      id,
+      key,
+      value
+    );
+  const handleDeleteXWWWFormEncoded = (id: string) =>
+    xWWWFormUrlencodedDataMetaDataManager.handleDelete(selectedTab, id);
+  const handleAddNewXWWWFormEncoded = () =>
+    xWWWFormUrlencodedDataMetaDataManager.handleAdd(selectedTab);
+  const handleXWWWFormEncodedCheckToggle = (id?: string) =>
+    xWWWFormUrlencodedDataMetaDataManager.handleCheckToggle(selectedTab, id);
 
   const handleToggleCollapse = useCallback(
     (size?: number) => {
+      if (!selectedTab) return;
+
       if (
         size !== undefined &&
         ((size > ResponsePanelMinLimit && !isResponseCollapsed) ||
@@ -700,110 +815,156 @@ const RequestResponseProvider = ({
       )
         return;
 
-      setIsResponseCollapsed((prev) => !prev);
+      setIsResponseCollapsed((prev) => ({
+        ...prev,
+        [selectedTab]: !prev[selectedTab],
+      }));
     },
-    [isResponseCollapsed]
+    [isResponseCollapsed, selectedTab]
   );
 
-  const handleChangeRequestName = useCallback((name: string) => {
-    setRequestname(name);
-  }, []);
+  const handleChangeRequestName = useCallback(
+    (name: string) => {
+      if (!selectedTab) return;
+      setStatekeyValue<string>(setRequestname, selectedTab, name);
+    },
+    [selectedTab]
+  );
 
   const handleClearRequestResponse = useCallback(() => {
-    setIsLoading(false);
-    setIsApiUrlError(false);
-    setIsResposneError(false);
-    setSelectedMethod("get");
-    setApiUrl("");
-    setParams([]);
-    setHeaders([]);
-    setAuthType("no-auth");
-    setBasicAuth({
-      username: "",
-      password: "",
-    });
-    setBearerTokenAuth("");
-    setJwtBearerAuth({
-      algo: "HS256",
-      secret: "",
-      payload: "",
-      headerPrefix: "Bearer",
-      addTo: "header",
-    });
-    setApiKeyAuth({
-      key: "",
-      value: "",
-      addTo: "header",
-    });
-    setRequestBodyType("none");
-    setRawData("");
-    setRawRequestBodyType("json");
-    setFormData([]);
-    setBinaryData(null);
-    setXWWWFormUrlencodedData([]);
-    setResponse(null);
-    setRequestSize({
-      header: 0,
-      body: 0,
-    });
-    setResponseSize({
-      header: 0,
-      body: 0,
-    });
-    setHiddenParams([]);
-    setHiddenHeaders(initialHiddenHeaderData());
-  }, []);
+    if (!selectedTab) return;
 
-  const handleChangeAuthType = useCallback((authType: TAuthType) => {
-    setAuthType(authType);
-  }, []);
+    setStatekeyValue<boolean>(setIsLoading, selectedTab, false);
+    setStatekeyValue<boolean>(setIsApiUrlError, selectedTab, false);
+    setStatekeyValue<boolean>(setIsResposneError, selectedTab, false);
+    setStatekeyValue<THTTPMethods>(setSelectedMethod, selectedTab, "get");
+    setStatekeyValue<string>(setApiUrl, selectedTab, "");
+    setStatekeyValue<Array<ParamInterface>>(setParams, selectedTab, []);
+    setStatekeyValue<Array<ParamInterface>>(setHeaders, selectedTab, []);
+    setStatekeyValue<TAuthType>(setAuthType, selectedTab, "no-auth");
+    setStatekeyValue<BasicAuthInterface>(
+      setBasicAuth,
+      selectedTab,
+      defaultBasicAuth
+    );
+    setStatekeyValue<string>(setBearerTokenAuth, selectedTab, "");
+    setStatekeyValue<JWTBearerAuthInterface>(
+      setJwtBearerAuth,
+      selectedTab,
+      defaultJWTBearerAuth
+    );
+    setStatekeyValue<APIKeyInterface>(
+      setApiKeyAuth,
+      selectedTab,
+      defaultApiKey
+    );
+    setStatekeyValue<TRequestBodyType>(setRequestBodyType, selectedTab, "none");
+    setStatekeyValue<string>(setRawData, selectedTab, "");
+    setStatekeyValue<TContentType>(setRawRequestBodyType, selectedTab, "json");
+    setStatekeyValue<Array<FormDataInterface>>(setFormData, selectedTab, []);
+    setStatekeyValue<File | null>(setBinaryData, selectedTab, null);
+    setStatekeyValue<Array<ParamInterface>>(
+      setXWWWFormUrlencodedData,
+      selectedTab,
+      []
+    );
+    setStatekeyValue<ResponseInterface | null>(setResponse, selectedTab, null);
+    setStatekeyValue<RequestResponseSizeInterface>(
+      setRequestSize,
+      selectedTab,
+      defaultRequestResponseSize
+    );
+    setStatekeyValue<RequestResponseSizeInterface>(
+      setResponseSize,
+      selectedTab,
+      defaultRequestResponseSize
+    );
+    setStatekeyValue<Array<ParamInterface>>(setHiddenParams, selectedTab, []);
+    setStatekeyValue<Array<ParamInterface>>(
+      setHiddenHeaders,
+      selectedTab,
+      initialHiddenHeaderData()
+    );
+  }, [selectedTab]);
+
+  const handleChangeAuthType = useCallback(
+    (authType: TAuthType) => {
+      if (!selectedTab) return;
+      setStatekeyValue<TAuthType>(setAuthType, selectedTab, authType);
+    },
+    [selectedTab]
+  );
 
   const handleChangeAPIKey = useCallback(
     (key: "key" | "value" | "addTo", value: string) => {
-      setApiKeyAuth((prev) => ({
-        ...prev,
+      if (!selectedTab) return;
+      setStatekeyValue<APIKeyInterface>(setApiKeyAuth, selectedTab, (prev) => ({
+        ...prev[selectedTab],
         [key]: value,
       }));
     },
-    []
+    [selectedTab]
   );
 
   const handleChangeBasicAuth = useCallback(
     (key: "username" | "password", value: string) => {
-      setBasicAuth((prev) => ({
-        ...prev,
-        [key]: value,
-      }));
+      if (!selectedTab) return;
+      setStatekeyValue<BasicAuthInterface>(
+        setBasicAuth,
+        selectedTab,
+        (prev) => ({
+          ...prev[selectedTab],
+          [key]: value,
+        })
+      );
     },
-    []
+    [selectedTab]
   );
 
-  const handleChangeBearerTokenAuth = useCallback((token: string) => {
-    setBearerTokenAuth(token);
-  }, []);
+  const handleChangeBearerTokenAuth = useCallback(
+    (token: string) => {
+      if (!selectedTab) return;
+      setStatekeyValue<string>(setBearerTokenAuth, selectedTab, token);
+    },
+    [selectedTab]
+  );
 
   const handleChangeJWTBearerAuth = useCallback(
     (
       key: "algo" | "secret" | "payload" | "headerPrefix" | "addTo",
       value: string
     ) => {
-      setJwtBearerAuth((prev) => ({
-        ...prev,
-        [key]: value,
-      }));
+      if (!selectedTab) return;
+      setStatekeyValue<JWTBearerAuthInterface>(
+        setJwtBearerAuth,
+        selectedTab,
+        (prev) => ({
+          ...prev[selectedTab],
+          [key]: value,
+        })
+      );
     },
-    []
+    [selectedTab]
   );
 
   const handleIsDownloadRequestWithBase64 = useCallback(
-    (value: boolean) => setIsDownloadRequestWithBase64(value),
-    []
+    (value: boolean) => {
+      if (!selectedTab) return;
+      setStatekeyValue<boolean>(
+        setIsDownloadRequestWithBase64,
+        selectedTab,
+        value
+      );
+    },
+    [selectedTab]
   );
 
   const handleDownloadRequest = useCallback(async () => {
+    if (!selectedTab) return;
+
     const formDataWithMetadata: Array<FormDataFileMetadataInterface> =
       await Promise.all(
-        formData.map(async (data) => {
+        (formData[selectedTab] ?? []).map(async (data) => {
           let value: Array<FileMetadataInterface> | string = "";
           if (
             Array.isArray(data.value) &&
@@ -811,7 +972,10 @@ const RequestResponseProvider = ({
           ) {
             value = await Promise.all(
               data.value.map((file) =>
-                converterFileToMetadata(file, isDownloadRequestWithBase64)
+                converterFileToMetadata(
+                  file,
+                  isDownloadRequestWithBase64[selectedTab]
+                )
               )
             );
           } else if (typeof data.value === "string") {
@@ -826,43 +990,43 @@ const RequestResponseProvider = ({
       );
 
     const authorizationData =
-      authType === "api-key"
-        ? apiKeyAuth
-        : authType === "basic-auth"
-          ? basicAuth
-          : authType === "bearer-token"
-            ? bearerTokenAuth
-            : authType === "jwt-bearer"
-              ? jwtBearerAuth
+      authType[selectedTab] === "api-key"
+        ? apiKeyAuth[selectedTab]
+        : authType[selectedTab] === "basic-auth"
+          ? basicAuth[selectedTab]
+          : authType[selectedTab] === "bearer-token"
+            ? bearerTokenAuth[selectedTab]
+            : authType[selectedTab] === "jwt-bearer"
+              ? jwtBearerAuth[selectedTab]
               : undefined;
 
     const downloadData: ResponseFileDataInterface = {
-      name: requestName,
-      url: apiUrl,
-      method: selectedMethod,
-      params,
-      headers,
+      name: requestName[selectedTab],
+      url: apiUrl[selectedTab],
+      method: selectedMethod[selectedTab],
+      params: params[selectedTab],
+      headers: headers[selectedTab],
       authorization: {
-        type: authType,
+        type: authType[selectedTab],
         data: authorizationData,
       },
       body: {
-        selected: requestBodyType,
-        rawData,
+        selected: requestBodyType[selectedTab],
+        rawData: rawData[selectedTab],
         formData: formDataWithMetadata,
-        xWWWFormUrlencodedData,
+        xWWWFormUrlencodedData: xWWWFormUrlencodedData[selectedTab],
         binaryData:
-          binaryData &&
+          binaryData[selectedTab] &&
           (await converterFileToMetadata(
-            binaryData,
-            isDownloadRequestWithBase64
+            binaryData[selectedTab],
+            isDownloadRequestWithBase64[selectedTab]
           )),
-        rawRequestBodyType,
+        rawRequestBodyType: rawRequestBodyType[selectedTab],
       },
-      response,
+      response: response[selectedTab],
       size: {
-        requestSize,
-        responseSize,
+        requestSize: requestSize[selectedTab],
+        responseSize: responseSize[selectedTab],
       },
     };
 
@@ -879,30 +1043,33 @@ const RequestResponseProvider = ({
 
     URL.revokeObjectURL(url);
   }, [
+    selectedTab,
+    formData,
+    authType,
+    apiKeyAuth,
+    basicAuth,
+    bearerTokenAuth,
+    jwtBearerAuth,
     requestName,
     apiUrl,
     selectedMethod,
     params,
     headers,
-    authType,
-    basicAuth,
-    bearerTokenAuth,
-    jwtBearerAuth,
-    apiKeyAuth,
     requestBodyType,
     rawData,
-    formData,
     xWWWFormUrlencodedData,
     binaryData,
+    isDownloadRequestWithBase64,
     rawRequestBodyType,
     response,
-    isDownloadRequestWithBase64,
     requestSize,
     responseSize,
   ]);
 
   const handleImportRequest = useCallback(
     async (file: File, cb?: (message: string) => void) => {
+      if (!selectedTab) return;
+
       try {
         const text = await file.text();
         const jsonData: ResponseFileDataInterface = JSON.parse(text);
@@ -951,37 +1118,102 @@ const RequestResponseProvider = ({
         const authorizationType = jsonData.authorization.type;
         const authorizationData = jsonData.authorization.data;
 
-        setRequestname(jsonData.name);
-        setSelectedMethod(jsonData.method);
-        setParams(jsonData.params);
-        setResponse(jsonData.response);
-        setFormData(formData);
-        setBinaryData(binaryData);
-        setRawData(jsonData.body.rawData);
-        setRequestBodyType(jsonData.body.selected);
-        setXWWWFormUrlencodedData(jsonData.body.xWWWFormUrlencodedData);
-        setRawRequestBodyType(jsonData.body.rawRequestBodyType);
-        setApiUrl(jsonData.url);
-        setHeaders(jsonData.headers);
-        setRequestSize(jsonData.size.requestSize);
-        setResponseSize(jsonData.size.responseSize);
-        setAuthType(authorizationType);
+        // setRequestname(jsonData.name);
+        setStatekeyValue<string>(setRequestname, selectedTab, jsonData.name);
+        setStatekeyValue<THTTPMethods>(
+          setSelectedMethod,
+          selectedTab,
+          jsonData.method
+        );
+        setStatekeyValue<Array<ParamInterface>>(
+          setParams,
+          selectedTab,
+          jsonData.params
+        );
+        setStatekeyValue<ResponseInterface | null>(
+          setResponse,
+          selectedTab,
+          jsonData.response
+        );
+        setStatekeyValue<Array<FormDataInterface>>(
+          setFormData,
+          selectedTab,
+          formData
+        );
+        setStatekeyValue<File | null>(setBinaryData, selectedTab, binaryData);
+        setStatekeyValue<string>(
+          setRawData,
+          selectedTab,
+          jsonData.body.rawData
+        );
+        setStatekeyValue<TRequestBodyType>(
+          setRequestBodyType,
+          selectedTab,
+          jsonData.body.selected
+        );
+        setStatekeyValue<Array<ParamInterface>>(
+          setXWWWFormUrlencodedData,
+          selectedTab,
+          jsonData.body.xWWWFormUrlencodedData
+        );
+        setStatekeyValue<TContentType>(
+          setRawRequestBodyType,
+          selectedTab,
+          jsonData.body.rawRequestBodyType
+        );
+        setStatekeyValue<string>(setApiUrl, selectedTab, jsonData.url);
+        setStatekeyValue<Array<ParamInterface>>(
+          setHeaders,
+          selectedTab,
+          jsonData.headers
+        );
+        setStatekeyValue<RequestResponseSizeInterface>(
+          setRequestSize,
+          selectedTab,
+          jsonData.size.requestSize
+        );
+        setStatekeyValue<RequestResponseSizeInterface>(
+          setResponseSize,
+          selectedTab,
+          jsonData.size.responseSize
+        );
+        setStatekeyValue<TAuthType>(
+          setAuthType,
+          selectedTab,
+          authorizationType
+        );
 
         switch (authorizationType as TAuthType) {
           case "api-key": {
-            setApiKeyAuth(authorizationData as APIKeyInterface);
+            setStatekeyValue<APIKeyInterface>(
+              setApiKeyAuth,
+              selectedTab,
+              authorizationData as APIKeyInterface
+            );
             break;
           }
           case "basic-auth": {
-            setBasicAuth(authorizationData as BasicAuthInterface);
+            setStatekeyValue<BasicAuthInterface>(
+              setBasicAuth,
+              selectedTab,
+              authorizationData as BasicAuthInterface
+            );
             break;
           }
           case "bearer-token": {
-            setBearerTokenAuth(authorizationData as TBearerToken);
+            setStatekeyValue<TBearerToken>(
+              setBearerTokenAuth,
+              selectedTab,
+              authorizationData as TBearerToken
+            );
             break;
           }
           case "jwt-bearer": {
-            setJwtBearerAuth(authorizationData as JWTBearerAuthInterface);
+            setStatekeyValue<JWTBearerAuthInterface>(
+              setJwtBearerAuth,
+              selectedTab,
+              authorizationData as JWTBearerAuthInterface
+            );
             break;
           }
         }
@@ -991,20 +1223,22 @@ const RequestResponseProvider = ({
         if (cb) cb("Request JSON file is not valid");
       }
     },
-    []
+    [selectedTab]
   );
 
   const handleFetchApi = useCallback(async () => {
-    setIsLoading(true);
+    if (!selectedTab) return;
 
-    const headersPayload = headers.reduce(
+    setStatekeyValue<boolean>(setIsLoading, selectedTab, true);
+
+    const headersPayload = headers[selectedTab]?.reduce(
       (acc, { key, value, hide }) => {
         if (!hide && key) acc[key] = value;
         return acc;
       },
       {} as Record<string, string>
     );
-    const hiddenHeadersPayload = hiddenHeaders.reduce(
+    const hiddenHeadersPayload = hiddenHeaders[selectedTab]?.reduce(
       (acc, { key, value, hide }) => {
         if (!hide && key) acc[key] = value;
         return acc;
@@ -1012,42 +1246,47 @@ const RequestResponseProvider = ({
       {} as Record<string, string>
     );
 
-    const formDataPayload = formData
+    const formDataPayload = (formData[selectedTab] ?? [])
       .filter((item) => !item.hide)
       .map(({ key, value }) => ({ key, value }));
 
-    const xWWWFormDataUrlencodedPayload = xWWWFormUrlencodedData
+    const xWWWFormDataUrlencodedPayload = (
+      xWWWFormUrlencodedData[selectedTab] ?? []
+    )
       .filter((item) => !item.hide)
       .map(({ key, value }) => ({ key, value }));
 
-    setRequestSize({
-      header: getPayloadSize(headersPayload) ?? 0,
-      body: requestDataSize({
-        bodyType: requestBodyType,
-        rawData,
-        binaryData: binaryData ?? undefined,
-        formData: formDataPayload,
-        xWWWformDataUrlencoded: xWWWFormDataUrlencodedPayload,
-      }),
-    });
+    setRequestSize((prev) => ({
+      ...prev,
+      [selectedTab]: {
+        header: getPayloadSize(headersPayload) ?? 0,
+        body: requestDataSize({
+          bodyType: requestBodyType[selectedTab],
+          rawData: rawData[selectedTab],
+          binaryData: binaryData[selectedTab] ?? undefined,
+          formData: formDataPayload,
+          xWWWformDataUrlencoded: xWWWFormDataUrlencodedPayload,
+        }),
+      },
+    }));
 
     const payload = {
-      method: selectedMethod,
-      url: ensureAbsoluteUrl(apiUrl),
+      method: selectedMethod[selectedTab],
+      url: ensureAbsoluteUrl(apiUrl[selectedTab]),
       headers: headersPayload,
       hiddenHeaders: hiddenHeadersPayload,
-      bodyType: requestBodyType,
-      binaryData: binaryData ?? undefined,
+      bodyType: requestBodyType[selectedTab],
+      binaryData: binaryData?.[selectedTab] ?? undefined,
       formData: formDataPayload,
       xWWWformDataUrlencoded: xWWWFormDataUrlencodedPayload,
-      rawData,
-      rawSubType: rawRequestBodyType,
+      rawData: rawData[selectedTab],
+      rawSubType: rawRequestBodyType[selectedTab],
     };
 
     const responseData: ResponseInterface =
       await fetchApiAndExtractData(payload);
 
-    setIsResposneError(false);
+    setStatekeyValue<boolean>(setIsResposneError, selectedTab, false);
 
     const statusDetails = (statusData as StatusDataInterface)[
       responseData.status
@@ -1057,124 +1296,217 @@ const RequestResponseProvider = ({
     if (!responseData!.statusText)
       responseData!.statusText = statusDetails?.reason;
 
-    setIsLoading(false);
-    setResponse(responseData);
-
-    setResponseSize({
-      header: getPayloadSize(responseData?.headers) ?? 0,
-      body: getPayloadSize(responseData?.data) ?? 0,
-    });
+    setStatekeyValue<boolean>(setIsLoading, selectedTab, false);
+    setStatekeyValue<ResponseInterface | null>(
+      setResponse,
+      selectedTab,
+      responseData
+    );
+    setStatekeyValue<RequestResponseSizeInterface>(
+      setResponseSize,
+      selectedTab,
+      () => ({
+        header: getPayloadSize(responseData?.headers) ?? 0,
+        body: getPayloadSize(responseData?.data) ?? 0,
+      })
+    );
   }, [
-    apiUrl,
-    selectedMethod,
+    selectedTab,
     headers,
     hiddenHeaders,
-    requestBodyType,
-    rawRequestBodyType,
-    rawData,
     formData,
     xWWWFormUrlencodedData,
+    selectedMethod,
+    apiUrl,
+    requestBodyType,
     binaryData,
+    rawData,
+    rawRequestBodyType,
   ]);
 
   useEffect(() => {
-    if (!shouldFetch) return;
-    handleFetchApi();
-    setShouldFetch(false);
-  }, [shouldFetch, handleFetchApi]);
+    if (!selectedTab) return;
+
+    if (!apiUrl[selectedTab])
+      setStatekeyValue<string>(setApiUrl, selectedTab, "");
+
+    if (!rawData[selectedTab])
+      setStatekeyValue<string>(setRawData, selectedTab, "");
+
+    if (!requestName[selectedTab])
+      setStatekeyValue<string>(setRequestname, selectedTab, "New Request");
+
+    if (!activeMetaTab[selectedTab])
+      setStatekeyValue<TActiveTabType>(setActiveMetaTab, selectedTab, "params");
+
+    if (!params[selectedTab])
+      setStatekeyValue<Array<ParamInterface>>(setParams, selectedTab, []);
+
+    if (!hiddenParams[selectedTab])
+      setStatekeyValue<Array<ParamInterface>>(setHiddenParams, selectedTab, []);
+
+    if (!headers[selectedTab])
+      setStatekeyValue<Array<ParamInterface>>(setHeaders, selectedTab, []);
+
+    if (!hiddenHeaders[selectedTab])
+      setStatekeyValue<Array<ParamInterface>>(
+        setHiddenHeaders,
+        selectedTab,
+        []
+      );
+
+    if (!formData[selectedTab])
+      setStatekeyValue<Array<FormDataInterface>>(setFormData, selectedTab, []);
+
+    if (!xWWWFormUrlencodedData[selectedTab])
+      setStatekeyValue<Array<ParamInterface>>(
+        setXWWWFormUrlencodedData,
+        selectedTab,
+        []
+      );
+
+    if (!binaryData[selectedTab])
+      setStatekeyValue<File | null>(setBinaryData, selectedTab, null);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedTab]);
 
   useEffect(() => {
+    if (!requestIdShouldFetch) return;
+    handleFetchApi();
+    setRequestIdShouldFetch("");
+  }, [requestIdShouldFetch, handleFetchApi]);
+
+  useEffect(() => {
+    if (!selectedTab) return;
+
     let finalUrl = "";
+    const mainUrl = apiUrl[selectedTab] ?? "";
 
     /* finding query params */
-    const queryString = params
+    const queryString = (params[selectedTab] ?? [])
       .filter(({ hide }) => !hide)
       .map(({ key = "", value = "" }) => `${key}=${encodeURIComponent(value)}`)
       .join("&");
 
     try {
       /* If baseUrl is valid, construct normally */
-      const url = new URL(apiUrl);
+      const url = new URL(mainUrl);
       url.search = queryString;
       finalUrl = url.toString();
     } catch {
       /* If baseUrl is invalid (like just "?name=abc"), just return query only */
 
       /* finding url without any query params and # */
-      const cleanUrl = apiUrl.split("?")[0].split("#")[0];
+      const cleanUrl = mainUrl.split("?")[0].split("#")[0];
 
       if (!cleanUrl.trim()) finalUrl = queryString ? `?${queryString}` : "";
       else finalUrl = cleanUrl + (queryString ? `?${queryString}` : "");
     }
 
-    if (previousFinalUrlRef.current === finalUrl) return;
+    if (previousFinalUrlRef.current[selectedTab] === finalUrl) return;
 
-    previousFinalUrlRef.current = finalUrl;
-    setApiUrl(finalUrl);
-  }, [apiUrl, params]);
+    previousFinalUrlRef.current[selectedTab] = finalUrl;
+    setStatekeyValue<string>(setApiUrl, selectedTab, finalUrl);
+  }, [apiUrl, params, selectedTab]);
 
   useEffect(() => {
+    if (!selectedTab) return;
+
     if (!apiUrl)
-      return setHiddenHeaders((prev) =>
-        prev.map((item) =>
-          item.key === "Cookie" ? { ...item, value: "" } : item
-        )
+      return setStatekeyValue<Array<ParamInterface>>(
+        setHiddenHeaders,
+        selectedTab,
+        (prev) => {
+          return (prev[selectedTab] ?? []).map((item) =>
+            item.key === "Cookie" ? { ...item, value: "" } : item
+          );
+        }
       );
 
     /* load cookies in header */
-    const handleDomainCookie = async (url: string) => {
+    (async () => {
+      const url = apiUrl[selectedTab] ?? "";
       const cookies = ((await getCookiesStringByDomain(
         ensureAbsoluteUrl(url)
       )) ?? "") as string;
 
-      setHiddenHeaders((prev) =>
-        prev.map((header) => ({
-          ...header,
-          ...(header.key === "Cookie" ? { value: cookies } : {}),
-        }))
+      return setStatekeyValue<Array<ParamInterface>>(
+        setHiddenHeaders,
+        selectedTab,
+        (prev) => {
+          return (prev[selectedTab] ?? []).map((header) => ({
+            ...header,
+            ...(header.key === "Cookie" ? { value: cookies } : {}),
+          }));
+        }
       );
-    };
-
-    handleDomainCookie(apiUrl);
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiUrl, response]);
 
-  useEffect(() => {
-    const addHiddenData = (
-      setState: React.Dispatch<React.SetStateAction<Array<ParamInterface>>>,
+  const addHiddenData = useCallback(
+    (
+      setState: React.Dispatch<
+        React.SetStateAction<Record<string, Array<ParamInterface>>>
+      >,
       keyName: string,
       payload: Record<string, string> = {}
     ) => {
-      setState((prev) => {
-        if (prev.some((item) => item.id === keyName)) {
-          return prev.map((item) =>
-            item.id === keyName ? { ...item, ...payload } : item
-          );
-        } else {
-          const filtered = prev.filter((h) => h.id !== keyName);
-          return [
-            {
-              ...generateNextHiddenHeaderOrParam(),
-              id: keyName,
-              ...payload,
-            },
-            ...filtered,
-          ];
-        }
-      });
-    };
+      if (!selectedTab) return;
 
-    const removeHiddenData = (
-      setState: React.Dispatch<React.SetStateAction<Array<ParamInterface>>>,
+      return setStatekeyValue<Array<ParamInterface>>(
+        setState,
+        selectedTab,
+        (prev) => {
+          if ((prev[selectedTab] ?? [])?.some((item) => item.id === keyName)) {
+            return (prev[selectedTab] ?? []).map((item) =>
+              item.id === keyName ? { ...item, ...payload } : item
+            );
+          } else {
+            const filtered = (prev[selectedTab] ?? []).filter(
+              (h) => h.id !== keyName
+            );
+            return [
+              {
+                ...generateNextHiddenHeaderOrParam(),
+                id: keyName,
+                ...payload,
+              },
+              ...filtered,
+            ];
+          }
+        }
+      );
+    },
+    [selectedTab]
+  );
+
+  const removeHiddenData = useCallback(
+    (
+      setState: React.Dispatch<
+        React.SetStateAction<Record<string, Array<ParamInterface>>>
+      >,
       keyName: string | Array<string>
     ) => {
+      if (!selectedTab) return;
+
       /* filter out those data which are not in keyName list or not keyName */
-      setState((prev) =>
-        prev.filter(
-          (param) =>
-            !(Array.isArray(keyName) ? keyName : [keyName]).includes(param.id)
-        )
+      return setStatekeyValue<Array<ParamInterface>>(
+        setState,
+        selectedTab,
+        (prev) =>
+          (prev[selectedTab] ?? []).filter(
+            (param) =>
+              !(Array.isArray(keyName) ? keyName : [keyName]).includes(param.id)
+          )
       );
-    };
+    },
+    [selectedTab]
+  );
+
+  useEffect(() => {
+    if (!selectedTab) return;
 
     /* if jwt-bearer */
     const handleJWTBearer = async () => {
@@ -1185,12 +1517,12 @@ const RequestResponseProvider = ({
         if (!jwtBearerAuth.secret) return;
 
         const token = await window.electronAPI.generateJWTToken({
-          payload: jwtBearerAuth.payload,
-          secret: jwtBearerAuth.secret,
-          algorithm: jwtBearerAuth.algo,
+          payload: jwtBearerAuth[selectedTab].payload,
+          secret: jwtBearerAuth[selectedTab].secret,
+          algorithm: jwtBearerAuth[selectedTab].algo,
         });
 
-        if (jwtBearerAuth.addTo === "header") {
+        if (jwtBearerAuth[selectedTab].addTo === "header") {
           removeHiddenData(setHiddenParams, "jwt-bearer");
           addHiddenData(setHiddenHeaders, "jwt-bearer", {
             key: "Authorization",
@@ -1217,33 +1549,39 @@ const RequestResponseProvider = ({
      * --- add in header and remove from params
      * else remove from both header and params
      * **/
-    if (authType === "api-key" && apiKeyAuth.addTo === "query") {
+    if (
+      authType[selectedTab] === "api-key" &&
+      apiKeyAuth[selectedTab].addTo === "query"
+    ) {
       removeHiddenData(setHiddenHeaders, getRestOfAuthType());
       addHiddenData(setHiddenParams, "api-key", {
-        key: apiKeyAuth.key,
-        value: apiKeyAuth.value,
+        key: apiKeyAuth[selectedTab].key,
+        value: apiKeyAuth[selectedTab].value,
       });
-    } else if (authType === "api-key" && apiKeyAuth.addTo === "header") {
+    } else if (
+      authType[selectedTab] === "api-key" &&
+      apiKeyAuth[selectedTab].addTo === "header"
+    ) {
       removeHiddenData(setHiddenParams, "api-key");
       addHiddenData(setHiddenHeaders, "api-key", {
-        key: apiKeyAuth.key,
-        value: apiKeyAuth.value,
+        key: apiKeyAuth[selectedTab].key,
+        value: apiKeyAuth[selectedTab].value,
       });
       removeHiddenData(setHiddenHeaders, getRestOfAuthType("api-key"));
-    } else if (authType === "basic-auth") {
+    } else if (authType[selectedTab] === "basic-auth") {
       removeHiddenData(setHiddenHeaders, getRestOfAuthType("basic-auth"));
       const token = btoa(`${basicAuth.username}:${basicAuth.password}`);
       addHiddenData(setHiddenHeaders, "basic-auth", {
         key: "Authorization",
         value: `Basic ${token}`,
       });
-    } else if (authType === "bearer-token") {
+    } else if (authType[selectedTab] === "bearer-token") {
       removeHiddenData(setHiddenHeaders, getRestOfAuthType("bearer-token"));
       addHiddenData(setHiddenHeaders, "bearer-token", {
         key: "Authorization",
         value: `Bearer ${bearerTokenAuth}`,
       });
-    } else if (authType === "jwt-bearer") {
+    } else if (authType[selectedTab] === "jwt-bearer") {
       (async () => {
         await handleJWTBearer();
       })();
@@ -1252,43 +1590,65 @@ const RequestResponseProvider = ({
       removeHiddenData(setHiddenHeaders, getRestOfAuthType());
     }
 
-    //// eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiKeyAuth, basicAuth, bearerTokenAuth, jwtBearerAuth, authType]);
 
-  const handleChangeActiveMetaTab = useCallback((id: TActiveTabType) => {
-    setActiveMetaTab(id);
-  }, []);
+  const handleChangeActiveMetaTab = useCallback(
+    (id: TActiveTabType) => {
+      if (!selectedTab) return;
+      setStatekeyValue<TActiveTabType>(setActiveMetaTab, selectedTab, id);
+    },
+    [selectedTab]
+  );
 
-  const handleChangeSelectedMethod = useCallback((id: THTTPMethods) => {
-    setSelectedMethod(id);
-  }, []);
+  const handleChangeSelectedMethod = useCallback(
+    (id: THTTPMethods) => {
+      if (!selectedTab) return;
+      setStatekeyValue<THTTPMethods>(setSelectedMethod, selectedTab, id);
+    },
+    [selectedTab]
+  );
 
-  const handleChangeRequestBodyType = useCallback((id: TRequestBodyType) => {
-    setRequestBodyType(id);
-  }, []);
+  const handleChangeRequestBodyType = useCallback(
+    (id: TRequestBodyType) => {
+      if (!selectedTab) return;
+      setStatekeyValue<TRequestBodyType>(setRequestBodyType, selectedTab, id);
+    },
+    [selectedTab]
+  );
 
-  const handleChangeRawRequestBodyType = useCallback((id: TContentType) => {
-    setRawRequestBodyType(id);
-  }, []);
+  const handleChangeRawRequestBodyType = useCallback(
+    (id: TContentType) => {
+      if (!selectedTab) return;
+      setStatekeyValue<TContentType>(setRawRequestBodyType, selectedTab, id);
+    },
+    [selectedTab]
+  );
 
-  const handleChangeApiUrl = useCallback((api: string) => {
-    const urlParams: Array<{
-      key: string;
-      value: string;
-    }> = parseUrlParams(api).map(([key, value]) => ({
-      key,
-      value,
-    }));
+  const handleChangeApiUrl = useCallback(
+    (api: string) => {
+      if (!selectedTab) return;
 
-    setParams((prev) => {
-      if (prev.length < urlParams.length)
-        return urlParams.map((param, index) => ({
-          ...generateNewMetaDataItem("params"),
-          ...prev[index],
-          ...param,
-        }));
+      const urlParams: Array<{
+        key: string;
+        value: string;
+      }> = parseUrlParams(api).map(([key, value]) => ({
+        key,
+        value,
+      }));
 
-      /* 
+      setStatekeyValue<Array<ParamInterface>>(
+        setParams,
+        selectedTab,
+        (prev) => {
+          if (prev[selectedTab]?.length < urlParams.length)
+            return urlParams.map((param, index) => ({
+              ...generateNewMetaDataItem("params"),
+              ...prev[selectedTab]?.[index],
+              ...param,
+            }));
+
+          /* 
       if new params size less then previous means some of them have to filter out
       
       so we keep hidden params as it is but for others we checked that is it exist in new param list
@@ -1296,95 +1656,164 @@ const RequestResponseProvider = ({
       if exist then update it
       else filter out it.
       */
-      let index = 0;
-      return prev.reduce(
-        (acc, curr) =>
-          curr.hide
-            ? [...acc, curr]
-            : urlParams[index]
-              ? [
-                  ...acc,
-                  {
-                    ...curr,
-                    ...urlParams[index++],
-                  },
-                ]
-              : acc,
-        [] as Array<ParamInterface>
+          let index = 0;
+          return prev[selectedTab]?.reduce(
+            (acc, curr) =>
+              curr.hide
+                ? [...acc, curr]
+                : urlParams[index]
+                  ? [
+                      ...acc,
+                      {
+                        ...curr,
+                        ...urlParams[index++],
+                      },
+                    ]
+                  : acc,
+            [] as Array<ParamInterface>
+          );
+        }
       );
-    });
 
-    setApiUrl(api);
-  }, []);
+      setStatekeyValue<string>(setApiUrl, selectedTab, api);
+    },
+    [selectedTab]
+  );
 
-  const handleIsInputError = useCallback((value: boolean) => {
-    setIsApiUrlError(value);
-  }, []);
+  const handleIsInputError = useCallback(
+    (value: boolean) => {
+      if (!selectedTab) return;
+      setStatekeyValue<boolean>(setIsApiUrlError, selectedTab, value);
+    },
+    [selectedTab]
+  );
 
-  const handleChangeRawData = useCallback((value: string) => {
-    setRawData(value);
-  }, []);
+  const handleChangeRawData = useCallback(
+    (value: string) => {
+      if (!selectedTab) return;
+      setStatekeyValue<string>(setRawData, selectedTab, value);
+    },
+    [selectedTab]
+  );
 
   const handleRequestSend = useCallback(() => {
-    setShouldFetch(true);
-  }, []);
+    if (!selectedTab) return;
+    setRequestIdShouldFetch(selectedTab);
+  }, [selectedTab]);
 
-  const handleRemoveAllMetaData = useCallback((type: TMetaTableType) => {
-    switch (type) {
-      case "params":
-        return setParams([]);
-      case "headers":
-        return setHeaders([]);
-      case "form-data":
-        return setFormData([]);
-      case "x-www-form-urlencoded":
-        return setXWWWFormUrlencodedData([]);
-    }
-  }, []);
+  const handleRemoveAllMetaData = useCallback(
+    (type: TMetaTableType) => {
+      if (!selectedTab) return;
 
-  const handleRemoveFormDataFile = useCallback((id: string, index: number) => {
-    setFormData((prev) =>
-      prev.map((item) => {
-        if (item.id !== id || typeof item.value === "string") return item;
+      switch (type) {
+        case "params":
+          return setStatekeyValue<Array<ParamInterface>>(
+            setParams,
+            selectedTab,
+            []
+          );
+        case "headers":
+          return setStatekeyValue<Array<ParamInterface>>(
+            setHeaders,
+            selectedTab,
+            []
+          );
+        case "form-data":
+          return setStatekeyValue<Array<FormDataInterface>>(
+            setFormData,
+            selectedTab,
+            []
+          );
+        case "x-www-form-urlencoded":
+          return setStatekeyValue<Array<ParamInterface>>(
+            setXWWWFormUrlencodedData,
+            selectedTab,
+            []
+          );
+      }
+    },
+    [selectedTab]
+  );
 
-        return {
-          ...item,
-          value: item.value.filter((_, i) => i !== index),
-        };
-      })
-    );
-  }, []);
+  const handleRemoveFormDataFile = useCallback(
+    (id: string, index: number) => {
+      if (!selectedTab) return;
+
+      setStatekeyValue<Array<FormDataInterface>>(
+        setFormData,
+        selectedTab,
+        (prev) => {
+          return (prev[selectedTab] ?? []).map((item) => {
+            if (item.id !== id || typeof item.value === "string") return item;
+
+            console.log("item.value === ", item.value);
+            return {
+              ...item,
+              value: item.value.filter((_, i) => i !== index),
+            };
+          });
+        }
+      );
+    },
+    [selectedTab]
+  );
 
   /* binary data */
-  const handleChangeBinaryData = useCallback((file: File | null = null) => {
-    setBinaryData(file);
-  }, []);
+  const handleChangeBinaryData = useCallback(
+    (file: File | null = null) => {
+      if (!selectedTab) return;
+      setStatekeyValue<File | null>(setBinaryData, selectedTab, file);
+    },
+    [selectedTab]
+  );
 
-  const activeTabList = useMemo(() => {
+  const activeTabList = useMemo((): Partial<
+    Record<TActiveTabType, boolean>
+  > => {
+    if (!selectedTab) return {};
+
     const tabList: Partial<Record<TActiveTabType, boolean>> = {};
 
-    if (params.length && !tabList["params"]) tabList["params"] = true;
+    console.log("headers[selectedTab] ==== ", headers[selectedTab]);
+
+    if (params[selectedTab]?.length && !tabList["params"])
+      tabList["params"] = true;
     else tabList["params"] = false;
 
-    if (headers.length && !tabList["headers"]) tabList["headers"] = true;
+    if (headers[selectedTab]?.length && !tabList["headers"])
+      tabList["headers"] = true;
     else tabList["headers"] = false;
 
+    console.log("formData[selectedTab] === ", formData[selectedTab]);
+    console.log(
+      "xWWWFormUrlencodedData[selectedTab] === ",
+      xWWWFormUrlencodedData[selectedTab]
+    );
     if (
-      (formData.length ||
-        xWWWFormUrlencodedData.length ||
-        rawData ||
-        binaryData) &&
+      (formData[selectedTab]?.length ||
+        xWWWFormUrlencodedData[selectedTab]?.length ||
+        rawData[selectedTab] ||
+        binaryData[selectedTab]) &&
       !tabList["body"]
     ) {
       tabList["body"] = true;
     } else tabList["body"] = false;
 
     return tabList;
-  }, [params, headers, formData, xWWWFormUrlencodedData, rawData, binaryData]);
+  }, [
+    selectedTab,
+    params,
+    headers,
+    formData,
+    xWWWFormUrlencodedData,
+    rawData,
+    binaryData,
+  ]);
 
   return (
     <RequestResponseContext.Provider
       value={{
+        selectedTab: selectedTab!,
         isResponseCollapsed,
         handleToggleCollapse,
         requestName,

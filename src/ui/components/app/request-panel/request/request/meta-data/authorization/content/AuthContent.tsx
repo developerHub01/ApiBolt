@@ -7,14 +7,14 @@ import APIKey from "@/components/app/request-panel/request/request/meta-data/aut
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 const AuthContent = () => {
-  const { authType } = useRequestResponse();
+  const { authType, selectedTab } = useRequestResponse();
   return (
     <ScrollArea className="w-full h-full pl-2 md:pl-2.5 ">
-      {authType === "no-auth" && <NoAuth />}
-      {authType === "basic-auth" && <BasicAuth />}
-      {authType === "bearer-token" && <BearerToken />}
-      {authType === "jwt-bearer" && <JWTBearer />}
-      {authType === "api-key" && <APIKey />}
+      {authType[selectedTab] === "no-auth" && <NoAuth />}
+      {authType[selectedTab] === "basic-auth" && <BasicAuth />}
+      {authType[selectedTab] === "bearer-token" && <BearerToken />}
+      {authType[selectedTab] === "jwt-bearer" && <JWTBearer />}
+      {authType[selectedTab] === "api-key" && <APIKey />}
     </ScrollArea>
   );
 };

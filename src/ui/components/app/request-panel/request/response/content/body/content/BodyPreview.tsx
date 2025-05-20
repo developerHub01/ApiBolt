@@ -5,15 +5,15 @@ import BodyHTMLPreview from "@/components/app/request-panel/request/response/con
 import BodyJSONPreview from "@/components/app/request-panel/request/response/content/body/content/body-json-preview/BodyJSONPreview";
 
 const BodyPreview = () => {
-  const { response } = useRequestResponse();
+  const { response, selectedTab } = useRequestResponse();
 
-  if (!response) return null;
+  if (!response || !response[selectedTab]) return null;
 
   const responseType = getResponseType(
-    String(response?.headers?.["content-type"] ?? "")
+    String(response[selectedTab]?.headers?.["content-type"] ?? "")
   ).toLowerCase() as TContentType;
 
-  const responseData = response?.data;
+  const responseData = response[selectedTab]?.data;
 
   return (
     <>

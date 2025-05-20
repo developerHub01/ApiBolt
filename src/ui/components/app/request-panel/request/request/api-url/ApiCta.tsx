@@ -4,12 +4,13 @@ import { Loader as LoaderIcon } from "lucide-react";
 import { useRequestResponse } from "@/context/request/RequestResponseProvider";
 
 const ApiCta = memo(() => {
-  const { isLoading } = useRequestResponse();
+  const { selectedTab, isLoading } = useRequestResponse();
+  const disabled = Boolean(isLoading[selectedTab]);
 
   return (
     <Button
       type="submit"
-      disabled={isLoading}
+      disabled={disabled}
       className="rounded-l-none uppercase"
     >
       {isLoading && <LoaderIcon className="animate-spin" size={16} />}

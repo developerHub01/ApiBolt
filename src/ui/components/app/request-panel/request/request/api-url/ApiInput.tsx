@@ -11,7 +11,9 @@ interface ApiInputProps {
 }
 
 const ApiInput = memo(({ value, onChange, onFocus, onBlur }: ApiInputProps) => {
-  const { isApiUrlError } = useRequestResponse();
+  const { selectedTab, isApiUrlError } = useRequestResponse();
+
+  const isError = Boolean(isApiUrlError[selectedTab]);
 
   const handleApiUrlChange = (e: ChangeEvent<HTMLInputElement>) =>
     onChange(e.target.value);
@@ -25,8 +27,8 @@ const ApiInput = memo(({ value, onChange, onFocus, onBlur }: ApiInputProps) => {
     <Input
       placeholder="Enter URL or paste text"
       className={cn("w-full rounded-none", {
-        "border-destructive": isApiUrlError,
-        "border-input": !isApiUrlError,
+        "border-destructive": isError,
+        "border-input": !isError,
       })}
       value={value}
       onChange={handleApiUrlChange}

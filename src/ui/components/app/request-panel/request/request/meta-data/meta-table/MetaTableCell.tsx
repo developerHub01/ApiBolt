@@ -36,6 +36,7 @@ const MetaTableCell = memo(
     prevent = false,
   }: MetaTableCellProps) => {
     const { handleRemoveFormDataFile } = useRequestMetaTable();
+    console.log("============MetaTableCell==========")
 
     const handleUploadFile = useCallback(
       (e: ChangeEvent<HTMLInputElement>) => {

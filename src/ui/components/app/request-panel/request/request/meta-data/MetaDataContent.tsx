@@ -6,14 +6,15 @@ import Headers from "@/components/app/request-panel/request/request/meta-data/he
 import Body from "@/components/app/request-panel/request/request/meta-data/body/Body";
 
 const MetaDataContent = memo(() => {
-  const { activeMetaTab } = useRequestResponse();
+  const { activeMetaTab, selectedTab } = useRequestResponse();
 
+  console.log({ activeMetaTab });
   return (
     <div className="h-full p-2.5 pt-1">
-      {activeMetaTab === "params" && <Params />}
-      {activeMetaTab === "authorization" && <Authorization />}
-      {activeMetaTab === "headers" && <Headers />}
-      {activeMetaTab === "body" && <Body />}
+      {activeMetaTab[selectedTab] === "params" && <Params />}
+      {activeMetaTab[selectedTab] === "authorization" && <Authorization />}
+      {activeMetaTab[selectedTab] === "headers" && <Headers />}
+      {activeMetaTab[selectedTab] === "body" && <Body />}
     </div>
   );
 });

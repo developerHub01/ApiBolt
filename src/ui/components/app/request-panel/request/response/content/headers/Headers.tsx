@@ -4,8 +4,11 @@ import { useRequestResponse } from "@/context/request/RequestResponseProvider";
 import HeaderContent from "@/components/app/request-panel/request/response/content/headers/HeaderContent";
 
 const Headers = () => {
-  const { response } = useRequestResponse();
-  const headers = response?.headers as Record<string, string>;
+  const { response, selectedTab } = useRequestResponse();
+
+  if (!response || !response[selectedTab]) return null;
+
+  const headers = response[selectedTab]?.headers as Record<string, string>;
 
   return (
     <ScrollArea className="flex-1 min-h-0 h-full overflow-hidden">

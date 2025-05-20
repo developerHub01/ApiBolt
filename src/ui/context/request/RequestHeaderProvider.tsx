@@ -1,4 +1,5 @@
 import React, { createContext, useCallback, useContext, useState } from "react";
+import { useParams } from "react-router-dom";
 
 interface RequestHeaderContext {
   showHiddenHeader: boolean;
@@ -25,6 +26,7 @@ interface RequestHeaderProviderProps {
 }
 
 const RequestHeaderProvider = ({ children }: RequestHeaderProviderProps) => {
+  const { id } = useParams();
   const [showHiddenHeader, setShowHiddenHeader] = useState<boolean>(false);
 
   const handleChangeShowHiddenHeader = useCallback((value?: boolean) => {
@@ -32,6 +34,8 @@ const RequestHeaderProvider = ({ children }: RequestHeaderProviderProps) => {
 
     setShowHiddenHeader(value);
   }, []);
+
+  if (!id) return;
 
   return (
     <RequestHeaderContext.Provider

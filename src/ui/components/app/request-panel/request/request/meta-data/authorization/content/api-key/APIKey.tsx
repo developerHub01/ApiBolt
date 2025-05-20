@@ -3,7 +3,10 @@ import AuthKeyValueWrapper from "@/components/app/request-panel/request/request/
 import AuthContentInput from "@/components/app/request-panel/request/request/meta-data/authorization/content/AuthContentInput";
 import AuthContentInoutLabel from "@/components/app/request-panel/request/request/meta-data/authorization/content/AuthContentInoutLabel";
 import AuthContentSelect from "@/components/app/request-panel/request/request/meta-data/authorization/content/AuthContentSelect";
-import { useRequestResponse } from "@/context/request/RequestResponseProvider";
+import {
+  defaultApiKey,
+  useRequestResponse,
+} from "@/context/request/RequestResponseProvider";
 
 const addToList = [
   {
@@ -17,7 +20,9 @@ const addToList = [
 ];
 
 const APIKey = () => {
-  const { apiKeyAuth, handleChangeAPIKey } = useRequestResponse();
+  const { apiKeyAuth, selectedTab, handleChangeAPIKey } = useRequestResponse();
+
+  const authData = apiKeyAuth[selectedTab] ?? defaultApiKey;
 
   return (
     <ContentWrapper>
@@ -26,7 +31,7 @@ const APIKey = () => {
         <AuthContentInput
           id="api-key"
           placeholder="Key"
-          value={apiKeyAuth.key}
+          value={authData.key}
           onBlur={(value) => handleChangeAPIKey("key", value)}
         />
       </AuthKeyValueWrapper>
@@ -36,7 +41,7 @@ const APIKey = () => {
           id="api-key"
           placeholder="Value"
           type="password"
-          value={apiKeyAuth.value}
+          value={authData.value}
           onBlur={(value) => handleChangeAPIKey("value", value)}
         />
       </AuthKeyValueWrapper>
@@ -48,7 +53,7 @@ const APIKey = () => {
           id="api-key"
           className="w-full"
           items={addToList}
-          value={apiKeyAuth.addTo ?? addToList[0].id}
+          value={authData.addTo}
           onChange={(value) => handleChangeAPIKey("addTo", value)}
         />
       </AuthKeyValueWrapper>

@@ -16,6 +16,9 @@ const MetaTableCheckAll = memo(
     const { handleCheckToggleMetaData } = useRequestMetaTable();
     const { data, type } = useGetTableData() ?? {};
 
+    console.log("===MetaTableCheckAll===");
+    console.log({ data, type });
+
     if (!type || !data || !data.length) return null;
 
     const isAllChecked = data.every((item) => !item.hide);

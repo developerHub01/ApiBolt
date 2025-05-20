@@ -8,9 +8,9 @@ import Headers from "@/components/app/request-panel/request/response/content/hea
 
 const ResposneContent = memo(() => {
   const { activeMetaTab } = useResponse();
-  const { response } = useRequestResponse();
+  const { response, selectedTab } = useRequestResponse();
 
-  if (!response) return <EmptyResponse />;
+  if (!response?.[selectedTab]) return <EmptyResponse />;
 
   return (
     <div className="p-2.5 pt-1 flex-1 min-h-0">

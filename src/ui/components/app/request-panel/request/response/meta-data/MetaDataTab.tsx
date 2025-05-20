@@ -25,20 +25,24 @@ const tabList: Array<{
 
 const MetaDataTab = memo(() => {
   const { activeMetaTab, handleChangeActiveMetaTab } = useResponse();
-  const { response } = useRequestResponse();
+  const { response, selectedTab } = useRequestResponse();
+
+  console.log("============MetaDataTab==========");
 
   const tabListWithActivity = useMemo(
     () =>
       tabList.map((item) => {
         if (item.id === "cookies") {
-          item.count = response?.cookies?.length ?? 0;
+          item.count = response[selectedTab]?.cookies?.length ?? 0;
         } else if (item.id === "headers") {
-          item.count = Object.keys(response?.headers ?? {}).length;
+          item.count = Object.keys(response[selectedTab]?.headers ?? {}).length;
         }
         return item;
       }),
-    [response]
+    [response, selectedTab]
   );
+
+  if (!response || !response[selectedTab]) return null;
 
   return (
     <>

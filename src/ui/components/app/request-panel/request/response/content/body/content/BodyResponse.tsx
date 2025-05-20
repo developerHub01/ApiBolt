@@ -8,12 +8,12 @@ import type { TContentType } from "@/types";
 import Code from "@/components/ui/code";
 
 const BodyResponse = memo(() => {
-  const { response } = useRequestResponse();
+  const { response, selectedTab } = useRequestResponse();
   const { responseCodeWrap } = useResponse();
   const [formattedCode, setFormattedCode] = useState("");
 
   const responseType = getResponseType(
-    String(response?.headers?.["content-type"] ?? "")
+    String(response[selectedTab]?.headers?.["content-type"] ?? "")
   ).toLowerCase() as TContentType;
 
   const parser = useMemo(() => getParser(responseType), [responseType]);
