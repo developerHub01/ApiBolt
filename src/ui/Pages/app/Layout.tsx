@@ -1,20 +1,20 @@
 import AppMainContentLayoutWrapper from "@/components/app/AppMainContentLayoutWrapper";
 import RequestListPanelWrapper from "@/components/app/request-list/RequestListPanelWrapper";
 import Sidebar from "@/components/app/sidebar/Sidebar";
-import TabSidebar from "@/components/app/tab-sidebar/TabSidebar";
+// import TabSidebar from "@/components/app/tab-sidebar/TabSidebar";
 import CopyRight from "@/components/copy-right";
 import Header from "@/components/header/Header";
 import {
   ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
+  // ResizablePanel,
+  // ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import RequestFolderProvider from "@/context/request-list/RequestFolderProvider";
+// import RequestFolderProvider from "@/context/request-list/RequestFolderProvider";
 import RequestListProvider from "@/context/request-list/RequestListProvider";
-import RequestResponseProvider from "@/context/request/RequestResponseProvider";
+// import RequestResponseProvider from "@/context/request/RequestResponseProvider";
 import SidebarProvider from "@/context/sidebar/SidebarProvider";
 import TabSidebarProvider from "@/context/tab-sidebar/TabSidebarProvider";
-import { Outlet } from "react-router-dom";
+// import { Outlet } from "react-router-dom";
 
 const AppLayout = () => {
   return (
@@ -26,7 +26,7 @@ const AppLayout = () => {
           <AppMainContentLayoutWrapper>
             <RequestListPanelWrapper />
             <ResizableHandle />
-            <ResizablePanel defaultSize={70}>
+            {/* <ResizablePanel defaultSize={70}>
               <ResizablePanelGroup direction="vertical">
                 <ResizablePanel defaultSize={25}>
                   <RequestFolderProvider>
@@ -34,9 +34,9 @@ const AppLayout = () => {
                   </RequestFolderProvider>
                 </ResizablePanel>
               </ResizablePanelGroup>
-            </ResizablePanel>
+            </ResizablePanel> */}
           </AppMainContentLayoutWrapper>
-          <TabSidebar />
+          {/* <TabSidebar /> */}
         </ProviderStack>
       </section>
       <CopyRight />
@@ -49,9 +49,9 @@ const ProviderStack = ({ children }: { children: React.ReactNode }) => {
     <SidebarProvider>
       <RequestListProvider>
         <TabSidebarProvider>
-          <RequestResponseProvider>
+          {/* <RequestResponseProvider> */}
             {children}
-          </RequestResponseProvider>
+          {/* </RequestResponseProvider> */}
         </TabSidebarProvider>
       </RequestListProvider>
     </SidebarProvider>

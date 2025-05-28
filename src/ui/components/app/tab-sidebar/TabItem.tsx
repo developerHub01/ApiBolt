@@ -1,16 +1,18 @@
 import { useState, type DragEvent, type MouseEvent } from "react";
 import RequestMethodTag from "@/components/app/RequestMethodTag";
 import { Button } from "@/components/ui/button";
-import { useRequestList } from "@/context/request-list/RequestListProvider";
 import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 import { cn } from "@/lib/utils";
 import type { TMethod } from "@/types";
 import { FolderClosed as FolderIcon, X as CloseIcon } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { useStore } from "@/store/store";
 
 const TabItem = ({ id, index }: { id: string; index: number }) => {
   const [isDragging, setIsDragging] = useState<boolean>(false);
-  const { handleGetRequestOrFolderDetails } = useRequestList();
+  const handleGetRequestOrFolderDetails = useStore(
+    (state) => state.handleGetRequestOrFolderDetails
+  );
 
   const tabDetails = handleGetRequestOrFolderDetails(id) ?? {};
 

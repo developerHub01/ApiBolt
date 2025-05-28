@@ -9,17 +9,22 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useRequestList } from "@/context/request-list/RequestListProvider";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useStore } from "@/store/store";
 
 const RequestListDeleteAlertDialog = () => {
-  const { listData, deleteFolderOrRequestId, handleDeleteFolderOrRequest } =
-    useRequestList();
+  const requestList = useStore((state) => state.requestList);
+  const deleteFolderOrRequestId = useStore(
+    (state) => state.deleteFolderOrRequestId
+  );
+  const handleDeleteFolderOrRequest = useStore(
+    (state) => state.handleDeleteFolderOrRequest
+  );
 
   const folderOrRequestName = useMemo(
-    () => listData[deleteFolderOrRequestId]?.name ?? "",
-    [listData, deleteFolderOrRequestId]
+    () => requestList[deleteFolderOrRequestId]?.name ?? "",
+    [requestList, deleteFolderOrRequestId]
   );
 
   return (

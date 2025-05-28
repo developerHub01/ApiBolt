@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useRequestList } from "@/context/request-list/RequestListProvider";
+import { useStore } from "@/store/store";
 
 type TAction = "blank_collection" | "single_request" | "rest_api_basics";
 
@@ -30,8 +30,15 @@ const actionsList: Array<{
 ];
 
 const AddAction = () => {
-  const { createCollection, createSingleRequest, createRestApiBasic } =
-    useRequestList();
+  const createCollection = useStore(
+    (state) => state.createCollection
+  );
+  const createSingleRequest = useStore(
+    (state) => state.createSingleRequest
+  );
+  const createRestApiBasic = useStore(
+    (state) => state.createRestApiBasic
+  );
   const handleAction = (id: TAction) => {
     switch (id) {
       case "single_request":

@@ -8,8 +8,8 @@ import { Button } from "@/components/ui/button";
 import { EllipsisVertical as ThreeDotIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRequestFolder } from "@/context/request-list/RequestFolderProvider";
-import { useRequestList } from "@/context/request-list/RequestListProvider";
 import { motion } from "motion/react";
+import { useStore } from "@/store/store";
 
 type TActionType =
   | "add_request"
@@ -75,7 +75,13 @@ const ItemCTA = ({ type, id }: ItemCTAProps) => {
     createSingleRequest,
     createCollection,
     duplicateBoltCore,
-  } = useRequestList();
+  } = useStore((state) => ({
+    handleChangeDeleteFolderOrRequestId:
+      state.handleChangeDeleteFolderOrRequestId,
+    createSingleRequest: state.createSingleRequest,
+    createCollection: state.createCollection,
+    duplicateBoltCore: state.duplicateBoltCore,
+  }));
 
   const handleCTAAction = (actionType: string) => {
     switch (actionType as TActionType) {

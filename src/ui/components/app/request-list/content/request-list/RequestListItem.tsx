@@ -1,5 +1,5 @@
 import {
-  useEffect,
+  // useEffect,
   useRef,
   useState,
   type ChangeEvent,
@@ -12,44 +12,39 @@ import RequestFolderProvider, {
   useRequestFolder,
 } from "@/context/request-list/RequestFolderProvider";
 import { ChevronRight as ArrowIcon } from "lucide-react";
-import ItemCTA from "@/components/app/request-list/content/request-list/item-cta/ItemCTA";
+// import ItemCTA from "@/components/app/request-list/content/request-list/item-cta/ItemCTA";
 import RequestMethodTag from "@/components/app/RequestMethodTag";
-import {
-  useRequestList,
-  type RequestListItemInterface,
-} from "@/context/request-list/RequestListProvider";
+import { type RequestListItemInterface } from "@/context/request-list/RequestListProvider";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { AnimatePresence } from "motion/react";
-import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
+// import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
+import { useStore } from "@/store/store";
 
 interface RequestListItemProps extends RequestListItemInterface {
   type: "folder" | "request";
-  lavel: number;
+  level: number;
   index: number;
 }
 
 const RequestListItem = ({
   id,
-  lavel = 0,
+  level = 0,
   index = 0,
 }: {
   id: string;
-  lavel: number;
+  level: number;
   index: number;
 }) => {
-  const { listData } = useRequestList();
-
-  const props = listData[id];
-
-  if (!props) return null;
+  const requestDetails = useStore((state) => state.requestList[id]);
+  if (!requestDetails) return null;
 
   return (
     <RequestFolderProvider>
       <RequestListItemContent
-        {...props}
-        type={props.children ? "folder" : "request"}
-        lavel={lavel}
+        {...requestDetails}
+        type={requestDetails.children ? "folder" : "request"}
+        level={level}
         index={index}
       />
     </RequestFolderProvider>
@@ -63,41 +58,62 @@ const RequestListItemContent = ({
   method,
   children,
   parent,
-  lavel,
+  level,
   index,
 }: RequestListItemProps) => {
+  console.log({
+    id,
+    type,
+    name,
+    method,
+    children,
+    parent,
+    level,
+    index,
+  });
+
   const {
     isRenameActive,
-    handleChangeName,
-    handleRenameAction,
+    // handleChangeName,
+    // handleRenameAction,
     isContextMenuOpen,
-    handleToggleContextMenu,
+    // handleToggleContextMenu,
   } = useRequestFolder();
+
   const {
-    createSingleRequest,
+    // createSingleRequest,
     handleToggleOpenFolder,
-    handleIsFolderOpen,
-    handleMoveRequest,
-  } = useRequestList();
-  const { changeSelectedTab } = useTabSidebar();
+    // handleIsFolderOpen,
+    // handleMoveRequest,
+  } = useStore((state) => ({
+    createSingleRequest: state.createSingleRequest,
+    handleToggleOpenFolder: state.handleToggleOpenFolder,
+    handleIsFolderOpen: state.handleIsFolderOpen,
+    handleMoveRequest: state.handleMoveRequest,
+  }));
+
+  // const { changeSelectedTab } = useTabSidebar();
   const [nameState, setNameState] = useState<string>(name ?? "");
-  const [isHovering, setIsHovering] = useState<boolean>(false);
+  // const [isHovering, setIsHovering] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const isExpend = handleIsFolderOpen(id);
+  // const isExpend = handleIsFolderOpen(id);
 
-  useEffect(() => {
-    if (name === nameState) return;
-    setNameState(name);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [name]);
+  console.log({ isRenameActive, isContextMenuOpen });
 
-  useEffect(() => {
-    if (isRenameActive) {
-      inputRef.current?.focus();
-    }
-  }, [isRenameActive]);
+  // useEffect(() => {
+  //   console.log("================");
+  //   if (name === nameState) return;
+  //   setNameState(name);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [name]);
+
+  // useEffect(() => {
+  //   if (isRenameActive) {
+  //     inputRef.current?.focus();
+  //   }
+  // }, [isRenameActive]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
     setNameState(e.target.value);
@@ -105,18 +121,18 @@ const RequestListItemContent = ({
   const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (!value) return setNameState(name);
-    handleChangeName(id, e.target.value);
-    window.getSelection()?.removeAllRanges();
+    // handleChangeName(id, e.target.value);
+    // window.getSelection()?.removeAllRanges();
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      window.getSelection()?.removeAllRanges();
-      handleChangeName(id, nameState.trim() || name);
+      // window.getSelection()?.removeAllRanges();
+      // handleChangeName(id, nameState.trim() || name);
     }
   };
 
-  const handleAddRequest = () => createSingleRequest(id);
+  // const handleAddRequest = () => createSingleRequest(id);
 
   const handleDragStart = (e: DragEvent<HTMLDivElement>) => {
     e.dataTransfer.setData("text/plain", id);
@@ -137,8 +153,8 @@ const RequestListItemContent = ({
     setIsDragging(false);
     if (draggedId === id) return;
 
-    (async () =>
-      await handleMoveRequest(draggedId, children ? id : parent, index))();
+    // (async () =>
+    //   await handleMoveRequest(draggedId, children ? id : parent, index))();
   };
 
   const handleDragLeave = () => setIsDragging(false);
@@ -148,19 +164,19 @@ const RequestListItemContent = ({
     handleToggleOpenFolder(id);
   };
 
-  const handleNameDoubleClick = (e: MouseEvent<HTMLInputElement>) => {
-    e.stopPropagation();
-    handleRenameAction();
-  };
+  // const handleNameDoubleClick = (e: MouseEvent<HTMLInputElement>) => {
+  //   e.stopPropagation();
+  //   // handleRenameAction();
+  // };
 
-  const handleRequestClick = () => changeSelectedTab(id);
+  // const handleRequestClick = () => changeSelectedTab(id);
 
   return (
     <>
       <div
         className="hover:bg-accent/50 focus-within:bg-accent/50 duration-100 transition-all px-2"
-        onContextMenu={() => handleToggleContextMenu(true)}
-        onClick={handleRequestClick}
+        // onContextMenu={() => handleToggleContextMenu(true)}
+        // onClick={handleRequestClick}
       >
         <div
           className={cn(
@@ -170,8 +186,8 @@ const RequestListItemContent = ({
               "ring-transparent": !isDragging,
             }
           )}
-          onMouseEnter={() => setIsHovering(true)}
-          onMouseLeave={() => setIsHovering(false)}
+          // onMouseEnter={() => setIsHovering(true)}
+          // onMouseLeave={() => setIsHovering(false)}
           draggable
           onDragStart={handleDragStart}
           onDragOver={handleDragOver}
@@ -188,18 +204,18 @@ const RequestListItemContent = ({
            * = 2 * 8 + 1 * 8 = 24
            */
           style={{
-            paddingLeft: lavel * 8 + Number(Boolean(lavel)) * 8,
+            paddingLeft: level * 8 + Number(Boolean(level)) * 8,
           }}
         >
           <div className="h-7 flex items-center">
             {type === "folder" ? (
               <button
                 className={cn(
-                  "p-0.5 aspect-square cursor-pointer duration-100 transition-all",
-                  {
-                    "rotate-90": isExpend,
-                    "rotate-0": !isExpend,
-                  }
+                  "p-0.5 aspect-square cursor-pointer duration-100 transition-all"
+                  // {
+                  //   "rotate-90": isExpend,
+                  //   "rotate-0": !isExpend,
+                  // }
                 )}
                 onClick={handleArrowButtonClick}
               >
@@ -217,48 +233,48 @@ const RequestListItemContent = ({
           </div>
           <div className="w-full flex flex-col gap-0.5">
             <div className="w-full text-sm h-7 flex justify-between items-center gap-1">
-              {isRenameActive ? (
-                <input
-                  value={nameState}
-                  onChange={handleChange}
-                  onKeyDown={handleKeyDown}
-                  onBlur={handleBlur}
-                  id={`request_list_item_input_${id}`}
-                  ref={inputRef}
-                  className={cn(
-                    "w-full h-full outline-0 focus:bg-background px-1 rounded-md text-sm ring-1 ring-primary/80",
-                    {
-                      "bg-background cursor-text": isRenameActive,
-                      "bg-transparent cursor-pointer": !isRenameActive,
-                    }
-                  )}
-                />
-              ) : (
-                <input
-                  id={`request_list_item_${id}`}
-                  value={name}
-                  readOnly
-                  onDoubleClick={handleNameDoubleClick}
-                  className="w-full h-full outline-0 px-1 rounded-md text-sm p-1 whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer select-none"
-                />
-              )}
+              {/* {isRenameActive ? ( */}
+              <input
+                value={nameState}
+                onChange={handleChange}
+                onKeyDown={handleKeyDown}
+                onBlur={handleBlur}
+                id={`request_list_item_input_${id}`}
+                ref={inputRef}
+                className={cn(
+                  "w-full h-full outline-0 focus:bg-background px-1 rounded-md text-sm ring-1 ring-primary/80"
+                  // {
+                  //   "bg-background cursor-text": isRenameActive,
+                  //   "bg-transparent cursor-pointer": !isRenameActive,
+                  // }
+                )}
+              />
+              {/* ) : (
+              <input
+                id={`request_list_item_${id}`}
+                value={name}
+                readOnly
+                onDoubleClick={handleNameDoubleClick}
+                className="w-full h-full outline-0 px-1 rounded-md text-sm p-1 whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer select-none"
+              />
+               )} */}
 
               <AnimatePresence>
-                {(isHovering || isContextMenuOpen) && (
+                {/* {(isHovering || isContextMenuOpen) && (
                   <ItemCTA type={type} id={id} />
-                )}
+                )} */}
               </AnimatePresence>
             </div>
           </div>
         </div>
       </div>
-      {isExpend && (
+      {/* {isExpend && (
         <div className="w-full select-text cursor-text">
           {!Array.isArray(children) || !children.length ? (
             <div
               className="text-xs text-muted-foreground p-1"
               style={{
-                paddingLeft: (lavel + 1) * 10 + 20,
+                paddingLeft: (level + 1) * 10 + 20,
               }}
             >
               This folder is empty. <br />
@@ -278,14 +294,14 @@ const RequestListItemContent = ({
                 <RequestListItem
                   key={id}
                   id={id}
-                  lavel={lavel + 1}
+                  level={level + 1}
                   index={index}
                 />
               ))}
             </div>
           )}
         </div>
-      )}
+      )} */}
     </>
   );
 };

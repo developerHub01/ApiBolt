@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { useNavigate } from "react-router";
 import type { THTTPMethods } from "@/context/request/RequestResponseProvider";
-import { useRequestList } from "@/context/request-list/RequestListProvider";
+import { useStore } from "@/store/store";
 
 export interface TabInterface {
   id: string;
@@ -207,7 +207,7 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
   const [tabListState, setTabListState] = useState<Array<string>>([]);
   const [selectedTab, setSelectedTab] = useState<string | null>(null);
   const [isTabListHovering, setIsTabListHovering] = useState<boolean>(false);
-  const { listData } = useRequestList();
+  const requestList = useStore(state => state.requestList);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -248,7 +248,7 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
       return;
     }
 
-    const tabDetails = listData[selectedTab];
+    const tabDetails = requestList[selectedTab];
 
     if (!tabDetails) navigate(defaultPath);
     else
