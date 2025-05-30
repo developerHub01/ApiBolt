@@ -1,4 +1,4 @@
-import type { RequestListItemInterface } from "@/context/request-list/RequestListProvider";
+import type { RequestListItemInterface } from "@/context/redux/request-list-slice";
 import type {
   APIPayloadBody,
   JWTBearerAuthInterface,
@@ -33,7 +33,7 @@ declare global {
     };
     electronAPIDB: {
       toggleFolder: (id: string) => Promise<void>;
-      getAllOpenFolder: () => Promise<void>;
+      getAllOpenFolder: () => Promise<Array<string>>;
 
       addBoltCore: (payload: RequestListItemInterface) => Promise<unknown>;
       addMultipleBoltCore: (

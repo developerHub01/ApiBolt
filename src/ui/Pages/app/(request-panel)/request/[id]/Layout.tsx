@@ -5,15 +5,13 @@ import { Outlet } from "react-router-dom";
 
 const RequestLayout = () => {
   return (
-    <>
-      <SingleRequestProvider>
-        <RequestBodyProvider>
-          <RequestHeaderProvider>
-            <Outlet />
-          </RequestHeaderProvider>
-        </RequestBodyProvider>
-      </SingleRequestProvider>
-    </>
+    <SingleRequestProvider>
+      <RequestBodyProvider>
+        <RequestHeaderProvider>
+          <Outlet />
+        </RequestHeaderProvider>
+      </RequestBodyProvider>
+    </SingleRequestProvider>
   );
 };
 

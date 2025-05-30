@@ -1,5 +1,5 @@
 import RequestMethodTag from "@/components/app/RequestMethodTag";
-import type { RequestListItemInterface } from "@/context/request-list/RequestListProvider";
+import type { RequestListItemInterface } from "@/context/redux/request-list-slice";
 
 const Request = ({ name, method }: RequestListItemInterface) => {
   return (

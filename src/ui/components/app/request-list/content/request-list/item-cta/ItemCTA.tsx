@@ -71,16 +71,16 @@ const ItemCTA = ({ type, id }: ItemCTAProps) => {
   const { isContextMenuOpen, handleToggleContextMenu, handleRenameAction } =
     useRequestFolder();
   const {
-    handleChangeDeleteFolderOrRequestId,
     createSingleRequest,
     createCollection,
     duplicateBoltCore,
+    handleRequestForDelete,
   } = useRequestList();
 
   const handleCTAAction = (actionType: string) => {
     switch (actionType as TActionType) {
       case "delete": {
-        handleChangeDeleteFolderOrRequestId(id);
+        handleRequestForDelete(id);
         break;
       }
       case "add_folder": {

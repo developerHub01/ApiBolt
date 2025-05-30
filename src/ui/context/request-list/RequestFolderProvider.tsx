@@ -1,4 +1,6 @@
 import React, { createContext, useCallback, useContext, useState } from "react";
+import { useAppDispatch } from "@/context/redux/hooks";
+import { handleChangeRequestName } from "@/context/redux/request-list-slice";
 
 interface RequestFolderContext {
   isContextMenuOpen: boolean;
@@ -29,6 +31,7 @@ interface RequestFolderProviderProps {
 }
 
 const RequestFolderProvider = ({ children }: RequestFolderProviderProps) => {
+  const dispatch = useAppDispatch();
   const [isContextMenuOpen, setIsContextMenuOpen] = useState<boolean>(false);
   const [isRenameActive, setIsRenameActive] = useState<boolean>(false);
 
@@ -44,10 +47,11 @@ const RequestFolderProvider = ({ children }: RequestFolderProviderProps) => {
 
   const handleChangeName = useCallback(async (id: string, name: string) => {
     setIsRenameActive(false);
+    dispatch(handleChangeRequestName({ id, name }));
     await window.electronAPIDB.updateBoltCore(id, {
       name,
     });
-  }, []);
+  }, [dispatch]);
 
   const handleDeleteFolderOrRequest = useCallback(async (id: string) => {
     setIsRenameActive(false);

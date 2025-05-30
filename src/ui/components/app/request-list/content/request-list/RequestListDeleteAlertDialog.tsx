@@ -12,14 +12,18 @@ import {
 import { useRequestList } from "@/context/request-list/RequestListProvider";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useAppSelector } from "@/context/redux/hooks";
 
 const RequestListDeleteAlertDialog = () => {
-  const { listData, deleteFolderOrRequestId, handleDeleteFolderOrRequest } =
-    useRequestList();
+  const { handleDeleteFolderOrRequest } = useRequestList();
+  const requestList = useAppSelector((state) => state.requestList.requestList);
+  const deleteFolderOrRequestId = useAppSelector(
+    (state) => state.requestList.deleteFolderOrRequestId
+  );
 
   const folderOrRequestName = useMemo(
-    () => listData[deleteFolderOrRequestId]?.name ?? "",
-    [listData, deleteFolderOrRequestId]
+    () => requestList[deleteFolderOrRequestId]?.name ?? "",
+    [requestList, deleteFolderOrRequestId]
   );
 
   return (

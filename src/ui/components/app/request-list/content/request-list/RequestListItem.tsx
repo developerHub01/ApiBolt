@@ -14,14 +14,13 @@ import RequestFolderProvider, {
 import { ChevronRight as ArrowIcon } from "lucide-react";
 import ItemCTA from "@/components/app/request-list/content/request-list/item-cta/ItemCTA";
 import RequestMethodTag from "@/components/app/RequestMethodTag";
-import {
-  useRequestList,
-  type RequestListItemInterface,
-} from "@/context/request-list/RequestListProvider";
+import { useRequestList } from "@/context/request-list/RequestListProvider";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { AnimatePresence } from "motion/react";
-import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import type { RequestListItemInterface } from "@/context/redux/request-list-slice";
+import { handleChangeSelectedTab } from "@/context/redux/tab-sidebar-slice";
 
 interface RequestListItemProps extends RequestListItemInterface {
   type: "folder" | "request";
@@ -38,17 +37,17 @@ const RequestListItem = ({
   lavel: number;
   index: number;
 }) => {
-  const { listData } = useRequestList();
+  const requestDetails = useAppSelector(
+    (state) => state.requestList.requestList[id]
+  );
 
-  const props = listData[id];
-
-  if (!props) return null;
+  if (!requestDetails) return null;
 
   return (
     <RequestFolderProvider>
       <RequestListItemContent
-        {...props}
-        type={props.children ? "folder" : "request"}
+        {...requestDetails}
+        type={requestDetails.children ? "folder" : "request"}
         lavel={lavel}
         index={index}
       />
@@ -66,6 +65,7 @@ const RequestListItemContent = ({
   lavel,
   index,
 }: RequestListItemProps) => {
+  const dispatch = useAppDispatch();
   const {
     isRenameActive,
     handleChangeName,
@@ -73,19 +73,16 @@ const RequestListItemContent = ({
     isContextMenuOpen,
     handleToggleContextMenu,
   } = useRequestFolder();
-  const {
-    createSingleRequest,
-    handleToggleOpenFolder,
-    handleIsFolderOpen,
-    handleMoveRequest,
-  } = useRequestList();
-  const { changeSelectedTab } = useTabSidebar();
+  const { createSingleRequest, handleToggleOpenFolder, handleMoveRequest } =
+    useRequestList();
   const [nameState, setNameState] = useState<string>(name ?? "");
   const [isHovering, setIsHovering] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const isExpend = handleIsFolderOpen(id);
+  const isExpend = useAppSelector((state) =>
+    state.requestList.openFolderList.includes(id)
+  );
 
   useEffect(() => {
     if (name === nameState) return;
@@ -153,7 +150,7 @@ const RequestListItemContent = ({
     handleRenameAction();
   };
 
-  const handleRequestClick = () => changeSelectedTab(id);
+  const handleRequestClick = () => dispatch(handleChangeSelectedTab(id));
 
   return (
     <>

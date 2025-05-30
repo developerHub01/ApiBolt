@@ -1,11 +1,17 @@
 import { Button } from "@/components/ui/button";
-import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import { handleAddTab } from "@/context/redux/tab-sidebar-slice";
 import { cn } from "@/lib/utils";
 import { Plus as AddIcon } from "lucide-react";
 import { motion } from "motion/react";
 
 export const AddNewTab = () => {
-  const { isTabListHovering } = useTabSidebar();
+  const dispatch = useAppDispatch();
+  const isTabListHovering = useAppSelector(
+    (state) => state.tabSidebar.isTabListHovering
+  );
+
+  const handleAdd = () => dispatch(handleAddTab());
 
   return (
     <div className="p-2 pt-0">
@@ -16,6 +22,7 @@ export const AddNewTab = () => {
           "justify-start": isTabListHovering,
           "justify-center": !isTabListHovering,
         })}
+        onClick={handleAdd}
       >
         <AddIcon />
         <motion.span

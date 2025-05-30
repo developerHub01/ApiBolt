@@ -22,7 +22,7 @@ import statusData from "@/data/http_status_details.json";
 import type { TMetaTableType } from "@/context/request/RequestMetaTableProvider";
 import type { TAuthType, TContentType } from "@/types";
 import { isElectron } from "@/utils/electron";
-import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
+import { useAppSelector } from "@/context/redux/hooks";
 
 const generateNewMetaDataItem = (type?: TMetaTableType) => ({
   id: uuidv4(),
@@ -625,7 +625,7 @@ interface RequestResponseProviderProps {
 const RequestResponseProvider = ({
   children,
 }: RequestResponseProviderProps) => {
-  const { selectedTab } = useTabSidebar();
+  const selectedTab = useAppSelector((state) => state.tabSidebar.selectedTab);
   const [requestName, setRequestname] = useState<Record<string, string>>({});
   const [isResponseCollapsed, setIsResponseCollapsed] = useState<
     Record<string, boolean>

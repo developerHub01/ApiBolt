@@ -1,27 +1,29 @@
 import { useState, type DragEvent, type MouseEvent } from "react";
 import RequestMethodTag from "@/components/app/RequestMethodTag";
 import { Button } from "@/components/ui/button";
-import { useRequestList } from "@/context/request-list/RequestListProvider";
-import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 import { cn } from "@/lib/utils";
 import type { TMethod } from "@/types";
 import { FolderClosed as FolderIcon, X as CloseIcon } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import {
+  handleChangeSelectedTab,
+  handleMoveTab,
+  handleRemoveTab,
+} from "@/context/redux/tab-sidebar-slice";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 
 const TabItem = ({ id, index }: { id: string; index: number }) => {
+  const dispatch = useAppDispatch();
   const [isDragging, setIsDragging] = useState<boolean>(false);
-  const { handleGetRequestOrFolderDetails } = useRequestList();
-
-  const tabDetails = handleGetRequestOrFolderDetails(id) ?? {};
-
-  const {
-    isTabListHovering,
-    selectedTab,
-    changeSelectedTab,
-    removeTab,
-    moveTab,
-  } = useTabSidebar();
   const [isTabHovering, setIsTabHovering] = useState<boolean>(false);
+
+  const tabDetails = useAppSelector(
+    (state) => state.requestList.requestList[id] ?? {}
+  );
+  const isTabListHovering = useAppSelector(
+    (state) => state.tabSidebar.isTabListHovering
+  );
+  const selectedTab = useAppSelector((state) => state.tabSidebar.selectedTab);
 
   const handleDragStart = (e: DragEvent<HTMLDivElement>) => {
     e.dataTransfer.setData("text/plain", id);
@@ -31,7 +33,6 @@ const TabItem = ({ id, index }: { id: string; index: number }) => {
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
-
     setIsDragging(true);
   };
 
@@ -43,7 +44,12 @@ const TabItem = ({ id, index }: { id: string; index: number }) => {
     setIsDragging(false);
     if (draggedId === id) return;
 
-    moveTab(draggedId, index);
+    dispatch(
+      handleMoveTab({
+        id: draggedId,
+        index,
+      })
+    );
   };
 
   const handleDragLeave = () => setIsDragging(false);
@@ -54,7 +60,7 @@ const TabItem = ({ id, index }: { id: string; index: number }) => {
 
   const handleCloseBtnClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    removeTab(id);
+    dispatch(handleRemoveTab(id));
   };
 
   return (
@@ -66,7 +72,7 @@ const TabItem = ({ id, index }: { id: string; index: number }) => {
       })}
       onMouseEnter={() => setIsTabHovering(true)}
       onMouseLeave={() => setIsTabHovering(false)}
-      onClick={() => changeSelectedTab(id)}
+      onClick={() => dispatch(handleChangeSelectedTab(id))}
       draggable
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
@@ -115,7 +121,7 @@ const TabItem = ({ id, index }: { id: string; index: number }) => {
             type="text"
             value={name}
             readOnly
-            className="w-full h-full outline-0 rounded-md text-sm whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer select-none"
+            className="w-full h-full outline-0 rounded-md text-sm whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer select-none pointer-events-none"
           />
         </motion.div>
         {isTabListHovering && (

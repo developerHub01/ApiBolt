@@ -4,12 +4,12 @@ import React, {
   useContext,
   useEffect,
 } from "react";
-import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 import {
   localStorageRequestActiveTabKey,
   useRequestResponse,
   type TActiveTabType,
 } from "@/context/request/RequestResponseProvider";
+import { useAppSelector } from "@/context/redux/hooks";
 
 interface SingleRequestContext {
   getActiveMetaTab: (requestId?: string) => TActiveTabType;
@@ -37,7 +37,7 @@ interface SingleRequestProviderProps {
 }
 
 const SingleRequestProvider = ({ children }: SingleRequestProviderProps) => {
-  const { selectedTab } = useTabSidebar();
+  const selectedTab = useAppSelector(state => state.tabSidebar.selectedTab);
   const { handleChangeActiveMetaTab, activeMetaTab, isLoading, isApiUrlError } =
     useRequestResponse();
 

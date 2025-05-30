@@ -3,36 +3,31 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useState,
 } from "react";
-import type { TMethod } from "@/types";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import {
+  handleChangeDeleteFolderOrRequestId,
+  handleChangeIsDataLoaded,
+  handleCreateRestApiBasic,
+  handleCreateSingleRequest,
+  handleLoadOpenFolderList,
+  handleLoadRequestList,
+  handleToggleFolder,
+  handleChangeShouldDataLoad,
+  type RequestListItemInterface,
+} from "@/context/redux/request-list-slice";
 import { v4 as uuidv4 } from "uuid";
-import { isElectron } from "@/utils/electron";
-
-export interface RequestListItemInterface {
-  id: string;
-  name: string;
-  method?: TMethod;
-  children?: Array<string>;
-  parent?: string;
-}
-export interface RequestListInterface {
-  [key: string]: RequestListItemInterface;
-}
+import type { TMethod } from "@/types";
 
 interface RequestListContext {
-  listData: Record<string, RequestListItemInterface>;
-  handleGetRequestOrFolderDetails: (id: string) => RequestListItemInterface;
   createSingleRequest: (parent?: string) => Promise<void>;
   createCollection: (parent?: string) => Promise<void>;
   createRestApiBasic: () => Promise<void>;
   duplicateBoltCore: (id: string) => Promise<void>;
-  deleteFolderOrRequestId: string;
-  handleChangeDeleteFolderOrRequestId: (value: string) => void;
   handleDeleteFolderOrRequest: (value: boolean) => void;
-  openFolderList: Set<string>;
-  handleToggleOpenFolder: (id: string) => void;
-  handleIsFolderOpen: (id: string) => boolean;
+  handleRequestForDelete: (value: string) => void;
+  handleToggleOpenFolder: (id: string) => Promise<void>;
   handleMoveRequest: (
     requestId: string,
     folderId: string | undefined,
@@ -60,79 +55,84 @@ interface RequestListProviderProps {
 }
 
 const RequestListProvider = ({ children }: RequestListProviderProps) => {
-  const [listData, setListData] = useState<
-    Record<string, RequestListItemInterface>
-  >({});
-  const [deleteFolderOrRequestId, setDeleteFolderOrRequestId] =
-    useState<string>("");
-  const [openFolderList, setOpenFolder] = useState<Set<string>>(new Set([]));
+  const isDataLoaded = useAppSelector(
+    (state) => state.requestList.isDataLoaded
+  );
+  const shouldDataLoad = useAppSelector(
+    (state) => state.requestList.shouldDataLoad
+  );
+  const deleteFolderOrRequestId = useAppSelector(
+    (state) => state.requestList.deleteFolderOrRequestId
+  );
+  const dispatch = useAppDispatch();
 
+  /**
+   * on application load it will load request list and openFolderList and used flag to stop reload aftar again mount after an unmounta. like if user hide request list and again on.
+   * **/
   useEffect(() => {
-    if (!isElectron()) return;
+    if (isDataLoaded) return;
 
-    (async () => await handleLoadList())();
-    window.electronAPIDB.onBoltCoreChange(() => {
-      (async () => await handleLoadList())();
-    });
+    (async () => {
+      const list = await window.electronAPIDB.getAllBoltCore();
+      const openFolderList = await window.electronAPIDB.getAllOpenFolder();
 
-    (async () => await handleLoadOpenFolderList())();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+      dispatch(handleLoadRequestList(list));
+      dispatch(handleLoadOpenFolderList(openFolderList));
+      dispatch(handleChangeIsDataLoaded(true));
+    })();
+  }, [isDataLoaded]);
 
-  const handleGetRequestOrFolderDetails = useCallback(
-    (id: string) => {
-      return listData[id];
-    },
-    [listData]
-  );
+  /**
+   * It mainly for those task which only modify in backend so after backend task shouldDataLoad will be true and then load from backend and make that flag as false
+   */
+  useEffect(() => {
+    if (!shouldDataLoad) return;
 
-  const handleLoadList = useCallback(
-    async () => setListData(await window.electronAPIDB.getAllBoltCore()),
-    []
-  );
-
-  const handleToggleFolderInBackend = useCallback(async (id: string) => {
-    await window.electronAPIDB.toggleFolder(id);
-  }, []);
-
-  const handleLoadOpenFolderList = useCallback(async () => {
-    setOpenFolder(
-      new Set((await window.electronAPIDB.getAllOpenFolder()) ?? [])
-    );
-  }, []);
-
-  const handleChangeDeleteFolderOrRequestId = useCallback(
-    (value: string) => setDeleteFolderOrRequestId(value),
-    []
-  );
+    (async () => {
+      const list = await window.electronAPIDB.getAllBoltCore();
+      dispatch(handleLoadRequestList(list));
+      dispatch(handleChangeShouldDataLoad(false));
+    })();
+  }, [shouldDataLoad]);
 
   const handleDeleteFolderOrRequest = useCallback(
     async (value: boolean) => {
-      if (value)
+      if (value) {
         await window.electronAPIDB.deleteBoltCore(deleteFolderOrRequestId);
+        dispatch(handleChangeShouldDataLoad(true));
+      }
 
-      return setDeleteFolderOrRequestId("");
+      dispatch(handleChangeDeleteFolderOrRequestId(""));
     },
     [deleteFolderOrRequestId]
   );
+
+  const handleRequestForDelete = useCallback((value: string) => {
+    dispatch(handleChangeDeleteFolderOrRequestId(value));
+  }, []);
 
   const createSingleRequest = async (parent?: string) => {
     const payload: RequestListItemInterface = {
       id: uuidv4(),
       name: "Request",
       method: "get",
+      createdAt: Date.now(),
       ...(parent ? { parent } : {}),
     };
+
+    dispatch(handleCreateSingleRequest(payload));
     await window.electronAPIDB.addBoltCore(payload);
   };
-
   const createCollection = async (parent?: string) => {
     const payload = {
       id: uuidv4(),
       name: parent ? "Folder" : "Collection",
       children: [],
+      createdAt: Date.now(),
       ...(parent ? { parent } : {}),
     };
+
+    dispatch(handleCreateSingleRequest(payload));
     await window.electronAPIDB.addBoltCore(payload);
   };
   const createRestApiBasic = async () => {
@@ -140,70 +140,41 @@ const RequestListProvider = ({ children }: RequestListProviderProps) => {
       id: uuidv4(),
       name: "REST API basics: CRUD, test & variable",
       children: [],
+      createdAt: Date.now(),
     };
 
-    const payload: Array<RequestListItemInterface> = [
-      {
-        id: uuidv4(),
-        name: "Get data",
-        method: "get",
-      },
-      {
-        id: uuidv4(),
-        name: "Post data",
-        method: "post",
-      },
-      {
-        id: uuidv4(),
-        name: "Update data",
-        method: "put",
-      },
-      {
-        id: uuidv4(),
-        name: "Update data",
-        method: "patch",
-      },
-      {
-        id: uuidv4(),
-        name: "Delete data",
-        method: "delete",
-      },
-    ];
+    const payload: Array<RequestListItemInterface> = (
+      ["get", "post", "put", "patch", "delete"] as Array<TMethod>
+    ).map((method) => ({
+      id: uuidv4(),
+      name: `${method[0].toUpperCase()}${method.substring(1)} data`,
+      method: method as TMethod,
+      createdAt: Date.now(),
+    }));
+
     parentFolder.children = payload.map((item) => item.id);
 
-    await window.electronAPIDB.addMultipleBoltCore([
+    const requestList = [
       parentFolder,
       ...payload.map((item) => ({
         ...item,
         parent: parentFolder.id,
       })),
-    ]);
+    ];
+
+    dispatch(handleCreateRestApiBasic(requestList));
+    await window.electronAPIDB.addMultipleBoltCore(requestList);
   };
 
   const duplicateBoltCore = async (id: string) => {
     await window.electronAPIDB.duplicateBoltCore(id);
+    dispatch(handleChangeShouldDataLoad(true));
   };
 
-  const handleToggleOpenFolder = useCallback(
-    (id: string) => {
-      setOpenFolder((prev) => {
-        const newSet = new Set(prev);
-
-        if (prev.has(id)) newSet.delete(id);
-        else newSet.add(id);
-
-        return newSet;
-      });
-
-      (async () => await handleToggleFolderInBackend(id))();
-    },
-    [handleToggleFolderInBackend]
-  );
-
-  const handleIsFolderOpen = useCallback(
-    (id: string) => openFolderList.has(id),
-    [openFolderList]
-  );
+  const handleToggleOpenFolder = useCallback(async (id: string) => {
+    dispatch(handleToggleFolder(id));
+    await window.electronAPIDB.toggleFolder(id);
+  }, []);
 
   const handleMoveRequest = useCallback(
     async (
@@ -212,6 +183,7 @@ const RequestListProvider = ({ children }: RequestListProviderProps) => {
       index: number = 0
     ) => {
       await window.electronAPIDB.moveBoltCore(requestId, folderId, index);
+      dispatch(handleChangeShouldDataLoad(true));
     },
     []
   );
@@ -219,18 +191,13 @@ const RequestListProvider = ({ children }: RequestListProviderProps) => {
   return (
     <RequestListContext.Provider
       value={{
-        listData,
-        handleGetRequestOrFolderDetails,
         createSingleRequest,
         createCollection,
         createRestApiBasic,
         duplicateBoltCore,
-        deleteFolderOrRequestId,
-        handleChangeDeleteFolderOrRequestId,
         handleDeleteFolderOrRequest,
-        openFolderList,
+        handleRequestForDelete,
         handleToggleOpenFolder,
-        handleIsFolderOpen,
         handleMoveRequest,
       }}
     >

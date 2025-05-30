@@ -1,4 +1,4 @@
-import type { RequestListItemInterface } from "@/context/request-list/RequestListProvider";
+import type { RequestListItemInterface } from "@/context/redux/request-list-slice";
 import { FolderClosed as FolderIcon } from "lucide-react";
 
 const Folder = ({ name }: RequestListItemInterface) => {
