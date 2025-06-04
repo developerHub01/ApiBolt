@@ -1,5 +1,5 @@
 import { memo, useCallback } from "react";
-// import MetaTable from "@/components/app/request-panel/request/request/meta-data/meta-table/MetaTable";
+import MetaTable from "@/components/app/request-panel/request/request/meta-data/meta-table/MetaTable";
 import AddNewData from "@/components/AddNewData";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { handleAddMetaData } from "@/context/redux/request-response/request-response-slice";
@@ -16,7 +16,7 @@ const FormDataContent = memo(() => {
 
   return (
     <>
-      {/* <MetaTable /> */}
+      <MetaTable />
       <AddNewData onClick={handleAddNewMetaData} label="Add Form Data" />
     </>
   );
