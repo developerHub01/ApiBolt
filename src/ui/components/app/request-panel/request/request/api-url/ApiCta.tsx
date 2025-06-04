@@ -1,16 +1,17 @@
 import { memo } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader as LoaderIcon } from "lucide-react";
-import { useRequestResponse } from "@/context/request/RequestResponseProvider";
+import { useAppSelector } from "@/context/redux/hooks";
 
 const ApiCta = memo(() => {
-  const { selectedTab, isLoading } = useRequestResponse();
-  const disabled = Boolean(isLoading[selectedTab]);
+  const isLoading = useAppSelector(
+    (state) => state.requestResponse.isLoading[state.tabSidebar.selectedTab!]
+  );
 
   return (
     <Button
       type="submit"
-      disabled={disabled}
+      disabled={isLoading}
       className="rounded-l-none uppercase"
     >
       {isLoading && <LoaderIcon className="animate-spin" size={16} />}

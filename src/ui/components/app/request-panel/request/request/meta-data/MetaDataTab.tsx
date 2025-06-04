@@ -1,10 +1,12 @@
 import { memo, useMemo } from "react";
 import TabV1 from "@/components/tab-v1";
 import SelectV1 from "@/components/select-v1";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import { selectActiveTabList } from "@/context/redux/request-response/request-response-selector";
 import {
-  useRequestResponse,
+  handleChangeActiveMetaTab,
   type TActiveTabType,
-} from "@/context/request/RequestResponseProvider";
+} from "@/context/redux/request-response/request-response-slice";
 
 const tabList: Array<{
   id: TActiveTabType;
@@ -31,15 +33,22 @@ const tabList: Array<{
 ];
 
 const MetaDataTab = memo(() => {
-  const {
-    selectedTab,
-    activeMetaTab,
-    handleChangeActiveMetaTab,
-    activeTabList,
-    params,
-    hiddenHeaders,
-    headers,
-  } = useRequestResponse();
+  const dispatch = useAppDispatch();
+  const activeTabList = useAppSelector(selectActiveTabList);
+  const activeMetaTab = useAppSelector(
+    (state) =>
+      state.requestResponse.activeMetaTab[state.tabSidebar.selectedTab!]
+  );
+  const params = useAppSelector(
+    (state) => state.requestResponse.params[state.tabSidebar.selectedTab!]
+  );
+  const hiddenHeaders = useAppSelector(
+    (state) =>
+      state.requestResponse.hiddenHeaders[state.tabSidebar.selectedTab!]
+  );
+  const headers = useAppSelector(
+    (state) => state.requestResponse.headers[state.tabSidebar.selectedTab!]
+  );
 
   const tabListWithActivity = useMemo(
     () =>
@@ -50,39 +59,45 @@ const MetaDataTab = memo(() => {
         }))
         .map((item) => {
           if (item.id === "params") {
-            if (item.count && !params[selectedTab]?.length) delete item.count;
-            else if (item.count !== params[selectedTab]?.length)
-              item.count = params[selectedTab].filter(
-                (param) => !param.hide
-              )?.length;
+            if (item.count && !params?.length) delete item.count;
+            else if (item.count !== params?.length)
+              item.count = params.filter((param) => !param.hide)?.length;
           } else if (item.id === "headers") {
             const totalHeaders =
-              headers[selectedTab]?.filter((header) => !header.hide)?.length +
-              hiddenHeaders[selectedTab]?.length;
+              headers?.filter((header) => !header.hide)?.length +
+              hiddenHeaders?.length;
             if (item.count && !totalHeaders) delete item.count;
             else if (item.count !== totalHeaders) item.count = totalHeaders;
           }
 
           return item;
         }),
-    [activeTabList, params, selectedTab, headers, hiddenHeaders]
+    [activeTabList, params, headers, hiddenHeaders]
   );
 
   return (
     <>
       <SelectV1
         list={tabList}
-        value={activeMetaTab[selectedTab] ?? "params"}
+        value={activeMetaTab ?? "params"}
         handleChange={(value) =>
-          handleChangeActiveMetaTab(value as TActiveTabType)
+          dispatch(
+            handleChangeActiveMetaTab({
+              type: value as TActiveTabType,
+            })
+          )
         }
         className="block md:hidden"
       />
       <TabV1
         list={tabListWithActivity}
-        activeTab={activeMetaTab[selectedTab] ?? "params"}
+        activeTab={activeMetaTab ?? "params"}
         handleSelect={(value) =>
-          handleChangeActiveMetaTab(value as TActiveTabType)
+          dispatch(
+            handleChangeActiveMetaTab({
+              type: value as TActiveTabType,
+            })
+          )
         }
         className="hidden md:flex select-none"
       />

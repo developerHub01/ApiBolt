@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
@@ -8,8 +9,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useRequestBody } from "@/context/request/RequestBodyProvider";
-import type { TRequestBodyType } from "@/context/request/RequestResponseProvider";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import {
+  handleChangeRequestBodyType,
+  type TRequestBodyType,
+} from "@/context/redux/request-response/request-response-slice";
 
 const bodyList: Array<{
   id: TRequestBodyType;
@@ -38,7 +42,23 @@ const bodyList: Array<{
 ];
 
 const BodyTypeSelector = () => {
-  const { requestBodyType, handleChangeRequestBodyType } = useRequestBody();
+  // const { handleChangeRequestBodyType } = useRequestBody();
+  const dispatch = useAppDispatch();
+  const requestBodyType = useAppSelector(
+    (state) =>
+      state.requestResponse.requestBodyType[state.tabSidebar.selectedTab!]
+  );
+
+  const handleChange = useCallback(
+    (type: TRequestBodyType) => {
+      dispatch(
+        handleChangeRequestBodyType({
+          type,
+        })
+      );
+    },
+    [dispatch]
+  );
 
   return (
     <>
@@ -46,7 +66,7 @@ const BodyTypeSelector = () => {
         <Select
           defaultValue={requestBodyType ?? bodyList[0].id}
           value={requestBodyType ?? bodyList[0].id}
-          onValueChange={handleChangeRequestBodyType}
+          onValueChange={handleChange}
         >
           <SelectTrigger className="min-w-[120px]" size="sm">
             <SelectValue placeholder="Select body type" />
@@ -65,7 +85,7 @@ const BodyTypeSelector = () => {
       <RadioGroup
         defaultValue={requestBodyType ?? bodyList[0].id}
         value={requestBodyType ?? bodyList[0].id}
-        onValueChange={handleChangeRequestBodyType}
+        onValueChange={handleChange}
         className="hidden md:flex items-center flex-wrap gap-3"
       >
         {bodyList.map(({ id, label }) => (

@@ -9,7 +9,7 @@ import {
   handleChangeSelectedTab,
   handleMoveTab,
   handleRemoveTab,
-} from "@/context/redux/tab-sidebar-slice";
+} from "@/context/redux/tab-sidebar-slice/tab-sidebar-slice";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 
 const TabItem = ({ id, index }: { id: string; index: number }) => {
@@ -54,9 +54,16 @@ const TabItem = ({ id, index }: { id: string; index: number }) => {
 
   const handleDragLeave = () => setIsDragging(false);
 
-  if (!tabDetails) return null;
+  const { children } = tabDetails || {};
 
-  const { name, children, method } = tabDetails;
+  const method = useAppSelector(
+    (state) => state.requestResponse.selectedMethod[id] ?? tabDetails.method
+  );
+  const name = useAppSelector(
+    (state) => state.requestResponse.requestName[id] ?? tabDetails.name
+  );
+
+  if (!tabDetails) return null;
 
   const handleCloseBtnClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();

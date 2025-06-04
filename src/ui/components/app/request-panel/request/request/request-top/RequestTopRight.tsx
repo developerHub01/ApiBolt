@@ -25,35 +25,54 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { useRequestResponse } from "@/context/request/RequestResponseProvider";
 import Warning from "@/components/warning";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import {
+  handleClearRequestResponse,
+  handleIsDownloadRequestWithBase64,
+} from "@/context/redux/request-response/request-response-slice";
+import { importRequestFromFile } from "@/context/redux/request-response/request-response-thunk";
 
 const RequestTopRight = () => {
-  const {
-    selectedTab,
-    requestName,
-    isDownloadRequestWithBase64,
-    handleIsDownloadRequestWithBase64,
-    handleDownloadRequest,
-    handleImportRequest,
-    handleClearRequestResponse,
-  } = useRequestResponse();
+  const dispatch = useAppDispatch();
+  const selectedTab = useAppSelector((state) => state.tabSidebar.selectedTab);
+  const { handleDownloadRequest } = useRequestResponse();
+  const requestName = useAppSelector(
+    (state) => state.requestResponse.requestName[state.tabSidebar.selectedTab!]
+  );
+  const isDownloadRequestWithBase64 = useAppSelector(
+    (state) =>
+      state.requestResponse.isDownloadRequestWithBase64[
+        state.tabSidebar.selectedTab!
+      ]
+  );
 
   const handleExport = useCallback(async () => {
-    await handleDownloadRequest();
+    await handleDownloadRequest(selectedTab!);
 
     toast("Successfully downloaded!!", {
       description: `${requestName}.json downloaded successfully`,
     });
-  }, [handleDownloadRequest, requestName]);
+  }, [handleDownloadRequest, requestName, selectedTab]);
 
   const handleImport = useCallback(
     async (file: File | undefined) => {
       if (!file) return toast("Please select a valid JSON file.");
-      await handleImportRequest(file, (message) => {
-        toast(message);
-      });
+      dispatch(
+        importRequestFromFile({
+          file,
+          selectedTab: selectedTab!,
+          cb: (message) => {
+            toast(message);
+          },
+        })
+      );
     },
-    [handleImportRequest]
+    [dispatch, selectedTab]
   );
+  const handleCheck = (value: boolean) =>
+    dispatch(handleIsDownloadRequestWithBase64(value));
+
+  const handleClear = () => dispatch(handleClearRequestResponse());
 
   return (
     <div className="flex items-center">
@@ -81,11 +100,11 @@ const RequestTopRight = () => {
             <DropdownMenuItem asChild>
               <ExportButton
                 handleExport={handleExport}
-                isChecked={Boolean(isDownloadRequestWithBase64[selectedTab])}
-                handleChangeCheck={handleIsDownloadRequestWithBase64}
+                isChecked={Boolean(isDownloadRequestWithBase64)}
+                handleChangeCheck={handleCheck}
               />
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={handleClearRequestResponse}>
+            <DropdownMenuItem onClick={handleClear}>
               <ClearIcon /> Clear All
             </DropdownMenuItem>
           </DropdownMenuGroup>

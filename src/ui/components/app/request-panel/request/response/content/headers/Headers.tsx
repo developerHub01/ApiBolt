@@ -1,14 +1,16 @@
 import Empty from "@/components/ui/empty";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { useRequestResponse } from "@/context/request/RequestResponseProvider";
 import HeaderContent from "@/components/app/request-panel/request/response/content/headers/HeaderContent";
+import { useAppSelector } from "@/context/redux/hooks";
 
 const Headers = () => {
-  const { response, selectedTab } = useRequestResponse();
+  const response = useAppSelector(
+    (state) => state.requestResponse.response[state.tabSidebar.selectedTab!]
+  );
 
-  if (!response || !response[selectedTab]) return null;
+  if (!response) return null;
 
-  const headers = response[selectedTab]?.headers as Record<string, string>;
+  const headers = response?.headers as Record<string, string>;
 
   return (
     <ScrollArea className="flex-1 min-h-0 h-full overflow-hidden">

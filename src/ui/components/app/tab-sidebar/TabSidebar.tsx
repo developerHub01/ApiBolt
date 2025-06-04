@@ -8,7 +8,7 @@ import Empty from "@/components/ui/empty";
 import {
   handleChangeIsTabListHovering,
   handleMoveTab,
-} from "@/context/redux/tab-sidebar-slice";
+} from "@/context/redux/tab-sidebar-slice/tab-sidebar-slice";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 
 const TabSidebar = () => {

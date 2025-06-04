@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { useRequestFolder } from "@/context/request-list/RequestFolderProvider";
 import { useRequestList } from "@/context/request-list/RequestListProvider";
 import { motion } from "motion/react";
+import type { MouseEvent } from "react";
 
 type TActionType =
   | "add_request"
@@ -153,7 +154,13 @@ interface CTAListProps {
 
 const CTAList = ({ list, onClick }: CTAListProps) => {
   return list.map(({ id, label }) => (
-    <DropdownMenuItem key={id} onClick={() => onClick(id)}>
+    <DropdownMenuItem
+      key={id}
+      onClick={(e: MouseEvent<HTMLDivElement>) => {
+        e.stopPropagation();
+        onClick(id);
+      }}
+    >
       {label}
     </DropdownMenuItem>
   ));

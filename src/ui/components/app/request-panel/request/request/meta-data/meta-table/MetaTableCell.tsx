@@ -9,11 +9,10 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import {
-  useRequestMetaTable,
-  type TMetaTableType,
-} from "@/context/request/RequestMetaTableProvider";
+import { type TMetaTableType } from "@/context/request/RequestMetaTableProvider";
 import MetaItemInput from "@/components/app/request-panel/request/request/meta-data/meta-table/MetaItemInput";
+import { handleRemoveFormDataFile } from "@/context/redux/request-response/request-response-slice";
+import { useAppDispatch } from "@/context/redux/hooks";
 
 interface MetaTableCellProps {
   keyType: string;
@@ -35,9 +34,7 @@ const MetaTableCell = memo(
     inputType = "text",
     prevent = false,
   }: MetaTableCellProps) => {
-    const { handleRemoveFormDataFile } = useRequestMetaTable();
-    console.log("============MetaTableCell==========")
-
+    const dispatch = useAppDispatch();
     const handleUploadFile = useCallback(
       (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -94,7 +91,14 @@ const MetaTableCell = memo(
                           <FileTag
                             key={index}
                             name={file.name ?? "unknown"}
-                            onClose={() => handleRemoveFormDataFile(id, index)}
+                            onClose={() =>
+                              dispatch(
+                                handleRemoveFormDataFile({
+                                  id,
+                                  index,
+                                })
+                              )
+                            }
                           />
                         ))}
                       </div>

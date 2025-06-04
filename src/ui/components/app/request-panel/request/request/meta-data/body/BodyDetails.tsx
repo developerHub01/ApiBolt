@@ -1,13 +1,16 @@
 import { memo } from "react";
 import Empty from "@/components/ui/empty";
-import { useRequestBody } from "@/context/request/RequestBodyProvider";
 import FormData from "@/components/app/request-panel/request/request/meta-data/body/form-data/FormData";
 import XWWWFormUrlencoded from "@/components/app/request-panel/request/request/meta-data/body/x-www-form-urlencoded/XWWWFormUrlencoded";
 import BodyCode from "@/components/app/request-panel/request/request/meta-data/body/raw/BodyCode";
 import BodyBinary from "@/components/app/request-panel/request/request/meta-data/body/binary/BodyBinary";
+import { useAppSelector } from "@/context/redux/hooks";
 
 const BodyDetails = memo(() => {
-  const { requestBodyType } = useRequestBody();
+  const requestBodyType = useAppSelector(
+    (state) =>
+      state.requestResponse.requestBodyType[state.tabSidebar.selectedTab!]
+  );
   return (
     <>
       {requestBodyType === "none" && (

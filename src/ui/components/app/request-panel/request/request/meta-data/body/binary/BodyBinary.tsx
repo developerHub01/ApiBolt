@@ -2,33 +2,49 @@ import { type ChangeEvent, memo, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus as AddIcon, X as CloseIcon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { useRequestResponse } from "@/context/request/RequestResponseProvider";
+import { handleChangeBinaryData } from "@/context/redux/request-response/request-response-slice";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 
 const BodyBinary = memo(() => {
-  const { binaryData, selectedTab, handleChangeBinaryData } =
-    useRequestResponse();
+  const dispatch = useAppDispatch();
+  // const { binaryData, selectedTab, handleChangeBinaryData } =
+  // useRequestResponse();
+  const binaryData = useAppSelector(
+    (state) => state.requestResponse.binaryData[state.tabSidebar.selectedTab!]
+  );
+
+  const handleChange = useCallback(
+    (file: File | null = null) => {
+      dispatch(
+        handleChangeBinaryData({
+          file,
+        })
+      );
+    },
+    [dispatch]
+  );
 
   const handleFile = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
       if (!file) return;
 
-      handleChangeBinaryData(file);
+      handleChange(file);
     },
-    [handleChangeBinaryData]
+    [handleChange]
   );
 
   return (
     <div className="w-full h-full flex justify-center items-center p-2.5">
       <div className="flex justify-center items-center max-w-4/5">
-        {binaryData[selectedTab] ? (
+        {binaryData ? (
           <>
             <Button
               variant={"secondary"}
               className="rounded-r-none w-full max-w-96 cursor-auto"
             >
               <span className="w-full overflow-hidden truncate">
-                {binaryData[selectedTab]?.name}
+                {binaryData?.name}
               </span>
             </Button>
             <Separator orientation="vertical" />
@@ -36,7 +52,7 @@ const BodyBinary = memo(() => {
               size={"icon"}
               variant={"secondary"}
               className="rounded-l-none"
-              onClick={() => handleChangeBinaryData()}
+              onClick={() => handleChange()}
             >
               <CloseIcon />
             </Button>

@@ -2,13 +2,27 @@ import ContentWrapper from "@/components/app/request-panel/request/request/meta-
 import AuthKeyValueWrapper from "@/components/app/request-panel/request/request/meta-data/authorization/content/AuthKeyValueWrapper";
 import AuthContentInput from "@/components/app/request-panel/request/request/meta-data/authorization/content/AuthContentInput";
 import AuthContentInoutLabel from "@/components/app/request-panel/request/request/meta-data/authorization/content/AuthContentInoutLabel";
-import { useRequestResponse } from "@/context/request/RequestResponseProvider";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import { useCallback } from "react";
+import { handleChangeBearerTokenAuth } from "@/context/redux/request-response/request-response-slice";
 
 const BearerToken = () => {
-  const { bearerTokenAuth, selectedTab, handleChangeBearerTokenAuth } =
-    useRequestResponse();
+  const dispatch = useAppDispatch();
+  const authData = useAppSelector(
+    (state) =>
+      state.requestResponse.bearerTokenAuth[state.tabSidebar.selectedTab!] ?? ""
+  );
 
-  const authData = bearerTokenAuth[selectedTab] ?? "";
+  const handleBlur = useCallback(
+    (value: string) => {
+      dispatch(
+        handleChangeBearerTokenAuth({
+          value,
+        })
+      );
+    },
+    [dispatch]
+  );
 
   return (
     <ContentWrapper>
@@ -21,7 +35,7 @@ const BearerToken = () => {
           placeholder="Token"
           type="password"
           value={authData}
-          onBlur={handleChangeBearerTokenAuth}
+          onBlur={handleBlur}
           className="w-full"
         />
       </AuthKeyValueWrapper>

@@ -1,9 +1,10 @@
-import type { RequestListItemInterface } from "@/context/redux/request-list-slice";
+import type { RequestListItemInterface } from "@/context/redux/request-list-slice/request-list-slice";
 import type {
   APIPayloadBody,
   JWTBearerAuthInterface,
+  ResponseDataBackendInterface,
   ResponseInterface,
-} from "@/context/request/RequestResponseProvider";
+} from "@/context/redux/request-response/request-response-slice";
 import type { TabsDataInterface } from "@/context/tab-sidebar/TabSidebarProvider";
 
 declare global {
@@ -56,6 +57,16 @@ declare global {
       /* Tabs ============== */
       getTabList: () => Promise<TabsDataInterface>;
       changeTabsData: (payload: TabsDataInterface) => Promise<void>;
+    };
+    electronAPIRequestAndFolderDB: {
+      findRequestOrFolderById: (
+        id: string
+      ) => Promise<ResponseDataBackendInterface | undefined>;
+      updateRequestOrFolderById: (
+        id: string,
+        payload: ResponseDataBackendInterface
+      ) => Promise<void>;
+      deleteRequestOrFolderById: (id: string) => Promise<void>;
     };
   }
 }

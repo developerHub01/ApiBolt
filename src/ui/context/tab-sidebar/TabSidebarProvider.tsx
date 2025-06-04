@@ -6,12 +6,12 @@ import React, {
   useEffect,
 } from "react";
 import { useNavigate } from "react-router";
-import type { THTTPMethods } from "@/context/request/RequestResponseProvider";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
   handleChangeSelectedTab,
   handleChangeTabList,
-} from "@/context/redux/tab-sidebar-slice";
+} from "@/context/redux/tab-sidebar-slice/tab-sidebar-slice";
+import type { THTTPMethods } from "@/context/redux/request-response/request-response-slice";
 
 export interface TabInterface {
   id: string;

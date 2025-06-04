@@ -84,3 +84,12 @@ contextBridge.exposeInMainWorld("electronAPIDB", {
     return await ipcRenderer.invoke("changeTabsData", payload);
   },
 });
+
+contextBridge.exposeInMainWorld("electronAPIRequestAndFolderDB", {
+  findRequestOrFolderById: async (id) =>
+    await ipcRenderer.invoke("findRequestOrFolderById", id),
+  updateRequestOrFolderById: async (id, payload) =>
+    await ipcRenderer.invoke("updateRequestOrFolderById", id, payload),
+  deleteRequestOrFolderById: async (id) =>
+    await ipcRenderer.invoke("deleteRequestOrFolderById", id),
+});

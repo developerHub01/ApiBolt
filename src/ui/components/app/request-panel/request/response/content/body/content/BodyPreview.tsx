@@ -1,19 +1,21 @@
-import { useRequestResponse } from "@/context/request/RequestResponseProvider";
 import type { TContentType } from "@/types";
 import { getResponseType } from "@/utils";
 import BodyHTMLPreview from "@/components/app/request-panel/request/response/content/body/content/BodyHTMLPreview";
 import BodyJSONPreview from "@/components/app/request-panel/request/response/content/body/content/body-json-preview/BodyJSONPreview";
+import { useAppSelector } from "@/context/redux/hooks";
 
 const BodyPreview = () => {
-  const { response, selectedTab } = useRequestResponse();
+  const response = useAppSelector(
+    (state) => state.requestResponse.response[state.tabSidebar.selectedTab!]
+  );
 
-  if (!response || !response[selectedTab]) return null;
+  if (!response || !response) return null;
 
   const responseType = getResponseType(
-    String(response[selectedTab]?.headers?.["content-type"] ?? "")
+    String(response?.headers?.["content-type"] ?? "")
   ).toLowerCase() as TContentType;
 
-  const responseData = response[selectedTab]?.data;
+  const responseData = response?.data;
 
   return (
     <>

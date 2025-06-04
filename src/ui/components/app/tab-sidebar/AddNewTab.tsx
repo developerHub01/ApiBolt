@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { handleAddTab } from "@/context/redux/tab-sidebar-slice";
+import { handleAddTab } from "@/context/redux/tab-sidebar-slice/tab-sidebar-slice";
 import { cn } from "@/lib/utils";
 import { Plus as AddIcon } from "lucide-react";
 import { motion } from "motion/react";

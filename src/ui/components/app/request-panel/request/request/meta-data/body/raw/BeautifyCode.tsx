@@ -9,14 +9,21 @@ import {
 } from "@/components/ui/tooltip";
 import { useRequestBody } from "@/context/request/RequestBodyProvider";
 import { formatCode, getParser } from "@/utils/prettierUtils";
+import { useAppSelector } from "@/context/redux/hooks";
 
 const BeautifyCode = memo(() => {
-  const {
-    rawData: code,
-    requestBodyType,
-    rawRequestBodyType,
-    handleChangeRawData,
-  } = useRequestBody();
+  const { handleChangeRawData } = useRequestBody();
+  const requestBodyType = useAppSelector(
+    (state) =>
+      state.requestResponse.requestBodyType[state.tabSidebar.selectedTab!]
+  );
+  const rawRequestBodyType = useAppSelector(
+    (state) =>
+      state.requestResponse.rawRequestBodyType[state.tabSidebar.selectedTab!]
+  );
+  const code = useAppSelector(
+    (state) => state.requestResponse.rawData[state.tabSidebar.selectedTab!]
+  );
 
   const parser = useMemo(
     () => getParser(rawRequestBodyType),

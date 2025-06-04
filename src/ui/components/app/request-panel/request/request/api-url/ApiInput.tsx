@@ -1,7 +1,7 @@
 import { memo, type ChangeEvent, type FocusEvent } from "react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { useRequestResponse } from "@/context/request/RequestResponseProvider";
+import { useAppSelector } from "@/context/redux/hooks";
 
 interface ApiInputProps {
   value: string;
@@ -11,15 +11,14 @@ interface ApiInputProps {
 }
 
 const ApiInput = memo(({ value, onChange, onFocus, onBlur }: ApiInputProps) => {
-  const { selectedTab, isApiUrlError } = useRequestResponse();
-
-  const isError = Boolean(isApiUrlError[selectedTab]);
+  const isError = useAppSelector(
+    (state) =>
+      state.requestResponse.isApiUrlError[state.tabSidebar.selectedTab!]
+  );
 
   const handleApiUrlChange = (e: ChangeEvent<HTMLInputElement>) =>
     onChange(e.target.value);
-
   const handleApiUrlFocus = () => onFocus();
-
   const handleApiUrlBlur = (e: FocusEvent<HTMLInputElement>) =>
     onBlur(e.target.value);
 

@@ -5,13 +5,9 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import {
-  useRequestResponse,
-  type FormDataInterface,
-  type ParamInterface,
-} from "@/context/request/RequestResponseProvider";
-import { useRequestBody } from "@/context/request/RequestBodyProvider";
 import { useParams } from "react-router-dom";
+import { useAppSelector } from "@/context/redux/hooks";
+import { selectMetaData } from "@/context/redux/request-response/request-response-selector";
 
 export type TMetaTableType =
   | "params"
@@ -30,20 +26,14 @@ export interface ShowColumnInterface {
 interface RequestMetaTableContext {
   showColumn: ShowColumnInterface;
   toggleShowColumn: (key: keyof ShowColumnInterface) => void;
-  handleChangeMetaData: (
-    type: TMetaTableType,
-    params: [id: string, key: string, value: string | File]
-  ) => void;
-  handleAddNewMetaData: (type: TMetaTableType) => void;
-  handleCheckToggleMetaData: (type: TMetaTableType, id?: string) => void;
-  handleDeleteMetaData: (type: TMetaTableType, id: string) => void;
-  handleRemoveAllMetaData: (type: TMetaTableType) => void;
-  handleRemoveFormDataFile: (id: string, index: number) => void;
-  getMetaData: (
-    tpe: TMetaTableType
-  ) => Array<
-    ParamInterface | ParamInterface | FormDataInterface | ParamInterface
-  >;
+  // handleChangeMetaData: (
+  //   type: TMetaTableType,
+  //   params: [id: string, key: string, value: string | File]
+  // ) => void;
+  // handleCheckToggleMetaData: (type: TMetaTableType, id?: string) => void;
+  // handleDeleteMetaData: (type: TMetaTableType, id: string) => void;
+  // handleRemoveAllMetaData: (type: TMetaTableType) => void;
+  // handleRemoveFormDataFile: (id: string, index: number) => void;
 }
 
 const RequestMetaTableContext = createContext<RequestMetaTableContext | null>(
@@ -82,18 +72,23 @@ export const useCellListToShow = () => {
 // eslint-disable-next-line react-refresh/only-export-components
 export const useGetTableData = () => {
   const { id } = useParams();
-  const { activeMetaTab } = useRequestResponse();
-  const { requestBodyType } = useRequestBody();
-  const { getMetaData } = useRequestMetaTable();
+  const activeMetaTab = useAppSelector(
+    (state) =>
+      state.requestResponse.activeMetaTab[state.tabSidebar.selectedTab!]
+  );
+  const requestBodyType = useAppSelector(
+    (state) =>
+      state.requestResponse.requestBodyType[state.tabSidebar.selectedTab!]
+  );
 
   const type: TMetaTableType | null = useMemo(() => {
     if (!id) return null;
 
-    if (["params", "headers"].includes(activeMetaTab[id]))
-      return activeMetaTab[id] as TMetaTableType;
+    if (["params", "headers"].includes(activeMetaTab))
+      return activeMetaTab as TMetaTableType;
 
     if (
-      activeMetaTab[id] === "body" &&
+      activeMetaTab === "body" &&
       ["x-www-form-urlencoded", "form-data"].includes(requestBodyType)
     )
       return requestBodyType as TMetaTableType;
@@ -101,9 +96,9 @@ export const useGetTableData = () => {
     return null;
   }, [activeMetaTab, id, requestBodyType]);
 
-  if (!type || !id) return null;
+  const data = useAppSelector(selectMetaData(type));
 
-  const data = getMetaData(type);
+  if (!type || !id) return null;
 
   return {
     data,
@@ -125,39 +120,35 @@ const RequestMetaTableProvider = ({
     description: true,
     contentType: false,
   });
-  const {
-    handleChangeParam,
-    handleChangeHeader,
-    handleChangeHiddenHeader,
-    handleChangeFormData,
-    handleChangeXWWWFormEncoded,
 
-    handleAddNewParam,
-    handleAddNewHeader,
-    handleAddNewFormData,
-    handleAddNewXWWWFormEncoded,
+  // const {
+  //   handleChangeParam,
+  //   handleChangeHeader,
+  //   handleChangeHiddenHeader,
+  //   handleChangeFormData,
+  //   handleChangeXWWWFormEncoded,
 
-    handleDeleteParam,
-    handleDeleteHeader,
-    handleDeleteFormData,
-    handleDeleteXWWWFormEncoded,
+  //   handleDeleteParam,
+  //   handleDeleteHeader,
+  //   handleDeleteFormData,
+  //   handleDeleteXWWWFormEncoded,
 
-    handleParamCheckToggle,
-    handleHeaderCheckToggle,
-    handleHiddenHeaderCheckToggle,
-    handleFormDataCheckToggle,
-    handleXWWWFormEncodedCheckToggle,
+  //   handleParamCheckToggle,
+  //   handleHeaderCheckToggle,
+  //   handleHiddenHeaderCheckToggle,
+  //   handleFormDataCheckToggle,
+  //   handleXWWWFormEncodedCheckToggle,
 
-    handleRemoveAllMetaData,
-    handleRemoveFormDataFile,
+  //   handleRemoveAllMetaData,
+  //   handleRemoveFormDataFile,
 
-    params,
-    hiddenParams,
-    headers,
-    hiddenHeaders,
-    formData,
-    xWWWFormUrlencodedData,
-  } = useRequestResponse();
+  //   params,
+  //   hiddenParams,
+  //   headers,
+  //   hiddenHeaders,
+  //   formData,
+  //   xWWWFormUrlencodedData,
+  // } = useRequestResponse();
 
   const toggleShowColumn = useCallback((key: keyof ShowColumnInterface) => {
     setShowColumn((prev) => ({
@@ -166,127 +157,49 @@ const RequestMetaTableProvider = ({
     }));
   }, []);
 
-  const getMetaData = useCallback(
-    (
-      type: TMetaTableType
-    ): Array<
-      ParamInterface | ParamInterface | FormDataInterface | ParamInterface
-    > => {
-      switch (type) {
-        case "params":
-          return params[id];
-        case "hiddenParams":
-          return hiddenParams[id];
-        case "headers":
-          return headers[id];
-        case "hiddenHeaders":
-          return hiddenHeaders[id];
-        case "form-data":
-          return formData[id];
-        case "x-www-form-urlencoded":
-          return xWWWFormUrlencodedData[id];
-      }
-    },
-    [params, id, hiddenParams, headers, hiddenHeaders, formData, xWWWFormUrlencodedData]
-  );
-
-  const handleChangeMetaData = useCallback(
-    (
-      type: TMetaTableType,
-      [id, key, value]: [id: string, key: string, value: string | File]
-    ) => {
-      switch (type) {
-        case "params": {
-          if (typeof value !== "string") return;
-          return handleChangeParam(id, key, value);
-        }
-        case "headers": {
-          if (typeof value !== "string") return;
-          return handleChangeHeader(id, key, value);
-        }
-        case "hiddenHeaders": {
-          if (typeof value !== "string") return;
-          return handleChangeHiddenHeader(id, key, value);
-        }
-        case "form-data":
-          return handleChangeFormData(id, key, value);
-        case "x-www-form-urlencoded": {
-          if (typeof value !== "string") return;
-          return handleChangeXWWWFormEncoded(id, key, value);
-        }
-      }
-    },
-    [
-      handleChangeParam,
-      handleChangeHeader,
-      handleChangeHiddenHeader,
-      handleChangeFormData,
-      handleChangeXWWWFormEncoded,
-    ]
-  );
-  const handleAddNewMetaData = useCallback(
-    (type: TMetaTableType) => {
-      switch (type) {
-        case "params":
-          return handleAddNewParam();
-        case "headers":
-          return handleAddNewHeader();
-        case "form-data":
-          return handleAddNewFormData();
-        case "x-www-form-urlencoded":
-          return handleAddNewXWWWFormEncoded();
-      }
-    },
-    [
-      handleAddNewParam,
-      handleAddNewHeader,
-      handleAddNewFormData,
-      handleAddNewXWWWFormEncoded,
-    ]
-  );
-  const handleCheckToggleMetaData = useCallback(
-    (type: TMetaTableType, id?: string) => {
-      switch (type) {
-        case "params":
-          return handleParamCheckToggle(id);
-        case "headers":
-          return handleHeaderCheckToggle(id);
-        case "hiddenHeaders":
-          return handleHiddenHeaderCheckToggle(id);
-        case "form-data":
-          return handleFormDataCheckToggle(id);
-        case "x-www-form-urlencoded":
-          return handleXWWWFormEncodedCheckToggle(id);
-      }
-    },
-    [
-      handleParamCheckToggle,
-      handleHeaderCheckToggle,
-      handleHiddenHeaderCheckToggle,
-      handleFormDataCheckToggle,
-      handleXWWWFormEncodedCheckToggle,
-    ]
-  );
-  const handleDeleteMetaData = useCallback(
-    (type: TMetaTableType, id: string) => {
-      switch (type) {
-        case "params":
-          return handleDeleteParam(id);
-        case "headers":
-          return handleDeleteHeader(id);
-        case "form-data":
-          return handleDeleteFormData(id);
-        case "x-www-form-urlencoded":
-          return handleDeleteXWWWFormEncoded(id);
-      }
-    },
-    [
-      handleDeleteParam,
-      handleDeleteHeader,
-      handleDeleteFormData,
-      handleDeleteXWWWFormEncoded,
-    ]
-  );
+  // const handleCheckToggleMetaData = useCallback(
+  //   (type: TMetaTableType, id?: string) => {
+  //     switch (type) {
+  //       case "params":
+  //         return handleParamCheckToggle(id);
+  //       case "headers":
+  //         return handleHeaderCheckToggle(id);
+  //       case "hiddenHeaders":
+  //         return handleHiddenHeaderCheckToggle(id);
+  //       case "form-data":
+  //         return handleFormDataCheckToggle(id);
+  //       case "x-www-form-urlencoded":
+  //         return handleXWWWFormEncodedCheckToggle(id);
+  //     }
+  //   },
+  //   [
+  //     handleParamCheckToggle,
+  //     handleHeaderCheckToggle,
+  //     handleHiddenHeaderCheckToggle,
+  //     handleFormDataCheckToggle,
+  //     handleXWWWFormEncodedCheckToggle,
+  //   ]
+  // );
+  // const handleDeleteMetaData = useCallback(
+  //   (type: TMetaTableType, id: string) => {
+  //     switch (type) {
+  //       case "params":
+  //         return handleDeleteParam(id);
+  //       case "headers":
+  //         return handleDeleteHeader(id);
+  //       case "form-data":
+  //         return handleDeleteFormData(id);
+  //       case "x-www-form-urlencoded":
+  //         return handleDeleteXWWWFormEncoded(id);
+  //     }
+  //   },
+  //   [
+  //     handleDeleteParam,
+  //     handleDeleteHeader,
+  //     handleDeleteFormData,
+  //     handleDeleteXWWWFormEncoded,
+  //   ]
+  // );
 
   if (!id) return null;
 
@@ -295,13 +208,11 @@ const RequestMetaTableProvider = ({
       value={{
         showColumn,
         toggleShowColumn,
-        handleChangeMetaData,
-        handleAddNewMetaData,
-        handleCheckToggleMetaData,
-        handleDeleteMetaData,
-        handleRemoveAllMetaData,
-        handleRemoveFormDataFile,
-        getMetaData,
+        // handleChangeMetaData,
+        // handleCheckToggleMetaData,
+        // handleDeleteMetaData,
+        // handleRemoveAllMetaData,
+        // handleRemoveFormDataFile,
       }}
     >
       {children}

@@ -12,7 +12,16 @@ import {
 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { useRequestMetaTable, type ShowColumnInterface, type TMetaTableType } from "@/context/request/RequestMetaTableProvider";
+import {
+  useRequestMetaTable,
+  type ShowColumnInterface,
+  type TMetaTableType,
+} from "@/context/request/RequestMetaTableProvider";
+import {
+  handleAddMetaData,
+  handleRemoveAllMetaData,
+} from "@/context/redux/request-response/request-response-slice";
+import { useAppDispatch } from "@/context/redux/hooks";
 
 interface MetaTableThreeDotActionProps {
   type: TMetaTableType;
@@ -20,20 +29,26 @@ interface MetaTableThreeDotActionProps {
 
 const MetaTableThreeDotAction = memo(
   ({ type }: MetaTableThreeDotActionProps) => {
-    const {
-      showColumn,
-      toggleShowColumn,
-      handleAddNewMetaData,
-      handleRemoveAllMetaData,
-    } = useRequestMetaTable();
+    const dispatch = useAppDispatch();
+    const { showColumn, toggleShowColumn } = useRequestMetaTable();
 
     const handleAddNewData = useCallback(
-      () => handleAddNewMetaData(type),
-      [type, handleAddNewMetaData]
+      () =>
+        dispatch(
+          handleAddMetaData({
+            type,
+          })
+        ),
+      [dispatch, type]
     );
     const handleDeleteAllData = useCallback(
-      () => handleRemoveAllMetaData(type),
-      [type, handleRemoveAllMetaData]
+      () =>
+        dispatch(
+          handleRemoveAllMetaData({
+            type,
+          })
+        ),
+      [dispatch, type]
     );
 
     return (

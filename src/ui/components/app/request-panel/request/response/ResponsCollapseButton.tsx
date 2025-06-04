@@ -7,10 +7,16 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useRequestResponse } from "@/context/request/RequestResponseProvider";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import { handleToggleCollapse } from "@/context/redux/request-response/request-response-slice";
 
 const ResponsCollapseButton = () => {
-  const { isResponseCollapsed, handleToggleCollapse } = useRequestResponse();
+  const dispatch = useAppDispatch();
+  const isResponseCollapsed = useAppSelector(
+    (state) =>
+      state.requestResponse.isResponseCollapsed[state.tabSidebar.selectedTab!]
+  );
+
   return (
     <TooltipProvider>
       <Tooltip>
@@ -18,7 +24,7 @@ const ResponsCollapseButton = () => {
           <Button
             size={"iconSm"}
             variant={"ghost"}
-            onClick={() => handleToggleCollapse()}
+            onClick={() => dispatch(handleToggleCollapse())}
           >
             <ArrowIcon
               className={cn("transition-transform duration-500 ease-in-out", {

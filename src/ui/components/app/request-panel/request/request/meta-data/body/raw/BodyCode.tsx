@@ -5,6 +5,7 @@ import type { TContentType } from "@/types";
 import { useRequestBody } from "@/context/request/RequestBodyProvider";
 import Code from "@/components/ui/code";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { useAppSelector } from "@/context/redux/hooks";
 
 const codeFormatter = async (
   rawRequestBodyType: TContentType,
@@ -19,12 +20,15 @@ const codeFormatter = async (
 };
 
 const BodyCode = memo(() => {
-  const {
-    rawData = "",
-    rawRequestBodyType,
-    handleChangeRawData,
-    codeLineWrap,
-  } = useRequestBody();
+  const { handleChangeRawData, codeLineWrap } = useRequestBody();
+  const rawData = useAppSelector(
+    (state) => state.requestResponse.rawData[state.tabSidebar.selectedTab!]
+  );
+  const rawRequestBodyType = useAppSelector(
+    (state) =>
+      state.requestResponse.rawRequestBodyType[state.tabSidebar.selectedTab!]
+  );
+
   const [code, setCode] = useState<string>(rawData);
 
   const handleFormat = useCallback(
@@ -37,7 +41,7 @@ const BodyCode = memo(() => {
   }, [rawData]);
 
   const handleChange = useCallback((value: string) => setCode(value), []);
-  
+
   const handleBlur = useCallback(
     () => handleChangeRawData(code),
     [code, handleChangeRawData]

@@ -2,7 +2,7 @@ import { memo, useMemo } from "react";
 import TabV1 from "@/components/tab-v1";
 import SelectV1 from "@/components/select-v1";
 import { useResponse } from "@/context/request/ResponseProvider";
-import { useRequestResponse } from "@/context/request/RequestResponseProvider";
+import { useAppSelector } from "@/context/redux/hooks";
 
 const tabList: Array<{
   id: string;
@@ -25,24 +25,24 @@ const tabList: Array<{
 
 const MetaDataTab = memo(() => {
   const { activeMetaTab, handleChangeActiveMetaTab } = useResponse();
-  const { response, selectedTab } = useRequestResponse();
-
-  console.log("============MetaDataTab==========");
+  const response = useAppSelector(
+    (state) => state.requestResponse.response[state.tabSidebar.selectedTab!]
+  );
 
   const tabListWithActivity = useMemo(
     () =>
       tabList.map((item) => {
         if (item.id === "cookies") {
-          item.count = response[selectedTab]?.cookies?.length ?? 0;
+          item.count = response?.cookies?.length ?? 0;
         } else if (item.id === "headers") {
-          item.count = Object.keys(response[selectedTab]?.headers ?? {}).length;
+          item.count = Object.keys(response?.headers ?? {}).length;
         }
         return item;
       }),
-    [response, selectedTab]
+    [response]
   );
 
-  if (!response || !response[selectedTab]) return null;
+  if (!response) return null;
 
   return (
     <>

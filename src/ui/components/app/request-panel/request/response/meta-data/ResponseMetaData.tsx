@@ -1,15 +1,17 @@
 import { memo } from "react";
-import { useRequestResponse } from "@/context/request/RequestResponseProvider";
 import MetaDataTab from "@/components/app/request-panel/request/response/meta-data/MetaDataTab";
 import ResponsCollapseButton from "@/components/app/request-panel/request/response/ResponsCollapseButton";
 import ResponseInfo from "@/components/app/request-panel/request/response/meta-data/response-info/ResponseInfo";
+import { useAppSelector } from "@/context/redux/hooks";
 
 const ResponseMetaData = memo(() => {
-  const { response, selectedTab } = useRequestResponse();
+  const response = useAppSelector(
+    (state) => state.requestResponse.response[state.tabSidebar.selectedTab!]
+  );
 
   return (
     <div className="flex justify-between items-center gap-2 px-2.5 h-12 min-h-12">
-      {response[selectedTab] ? (
+      {response ? (
         <MetaDataTab />
       ) : (
         <p className="select-none text-secondary-foreground">Response</p>

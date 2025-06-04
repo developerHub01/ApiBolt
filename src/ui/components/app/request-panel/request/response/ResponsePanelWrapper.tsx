@@ -1,20 +1,22 @@
 import React, { memo, useCallback } from "react";
 import { ResizablePanel } from "@/components/ui/resizable";
-import { useRequestResponse } from "@/context/request/RequestResponseProvider";
+import { handleToggleCollapse } from "@/context/redux/request-response/request-response-slice";
+import { useAppDispatch } from "@/context/redux/hooks";
+// import { useRequestResponse } from "@/context/request/RequestResponseProvider";
 
 interface ResponsePanelWrapperProps {
   children: React.ReactNode;
 }
 
 const ResponsePanelWrapper = memo(({ children }: ResponsePanelWrapperProps) => {
-  const { handleToggleCollapse } = useRequestResponse();
-  
-  const handleResize = useCallback(
-    (size: number) => {
-      handleToggleCollapse(size);
-    },
-    [handleToggleCollapse]
-  );
+  const dispatch = useAppDispatch();
+  const handleResize = useCallback((size: number) => {
+    dispatch(
+      handleToggleCollapse({
+        size,
+      })
+    );
+  }, [dispatch]);
 
   return (
     <ResizablePanel

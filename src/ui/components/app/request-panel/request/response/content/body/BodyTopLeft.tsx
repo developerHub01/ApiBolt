@@ -2,16 +2,18 @@ import { Button } from "@/components/ui/button";
 import { Play as PreviewIcon } from "lucide-react";
 import { getResponseType } from "@/utils";
 import { useResponse } from "@/context/request/ResponseProvider";
-import { useRequestResponse } from "@/context/request/RequestResponseProvider";
+import { useAppSelector } from "@/context/redux/hooks";
 
 const BodyTopLeft = () => {
   const { responseTab, handleChangeActiveResponseTab } = useResponse();
-  const { response, selectedTab } = useRequestResponse();
+  const response = useAppSelector(
+    (state) => state.requestResponse.response[state.tabSidebar.selectedTab!]
+  );
 
-  if (!response || !response[selectedTab]) return null;
+  if (!response) return null;
 
   const responseType = getResponseType(
-    String(response[selectedTab]?.headers?.["content-type"] ?? "")
+    String(response?.headers?.["content-type"] ?? "")
   );
 
   return (

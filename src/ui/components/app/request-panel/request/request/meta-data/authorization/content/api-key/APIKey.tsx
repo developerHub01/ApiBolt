@@ -3,10 +3,12 @@ import AuthKeyValueWrapper from "@/components/app/request-panel/request/request/
 import AuthContentInput from "@/components/app/request-panel/request/request/meta-data/authorization/content/AuthContentInput";
 import AuthContentInoutLabel from "@/components/app/request-panel/request/request/meta-data/authorization/content/AuthContentInoutLabel";
 import AuthContentSelect from "@/components/app/request-panel/request/request/meta-data/authorization/content/AuthContentSelect";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
   defaultApiKey,
-  useRequestResponse,
-} from "@/context/request/RequestResponseProvider";
+  handleChangeAPIKey,
+} from "@/context/redux/request-response/request-response-slice";
+import { useCallback } from "react";
 
 const addToList = [
   {
@@ -20,9 +22,24 @@ const addToList = [
 ];
 
 const APIKey = () => {
-  const { apiKeyAuth, selectedTab, handleChangeAPIKey } = useRequestResponse();
+  const dispatch = useAppDispatch();
+  const authData = useAppSelector(
+    (state) =>
+      state.requestResponse.apiKeyAuth[state.tabSidebar.selectedTab!] ??
+      defaultApiKey
+  );
 
-  const authData = apiKeyAuth[selectedTab] ?? defaultApiKey;
+  const handleBlur = useCallback(
+    (key: "key" | "value" | "addTo", value: string) => {
+      dispatch(
+        handleChangeAPIKey({
+          key,
+          value,
+        })
+      );
+    },
+    [dispatch]
+  );
 
   return (
     <ContentWrapper>
@@ -32,7 +49,7 @@ const APIKey = () => {
           id="api-key"
           placeholder="Key"
           value={authData.key}
-          onBlur={(value) => handleChangeAPIKey("key", value)}
+          onBlur={(value) => handleBlur("key", value)}
         />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
@@ -42,7 +59,7 @@ const APIKey = () => {
           placeholder="Value"
           type="password"
           value={authData.value}
-          onBlur={(value) => handleChangeAPIKey("value", value)}
+          onBlur={(value) => handleBlur("value", value)}
         />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
@@ -54,7 +71,7 @@ const APIKey = () => {
           className="w-full"
           items={addToList}
           value={authData.addTo}
-          onChange={(value) => handleChangeAPIKey("addTo", value)}
+          onChange={(value) => handleBlur("addTo", value)}
         />
       </AuthKeyValueWrapper>
     </ContentWrapper>

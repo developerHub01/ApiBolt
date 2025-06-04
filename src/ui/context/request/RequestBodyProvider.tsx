@@ -1,17 +1,9 @@
 import React, { createContext, useCallback, useContext, useState } from "react";
-import {
-  useRequestResponse,
-  type TRequestBodyType,
-} from "@/context/request/RequestResponseProvider";
-import type { TContentType } from "@/types";
 import { useParams } from "react-router-dom";
+import { useAppDispatch } from "@/context/redux/hooks";
+import { handleChangeRawData } from "@/context/redux/request-response/request-response-slice";
 
 interface RequestBodyContext {
-  requestBodyType: TRequestBodyType;
-  handleChangeRequestBodyType: (id: TRequestBodyType) => void;
-  rawRequestBodyType: TContentType;
-  handleChangeRawRequestBodyType: (id: TContentType) => void;
-  rawData: string;
   handleChangeRawData: (data: string) => void;
   codeLineWrap: boolean;
   handleToggleCodeLineWrap: () => void;
@@ -38,15 +30,7 @@ interface RequestBodyProviderProps {
 
 const RequestBodyProvider = ({ children }: RequestBodyProviderProps) => {
   const { id } = useParams();
-
-  const {
-    rawData,
-    handleChangeRawData: changeRawData,
-    requestBodyType,
-    handleChangeRequestBodyType,
-    rawRequestBodyType,
-    handleChangeRawRequestBodyType,
-  } = useRequestResponse();
+  const dispatch = useAppDispatch();
   const [codeLineWrap, setCodeLineWrap] = useState<boolean>(false);
 
   const handleToggleCodeLineWrap = useCallback(() => {
@@ -58,12 +42,7 @@ const RequestBodyProvider = ({ children }: RequestBodyProviderProps) => {
   return (
     <RequestBodyContext.Provider
       value={{
-        requestBodyType: requestBodyType[id],
-        handleChangeRequestBodyType,
-        rawRequestBodyType: rawRequestBodyType[id],
-        handleChangeRawRequestBodyType,
-        rawData: rawData[id],
-        handleChangeRawData: changeRawData,
+        handleChangeRawData: (raw) => dispatch(handleChangeRawData({ raw })),
         codeLineWrap,
         handleToggleCodeLineWrap,
       }}

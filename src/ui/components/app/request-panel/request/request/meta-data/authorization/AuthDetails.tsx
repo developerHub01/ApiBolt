@@ -1,9 +1,10 @@
-import { useRequestResponse } from "@/context/request/RequestResponseProvider";
+import { useAppSelector } from "@/context/redux/hooks";
 
 const AuthDetails = () => {
-  const { authType, selectedTab } = useRequestResponse();
-
-  if (authType[selectedTab] === "no-auth") return null;
+  const authType = useAppSelector(
+    (state) => state.requestResponse.authType[state.tabSidebar.selectedTab!]
+  );
+  if (authType === "no-auth") return null;
 
   return (
     <div>

@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import requestListReducer from "@/context/redux/request-list-slice";
-import tabSidebarReducer from "@/context/redux/tab-sidebar-slice";
+import requestListReducer from "@/context/redux/request-list-slice/request-list-slice";
+import tabSidebarReducer from "@/context/redux/tab-sidebar-slice/tab-sidebar-slice";
+import requestResponseReducer from "@/context/redux/request-response/request-response-slice";
 
 export const store = configureStore({
   reducer: {
     requestList: requestListReducer,
     tabSidebar: tabSidebarReducer,
+    requestResponse: requestResponseReducer,
   },
 });
 

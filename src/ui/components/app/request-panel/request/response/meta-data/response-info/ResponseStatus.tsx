@@ -6,14 +6,15 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { cn } from "@/lib/utils";
-import { useRequestResponse } from "@/context/request/RequestResponseProvider";
+import { useAppSelector } from "@/context/redux/hooks";
 
 const ResponseStatus = memo(() => {
-  const { response, selectedTab } = useRequestResponse();
-  if (!response || !response[selectedTab]) return null;
+  const response = useAppSelector(
+    (state) => state.requestResponse.response[state.tabSidebar.selectedTab!]
+  );
+  if (!response || !response) return null;
 
-  const { status, statusText, statusDescription } = response[selectedTab];
-
+  const { status, statusText, statusDescription } = response;
   if (!status) return null;
 
   return (

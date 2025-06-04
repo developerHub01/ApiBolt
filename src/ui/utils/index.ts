@@ -1,9 +1,6 @@
-import type {
-  APIPayloadBody,
-  TRequestBodyType,
-} from "@/context/request/RequestResponseProvider";
 import axios from "axios";
 import { isElectron } from "@/utils/electron";
+import type { APIPayloadBody, TRequestBodyType } from "@/context/redux/request-response/request-response-slice";
 
 export const getResponseType = (contentType: string) => {
   if (contentType.includes("application/json")) {

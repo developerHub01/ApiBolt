@@ -2,16 +2,32 @@ import ContentWrapper from "@/components/app/request-panel/request/request/meta-
 import AuthKeyValueWrapper from "@/components/app/request-panel/request/request/meta-data/authorization/content/AuthKeyValueWrapper";
 import AuthContentInput from "@/components/app/request-panel/request/request/meta-data/authorization/content/AuthContentInput";
 import AuthContentInoutLabel from "@/components/app/request-panel/request/request/meta-data/authorization/content/AuthContentInoutLabel";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
   defaultBasicAuth,
-  useRequestResponse,
-} from "@/context/request/RequestResponseProvider";
+  handleChangeBasicAuth,
+} from "@/context/redux/request-response/request-response-slice";
+import { useCallback } from "react";
 
 const BasicAuth = () => {
-  const { basicAuth, selectedTab, handleChangeBasicAuth } =
-    useRequestResponse();
+  const dispatch = useAppDispatch();
+  const authData = useAppSelector(
+    (state) =>
+      state.requestResponse.basicAuth[state.tabSidebar.selectedTab!] ??
+      defaultBasicAuth
+  );
 
-  const authData = basicAuth[selectedTab] ?? defaultBasicAuth;
+  const handleBlur = useCallback(
+    (key: "username" | "password", value: string) => {
+      dispatch(
+        handleChangeBasicAuth({
+          key,
+          value,
+        })
+      );
+    },
+    [dispatch]
+  );
 
   return (
     <ContentWrapper>
@@ -23,7 +39,7 @@ const BasicAuth = () => {
           id="basic-auth-username"
           placeholder="Username"
           value={authData.username}
-          onBlur={(value) => handleChangeBasicAuth("username", value)}
+          onBlur={(value) => handleBlur("username", value)}
           className="w-full"
         />
       </AuthKeyValueWrapper>
@@ -36,7 +52,7 @@ const BasicAuth = () => {
           placeholder="Password"
           type="password"
           value={authData.password}
-          onBlur={(value) => handleChangeBasicAuth("password", value)}
+          onBlur={(value) => handleBlur("password", value)}
           className="w-full"
         />
       </AuthKeyValueWrapper>

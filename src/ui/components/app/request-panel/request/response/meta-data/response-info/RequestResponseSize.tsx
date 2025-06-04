@@ -12,22 +12,27 @@ import {
   ArrowDownToLine as DownIcon,
 } from "lucide-react";
 import { formatSize } from "@/utils";
-import { useRequestResponse } from "@/context/request/RequestResponseProvider";
 import Warning from "@/components/warning";
+import { useAppSelector } from "@/context/redux/hooks";
 
 const RequestResponseSize = memo(() => {
-  const { response, requestSize, responseSize, selectedTab } =
-    useRequestResponse();
+  const response = useAppSelector(
+    (state) => state.requestResponse.response[state.tabSidebar.selectedTab!]
+  );
+  const requestSize = useAppSelector(
+    (state) => state.requestResponse.requestSize[state.tabSidebar.selectedTab!]
+  );
+  const responseSize = useAppSelector(
+    (state) => state.requestResponse.responseSize[state.tabSidebar.selectedTab!]
+  );
 
-  if (!response || !selectedTab) return null;
+  if (!response) return null;
 
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
         <Badge className={cn("select-none text-foreground bg-secondary")}>
-          {formatSize(
-            responseSize[selectedTab].header + responseSize[selectedTab].body
-          )}
+          {formatSize(responseSize.header + responseSize.body)}
         </Badge>
       </HoverCardTrigger>
       <HoverCardContent
@@ -35,9 +40,9 @@ const RequestResponseSize = memo(() => {
         side="bottom"
         align="end"
       >
-        <SizeDetails type="request" {...requestSize[selectedTab]} />
+        <SizeDetails type="request" {...requestSize} />
         <Separator />
-        <SizeDetails type="response" {...responseSize[selectedTab]} />
+        <SizeDetails type="response" {...responseSize} />
         <Warning label="These values are approximate, not exact network size." />
       </HoverCardContent>
     </HoverCard>

@@ -1,8 +1,10 @@
-import { useRequestResponse } from "@/context/request/RequestResponseProvider";
+import { useAppSelector } from "@/context/redux/hooks";
 import { motion, AnimatePresence } from "motion/react";
 
 const ResponseLoader = () => {
-  const { isLoading } = useRequestResponse();
+  const isLoading = useAppSelector(
+    (state) => state.requestResponse.isLoading[state.tabSidebar.selectedTab!]
+  );
 
   return (
     <AnimatePresence>

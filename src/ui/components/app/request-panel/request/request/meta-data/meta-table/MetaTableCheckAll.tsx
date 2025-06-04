@@ -1,10 +1,9 @@
 import { memo } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
-import {
-  useGetTableData,
-  useRequestMetaTable,
-} from "@/context/request/RequestMetaTableProvider";
+import { useGetTableData } from "@/context/request/RequestMetaTableProvider";
+import { handleCheckToggleMetaData } from "@/context/redux/request-response/request-response-slice";
+import { useAppDispatch } from "@/context/redux/hooks";
 
 interface MetaTableCheckAllProps {
   id?: string;
@@ -13,11 +12,8 @@ interface MetaTableCheckAllProps {
 
 const MetaTableCheckAll = memo(
   ({ id = "", className = "" }: MetaTableCheckAllProps) => {
-    const { handleCheckToggleMetaData } = useRequestMetaTable();
+    const dispatch = useAppDispatch();
     const { data, type } = useGetTableData() ?? {};
-
-    console.log("===MetaTableCheckAll===");
-    console.log({ data, type });
 
     if (!type || !data || !data.length) return null;
 
@@ -29,7 +25,13 @@ const MetaTableCheckAll = memo(
           id={id}
           className="cursor-pointer"
           checked={isAllChecked}
-          onCheckedChange={() => handleCheckToggleMetaData(type)}
+          onCheckedChange={() =>
+            dispatch(
+              handleCheckToggleMetaData({
+                type,
+              })
+            )
+          }
         />
       </div>
     );

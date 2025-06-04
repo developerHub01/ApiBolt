@@ -6,10 +6,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { CookieInterface } from "@/context/request/RequestResponseProvider";
 import DataTableCellContent from "@/components/app/request-panel/request/response/content/DataTableCellContent";
 import { useMemo } from "react";
 import { getCookiePropertyList } from "@/utils/cookie";
+import type { CookieInterface } from "@/context/redux/request-response/request-response-slice";
 
 interface CookieListProps {
   cookies: Array<CookieInterface>;

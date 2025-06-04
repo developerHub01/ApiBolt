@@ -8,14 +8,17 @@ import React, {
 } from "react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { useRequestResponse } from "@/context/request/RequestResponseProvider";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import { handleChangeRequestName } from "@/context/redux/request-response/request-response-slice";
 
 const RequestTopLeft = () => {
-  const { selectedTab, requestName, handleChangeRequestName } =
-    useRequestResponse();
-  const [requestNameState, setRequestNameState] = useState<string>(
-    requestName[selectedTab] ?? "Request"
+  const dispatch = useAppDispatch();
+  const requestName = useAppSelector(
+    (state) =>
+      state.requestResponse.requestName[state.tabSidebar.selectedTab!] ??
+      "Request"
   );
+  const [requestNameState, setRequestNameState] = useState<string>(requestName);
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const nameInputRef = useRef<HTMLInputElement>(null);
 
@@ -24,8 +27,7 @@ const RequestTopLeft = () => {
   }, [isFocused]);
 
   useEffect(() => {
-    setRequestNameState(requestName[selectedTab] ?? "");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setRequestNameState(requestName);
   }, [requestName]);
 
   const handleInputFocus = useCallback(() => {
@@ -39,9 +41,13 @@ const RequestTopLeft = () => {
   const handleBlur = useCallback(
     (e: FocusEvent<HTMLInputElement>) => {
       setIsFocused(false);
-      handleChangeRequestName(e.target.value);
+      dispatch(
+        handleChangeRequestName({
+          name: e.target.value,
+        })
+      );
     },
-    [handleChangeRequestName]
+    [dispatch]
   );
 
   const handleKeyDown = useCallback(

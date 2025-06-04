@@ -6,7 +6,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useRequestResponse } from "@/context/request/RequestResponseProvider";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import { handleChangeAuthType } from "@/context/redux/request-response/request-response-slice";
 import type { TAuthType } from "@/types";
 
 const authTypeList: Array<{
@@ -36,11 +37,21 @@ const authTypeList: Array<{
 ];
 
 const AuthTypeTab = () => {
-  const { authType, selectedTab, handleChangeAuthType } = useRequestResponse();
+  const dispatch = useAppDispatch();
+  const authType = useAppSelector(
+    (state) => state.requestResponse.authType[state.tabSidebar.selectedTab!]
+  );
+
   return (
     <Select
-      value={authType[selectedTab] ?? authTypeList[0].id}
-      onValueChange={handleChangeAuthType}
+      value={authType ?? authTypeList[0].id}
+      onValueChange={(type: TAuthType) =>
+        dispatch(
+          handleChangeAuthType({
+            type,
+          })
+        )
+      }
     >
       <SelectTrigger className="w-full capitalize">
         <SelectValue placeholder="Select auth" />

@@ -1,18 +1,23 @@
-import { memo } from "react";
-import { useRequestMetaTable } from "@/context/request/RequestMetaTableProvider";
-import MetaTable from "@/components/app/request-panel/request/request/meta-data/meta-table/MetaTable";
+import { memo, useCallback } from "react";
+// import MetaTable from "@/components/app/request-panel/request/request/meta-data/meta-table/MetaTable";
 import AddNewData from "@/components/AddNewData";
+import { useAppDispatch } from "@/context/redux/hooks";
+import { handleAddMetaData } from "@/context/redux/request-response/request-response-slice";
 
 const FormDataContent = memo(() => {
-  const { handleAddNewMetaData } = useRequestMetaTable();
+  const dispatch = useAppDispatch();
+  const handleAddNewMetaData = useCallback(() => {
+    dispatch(
+      handleAddMetaData({
+        type: "form-data",
+      })
+    );
+  }, [dispatch]);
 
   return (
     <>
-      <MetaTable />
-      <AddNewData
-        onClick={() => handleAddNewMetaData("form-data")}
-        label="Add Form Data"
-      />
+      {/* <MetaTable /> */}
+      <AddNewData onClick={handleAddNewMetaData} label="Add Form Data" />
     </>
   );
 });

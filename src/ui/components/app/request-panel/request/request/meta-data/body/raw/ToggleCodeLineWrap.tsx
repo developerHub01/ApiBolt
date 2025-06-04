@@ -1,10 +1,15 @@
 import { memo } from "react";
 import { Button } from "@/components/ui/button";
 import { useRequestBody } from "@/context/request/RequestBodyProvider";
+import { useAppSelector } from "@/context/redux/hooks";
 
 const ToggleCodeLineWrap = memo(() => {
-  const { requestBodyType, codeLineWrap, handleToggleCodeLineWrap } =
-    useRequestBody();
+  const { codeLineWrap, handleToggleCodeLineWrap } = useRequestBody();
+
+  const requestBodyType = useAppSelector(
+    (state) =>
+      state.requestResponse.requestBodyType[state.tabSidebar.selectedTab!]
+  );
 
   if (requestBodyType !== "raw") return null;
 

@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import {
   Select,
   SelectContent,
@@ -7,7 +7,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useRequestBody } from "@/context/request/RequestBodyProvider";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import { handleChangeRawRequestBodyType } from "@/context/redux/request-response/request-response-slice";
+import type { TContentType } from "@/types";
 
 const rawDataTypeList = [
   {
@@ -33,11 +35,26 @@ const rawDataTypeList = [
 ];
 
 const BodyRawDataTypeSelector = memo(() => {
-  const {
-    requestBodyType,
-    rawRequestBodyType,
-    handleChangeRawRequestBodyType,
-  } = useRequestBody();
+  const dispatch = useAppDispatch();
+  const requestBodyType = useAppSelector(
+    (state) =>
+      state.requestResponse.requestBodyType[state.tabSidebar.selectedTab!]
+  );
+  const rawRequestBodyType = useAppSelector(
+    (state) =>
+      state.requestResponse.rawRequestBodyType[state.tabSidebar.selectedTab!]
+  );
+
+  const handleChange = useCallback(
+    (type: TContentType) => {
+      dispatch(
+        handleChangeRawRequestBodyType({
+          type,
+        })
+      );
+    },
+    [dispatch]
+  );
 
   if (requestBodyType !== "raw") return null;
 
@@ -45,7 +62,7 @@ const BodyRawDataTypeSelector = memo(() => {
     <Select
       defaultValue={rawRequestBodyType ?? rawDataTypeList[0].id}
       value={rawRequestBodyType ?? rawDataTypeList[0].id}
-      onValueChange={handleChangeRawRequestBodyType}
+      onValueChange={handleChange}
     >
       <SelectTrigger className="border-none" size="sm">
         <SelectValue placeholder="Select Raw Body Type" />

@@ -12,6 +12,7 @@ import "./ipc/boltCoreDB.js";
 import { boltCoreDBHandlers } from "./ipc/boltCoreDB.js";
 import { openFoldersDBHandlers } from "./ipc/openFoldersDB.js";
 import { tabsDBHandlers } from "./ipc/tabsDB.js";
+import { requestOrFolderDBHandlers } from "./ipc/requestOrFolder.js";
 
 // browser style cookies holder by domain/path
 export const jar = initialCookieJar(undefined, { rejectPublicSuffixes: false });
@@ -31,14 +32,12 @@ app.whenReady().then(() => {
   });
 
   registerCookieHandlers();
-
   registerWindowHandlers(mainWindow);
-
   jsonWebTokenHandlers();
-
   boltCoreDBHandlers();
   openFoldersDBHandlers();
   tabsDBHandlers();
+  requestOrFolderDBHandlers();
 });
 
 app.on("window-all-closed", () => {

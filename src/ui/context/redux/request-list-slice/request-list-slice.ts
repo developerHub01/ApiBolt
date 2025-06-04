@@ -1,7 +1,7 @@
 import type { TMethod } from "@/types";
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { THTTPMethods } from "@/context/request/RequestResponseProvider";
+import type { THTTPMethods } from "@/context/redux/request-response/request-response-slice";
 
 export interface RequestListItemInterface {
   id: string;

@@ -16,7 +16,7 @@ import {
   handleToggleFolder,
   handleChangeShouldDataLoad,
   type RequestListItemInterface,
-} from "@/context/redux/request-list-slice";
+} from "@/context/redux/request-list-slice/request-list-slice";
 import { v4 as uuidv4 } from "uuid";
 import type { TMethod } from "@/types";
 

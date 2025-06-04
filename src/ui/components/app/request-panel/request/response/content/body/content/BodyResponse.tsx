@@ -2,18 +2,20 @@ import { memo, useEffect, useMemo, useState } from "react";
 import { getResponseType } from "@/utils";
 import { formatCode, getParser } from "@/utils/prettierUtils";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { useRequestResponse } from "@/context/request/RequestResponseProvider";
 import { useResponse } from "@/context/request/ResponseProvider";
 import type { TContentType } from "@/types";
 import Code from "@/components/ui/code";
+import { useAppSelector } from "@/context/redux/hooks";
 
 const BodyResponse = memo(() => {
-  const { response, selectedTab } = useRequestResponse();
+  const response = useAppSelector(
+    (state) => state.requestResponse.response[state.tabSidebar.selectedTab!]
+  );
   const { responseCodeWrap } = useResponse();
   const [formattedCode, setFormattedCode] = useState("");
 
   const responseType = getResponseType(
-    String(response[selectedTab]?.headers?.["content-type"] ?? "")
+    String(response?.headers?.["content-type"] ?? "")
   ).toLowerCase() as TContentType;
 
   const parser = useMemo(() => getParser(responseType), [responseType]);

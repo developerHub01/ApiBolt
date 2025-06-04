@@ -2,11 +2,17 @@ import { memo } from "react";
 import {
   useCellListToShow,
   useGetTableData,
-  useRequestMetaTable,
 } from "@/context/request/RequestMetaTableProvider";
 import MetaTableHeader from "@/components/app/request-panel/request/request/meta-data/meta-table/MetaTableHeader";
 import MetaTableWrapper from "@/components/app/request-panel/request/request/meta-data/meta-table/MetaTableWrapper";
 import MetaTableRow from "@/components/app/request-panel/request/request/meta-data/meta-table/MetaTableRow";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import { selectMetaData } from "@/context/redux/request-response/request-response-selector";
+import {
+  handleChangeMetaData,
+  handleCheckToggleMetaData,
+  handleDeleteMetaData,
+} from "@/context/redux/request-response/request-response-slice";
 
 const headersToPreventCheckList = ["Cookie", "Authorization"];
 
@@ -22,15 +28,11 @@ const passwordTypeKeyList = [
 ];
 
 const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
-  const {
-    handleChangeMetaData,
-    handleDeleteMetaData,
-    handleCheckToggleMetaData,
-    getMetaData,
-  } = useRequestMetaTable();
-
+  const dispatch = useAppDispatch();
   const tableData = useGetTableData();
   const cellToShow = useCellListToShow();
+
+  const hiddenHeader = useAppSelector(selectMetaData("headers")) ?? [];
 
   if (!tableData) return null;
 
@@ -40,7 +42,7 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
   if (!type || !data) return null;
 
   if (type === "headers" && showHiddenData) {
-    data = [...getMetaData("hiddenHeaders"), ...data].map((header) => ({
+    data = [...hiddenHeader, ...data].map((header) => ({
       ...header,
       ...(passwordTypeKeyList.includes(header.id)
         ? { inputType: "password" }
@@ -48,7 +50,7 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
     }));
   }
   if (type === "params")
-    data = [...getMetaData("hiddenParams"), ...data].map((header) => ({
+    data = [...hiddenHeader, ...data].map((header) => ({
       ...header,
       ...(passwordTypeKeyList.includes(header.id)
         ? { inputType: "password" }
@@ -65,17 +67,34 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
           {...param}
           keyName={key}
           handleChangeItem={(id: string, key: string, value: string | File) =>
-            handleChangeMetaData(type, [id, key, value])
+            dispatch(
+              handleChangeMetaData({
+                type,
+                id,
+                key,
+                value,
+              })
+            )
           }
-          handleDeleteItem={(id) => handleDeleteMetaData(type, id)}
+          handleDeleteItem={(id: string) =>
+            dispatch(
+              handleDeleteMetaData({
+                type,
+                id,
+              })
+            )
+          }
           handleCheckToggle={(id?: string) =>
-            handleCheckToggleMetaData(
-              param.prevent && type === "params"
-                ? "hiddenParams"
-                : param.prevent && type === "headers"
-                  ? "hiddenHeaders"
-                  : type,
-              id
+            dispatch(
+              handleCheckToggleMetaData({
+                id,
+                type:
+                  param.prevent && type === "params"
+                    ? "hiddenParams"
+                    : param.prevent && type === "headers"
+                      ? "hiddenHeaders"
+                      : type,
+              })
             )
           }
           cellList={cellToShow}

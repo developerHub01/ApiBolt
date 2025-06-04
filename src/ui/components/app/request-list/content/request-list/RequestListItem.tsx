@@ -19,8 +19,8 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { AnimatePresence } from "motion/react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import type { RequestListItemInterface } from "@/context/redux/request-list-slice";
-import { handleChangeSelectedTab } from "@/context/redux/tab-sidebar-slice";
+import type { RequestListItemInterface } from "@/context/redux/request-list-slice/request-list-slice";
+import { handleChangeSelectedTab } from "@/context/redux/tab-sidebar-slice/tab-sidebar-slice";
 
 interface RequestListItemProps extends RequestListItemInterface {
   type: "folder" | "request";
@@ -58,14 +58,20 @@ const RequestListItem = ({
 const RequestListItemContent = ({
   id,
   type,
-  name,
-  method,
   children,
   parent,
   lavel,
   index,
+  ...props
 }: RequestListItemProps) => {
   const dispatch = useAppDispatch();
+  const method = useAppSelector(
+    (state) => state.requestResponse.selectedMethod[id] ?? props.method
+  );
+  const name = useAppSelector(
+    (state) => state.requestResponse.requestName[id] ?? props.name
+  );
+  
   const {
     isRenameActive,
     handleChangeName,

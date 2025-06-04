@@ -3,12 +3,14 @@ import AuthKeyValueWrapper from "@/components/app/request-panel/request/request/
 import AuthContentInput from "@/components/app/request-panel/request/request/meta-data/authorization/content/AuthContentInput";
 import AuthContentSelect from "@/components/app/request-panel/request/request/meta-data/authorization/content/AuthContentSelect";
 import AuthContentInoutLabel from "@/components/app/request-panel/request/request/meta-data/authorization/content/AuthContentInoutLabel";
-import {
-  defaultJWTBearerAuth,
-  useRequestResponse,
-} from "@/context/request/RequestResponseProvider";
 import { JWT_ALGO_LIST } from "@/constant";
 import PayloadCode from "@/components/app/request-panel/request/request/meta-data/authorization/content/jwt-bearer/PayloadCode";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import {
+  defaultJWTBearerAuth,
+  handleChangeJWTBearerAuth,
+} from "@/context/redux/request-response/request-response-slice";
+import { useCallback } from "react";
 
 const algoList = JWT_ALGO_LIST.map((algo) => ({
   id: algo,
@@ -27,10 +29,27 @@ const addToList = [
 ];
 
 const JWTBearer = () => {
-  const { jwtBearerAuth, selectedTab, handleChangeJWTBearerAuth } =
-    useRequestResponse();
+  const dispatch = useAppDispatch();
+  const authData = useAppSelector(
+    (state) =>
+      state.requestResponse.jwtBearerAuth[state.tabSidebar.selectedTab!] ??
+      defaultJWTBearerAuth
+  );
 
-  const authData = jwtBearerAuth[selectedTab] ?? defaultJWTBearerAuth;
+  const handleBlur = useCallback(
+    (
+      key: "algo" | "secret" | "payload" | "headerPrefix" | "addTo",
+      value: string
+    ) => {
+      dispatch(
+        handleChangeJWTBearerAuth({
+          key,
+          value,
+        })
+      );
+    },
+    [dispatch]
+  );
 
   return (
     <ContentWrapper>
@@ -43,7 +62,7 @@ const JWTBearer = () => {
           className="w-full"
           items={algoList}
           value={authData.algo ?? algoList[0].id}
-          onChange={(value) => handleChangeJWTBearerAuth("algo", value)}
+          onChange={(value) => handleBlur("algo", value)}
         />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
@@ -55,7 +74,7 @@ const JWTBearer = () => {
           className="w-full"
           type="password"
           value={authData.secret}
-          onBlur={(value) => handleChangeJWTBearerAuth("secret", value)}
+          onBlur={(value) => handleBlur("secret", value)}
         />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
@@ -64,7 +83,7 @@ const JWTBearer = () => {
         </AuthContentInoutLabel>
         <PayloadCode
           code={authData.payload}
-          onBlur={(code) => handleChangeJWTBearerAuth("payload", code)}
+          onBlur={(code: string) => handleBlur("payload", code)}
         />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
@@ -75,7 +94,7 @@ const JWTBearer = () => {
           id="api-key"
           className="max-w-80"
           value={authData.headerPrefix}
-          onBlur={(value) => handleChangeJWTBearerAuth("headerPrefix", value)}
+          onBlur={(value) => handleBlur("headerPrefix", value)}
         />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
@@ -87,7 +106,7 @@ const JWTBearer = () => {
           className="w-full"
           items={addToList}
           value={authData.addTo ?? addToList[0].id}
-          onChange={(value) => handleChangeJWTBearerAuth("addTo", value)}
+          onChange={(value) => handleBlur("addTo", value)}
         />
       </AuthKeyValueWrapper>
     </ContentWrapper>

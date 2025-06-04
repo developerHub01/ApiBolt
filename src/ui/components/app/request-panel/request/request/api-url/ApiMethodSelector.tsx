@@ -8,9 +8,10 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import {
-  useRequestResponse,
+  handleChangeSelectedMethod,
   type THTTPMethods,
-} from "@/context/request/RequestResponseProvider";
+} from "@/context/redux/request-response/request-response-slice";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 
 const methodList: Array<{
   id: THTTPMethods;
@@ -39,16 +40,27 @@ const methodList: Array<{
 ];
 
 const ApiMethodSelector = memo(() => {
-  const { selectedTab, selectedMethod, handleChangeSelectedMethod } =
-    useRequestResponse();
+  const dispatch = useAppDispatch();
+  const methodType = useAppSelector(
+    (state) =>
+      state.requestResponse.selectedMethod[state.tabSidebar.selectedTab!] ??
+      "get"
+  );
 
-  const methodType = selectedMethod[selectedTab];
+  const handleChange = (value: THTTPMethods) => {
+    dispatch(
+      handleChangeSelectedMethod({
+        method: value,
+      })
+    );
+  };
 
   return (
     <div className="w-[150px] select-none">
       <Select
         defaultValue={methodType ?? methodList[0].id}
-        onValueChange={handleChangeSelectedMethod}
+        onValueChange={handleChange}
+        value={methodType}
       >
         <SelectTrigger
           className={cn("w-full rounded-r-none font-semibold", {
