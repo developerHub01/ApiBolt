@@ -6,10 +6,9 @@ import React, {
 } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
-  handleInitRequest,
-  handleUpdateRequestResponseSelectedTab,
-} from "@/context/redux/request-response/request-response-slice";
-import { getDownloadableRequestData } from "@/context/redux/request-response/request-response-thunk";
+  getDownloadableRequestData,
+  loadRequestData,
+} from "@/context/redux/request-response/request-response-thunk";
 
 interface RequestResponseContext {
   handleDownloadRequest: (id: string) => Promise<void>;
@@ -41,35 +40,9 @@ const RequestResponseProvider = ({
 }: RequestResponseProviderProps) => {
   const dispatch = useAppDispatch();
   const selectedTab = useAppSelector((state) => state.tabSidebar.selectedTab);
-  const requestResponseSelectedTab = useAppSelector(
-    (state) => state.requestResponse.selectedTab
-  );
-  const isSelectedRequestAlreadyLoaded = useAppSelector(
-    (state) =>
-      state.requestResponse.loadedRequestList[
-        state.tabSidebar.selectedTab ?? ""
-      ]
-  );
 
   useEffect(() => {
-    if (selectedTab === requestResponseSelectedTab) return;
-    dispatch(handleUpdateRequestResponseSelectedTab(selectedTab));
-
-    if (!selectedTab || isSelectedRequestAlreadyLoaded) return;
-
-    (async () => {
-      const requestDetails =
-        await window.electronAPIRequestAndFolderDB.findRequestOrFolderById(
-          selectedTab
-        );
-      dispatch(
-        handleInitRequest({
-          id: selectedTab,
-          payload: requestDetails,
-        })
-      );
-    })();
-
+    dispatch(loadRequestData(selectedTab));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTab]);
 

@@ -10,6 +10,7 @@ import {
   handleChangeRequestName,
   handleChangeRequestResponseSize,
   handleChangeSelectedMethod,
+  handleInitRequest,
   handleSetAPIKey,
   handleSetBasicAuth,
   handleSetBinary,
@@ -19,6 +20,7 @@ import {
   handleSetParams,
   handleSetResponse,
   handleSetXWWWFormUrlencodedData,
+  handleUpdateRequestResponseSelectedTab,
   type APIKeyInterface,
   type BasicAuthInterface,
   type FileMetadataInterface,
@@ -30,6 +32,38 @@ import {
 import { base64ToFileObject, converterFileToMetadata } from "@/utils";
 import { handleCheckImportedRequestFileValidator } from "@/context/redux/request-response/utils";
 import type { TAuthType } from "@/types";
+
+export const loadRequestData = createAsyncThunk<
+  void,
+  string | null,
+  { dispatch: AppDispatch; state: RootState }
+>(
+  "request-response/loadRequestData",
+  async (selectedTab: string | null, { getState, dispatch }) => {
+    if (!selectedTab) return;
+    const state = getState() as RootState;
+
+    const isSelectedRequestAlreadyLoaded =
+      state.requestResponse.loadedRequestList[selectedTab];
+
+    const requestResponseSelectedTab = state.requestResponse.selectedTab;
+    if (selectedTab === requestResponseSelectedTab) return;
+    dispatch(handleUpdateRequestResponseSelectedTab(selectedTab));
+
+    if (!selectedTab || isSelectedRequestAlreadyLoaded) return;
+
+    const requestDetails =
+      await window.electronAPIRequestAndFolderDB.findRequestOrFolderById(
+        selectedTab
+      );
+    dispatch(
+      handleInitRequest({
+        id: selectedTab,
+        payload: requestDetails,
+      })
+    );
+  }
+);
 
 export const getDownloadableRequestData = createAsyncThunk<
   ResponseFileDataInterface | null,
