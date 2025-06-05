@@ -40,6 +40,7 @@ import {
   type JWTBearerAuthInterface,
   type RequestListItemInterface,
   type ResponseFileDataInterface,
+  type THTTPMethods,
 } from "@/context/redux/request-response/request-response-slice";
 import { base64ToFileObject, converterFileToMetadata } from "@/utils";
 import { handleCheckImportedRequestFileValidator } from "@/context/redux/request-response/utils";
@@ -482,6 +483,33 @@ export const changeRequestName = createAsyncThunk<
       );
       await window.electronAPIDB.updateBoltCore(requestId, {
         name,
+      });
+    } catch {
+      console.log("changeRequestName error");
+    }
+  }
+);
+
+export const changeRequestMethod = createAsyncThunk<
+  void,
+  { id?: string; method: THTTPMethods },
+  { state: RootState; dispatch: AppDispatch }
+>(
+  "request-response/changeRequestName",
+  async ({ id, method }, { dispatch, getState }) => {
+    const requestId = id ?? getState().requestResponse.selectedTab;
+
+    if (!requestId) return;
+
+    try {
+      dispatch(
+        handleChangeSelectedMethod({
+          id: requestId,
+          method,
+        })
+      );
+      await window.electronAPIDB.updateBoltCore(requestId, {
+        method,
       });
     } catch {
       console.log("changeRequestName error");

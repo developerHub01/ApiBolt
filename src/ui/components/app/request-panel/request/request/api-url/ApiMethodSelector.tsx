@@ -7,11 +7,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import {
-  handleChangeSelectedMethod,
-  type THTTPMethods,
-} from "@/context/redux/request-response/request-response-slice";
+import { type THTTPMethods } from "@/context/redux/request-response/request-response-slice";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import { changeRequestMethod } from "@/context/redux/request-response/request-response-thunk";
 
 const methodList: Array<{
   id: THTTPMethods;
@@ -49,7 +47,7 @@ const ApiMethodSelector = memo(() => {
 
   const handleChange = (value: THTTPMethods) => {
     dispatch(
-      handleChangeSelectedMethod({
+      changeRequestMethod({
         method: value,
       })
     );
