@@ -82,9 +82,24 @@ export const duplicateBoltCore = async (event, id, newId) => {
 
 export const deleteBoltCore = async (event, id) => {
   const deleteCandidateList = await getNestedChildList(id);
+  console.log({ deleteCandidateList });
 
   try {
+    const requestData = await boltcoreDB.get(id);
+    if (!requestData) return;
+
     await boltcoreDB.bulkDocs(deleteCandidateList);
+
+    /* if this is it have parent then remove id from it's parent's children */
+    if (requestData.parent) {
+      const parentData = await boltcoreDB.get(requestData.parent);
+      console.log("parentData ===== ");
+      console.log(parentData);
+      parentData.children = parentData.children.filter(
+        (requestId) => requestId !== id
+      );
+      await boltcoreDB.put(parentData);
+    }
   } catch (error) {
     console.log(error);
   } finally {
