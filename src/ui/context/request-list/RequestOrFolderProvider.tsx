@@ -2,7 +2,7 @@ import React, { createContext, useCallback, useContext, useState } from "react";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { changeRequestName } from "@/context/redux/request-response/request-response-thunk";
 
-interface RequestFolderContext {
+interface RequestOrFolderContext {
   isContextMenuOpen: boolean;
   handleToggleContextMenu: (value?: boolean) => void;
   isRenameActive: boolean;
@@ -10,11 +10,13 @@ interface RequestFolderContext {
   handleChangeName: (id: string, name: string) => void;
 }
 
-const RequestFolderContext = createContext<RequestFolderContext | null>(null);
+const RequestOrFolderContext = createContext<RequestOrFolderContext | null>(
+  null
+);
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useRequestFolder = () => {
-  const context = useContext(RequestFolderContext);
+  const context = useContext(RequestOrFolderContext);
 
   if (!context) {
     throw new Error(
@@ -25,11 +27,13 @@ export const useRequestFolder = () => {
   return context;
 };
 
-interface RequestFolderProviderProps {
+interface RequestOrFolderProviderProps {
   children: React.ReactNode;
 }
 
-const RequestFolderProvider = ({ children }: RequestFolderProviderProps) => {
+const RequestOrFolderProvider = ({
+  children,
+}: RequestOrFolderProviderProps) => {
   const dispatch = useAppDispatch();
   const [isContextMenuOpen, setIsContextMenuOpen] = useState<boolean>(false);
   const [isRenameActive, setIsRenameActive] = useState<boolean>(false);
@@ -53,7 +57,7 @@ const RequestFolderProvider = ({ children }: RequestFolderProviderProps) => {
   );
 
   return (
-    <RequestFolderContext.Provider
+    <RequestOrFolderContext.Provider
       value={{
         isContextMenuOpen,
         handleToggleContextMenu,
@@ -63,8 +67,8 @@ const RequestFolderProvider = ({ children }: RequestFolderProviderProps) => {
       }}
     >
       {children}
-    </RequestFolderContext.Provider>
+    </RequestOrFolderContext.Provider>
   );
 };
 
-export default RequestFolderProvider;
+export default RequestOrFolderProvider;

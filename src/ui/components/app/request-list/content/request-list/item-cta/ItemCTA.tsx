@@ -7,7 +7,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { EllipsisVertical as ThreeDotIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useRequestFolder } from "@/context/request-list/RequestFolderProvider";
+import { useRequestFolder } from "@/context/request-list/RequestOrFolderProvider";
 import { motion } from "motion/react";
 import {
   createCollection,

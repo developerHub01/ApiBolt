@@ -9,7 +9,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import RequestFolderProvider from "@/context/request-list/RequestFolderProvider";
+import RequestFolderProvider from "@/context/request-list/RequestOrFolderProvider";
 import RequestResponseProvider from "@/context/request/RequestResponseProvider";
 import TabSidebarProvider from "@/context/tab-sidebar/TabSidebarProvider";
 import { Outlet } from "react-router-dom";

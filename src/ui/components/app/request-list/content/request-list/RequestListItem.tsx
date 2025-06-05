@@ -9,9 +9,9 @@ import {
   type KeyboardEvent,
   type MouseEvent,
 } from "react";
-import RequestFolderProvider, {
+import RequestOrFolderProvider, {
   useRequestFolder,
-} from "@/context/request-list/RequestFolderProvider";
+} from "@/context/request-list/RequestOrFolderProvider";
 import { ChevronRight as ArrowIcon } from "lucide-react";
 import ItemCTA from "@/components/app/request-list/content/request-list/item-cta/ItemCTA";
 import RequestMethodTag from "@/components/app/RequestMethodTag";
@@ -52,14 +52,14 @@ const RequestListItem = memo(
     if (!requestDetails) return null;
 
     return (
-      <RequestFolderProvider>
+      <RequestOrFolderProvider>
         <RequestListItemContent
           {...requestDetails}
           type={requestDetails.children ? "folder" : "request"}
           lavel={lavel}
           index={index}
         />
-      </RequestFolderProvider>
+      </RequestOrFolderProvider>
     );
   }
 );
