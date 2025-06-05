@@ -1,7 +1,8 @@
 import type { RequestListItemInterface } from "@/context/redux/request-response/request-response-slice";
 import { FolderClosed as FolderIcon } from "lucide-react";
+import { memo } from "react";
 
-const Folder = ({ name }: RequestListItemInterface) => {
+const Folder = memo(({ name }: RequestListItemInterface) => {
   return (
     <>
       <div className="w-full flex gap-2 items-center">
@@ -10,6 +11,6 @@ const Folder = ({ name }: RequestListItemInterface) => {
       </div>
     </>
   );
-};
+});
 
 export default Folder;

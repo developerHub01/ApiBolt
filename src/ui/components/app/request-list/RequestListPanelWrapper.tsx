@@ -1,10 +1,10 @@
-import { useRef } from "react";
+import { memo, useRef } from "react";
 import { ResizablePanel } from "@/components/ui/resizable";
 import { useSidebar } from "@/context/sidebar/SidebarProvider";
 import RequestListPanel from "@/components/app/request-list/RequestListPanel";
 import type { ImperativePanelHandle } from "react-resizable-panels";
 
-const RequestListPanelWrapper = () => {
+const RequestListPanelWrapper = memo(() => {
   const { activeTab } = useSidebar();
   const resizableSizelRef = useRef<number | null>(null);
   const resizablePanelRef = useRef<ImperativePanelHandle>(null);
@@ -33,7 +33,7 @@ const RequestListPanelWrapper = () => {
       <RequestListPanel />
     </ResizablePanel>
   );
-};
+});
 
 RequestListPanelWrapper.displayName = "Request list panel wrapper";
 

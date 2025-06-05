@@ -2,10 +2,7 @@ import React, { createContext, useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import type { THTTPMethods } from "@/context/redux/request-response/request-response-slice";
-import {
-  changeTabsData,
-  loadTabList,
-} from "@/context/redux/request-response/request-response-thunk";
+import { changeTabsData } from "@/context/redux/request-response/request-response-thunk";
 
 export interface TabInterface {
   id: string;
@@ -51,10 +48,6 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
     (state) => state.requestResponse.selectedTab
   );
   const navigate = useNavigate();
-
-  useEffect(() => {
-    dispatch(loadTabList());
-  }, [dispatch]);
 
   let changeTabDataTimeout;
   useEffect(() => {

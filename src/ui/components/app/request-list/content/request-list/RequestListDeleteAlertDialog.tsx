@@ -12,12 +12,16 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { deleteFolderOrRequest } from "@/context/redux/request-response/request-response-thunk";
+import { memo } from "react";
 
-const RequestListDeleteAlertDialog = () => {
+const RequestListDeleteAlertDialog = memo(() => {
   const dispatch = useAppDispatch();
   const deleteFolderOrRequestId = useAppSelector(
     (state) => state.requestResponse.deleteFolderOrRequestId
   );
+
+  console.log({ deleteFolderOrRequestId });
+
   const folderOrRequestName = useAppSelector(
     (state) =>
       state.requestResponse.requestList[
@@ -58,6 +62,6 @@ const RequestListDeleteAlertDialog = () => {
       </AlertDialogContent>
     </AlertDialog>
   );
-};
+});
 
 export default RequestListDeleteAlertDialog;

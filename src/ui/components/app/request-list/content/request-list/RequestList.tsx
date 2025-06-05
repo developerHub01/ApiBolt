@@ -1,9 +1,9 @@
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import RequestListItem from "@/components/app/request-list/content/request-list/RequestListItem";
 import RequestListDeleteAlertDialog from "@/components/app/request-list/content/request-list/RequestListDeleteAlertDialog";
 import { useAppSelector } from "@/context/redux/hooks";
 
-const RequestList = () => {
+const RequestList = memo(() => {
   const requestList = useAppSelector(
     (state) => state.requestResponse.requestList
   );
@@ -22,6 +22,6 @@ const RequestList = () => {
       <RequestListDeleteAlertDialog />
     </div>
   );
-};
+});
 
 export default RequestList;

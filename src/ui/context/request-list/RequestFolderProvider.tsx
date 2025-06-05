@@ -45,11 +45,13 @@ const RequestFolderProvider = ({ children }: RequestFolderProviderProps) => {
   const [isContextMenuOpen, setIsContextMenuOpen] = useState<boolean>(false);
   const [isRenameActive, setIsRenameActive] = useState<boolean>(false);
 
+  console.log({ isRequestListLoaded });
   useEffect(() => {
     if (isRequestListLoaded) return;
 
     dispatch(loadRequestList());
-  }, [dispatch, isRequestListLoaded]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isRequestListLoaded]);
 
   const handleToggleContextMenu = useCallback(
     (value?: boolean) =>

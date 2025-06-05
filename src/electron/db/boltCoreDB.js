@@ -62,7 +62,7 @@ export const updateBoltCore = async (event, id, payload) => {
   }
 };
 
-export const duplicateBoltCore = async (event, id) => {
+export const duplicateBoltCore = async (event, id, newId) => {
   if (!id) return;
 
   try {
@@ -71,7 +71,7 @@ export const duplicateBoltCore = async (event, id) => {
     await duplicateRequestOrFolder({
       id,
       parent: node?.parent,
-      newId: uuidv4(),
+      newId: newId ?? uuidv4(),
     });
   } catch (error) {
     // console.log(error);
@@ -83,10 +83,12 @@ export const duplicateBoltCore = async (event, id) => {
 export const deleteBoltCore = async (event, id) => {
   const deleteCandidateList = await getNestedChildList(id);
 
+  console.log({ deleteCandidateList });
+
   try {
     await boltcoreDB.bulkDocs(deleteCandidateList);
   } catch (error) {
-    // console.log(error);
+    console.log(error);
   } finally {
     boltCoreHaveChange(event);
   }

@@ -393,7 +393,6 @@ interface RequestResponseState {
   openFolderList: Array<string>;
   loadedRequestList: Record<string, boolean>;
   isRequestListLoaded: boolean;
-  shouldRequestListLoad: boolean;
   deleteFolderOrRequestId: string;
 
   tabList: Array<string>;
@@ -453,7 +452,6 @@ const initialState: RequestResponseState = {
   openFolderList: [],
   loadedRequestList: {},
   isRequestListLoaded: false,
-  shouldRequestListLoad: false,
   deleteFolderOrRequestId: "",
 
   tabList: [],
@@ -507,13 +505,6 @@ export const requestResponseSlice = createSlice({
       action: PayloadAction<boolean | undefined>
     ) => {
       state.isRequestListLoaded = action.payload ?? !state.isRequestListLoaded;
-    },
-    handleChangeShouldRequestListLoad: (
-      state,
-      action: PayloadAction<boolean | undefined>
-    ) => {
-      state.shouldRequestListLoad =
-        action.payload ?? !state.shouldRequestListLoad;
     },
     handleToggleFolder: (state, action: PayloadAction<string>) => {
       const folderId = action.payload;
@@ -618,21 +609,21 @@ export const requestResponseSlice = createSlice({
     },
     handleRemoveTab: (state, action: PayloadAction<string>) => {
       const id = action.payload;
+      const idIndex = state.tabList.findIndex((tabId) => tabId === id);
       const newTabList = state.tabList.filter((tabId) => tabId !== id);
       state.tabList = newTabList;
 
+      // If the removed tab isn't the selected one, no need to touch selectedTab
       if (id !== state.selectedTab) return;
 
-      const idIndex = state.tabList.findIndex((tabId) => tabId === id);
-
-      let nextSelectedTabIndex = Math.max(
+      const nextSelectedTabIndex = Math.max(
         Math.min(idIndex, newTabList.length - 1),
         0
       );
 
-      if (state.tabList.length <= 1) nextSelectedTabIndex = -1;
-
-      state.selectedTab = newTabList[nextSelectedTabIndex] ?? null;
+      // If no tabs left, set to null
+      state.selectedTab =
+        newTabList.length === 0 ? null : newTabList[nextSelectedTabIndex];
     },
     handleMoveTab: (
       state,
@@ -1397,7 +1388,6 @@ export const {
   handleLoadRequestList,
   handleLoadOpenFolderList,
   handleChangeIsRequestListLoaded,
-  handleChangeShouldRequestListLoad,
   handleToggleFolder,
   handleChangeRequestName,
   handleChangeSelectedMethod,

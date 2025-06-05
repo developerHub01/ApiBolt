@@ -16,7 +16,7 @@ import {
 } from "@/context/redux/request-response/request-response-thunk";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { handleChangeDeleteFolderOrRequestId } from "@/context/redux/request-response/request-response-slice";
-import { useCallback, type MouseEvent } from "react";
+import { memo, useCallback, type MouseEvent } from "react";
 
 type TActionType =
   | "add_request"
@@ -74,7 +74,7 @@ interface ItemCTAProps {
   id: string;
 }
 
-const ItemCTA = ({ type, id }: ItemCTAProps) => {
+const ItemCTA = memo(({ type, id }: ItemCTAProps) => {
   const dispatch = useAppDispatch();
   const { isContextMenuOpen, handleToggleContextMenu, handleRenameAction } =
     useRequestFolder();
@@ -82,7 +82,7 @@ const ItemCTA = ({ type, id }: ItemCTAProps) => {
   const handleCTAAction = (actionType: string) => {
     switch (actionType as TActionType) {
       case "delete": {
-        handleChangeDeleteFolderOrRequestId(id);
+        dispatch(handleChangeDeleteFolderOrRequestId(id));
         break;
       }
       case "add_folder": {
@@ -149,7 +149,7 @@ const ItemCTA = ({ type, id }: ItemCTAProps) => {
       </DropdownMenu>
     </motion.div>
   );
-};
+});
 
 interface CTAListProps {
   list: Array<{
@@ -159,12 +159,12 @@ interface CTAListProps {
   onClick: (id: string) => void;
 }
 
-const CTAList = ({ list, onClick }: CTAListProps) => {
+const CTAList = memo(({ list, onClick }: CTAListProps) => {
   return list.map(({ id, label }) => (
     <DropdownMenuItem key={id} onClick={() => onClick(id)}>
       {label}
     </DropdownMenuItem>
   ));
-};
+});
 
 export default ItemCTA;

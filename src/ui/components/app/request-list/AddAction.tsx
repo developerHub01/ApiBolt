@@ -13,6 +13,7 @@ import {
   createSingleRequest,
 } from "@/context/redux/request-response/request-response-thunk";
 import { useAppDispatch } from "@/context/redux/hooks";
+import { memo } from "react";
 
 type TAction = "blank_collection" | "single_request" | "rest_api_basics";
 
@@ -34,7 +35,7 @@ const actionsList: Array<{
   },
 ];
 
-const AddAction = () => {
+const AddAction = memo(() => {
   const dispatch = useAppDispatch();
 
   const handleAction = (id: TAction) => {
@@ -70,6 +71,6 @@ const AddAction = () => {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-};
+});
 
 export default AddAction;

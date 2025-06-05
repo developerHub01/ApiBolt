@@ -20,6 +20,7 @@ import {
   handleInitRequest,
   handleLoadOpenFolderList,
   handleLoadRequestList,
+  handleRemoveTab,
   handleSetAPIKey,
   handleSetBasicAuth,
   handleSetBinary,
@@ -526,11 +527,18 @@ export const addNewTab = createAsyncThunk<
   }
 });
 
-export const duplicateRequestOrFolder = createAsyncThunk<void, string>(
+export const duplicateRequestOrFolder = createAsyncThunk<
+  void,
+  string,
+  { state: RootState; dispatch: AppDispatch }
+>(
   "request-response/duplicateRequestOrFolder",
-  async (id: string) => {
+  async (id: string, { dispatch }) => {
     try {
-      await window.electronAPIDB.duplicateBoltCore(id);
+      const newRequestId = uuidv4();
+      await window.electronAPIDB.duplicateBoltCore(id, newRequestId);
+      dispatch(handleChangeIsRequestListLoaded(false));
+      dispatch(handleChangeSelectedTab(newRequestId));
     } catch {
       console.log("duplicateRequestOrFolder error");
     }
@@ -545,15 +553,20 @@ export const deleteFolderOrRequest = createAsyncThunk<
   "request-response/deleteFolderOrRequest",
   async (value: boolean, { getState, dispatch }) => {
     const state = getState() as RootState;
+
+    const deleteCandidateId = state.requestResponse.deleteFolderOrRequestId;
+
     try {
-      if (value)
-        await window.electronAPIDB.deleteBoltCore(
-          state.requestResponse.deleteFolderOrRequestId
-        );
+      if (value && state.requestResponse.deleteFolderOrRequestId) {
+        await window.electronAPIDB.deleteBoltCore(deleteCandidateId);
+        dispatch(handleChangeIsRequestListLoaded(false));
+        if (state.requestResponse.tabList.includes(deleteCandidateId))
+          dispatch(handleRemoveTab(deleteCandidateId));
+      }
 
       dispatch(handleChangeDeleteFolderOrRequestId(""));
     } catch {
-      console.log("duplicateRequestOrFolder error");
+      console.log("deleteFolderOrRequest error");
     }
   }
 );
