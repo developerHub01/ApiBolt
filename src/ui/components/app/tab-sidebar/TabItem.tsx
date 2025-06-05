@@ -119,6 +119,7 @@ const TabItem = ({ id, index }: { id: string; index: number }) => {
         <motion.div
           className="flex-1 cursor-pointer flex items-center transition-all duration-300"
           style={{ transformOrigin: "left" }}
+          key={id}
           animate={{
             opacity: isTabListHovering ? 1 : 0,
             width: isTabListHovering ? "100%" : "0px",
