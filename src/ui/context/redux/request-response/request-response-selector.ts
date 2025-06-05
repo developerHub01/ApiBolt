@@ -66,19 +66,19 @@ export const selectMetaData = (type: TMetaTableType | null) =>
 
       switch (type) {
         case "params":
-          return params[selectedTab];
+          return params[selectedTab] ?? [];
         case "hiddenParams":
-          return hiddenParams[selectedTab];
+          return hiddenParams[selectedTab] ?? [];
         case "headers":
-          return headers[selectedTab];
+          return headers[selectedTab] ?? [];
         case "hiddenHeaders":
-          return hiddenHeaders[selectedTab];
+          return hiddenHeaders[selectedTab] ?? [];
         case "form-data":
-          return formData[selectedTab];
+          return formData[selectedTab] ?? [];
         case "x-www-form-urlencoded":
-          return xWWWFormUrlencodedData[selectedTab];
-        default:
-          return null;
+          return xWWWFormUrlencodedData[selectedTab] ?? [];
       }
+
+      return [];
     }
   );

@@ -12,13 +12,11 @@ import {
   handleChangeMetaData,
   handleCheckToggleMetaData,
   handleDeleteMetaData,
+  type FormDataInterface,
+  type ParamInterface,
 } from "@/context/redux/request-response/request-response-slice";
 
 const headersToPreventCheckList = ["Cookie", "Authorization"];
-
-interface MetaTableInterface {
-  showHiddenData?: boolean;
-}
 
 const passwordTypeKeyList = [
   "api-key",
@@ -27,35 +25,27 @@ const passwordTypeKeyList = [
   "jwt-bearer",
 ];
 
+const checkInputType = (item: ParamInterface | FormDataInterface) => ({
+  ...item,
+  ...(passwordTypeKeyList.includes(item.id) ? { inputType: "password" } : {}),
+});
+
+interface MetaTableInterface {
+  showHiddenData?: boolean;
+}
+
 const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
   const dispatch = useAppDispatch();
   const tableData = useGetTableData();
   const cellToShow = useCellListToShow();
-
   const hiddenHeader = useAppSelector(selectMetaData("headers")) ?? [];
 
-  if (!tableData) return null;
+  let data = tableData.data;
+  const type = tableData.type;
 
-  let data = tableData?.data;
-  const type = tableData?.type;
-
-  if (!type || !data) return null;
-
-  if (type === "headers" && showHiddenData) {
-    data = [...hiddenHeader, ...data].map((header) => ({
-      ...header,
-      ...(passwordTypeKeyList.includes(header.id)
-        ? { inputType: "password" }
-        : {}),
-    }));
-  }
-  if (type === "params")
-    data = [...hiddenHeader, ...data].map((header) => ({
-      ...header,
-      ...(passwordTypeKeyList.includes(header.id)
-        ? { inputType: "password" }
-        : {}),
-    }));
+  if (type === "headers" && showHiddenData)
+    data = [...hiddenHeader, ...data].map(checkInputType);
+  if (type === "params") data = [...hiddenHeader, ...data].map(checkInputType);
 
   return (
     <MetaTableWrapper header={<MetaTableHeader type={type} />}>

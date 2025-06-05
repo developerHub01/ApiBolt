@@ -71,19 +71,17 @@ export const useCellListToShow = () => {
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useGetTableData = () => {
-  const { id } = useParams();
   const activeMetaTab = useAppSelector(
     (state) =>
-      state.requestResponse.activeMetaTab[state.requestResponse.selectedTab!]
+      state.requestResponse.activeMetaTab[state.requestResponse.selectedTab!] ??
+      "params"
   );
   const requestBodyType = useAppSelector(
     (state) =>
       state.requestResponse.requestBodyType[state.requestResponse.selectedTab!]
   );
 
-  const type: TMetaTableType | null = useMemo(() => {
-    if (!id) return null;
-
+  const type: TMetaTableType = useMemo(() => {
     if (["params", "headers"].includes(activeMetaTab))
       return activeMetaTab as TMetaTableType;
 
@@ -93,12 +91,10 @@ export const useGetTableData = () => {
     )
       return requestBodyType as TMetaTableType;
 
-    return null;
-  }, [activeMetaTab, id, requestBodyType]);
+    return "params";
+  }, [activeMetaTab, requestBodyType]);
 
-  const data = useAppSelector(selectMetaData(type));
-
-  if (!type || !id) return null;
+  const data = useAppSelector(selectMetaData(type)) ?? [];
 
   return {
     data,

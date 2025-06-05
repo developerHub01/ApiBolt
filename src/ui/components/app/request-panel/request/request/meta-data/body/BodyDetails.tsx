@@ -9,7 +9,9 @@ import { useAppSelector } from "@/context/redux/hooks";
 const BodyDetails = memo(() => {
   const requestBodyType = useAppSelector(
     (state) =>
-      state.requestResponse.requestBodyType[state.requestResponse.selectedTab!]
+      state.requestResponse.requestBodyType[
+        state.requestResponse.selectedTab!
+      ] ?? "none"
   );
   return (
     <>
