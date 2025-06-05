@@ -39,12 +39,13 @@ const RequestResponseProvider = ({
   children,
 }: RequestResponseProviderProps) => {
   const dispatch = useAppDispatch();
-  const selectedTab = useAppSelector((state) => state.tabSidebar.selectedTab);
+  const selectedTab = useAppSelector(
+    (state) => state.requestResponse.selectedTab
+  );
 
   useEffect(() => {
     dispatch(loadRequestData(selectedTab));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedTab]);
+  }, [dispatch, selectedTab]);
 
   const handleDownloadRequest = useCallback(
     async (id: string) => {

@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,21 +8,21 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useRequestList } from "@/context/request-list/RequestListProvider";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useAppSelector } from "@/context/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import { deleteFolderOrRequest } from "@/context/redux/request-response/request-response-thunk";
 
 const RequestListDeleteAlertDialog = () => {
-  const { handleDeleteFolderOrRequest } = useRequestList();
-  const requestList = useAppSelector((state) => state.requestList.requestList);
+  const dispatch = useAppDispatch();
   const deleteFolderOrRequestId = useAppSelector(
-    (state) => state.requestList.deleteFolderOrRequestId
+    (state) => state.requestResponse.deleteFolderOrRequestId
   );
-
-  const folderOrRequestName = useMemo(
-    () => requestList[deleteFolderOrRequestId]?.name ?? "",
-    [requestList, deleteFolderOrRequestId]
+  const folderOrRequestName = useAppSelector(
+    (state) =>
+      state.requestResponse.requestList[
+        state.requestResponse.deleteFolderOrRequestId
+      ]?.name ?? ""
   );
 
   return (
@@ -39,14 +38,14 @@ const RequestListDeleteAlertDialog = () => {
           <AlertDialogCancel asChild>
             <Button
               variant={"secondary"}
-              onClick={() => handleDeleteFolderOrRequest(false)}
+              onClick={() => dispatch(deleteFolderOrRequest(false))}
             >
               Cancel
             </Button>
           </AlertDialogCancel>
           <AlertDialogAction asChild>
             <Button
-              onClick={() => handleDeleteFolderOrRequest(true)}
+              onClick={() => dispatch(deleteFolderOrRequest(true))}
               className={cn(
                 "text-foreground bg-red-500",
                 "hover:text-foreground hover:bg-red-700"

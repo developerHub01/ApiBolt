@@ -1,7 +1,7 @@
-import type { RequestListItemInterface } from "@/context/redux/request-list-slice/request-list-slice";
 import type {
   APIPayloadBody,
   JWTBearerAuthInterface,
+  RequestListItemInterface,
   ResponseDataBackendInterface,
   ResponseInterface,
 } from "@/context/redux/request-response/request-response-slice";

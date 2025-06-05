@@ -12,11 +12,11 @@ import {
 const ApiUrl = memo(() => {
   const dispatch = useAppDispatch();
   const apiUrl = useAppSelector(
-    (state) => state.requestResponse.apiUrl[state.tabSidebar.selectedTab!] ?? ""
+    (state) => state.requestResponse.apiUrl[state.requestResponse.selectedTab!] ?? ""
   );
   const isApiUrlError = useAppSelector(
     (state) =>
-      state.requestResponse.isApiUrlError[state.tabSidebar.selectedTab!]
+      state.requestResponse.isApiUrlError[state.requestResponse.selectedTab!]
   );
   const [url, setUrl] = useState<string>(apiUrl);
 

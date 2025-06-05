@@ -7,7 +7,7 @@ import { useAppSelector } from "@/context/redux/hooks";
 const BodyTopLeft = () => {
   const { responseTab, handleChangeActiveResponseTab } = useResponse();
   const response = useAppSelector(
-    (state) => state.requestResponse.response[state.tabSidebar.selectedTab!]
+    (state) => state.requestResponse.response[state.requestResponse.selectedTab!]
   );
 
   if (!response) return null;

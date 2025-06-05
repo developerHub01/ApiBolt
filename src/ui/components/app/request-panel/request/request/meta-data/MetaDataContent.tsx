@@ -8,7 +8,7 @@ import { useAppSelector } from "@/context/redux/hooks";
 const MetaDataContent = memo(() => {
   const activeMetaTab = useAppSelector(
     (state) =>
-      state.requestResponse.activeMetaTab[state.tabSidebar.selectedTab!]
+      state.requestResponse.activeMetaTab[state.requestResponse.selectedTab!]
   );
 
   return (

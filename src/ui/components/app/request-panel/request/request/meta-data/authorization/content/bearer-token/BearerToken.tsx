@@ -10,7 +10,7 @@ const BearerToken = () => {
   const dispatch = useAppDispatch();
   const authData = useAppSelector(
     (state) =>
-      state.requestResponse.bearerTokenAuth[state.tabSidebar.selectedTab!] ?? ""
+      state.requestResponse.bearerTokenAuth[state.requestResponse.selectedTab!] ?? ""
   );
 
   const handleBlur = useCallback(

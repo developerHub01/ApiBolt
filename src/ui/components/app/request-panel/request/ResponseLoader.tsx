@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 
 const ResponseLoader = () => {
   const isLoading = useAppSelector(
-    (state) => state.requestResponse.isLoading[state.tabSidebar.selectedTab!]
+    (state) => state.requestResponse.isLoading[state.requestResponse.selectedTab!]
   );
 
   return (

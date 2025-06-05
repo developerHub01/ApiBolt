@@ -37,17 +37,17 @@ const MetaDataTab = memo(() => {
   const activeTabList = useAppSelector(selectActiveTabList);
   const activeMetaTab = useAppSelector(
     (state) =>
-      state.requestResponse.activeMetaTab[state.tabSidebar.selectedTab!]
+      state.requestResponse.activeMetaTab[state.requestResponse.selectedTab!]
   );
   const params = useAppSelector(
-    (state) => state.requestResponse.params[state.tabSidebar.selectedTab!]
+    (state) => state.requestResponse.params[state.requestResponse.selectedTab!]
   );
   const hiddenHeaders = useAppSelector(
     (state) =>
-      state.requestResponse.hiddenHeaders[state.tabSidebar.selectedTab!]
+      state.requestResponse.hiddenHeaders[state.requestResponse.selectedTab!]
   );
   const headers = useAppSelector(
-    (state) => state.requestResponse.headers[state.tabSidebar.selectedTab!]
+    (state) => state.requestResponse.headers[state.requestResponse.selectedTab!]
   );
 
   const tabListWithActivity = useMemo(

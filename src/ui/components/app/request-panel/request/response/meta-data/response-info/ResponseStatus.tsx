@@ -10,7 +10,7 @@ import { useAppSelector } from "@/context/redux/hooks";
 
 const ResponseStatus = memo(() => {
   const response = useAppSelector(
-    (state) => state.requestResponse.response[state.tabSidebar.selectedTab!]
+    (state) => state.requestResponse.response[state.requestResponse.selectedTab!]
   );
   if (!response || !response) return null;
 

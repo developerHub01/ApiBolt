@@ -27,7 +27,7 @@ export const addBoltCore = async (event, payload) => {
       await updateBoltCore(event, parentId, parentData);
     }
   } catch (error) {
-    // console.log(error);
+    console.log(error);
   } finally {
     boltCoreHaveChange(event);
   }

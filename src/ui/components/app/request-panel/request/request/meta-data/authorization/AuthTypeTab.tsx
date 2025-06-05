@@ -39,7 +39,7 @@ const authTypeList: Array<{
 const AuthTypeTab = () => {
   const dispatch = useAppDispatch();
   const authType = useAppSelector(
-    (state) => state.requestResponse.authType[state.tabSidebar.selectedTab!]
+    (state) => state.requestResponse.authType[state.requestResponse.selectedTab!]
   );
 
   return (

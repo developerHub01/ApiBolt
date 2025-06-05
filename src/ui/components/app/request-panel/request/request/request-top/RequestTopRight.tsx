@@ -34,15 +34,19 @@ import { importRequestFromFile } from "@/context/redux/request-response/request-
 
 const RequestTopRight = () => {
   const dispatch = useAppDispatch();
-  const selectedTab = useAppSelector((state) => state.tabSidebar.selectedTab);
+  const selectedTab = useAppSelector(
+    (state) => state.requestResponse.selectedTab
+  );
   const { handleDownloadRequest } = useRequestResponse();
   const requestName = useAppSelector(
-    (state) => state.requestResponse.requestName[state.tabSidebar.selectedTab!]
+    (state) =>
+      state.requestResponse.requestList[state.requestResponse.selectedTab!]
+        ?.name ?? "Request"
   );
   const isDownloadRequestWithBase64 = useAppSelector(
     (state) =>
       state.requestResponse.isDownloadRequestWithBase64[
-        state.tabSidebar.selectedTab!
+        state.requestResponse.selectedTab!
       ]
   );
 

@@ -15,7 +15,7 @@ const RequestTopLeft = () => {
   const dispatch = useAppDispatch();
   const requestName = useAppSelector(
     (state) =>
-      state.requestResponse.requestName[state.tabSidebar.selectedTab!] ??
+      state.requestResponse.requestList[state.requestResponse.selectedTab!]?.name ??
       "Request"
   );
   const [requestNameState, setRequestNameState] = useState<string>(requestName);

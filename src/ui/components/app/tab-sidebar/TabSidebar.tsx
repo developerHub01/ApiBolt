@@ -5,25 +5,29 @@ import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 // import { AddNewTab } from "@/components/app/tab-sidebar/AddNewTab";
 import Empty from "@/components/ui/empty";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
   handleChangeIsTabListHovering,
   handleMoveTab,
-} from "@/context/redux/tab-sidebar-slice/tab-sidebar-slice";
-import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+} from "@/context/redux/request-response/request-response-slice";
 
 const TabSidebar = () => {
   const dispatch = useAppDispatch();
   const isTabListHovering = useAppSelector(
-    (state) => state.tabSidebar.isTabListHovering
+    (state) => state.requestResponse.isTabListHovering
   );
-  const tabList = useAppSelector((state) => state.tabSidebar.tabList);
+  const tabList = useAppSelector((state) => state.requestResponse.tabList);
 
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const draggedId = e.dataTransfer.getData("text/plain");
     if (!draggedId) return;
 
-    dispatch(handleMoveTab({ id: draggedId }));
+    dispatch(
+      handleMoveTab({
+        id: draggedId,
+      })
+    );
   };
 
   return (

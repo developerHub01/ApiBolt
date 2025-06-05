@@ -8,7 +8,7 @@ const ToggleCodeLineWrap = memo(() => {
 
   const requestBodyType = useAppSelector(
     (state) =>
-      state.requestResponse.requestBodyType[state.tabSidebar.selectedTab!]
+      state.requestResponse.requestBodyType[state.requestResponse.selectedTab!]
   );
 
   if (requestBodyType !== "raw") return null;

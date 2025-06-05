@@ -7,7 +7,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useRequestList } from "@/context/request-list/RequestListProvider";
+import {
+  createCollection,
+  createRestApiBasic,
+  createSingleRequest,
+} from "@/context/redux/request-response/request-response-thunk";
+import { useAppDispatch } from "@/context/redux/hooks";
 
 type TAction = "blank_collection" | "single_request" | "rest_api_basics";
 
@@ -30,16 +35,16 @@ const actionsList: Array<{
 ];
 
 const AddAction = () => {
-  const { createCollection, createSingleRequest, createRestApiBasic } =
-    useRequestList();
+  const dispatch = useAppDispatch();
+
   const handleAction = (id: TAction) => {
     switch (id) {
       case "single_request":
-        return createSingleRequest();
+        return dispatch(createSingleRequest());
       case "blank_collection":
-        return createCollection();
+        return dispatch(createCollection());
       case "rest_api_basics":
-        return createRestApiBasic();
+        return dispatch(createRestApiBasic());
     }
   };
 

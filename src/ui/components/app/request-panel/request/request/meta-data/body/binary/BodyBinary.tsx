@@ -10,7 +10,7 @@ const BodyBinary = memo(() => {
   // const { binaryData, selectedTab, handleChangeBinaryData } =
   // useRequestResponse();
   const binaryData = useAppSelector(
-    (state) => state.requestResponse.binaryData[state.tabSidebar.selectedTab!]
+    (state) => state.requestResponse.binaryData[state.requestResponse.selectedTab!]
   );
 
   const handleChange = useCallback(

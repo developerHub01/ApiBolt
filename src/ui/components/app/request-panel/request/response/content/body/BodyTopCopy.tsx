@@ -11,7 +11,7 @@ import { useAppSelector } from "@/context/redux/hooks";
 
 const BodyTopCopy = () => {
   const response = useAppSelector(
-    (state) => state.requestResponse.response[state.tabSidebar.selectedTab!]
+    (state) => state.requestResponse.response[state.requestResponse.selectedTab!]
   );
 
   const handleCopy = useCallback(async () => {

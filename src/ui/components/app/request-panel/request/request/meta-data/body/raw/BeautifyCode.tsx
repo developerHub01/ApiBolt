@@ -15,14 +15,14 @@ const BeautifyCode = memo(() => {
   const { handleChangeRawData } = useRequestBody();
   const requestBodyType = useAppSelector(
     (state) =>
-      state.requestResponse.requestBodyType[state.tabSidebar.selectedTab!]
+      state.requestResponse.requestBodyType[state.requestResponse.selectedTab!]
   );
   const rawRequestBodyType = useAppSelector(
     (state) =>
-      state.requestResponse.rawRequestBodyType[state.tabSidebar.selectedTab!]
+      state.requestResponse.rawRequestBodyType[state.requestResponse.selectedTab!]
   );
   const code = useAppSelector(
-    (state) => state.requestResponse.rawData[state.tabSidebar.selectedTab!]
+    (state) => state.requestResponse.rawData[state.requestResponse.selectedTab!]
   );
 
   const parser = useMemo(

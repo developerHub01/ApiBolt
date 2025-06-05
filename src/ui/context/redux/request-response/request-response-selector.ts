@@ -9,7 +9,7 @@ import type { TMetaTableType } from "@/context/request/RequestMetaTableProvider"
 
 export const selectActiveTabList = createSelector(
   [
-    (state: RootState) => state.tabSidebar.selectedTab,
+    (state: RootState) => state.requestResponse.selectedTab,
     (state: RootState) => state.requestResponse.params,
     (state: RootState) => state.requestResponse.headers,
     (state: RootState) => state.requestResponse.formData,
@@ -45,7 +45,7 @@ export const selectActiveTabList = createSelector(
 export const selectMetaData = (type: TMetaTableType | null) =>
   createSelector(
     [
-      (state: RootState) => state.tabSidebar.selectedTab,
+      (state: RootState) => state.requestResponse.selectedTab,
       (state: RootState) => state.requestResponse.params,
       (state: RootState) => state.requestResponse.hiddenParams,
       (state: RootState) => state.requestResponse.headers,

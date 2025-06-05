@@ -43,8 +43,8 @@ const ApiMethodSelector = memo(() => {
   const dispatch = useAppDispatch();
   const methodType = useAppSelector(
     (state) =>
-      state.requestResponse.selectedMethod[state.tabSidebar.selectedTab!] ??
-      "get"
+      state.requestResponse.requestList[state.requestResponse.selectedTab!]
+        ?.method ?? "get"
   );
 
   const handleChange = (value: THTTPMethods) => {

@@ -14,7 +14,7 @@ const ResponsCollapseButton = () => {
   const dispatch = useAppDispatch();
   const isResponseCollapsed = useAppSelector(
     (state) =>
-      state.requestResponse.isResponseCollapsed[state.tabSidebar.selectedTab!]
+      state.requestResponse.isResponseCollapsed[state.requestResponse.selectedTab!]
   );
 
   return (

@@ -8,7 +8,7 @@ import { useAppSelector } from "@/context/redux/hooks";
 
 const AuthContent = () => {
   const authType = useAppSelector(
-    (state) => state.requestResponse.authType[state.tabSidebar.selectedTab!]
+    (state) => state.requestResponse.authType[state.requestResponse.selectedTab!]
   );
 
   return (

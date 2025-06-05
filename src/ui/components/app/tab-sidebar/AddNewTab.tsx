@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { handleAddTab } from "@/context/redux/tab-sidebar-slice/tab-sidebar-slice";
+import { handleAddTab } from "@/context/redux/request-response/request-response-slice";
 import { cn } from "@/lib/utils";
 import { Plus as AddIcon } from "lucide-react";
 import { motion } from "motion/react";
@@ -8,7 +8,7 @@ import { motion } from "motion/react";
 export const AddNewTab = () => {
   const dispatch = useAppDispatch();
   const isTabListHovering = useAppSelector(
-    (state) => state.tabSidebar.isTabListHovering
+    (state) => state.requestResponse.isTabListHovering
   );
 
   const handleAdd = () => dispatch(handleAddTab());

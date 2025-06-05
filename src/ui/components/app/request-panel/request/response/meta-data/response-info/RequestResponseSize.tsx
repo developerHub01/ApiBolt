@@ -17,13 +17,13 @@ import { useAppSelector } from "@/context/redux/hooks";
 
 const RequestResponseSize = memo(() => {
   const response = useAppSelector(
-    (state) => state.requestResponse.response[state.tabSidebar.selectedTab!]
+    (state) => state.requestResponse.response[state.requestResponse.selectedTab!]
   );
   const requestSize = useAppSelector(
-    (state) => state.requestResponse.requestSize[state.tabSidebar.selectedTab!]
+    (state) => state.requestResponse.requestSize[state.requestResponse.selectedTab!]
   );
   const responseSize = useAppSelector(
-    (state) => state.requestResponse.responseSize[state.tabSidebar.selectedTab!]
+    (state) => state.requestResponse.responseSize[state.requestResponse.selectedTab!]
   );
 
   if (!response) return null;

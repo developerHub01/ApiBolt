@@ -13,7 +13,7 @@ const BasicAuth = () => {
   const dispatch = useAppDispatch();
   const authData = useAppSelector(
     (state) =>
-      state.requestResponse.basicAuth[state.tabSidebar.selectedTab!] ??
+      state.requestResponse.basicAuth[state.requestResponse.selectedTab!] ??
       defaultBasicAuth
   );
 

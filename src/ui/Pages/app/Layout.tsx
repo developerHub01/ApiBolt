@@ -10,7 +10,6 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import RequestFolderProvider from "@/context/request-list/RequestFolderProvider";
-import RequestListProvider from "@/context/request-list/RequestListProvider";
 import RequestResponseProvider from "@/context/request/RequestResponseProvider";
 import SidebarProvider from "@/context/sidebar/SidebarProvider";
 import TabSidebarProvider from "@/context/tab-sidebar/TabSidebarProvider";
@@ -47,13 +46,9 @@ const AppLayout = () => {
 const ProviderStack = ({ children }: { children: React.ReactNode }) => {
   return (
     <SidebarProvider>
-      <RequestListProvider>
-        <TabSidebarProvider>
-          <RequestResponseProvider>
-            {children}
-          </RequestResponseProvider>
-        </TabSidebarProvider>
-      </RequestListProvider>
+      <TabSidebarProvider>
+        <RequestResponseProvider>{children}</RequestResponseProvider>
+      </TabSidebarProvider>
     </SidebarProvider>
   );
 };

@@ -25,7 +25,7 @@ const APIKey = () => {
   const dispatch = useAppDispatch();
   const authData = useAppSelector(
     (state) =>
-      state.requestResponse.apiKeyAuth[state.tabSidebar.selectedTab!] ??
+      state.requestResponse.apiKeyAuth[state.requestResponse.selectedTab!] ??
       defaultApiKey
   );
 

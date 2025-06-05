@@ -1,17 +1,15 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, {
   createContext,
-  useCallback,
   useContext,
   useEffect,
 } from "react";
 import { useNavigate } from "react-router";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import {
-  handleChangeSelectedTab,
-  handleChangeTabList,
-} from "@/context/redux/tab-sidebar-slice/tab-sidebar-slice";
 import type { THTTPMethods } from "@/context/redux/request-response/request-response-slice";
+import {
+  changeTabsData,
+  loadTabList,
+} from "@/context/redux/request-response/request-response-thunk";
 
 export interface TabInterface {
   id: string;
@@ -25,11 +23,12 @@ export interface TabsDataInterface {
   selectedTab?: string | null;
 }
 
-interface TabSidebarContext {
-  changeTabsData: () => Promise<void>;
-}
+// interface TabSidebarContext {
+  
+// }
 
-const TabSidebarContext = createContext<TabSidebarContext | null>(null);
+// const TabSidebarContext = createContext<TabSidebarContext | null>(null);
+const TabSidebarContext = createContext<undefined>(undefined);
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useTabSidebar = () => {
@@ -48,27 +47,22 @@ interface TabSidebarProviderProps {
 
 const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
   const dispatch = useAppDispatch();
-  const tabList = useAppSelector((state) => state.tabSidebar.tabList);
-  const requestList = useAppSelector((state) => state.requestList.requestList);
-  const selectedTab = useAppSelector((state) => state.tabSidebar.selectedTab);
+  const tabList = useAppSelector((state) => state.requestResponse.tabList);
+  const requestList = useAppSelector((state) => state.requestResponse.requestList);
+  const selectedTab = useAppSelector((state) => state.requestResponse.selectedTab);
   const navigate = useNavigate();
 
   useEffect(() => {
-    (async () => {
-      const tabsListData = await window.electronAPIDB.getTabList();
-
-      dispatch(handleChangeTabList(tabsListData.openTabs ?? []));
-      dispatch(handleChangeSelectedTab(tabsListData.selectedTab ?? null));
-    })();
-  }, []);
+    dispatch(loadTabList());
+  }, [dispatch]);
 
   let changeTabDataTimeout;
   useEffect(() => {
     clearTimeout(changeTabDataTimeout);
     setTimeout(() => {
-      (async () => changeTabsData())();
+      dispatch(changeTabsData());
     }, 500);
-  }, [tabList, selectedTab]);
+  }, [tabList, selectedTab, changeTabDataTimeout, dispatch]);
 
   useEffect(() => {
     const defaultPath = "/";
@@ -83,20 +77,11 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
     if (!tabDetails) navigate(defaultPath);
     else
       navigate(`/${tabDetails.children ? "folder" : "request"}/${selectedTab}`);
-  }, [selectedTab, tabList, requestList]);
-
-  const changeTabsData = useCallback(async () => {
-    await window.electronAPIDB.changeTabsData({
-      openTabs: tabList,
-      selectedTab,
-    });
-  }, [tabList, selectedTab]);
+  }, [selectedTab, tabList, requestList, navigate]);
 
   return (
     <TabSidebarContext.Provider
-      value={{
-        changeTabsData,
-      }}
+      value={undefined}
     >
       {children}
     </TabSidebarContext.Provider>

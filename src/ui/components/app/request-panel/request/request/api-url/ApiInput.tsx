@@ -13,7 +13,7 @@ interface ApiInputProps {
 const ApiInput = memo(({ value, onChange, onFocus, onBlur }: ApiInputProps) => {
   const isError = useAppSelector(
     (state) =>
-      state.requestResponse.isApiUrlError[state.tabSidebar.selectedTab!]
+      state.requestResponse.isApiUrlError[state.requestResponse.selectedTab!]
   );
 
   const handleApiUrlChange = (e: ChangeEvent<HTMLInputElement>) =>

@@ -41,14 +41,14 @@
 //   const selectedTab = useAppSelector((state) => state.tabSidebar.selectedTab);
 //   const activeMetaTab = useAppSelector(
 //     (state) =>
-//       state.requestResponse.activeMetaTab[state.tabSidebar.selectedTab!]
+//       state.requestResponse.activeMetaTab[state.requestResponse.selectedTab!]
 //   );
 //   const isLoading = useAppSelector(
-//     (state) => state.requestResponse.isLoading[state.tabSidebar.selectedTab!]
+//     (state) => state.requestResponse.isLoading[state.requestResponse.selectedTab!]
 //   );
 //   const isApiUrlError = useAppSelector(
 //     (state) =>
-//       state.requestResponse.isApiUrlError[state.tabSidebar.selectedTab!]
+//       state.requestResponse.isApiUrlError[state.requestResponse.selectedTab!]
 //   );
 
 //   useEffect(() => {

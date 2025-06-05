@@ -4,7 +4,9 @@ import RequestListDeleteAlertDialog from "@/components/app/request-list/content/
 import { useAppSelector } from "@/context/redux/hooks";
 
 const RequestList = () => {
-  const requestList = useAppSelector((state) => state.requestList.requestList);
+  const requestList = useAppSelector(
+    (state) => state.requestResponse.requestList
+  );
 
   const rootList = useMemo(() => {
     return Object.values(requestList)

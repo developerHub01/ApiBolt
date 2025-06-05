@@ -1,3 +1,4 @@
+import type { MouseEvent } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,9 +9,14 @@ import { Button } from "@/components/ui/button";
 import { EllipsisVertical as ThreeDotIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRequestFolder } from "@/context/request-list/RequestFolderProvider";
-import { useRequestList } from "@/context/request-list/RequestListProvider";
 import { motion } from "motion/react";
-import type { MouseEvent } from "react";
+import {
+  createCollection,
+  createSingleRequest,
+  duplicateRequestOrFolder,
+} from "@/context/redux/request-response/request-response-thunk";
+import { useAppDispatch } from "@/context/redux/hooks";
+import { handleChangeDeleteFolderOrRequestId } from "@/context/redux/request-response/request-response-slice";
 
 type TActionType =
   | "add_request"
@@ -69,27 +75,22 @@ interface ItemCTAProps {
 }
 
 const ItemCTA = ({ type, id }: ItemCTAProps) => {
+  const dispatch = useAppDispatch();
   const { isContextMenuOpen, handleToggleContextMenu, handleRenameAction } =
     useRequestFolder();
-  const {
-    createSingleRequest,
-    createCollection,
-    duplicateBoltCore,
-    handleRequestForDelete,
-  } = useRequestList();
 
   const handleCTAAction = (actionType: string) => {
     switch (actionType as TActionType) {
       case "delete": {
-        handleRequestForDelete(id);
+        handleChangeDeleteFolderOrRequestId(id);
         break;
       }
       case "add_folder": {
-        createCollection(id);
+        dispatch(createCollection(id));
         break;
       }
       case "add_request": {
-        createSingleRequest(id);
+        dispatch(createSingleRequest(id));
         break;
       }
       case "rename": {
@@ -97,7 +98,7 @@ const ItemCTA = ({ type, id }: ItemCTAProps) => {
         break;
       }
       case "duplicate": {
-        duplicateBoltCore(id);
+        dispatch(duplicateRequestOrFolder(id));
         break;
       }
     }

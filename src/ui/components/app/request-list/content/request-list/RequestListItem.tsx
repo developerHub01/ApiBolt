@@ -14,13 +14,19 @@ import RequestFolderProvider, {
 import { ChevronRight as ArrowIcon } from "lucide-react";
 import ItemCTA from "@/components/app/request-list/content/request-list/item-cta/ItemCTA";
 import RequestMethodTag from "@/components/app/RequestMethodTag";
-import { useRequestList } from "@/context/request-list/RequestListProvider";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { AnimatePresence } from "motion/react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import type { RequestListItemInterface } from "@/context/redux/request-list-slice/request-list-slice";
-import { handleChangeSelectedTab } from "@/context/redux/tab-sidebar-slice/tab-sidebar-slice";
+import {
+  handleChangeSelectedTab,
+  type RequestListItemInterface,
+} from "@/context/redux/request-response/request-response-slice";
+import {
+  createSingleRequest,
+  moveRequest,
+  toggleOpenFolder,
+} from "@/context/redux/request-response/request-response-thunk";
 
 interface RequestListItemProps extends RequestListItemInterface {
   type: "folder" | "request";
@@ -38,7 +44,7 @@ const RequestListItem = ({
   index: number;
 }) => {
   const requestDetails = useAppSelector(
-    (state) => state.requestList.requestList[id]
+    (state) => state.requestResponse.requestList[id]
   );
 
   if (!requestDetails) return null;
@@ -66,12 +72,12 @@ const RequestListItemContent = ({
 }: RequestListItemProps) => {
   const dispatch = useAppDispatch();
   const method = useAppSelector(
-    (state) => state.requestResponse.selectedMethod[id] ?? props.method
+    (state) => state.requestResponse.requestList[id].method ?? props.method
   );
   const name = useAppSelector(
-    (state) => state.requestResponse.requestName[id] ?? props.name
+    (state) => state.requestResponse.requestList[id].name ?? props.name
   );
-  
+
   const {
     isRenameActive,
     handleChangeName,
@@ -79,15 +85,13 @@ const RequestListItemContent = ({
     isContextMenuOpen,
     handleToggleContextMenu,
   } = useRequestFolder();
-  const { createSingleRequest, handleToggleOpenFolder, handleMoveRequest } =
-    useRequestList();
   const [nameState, setNameState] = useState<string>(name ?? "");
   const [isHovering, setIsHovering] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const isExpend = useAppSelector((state) =>
-    state.requestList.openFolderList.includes(id)
+    state.requestResponse.openFolderList.includes(id)
   );
 
   useEffect(() => {
@@ -119,7 +123,7 @@ const RequestListItemContent = ({
     }
   };
 
-  const handleAddRequest = () => createSingleRequest(id);
+  const handleAddRequest = () => dispatch(createSingleRequest(id));
 
   const handleDragStart = (e: DragEvent<HTMLDivElement>) => {
     e.dataTransfer.setData("text/plain", id);
@@ -140,15 +144,20 @@ const RequestListItemContent = ({
     setIsDragging(false);
     if (draggedId === id) return;
 
-    (async () =>
-      await handleMoveRequest(draggedId, children ? id : parent, index))();
+    dispatch(
+      moveRequest({
+        requestId: draggedId,
+        folderId: children ? id : parent,
+        index,
+      })
+    );
   };
 
   const handleDragLeave = () => setIsDragging(false);
 
   const handleArrowButtonClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    handleToggleOpenFolder(id);
+    dispatch(toggleOpenFolder(id));
   };
 
   const handleNameDoubleClick = (e: MouseEvent<HTMLInputElement>) => {

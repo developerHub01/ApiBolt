@@ -38,11 +38,11 @@ const BodyRawDataTypeSelector = memo(() => {
   const dispatch = useAppDispatch();
   const requestBodyType = useAppSelector(
     (state) =>
-      state.requestResponse.requestBodyType[state.tabSidebar.selectedTab!]
+      state.requestResponse.requestBodyType[state.requestResponse.selectedTab!]
   );
   const rawRequestBodyType = useAppSelector(
     (state) =>
-      state.requestResponse.rawRequestBodyType[state.tabSidebar.selectedTab!]
+      state.requestResponse.rawRequestBodyType[state.requestResponse.selectedTab!]
   );
 
   const handleChange = useCallback(

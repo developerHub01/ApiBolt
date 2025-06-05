@@ -6,7 +6,7 @@ import type { CookieInterface } from "@/context/redux/request-response/request-r
 
 const Cookies = () => {
   const response = useAppSelector(
-    (state) => state.requestResponse.response[state.tabSidebar.selectedTab!]
+    (state) => state.requestResponse.response[state.requestResponse.selectedTab!]
   );
 
   if (!response) return null;

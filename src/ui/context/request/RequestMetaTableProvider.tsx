@@ -74,11 +74,11 @@ export const useGetTableData = () => {
   const { id } = useParams();
   const activeMetaTab = useAppSelector(
     (state) =>
-      state.requestResponse.activeMetaTab[state.tabSidebar.selectedTab!]
+      state.requestResponse.activeMetaTab[state.requestResponse.selectedTab!]
   );
   const requestBodyType = useAppSelector(
     (state) =>
-      state.requestResponse.requestBodyType[state.tabSidebar.selectedTab!]
+      state.requestResponse.requestBodyType[state.requestResponse.selectedTab!]
   );
 
   const type: TMetaTableType | null = useMemo(() => {

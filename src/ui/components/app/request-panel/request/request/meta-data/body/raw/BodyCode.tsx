@@ -22,11 +22,11 @@ const codeFormatter = async (
 const BodyCode = memo(() => {
   const { handleChangeRawData, codeLineWrap } = useRequestBody();
   const rawData = useAppSelector(
-    (state) => state.requestResponse.rawData[state.tabSidebar.selectedTab!]
+    (state) => state.requestResponse.rawData[state.requestResponse.selectedTab!]
   );
   const rawRequestBodyType = useAppSelector(
     (state) =>
-      state.requestResponse.rawRequestBodyType[state.tabSidebar.selectedTab!]
+      state.requestResponse.rawRequestBodyType[state.requestResponse.selectedTab!]
   );
 
   const [code, setCode] = useState<string>(rawData);

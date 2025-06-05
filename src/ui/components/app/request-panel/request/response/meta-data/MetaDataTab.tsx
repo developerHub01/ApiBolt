@@ -26,7 +26,7 @@ const tabList: Array<{
 const MetaDataTab = memo(() => {
   const { activeMetaTab, handleChangeActiveMetaTab } = useResponse();
   const response = useAppSelector(
-    (state) => state.requestResponse.response[state.tabSidebar.selectedTab!]
+    (state) => state.requestResponse.response[state.requestResponse.selectedTab!]
   );
 
   const tabListWithActivity = useMemo(

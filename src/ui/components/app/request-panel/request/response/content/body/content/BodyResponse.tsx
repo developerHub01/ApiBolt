@@ -9,7 +9,7 @@ import { useAppSelector } from "@/context/redux/hooks";
 
 const BodyResponse = memo(() => {
   const response = useAppSelector(
-    (state) => state.requestResponse.response[state.tabSidebar.selectedTab!]
+    (state) => state.requestResponse.response[state.requestResponse.selectedTab!]
   );
   const { responseCodeWrap } = useResponse();
   const [formattedCode, setFormattedCode] = useState("");

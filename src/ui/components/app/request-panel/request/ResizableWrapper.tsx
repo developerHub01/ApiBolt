@@ -11,7 +11,7 @@ const ResizableWrapper = ({ children }: ResizableWrapperProps) => {
   const panelGroupRef = useRef<ImperativePanelGroupHandle>(null);
   const isResponseCollapsed = useAppSelector(
     (state) =>
-      state.requestResponse.isResponseCollapsed[state.tabSidebar.selectedTab!]
+      state.requestResponse.isResponseCollapsed[state.requestResponse.selectedTab!]
   );
 
   useEffect(() => {

@@ -14,6 +14,19 @@ const generateNewMetaDataItem = (type?: TMetaTableType) => ({
   description: "",
 });
 
+export interface RequestListItemInterface {
+  id: string;
+  name: string;
+  method?: THTTPMethods;
+  children?: Array<string>;
+  parent?: string;
+  createdAt?: number;
+}
+
+export interface RequestListInterface {
+  [key: string]: RequestListItemInterface;
+}
+
 export type TRequestBodyType =
   | "none"
   | "form-data"
@@ -108,7 +121,7 @@ export interface ResponseFileDataInterface {
 
 export type ResponseDataBackendInterface = Omit<
   ResponseFileDataInterface,
-  "response"
+  "response" | "name" | "method"
 >;
 
 export interface APIPayloadBody {
@@ -376,12 +389,19 @@ const initialHiddenHeaderData = () => [
 // Define a type for the slice state
 
 interface RequestResponseState {
+  requestList: RequestListInterface;
+  openFolderList: Array<string>;
   loadedRequestList: Record<string, boolean>;
+  isRequestListLoaded: boolean;
+  shouldRequestListLoad: boolean;
+  deleteFolderOrRequestId: string;
+
+  tabList: Array<string>;
+  isTabListHovering: boolean;
+
   selectedTab: string | null;
-  requestName: Record<string, string>;
   isResponseCollapsed: Record<string, boolean>;
   activeMetaTab: Record<string, TActiveTabType>;
-  selectedMethod: Record<string, THTTPMethods>;
   isApiUrlError: Record<string, boolean>;
   isLoading: Record<string, boolean>;
   apiUrl: Record<string, string>;
@@ -429,12 +449,19 @@ interface RequestResponseState {
 
 // Define the initial state using that type
 const initialState: RequestResponseState = {
+  requestList: {},
+  openFolderList: [],
   loadedRequestList: {},
+  isRequestListLoaded: false,
+  shouldRequestListLoad: false,
+  deleteFolderOrRequestId: "",
+
+  tabList: [],
+  isTabListHovering: false,
+
   selectedTab: null,
-  requestName: {},
   isResponseCollapsed: {},
   activeMetaTab: {},
-  selectedMethod: {},
   isApiUrlError: {},
   isLoading: {},
   apiUrl: {},
@@ -466,6 +493,198 @@ export const requestResponseSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
+    handleLoadRequestList: (
+      state,
+      action: PayloadAction<RequestListInterface>
+    ) => {
+      state.requestList = action.payload;
+    },
+    handleLoadOpenFolderList: (state, action: PayloadAction<Array<string>>) => {
+      state.openFolderList = action.payload;
+    },
+    handleChangeIsRequestListLoaded: (
+      state,
+      action: PayloadAction<boolean | undefined>
+    ) => {
+      state.isRequestListLoaded = action.payload ?? !state.isRequestListLoaded;
+    },
+    handleChangeShouldRequestListLoad: (
+      state,
+      action: PayloadAction<boolean | undefined>
+    ) => {
+      state.shouldRequestListLoad =
+        action.payload ?? !state.shouldRequestListLoad;
+    },
+    handleToggleFolder: (state, action: PayloadAction<string>) => {
+      const folderId = action.payload;
+      const isOpen = state.openFolderList.includes(folderId);
+
+      state.openFolderList = isOpen
+        ? state.openFolderList.filter((id) => id !== folderId)
+        : [...state.openFolderList, folderId];
+    },
+    handleChangeRequestName: (
+      state,
+      action: PayloadAction<{
+        id?: string;
+        name: string;
+      }>
+    ) => {
+      const { name } = action.payload;
+      const id = action.payload.id ?? state.selectedTab;
+      if (!id || !state.requestList[id]?.name) return;
+
+      state.requestList[id].name = name;
+    },
+    handleChangeSelectedMethod: (
+      state,
+      action: PayloadAction<{
+        id?: string;
+        method: THTTPMethods;
+      }>
+    ) => {
+      const { method } = action.payload;
+      const id = action.payload.id ?? state.selectedTab;
+      if (!id || !state.requestList[id]?.method) return;
+
+      state.requestList[id].method = method;
+    },
+    handleChangeDeleteFolderOrRequestId: (
+      state,
+      action: PayloadAction<string>
+    ) => {
+      state.deleteFolderOrRequestId = action.payload;
+    },
+    handleCreateSingleRequest: (
+      state,
+      action: PayloadAction<RequestListItemInterface>
+    ) => {
+      const payload = action.payload;
+
+      const parentId = payload.parent;
+
+      if (parentId && state.requestList[parentId]) {
+        const parentData = state.requestList[parentId];
+        parentData.children?.push(payload.id);
+      }
+
+      state.requestList[payload.id] = payload;
+    },
+    handleCreateRestApiBasic: (
+      state,
+      action: PayloadAction<Array<RequestListItemInterface>>
+    ) => {
+      const payload = (action.payload ?? [])?.reduce(
+        (acc, curr) => {
+          acc[curr.id] = curr;
+          return acc;
+        },
+        {} as Record<string, RequestListItemInterface>
+      );
+
+      state.requestList = {
+        ...state.requestList,
+        ...payload,
+      };
+    },
+
+    handleChangeIsTabListHovering: (
+      state,
+      action: PayloadAction<boolean | undefined>
+    ) => {
+      if (state.isTabListHovering === action.payload) return;
+
+      state.isTabListHovering = action.payload ?? !state.isTabListHovering;
+    },
+    handleChangeTabList: (state, action: PayloadAction<Array<string>>) => {
+      state.tabList = action.payload;
+    },
+    handleAddTab: (state, action: PayloadAction<string | undefined>) => {
+      const id = action.payload ?? "";
+
+      let addIndex = state.tabList.length;
+
+      const selectedIdIndex = state.tabList.findIndex(
+        (tabId) => tabId === state.selectedTab
+      );
+
+      if (selectedIdIndex >= 0) addIndex = selectedIdIndex + 1;
+
+      if (state.tabList.includes(id)) return;
+
+      const newList = state.tabList;
+      newList.splice(addIndex, 0, id);
+      state.tabList = newList;
+    },
+    handleRemoveTab: (state, action: PayloadAction<string>) => {
+      const id = action.payload;
+      const newTabList = state.tabList.filter((tabId) => tabId !== id);
+      state.tabList = newTabList;
+
+      if (id !== state.selectedTab) return;
+
+      const idIndex = state.tabList.findIndex((tabId) => tabId === id);
+
+      let nextSelectedTabIndex = Math.max(
+        Math.min(idIndex, newTabList.length - 1),
+        0
+      );
+
+      if (state.tabList.length <= 1) nextSelectedTabIndex = -1;
+
+      state.selectedTab = newTabList[nextSelectedTabIndex] ?? null;
+    },
+    handleMoveTab: (
+      state,
+      action: PayloadAction<{
+        id: string;
+        index?: number;
+      }>
+    ) => {
+      const { id, index = 0 } = action.payload;
+
+      let tabList = state.tabList;
+
+      const idIndex = tabList.findIndex((tabId) => tabId === id);
+      if (idIndex >= 0) tabList = tabList.filter((tabId) => tabId !== id);
+
+      tabList.splice(index ?? tabList.length, 0, id);
+      state.tabList = [...tabList];
+    },
+    handleChangeSelectedTab: (
+      state,
+      action: PayloadAction<string | undefined | null>
+    ) => {
+      const id = action.payload;
+
+      if (!id) {
+        state.selectedTab = null;
+        return;
+      }
+
+      const newSelectedTabIndex = state.tabList.findIndex(
+        (tabId) => tabId === id
+      );
+      const oldSelectedTabIndex = state.tabList.findIndex(
+        (tabId) => tabId === state.selectedTab
+      );
+
+      /* if new selected tab index doesnt exist in tabList (in open tabs) then add it next to old selected tab if old exist else last */
+      if (newSelectedTabIndex < 0) {
+        const newTabList = state.tabList;
+        newTabList.splice(
+          oldSelectedTabIndex < 0
+            ? state.tabList.length
+            : oldSelectedTabIndex + 1,
+          0,
+          id
+        );
+        state.tabList = newTabList;
+      }
+
+      state.selectedTab = id;
+    },
+
     handleToggleCollapse: (
       state,
       action: PayloadAction<
@@ -501,25 +720,12 @@ export const requestResponseSlice = createSlice({
       const { id, payload } = action.payload;
       if (!id) return;
 
-      console.log({ payload });
-      console.log({
-        requestName: state.requestName[id],
-        activeMetaTab: state.activeMetaTab[id],
-        selectedMethod: state.selectedMethod[id],
-        apiUrl: state.apiUrl[id],
-        requestBodyType: state.requestBodyType[id],
-      });
-
       if (state.loadedRequestList[id]) return;
 
       /**
        * If payload have that value then good else check if already loaded data or not if not then assign default value
        * **/
-      state.requestName[id] =
-        payload?.name ?? state.requestName[id] ?? "Request";
       state.activeMetaTab[id] = state.activeMetaTab[id] ?? "params";
-      state.selectedMethod[id] =
-        payload?.method ?? state.selectedMethod[id] ?? "get";
       state.apiUrl[id] = payload?.url ?? state.apiUrl[id] ?? "";
       state.requestBodyType[id] = state.requestBodyType[id] ?? "none";
       state.rawRequestBodyType[id] = state.rawRequestBodyType[id] ?? "text";
@@ -544,19 +750,6 @@ export const requestResponseSlice = createSlice({
     ) => {
       state.selectedTab = action.payload;
     },
-    handleChangeRequestName: (
-      state,
-      action: PayloadAction<{
-        id?: string;
-        name: string;
-      }>
-    ) => {
-      const { name } = action.payload;
-      const id = action.payload.id ?? state.selectedTab;
-      if (!id) return;
-
-      state.requestName[id] = name;
-    },
     handleChangeActiveMetaTab: (
       state,
       action: PayloadAction<{
@@ -569,19 +762,6 @@ export const requestResponseSlice = createSlice({
       if (!id) return;
 
       state.activeMetaTab[id] = type;
-    },
-    handleChangeSelectedMethod: (
-      state,
-      action: PayloadAction<{
-        id?: string;
-        method: THTTPMethods;
-      }>
-    ) => {
-      const { method } = action.payload;
-      const id = action.payload.id ?? state.selectedTab;
-      if (!id) return;
-
-      state.selectedMethod[id] = method;
     },
     handleSetParams: (
       state,
@@ -924,7 +1104,6 @@ export const requestResponseSlice = createSlice({
       delete state.isLoading[id];
       delete state.isApiUrlError[id];
       delete state.isResposneError[id];
-      state.selectedMethod[id] = "get";
       state.apiUrl[id] = "";
       state.params[id] = [];
       state.headers[id] = [];
@@ -1169,7 +1348,6 @@ export const requestResponseSlice = createSlice({
           return;
       }
     },
-
     handleChangeBinaryData: (
       state,
       action: PayloadAction<{
@@ -1213,15 +1391,31 @@ export const requestResponseSlice = createSlice({
 
 export const selectRequestNameById =
   (id: string) => (state: RequestResponseState) =>
-    state.requestName[id];
+    state.requestList[id]?.name;
 
 export const {
+  handleLoadRequestList,
+  handleLoadOpenFolderList,
+  handleChangeIsRequestListLoaded,
+  handleChangeShouldRequestListLoad,
+  handleToggleFolder,
+  handleChangeRequestName,
+  handleChangeSelectedMethod,
+  handleChangeDeleteFolderOrRequestId,
+  handleCreateSingleRequest,
+  handleCreateRestApiBasic,
+
+  handleChangeTabList,
+  handleChangeIsTabListHovering,
+  handleAddTab,
+  handleRemoveTab,
+  handleMoveTab,
+  handleChangeSelectedTab,
+
   handleToggleCollapse,
   handleInitRequest,
   handleUpdateRequestResponseSelectedTab,
-  handleChangeRequestName,
   handleChangeActiveMetaTab,
-  handleChangeSelectedMethod,
   handleSetParams,
   handleSetHeaders,
   handleSetResponse,

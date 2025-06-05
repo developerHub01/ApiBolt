@@ -5,12 +5,12 @@ import { cn } from "@/lib/utils";
 import type { TMethod } from "@/types";
 import { FolderClosed as FolderIcon, X as CloseIcon } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
   handleChangeSelectedTab,
   handleMoveTab,
   handleRemoveTab,
-} from "@/context/redux/tab-sidebar-slice/tab-sidebar-slice";
-import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+} from "@/context/redux/request-response/request-response-slice";
 
 const TabItem = ({ id, index }: { id: string; index: number }) => {
   const dispatch = useAppDispatch();
@@ -18,12 +18,14 @@ const TabItem = ({ id, index }: { id: string; index: number }) => {
   const [isTabHovering, setIsTabHovering] = useState<boolean>(false);
 
   const tabDetails = useAppSelector(
-    (state) => state.requestList.requestList[id] ?? {}
+    (state) => state.requestResponse.requestList[id] ?? {}
   );
   const isTabListHovering = useAppSelector(
-    (state) => state.tabSidebar.isTabListHovering
+    (state) => state.requestResponse.isTabListHovering
   );
-  const selectedTab = useAppSelector((state) => state.tabSidebar.selectedTab);
+  const selectedTab = useAppSelector(
+    (state) => state.requestResponse.selectedTab
+  );
 
   const handleDragStart = (e: DragEvent<HTMLDivElement>) => {
     e.dataTransfer.setData("text/plain", id);
@@ -57,10 +59,11 @@ const TabItem = ({ id, index }: { id: string; index: number }) => {
   const { children } = tabDetails || {};
 
   const method = useAppSelector(
-    (state) => state.requestResponse.selectedMethod[id] ?? tabDetails.method
+    (state) =>
+      state.requestResponse.requestList[id]?.method ?? tabDetails.method
   );
   const name = useAppSelector(
-    (state) => state.requestResponse.requestName[id] ?? tabDetails.name
+    (state) => state.requestResponse.requestList[id]?.name ?? tabDetails.name
   );
 
   if (!tabDetails) return null;

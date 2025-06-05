@@ -32,7 +32,7 @@ const JWTBearer = () => {
   const dispatch = useAppDispatch();
   const authData = useAppSelector(
     (state) =>
-      state.requestResponse.jwtBearerAuth[state.tabSidebar.selectedTab!] ??
+      state.requestResponse.jwtBearerAuth[state.requestResponse.selectedTab!] ??
       defaultJWTBearerAuth
   );
 

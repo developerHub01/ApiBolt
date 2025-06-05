@@ -5,7 +5,7 @@ import { useAppSelector } from "@/context/redux/hooks";
 
 const ApiCta = memo(() => {
   const isLoading = useAppSelector(
-    (state) => state.requestResponse.isLoading[state.tabSidebar.selectedTab!]
+    (state) => state.requestResponse.isLoading[state.requestResponse.selectedTab!]
   );
 
   return (
