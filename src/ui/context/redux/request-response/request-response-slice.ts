@@ -903,7 +903,6 @@ export const requestResponseSlice = createSlice({
       }));
 
       let updatedParams: Array<ParamInterface> = [];
-
       /* 
       if new params size less then previous means some of them have to filter out
       
@@ -912,6 +911,7 @@ export const requestResponseSlice = createSlice({
       if exist then update it
       else filter out it.
       */
+      if (!state.params[id]) state.params[id] = [];
       if (state.params[id].length < urlParams.length) {
         updatedParams = urlParams.map((param, index) => ({
           ...generateNewMetaDataItem("params"),
