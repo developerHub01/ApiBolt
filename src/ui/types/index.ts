@@ -3,6 +3,7 @@ import type {
   JWTBearerAuthInterface,
   RequestListItemInterface,
   ResponseDataBackendInterface,
+  ResponseFolderDataInterface,
   ResponseInterface,
 } from "@/context/redux/request-response/request-response-slice";
 import type { TabsDataInterface } from "@/context/tab-sidebar/TabSidebarProvider";
@@ -61,10 +62,12 @@ declare global {
     electronAPIRequestAndFolderDB: {
       findRequestOrFolderById: (
         id: string
-      ) => Promise<ResponseDataBackendInterface | undefined>;
+      ) => Promise<
+        ResponseDataBackendInterface | undefined | Record<string, unknown>
+      >;
       updateRequestOrFolderById: (
         id: string,
-        payload: ResponseDataBackendInterface
+        payload: ResponseDataBackendInterface | ResponseFolderDataInterface
       ) => Promise<void>;
       deleteRequestOrFolderById: (id: string) => Promise<void>;
     };

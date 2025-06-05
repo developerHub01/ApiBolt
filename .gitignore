@@ -19,6 +19,7 @@ boltCore
 openFolder
 tabsState
 out
+src/electron/storage/request-or-folder/*
 
 # Editor directories and files
 .vscode/*

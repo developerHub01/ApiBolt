@@ -119,10 +119,19 @@ export interface ResponseFileDataInterface {
   };
 }
 
-export type ResponseDataBackendInterface = Omit<
+export interface ResponseFolderDataInterface {
+  title: string;
+  description: string;
+}
+
+export type ResponseFileDataBackendInterface = Omit<
   ResponseFileDataInterface,
   "response" | "name" | "method"
 >;
+
+export type ResponseDataBackendInterface =
+  | ResponseFileDataBackendInterface
+  | ResponseFolderDataInterface;
 
 export interface APIPayloadBody {
   method: THTTPMethods;
@@ -251,6 +260,9 @@ export const defaultJWTBearerAuth: JWTBearerAuthInterface = {
   headerPrefix: "Bearer",
   addTo: "header",
 };
+
+export const defaultFolderTitle: string = "New Folder";
+export const defaultFolderDescription: string = `# Heading one`;
 
 const initialHiddenHeaderData = () => [
   {
@@ -444,6 +456,9 @@ interface RequestResponseState {
    * when to request the API
    */
   jwtBearerAuth: Record<string, JWTBearerAuthInterface>;
+
+  folderTitle: Record<string, string>;
+  folderDescription: Record<string, string>;
 }
 
 // Define the initial state using that type
@@ -484,6 +499,9 @@ const initialState: RequestResponseState = {
   basicAuth: {},
   bearerTokenAuth: {},
   jwtBearerAuth: {},
+
+  folderTitle: {},
+  folderDescription: {},
 };
 
 export const requestResponseSlice = createSlice({
@@ -709,7 +727,7 @@ export const requestResponseSlice = createSlice({
       state,
       action: PayloadAction<{
         id: string;
-        payload?: ResponseDataBackendInterface;
+        payload?: ResponseFileDataBackendInterface;
       }>
     ) => {
       const { id, payload } = action.payload;
@@ -1376,6 +1394,58 @@ export const requestResponseSlice = createSlice({
         };
       });
     },
+
+    handleInitFolder: (
+      state,
+      action: PayloadAction<{
+        id?: string;
+        payload?: ResponseFolderDataInterface;
+      }>
+    ) => {
+      const id = action.payload.id ?? state.selectedTab;
+      if (!id) return;
+
+      const { payload } = action.payload;
+
+      console.log({ payload });
+      if (state.loadedRequestList[id]) return;
+
+      /**
+       * If payload have that value then good else check if already loaded data or not if not then assign default value
+       * **/
+      state.folderTitle[id] =
+        payload?.title ?? state.folderTitle[id] ?? defaultFolderTitle;
+      state.folderDescription[id] =
+        payload?.description ??
+        state.folderDescription[id] ??
+        defaultFolderDescription;
+
+      state.loadedRequestList[id] = true;
+    },
+    handleChangeFolderTitle: (
+      state,
+      action: PayloadAction<{
+        id?: string;
+        value: string;
+      }>
+    ) => {
+      const id = action.payload.id ?? state.selectedTab;
+      if (!id) return;
+
+      state.folderTitle[id] = action.payload.value;
+    },
+    handleChangeFolderDescription: (
+      state,
+      action: PayloadAction<{
+        id?: string;
+        value: string;
+      }>
+    ) => {
+      const id = action.payload.id ?? state.selectedTab;
+      if (!id) return;
+
+      state.folderDescription[id] = action.payload.value;
+    },
   },
   // extraReducers(builder){
   //   builder.addCase(getDownloadableRequestData.fulfilled, (state, action)=>{
@@ -1441,6 +1511,10 @@ export const {
   handleRemoveAllMetaData,
   handleChangeBinaryData,
   handleRemoveFormDataFile,
+
+  handleInitFolder,
+  handleChangeFolderTitle,
+  handleChangeFolderDescription,
 } = requestResponseSlice.actions;
 
 export default requestResponseSlice.reducer;

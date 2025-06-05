@@ -17,7 +17,7 @@ const getFullPath = (id) =>
 export const findRequestOrFolderById = async (id) => {
   if (!id) return null;
   try {
-    return await fs.readFile(getFullPath(id), "utf-8");
+    return JSON.parse(await fs.readFile(getFullPath(id), "utf-8"));
   } catch (error) {
     console.log(error);
   }

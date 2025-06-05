@@ -1,11 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import {
+  defaultFolderDescription,
+  defaultFolderTitle,
   handleAddTab,
   handleChangeApiUrl,
   handleChangeAuthType,
   handleChangeBearerTokenAuth,
   handleChangeDeleteFolderOrRequestId,
+  handleChangeFolderDescription,
+  handleChangeFolderTitle,
   handleChangeIsRequestListLoaded,
   handleChangeRawData,
   handleChangeRawRequestBodyType,
@@ -17,6 +21,7 @@ import {
   handleChangeTabList,
   handleCreateRestApiBasic,
   handleCreateSingleRequest,
+  handleInitFolder,
   handleInitRequest,
   handleLoadOpenFolderList,
   handleLoadRequestList,
@@ -39,7 +44,9 @@ import {
   type FormDataInterface,
   type JWTBearerAuthInterface,
   type RequestListItemInterface,
+  type ResponseFileDataBackendInterface,
   type ResponseFileDataInterface,
+  type ResponseFolderDataInterface,
   type THTTPMethods,
 } from "@/context/redux/request-response/request-response-slice";
 import { base64ToFileObject, converterFileToMetadata } from "@/utils";
@@ -70,7 +77,7 @@ export const loadRequestData = createAsyncThunk<
   { dispatch: AppDispatch; state: RootState }
 >(
   "request-response/loadRequestData",
-  async (selectedTab: string | null, { getState, dispatch }) => {
+  async (selectedTab, { getState, dispatch }) => {
     if (!selectedTab) return;
     const state = getState() as RootState;
 
@@ -78,21 +85,50 @@ export const loadRequestData = createAsyncThunk<
       state.requestResponse.loadedRequestList[selectedTab];
 
     const requestResponseSelectedTab = state.requestResponse.selectedTab;
-    if (selectedTab === requestResponseSelectedTab) return;
+    console.log("{ selectedTab }==========");
+    console.log({
+      selectedTab,
+      requestResponseSelectedTab,
+      isSelectedRequestAlreadyLoaded,
+    });
+    console.log(
+      "selectedTab === requestResponseSelectedTab === ",
+      selectedTab === requestResponseSelectedTab
+    );
+    // if (selectedTab === requestResponseSelectedTab) return;
     dispatch(handleUpdateRequestResponseSelectedTab(selectedTab));
 
+    console.log(
+      "!selectedTab || isSelectedRequestAlreadyLoaded === ",
+      !selectedTab || isSelectedRequestAlreadyLoaded
+    );
     if (!selectedTab || isSelectedRequestAlreadyLoaded) return;
 
     const requestDetails =
       await window.electronAPIRequestAndFolderDB.findRequestOrFolderById(
         selectedTab
       );
-    dispatch(
-      handleInitRequest({
-        id: selectedTab,
-        payload: requestDetails,
-      })
-    );
+
+    console.log({ requestDetails });
+
+    console.log(state.requestResponse.requestList[selectedTab]);
+    if (state.requestResponse.requestList[selectedTab]?.children) {
+      dispatch(
+        handleInitFolder({
+          id: selectedTab,
+          payload: requestDetails as ResponseFolderDataInterface | undefined,
+        })
+      );
+    } else {
+      dispatch(
+        handleInitRequest({
+          id: selectedTab,
+          payload: requestDetails as
+            | ResponseFileDataBackendInterface
+            | undefined,
+        })
+      );
+    }
   }
 );
 
@@ -100,85 +136,81 @@ export const getDownloadableRequestData = createAsyncThunk<
   ResponseFileDataInterface | null,
   string,
   { state: RootState }
->(
-  "request-response/getDownloadableRequestData",
-  async (id: string, { getState }) => {
-    const state = getState() as RootState;
+>("request-response/getDownloadableRequestData", async (id, { getState }) => {
+  const state = getState() as RootState;
 
-    if (!state.requestResponse.loadedRequestList[id]) return null;
+  if (!state.requestResponse.loadedRequestList[id]) return null;
 
-    const formDataWithMetadata: Array<FormDataFileMetadataInterface> =
-      await Promise.all(
-        (state.requestResponse.formData[id] ?? []).map(async (data) => {
-          let value: Array<FileMetadataInterface> | string = "";
-          if (
-            Array.isArray(data.value) &&
-            data.value.every((v) => v instanceof File)
-          ) {
-            value = await Promise.all(
-              data.value.map((file) =>
-                converterFileToMetadata(
-                  file,
-                  state.requestResponse.isDownloadRequestWithBase64[id]
-                )
+  const formDataWithMetadata: Array<FormDataFileMetadataInterface> =
+    await Promise.all(
+      (state.requestResponse.formData[id] ?? []).map(async (data) => {
+        let value: Array<FileMetadataInterface> | string = "";
+        if (
+          Array.isArray(data.value) &&
+          data.value.every((v) => v instanceof File)
+        ) {
+          value = await Promise.all(
+            data.value.map((file) =>
+              converterFileToMetadata(
+                file,
+                state.requestResponse.isDownloadRequestWithBase64[id]
               )
-            );
-          } else if (typeof data.value === "string") {
-            value = data.value;
-          }
+            )
+          );
+        } else if (typeof data.value === "string") {
+          value = data.value;
+        }
 
-          return {
-            ...data,
-            value,
-          };
-        })
-      );
+        return {
+          ...data,
+          value,
+        };
+      })
+    );
 
-    const authorizationData =
-      state.requestResponse.authType[id] === "api-key"
-        ? state.requestResponse.apiKeyAuth[id]
-        : state.requestResponse.authType[id] === "basic-auth"
-          ? state.requestResponse.basicAuth[id]
-          : state.requestResponse.authType[id] === "bearer-token"
-            ? state.requestResponse.bearerTokenAuth[id]
-            : state.requestResponse.authType[id] === "jwt-bearer"
-              ? state.requestResponse.jwtBearerAuth[id]
-              : undefined;
+  const authorizationData =
+    state.requestResponse.authType[id] === "api-key"
+      ? state.requestResponse.apiKeyAuth[id]
+      : state.requestResponse.authType[id] === "basic-auth"
+        ? state.requestResponse.basicAuth[id]
+        : state.requestResponse.authType[id] === "bearer-token"
+          ? state.requestResponse.bearerTokenAuth[id]
+          : state.requestResponse.authType[id] === "jwt-bearer"
+            ? state.requestResponse.jwtBearerAuth[id]
+            : undefined;
 
-    const downloadData: ResponseFileDataInterface = {
-      name: state.requestResponse.requestList[id].name,
-      url: state.requestResponse.apiUrl[id],
-      method: state.requestResponse.requestList[id].method!,
-      params: state.requestResponse.params[id],
-      headers: state.requestResponse.headers[id],
-      authorization: {
-        type: state.requestResponse.authType[id],
-        data: authorizationData,
-      },
-      body: {
-        selected: state.requestResponse.requestBodyType[id],
-        rawData: state.requestResponse.rawData[id],
-        formData: formDataWithMetadata,
-        xWWWFormUrlencodedData:
-          state.requestResponse.xWWWFormUrlencodedData[id],
-        binaryData:
-          state.requestResponse.binaryData[id] &&
-          (await converterFileToMetadata(
-            state.requestResponse.binaryData[id],
-            state.requestResponse.isDownloadRequestWithBase64[id]
-          )),
-        rawRequestBodyType: state.requestResponse.rawRequestBodyType[id],
-      },
-      response: state.requestResponse.response[id],
-      size: {
-        requestSize: state.requestResponse.requestSize[id],
-        responseSize: state.requestResponse.responseSize[id],
-      },
-    };
+  const downloadData: ResponseFileDataInterface = {
+    name: state.requestResponse.requestList[id].name,
+    url: state.requestResponse.apiUrl[id],
+    method: state.requestResponse.requestList[id].method!,
+    params: state.requestResponse.params[id],
+    headers: state.requestResponse.headers[id],
+    authorization: {
+      type: state.requestResponse.authType[id],
+      data: authorizationData,
+    },
+    body: {
+      selected: state.requestResponse.requestBodyType[id],
+      rawData: state.requestResponse.rawData[id],
+      formData: formDataWithMetadata,
+      xWWWFormUrlencodedData: state.requestResponse.xWWWFormUrlencodedData[id],
+      binaryData:
+        state.requestResponse.binaryData[id] &&
+        (await converterFileToMetadata(
+          state.requestResponse.binaryData[id],
+          state.requestResponse.isDownloadRequestWithBase64[id]
+        )),
+      rawRequestBodyType: state.requestResponse.rawRequestBodyType[id],
+    },
+    response: state.requestResponse.response[id],
+    size: {
+      requestSize: state.requestResponse.requestSize[id],
+      responseSize: state.requestResponse.responseSize[id],
+    },
+  };
 
-    return downloadData;
-  }
-);
+  return downloadData;
+});
 
 export const importRequestFromFile = createAsyncThunk<
   void,
@@ -366,47 +398,41 @@ export const createSingleRequest = createAsyncThunk<
   {
     dispatch: AppDispatch;
   }
->(
-  "request-response/createSingleRequest",
-  async (parent: string | undefined, { dispatch }) => {
-    try {
-      const payload: RequestListItemInterface = {
-        id: uuidv4(),
-        name: "Request",
-        method: "get",
-        ...(parent ? { parent } : {}),
-      };
+>("request-response/createSingleRequest", async (parent, { dispatch }) => {
+  try {
+    const payload: RequestListItemInterface = {
+      id: uuidv4(),
+      name: "Request",
+      method: "get",
+      ...(parent ? { parent } : {}),
+    };
 
-      dispatch(handleCreateSingleRequest(payload));
-      await window.electronAPIDB.addBoltCore(payload);
-    } catch {
-      console.log("Request JSON file is not valid");
-    }
+    dispatch(handleCreateSingleRequest(payload));
+    await window.electronAPIDB.addBoltCore(payload);
+  } catch {
+    console.log("Request JSON file is not valid");
   }
-);
+});
 
 export const createCollection = createAsyncThunk<
   void,
   string | undefined,
   { dispatch: AppDispatch; state: RootState }
->(
-  "request-response/createCollection",
-  async (parent: string | undefined, { dispatch }) => {
-    try {
-      const payload = {
-        id: uuidv4(),
-        name: parent ? "Folder" : "Collection",
-        children: [],
-        ...(parent ? { parent } : {}),
-      };
+>("request-response/createCollection", async (parent, { dispatch }) => {
+  try {
+    const payload = {
+      id: uuidv4(),
+      name: parent ? "Folder" : "Collection",
+      children: [],
+      ...(parent ? { parent } : {}),
+    };
 
-      dispatch(handleCreateSingleRequest(payload));
-      await window.electronAPIDB.addBoltCore(payload);
-    } catch {
-      console.log("Request JSON file is not valid");
-    }
+    dispatch(handleCreateSingleRequest(payload));
+    await window.electronAPIDB.addBoltCore(payload);
+  } catch {
+    console.log("Request JSON file is not valid");
   }
-);
+});
 
 export const createRestApiBasic = createAsyncThunk<
   void,
@@ -607,7 +633,7 @@ export const deleteFolderOrRequest = createAsyncThunk<
   { state: RootState; dispatch: AppDispatch }
 >(
   "request-response/deleteFolderOrRequest",
-  async (value: boolean, { getState, dispatch }) => {
+  async (value, { getState, dispatch }) => {
     const state = getState() as RootState;
 
     const deleteCandidateId = state.requestResponse.deleteFolderOrRequestId;
@@ -623,6 +649,50 @@ export const deleteFolderOrRequest = createAsyncThunk<
       dispatch(handleChangeDeleteFolderOrRequestId(""));
     } catch {
       console.log("deleteFolderOrRequest error");
+    }
+  }
+);
+
+export const changeFolderContent = createAsyncThunk<
+  void,
+  { id?: string; value: string; type?: "title" | "description" },
+  { state: RootState; dispatch: AppDispatch }
+>(
+  "request-response/changeFolderContent",
+  async ({ id, value, type = "title" }, { getState, dispatch }) => {
+    const state = getState() as RootState;
+
+    const requestId = id ?? state.requestResponse.selectedTab;
+    if (!requestId || !state.requestResponse.requestList[requestId].children)
+      return;
+
+    try {
+      dispatch(
+        type === "title"
+          ? handleChangeFolderTitle({
+              value,
+            })
+          : handleChangeFolderDescription({
+              value,
+            })
+      );
+      await window.electronAPIRequestAndFolderDB.updateRequestOrFolderById(
+        requestId,
+        {
+          title:
+            type === "title"
+              ? value
+              : (state.requestResponse.folderTitle[requestId] ??
+                defaultFolderTitle),
+          description:
+            type === "description"
+              ? value
+              : (state.requestResponse.folderDescription[requestId] ??
+                defaultFolderDescription),
+        }
+      );
+    } catch {
+      console.log("changeFolderContent error");
     }
   }
 );

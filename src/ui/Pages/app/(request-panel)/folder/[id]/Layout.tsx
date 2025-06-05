@@ -1,12 +1,20 @@
-import FolderProvider from "@/context/folder/FolderProvider";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import { loadRequestData } from "@/context/redux/request-response/request-response-thunk";
 import { Outlet } from "react-router-dom";
 
 const FolderLayout = () => {
-  return (
-    <FolderProvider>
-      <Outlet />
-    </FolderProvider>
+  const dispatch = useAppDispatch();
+  const selectedTab = useAppSelector(
+    (state) => state.requestResponse.selectedTab
   );
+  console.log({ selectedTabPage: selectedTab });
+
+  useEffect(() => {
+    dispatch(loadRequestData(selectedTab));
+  }, [dispatch, selectedTab]);
+
+  return <Outlet />;
 };
 
 export default FolderLayout;

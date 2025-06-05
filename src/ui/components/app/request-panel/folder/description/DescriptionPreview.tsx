@@ -1,14 +1,17 @@
+import { memo } from "react";
 import MarkdownPreview from "@/components/markdown-preview";
-import { useFolder } from "@/context/folder/FolderProvider";
 
-const DescriptionPreview = () => {
-  const { description } = useFolder();
+interface DescriptionPreviewProps {
+  content: string;
+}
+
+const DescriptionPreview = memo(({ content = "" }: DescriptionPreviewProps) => {
   return (
     <MarkdownPreview
-      code={description}
+      code={content}
       className="w-full h-full min-h-96 p-3 overflow-hidden border rounded-md"
     />
   );
-};
+});
 
 export default DescriptionPreview;

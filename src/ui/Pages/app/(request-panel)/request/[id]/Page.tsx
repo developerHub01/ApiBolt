@@ -9,7 +9,9 @@ import { useAppSelector } from "@/context/redux/hooks";
 import { useNavigate, useParams } from "react-router-dom";
 
 const RequestPage = () => {
-  const selectedTab = useAppSelector((state) => state.requestResponse.selectedTab);
+  const selectedTab = useAppSelector(
+    (state) => state.requestResponse.selectedTab
+  );
   const { id } = useParams();
   const navigate = useNavigate();
 

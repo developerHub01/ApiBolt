@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import { cn } from "@/lib/utils";
 import DescriptionEditor from "@/components/app/request-panel/folder/description/DescriptionEditor";
 import DescriptionPreview from "@/components/app/request-panel/folder/description/DescriptionPreview";
+import { useAppSelector } from "@/context/redux/hooks";
 
 const buttonList: Array<{
   id: TTab;
@@ -19,9 +20,15 @@ const buttonList: Array<{
 
 type TTab = "markdown" | "preview";
 
-const FolderDescription = () => {
+const FolderDescription = memo(() => {
+  const description =
+    useAppSelector(
+      (state) =>
+        state.requestResponse.folderDescription[
+          state.requestResponse.selectedTab!
+        ]
+    ) ?? "";
   const [activeTab, setActiveTab] = useState<TTab>("markdown");
-
   const handleChangeTab = (id: TTab) => setActiveTab(id);
 
   return (
@@ -44,12 +51,12 @@ const FolderDescription = () => {
         ))}
       </div>
       {activeTab === "markdown" ? (
-        <DescriptionEditor />
+        <DescriptionEditor content={description} />
       ) : (
-        <DescriptionPreview />
+        <DescriptionPreview content={description} />
       )}
     </div>
   );
-};
+});
 
 export default FolderDescription;

@@ -1,15 +1,22 @@
 import {
+  memo,
   useCallback,
   useEffect,
   useState,
   type FocusEvent,
   type KeyboardEvent,
 } from "react";
-import { useFolder } from "@/context/folder/FolderProvider";
+import { changeFolderContent } from "@/context/redux/request-response/request-response-thunk";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 
-const FolderTitle = () => {
-  const { title, handleChangeTitle } = useFolder();
-  const [titleState, setTitleState] = useState<string>(title || "New Folder");
+const FolderTitle = memo(() => {
+  const dispatch = useAppDispatch();
+  const title =
+    useAppSelector(
+      (state) =>
+        state.requestResponse.folderTitle[state.requestResponse.selectedTab!]
+    ) ?? "New Folder";
+  const [titleState, setTitleState] = useState<string>(title);
 
   useEffect(() => {
     setTitleState(title);
@@ -22,9 +29,15 @@ const FolderTitle = () => {
   const handleBlur = useCallback(
     (e: FocusEvent<HTMLHeadingElement>) => {
       setTitleState(e.target.innerText.trim());
-      handleChangeTitle(e.target.innerText);
+
+      dispatch(
+        changeFolderContent({
+          type: "title",
+          value: e.target.innerText,
+        })
+      );
     },
-    [handleChangeTitle]
+    [dispatch]
   );
 
   return (
@@ -40,6 +53,6 @@ const FolderTitle = () => {
       </h2>
     </div>
   );
-};
+});
 
 export default FolderTitle;
