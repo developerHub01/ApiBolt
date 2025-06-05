@@ -24,7 +24,6 @@ const RequestPage = () => {
         <RequestTop />
         <ApiUrl />
         <RequestMetaData />
-        {selectedTab}
       </div>
       <ResizableWrapper>
         <RequestPanel />

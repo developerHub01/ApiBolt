@@ -65,9 +65,9 @@ const ApiMethodSelector = memo(() => {
         <SelectTrigger
           className={cn("w-full rounded-r-none font-semibold", {
             "text-green-500": methodType === "get",
-            "text-yellow-500": methodType === "post",
-            "text-blue-500": methodType === "put",
-            "text-pink-500": methodType === "patch",
+            "text-blue-500": methodType === "post",
+            "text-yellow-500": methodType === "put",
+            "text-orange-500": methodType === "patch",
             "text-red-500": methodType === "delete",
           })}
         >
@@ -80,9 +80,9 @@ const ApiMethodSelector = memo(() => {
               value={id}
               className={cn("font-semibold", {
                 "text-green-500": id === "get",
-                "text-yellow-500": id === "post",
-                "text-blue-500": id === "put",
-                "text-pink-500": id === "patch",
+                "text-blue-500": id === "post",
+                "text-yellow-500": id === "put",
+                "text-orange-500": id === "patch",
                 "text-red-500": id === "delete",
               })}
             >

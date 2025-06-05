@@ -6,7 +6,6 @@ import { handleAddMetaData } from "@/context/redux/request-response/request-resp
 import { useAppDispatch } from "@/context/redux/hooks";
 
 const Params = memo(() => {
-  // const { showHiddenHeader } = useRequestHeader();
   const dispatch = useAppDispatch();
   const handleAddNewMetaData = useCallback(() => {
     dispatch(
