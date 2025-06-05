@@ -36,9 +36,21 @@ export const changeTabsData = async (
   { openTabs = [], selectedTab = null }
 ) => {
   try {
-    const tabsData = await tabsStateDB.get(_id);
+    let tabsData = {};
+
+    try {
+      tabsData = await tabsStateDB.get(_id);
+    } catch (err) {
+      if (err.status === 404) {
+        /* First time, no doc yet — that's okay! */
+        tabsData = {};
+      } else {
+        throw err;
+      }
+    }
 
     await tabsStateDB.put({
+      _id,
       ...tabsData,
       openTabs,
       selectedTab,

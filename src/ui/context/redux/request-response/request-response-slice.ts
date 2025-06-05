@@ -600,7 +600,7 @@ export const requestResponseSlice = createSlice({
       state.tabList = action.payload;
     },
     handleAddTab: (state, action: PayloadAction<string | undefined>) => {
-      const id = action.payload ?? "";
+      const id = action.payload ?? uuidv4();
 
       let addIndex = state.tabList.length;
 

@@ -1,9 +1,10 @@
+import { useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { handleAddTab } from "@/context/redux/request-response/request-response-slice";
 import { cn } from "@/lib/utils";
 import { Plus as AddIcon } from "lucide-react";
 import { motion } from "motion/react";
+import { addNewTab } from "@/context/redux/request-response/request-response-thunk";
 
 export const AddNewTab = () => {
   const dispatch = useAppDispatch();
@@ -11,7 +12,9 @@ export const AddNewTab = () => {
     (state) => state.requestResponse.isTabListHovering
   );
 
-  const handleAdd = () => dispatch(handleAddTab());
+  const handleAdd = useCallback(() => {
+    dispatch(addNewTab());
+  }, [dispatch]);
 
   return (
     <div className="p-2 pt-0">

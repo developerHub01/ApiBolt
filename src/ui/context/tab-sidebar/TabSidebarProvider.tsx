@@ -1,8 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-} from "react";
+import React, { createContext, useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import type { THTTPMethods } from "@/context/redux/request-response/request-response-slice";
@@ -24,7 +20,7 @@ export interface TabsDataInterface {
 }
 
 // interface TabSidebarContext {
-  
+
 // }
 
 // const TabSidebarContext = createContext<TabSidebarContext | null>(null);
@@ -48,8 +44,12 @@ interface TabSidebarProviderProps {
 const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
   const dispatch = useAppDispatch();
   const tabList = useAppSelector((state) => state.requestResponse.tabList);
-  const requestList = useAppSelector((state) => state.requestResponse.requestList);
-  const selectedTab = useAppSelector((state) => state.requestResponse.selectedTab);
+  const requestList = useAppSelector(
+    (state) => state.requestResponse.requestList
+  );
+  const selectedTab = useAppSelector(
+    (state) => state.requestResponse.selectedTab
+  );
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -80,9 +80,7 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
   }, [selectedTab, tabList, requestList, navigate]);
 
   return (
-    <TabSidebarContext.Provider
-      value={undefined}
-    >
+    <TabSidebarContext.Provider value={undefined}>
       {children}
     </TabSidebarContext.Provider>
   );

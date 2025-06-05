@@ -1,4 +1,3 @@
-import type { MouseEvent } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,6 +16,7 @@ import {
 } from "@/context/redux/request-response/request-response-thunk";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { handleChangeDeleteFolderOrRequestId } from "@/context/redux/request-response/request-response-slice";
+import { useCallback, type MouseEvent } from "react";
 
 type TActionType =
   | "add_request"
@@ -104,6 +104,10 @@ const ItemCTA = ({ type, id }: ItemCTAProps) => {
     }
   };
 
+  const handlePreventPropagation = useCallback((e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+  }, []);
+
   return (
     <motion.div
       key={`request-item-cta-${id}`}
@@ -127,6 +131,7 @@ const ItemCTA = ({ type, id }: ItemCTAProps) => {
                 "opacity-0 pointer-events-none": !isContextMenuOpen,
               }
             )}
+            onClick={handlePreventPropagation}
           >
             <ThreeDotIcon />
           </Button>
@@ -134,6 +139,7 @@ const ItemCTA = ({ type, id }: ItemCTAProps) => {
         <DropdownMenuContent
           className="w-40 [&>div]:cursor-pointer"
           align="start"
+          onClick={handlePreventPropagation}
         >
           <CTAList
             list={type === "folder" ? folderCTAList : requestCTAList}
@@ -155,13 +161,7 @@ interface CTAListProps {
 
 const CTAList = ({ list, onClick }: CTAListProps) => {
   return list.map(({ id, label }) => (
-    <DropdownMenuItem
-      key={id}
-      onClick={(e: MouseEvent<HTMLDivElement>) => {
-        e.stopPropagation();
-        onClick(id);
-      }}
-    >
+    <DropdownMenuItem key={id} onClick={() => onClick(id)}>
       {label}
     </DropdownMenuItem>
   ));

@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import {
+  handleAddTab,
   handleChangeApiUrl,
   handleChangeAuthType,
   handleChangeBearerTokenAuth,
@@ -480,6 +481,7 @@ export const loadTabList = createAsyncThunk<
 >("request-response/loadTabList", async (_, { dispatch }) => {
   try {
     const tabsListData = await window.electronAPIDB.getTabList();
+    console.log({ tabsListData });
     dispatch(handleChangeTabList(tabsListData.openTabs ?? []));
     dispatch(handleChangeSelectedTab(tabsListData.selectedTab ?? null));
   } catch {
@@ -498,6 +500,28 @@ export const changeTabsData = createAsyncThunk<
       openTabs: state.requestResponse.tabList,
       selectedTab: state.requestResponse.selectedTab,
     });
+  } catch {
+    console.log("changeTabsData error");
+  }
+});
+
+export const addNewTab = createAsyncThunk<
+  void,
+  void,
+  { state: RootState; dispatch: AppDispatch }
+>("request-response/addNewTab", async (_, { dispatch }) => {
+  try {
+    const newTabId = uuidv4();
+
+    const payload: RequestListItemInterface = {
+      id: newTabId,
+      name: "Request",
+      method: "get",
+    };
+
+    dispatch(handleAddTab(newTabId));
+    dispatch(handleCreateSingleRequest(payload));
+    await window.electronAPIDB.addBoltCore(payload);
   } catch {
     console.log("changeTabsData error");
   }
