@@ -83,8 +83,6 @@ export const duplicateBoltCore = async (event, id, newId) => {
 export const deleteBoltCore = async (event, id) => {
   const deleteCandidateList = await getNestedChildList(id);
 
-  console.log({ deleteCandidateList });
-
   try {
     await boltcoreDB.bulkDocs(deleteCandidateList);
   } catch (error) {

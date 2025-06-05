@@ -3,13 +3,13 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import TabItem from "@/components/app/tab-sidebar/TabItem";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
-import { AddNewTab } from "@/components/app/tab-sidebar/AddNewTab";
 import Empty from "@/components/ui/empty";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
   handleChangeIsTabListHovering,
   handleMoveTab,
 } from "@/context/redux/request-response/request-response-slice";
+import TabActionWrapper from "@/components/app/tab-sidebar/TabActionWrapper";
 
 const TabSidebar = () => {
   const dispatch = useAppDispatch();
@@ -65,7 +65,7 @@ const TabSidebar = () => {
             )}
           </div>
         </ScrollArea>
-        <AddNewTab />
+        <TabActionWrapper />
       </motion.div>
     </div>
   );

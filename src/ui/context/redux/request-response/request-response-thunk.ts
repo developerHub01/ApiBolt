@@ -462,6 +462,21 @@ export const moveRequest = createAsyncThunk<
   }
 );
 
+export const changeRequestName = createAsyncThunk<
+  void,
+  { id: string; name: string },
+  { dispatch: AppDispatch }
+>("request-response/changeRequestName", async ({ id, name }, { dispatch }) => {
+  try {
+    dispatch(handleChangeRequestName({ id, name }));
+    await window.electronAPIDB.updateBoltCore(id, {
+      name,
+    });
+  } catch {
+    console.log("changeRequestName error");
+  }
+});
+
 export const toggleOpenFolder = createAsyncThunk<
   void,
   string,
@@ -520,6 +535,7 @@ export const addNewTab = createAsyncThunk<
     };
 
     dispatch(handleAddTab(newTabId));
+    dispatch(handleChangeSelectedTab(newTabId));
     dispatch(handleCreateSingleRequest(payload));
     await window.electronAPIDB.addBoltCore(payload);
   } catch {

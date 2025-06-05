@@ -20,8 +20,6 @@ const RequestListDeleteAlertDialog = memo(() => {
     (state) => state.requestResponse.deleteFolderOrRequestId
   );
 
-  console.log({ deleteFolderOrRequestId });
-
   const folderOrRequestName = useAppSelector(
     (state) =>
       state.requestResponse.requestList[

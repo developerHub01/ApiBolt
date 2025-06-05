@@ -587,6 +587,10 @@ export const requestResponseSlice = createSlice({
 
       state.isTabListHovering = action.payload ?? !state.isTabListHovering;
     },
+    handleClearTabList: (state) => {
+      state.tabList = [];
+      state.selectedTab = null;
+    },
     handleChangeTabList: (state, action: PayloadAction<Array<string>>) => {
       state.tabList = action.payload;
     },
@@ -1397,6 +1401,7 @@ export const {
 
   handleChangeTabList,
   handleChangeIsTabListHovering,
+  handleClearTabList,
   handleAddTab,
   handleRemoveTab,
   handleMoveTab,

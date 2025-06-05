@@ -1,13 +1,6 @@
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { handleChangeRequestName } from "@/context/redux/request-response/request-response-slice";
-import { loadRequestList } from "@/context/redux/request-response/request-response-thunk";
+import React, { createContext, useCallback, useContext, useState } from "react";
+import { useAppDispatch } from "@/context/redux/hooks";
+import { changeRequestName } from "@/context/redux/request-response/request-response-thunk";
 
 interface RequestFolderContext {
   isContextMenuOpen: boolean;
@@ -15,7 +8,6 @@ interface RequestFolderContext {
   isRenameActive: boolean;
   handleRenameAction: () => void;
   handleChangeName: (id: string, name: string) => void;
-  handleDeleteFolderOrRequest: (id: string) => void;
 }
 
 const RequestFolderContext = createContext<RequestFolderContext | null>(null);
@@ -39,19 +31,8 @@ interface RequestFolderProviderProps {
 
 const RequestFolderProvider = ({ children }: RequestFolderProviderProps) => {
   const dispatch = useAppDispatch();
-  const isRequestListLoaded = useAppSelector(
-    (state) => state.requestResponse.isRequestListLoaded
-  );
   const [isContextMenuOpen, setIsContextMenuOpen] = useState<boolean>(false);
   const [isRenameActive, setIsRenameActive] = useState<boolean>(false);
-
-  console.log({ isRequestListLoaded });
-  useEffect(() => {
-    if (isRequestListLoaded) return;
-
-    dispatch(loadRequestList());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isRequestListLoaded]);
 
   const handleToggleContextMenu = useCallback(
     (value?: boolean) =>
@@ -64,20 +45,12 @@ const RequestFolderProvider = ({ children }: RequestFolderProviderProps) => {
   }, []);
 
   const handleChangeName = useCallback(
-    async (id: string, name: string) => {
+    (id: string, name: string) => {
       setIsRenameActive(false);
-      dispatch(handleChangeRequestName({ id, name }));
-      await window.electronAPIDB.updateBoltCore(id, {
-        name,
-      });
+      dispatch(changeRequestName({ id, name }));
     },
     [dispatch]
   );
-
-  const handleDeleteFolderOrRequest = useCallback(async (id: string) => {
-    setIsRenameActive(false);
-    await window.electronAPIDB.deleteBoltCore(id);
-  }, []);
 
   return (
     <RequestFolderContext.Provider
@@ -87,7 +60,6 @@ const RequestFolderProvider = ({ children }: RequestFolderProviderProps) => {
         isRenameActive,
         handleRenameAction,
         handleChangeName,
-        handleDeleteFolderOrRequest,
       }}
     >
       {children}
