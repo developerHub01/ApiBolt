@@ -9,14 +9,14 @@ import React, {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { handleChangeRequestName } from "@/context/redux/request-response/request-response-slice";
+import { changeRequestName } from "@/context/redux/request-response/request-response-thunk";
 
 const RequestTopLeft = () => {
   const dispatch = useAppDispatch();
   const requestName = useAppSelector(
     (state) =>
-      state.requestResponse.requestList[state.requestResponse.selectedTab!]?.name ??
-      "Request"
+      state.requestResponse.requestList[state.requestResponse.selectedTab!]
+        ?.name ?? "Request"
   );
   const [requestNameState, setRequestNameState] = useState<string>(requestName);
   const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -42,7 +42,7 @@ const RequestTopLeft = () => {
     (e: FocusEvent<HTMLInputElement>) => {
       setIsFocused(false);
       dispatch(
-        handleChangeRequestName({
+        changeRequestName({
           name: e.target.value,
         })
       );
