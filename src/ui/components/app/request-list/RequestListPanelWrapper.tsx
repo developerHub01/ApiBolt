@@ -1,11 +1,11 @@
 import { memo, useRef } from "react";
 import { ResizablePanel } from "@/components/ui/resizable";
-import { useSidebar } from "@/context/sidebar/SidebarProvider";
 import RequestListPanel from "@/components/app/request-list/RequestListPanel";
 import type { ImperativePanelHandle } from "react-resizable-panels";
+import { useAppSelector } from "@/context/redux/hooks";
 
 const RequestListPanelWrapper = memo(() => {
-  const { activeTab } = useSidebar();
+  const activeTab = useAppSelector((state) => state.sidebar.activeTab);
   const resizableSizelRef = useRef<number | null>(null);
   const resizablePanelRef = useRef<ImperativePanelHandle>(null);
 

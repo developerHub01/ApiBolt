@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/resizable";
 import RequestFolderProvider from "@/context/request-list/RequestFolderProvider";
 import RequestResponseProvider from "@/context/request/RequestResponseProvider";
-import SidebarProvider from "@/context/sidebar/SidebarProvider";
 import TabSidebarProvider from "@/context/tab-sidebar/TabSidebarProvider";
 import { Outlet } from "react-router-dom";
 
@@ -45,11 +44,9 @@ const AppLayout = () => {
 
 const ProviderStack = ({ children }: { children: React.ReactNode }) => {
   return (
-    <SidebarProvider>
-      <TabSidebarProvider>
-        <RequestResponseProvider>{children}</RequestResponseProvider>
-      </TabSidebarProvider>
-    </SidebarProvider>
+    <TabSidebarProvider>
+      <RequestResponseProvider>{children}</RequestResponseProvider>
+    </TabSidebarProvider>
   );
 };
 

@@ -1,13 +1,19 @@
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu as MenuIcon } from "lucide-react";
-import { useSidebar } from "@/context/sidebar/SidebarProvider";
+import { useAppDispatch } from "@/context/redux/hooks";
+import { handleToggleSidebar } from "@/context/redux/sidebar/sidebar-slice";
 
 const SidbarToggler = memo(() => {
-  const { handleToggleSidebar } = useSidebar();
+  const dispath = useAppDispatch();
+
+  const handleClick = useCallback(
+    () => dispath(handleToggleSidebar()),
+    [dispath]
+  );
 
   return (
-    <Button size={"icon"} variant={"ghost"} onClick={handleToggleSidebar}>
+    <Button size={"icon"} variant={"ghost"} onClick={handleClick}>
       <MenuIcon />
     </Button>
   );

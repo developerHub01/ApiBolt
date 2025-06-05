@@ -10,6 +10,7 @@ import {
   handleMoveTab,
 } from "@/context/redux/request-response/request-response-slice";
 import TabActionWrapper from "@/components/app/tab-sidebar/TabActionWrapper";
+import TabSidebarWrapper from "@/components/app/tab-sidebar/TabSidebarWrapper";
 
 const TabSidebar = () => {
   const dispatch = useAppDispatch();
@@ -31,43 +32,45 @@ const TabSidebar = () => {
   };
 
   return (
-    <div
-      className="w-12 relative"
-      onMouseEnter={() => dispatch(handleChangeIsTabListHovering(true))}
-      onMouseLeave={() => dispatch(handleChangeIsTabListHovering(false))}
-    >
-      <motion.div
-        initial={{ width: 48 }}
-        animate={{ width: isTabListHovering ? 280 : 48 }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
-        className={cn(
-          "h-full flex flex-col absolute right-0 top-0 z-[99] bg-background gap-2 shadow-2xl border-l border-muted-foreground/20"
-        )}
+    <TabSidebarWrapper>
+      <div
+        className="w-12 relative"
+        onMouseEnter={() => dispatch(handleChangeIsTabListHovering(true))}
+        onMouseLeave={() => dispatch(handleChangeIsTabListHovering(false))}
       >
-        <ScrollArea
-          className="w-full h-full min-h-0 flex-1 pt-2 pb-0"
-          onDrop={handleDrop}
-          onDragOver={(e) => e.preventDefault()}
+        <motion.div
+          initial={{ width: 48 }}
+          animate={{ width: isTabListHovering ? 280 : 48 }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+          className={cn(
+            "h-full flex flex-col absolute right-0 top-0 z-[99] bg-background gap-2 shadow-2xl border-l border-muted-foreground/20"
+          )}
         >
-          <div className="w-full flex flex-col gap-1 pb-1">
-            {tabList.length ? (
-              <>
-                {tabList.map((tabId, index) => (
-                  <TabItem id={tabId} index={index} />
-                ))}
-              </>
-            ) : (
-              <div className="p-2.5">
-                {isTabListHovering && (
-                  <Empty label="No tab open" className="min-h-36" />
-                )}
-              </div>
-            )}
-          </div>
-        </ScrollArea>
-        <TabActionWrapper />
-      </motion.div>
-    </div>
+          <ScrollArea
+            className="w-full h-full min-h-0 flex-1 pt-2 pb-0"
+            onDrop={handleDrop}
+            onDragOver={(e) => e.preventDefault()}
+          >
+            <div className="w-full flex flex-col gap-1 pb-1">
+              {tabList.length ? (
+                <>
+                  {tabList.map((tabId, index) => (
+                    <TabItem id={tabId} index={index} />
+                  ))}
+                </>
+              ) : (
+                <div className="p-2.5">
+                  {isTabListHovering && (
+                    <Empty label="No tab open" className="min-h-36" />
+                  )}
+                </div>
+              )}
+            </div>
+          </ScrollArea>
+          <TabActionWrapper />
+        </motion.div>
+      </div>
+    </TabSidebarWrapper>
   );
 };
 

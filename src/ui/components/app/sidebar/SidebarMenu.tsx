@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -11,9 +11,10 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import {
-  useSidebar,
+  handleChangeActiveTab,
   type TSidebarTab,
-} from "@/context/sidebar/SidebarProvider";
+} from "@/context/redux/sidebar/sidebar-slice";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 
 const menuList: Array<{
   id: TSidebarTab;
@@ -33,7 +34,13 @@ const menuList: Array<{
 ];
 
 const SidebarMenu = memo(() => {
-  const { activeTab, handleChangeActiveTab } = useSidebar();
+  const dispatch = useAppDispatch();
+  const activeTab = useAppSelector((state) => state.sidebar.activeTab);
+
+  const handleClick = useCallback(
+    (id: TSidebarTab) => dispatch(handleChangeActiveTab(id)),
+    [dispatch]
+  );
 
   return (
     <div className="flex flex-col gap-2">
@@ -43,7 +50,7 @@ const SidebarMenu = memo(() => {
             <Button
               size={"icon"}
               variant={activeTab === id ? "default" : "outline"}
-              onClick={() => handleChangeActiveTab(id)}
+              onClick={() => handleClick(id)}
               className="mt-auto"
             >
               <Icon />
