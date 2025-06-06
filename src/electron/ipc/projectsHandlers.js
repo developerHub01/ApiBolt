@@ -1,4 +1,5 @@
-import { createProjects, deleteProjects, getProjects } from "../db/projectsDB";
+import { ipcMain } from "electron";
+import { createProjects, deleteProjects, getProjects } from "../db/projectsDB.js";
 
 export const projectsHandlers = () => {
   ipcMain.handle("getProjects", async (_) => await getProjects());

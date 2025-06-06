@@ -71,6 +71,15 @@ declare global {
       ) => Promise<void>;
       deleteRequestOrFolderById: (id: string) => Promise<void>;
     };
+    electronAPIProjectsDB: {
+      getProjects: () => Promise<Array<{ name: string; id: string }>>;
+      createProjects: (payload: { name: string }) => Promise<boolean>;
+      updateProjects: (
+        id: string,
+        payload: { name: string }
+      ) => Promise<boolean>;
+      deleteProjects: (id: string) => Promise<boolean>;
+    };
   }
 }
 

@@ -93,3 +93,12 @@ contextBridge.exposeInMainWorld("electronAPIRequestAndFolderDB", {
   deleteRequestOrFolderById: async (id) =>
     await ipcRenderer.invoke("deleteRequestOrFolderById", id),
 });
+
+contextBridge.exposeInMainWorld("electronAPIProjectsDB", {
+  getProjects: async () => await ipcRenderer.invoke("getProjects"),
+  createProjects: async (payload) =>
+    await ipcRenderer.invoke("createProjects", payload),
+  updateProjects: async (id, payload) =>
+    await ipcRenderer.invoke("updateProjects", id, payload),
+  deleteProjects: async (id) => await ipcRenderer.invoke("deleteProjects", id),
+});
