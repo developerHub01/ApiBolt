@@ -14,6 +14,7 @@ import { openFoldersDBHandlers } from "./ipc/openFoldersDB.js";
 import { tabsDBHandlers } from "./ipc/tabsDB.js";
 import { requestOrFolderDBHandlers } from "./ipc/requestOrFolder.js";
 import "./db/index.js";
+import { projectsHandlers } from "./ipc/projectsHandlers.js";
 
 // browser style cookies holder by domain/path
 export const jar = initialCookieJar(undefined, { rejectPublicSuffixes: false });
@@ -39,6 +40,7 @@ app.whenReady().then(() => {
   openFoldersDBHandlers();
   tabsDBHandlers();
   requestOrFolderDBHandlers();
+  projectsHandlers()
 });
 
 app.on("window-all-closed", () => {
