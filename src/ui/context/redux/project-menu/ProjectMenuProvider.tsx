@@ -3,8 +3,10 @@ import React, { createContext, useCallback, useContext, useState } from "react";
 interface ProjectMenuContext {
   isMenuOpen: boolean;
   activeProject: string | null;
+  isCreateDialogOpen: boolean;
   handleChangeMenuOpen: (value?: boolean) => void;
   handleChangeActiveProject: (value?: string) => void;
+  handleChangeIsCreateDialogOpen: (value?: boolean) => void;
 }
 
 const ProjectMenuContext = createContext<ProjectMenuContext | null>(null);
@@ -29,6 +31,7 @@ interface ProjectMenuProviderProps {
 const ProjectMenuProvider = ({ children }: ProjectMenuProviderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [activeProject, setActiveProject] = useState<string | null>(null);
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState<boolean>(false);
 
   const handleChangeMenuOpen = useCallback((value?: boolean) => {
     setIsMenuOpen((prev) => (value === undefined ? !prev : value));
@@ -38,6 +41,10 @@ const ProjectMenuProvider = ({ children }: ProjectMenuProviderProps) => {
     setActiveProject(value ?? null);
   }, []);
 
+  const handleChangeIsCreateDialogOpen = useCallback((value?: boolean) => {
+    setIsCreateDialogOpen((prev) => (value === undefined ? !prev : value));
+  }, []);
+
   return (
     <ProjectMenuContext.Provider
       value={{
@@ -45,6 +52,8 @@ const ProjectMenuProvider = ({ children }: ProjectMenuProviderProps) => {
         activeProject,
         handleChangeMenuOpen,
         handleChangeActiveProject,
+        isCreateDialogOpen,
+        handleChangeIsCreateDialogOpen,
       }}
     >
       {children}

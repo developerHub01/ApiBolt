@@ -7,11 +7,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import ViewAllProjects from "@/components/header/project-menu/ViewAllProjects";
 import ProjectMenuTop from "@/components/header/project-menu/ProjectMenuTop";
 import Empty from "@/components/ui/empty";
 import { useProjectMenu } from "@/context/redux/project-menu/ProjectMenuProvider";
 import ProjectMenuItem from "@/components/header/project-menu/ProjectMenuItem";
+import ProjectMenuBottom from "@/components/header/project-menu/ProjectMenuBottom";
 
 const frameworks = [
   {
@@ -327,23 +327,21 @@ const ProjectMenu = memo(() => {
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0 flex flex-col gap-3">
+      <PopoverContent className="w-[200px] p-0 flex flex-col gap-2">
         <ProjectMenuTop />
-        <div>
-          <p className="text-muted-foreground pb-1.5 px-4">Projects list:</p>
-          <ScrollArea className="w-full h-full max-h-80 flex flex-col">
-            {Boolean(!frameworks.length) && <Empty label="No project exist" />}
-            {frameworks.map((item) => (
-              <ProjectMenuItem
-                key={item.value}
-                {...item}
-                activeValue={activeProject}
-                onChange={handleChangeProject}
-              />
-            ))}
-          </ScrollArea>
-        </div>
-        <ViewAllProjects />
+        <p className="text-muted-foreground pb-1.5 px-4">Projects list:</p>
+        <ScrollArea className="w-full h-full max-h-80 flex flex-col">
+          {Boolean(!frameworks.length) && <Empty label="No project exist" />}
+          {frameworks.map((item) => (
+            <ProjectMenuItem
+              key={item.value}
+              {...item}
+              activeValue={activeProject}
+              onChange={handleChangeProject}
+            />
+          ))}
+        </ScrollArea>
+        <ProjectMenuBottom />
       </PopoverContent>
     </Popover>
   );
