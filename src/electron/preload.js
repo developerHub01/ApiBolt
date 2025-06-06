@@ -101,4 +101,7 @@ contextBridge.exposeInMainWorld("electronAPIProjectsDB", {
   updateProjects: async (id, payload) =>
     await ipcRenderer.invoke("updateProjects", id, payload),
   deleteProjects: async (id) => await ipcRenderer.invoke("deleteProjects", id),
+  changeActiveProject: async (id) =>
+    await ipcRenderer.invoke("changeActiveProject", id),
+  getActiveProject: async () => await ipcRenderer.invoke("getActiveProject"),
 });

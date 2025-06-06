@@ -1,5 +1,6 @@
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { v4 as uuidv4 } from "uuid";
+import { ACTIVE_PROJECT_ID } from "./projectsDB.js";
 
 export const usersTable = sqliteTable("users_table", {
   id: int().primaryKey({ autoIncrement: true }),
@@ -13,4 +14,9 @@ export const projectTable = sqliteTable("projects_table", {
     .primaryKey()
     .$defaultFn(() => uuidv4()),
   name: text().notNull(),
+});
+
+export const activeProjectTable = sqliteTable("active_project_table", {
+  id: text().primaryKey().default(ACTIVE_PROJECT_ID),
+  activeProjectId: text("active_project_id"),
 });

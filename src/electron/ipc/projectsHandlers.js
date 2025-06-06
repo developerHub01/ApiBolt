@@ -1,5 +1,11 @@
 import { ipcMain } from "electron";
-import { createProjects, deleteProjects, getProjects } from "../db/projectsDB.js";
+import {
+  changeActiveProject,
+  createProjects,
+  deleteProjects,
+  getActiveProject,
+  getProjects,
+} from "../db/projectsDB.js";
 
 export const projectsHandlers = () => {
   ipcMain.handle("getProjects", async (_) => await getProjects());
@@ -15,4 +21,9 @@ export const projectsHandlers = () => {
     "deleteProjects",
     async (_, ...rest) => await deleteProjects(...rest)
   );
+  ipcMain.handle(
+    "changeActiveProject",
+    async (_, ...rest) => await changeActiveProject(...rest)
+  );
+  ipcMain.handle("getActiveProject", async (_) => await getActiveProject());
 };

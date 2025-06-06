@@ -79,6 +79,8 @@ declare global {
         payload: { name: string }
       ) => Promise<boolean>;
       deleteProjects: (id: string) => Promise<boolean>;
+      changeActiveProject: (id: string) => Promise<boolean>;
+      getActiveProject: (id: string) => Promise<string | null>;
     };
   }
 }
