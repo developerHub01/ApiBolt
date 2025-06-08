@@ -15,7 +15,6 @@ import { tabsDBHandlers } from "./ipc/tabsDB.js";
 import { requestOrFolderDBHandlers } from "./ipc/requestOrFolder.js";
 import "./db/index.js";
 import { projectsHandlers } from "./ipc/projectsHandlers.js";
-import { changeActiveProject, getActiveProject } from "./db/projectsDB.js";
 
 // browser style cookies holder by domain/path
 export const jar = initialCookieJar(undefined, { rejectPublicSuffixes: false });
@@ -41,13 +40,9 @@ app.whenReady().then(() => {
   openFoldersDBHandlers();
   tabsDBHandlers();
   requestOrFolderDBHandlers();
-  projectsHandlers()
+  projectsHandlers();
 });
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
 });
-
-
-// changeActiveProject()
-getActiveProject()

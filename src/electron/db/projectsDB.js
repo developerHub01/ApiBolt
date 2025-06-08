@@ -1,8 +1,10 @@
-import { eq, sql } from "drizzle-orm";
+import { eq, count } from "drizzle-orm";
 import { db } from "./index.js";
-import { projectTable, activeProjectTable } from "./schema.js";
-
-export const ACTIVE_PROJECT_ID = "singleton";
+import {
+  projectTable,
+  activeProjectTable,
+  ACTIVE_PROJECT_ID,
+} from "./schema.js";
 
 export const getProjects = async () => {
   try {
@@ -53,16 +55,14 @@ export const changeActiveProject = async (id) => {
   try {
     const countResult = await db
       .select({
-        // prettier-ignore
-        count: sql<number>`count(0)`,
+        count: count(),
       })
       .from(activeProjectTable);
-
-    const count = countResult[0]?.count ?? 0;
+    const rowCount = countResult?.[0]?.count ?? 0;
 
     let result;
 
-    if (count) {
+    if (rowCount) {
       result = await db
         .update(activeProjectTable)
         .set({
@@ -82,14 +82,15 @@ export const changeActiveProject = async (id) => {
   }
 };
 
-export const getActiveProject = async (id) => {
+export const getActiveProject = async () => {
   try {
-    const result = await db.select
+    const result = await db
+      .select()
       .from(activeProjectTable)
       .where(eq(activeProjectTable.activeProjectId, ACTIVE_PROJECT_ID))
       .limit(1);
 
-    return result[0].activeProjectId ?? null;
+    return result[0]?.activeProjectId ?? null;
   } catch (error) {
     console.log(error);
   }
