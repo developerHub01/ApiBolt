@@ -1,6 +1,7 @@
 import type {
   APIPayloadBody,
   JWTBearerAuthInterface,
+  ProjectInterface,
   RequestListItemInterface,
   ResponseDataBackendInterface,
   ResponseFolderDataInterface,
@@ -72,15 +73,15 @@ declare global {
       deleteRequestOrFolderById: (id: string) => Promise<void>;
     };
     electronAPIProjectsDB: {
-      getProjects: () => Promise<Array<{ name: string; id: string }>>;
+      getProjects: () => Promise<Array<ProjectInterface>>;
       createProjects: (payload: { name: string }) => Promise<boolean>;
       updateProjects: (
         id: string,
-        payload: { name: string }
+        payload: Omit<ProjectInterface, "id">
       ) => Promise<boolean>;
       deleteProjects: (id: string) => Promise<boolean>;
       changeActiveProject: (id: string) => Promise<boolean>;
-      getActiveProject: (id: string) => Promise<string | null>;
+      getActiveProject: () => Promise<string | null>;
     };
   }
 }

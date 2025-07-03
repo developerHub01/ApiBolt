@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button";
 import { isElectron } from "@/utils/electron";
 import { Settings as SettingIcon } from "lucide-react";
 import WindowControls from "@/components/header/WindowControls";
-import ProjectMenu from "@/components/header/project-menu/ProjectMenu";
-import ProjectMenuProvider from "@/context/redux/project-menu/ProjectMenuProvider";
+import ProjectMenuProvider from "@/context/project-menu/ProjectMenuProvider";
+import HeaderNavigation from "@/components/header/HeaderNavigation";
 
 const Header = () => {
   return (
@@ -23,17 +23,7 @@ const Header = () => {
           <p className="select-none text-lg md:text-xl font-bold tracking-wide">
             ApiBolt
           </p>
-          <div
-            style={{
-              ...(isElectron()
-                ? ({
-                    appRegion: "no-drag",
-                  } as CSSProperties)
-                : {}),
-            }}
-          >
-            <ProjectMenu />
-          </div>
+          <HeaderNavigation />
           <Button
             size={"iconSm"}
             variant={"ghost"}

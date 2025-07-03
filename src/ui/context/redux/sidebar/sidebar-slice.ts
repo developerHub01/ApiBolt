@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-export type TSidebarTab = "collections" | "environments" | null;
+export type TSidebarTab = "projects" | "collections" | "environments" | null;
 
 interface SidebarState {
   activeTab: TSidebarTab;

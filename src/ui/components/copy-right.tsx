@@ -1,12 +1,15 @@
-import { memo, useCallback, useEffect, useState } from "react";
-import { X as CloseIcon } from "lucide-react";
-import useMounted from "@/hooks/use-mounted";
-import { Link } from "react-router-dom";
+import { memo, 
+  // useCallback, useEffect, useState
+ } from "react";
+// import { X as CloseIcon } from "lucide-react";
+// import useMounted from "@/hooks/use-mounted";
+// import { Link } from "react-router-dom";
 
-const githubLink = "https://github.com/developerHub01";
+// const githubLink = "https://github.com/developerHub01";
 
 const CopyRight = memo(() => {
-  const [isVisible, setIsVisible] = useState<boolean>(true);
+  return null;
+  /*   const [isVisible, setIsVisible] = useState<boolean>(true);
   const mounted = useMounted();
 
   useEffect(() => {
@@ -59,7 +62,7 @@ const CopyRight = memo(() => {
         <CloseIcon size={16} />
       </button>
     </div>
-  );
+  ); */
 });
 
 CopyRight.displayName = "Copyright bar";

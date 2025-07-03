@@ -5,6 +5,7 @@ import {
   deleteProjects,
   getActiveProject,
   getProjects,
+  updateProjects,
 } from "../db/projectsDB.js";
 
 export const projectsHandlers = () => {
@@ -15,7 +16,7 @@ export const projectsHandlers = () => {
   );
   ipcMain.handle(
     "updateProjects",
-    async (_, ...rest) => await getProjects(...rest)
+    async (_, ...rest) => await updateProjects(...rest)
   );
   ipcMain.handle(
     "deleteProjects",

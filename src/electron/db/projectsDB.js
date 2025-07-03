@@ -26,6 +26,7 @@ export const createProjects = async (payload) => {
 
 export const updateProjects = async (id, payload = {}) => {
   try {
+    console.log({ ...payload });
     const updated = await db
       .update(projectTable)
       .set({
@@ -68,7 +69,7 @@ export const changeActiveProject = async (id) => {
         .set({
           activeProjectId: id,
         })
-        .where(eq(activeProjectTable.activeProjectId, ACTIVE_PROJECT_ID));
+        .where(eq(activeProjectTable.id, ACTIVE_PROJECT_ID));
     } else {
       result = await db.insert(activeProjectTable).values({
         id: ACTIVE_PROJECT_ID,
@@ -87,7 +88,7 @@ export const getActiveProject = async () => {
     const result = await db
       .select()
       .from(activeProjectTable)
-      .where(eq(activeProjectTable.activeProjectId, ACTIVE_PROJECT_ID))
+      .where(eq(activeProjectTable.id, ACTIVE_PROJECT_ID))
       .limit(1);
 
     return result[0]?.activeProjectId ?? null;

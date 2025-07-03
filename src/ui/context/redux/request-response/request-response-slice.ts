@@ -14,6 +14,11 @@ const generateNewMetaDataItem = (type?: TMetaTableType) => ({
   description: "",
 });
 
+export interface ProjectInterface {
+  id: string;
+  name: string;
+}
+
 export interface RequestListItemInterface {
   id: string;
   name: string;
@@ -401,6 +406,9 @@ const initialHiddenHeaderData = () => [
 // Define a type for the slice state
 
 interface RequestResponseState {
+  projectList: Array<ProjectInterface>;
+  activeProjectId: string | null;
+
   requestList: RequestListInterface;
   openFolderList: Array<string>;
   loadedRequestList: Record<string, boolean>;
@@ -463,6 +471,9 @@ interface RequestResponseState {
 
 // Define the initial state using that type
 const initialState: RequestResponseState = {
+  projectList: [],
+  activeProjectId: null,
+
   requestList: {},
   openFolderList: [],
   loadedRequestList: {},
@@ -509,6 +520,20 @@ export const requestResponseSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
+    handleLoadProjectsList: (
+      state,
+      action: PayloadAction<Array<ProjectInterface>>
+    ) => {
+      state.projectList = action.payload;
+    },
+    handleChangeActiveProject: (
+      state,
+      action: PayloadAction<string | null>
+    ) => {
+      if (state.activeProjectId === action.payload) return;
+      state.activeProjectId = action.payload;
+    },
+
     handleLoadRequestList: (
       state,
       action: PayloadAction<RequestListInterface>
@@ -1459,6 +1484,9 @@ export const selectRequestNameById =
     state.requestList[id]?.name;
 
 export const {
+  handleLoadProjectsList,
+  handleChangeActiveProject,
+
   handleLoadRequestList,
   handleLoadOpenFolderList,
   handleChangeIsRequestListLoaded,
