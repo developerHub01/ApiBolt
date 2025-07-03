@@ -24,10 +24,13 @@ import { toast } from "sonner";
 import LoaderV1 from "@/components/LoaderV1";
 import { cn } from "@/lib/utils";
 import ActionButton from "@/components/app/projects/project-top/ActionButton";
+import { useAppDispatch } from "@/context/redux/hooks";
+import { createProject } from "@/context/redux/request-response/request-response-thunk";
 
 const defaultName = "New Project";
 
 const CreateNewProject = memo(() => {
+  const dispatch = useAppDispatch();
   const { isCreateDialogOpen, handleChangeIsCreateDialogOpen } =
     useProjectMenu();
   const [name, setName] = useState<string>(defaultName);
@@ -35,14 +38,12 @@ const CreateNewProject = memo(() => {
 
   const handleCreate = useCallback(async () => {
     setIsLoading(true);
-    const response = await window.electronAPIProjectsDB.createProjects({
-      name,
-    });
+    const response = await dispatch(createProject(name)).unwrap();
     setIsLoading(false);
 
     if (response) handleChangeIsCreateDialogOpen();
     toast(response ? "Project Created Successfully!" : "Something went wrong!");
-  }, [handleChangeIsCreateDialogOpen, name]);
+  }, [dispatch, handleChangeIsCreateDialogOpen, name]);
 
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);

@@ -20,7 +20,7 @@ openFolder
 tabsState
 out
 src/electron/storage/request-or-folder/*
-db
+db/
 
 # Editor directories and files
 .vscode/*

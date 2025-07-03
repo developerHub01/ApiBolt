@@ -88,6 +88,20 @@ export const changeActiveProject = createAsyncThunk<
   return response;
 });
 
+export const createProject = createAsyncThunk<
+  boolean,
+  string,
+  { dispatch: AppDispatch; state: RootState }
+>("request-response/changeActiveProject", async (name, { dispatch }) => {
+  const response = await window.electronAPIProjectsDB.createProjects({
+    name,
+  });
+
+  if (response) dispatch(loadProjectList());
+
+  return response;
+});
+
 export const deleteProject = createAsyncThunk<
   boolean,
   string,
