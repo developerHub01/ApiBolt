@@ -11,8 +11,8 @@ import FolderPage from "@/pages/app/folder/[id]/page";
 import RequestLayout from "@/pages/app/request/[id]/layout";
 import RequestPage from "@/pages/app/request/[id]/page";
 import { isElectron } from "@/utils/electron";
-import EnvironmentLayout from "@/pages/app/environment/[id]/layout";
-import EnvironmentPage from "@/pages/app/environment/[id]/page";
+import EnvironmentLayout from "@/pages/app/environment/layout";
+import EnvironmentPage from "@/pages/app/environment/page";
 import ProjectsLayout from "@/pages/app/projects/layout";
 import ProjectsPage from "@/pages/app/projects/page";
 
