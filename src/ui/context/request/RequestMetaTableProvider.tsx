@@ -15,7 +15,8 @@ export type TMetaTableType =
   | "headers"
   | "hiddenHeaders"
   | "form-data"
-  | "x-www-form-urlencoded";
+  | "x-www-form-urlencoded"
+  | "environments";
 
 export interface ShowColumnInterface {
   value: boolean;

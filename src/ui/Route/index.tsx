@@ -51,7 +51,7 @@ const routes = [
             ],
           },
           {
-            path: "environment/:id",
+            path: "environments",
             element: <EnvironmentLayout />,
             children: [
               {

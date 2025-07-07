@@ -11,7 +11,7 @@ import {
   loadProjectList,
 } from "@/context/redux/request-response/request-response-thunk";
 import type { ProjectInterface } from "@/context/redux/request-response/request-response-slice";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface ProjectMenuContext {
   projectList: Array<ProjectInterface>;
@@ -65,17 +65,12 @@ const ProjectMenuProvider = ({ children }: ProjectMenuProviderProps) => {
     (async () => {
       const { activeProject, projectList } =
         await dispatch(loadProjectList()).unwrap();
-      console.log({ activeProject, projectList });
-
       setProjectList(projectList);
 
       if (!activeProject) return setTimeout(() => navigate("/projects"), 0);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const location = useLocation();
-  console.log(location.pathname);
 
   useEffect(() => {
     setProjectList(projectListFromStore);

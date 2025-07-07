@@ -24,6 +24,7 @@ import {
   handleCreateSingleRequest,
   handleInitFolder,
   handleInitRequest,
+  handleLoadEnvironmentsList,
   handleLoadOpenFolderList,
   handleLoadProjectsList,
   handleLoadRequestList,
@@ -41,6 +42,8 @@ import {
   handleUpdateRequestResponseSelectedTab,
   type APIKeyInterface,
   type BasicAuthInterface,
+  type EnvironmentInterface,
+  type EnvironmentPayloadInterface,
   type FileMetadataInterface,
   type FormDataFileMetadataInterface,
   type FormDataInterface,
@@ -82,7 +85,6 @@ export const changeActiveProject = createAsyncThunk<
   string,
   { dispatch: AppDispatch; state: RootState }
 >("request-response/changeActiveProject", async (id, { dispatch }) => {
-  console.log("handleChangeActiveProject=============");
   dispatch(handleChangeActiveProject(id));
   const response = await window.electronAPIProjectsDB.changeActiveProject(id);
   return response;
@@ -107,7 +109,6 @@ export const deleteProject = createAsyncThunk<
   string,
   { dispatch: AppDispatch; state: RootState }
 >("request-response/deleteProject", async (id, { dispatch }) => {
-  console.log({ id });
   const response = await window.electronAPIProjectsDB.deleteProjects(id);
 
   // update the project list after deletion
@@ -127,13 +128,9 @@ export const updateProject = createAsyncThunk<
   },
   { dispatch: AppDispatch; state: RootState }
 >("request-response/updateProject", async ({ id, name }, { dispatch }) => {
-  console.log({ id });
-  console.log({ id, name });
   const response = await window.electronAPIProjectsDB.updateProjects(id, {
     name,
   });
-
-  console.log({ response });
 
   // update the project list after deletion
   if (response) {
@@ -142,6 +139,110 @@ export const updateProject = createAsyncThunk<
 
   return response;
 });
+
+/* ==============================
+===== Environment start =========
+================================= */
+export const loadEnvironmentsList = createAsyncThunk<
+  Record<string, EnvironmentInterface>,
+  void,
+  { dispatch: AppDispatch; state: RootState }
+>("request-response/loadEnvironmentsList", async (_, { dispatch }) => {
+  try {
+    const list = (
+      (await window.electronAPIEnvironmentsDB.getEnvironments()) ?? []
+    ).reduce(
+      (acc, curr) => {
+        acc[curr.id] = {
+          ...curr,
+          isCheck: Boolean(Number(curr.isCheck)),
+        };
+        return acc;
+      },
+      {} as Record<string, EnvironmentInterface>
+    );
+
+    dispatch(handleLoadEnvironmentsList(list));
+
+    return list;
+  } catch {
+    return {};
+  }
+});
+
+export const createEnvironments = createAsyncThunk<
+  boolean,
+  void,
+  { dispatch: AppDispatch; state: RootState }
+>("request-response/createEnvironments", async (_, { dispatch }) => {
+  try {
+    const payload = {
+      id: uuidv4(),
+    };
+    const response = await window.electronAPIEnvironmentsDB.createEnvironments({
+      ...payload,
+    });
+
+    if (response) dispatch(loadEnvironmentsList());
+
+    return response;
+  } catch (error) {
+    console.error("Error creating environment:", error);
+    return false;
+  }
+});
+
+export const updateEnvironments = createAsyncThunk<
+  boolean,
+  {
+    id: string;
+    payload: Partial<EnvironmentPayloadInterface>;
+  },
+  { dispatch: AppDispatch; state: RootState }
+>(
+  "request-response/updateEnvironments",
+  async ({ id, payload }, { dispatch }) => {
+    const response = await window.electronAPIEnvironmentsDB.updateEnvironments({
+      id,
+      ...payload,
+    });
+
+    if (response) dispatch(loadEnvironmentsList());
+
+    return response;
+  }
+);
+
+export const deleteAllEnvironments = createAsyncThunk<
+  boolean,
+  void,
+  { dispatch: AppDispatch; state: RootState }
+>("request-response/deleteAllEnvironments", async (_, { dispatch }) => {
+  const response =
+    await window.electronAPIEnvironmentsDB.deleteAllEnvironments();
+
+  // update the environment list after deletion
+  if (response) dispatch(loadEnvironmentsList());
+
+  return response;
+});
+
+export const deleteEnvironments = createAsyncThunk<
+  boolean,
+  string,
+  { dispatch: AppDispatch; state: RootState }
+>("request-response/deleteEnvironments", async (id, { dispatch }) => {
+  const response =
+    await window.electronAPIEnvironmentsDB.deleteEnvironments(id);
+
+  // update the environment list after deletion
+  if (response) dispatch(loadEnvironmentsList());
+
+  return response;
+});
+/* ==============================
+===== Environment end =========
+================================= */
 
 export const loadRequestList = createAsyncThunk<
   void,
@@ -173,24 +274,9 @@ export const loadRequestData = createAsyncThunk<
     const isSelectedRequestAlreadyLoaded =
       state.requestResponse.loadedRequestList[selectedTab];
 
-    const requestResponseSelectedTab = state.requestResponse.selectedTab;
-    console.log("{ selectedTab }==========");
-    console.log({
-      selectedTab,
-      requestResponseSelectedTab,
-      isSelectedRequestAlreadyLoaded,
-    });
-    console.log(
-      "selectedTab === requestResponseSelectedTab === ",
-      selectedTab === requestResponseSelectedTab
-    );
     // if (selectedTab === requestResponseSelectedTab) return;
     dispatch(handleUpdateRequestResponseSelectedTab(selectedTab));
 
-    console.log(
-      "!selectedTab || isSelectedRequestAlreadyLoaded === ",
-      !selectedTab || isSelectedRequestAlreadyLoaded
-    );
     if (!selectedTab || isSelectedRequestAlreadyLoaded) return;
 
     const requestDetails =
@@ -198,9 +284,6 @@ export const loadRequestData = createAsyncThunk<
         selectedTab
       );
 
-    console.log({ requestDetails });
-
-    console.log(state.requestResponse.requestList[selectedTab]);
     if (state.requestResponse.requestList[selectedTab]?.children) {
       dispatch(
         handleInitFolder({

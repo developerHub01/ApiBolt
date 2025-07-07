@@ -1,0 +1,1 @@
+ALTER TABLE environments_table_new RENAME TO environments_table;

@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { v4 as uuidv4 } from "uuid";
 
@@ -15,6 +16,22 @@ export const projectTable = sqliteTable("projects_table", {
     .primaryKey()
     .$defaultFn(() => uuidv4()),
   name: text().notNull(),
+});
+
+export const environmentTable = sqliteTable("environments_table", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  variable: text(),
+  type: text().default("default"),
+  value: text(),
+  isCheck: int().notNull().default(1),
+  projectId: text()
+    .notNull()
+    .references(() => projectTable.id),
+  createdAt: text()
+    .notNull()
+    .default(sql`(current_timestamp)`),
 });
 
 export const activeProjectTable = sqliteTable("active_project_table", {

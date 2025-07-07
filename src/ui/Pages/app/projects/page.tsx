@@ -4,7 +4,6 @@ import ProjectSearch from "@/components/app/projects/search/ProjectSearch";
 import ActiveProject from "@/components/app/projects/ActiveProject";
 
 const ProjectsPage = () => {
-  console.log("re-render");
   return (
     <section className="w-full h-full flex justify-center items-center">
       <div className="h-full flex flex-col gap-4 p-5 pb-8">

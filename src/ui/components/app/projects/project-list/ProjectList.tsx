@@ -10,8 +10,6 @@ const ProjectList = () => {
     (state) => state.requestResponse.activeProjectId
   );
 
-  console.log({ activeProjectId });
-
   if (!projectList?.length) return <ProjectNotFound />;
 
   return (

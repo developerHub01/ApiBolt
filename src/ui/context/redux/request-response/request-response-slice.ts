@@ -19,6 +19,21 @@ export interface ProjectInterface {
   name: string;
 }
 
+export interface EnvironmentInterface {
+  id: string;
+  variable: string;
+  type: "default" | "secret";
+  value: string;
+  isCheck: boolean;
+  projectId: string;
+  createdAt: string;
+}
+
+export type EnvironmentPayloadInterface = Omit<
+  EnvironmentInterface,
+  "createdAt"
+>;
+
 export interface RequestListItemInterface {
   id: string;
   name: string;
@@ -248,6 +263,18 @@ export const defaultRequestResponseSize = {
   body: 0,
 };
 
+export const defaultEnvironment = (
+  id: string,
+  projectId: string
+): Omit<EnvironmentInterface, "createdAt"> => ({
+  id,
+  type: "default",
+  variable: "",
+  value: "",
+  isCheck: true,
+  projectId,
+});
+
 export const defaultApiKey: APIKeyInterface = {
   key: "",
   value: "",
@@ -409,6 +436,8 @@ interface RequestResponseState {
   projectList: Array<ProjectInterface>;
   activeProjectId: string | null;
 
+  environmentsList: Record<string, EnvironmentInterface>;
+
   requestList: RequestListInterface;
   openFolderList: Array<string>;
   loadedRequestList: Record<string, boolean>;
@@ -474,6 +503,8 @@ const initialState: RequestResponseState = {
   projectList: [],
   activeProjectId: null,
 
+  environmentsList: {},
+
   requestList: {},
   openFolderList: [],
   loadedRequestList: {},
@@ -533,6 +564,17 @@ export const requestResponseSlice = createSlice({
       if (state.activeProjectId === action.payload) return;
       state.activeProjectId = action.payload;
     },
+
+    /* =============== Environment reducers start ============= */
+    handleLoadEnvironmentsList: (
+      state,
+      action: PayloadAction<Record<string, EnvironmentInterface>>
+    ) => {
+      if (!state.activeProjectId) return;
+
+      state.environmentsList = action.payload;
+    },
+    /* =============== Environment reducers end ============= */
 
     handleLoadRequestList: (
       state,
@@ -1432,7 +1474,6 @@ export const requestResponseSlice = createSlice({
 
       const { payload } = action.payload;
 
-      console.log({ payload });
       if (state.loadedRequestList[id]) return;
 
       /**
@@ -1486,6 +1527,8 @@ export const selectRequestNameById =
 export const {
   handleLoadProjectsList,
   handleChangeActiveProject,
+
+  handleLoadEnvironmentsList,
 
   handleLoadRequestList,
   handleLoadOpenFolderList,

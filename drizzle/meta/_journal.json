@@ -22,6 +22,41 @@
       "when": 1749234133280,
       "tag": "0002_white_bill_hollister",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1751573873203,
+      "tag": "0003_long_silver_sable",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1751815757213,
+      "tag": "0004_watery_franklin_storm",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1751854932862,
+      "tag": "0005_unknown_komodo",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1751858194968,
+      "tag": "0006_confused_vapor",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1751905290221,
+      "tag": "0007_red_polaris",
+      "breakpoints": true
     }
   ]
 }

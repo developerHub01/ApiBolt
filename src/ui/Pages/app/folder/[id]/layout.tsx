@@ -8,7 +8,6 @@ const FolderLayout = () => {
   const selectedTab = useAppSelector(
     (state) => state.requestResponse.selectedTab
   );
-  console.log({ selectedTabPage: selectedTab });
 
   useEffect(() => {
     dispatch(loadRequestData(selectedTab));

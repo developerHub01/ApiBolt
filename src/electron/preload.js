@@ -105,3 +105,17 @@ contextBridge.exposeInMainWorld("electronAPIProjectsDB", {
     await ipcRenderer.invoke("changeActiveProject", id),
   getActiveProject: async () => await ipcRenderer.invoke("getActiveProject"),
 });
+
+contextBridge.exposeInMainWorld("electronAPIEnvironmentsDB", {
+  getAllEnvironments: async () =>
+    await ipcRenderer.invoke("getAllEnvironments"),
+  getEnvironments: async () => await ipcRenderer.invoke("getEnvironments"),
+  createEnvironments: async (payload) =>
+    await ipcRenderer.invoke("createEnvironments", payload),
+  updateEnvironments: async (payload) =>
+    await ipcRenderer.invoke("updateEnvironments", payload),
+  deleteAllEnvironments: async () =>
+    await ipcRenderer.invoke("deleteAllEnvironments"),
+  deleteEnvironments: async (id) =>
+    await ipcRenderer.invoke("deleteEnvironments", id),
+});

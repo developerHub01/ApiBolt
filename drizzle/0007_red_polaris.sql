@@ -1,0 +1,1 @@
+ALTER TABLE `environments_table` ADD `createdAt` text DEFAULT (current_timestamp) NOT NULL;

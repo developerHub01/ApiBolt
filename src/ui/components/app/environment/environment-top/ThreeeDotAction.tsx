@@ -4,33 +4,50 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useAppDispatch } from "@/context/redux/hooks";
+import { deleteAllEnvironments } from "@/context/redux/request-response/request-response-thunk";
 import {
   EllipsisVertical as ThreeDotIcon,
   Download as ExportIcon,
   FileDown as ImportIcon,
-  BrushCleaning as ClearIcon,
+  Trash2 as DeleteIcon,
   type LucideIcon,
 } from "lucide-react";
-
-const actionButtonList = [
-  {
-    id: "import",
-    label: "Import",
-    Icon: ImportIcon,
-  },
-  {
-    id: "export",
-    label: "Export",
-    Icon: ExportIcon,
-  },
-  {
-    id: "clear",
-    label: "Clear",
-    Icon: ClearIcon,
-  },
-];
+import { memo, useCallback, useMemo } from "react";
 
 const ThreeeDotAction = () => {
+  const dispatch = useAppDispatch();
+  const handleDeleteAll = useCallback(() => {
+    dispatch(deleteAllEnvironments());
+  }, [dispatch]);
+
+  const actionButtonList: Array<{
+    id: string;
+    label: string;
+    Icon: LucideIcon;
+    onClick?: () => void;
+  }> = useMemo(
+    () => [
+      {
+        id: "import",
+        label: "Import",
+        Icon: ImportIcon,
+      },
+      {
+        id: "export",
+        label: "Export",
+        Icon: ExportIcon,
+      },
+      {
+        id: "delete",
+        label: "Delete All",
+        Icon: DeleteIcon,
+        onClick: handleDeleteAll,
+      },
+    ],
+    [handleDeleteAll]
+  );
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -53,14 +70,21 @@ const ThreeeDotAction = () => {
 interface ActionButtonProps extends React.ComponentProps<"button"> {
   Icon: LucideIcon;
   label: string;
+  onClick?: () => void;
 }
 
-const ActionButton = ({ Icon, label }: ActionButtonProps) => {
+const ActionButton = memo(({ Icon, label, onClick }: ActionButtonProps) => {
   return (
-    <Button variant={"ghost"}>
+    <Button
+      variant={"ghost"}
+      {...{
+        onClick: onClick,
+      }}
+      className="w-full justify-start"
+    >
       <Icon /> {label}
     </Button>
   );
-};
+});
 
 export default ThreeeDotAction;
