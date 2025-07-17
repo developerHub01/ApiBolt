@@ -3,9 +3,11 @@ import EnvironmentsProvider from "@/context/environments/EnvironmentsProvider";
 
 const EnvironmentLayout = () => {
   return (
-    <EnvironmentsProvider>
-      <Outlet />
-    </EnvironmentsProvider>
+    <section className="w-full h-full flex flex-col items-center p-4">
+      <EnvironmentsProvider>
+        <Outlet />
+      </EnvironmentsProvider>
+    </section>
   );
 };
 
