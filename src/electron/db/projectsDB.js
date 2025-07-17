@@ -26,7 +26,6 @@ export const createProjects = async (payload) => {
 
 export const updateProjects = async (id, payload = {}) => {
   try {
-    console.log({ ...payload });
     const updated = await db
       .update(projectTable)
       .set({
@@ -45,6 +44,11 @@ export const deleteProjects = async (id) => {
     const deleted = await db
       .delete(projectTable)
       .where(eq(projectTable.id, id));
+
+    /* delete active project from that table if deleting project is active project  */
+    await db
+      .delete(activeProjectTable)
+      .where(eq(activeProjectTable.activeProjectId, id));
 
     return deleted.changes > 0;
   } catch (error) {

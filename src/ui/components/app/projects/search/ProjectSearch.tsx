@@ -5,7 +5,7 @@ import { useProjectMenu } from "@/context/project-menu/ProjectMenuProvider";
 
 const ProjectSearch = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const { handleSearchProjects } = useProjectMenu();
+  const { projectList, handleSearchProjects } = useProjectMenu();
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -19,6 +19,8 @@ const ProjectSearch = () => {
     setSearchTerm("");
     handleSearchProjects("");
   }, [handleSearchProjects]);
+
+  if (!projectList?.length) return null;
 
   return (
     <div className="w-full flex items-center gap-2 px-2 py-1 border border-muted rounded-md ring-0 focus-within:ring-1 ring-primary min-h-10 my-1">
