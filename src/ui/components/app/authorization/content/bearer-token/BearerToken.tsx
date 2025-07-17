@@ -1,23 +1,22 @@
-import ContentWrapper from "@/components/app/request/request/meta-data/authorization/content/ContentWrapper";
-import AuthKeyValueWrapper from "@/components/app/request/request/meta-data/authorization/content/AuthKeyValueWrapper";
-import AuthContentInput from "@/components/app/request/request/meta-data/authorization/content/AuthContentInput";
-import AuthContentInoutLabel from "@/components/app/request/request/meta-data/authorization/content/AuthContentInoutLabel";
+import ContentWrapper from "@/components/app/authorization/content/ContentWrapper";
+import AuthKeyValueWrapper from "@/components/app/authorization/content/AuthKeyValueWrapper";
+import AuthContentInput from "@/components/app/authorization/content/AuthContentInput";
+import AuthContentInoutLabel from "@/components/app/authorization/content/AuthContentInoutLabel";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { useCallback } from "react";
-import { handleChangeBearerTokenAuth } from "@/context/redux/request-response/request-response-slice";
+import { updateAuthorization } from "@/context/redux/request-response/request-response-thunk";
 
 const BearerToken = () => {
   const dispatch = useAppDispatch();
   const authData = useAppSelector(
-    (state) =>
-      state.requestResponse.bearerTokenAuth[state.requestResponse.selectedTab!] ?? ""
+    (state) => state.requestResponse.bearerTokenAuth ?? ""
   );
 
   const handleBlur = useCallback(
     (value: string) => {
       dispatch(
-        handleChangeBearerTokenAuth({
-          value,
+        updateAuthorization({
+          bearerToken: value,
         })
       );
     },

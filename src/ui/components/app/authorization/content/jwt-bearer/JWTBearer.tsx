@@ -1,16 +1,14 @@
-import ContentWrapper from "@/components/app/request/request/meta-data/authorization/content/ContentWrapper";
-import AuthKeyValueWrapper from "@/components/app/request/request/meta-data/authorization/content/AuthKeyValueWrapper";
-import AuthContentInput from "@/components/app/request/request/meta-data/authorization/content/AuthContentInput";
-import AuthContentSelect from "@/components/app/request/request/meta-data/authorization/content/AuthContentSelect";
-import AuthContentInoutLabel from "@/components/app/request/request/meta-data/authorization/content/AuthContentInoutLabel";
+import ContentWrapper from "@/components/app/authorization/content/ContentWrapper";
+import AuthKeyValueWrapper from "@/components/app/authorization/content/AuthKeyValueWrapper";
+import AuthContentInput from "@/components/app/authorization/content/AuthContentInput";
+import AuthContentSelect from "@/components/app/authorization/content/AuthContentSelect";
+import AuthContentInoutLabel from "@/components/app/authorization/content/AuthContentInoutLabel";
 import { JWT_ALGO_LIST } from "@/constant";
-import PayloadCode from "@/components/app/request/request/meta-data/authorization/content/jwt-bearer/PayloadCode";
+import PayloadCode from "@/components/app/authorization/content/jwt-bearer/PayloadCode";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import {
-  defaultJWTBearerAuth,
-  handleChangeJWTBearerAuth,
-} from "@/context/redux/request-response/request-response-slice";
+import { defaultJWTBearerAuth } from "@/context/redux/request-response/request-response-slice";
 import { useCallback } from "react";
+import { updateAuthorization } from "@/context/redux/request-response/request-response-thunk";
 
 const algoList = JWT_ALGO_LIST.map((algo) => ({
   id: algo,
@@ -31,20 +29,22 @@ const addToList = [
 const JWTBearer = () => {
   const dispatch = useAppDispatch();
   const authData = useAppSelector(
-    (state) =>
-      state.requestResponse.jwtBearerAuth[state.requestResponse.selectedTab!] ??
-      defaultJWTBearerAuth
+    (state) => state.requestResponse.jwtBearerAuth ?? defaultJWTBearerAuth
   );
 
   const handleBlur = useCallback(
     (
-      key: "algo" | "secret" | "payload" | "headerPrefix" | "addTo",
+      key:
+        | "jwtAlgo"
+        | "jwtSecret"
+        | "jwtPayload"
+        | "jwtHeaderPrefix"
+        | "jwtAddTo",
       value: string
     ) => {
       dispatch(
-        handleChangeJWTBearerAuth({
-          key,
-          value,
+        updateAuthorization({
+          [key]: value,
         })
       );
     },
@@ -62,7 +62,7 @@ const JWTBearer = () => {
           className="w-full"
           items={algoList}
           value={authData.algo ?? algoList[0].id}
-          onChange={(value) => handleBlur("algo", value)}
+          onChange={(value) => handleBlur("jwtAlgo", value)}
         />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
@@ -74,7 +74,7 @@ const JWTBearer = () => {
           className="w-full"
           type="password"
           value={authData.secret}
-          onBlur={(value) => handleBlur("secret", value)}
+          onBlur={(value) => handleBlur("jwtSecret", value)}
         />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
@@ -83,7 +83,7 @@ const JWTBearer = () => {
         </AuthContentInoutLabel>
         <PayloadCode
           code={authData.payload}
-          onBlur={(code: string) => handleBlur("payload", code)}
+          onBlur={(code: string) => handleBlur("jwtPayload", code)}
         />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
@@ -94,7 +94,7 @@ const JWTBearer = () => {
           id="api-key"
           className="max-w-80"
           value={authData.headerPrefix}
-          onBlur={(value) => handleBlur("headerPrefix", value)}
+          onBlur={(value) => handleBlur("jwtHeaderPrefix", value)}
         />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
@@ -106,7 +106,7 @@ const JWTBearer = () => {
           className="w-full"
           items={addToList}
           value={authData.addTo ?? addToList[0].id}
-          onChange={(value) => handleBlur("addTo", value)}
+          onChange={(value) => handleBlur("jwtAddTo", value)}
         />
       </AuthKeyValueWrapper>
     </ContentWrapper>

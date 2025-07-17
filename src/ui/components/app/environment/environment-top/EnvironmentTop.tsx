@@ -4,7 +4,7 @@ import EnvironmentTopRight from "@/components/app/environment/environment-top/En
 
 const EnvironmentTop = () => {
   return (
-    <div className="w-full flex flex-col gap-3 p-2.5">
+    <div className="w-full flex flex-col p-2.5">
       <div className="flex justify-between items-center gap-2">
         <EnvironmentTopLeft />
         <EnvironmentTopRight />

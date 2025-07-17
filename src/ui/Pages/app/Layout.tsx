@@ -1,7 +1,7 @@
 import Sidebar from "@/components/app/sidebar/Sidebar";
 import CopyRight from "@/components/copy-right";
 import Header from "@/components/header/Header";
-import RequestResponseProvider from "@/context/request/RequestResponseProvider";
+// import RequestResponseProvider from "@/context/request/RequestResponseProvider";
 import TabSidebarProvider from "@/context/tab-sidebar/TabSidebarProvider";
 import { Outlet } from "react-router-dom";
 
@@ -23,7 +23,9 @@ const AppLayout = () => {
 const ProviderStack = ({ children }: { children: React.ReactNode }) => {
   return (
     <TabSidebarProvider>
-      <RequestResponseProvider>{children}</RequestResponseProvider>
+      {/* <RequestResponseProvider> */}
+      {children}
+      {/* </RequestResponseProvider> */}
     </TabSidebarProvider>
   );
 };

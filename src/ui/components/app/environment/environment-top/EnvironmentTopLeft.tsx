@@ -1,9 +1,7 @@
+import PageHeader from "@/components/ui/page-header";
+
 const EnvironmentTopLeft = () => {
-  return (
-    <div className="pb-1.5">
-      <h1 className="text-lg font-semibold">Environment Variables</h1>
-    </div>
-  );
+  return <PageHeader>Environment Variables</PageHeader>;
 };
 EnvironmentTopLeft.displayName = "Request top left";
 

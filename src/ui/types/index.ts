@@ -1,5 +1,6 @@
 import type {
   APIPayloadBody,
+  AuthorizationPayloadInterface,
   EnvironmentInterface,
   EnvironmentPayloadInterface,
   JWTBearerAuthInterface,
@@ -37,11 +38,11 @@ declare global {
 
     electronAPIDB: {
       toggleFolder(id: string): Promise<void>;
-      getAllOpenFolder(): Promise<string[]>;
+      getAllOpenFolder(): Promise<Array<string>>;
 
       addBoltCore(payload: RequestListItemInterface): Promise<unknown>;
       addMultipleBoltCore(
-        payload: RequestListItemInterface[]
+        payload: Array<RequestListItemInterface>
       ): Promise<unknown>;
       duplicateBoltCore(id: string, newId?: string): Promise<unknown>;
       updateBoltCore(
@@ -76,7 +77,7 @@ declare global {
     };
 
     electronAPIProjectsDB: {
-      getProjects(): Promise<ProjectInterface[]>;
+      getProjects(): Promise<Array<ProjectInterface>>;
       createProjects(payload: { name: string }): Promise<boolean>;
       updateProjects(
         id: string,
@@ -88,8 +89,8 @@ declare global {
     };
 
     electronAPIEnvironmentsDB: {
-      getAllEnvironments(id?: string): Promise<EnvironmentInterface[]>;
-      getEnvironments(id?: string): Promise<EnvironmentInterface[]>;
+      getAllEnvironments(id?: string): Promise<Array<EnvironmentInterface>>;
+      getEnvironments(id?: string): Promise<Array<EnvironmentInterface>>;
       createEnvironments(
         payload: Partial<EnvironmentPayloadInterface> &
           Required<Pick<EnvironmentPayloadInterface, "id">>
@@ -100,6 +101,15 @@ declare global {
       ): Promise<boolean>;
       deleteAllEnvironments(): Promise<boolean>;
       deleteEnvironments(id: string): Promise<boolean>;
+    };
+
+    electronAPIAuthorizationDB: {
+      getAuth(): Promise<AuthorizationPayloadInterface>;
+      createAuth(): Promise<boolean>;
+      updateAuth(
+        payload: Partial<Omit<AuthorizationPayloadInterface, "id">>
+      ): Promise<boolean>;
+      deleteAuth(id?: string): Promise<boolean>;
     };
   }
 }

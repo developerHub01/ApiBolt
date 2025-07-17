@@ -7,7 +7,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { handleChangeAuthType } from "@/context/redux/request-response/request-response-slice";
+import { updateAuthorization } from "@/context/redux/request-response/request-response-thunk";
 import type { TAuthType } from "@/types";
 
 const authTypeList: Array<{
@@ -38,16 +38,17 @@ const authTypeList: Array<{
 
 const AuthTypeTab = () => {
   const dispatch = useAppDispatch();
-  const authType = useAppSelector(
-    (state) => state.requestResponse.authType[state.requestResponse.selectedTab!]
-  );
+  const authType = useAppSelector((state) => state.requestResponse.authType);
+  useAppSelector((state) => console.log(state.requestResponse));
+
+  console.log("AuthTypeTab", authType);
 
   return (
     <Select
       value={authType ?? authTypeList[0].id}
       onValueChange={(type: TAuthType) =>
         dispatch(
-          handleChangeAuthType({
+          updateAuthorization({
             type,
           })
         )

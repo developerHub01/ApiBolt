@@ -1,14 +1,12 @@
-import ContentWrapper from "@/components/app/request/request/meta-data/authorization/content/ContentWrapper";
-import AuthKeyValueWrapper from "@/components/app/request/request/meta-data/authorization/content/AuthKeyValueWrapper";
-import AuthContentInput from "@/components/app/request/request/meta-data/authorization/content/AuthContentInput";
-import AuthContentInoutLabel from "@/components/app/request/request/meta-data/authorization/content/AuthContentInoutLabel";
-import AuthContentSelect from "@/components/app/request/request/meta-data/authorization/content/AuthContentSelect";
+import ContentWrapper from "@/components/app/authorization/content/ContentWrapper";
+import AuthKeyValueWrapper from "@/components/app/authorization/content/AuthKeyValueWrapper";
+import AuthContentInput from "@/components/app/authorization/content/AuthContentInput";
+import AuthContentInoutLabel from "@/components/app/authorization/content/AuthContentInoutLabel";
+import AuthContentSelect from "@/components/app/authorization/content/AuthContentSelect";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import {
-  defaultApiKey,
-  handleChangeAPIKey,
-} from "@/context/redux/request-response/request-response-slice";
+import { defaultApiKey } from "@/context/redux/request-response/request-response-slice";
 import { useCallback } from "react";
+import { updateAuthorization } from "@/context/redux/request-response/request-response-thunk";
 
 const addToList = [
   {
@@ -24,17 +22,14 @@ const addToList = [
 const APIKey = () => {
   const dispatch = useAppDispatch();
   const authData = useAppSelector(
-    (state) =>
-      state.requestResponse.apiKeyAuth[state.requestResponse.selectedTab!] ??
-      defaultApiKey
+    (state) => state.requestResponse.apiKeyAuth ?? defaultApiKey
   );
 
   const handleBlur = useCallback(
-    (key: "key" | "value" | "addTo", value: string) => {
+    (key: "apiKeyKey" | "apiKeyValue" | "apiKeyAddTo", value: string) => {
       dispatch(
-        handleChangeAPIKey({
-          key,
-          value,
+        updateAuthorization({
+          [key]: value,
         })
       );
     },
@@ -49,7 +44,7 @@ const APIKey = () => {
           id="api-key"
           placeholder="Key"
           value={authData.key}
-          onBlur={(value) => handleBlur("key", value)}
+          onBlur={(value) => handleBlur("apiKeyKey", value)}
         />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
@@ -59,7 +54,7 @@ const APIKey = () => {
           placeholder="Value"
           type="password"
           value={authData.value}
-          onBlur={(value) => handleBlur("value", value)}
+          onBlur={(value) => handleBlur("apiKeyValue", value)}
         />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
@@ -71,7 +66,7 @@ const APIKey = () => {
           className="w-full"
           items={addToList}
           value={authData.addTo}
-          onChange={(value) => handleBlur("addTo", value)}
+          onChange={(value) => handleBlur("apiKeyAddTo", value)}
         />
       </AuthKeyValueWrapper>
     </ContentWrapper>

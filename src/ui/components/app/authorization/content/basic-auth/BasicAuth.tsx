@@ -1,28 +1,23 @@
-import ContentWrapper from "@/components/app/request/request/meta-data/authorization/content/ContentWrapper";
-import AuthKeyValueWrapper from "@/components/app/request/request/meta-data/authorization/content/AuthKeyValueWrapper";
-import AuthContentInput from "@/components/app/request/request/meta-data/authorization/content/AuthContentInput";
-import AuthContentInoutLabel from "@/components/app/request/request/meta-data/authorization/content/AuthContentInoutLabel";
+import ContentWrapper from "@/components/app/authorization/content/ContentWrapper";
+import AuthKeyValueWrapper from "@/components/app/authorization/content/AuthKeyValueWrapper";
+import AuthContentInput from "@/components/app/authorization/content/AuthContentInput";
+import AuthContentInoutLabel from "@/components/app/authorization/content/AuthContentInoutLabel";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import {
-  defaultBasicAuth,
-  handleChangeBasicAuth,
-} from "@/context/redux/request-response/request-response-slice";
+import { defaultBasicAuth } from "@/context/redux/request-response/request-response-slice";
 import { useCallback } from "react";
+import { updateAuthorization } from "@/context/redux/request-response/request-response-thunk";
 
 const BasicAuth = () => {
   const dispatch = useAppDispatch();
   const authData = useAppSelector(
-    (state) =>
-      state.requestResponse.basicAuth[state.requestResponse.selectedTab!] ??
-      defaultBasicAuth
+    (state) => state.requestResponse.basicAuth ?? defaultBasicAuth
   );
 
   const handleBlur = useCallback(
-    (key: "username" | "password", value: string) => {
+    (key: "basicAuthUsername" | "basicAuthPassword", value: string) => {
       dispatch(
-        handleChangeBasicAuth({
-          key,
-          value,
+        updateAuthorization({
+          [key]: value,
         })
       );
     },
@@ -39,7 +34,7 @@ const BasicAuth = () => {
           id="basic-auth-username"
           placeholder="Username"
           value={authData.username}
-          onBlur={(value) => handleBlur("username", value)}
+          onBlur={(value) => handleBlur("basicAuthUsername", value)}
           className="w-full"
         />
       </AuthKeyValueWrapper>
@@ -52,7 +47,7 @@ const BasicAuth = () => {
           placeholder="Password"
           type="password"
           value={authData.password}
-          onBlur={(value) => handleBlur("password", value)}
+          onBlur={(value) => handleBlur("basicAuthPassword", value)}
           className="w-full"
         />
       </AuthKeyValueWrapper>

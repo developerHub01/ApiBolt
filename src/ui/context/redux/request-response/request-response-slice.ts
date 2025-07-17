@@ -4,7 +4,8 @@ import { parseUrlParams } from "@/utils";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 
-export type TActiveTabType = "params" | "headers" | "body" | "authorization";
+export type TActiveTabType = "params" | "headers" | "body";
+export type TAuthAddTo = "header" | "query";
 
 const generateNewMetaDataItem = (type?: TMetaTableType) => ({
   id: uuidv4(),
@@ -33,6 +34,26 @@ export type EnvironmentPayloadInterface = Omit<
   EnvironmentInterface,
   "createdAt"
 >;
+
+export interface AuthorizationPayloadInterface {
+  id: string;
+  type: TAuthType;
+  projectId: string;
+  apiKeyKey: string;
+  apiKeyValue: string;
+  apiKeyAddTo: TAuthAddTo;
+  /* Bearer Token Auth ============ */
+  bearerToken: string;
+  /* Basic Auth =========== */
+  basicAuthUsername: string;
+  basicAuthPassword: string;
+  /* JWT Bearer Auth ============ */
+  jwtAlgo: string;
+  jwtSecret: string;
+  jwtPayload: string;
+  jwtHeaderPrefix: string;
+  jwtAddTo: TAuthAddTo;
+}
 
 export interface RequestListItemInterface {
   id: string;
@@ -182,7 +203,7 @@ export interface StatusDataInterface {
 export interface APIKeyInterface {
   key: string;
   value: string;
-  addTo: "header" | "query";
+  addTo: TAuthAddTo;
 }
 export type TBearerToken = string;
 export interface BasicAuthInterface {
@@ -194,7 +215,7 @@ export interface JWTBearerAuthInterface {
   secret: string;
   payload: string;
   headerPrefix: string;
-  addTo: "header" | "query";
+  addTo: TAuthAddTo;
 }
 
 // export const fetchApiUniformError = (error: unknown): ResponseInterface => {
@@ -469,22 +490,22 @@ interface RequestResponseState {
   xWWWFormUrlencodedData: Record<string, Array<ParamInterface>>;
   isDownloadRequestWithBase64: Record<string, boolean>;
   requestIdShouldFetch: string;
-  authType: Record<string, TAuthType>;
-  apiKeyAuth: Record<string, APIKeyInterface>;
+  authType: TAuthType;
+  apiKeyAuth: APIKeyInterface;
   /**
    * convert
    * const token = btoa(`${username}:${password}`);
    * headers["Authorization"] = `Basic ${token}`;
    * when to request the API
    */
-  basicAuth: Record<string, BasicAuthInterface>;
+  basicAuth: BasicAuthInterface;
 
   /**
    * convert
    * Authorization: `Bearer ${bearerToken}`
    * when to request the API
    */
-  bearerTokenAuth: Record<string, TBearerToken>;
+  bearerTokenAuth: TBearerToken;
 
   /**
    * convert
@@ -492,7 +513,7 @@ interface RequestResponseState {
    * based on the data
    * when to request the API
    */
-  jwtBearerAuth: Record<string, JWTBearerAuthInterface>;
+  jwtBearerAuth: JWTBearerAuthInterface;
 
   folderTitle: Record<string, string>;
   folderDescription: Record<string, string>;
@@ -536,11 +557,11 @@ const initialState: RequestResponseState = {
   xWWWFormUrlencodedData: {},
   isDownloadRequestWithBase64: {},
   requestIdShouldFetch: "",
-  authType: {},
-  apiKeyAuth: {},
-  basicAuth: {},
-  bearerTokenAuth: {},
-  jwtBearerAuth: {},
+  authType: "no-auth",
+  apiKeyAuth: defaultApiKey,
+  basicAuth: defaultBasicAuth,
+  bearerTokenAuth: "",
+  jwtBearerAuth: defaultJWTBearerAuth,
 
   folderTitle: {},
   folderDescription: {},
@@ -575,6 +596,54 @@ export const requestResponseSlice = createSlice({
       state.environmentsList = action.payload;
     },
     /* =============== Environment reducers end ============= */
+
+    /* =============== Authorization reducers start ============= */
+    handleAuthorizations: (
+      state,
+      action: PayloadAction<AuthorizationPayloadInterface>
+    ) => {
+      if (!state.activeProjectId) return;
+
+      const {
+        type,
+        apiKeyKey,
+        apiKeyValue,
+        apiKeyAddTo,
+        /* Bearer Token Auth ============ */
+        bearerToken,
+        /* Basic Auth =========== */
+        basicAuthUsername,
+        basicAuthPassword,
+        /* JWT Bearer Auth ============ */
+        jwtAlgo,
+        jwtSecret,
+        jwtPayload,
+        jwtHeaderPrefix,
+        jwtAddTo,
+      } = action.payload;
+
+      console.log("handleAuthorizations", action.payload);
+      state.authType = type;
+
+      state.apiKeyAuth = {
+        key: apiKeyKey ?? "",
+        value: apiKeyValue ?? "",
+        addTo: apiKeyAddTo ?? "header",
+      };
+      state.bearerTokenAuth = bearerToken ?? "";
+      state.basicAuth = {
+        username: basicAuthUsername ?? "",
+        password: basicAuthPassword ?? "",
+      };
+      state.jwtBearerAuth = {
+        algo: jwtAlgo ?? "",
+        secret: jwtSecret ?? "",
+        payload: jwtPayload ?? "",
+        headerPrefix: jwtHeaderPrefix ?? "Bearer",
+        addTo: jwtAddTo ?? "header",
+      };
+    },
+    /* =============== Authorization reducers end ============= */
 
     handleLoadRequestList: (
       state,
@@ -819,9 +888,6 @@ export const requestResponseSlice = createSlice({
         payload?.body?.xWWWFormUrlencodedData ??
         state.xWWWFormUrlencodedData[id] ??
         [];
-      state.authType[id] =
-        payload?.authorization.type ?? state.authType[id] ?? "no-auth";
-
       state.loadedRequestList[id] = true;
     },
     handleUpdateRequestResponseSelectedTab: (
@@ -1044,122 +1110,119 @@ export const requestResponseSlice = createSlice({
     handleChangeAuthType: (
       state,
       action: PayloadAction<{
-        id?: string;
         type: TAuthType;
       }>
     ) => {
       const { type } = action.payload;
-      const id = action.payload.id ?? state.selectedTab;
-      if (!id) return;
 
-      state.authType[id] = type;
+      state.authType = type;
     },
-    handleSetAPIKey: (
-      state,
-      action: PayloadAction<{
-        id?: string;
-        value: APIKeyInterface;
-      }>
-    ) => {
-      const { value } = action.payload;
-      const id = action.payload.id ?? state.selectedTab;
-      if (!id) return;
+    // handleSetAPIKey: (
+    //   state,
+    //   action: PayloadAction<{
+    //     id?: string;
+    //     value: APIKeyInterface;
+    //   }>
+    // ) => {
+    //   const { value } = action.payload;
+    //   const id = action.payload.id ?? state.selectedTab;
+    //   if (!id) return;
 
-      state.apiKeyAuth[id] = value;
-    },
-    handleChangeAPIKey: (
-      state,
-      action: PayloadAction<{
-        id?: string;
-        key: "key" | "value" | "addTo";
-        value: string;
-      }>
-    ) => {
-      const { value, key } = action.payload;
-      const id = action.payload.id ?? state.selectedTab;
-      if (!id) return;
+    //   state.apiKeyAuth[id] = value;
+    // },
+    // handleChangeAPIKey: (
+    //   state,
+    //   action: PayloadAction<{
+    //     id?: string;
+    //     key: "key" | "value" | "addTo";
+    //     value: string;
+    //   }>
+    // ) => {
+    //   const { value, key } = action.payload;
+    //   const id = action.payload.id ?? state.selectedTab;
+    //   if (!id) return;
 
-      state.apiKeyAuth[id] = {
-        ...defaultApiKey,
-        ...(state.apiKeyAuth[id] ?? {}),
-        [key]: value,
-      };
-    },
-    handleSetBasicAuth: (
-      state,
-      action: PayloadAction<{
-        id?: string;
-        value: BasicAuthInterface;
-      }>
-    ) => {
-      const { value } = action.payload;
-      const id = action.payload.id ?? state.selectedTab;
-      if (!id) return;
+    //   state.apiKeyAuth[id] = {
+    //     ...defaultApiKey,
+    //     ...(state.apiKeyAuth[id] ?? {}),
+    //     [key]: value,
+    //   };
+    // },
+    // handleSetBasicAuth: (
+    //   state,
+    //   action: PayloadAction<{
+    //     id?: string;
+    //     value: BasicAuthInterface;
+    //   }>
+    // ) => {
+    //   const { value } = action.payload;
+    //   const id = action.payload.id ?? state.selectedTab;
+    //   if (!id) return;
 
-      state.basicAuth[id] = value;
-    },
-    handleChangeBasicAuth: (
-      state,
-      action: PayloadAction<{
-        id?: string;
-        key: "username" | "password";
-        value: string;
-      }>
-    ) => {
-      const { value, key } = action.payload;
-      const id = action.payload.id ?? state.selectedTab;
-      if (!id) return;
+    //   state.basicAuth[id] = value;
+    // },
+    // handleChangeBasicAuth: (
+    //   state,
+    //   action: PayloadAction<{
+    //     id?: string;
+    //     key: "username" | "password";
+    //     value: string;
+    //   }>
+    // ) => {
+    //   const { value, key } = action.payload;
+    //   const id = action.payload.id ?? state.selectedTab;
+    //   if (!id) return;
 
-      state.basicAuth[id] = {
-        ...defaultBasicAuth,
-        ...(state.basicAuth[id] ?? {}),
-        [key]: value,
-      };
-    },
-    handleChangeBearerTokenAuth: (
-      state,
-      action: PayloadAction<{
-        id?: string;
-        value: string;
-      }>
-    ) => {
-      const { value } = action.payload;
-      const id = action.payload.id ?? state.selectedTab;
-      if (!id) return;
+    //   state.basicAuth[id] = {
+    //     ...defaultBasicAuth,
+    //     ...(state.basicAuth[id] ?? {}),
+    //     [key]: value,
+    //   };
+    // },
+    // handleChangeBearerTokenAuth: (
+    //   state,
+    //   action: PayloadAction<{
+    //     id?: string;
+    //     value: string;
+    //   }>
+    // ) => {
+    //   const { value } = action.payload;
+    //   const id = action.payload.id ?? state.selectedTab;
+    //   if (!id) return;
 
-      state.bearerTokenAuth[id] = value;
-    },
-    handleSetJWTBearerAuth: (
-      state,
-      action: PayloadAction<{
-        id?: string;
-        value: JWTBearerAuthInterface;
-      }>
-    ) => {
-      const { value } = action.payload;
-      const id = action.payload.id ?? state.selectedTab;
-      if (!id) return;
+    //   state.bearerTokenAuth[id] = value;
+    // },
+    // handleSetJWTBearerAuth: (
+    //   state,
+    //   action: PayloadAction<{
+    //     id?: string;
+    //     value: JWTBearerAuthInterface;
+    //   }>
+    // ) => {
+    //   const { value } = action.payload;
+    //   const id = action.payload.id ?? state.selectedTab;
+    //   if (!id) return;
 
-      state.jwtBearerAuth[id] = value;
-    },
-    handleChangeJWTBearerAuth: (
-      state,
-      action: PayloadAction<{
-        id?: string;
-        key: "algo" | "secret" | "payload" | "headerPrefix" | "addTo";
-        value: string;
-      }>
-    ) => {
-      const { key, value } = action.payload;
-      const id = action.payload.id ?? state.selectedTab;
-      if (!id) return;
+    //   state.jwtBearerAuth[id] = value;
+    // },
+    // handleChangeJWTBearerAuth: (
+    //   state,
+    //   action: PayloadAction<{
+    //     id?: string;
+    //     key: "algo" | "secret" | "payload" | "headerPrefix" | "addTo";
+    //     value: string;
+    //   }>
+    // ) => {
+    //   const { key, value } = action.payload;
+    //   const id = action.payload.id ?? state.selectedTab;
+    //   if (!id) return;
 
-      state.jwtBearerAuth[id] = {
-        ...defaultJWTBearerAuth,
-        ...(state.jwtBearerAuth[id] ?? {}),
-        [key]: value,
-      };
-    },
+    //   state.jwtBearerAuth[id] = {
+    //     ...defaultJWTBearerAuth,
+    //     ...(state.jwtBearerAuth[id] ?? {}),
+    //     [key]: value,
+    //   };
+    // },
     handleIsDownloadRequestWithBase64: (
       state,
       action: PayloadAction<boolean>
@@ -1188,12 +1251,10 @@ export const requestResponseSlice = createSlice({
       state.params[id] = [];
       state.headers[id] = [];
       state.headers[id] = [];
-      state.authType[id] = "no-auth";
-      state.authType[id] = "no-auth";
-      delete state.basicAuth[id];
-      delete state.bearerTokenAuth[id];
-      delete state.jwtBearerAuth[id];
-      delete state.apiKeyAuth[id];
+      // delete state.basicAuth[id];
+      // delete state.bearerTokenAuth[id];
+      // delete state.jwtBearerAuth[id];
+      // delete state.apiKeyAuth[id];
       state.requestBodyType[id] = "none";
       state.rawRequestBodyType[id] = "json";
       state.formData[id] = [];
@@ -1530,6 +1591,8 @@ export const {
 
   handleLoadEnvironmentsList,
 
+  handleAuthorizations,
+
   handleLoadRequestList,
   handleLoadOpenFolderList,
   handleChangeIsRequestListLoaded,
@@ -1566,13 +1629,13 @@ export const {
   handleChangeApiUrl,
   handleChangeRequestResponseSize,
   handleChangeAuthType,
-  handleSetAPIKey,
-  handleChangeAPIKey,
-  handleSetBasicAuth,
-  handleChangeBasicAuth,
-  handleChangeBearerTokenAuth,
-  handleSetJWTBearerAuth,
-  handleChangeJWTBearerAuth,
+  // handleSetAPIKey,
+  // handleChangeAPIKey,
+  // handleSetBasicAuth,
+  // handleChangeBasicAuth,
+  // handleChangeBearerTokenAuth,
+  // handleSetJWTBearerAuth,
+  // handleChangeJWTBearerAuth,
   handleIsDownloadRequestWithBase64,
   handleClearRequestResponse,
   handleAddMetaData,

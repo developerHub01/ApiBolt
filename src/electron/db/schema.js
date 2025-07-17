@@ -38,3 +38,33 @@ export const activeProjectTable = sqliteTable("active_project_table", {
   id: text().primaryKey().default(ACTIVE_PROJECT_ID),
   activeProjectId: text("active_project_id"),
 });
+
+export const authorizationTable = sqliteTable("authorization_table", {
+  id: text()
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  type: text()
+    .notNull()
+    .default(
+      "no-auth"
+    ) /* "no-auth" | "basic-auth" | "bearer-token" | "jwt-bearer" | "api-key"; */,
+  projectId: text()
+    .notNull()
+    .unique()
+    .references(() => projectTable.id),
+  /* API Key Auth =========== */
+  apiKeyKey: text(),
+  apiKeyValue: text(),
+  apiKeyAddTo: text() /* "header" | "query" */,
+  /* Bearer Token Auth ============ */
+  bearerToken: text(),
+  /* Basic Auth =========== */
+  basicAuthUsername: text(),
+  basicAuthPassword: text(),
+  /* JWT Bearer Auth ============ */
+  jwtAlgo: text(),
+  jwtSecret: text(),
+  jwtPayload: text(),
+  jwtHeaderPrefix: text(),
+  jwtAddTo: text() /* "header" | "query" */,
+});

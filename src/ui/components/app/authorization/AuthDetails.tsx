@@ -1,9 +1,8 @@
 import { useAppSelector } from "@/context/redux/hooks";
 
 const AuthDetails = () => {
-  const authType = useAppSelector(
-    (state) => state.requestResponse.authType[state.requestResponse.selectedTab!]
-  );
+  const authType = useAppSelector((state) => state.requestResponse.authType);
+  
   if (authType === "no-auth") return null;
 
   return (

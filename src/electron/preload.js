@@ -119,3 +119,12 @@ contextBridge.exposeInMainWorld("electronAPIEnvironmentsDB", {
   deleteEnvironments: async (id) =>
     await ipcRenderer.invoke("deleteEnvironments", id),
 });
+
+contextBridge.exposeInMainWorld("electronAPIAuthorizationDB", {
+  getAuth: async () => await ipcRenderer.invoke("getAuth"),
+  createAuth: async () => await ipcRenderer.invoke("createAuth"),
+  updateAuth: async (...payload) =>
+    await ipcRenderer.invoke("updateAuth", ...payload),
+  deleteAuth: async (...payload) =>
+    await ipcRenderer.invoke("deleteAuth", ...payload),
+});

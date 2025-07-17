@@ -10,6 +10,7 @@ import {
   Container as EnvironmentsIcon,
   type LucideIcon,
   Layers as ProjectsIcon,
+  KeyRound as AuthorizationIcon,
 } from "lucide-react";
 import {
   // handleChangeActiveTab,
@@ -42,11 +43,18 @@ const menuList: Array<{
     label: "Environments",
     path: "/environments",
   },
+  {
+    id: "authorization",
+    Icon: AuthorizationIcon,
+    label: "Authorization",
+    path: "/authorization",
+  },
 ];
 
 const hiddenTabsWhenNotProjectSelected: Array<TSidebarTab> = [
   "collections",
   "environments",
+  "authorization"
 ];
 
 const SidebarMenu = memo(() => {

@@ -17,8 +17,8 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "db:generate": "npx drizzle-kit generate",
-    "db:migrate": "npx drizzle-kit migrate"
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate"
   },
   "keywords": [],
   "author": {
@@ -55,7 +55,7 @@
     "@uiw/react-codemirror": "^4.23.12",
     "axios": "^1.9.0",
     "axios-cookiejar-support": "^6.0.2",
-    "better-sqlite3": "^11.10.0",
+    "better-sqlite3": "^12.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",

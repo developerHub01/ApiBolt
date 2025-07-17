@@ -15,6 +15,8 @@ import EnvironmentLayout from "@/pages/app/environment/layout";
 import EnvironmentPage from "@/pages/app/environment/page";
 import ProjectsLayout from "@/pages/app/projects/layout";
 import ProjectsPage from "@/pages/app/projects/page";
+import AuthorizationLayout from "@/pages/app/authorization/layout";
+import AuthorizationPage from "@/pages/app/authorization/page";
 
 const routes = [
   {
@@ -67,6 +69,16 @@ const routes = [
               {
                 path: "",
                 element: <ProjectsPage />,
+              },
+            ],
+          },
+          {
+            path: "authorization",
+            element: <AuthorizationLayout />,
+            children: [
+              {
+                path: "",
+                element: <AuthorizationPage />,
               },
             ],
           },

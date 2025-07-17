@@ -4,19 +4,20 @@ import {
   defaultFolderDescription,
   defaultFolderTitle,
   handleAddTab,
+  handleAuthorizations,
   handleChangeActiveProject,
-  handleChangeApiUrl,
-  handleChangeAuthType,
-  handleChangeBearerTokenAuth,
+  // handleChangeApiUrl,
+  // handleChangeAuthType,
+  // handleChangeBearerTokenAuth,
   handleChangeDeleteFolderOrRequestId,
   handleChangeFolderDescription,
   handleChangeFolderTitle,
   handleChangeIsRequestListLoaded,
-  handleChangeRawData,
-  handleChangeRawRequestBodyType,
-  handleChangeRequestBodyType,
+  // handleChangeRawData,
+  // handleChangeRawRequestBodyType,
+  // handleChangeRequestBodyType,
   handleChangeRequestName,
-  handleChangeRequestResponseSize,
+  // handleChangeRequestResponseSize,
   handleChangeSelectedMethod,
   handleChangeSelectedTab,
   handleChangeTabList,
@@ -29,35 +30,36 @@ import {
   handleLoadProjectsList,
   handleLoadRequestList,
   handleRemoveTab,
-  handleSetAPIKey,
-  handleSetBasicAuth,
-  handleSetBinary,
-  handleSetFormData,
-  handleSetHeaders,
-  handleSetJWTBearerAuth,
-  handleSetParams,
-  handleSetResponse,
-  handleSetXWWWFormUrlencodedData,
+  // handleSetAPIKey,
+  // handleSetBasicAuth,
+  // handleSetBinary,
+  // handleSetFormData,
+  // handleSetHeaders,
+  // handleSetJWTBearerAuth,
+  // handleSetParams,
+  // handleSetResponse,
+  // handleSetXWWWFormUrlencodedData,
   handleToggleFolder,
   handleUpdateRequestResponseSelectedTab,
-  type APIKeyInterface,
-  type BasicAuthInterface,
+  // type APIKeyInterface,
+  type AuthorizationPayloadInterface,
+  // type BasicAuthInterface,
   type EnvironmentInterface,
   type EnvironmentPayloadInterface,
-  type FileMetadataInterface,
-  type FormDataFileMetadataInterface,
-  type FormDataInterface,
-  type JWTBearerAuthInterface,
+  // type FileMetadataInterface,
+  // type FormDataFileMetadataInterface,
+  // type FormDataInterface,
+  // type JWTBearerAuthInterface,
   type ProjectInterface,
   type RequestListItemInterface,
   type ResponseFileDataBackendInterface,
-  type ResponseFileDataInterface,
+  // type ResponseFileDataInterface,
   type ResponseFolderDataInterface,
   type THTTPMethods,
 } from "@/context/redux/request-response/request-response-slice";
-import { base64ToFileObject, converterFileToMetadata } from "@/utils";
-import { handleCheckImportedRequestFileValidator } from "@/context/redux/request-response/utils";
-import type { TAuthType, TMethod } from "@/types";
+// import { base64ToFileObject, converterFileToMetadata } from "@/utils";
+// import { handleCheckImportedRequestFileValidator } from "@/context/redux/request-response/utils";
+import type { TMethod } from "@/types";
 import { v4 as uuidv4 } from "uuid";
 
 export const loadProjectList = createAsyncThunk<
@@ -244,6 +246,39 @@ export const deleteEnvironments = createAsyncThunk<
 ===== Environment end =========
 ================================= */
 
+/* ==============================
+===== Auth start =========
+================================= */
+export const loadAuthorization = createAsyncThunk<
+  AuthorizationPayloadInterface,
+  void,
+  { dispatch: AppDispatch; state: RootState }
+>("request-response/loadAuthorization", async (_, { dispatch }) => {
+  const authorizationData = await window.electronAPIAuthorizationDB.getAuth();
+
+  console.log("authorizationData", authorizationData);
+
+  dispatch(handleAuthorizations(authorizationData));
+
+  return authorizationData;
+});
+export const updateAuthorization = createAsyncThunk<
+  boolean,
+  Partial<Omit<AuthorizationPayloadInterface, "id">>,
+  { dispatch: AppDispatch; state: RootState }
+>("request-response/updateAuthorization", async (payload, { dispatch }) => {
+  const response = await window.electronAPIAuthorizationDB.updateAuth({
+    ...payload,
+  });
+
+  if (response) dispatch(loadAuthorization());
+
+  return response;
+});
+/* ==============================
+===== Auth end =========
+================================= */
+
 export const loadRequestList = createAsyncThunk<
   void,
   void,
@@ -304,265 +339,265 @@ export const loadRequestData = createAsyncThunk<
   }
 );
 
-export const getDownloadableRequestData = createAsyncThunk<
-  ResponseFileDataInterface | null,
-  string,
-  { state: RootState }
->("request-response/getDownloadableRequestData", async (id, { getState }) => {
-  const state = getState() as RootState;
+// export const getDownloadableRequestData = createAsyncThunk<
+//   ResponseFileDataInterface | null,
+//   string,
+//   { state: RootState }
+// >("request-response/getDownloadableRequestData", async (id, { getState }) => {
+//   const state = getState() as RootState;
 
-  if (!state.requestResponse.loadedRequestList[id]) return null;
+//   if (!state.requestResponse.loadedRequestList[id]) return null;
 
-  const formDataWithMetadata: Array<FormDataFileMetadataInterface> =
-    await Promise.all(
-      (state.requestResponse.formData[id] ?? []).map(async (data) => {
-        let value: Array<FileMetadataInterface> | string = "";
-        if (
-          Array.isArray(data.value) &&
-          data.value.every((v) => v instanceof File)
-        ) {
-          value = await Promise.all(
-            data.value.map((file) =>
-              converterFileToMetadata(
-                file,
-                state.requestResponse.isDownloadRequestWithBase64[id]
-              )
-            )
-          );
-        } else if (typeof data.value === "string") {
-          value = data.value;
-        }
+//   const formDataWithMetadata: Array<FormDataFileMetadataInterface> =
+//     await Promise.all(
+//       (state.requestResponse.formData[id] ?? []).map(async (data) => {
+//         let value: Array<FileMetadataInterface> | string = "";
+//         if (
+//           Array.isArray(data.value) &&
+//           data.value.every((v) => v instanceof File)
+//         ) {
+//           value = await Promise.all(
+//             data.value.map((file) =>
+//               converterFileToMetadata(
+//                 file,
+//                 state.requestResponse.isDownloadRequestWithBase64[id]
+//               )
+//             )
+//           );
+//         } else if (typeof data.value === "string") {
+//           value = data.value;
+//         }
 
-        return {
-          ...data,
-          value,
-        };
-      })
-    );
+//         return {
+//           ...data,
+//           value,
+//         };
+//       })
+//     );
 
-  const authorizationData =
-    state.requestResponse.authType[id] === "api-key"
-      ? state.requestResponse.apiKeyAuth[id]
-      : state.requestResponse.authType[id] === "basic-auth"
-        ? state.requestResponse.basicAuth[id]
-        : state.requestResponse.authType[id] === "bearer-token"
-          ? state.requestResponse.bearerTokenAuth[id]
-          : state.requestResponse.authType[id] === "jwt-bearer"
-            ? state.requestResponse.jwtBearerAuth[id]
-            : undefined;
+//   // const authorizationData =
+//   //   state.requestResponse.authType[id] === "api-key"
+//   //     ? state.requestResponse.apiKeyAuth[id]
+//   //     : state.requestResponse.authType[id] === "basic-auth"
+//   //       ? state.requestResponse.basicAuth[id]
+//   //       : state.requestResponse.authType[id] === "bearer-token"
+//   //         ? state.requestResponse.bearerTokenAuth[id]
+//   //         : state.requestResponse.authType[id] === "jwt-bearer"
+//   //           ? state.requestResponse.jwtBearerAuth[id]
+//   //           : undefined;
 
-  const downloadData: ResponseFileDataInterface = {
-    name: state.requestResponse.requestList[id].name,
-    url: state.requestResponse.apiUrl[id],
-    method: state.requestResponse.requestList[id].method!,
-    params: state.requestResponse.params[id],
-    headers: state.requestResponse.headers[id],
-    authorization: {
-      type: state.requestResponse.authType[id],
-      data: authorizationData,
-    },
-    body: {
-      selected: state.requestResponse.requestBodyType[id],
-      rawData: state.requestResponse.rawData[id],
-      formData: formDataWithMetadata,
-      xWWWFormUrlencodedData: state.requestResponse.xWWWFormUrlencodedData[id],
-      binaryData:
-        state.requestResponse.binaryData[id] &&
-        (await converterFileToMetadata(
-          state.requestResponse.binaryData[id],
-          state.requestResponse.isDownloadRequestWithBase64[id]
-        )),
-      rawRequestBodyType: state.requestResponse.rawRequestBodyType[id],
-    },
-    response: state.requestResponse.response[id],
-    size: {
-      requestSize: state.requestResponse.requestSize[id],
-      responseSize: state.requestResponse.responseSize[id],
-    },
-  };
+//   // const downloadData: ResponseFileDataInterface = {
+//   //   name: state.requestResponse.requestList[id].name,
+//   //   url: state.requestResponse.apiUrl[id],
+//   //   method: state.requestResponse.requestList[id].method!,
+//   //   params: state.requestResponse.params[id],
+//   //   headers: state.requestResponse.headers[id],
+//   //   // authorization: {
+//   //   //   type: state.requestResponse.authType[id],
+//   //   //   data: authorizationData,
+//   //   // },
+//   //   body: {
+//   //     selected: state.requestResponse.requestBodyType[id],
+//   //     rawData: state.requestResponse.rawData[id],
+//   //     formData: formDataWithMetadata,
+//   //     xWWWFormUrlencodedData: state.requestResponse.xWWWFormUrlencodedData[id],
+//   //     binaryData:
+//   //       state.requestResponse.binaryData[id] &&
+//   //       (await converterFileToMetadata(
+//   //         state.requestResponse.binaryData[id],
+//   //         state.requestResponse.isDownloadRequestWithBase64[id]
+//   //       )),
+//   //     rawRequestBodyType: state.requestResponse.rawRequestBodyType[id],
+//   //   },
+//   //   response: state.requestResponse.response[id],
+//   //   size: {
+//   //     requestSize: state.requestResponse.requestSize[id],
+//   //     responseSize: state.requestResponse.responseSize[id],
+//   //   },
+//   // };
 
-  return downloadData;
-});
+//   return downloadData;
+// });
 
-export const importRequestFromFile = createAsyncThunk<
-  void,
-  { file: File; selectedTab: string; cb?: (message: string) => void },
-  { dispatch: AppDispatch; state: RootState }
->(
-  "request-response/importRequestFromFile",
-  async ({ file, selectedTab, cb }, { dispatch }) => {
-    try {
-      const text = await file.text();
-      const jsonData: ResponseFileDataInterface = JSON.parse(text);
+// export const importRequestFromFile = createAsyncThunk<
+//   void,
+//   { file: File; selectedTab: string; cb?: (message: string) => void },
+//   { dispatch: AppDispatch; state: RootState }
+// >(
+//   "request-response/importRequestFromFile",
+//   async ({ file, selectedTab, cb }, { dispatch }) => {
+//     try {
+//       const text = await file.text();
+//       const jsonData: ResponseFileDataInterface = JSON.parse(text);
 
-      if (!handleCheckImportedRequestFileValidator(jsonData))
-        throw new Error("File json is not valid");
+//       if (!handleCheckImportedRequestFileValidator(jsonData))
+//         throw new Error("File json is not valid");
 
-      const formData: Array<FormDataInterface> = jsonData.body.formData.map(
-        (data) => {
-          if (typeof data.value === "string") return data as FormDataInterface;
+//       const formData: Array<FormDataInterface> = jsonData.body.formData.map(
+//         (data) => {
+//           if (typeof data.value === "string") return data as FormDataInterface;
 
-          if (Array.isArray(data.value)) {
-            if (data.value.some((v) => !v.base64)) {
-              return { ...data, value: "" };
-            }
+//           if (Array.isArray(data.value)) {
+//             if (data.value.some((v) => !v.base64)) {
+//               return { ...data, value: "" };
+//             }
 
-            const files = data.value.map((file) =>
-              base64ToFileObject(file.base64!, file.fileName, file.mimeType)
-            );
+//             const files = data.value.map((file) =>
+//               base64ToFileObject(file.base64!, file.fileName, file.mimeType)
+//             );
 
-            return { ...data, value: files };
-          }
+//             return { ...data, value: files };
+//           }
 
-          return { ...data, value: "" };
-        }
-      );
+//           return { ...data, value: "" };
+//         }
+//       );
 
-      const binaryData = jsonData.body.binaryData?.base64
-        ? base64ToFileObject(
-            jsonData.body.binaryData.base64,
-            jsonData.body.binaryData.fileName,
-            jsonData.body.binaryData.mimeType
-          )
-        : null;
+//       const binaryData = jsonData.body.binaryData?.base64
+//         ? base64ToFileObject(
+//             jsonData.body.binaryData.base64,
+//             jsonData.body.binaryData.fileName,
+//             jsonData.body.binaryData.mimeType
+//           )
+//         : null;
 
-      const authorizationType = jsonData.authorization.type;
-      const authorizationData = jsonData.authorization.data;
+//       const authorizationType = jsonData.authorization.type;
+//       const authorizationData = jsonData.authorization.data;
 
-      dispatch(
-        handleChangeRequestName({
-          id: selectedTab,
-          name: jsonData.name,
-        })
-      );
-      dispatch(
-        handleChangeSelectedMethod({
-          id: selectedTab,
-          method: jsonData.method,
-        })
-      );
-      dispatch(
-        handleSetParams({
-          id: selectedTab,
-          params: jsonData.params,
-        })
-      );
-      dispatch(
-        handleSetHeaders({
-          id: selectedTab,
-          headers: jsonData.headers,
-        })
-      );
-      dispatch(
-        handleSetResponse({
-          id: selectedTab,
-          response: jsonData.response,
-        })
-      );
-      dispatch(
-        handleSetFormData({
-          id: selectedTab,
-          formData: formData,
-        })
-      );
-      dispatch(
-        handleSetBinary({
-          id: selectedTab,
-          binary: binaryData,
-        })
-      );
-      dispatch(
-        handleChangeRawData({
-          id: selectedTab,
-          raw: jsonData.body.rawData,
-        })
-      );
-      dispatch(
-        handleChangeRequestBodyType({
-          id: selectedTab,
-          type: jsonData.body.selected,
-        })
-      );
-      dispatch(
-        handleSetXWWWFormUrlencodedData({
-          id: selectedTab,
-          xWWWFormUrlencoded: jsonData.body.xWWWFormUrlencodedData,
-        })
-      );
-      dispatch(
-        handleChangeRawRequestBodyType({
-          id: selectedTab,
-          type: jsonData.body.rawRequestBodyType,
-        })
-      );
-      dispatch(
-        handleChangeApiUrl({
-          id: selectedTab,
-          url: jsonData.url,
-        })
-      );
-      dispatch(
-        handleChangeRequestResponseSize({
-          id: selectedTab,
-          payload: jsonData.size.requestSize,
-          type: "request",
-        })
-      );
-      dispatch(
-        handleChangeRequestResponseSize({
-          id: selectedTab,
-          payload: jsonData.size.responseSize,
-          type: "response",
-        })
-      );
-      dispatch(
-        handleChangeAuthType({
-          id: selectedTab,
-          type: authorizationType,
-        })
-      );
+//       dispatch(
+//         handleChangeRequestName({
+//           id: selectedTab,
+//           name: jsonData.name,
+//         })
+//       );
+//       dispatch(
+//         handleChangeSelectedMethod({
+//           id: selectedTab,
+//           method: jsonData.method,
+//         })
+//       );
+//       dispatch(
+//         handleSetParams({
+//           id: selectedTab,
+//           params: jsonData.params,
+//         })
+//       );
+//       dispatch(
+//         handleSetHeaders({
+//           id: selectedTab,
+//           headers: jsonData.headers,
+//         })
+//       );
+//       dispatch(
+//         handleSetResponse({
+//           id: selectedTab,
+//           response: jsonData.response,
+//         })
+//       );
+//       dispatch(
+//         handleSetFormData({
+//           id: selectedTab,
+//           formData: formData,
+//         })
+//       );
+//       dispatch(
+//         handleSetBinary({
+//           id: selectedTab,
+//           binary: binaryData,
+//         })
+//       );
+//       dispatch(
+//         handleChangeRawData({
+//           id: selectedTab,
+//           raw: jsonData.body.rawData,
+//         })
+//       );
+//       dispatch(
+//         handleChangeRequestBodyType({
+//           id: selectedTab,
+//           type: jsonData.body.selected,
+//         })
+//       );
+//       dispatch(
+//         handleSetXWWWFormUrlencodedData({
+//           id: selectedTab,
+//           xWWWFormUrlencoded: jsonData.body.xWWWFormUrlencodedData,
+//         })
+//       );
+//       dispatch(
+//         handleChangeRawRequestBodyType({
+//           id: selectedTab,
+//           type: jsonData.body.rawRequestBodyType,
+//         })
+//       );
+//       dispatch(
+//         handleChangeApiUrl({
+//           id: selectedTab,
+//           url: jsonData.url,
+//         })
+//       );
+//       dispatch(
+//         handleChangeRequestResponseSize({
+//           id: selectedTab,
+//           payload: jsonData.size.requestSize,
+//           type: "request",
+//         })
+//       );
+//       dispatch(
+//         handleChangeRequestResponseSize({
+//           id: selectedTab,
+//           payload: jsonData.size.responseSize,
+//           type: "response",
+//         })
+//       );
+//       dispatch(
+//         handleChangeAuthType({
+//           id: selectedTab,
+//           type: authorizationType,
+//         })
+//       );
 
-      switch (authorizationType as TAuthType) {
-        case "api-key":
-          dispatch(
-            handleSetAPIKey({
-              id: selectedTab,
-              value: authorizationData as APIKeyInterface,
-            })
-          );
-          break;
-        case "basic-auth":
-          dispatch(
-            handleSetBasicAuth({
-              id: selectedTab,
-              value: authorizationData as BasicAuthInterface,
-            })
-          );
-          break;
-        case "bearer-token":
-          dispatch(
-            handleChangeBearerTokenAuth({
-              id: selectedTab,
-              value: authorizationData as string,
-            })
-          );
-          break;
-        case "jwt-bearer":
-          dispatch(
-            handleSetJWTBearerAuth({
-              id: selectedTab,
-              value: authorizationData as JWTBearerAuthInterface,
-            })
-          );
-          break;
-      }
+//       switch (authorizationType as TAuthType) {
+//         case "api-key":
+//           dispatch(
+//             handleSetAPIKey({
+//               id: selectedTab,
+//               value: authorizationData as APIKeyInterface,
+//             })
+//           );
+//           break;
+//         case "basic-auth":
+//           dispatch(
+//             handleSetBasicAuth({
+//               id: selectedTab,
+//               value: authorizationData as BasicAuthInterface,
+//             })
+//           );
+//           break;
+//         case "bearer-token":
+//           dispatch(
+//             handleChangeBearerTokenAuth({
+//               id: selectedTab,
+//               value: authorizationData as string,
+//             })
+//           );
+//           break;
+//         case "jwt-bearer":
+//           dispatch(
+//             handleSetJWTBearerAuth({
+//               id: selectedTab,
+//               value: authorizationData as JWTBearerAuthInterface,
+//             })
+//           );
+//           break;
+//       }
 
-      if (cb) cb("Successfully imported");
-    } catch {
-      if (cb) cb("Request JSON file is not valid");
-    }
-  }
-);
+//       if (cb) cb("Successfully imported");
+//     } catch {
+//       if (cb) cb("Request JSON file is not valid");
+//     }
+//   }
+// );
 
 export const createSingleRequest = createAsyncThunk<
   void,

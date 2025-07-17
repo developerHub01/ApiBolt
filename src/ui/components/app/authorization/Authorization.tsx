@@ -1,6 +1,6 @@
-import AuthTypeTab from "@/components/app/request/request/meta-data/authorization/AuthTypeTab";
-import AuthContent from "@/components/app/request/request/meta-data/authorization/content/AuthContent";
-import AuthDetails from "@/components/app/request/request/meta-data/authorization/AuthDetails";
+import AuthTypeTab from "@/components/app/authorization/AuthTypeTab";
+import AuthContent from "@/components/app/authorization/content/AuthContent";
+import AuthDetails from "@/components/app/authorization/AuthDetails";
 
 const Authorization = () => {
   return (
