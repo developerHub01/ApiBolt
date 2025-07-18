@@ -10,13 +10,15 @@ const AuthContent = () => {
   const authType = useAppSelector((state) => state.requestResponse.authType);
 
   return (
-    <ScrollArea className="w-full h-full pl-2 md:pl-2.5 ">
-      {authType === "no-auth" && <NoAuth />}
-      {authType === "basic-auth" && <BasicAuth />}
-      {authType === "bearer-token" && <BearerToken />}
-      {authType === "jwt-bearer" && <JWTBearer />}
-      {authType === "api-key" && <APIKey />}
-    </ScrollArea>
+    <div className="h-full min-h-0 w-full">
+      <ScrollArea className="w-full h-full min-h-0 py-2">
+        {authType === "no-auth" && <NoAuth />}
+        {authType === "basic-auth" && <BasicAuth />}
+        {authType === "bearer-token" && <BearerToken />}
+        {authType === "jwt-bearer" && <JWTBearer />}
+        {authType === "api-key" && <APIKey />}
+      </ScrollArea>
+    </div>
   );
 };
 

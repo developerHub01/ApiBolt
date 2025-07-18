@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/select";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { updateAuthorization } from "@/context/redux/request-response/request-response-thunk";
+import { cn } from "@/lib/utils";
 import type { TAuthType } from "@/types";
 
 const authTypeList: Array<{
@@ -36,7 +37,11 @@ const authTypeList: Array<{
   },
 ];
 
-const AuthTypeTab = () => {
+interface Props {
+  className?: string;
+}
+
+const AuthTypeTab = ({ className = "" }: Props) => {
   const dispatch = useAppDispatch();
   const authType = useAppSelector((state) => state.requestResponse.authType);
   useAppSelector((state) => console.log(state.requestResponse));
@@ -54,7 +59,7 @@ const AuthTypeTab = () => {
         )
       }
     >
-      <SelectTrigger className="w-full capitalize">
+      <SelectTrigger className={cn("capitalize", className)} size="sm">
         <SelectValue placeholder="Select auth" />
       </SelectTrigger>
       <SelectContent>

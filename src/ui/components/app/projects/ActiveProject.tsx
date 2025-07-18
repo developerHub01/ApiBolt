@@ -86,7 +86,7 @@ const ActiveProject = () => {
   if (!activeProject) return null;
 
   return (
-    <div className="w-full border-2 border-dotted rounded-sm p-4 flex gap-2 bg-accent/50 group">
+    <div className="w-full border-2 border-dotted rounded-md p-4 flex gap-2 bg-accent/50 group">
       <div className="flex flex-col flex-1">
         <p className="text-sm font-semibold pb-0.5">Active Project</p>
         <h3 className="text-xl font-bold flex items-center gap-3 pb-3">
