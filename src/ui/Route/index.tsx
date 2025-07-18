@@ -6,10 +6,10 @@ import {
 } from "react-router-dom";
 import AppLayout from "@/pages/app/layout";
 import AppPage from "@/pages/app/page";
-import FolderLayout from "@/pages/app/folder/[id]/layout";
-import FolderPage from "@/pages/app/folder/[id]/page";
-import RequestLayout from "@/pages/app/request/[id]/layout";
-import RequestPage from "@/pages/app/request/[id]/page";
+import FolderLayout from "@/pages/app/collections/folder/[id]/layout";
+import FolderPage from "@/pages/app/collections/folder/[id]/page";
+import RequestLayout from "@/pages/app/collections/request/[id]/layout";
+import RequestPage from "@/pages/app/collections/request/[id]/page";
 import { isElectron } from "@/utils/electron";
 import EnvironmentLayout from "@/pages/app/environment/layout";
 import EnvironmentPage from "@/pages/app/environment/page";
@@ -17,6 +17,7 @@ import ProjectsLayout from "@/pages/app/projects/layout";
 import ProjectsPage from "@/pages/app/projects/page";
 import AuthorizationLayout from "@/pages/app/authorization/layout";
 import AuthorizationPage from "@/pages/app/authorization/page";
+import CollectionsLayout from "@/pages/app/collections/layout";
 
 const routes = [
   {
@@ -33,22 +34,28 @@ const routes = [
             element: <AppPage />,
           },
           {
-            path: "folder/:id",
-            element: <FolderLayout />,
+            path: "collections",
+            element: <CollectionsLayout />,
             children: [
               {
-                path: "",
-                element: <FolderPage />,
+                path: "folder/:id",
+                element: <FolderLayout />,
+                children: [
+                  {
+                    path: "",
+                    element: <FolderPage />,
+                  },
+                ],
               },
-            ],
-          },
-          {
-            path: "request/:id",
-            element: <RequestLayout />,
-            children: [
               {
-                path: "",
-                element: <RequestPage />,
+                path: "request/:id",
+                element: <RequestLayout />,
+                children: [
+                  {
+                    path: "",
+                    element: <RequestPage />,
+                  },
+                ],
               },
             ],
           },

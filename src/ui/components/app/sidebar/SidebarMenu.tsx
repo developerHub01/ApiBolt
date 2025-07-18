@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -13,10 +13,10 @@ import {
   KeyRound as AuthorizationIcon,
 } from "lucide-react";
 import {
-  // handleChangeActiveTab,
+  handleChangeActiveTab,
   type TSidebarTab,
 } from "@/context/redux/sidebar/sidebar-slice";
-import { useAppSelector } from "@/context/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { Link } from "react-router-dom";
 
 const menuList: Array<{
@@ -54,17 +54,17 @@ const menuList: Array<{
 const hiddenTabsWhenNotProjectSelected: Array<TSidebarTab> = [
   "collections",
   "environments",
-  "authorization"
+  "authorization",
 ];
 
 const SidebarMenu = memo(() => {
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   const activeTab = useAppSelector((state) => state.sidebar.activeTab);
 
-  // const handleClick = useCallback(
-  //   (id: TSidebarTab) => dispatch(handleChangeActiveTab(id)),
-  //   [dispatch]
-  // );
+  const handleClick = useCallback(
+    (id: TSidebarTab) => dispatch(handleChangeActiveTab(id)),
+    [dispatch]
+  );
   const activeProjectId = useAppSelector(
     (state) => state.requestResponse.activeProjectId
   );
@@ -83,6 +83,7 @@ const SidebarMenu = memo(() => {
                   size={"icon"}
                   variant={activeTab === id ? "default" : "outline"}
                   className="mt-auto"
+                  onClick={() => handleClick(id)}
                 >
                   <Icon />
                 </Button>

@@ -1,6 +1,6 @@
 // import ApiUrl from "@/components/app/request/request/api-url/ApiUrl";
 // import RequestMetaData from "@/components/app/request/request/meta-data/RequestMetaData";
-// import RequestTop from "@/components/app/request/request/request-top/RequestTop";
+import RequestTop from "@/components/app/request/request/request-top/RequestTop";
 // import RequestPanel from "@/components/app/request/request/RequestPanel";
 // import ResizableWrapper from "@/components/app/request/ResizableWrapper";
 // import ResponsePanel from "@/components/app/request/response/ResponsePanel";
@@ -22,12 +22,12 @@ const RequestPage = () => {
 
   return (
     <div className="flex flex-col w-full h-full items-center justify-center">
-      {/* <div className="w-full p-2.5 flex flex-col gap-2">
+      <div className="w-full p-2.5 flex flex-col gap-2">
         <RequestTop />
-        <ApiUrl />
-        <RequestMetaData />
+        {/* <ApiUrl />
+        <RequestMetaData /> */}
       </div>
-      <ResizableWrapper>
+      {/* <ResizableWrapper>
         <RequestPanel />
         <ResizableHandle />
         <ResponsePanel />
