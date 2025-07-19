@@ -68,3 +68,20 @@ export const authorizationTable = sqliteTable("authorization_table", {
   jwtHeaderPrefix: text(),
   jwtAddTo: text() /* "header" | "query" */,
 });
+
+export const requestOrFolderMetaTable = sqliteTable(
+  "request_or_folder_meta_table",
+  {
+    id: text()
+      .primaryKey()
+      .$defaultFn(() => uuidv4()),
+    method: text() /* "get" | "post" | "put" | "patch" | "delete"; */,
+    name: text().default(""),
+    projectId: text()
+      .notNull()
+      .references(() => projectTable.id),
+    parentId: text()
+      .notNull()
+      .references(() => requestOrFolderMetaTable.id),
+  }
+);
