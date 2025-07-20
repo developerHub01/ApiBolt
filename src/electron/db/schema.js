@@ -82,5 +82,8 @@ export const requestOrFolderMetaTable = sqliteTable(
       .references(() => projectTable.id),
     parentId: text().references(() => requestOrFolderMetaTable.id),
     isExpended: integer({ mode: "boolean" }).notNull().default(0),
+    createdAt: text()
+      .notNull()
+      .default(sql`(current_timestamp)`),
   }
 );

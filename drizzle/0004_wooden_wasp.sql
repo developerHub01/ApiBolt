@@ -1,0 +1,1 @@
+ALTER TABLE `request_or_folder_meta_table` ADD `createdAt` text DEFAULT (current_timestamp) NOT NULL;

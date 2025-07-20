@@ -133,4 +133,11 @@ contextBridge.exposeInMainWorld("electronAPIRequestOrFolderMetaDB", {
     await ipcRenderer.invoke("getRequestOrFolderMeta"),
   createRequestOrFolderMeta: async (...payload) =>
     await ipcRenderer.invoke("createRequestOrFolderMeta", ...payload),
+  deleteRequestOrFolderMetaByProjectId: async (...payload) =>
+    await ipcRenderer.invoke(
+      "deleteRequestOrFolderMetaByProjectId",
+      ...payload
+    ),
+  deleteRequestOrFolderMetaAll: async () =>
+    await ipcRenderer.invoke("deleteRequestOrFolderMetaAll"),
 });
