@@ -111,6 +111,19 @@ declare global {
       ): Promise<boolean>;
       deleteAuth(id?: string): Promise<boolean>;
     };
+
+    electronAPIRequestOrFolderMetaDB: {
+      getRequestOrFolderMeta(): Promise<
+        Record<string, RequestListItemInterface>
+      >;
+      createRequestOrFolderMeta(
+        payload: RequestListItemInterface | Array<RequestListItemInterface>
+      ): Promise<boolean>;
+      updateAuth(
+        payload: Partial<Omit<AuthorizationPayloadInterface, "id">>
+      ): Promise<boolean>;
+      deleteAuth(id?: string): Promise<boolean>;
+    };
   }
 }
 

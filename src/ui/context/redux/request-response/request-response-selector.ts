@@ -5,7 +5,7 @@ import type {
   TActiveTabType,
 } from "@/context/redux/request-response/request-response-slice";
 import type { RootState } from "@/context/redux/store";
-import type { TMetaTableType } from "@/context/request/RequestMetaTableProvider";
+import type { TMetaTableType } from "@/context/collections/request/RequestMetaTableProvider";
 
 export const selectActiveTabList = createSelector(
   [

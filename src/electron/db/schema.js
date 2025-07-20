@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { int, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { v4 as uuidv4 } from "uuid";
 
 export const ACTIVE_PROJECT_ID = "singleton";
@@ -80,8 +80,7 @@ export const requestOrFolderMetaTable = sqliteTable(
     projectId: text()
       .notNull()
       .references(() => projectTable.id),
-    parentId: text()
-      .notNull()
-      .references(() => requestOrFolderMetaTable.id),
+    parentId: text().references(() => requestOrFolderMetaTable.id),
+    isExpended: integer({ mode: "boolean" }).notNull().default(0),
   }
 );

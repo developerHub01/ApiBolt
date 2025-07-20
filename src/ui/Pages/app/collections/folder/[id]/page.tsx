@@ -1,5 +1,5 @@
-import FolderDescription from "@/components/app/folder/description/FolderDescription";
-import FolderTitle from "@/components/app/folder/FolderTitle";
+import FolderDescription from "@/components/app/collections/folder/description/FolderDescription";
+import FolderTitle from "@/components/app/collections/folder/FolderTitle";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 const FolderPage = () => {

@@ -128,3 +128,9 @@ contextBridge.exposeInMainWorld("electronAPIAuthorizationDB", {
   deleteAuth: async (...payload) =>
     await ipcRenderer.invoke("deleteAuth", ...payload),
 });
+contextBridge.exposeInMainWorld("electronAPIRequestOrFolderMetaDB", {
+  getRequestOrFolderMeta: async () =>
+    await ipcRenderer.invoke("getRequestOrFolderMeta"),
+  createRequestOrFolderMeta: async (...payload) =>
+    await ipcRenderer.invoke("createRequestOrFolderMeta", ...payload),
+});

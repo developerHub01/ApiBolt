@@ -26,7 +26,6 @@ import {
   handleInitFolder,
   handleInitRequest,
   handleLoadEnvironmentsList,
-  handleLoadOpenFolderList,
   handleLoadProjectsList,
   handleLoadRequestList,
   handleRemoveTab,
@@ -256,8 +255,6 @@ export const loadAuthorization = createAsyncThunk<
 >("request-response/loadAuthorization", async (_, { dispatch }) => {
   const authorizationData = await window.electronAPIAuthorizationDB.getAuth();
 
-  console.log("authorizationData", authorizationData);
-
   dispatch(handleAuthorizations(authorizationData));
 
   return authorizationData;
@@ -279,6 +276,9 @@ export const updateAuthorization = createAsyncThunk<
 ===== Auth end =========
 ================================= */
 
+/* ==============================
+===== RequestList start =========
+================================= */
 export const loadRequestList = createAsyncThunk<
   void,
   void,
@@ -287,14 +287,106 @@ export const loadRequestList = createAsyncThunk<
   const state = getState() as RootState;
 
   if (state.requestResponse.isRequestListLoaded) return;
+  try {
+    const list =
+      await window.electronAPIRequestOrFolderMetaDB.getRequestOrFolderMeta();
 
-  const list = await window.electronAPIDB.getAllBoltCore();
-  const openFolderList = await window.electronAPIDB.getAllOpenFolder();
-
-  dispatch(handleLoadRequestList(list));
-  dispatch(handleLoadOpenFolderList(openFolderList));
-  dispatch(handleChangeIsRequestListLoaded(true));
+    dispatch(handleLoadRequestList(list));
+    dispatch(handleChangeIsRequestListLoaded(true));
+  } catch (error) {
+    console.log(error);
+  }
 });
+export const createSingleRequest = createAsyncThunk<
+  void,
+  string | undefined,
+  {
+    dispatch: AppDispatch;
+  }
+>("request-response/createSingleRequest", async (parentId, { dispatch }) => {
+  try {
+    console.log("createSingleRequest===========");
+    const payload: RequestListItemInterface = {
+      id: uuidv4(),
+      name: "Request",
+      method: "get",
+      ...(parentId ? { parentId } : {}),
+    };
+
+    dispatch(handleCreateSingleRequest(payload));
+    await window.electronAPIRequestOrFolderMetaDB.createRequestOrFolderMeta(
+      payload
+    );
+  } catch {
+    console.log("Request JSON file is not valid");
+  }
+});
+export const createCollection = createAsyncThunk<
+  void,
+  string | undefined,
+  { dispatch: AppDispatch; state: RootState }
+>("request-response/createCollection", async (parentId, { dispatch }) => {
+  try {
+    console.log("createCollection=========");
+    const payload = {
+      id: uuidv4(),
+      name: parentId ? "Folder" : "Collection",
+      ...(parentId ? { parentId } : {}),
+    };
+
+    dispatch(handleCreateSingleRequest(payload));
+
+    await window.electronAPIRequestOrFolderMetaDB.createRequestOrFolderMeta(
+      payload
+    );
+  } catch {
+    console.log("Request JSON file is not valid");
+  }
+});
+export const createRestApiBasic = createAsyncThunk<
+  void,
+  void,
+  { dispatch: AppDispatch }
+>("request-response/createSingleRequest", async (_, { dispatch }) => {
+  try {
+    console.log("createRestApiBasic==========");
+    const parentFolder: RequestListItemInterface = {
+      id: uuidv4(),
+      name: "REST API basics: CRUD, test & variable",
+      children: [],
+      createdAt: Date.now(),
+    };
+
+    const payload: Array<RequestListItemInterface> = (
+      ["get", "post", "put", "patch", "delete"] as Array<TMethod>
+    ).map((method) => ({
+      id: uuidv4(),
+      name: `${method[0].toUpperCase()}${method.substring(1)} data`,
+      method: method as TMethod,
+      createdAt: Date.now(),
+    }));
+
+    parentFolder.children = payload.map((item) => item.id);
+
+    const requestList = [
+      parentFolder,
+      ...payload.map((item) => ({
+        ...item,
+        parentId: parentFolder.id,
+      })),
+    ];
+
+    dispatch(handleCreateRestApiBasic(requestList));
+    await window.window.electronAPIRequestOrFolderMetaDB.createRequestOrFolderMeta(
+      requestList
+    );
+  } catch {
+    console.log("Request JSON file is not valid");
+  }
+});
+/* ==============================
+===== RequestList end =========
+================================= */
 
 export const loadRequestData = createAsyncThunk<
   void,
@@ -598,87 +690,6 @@ export const loadRequestData = createAsyncThunk<
 //     }
 //   }
 // );
-
-export const createSingleRequest = createAsyncThunk<
-  void,
-  string | undefined,
-  {
-    dispatch: AppDispatch;
-  }
->("request-response/createSingleRequest", async (parent, { dispatch }) => {
-  try {
-    const payload: RequestListItemInterface = {
-      id: uuidv4(),
-      name: "Request",
-      method: "get",
-      ...(parent ? { parent } : {}),
-    };
-
-    dispatch(handleCreateSingleRequest(payload));
-    await window.electronAPIDB.addBoltCore(payload);
-  } catch {
-    console.log("Request JSON file is not valid");
-  }
-});
-
-export const createCollection = createAsyncThunk<
-  void,
-  string | undefined,
-  { dispatch: AppDispatch; state: RootState }
->("request-response/createCollection", async (parent, { dispatch }) => {
-  try {
-    const payload = {
-      id: uuidv4(),
-      name: parent ? "Folder" : "Collection",
-      children: [],
-      ...(parent ? { parent } : {}),
-    };
-
-    dispatch(handleCreateSingleRequest(payload));
-    await window.electronAPIDB.addBoltCore(payload);
-  } catch {
-    console.log("Request JSON file is not valid");
-  }
-});
-
-export const createRestApiBasic = createAsyncThunk<
-  void,
-  void,
-  { dispatch: AppDispatch }
->("request-response/createSingleRequest", async (_, { dispatch }) => {
-  try {
-    const parentFolder: RequestListItemInterface = {
-      id: uuidv4(),
-      name: "REST API basics: CRUD, test & variable",
-      children: [],
-      createdAt: Date.now(),
-    };
-
-    const payload: Array<RequestListItemInterface> = (
-      ["get", "post", "put", "patch", "delete"] as Array<TMethod>
-    ).map((method) => ({
-      id: uuidv4(),
-      name: `${method[0].toUpperCase()}${method.substring(1)} data`,
-      method: method as TMethod,
-      createdAt: Date.now(),
-    }));
-
-    parentFolder.children = payload.map((item) => item.id);
-
-    const requestList = [
-      parentFolder,
-      ...payload.map((item) => ({
-        ...item,
-        parent: parentFolder.id,
-      })),
-    ];
-
-    dispatch(handleCreateRestApiBasic(requestList));
-    await window.electronAPIDB.addMultipleBoltCore(requestList);
-  } catch {
-    console.log("Request JSON file is not valid");
-  }
-});
 
 export const moveRequest = createAsyncThunk<
   void,

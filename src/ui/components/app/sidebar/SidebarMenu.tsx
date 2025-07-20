@@ -80,8 +80,6 @@ const SidebarMenu = memo(() => {
     (state) => state.requestResponse.activeProjectId
   );
 
-  console.log({ activeProjectId });
-
   return (
     <div className="flex flex-col gap-2">
       {menuList.map(({ id, Icon, label, path }) => {

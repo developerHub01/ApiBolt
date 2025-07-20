@@ -1,4 +1,4 @@
-import { type TMetaTableType } from "@/context/request/RequestMetaTableProvider";
+import { type TMetaTableType } from "@/context/collections/request/RequestMetaTableProvider";
 import type { TAuthType, TContentType } from "@/types";
 import { parseUrlParams } from "@/utils";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
@@ -60,8 +60,9 @@ export interface RequestListItemInterface {
   name: string;
   method?: THTTPMethods;
   children?: Array<string>;
-  parent?: string;
+  parentId?: string;
   createdAt?: number;
+  isExpended?: boolean;
 }
 
 export interface RequestListInterface {
@@ -706,7 +707,9 @@ export const requestResponseSlice = createSlice({
     ) => {
       const payload = action.payload;
 
-      const parentId = payload.parent;
+      if (!payload.id) return;
+
+      const { parentId } = payload;
 
       if (parentId && state.requestList[parentId]) {
         const parentData = state.requestList[parentId];

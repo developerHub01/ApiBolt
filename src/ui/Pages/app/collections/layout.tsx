@@ -1,14 +1,14 @@
 import AppMainContentLayoutWrapper from "@/components/app/AppMainContentLayoutWrapper";
-import RequestListPanelWrapper from "@/components/app/request-list/RequestListPanelWrapper";
+import RequestListPanelWrapper from "@/components/app/collections/request-list/RequestListPanelWrapper";
 import TabSidebar from "@/components/app/tab-sidebar/TabSidebar";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import RequestOrFolderProvider from "@/context/request-list/RequestOrFolderProvider";
-import RequestBodyProvider from "@/context/request/RequestBodyProvider";
-import RequestHeaderProvider from "@/context/request/RequestHeaderProvider";
+import RequestOrFolderProvider from "@/context/collections/request-list/RequestOrFolderProvider";
+import RequestBodyProvider from "@/context/collections/request/RequestBodyProvider";
+import RequestHeaderProvider from "@/context/collections/request/RequestHeaderProvider";
 import { Outlet } from "react-router-dom";
 
 const CollectionsLayout = () => {

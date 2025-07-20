@@ -15,6 +15,20 @@
       "when": 1752905003705,
       "tag": "0001_serious_doctor_doom",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1753025076486,
+      "tag": "0002_tired_grandmaster",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1753031443518,
+      "tag": "0003_lean_kylun",
+      "breakpoints": true
     }
   ]
 }

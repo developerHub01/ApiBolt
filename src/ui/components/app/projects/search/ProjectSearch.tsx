@@ -1,7 +1,7 @@
 import { useCallback, useState, type ChangeEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { X as CloseIcon } from "lucide-react";
-import { useProjectMenu } from "@/context/project-menu/ProjectMenuProvider";
+import { useProjectMenu } from "@/context/collections/project/ProjectMenuProvider";
 
 const ProjectSearch = () => {
   const [searchTerm, setSearchTerm] = useState("");
