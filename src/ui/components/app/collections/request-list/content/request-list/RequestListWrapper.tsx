@@ -9,9 +9,6 @@ const RequestListWrapper = memo(() => {
     (state) => state.requestResponse.isRequestListLoaded
   );
 
-  console.log("RequestListWrapper ======== ");
-  console.log({ isRequestListLoaded });
-
   useEffect(() => {
     if (isRequestListLoaded) return;
 
