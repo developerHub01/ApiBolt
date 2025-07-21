@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import ContentWrapper from "@/components/app/authorization/content/ContentWrapper";
 import AuthKeyValueWrapper from "@/components/app/authorization/content/AuthKeyValueWrapper";
 import AuthContentInput from "@/components/app/authorization/content/AuthContentInput";
@@ -6,9 +7,8 @@ import AuthContentInoutLabel from "@/components/app/authorization/content/AuthCo
 import { JWT_ALGO_LIST } from "@/constant";
 import PayloadCode from "@/components/app/authorization/content/jwt-bearer/PayloadCode";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { defaultJWTBearerAuth } from "@/context/redux/request-response/request-response-slice";
-import { useCallback } from "react";
 import { updateAuthorization } from "@/context/redux/request-response/request-response-thunk";
+import { defaultJWTBearerAuth } from "@/constant/request-response.constant";
 
 const algoList = JWT_ALGO_LIST.map((algo) => ({
   id: algo,

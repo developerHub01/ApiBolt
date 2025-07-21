@@ -1,11 +1,11 @@
+import { useCallback } from "react";
 import ContentWrapper from "@/components/app/authorization/content/ContentWrapper";
 import AuthKeyValueWrapper from "@/components/app/authorization/content/AuthKeyValueWrapper";
 import AuthContentInput from "@/components/app/authorization/content/AuthContentInput";
 import AuthContentInoutLabel from "@/components/app/authorization/content/AuthContentInoutLabel";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { defaultBasicAuth } from "@/context/redux/request-response/request-response-slice";
-import { useCallback } from "react";
 import { updateAuthorization } from "@/context/redux/request-response/request-response-thunk";
+import { defaultBasicAuth } from "@/constant/request-response.constant";
 
 const BasicAuth = () => {
   const dispatch = useAppDispatch();

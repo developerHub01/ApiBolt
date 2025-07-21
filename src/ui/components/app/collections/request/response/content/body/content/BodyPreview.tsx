@@ -1,12 +1,13 @@
-import type { TContentType } from "@/types";
 import { getResponseType } from "@/utils";
 import BodyHTMLPreview from "@/components/app/collections/request/response/content/body/content/BodyHTMLPreview";
 import BodyJSONPreview from "@/components/app/collections/request/response/content/body/content/body-json-preview/BodyJSONPreview";
 import { useAppSelector } from "@/context/redux/hooks";
+import type { TContentType } from "@/types/request-response.types";
 
 const BodyPreview = () => {
   const response = useAppSelector(
-    (state) => state.requestResponse.response[state.requestResponse.selectedTab!]
+    (state) =>
+      state.requestResponse.response[state.requestResponse.selectedTab!]
   );
 
   if (!response || !response) return null;

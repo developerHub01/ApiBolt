@@ -3,10 +3,8 @@ import TabV1 from "@/components/tab-v1";
 import SelectV1 from "@/components/select-v1";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { selectActiveTabList } from "@/context/redux/request-response/request-response-selector";
-import {
-  handleChangeActiveMetaTab,
-  type TActiveTabType,
-} from "@/context/redux/request-response/request-response-slice";
+import { handleChangeActiveMetaTab } from "@/context/redux/request-response/request-response-slice";
+import type { TActiveTabType } from "@/types/request-response.types";
 
 const tabList: Array<{
   id: TActiveTabType;

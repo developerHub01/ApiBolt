@@ -7,9 +7,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { type THTTPMethods } from "@/context/redux/request-response/request-response-slice";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { changeRequestMethod } from "@/context/redux/request-response/request-response-thunk";
+import type { THTTPMethods } from "@/types/request-response.types";
 
 const methodList: Array<{
   id: THTTPMethods;

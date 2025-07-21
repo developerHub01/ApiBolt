@@ -1,6 +1,6 @@
-import type { TMethod } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import type { TMethod } from "@/types/request-response.types";
 
 interface Props {
   method: TMethod;

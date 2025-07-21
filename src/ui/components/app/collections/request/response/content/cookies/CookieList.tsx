@@ -9,7 +9,7 @@ import {
 import DataTableCellContent from "@/components/app/collections/request/response/content/DataTableCellContent";
 import { useMemo } from "react";
 import { getCookiePropertyList } from "@/utils/cookie";
-import type { CookieInterface } from "@/context/redux/request-response/request-response-slice";
+import type { CookieInterface } from "@/types/request-response.types";
 
 interface CookieListProps {
   cookies: Array<CookieInterface>;

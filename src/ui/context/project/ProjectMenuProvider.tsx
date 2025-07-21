@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { changeActiveProject } from "@/context/redux/request-response/request-response-thunk";
-import type { ProjectInterface } from "@/context/redux/request-response/request-response-slice";
+import type { ProjectInterface } from "@/types/request-response.types";
 
 interface ProjectMenuContext {
   projectList: Array<ProjectInterface>;

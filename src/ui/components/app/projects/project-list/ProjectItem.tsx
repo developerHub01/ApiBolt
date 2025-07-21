@@ -16,7 +16,7 @@ const ProjectItem = ({ id, name, activeProjectId }: ProjectItemProps) => {
       onClick={() => dispatch(changeActiveProject(id))}
       id={id}
       className={cn(
-        "w-full p-5 rounded-sm bg-accent/20 hover:bg-accent transition-all duration-200 cursor-pointer",
+        "w-full p-5 rounded-md bg-accent/50 hover:bg-accent transition-all duration-200 cursor-pointer",
         {
           "ring-2 ring-primary/50": activeProjectId === id,
           "ring-0": activeProjectId !== id,

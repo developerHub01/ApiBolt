@@ -2,11 +2,12 @@ import Empty from "@/components/ui/empty";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import CookieList from "@/components/app/collections/request/response/content/cookies/CookieList";
 import { useAppSelector } from "@/context/redux/hooks";
-import type { CookieInterface } from "@/context/redux/request-response/request-response-slice";
+import type { CookieInterface } from "@/types/request-response.types";
 
 const Cookies = () => {
   const response = useAppSelector(
-    (state) => state.requestResponse.response[state.requestResponse.selectedTab!]
+    (state) =>
+      state.requestResponse.response[state.requestResponse.selectedTab!]
   );
 
   if (!response) return null;

@@ -1,11 +1,11 @@
 import { createSelector } from "@reduxjs/toolkit";
+import type { RootState } from "@/context/redux/store";
+import type { TMetaTableType } from "@/context/collections/request/RequestMetaTableProvider";
 import type {
   FormDataInterface,
   ParamInterface,
   TActiveTabType,
-} from "@/context/redux/request-response/request-response-slice";
-import type { RootState } from "@/context/redux/store";
-import type { TMetaTableType } from "@/context/collections/request/RequestMetaTableProvider";
+} from "@/types/request-response.types";
 
 export const selectActiveTabList = createSelector(
   [

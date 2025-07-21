@@ -1,25 +1,15 @@
+import {
+  localStorageSidebarActiveTabKey,
+  localStorageSidebarLastActiveTabKey,
+} from "@/constant/sidebar.constant";
+import type { SidebarState, TSidebarTab } from "@/types/sidebar.types";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-
-export type TSidebarTab =
-  | "projects"
-  | "collections"
-  | "environments"
-  | "authorization"
-  | null;
-
-interface SidebarState {
-  activeTab: TSidebarTab;
-  lastActiveTab: TSidebarTab;
-}
 
 // Define the initial state using that type
 const initialState: SidebarState = {
   activeTab: "collections",
   lastActiveTab: "collections",
 };
-
-export const localStorageSidebarActiveTabKey = "sidebar-active-tab";
-export const localStorageSidebarLastActiveTabKey = "sidebar-last-active-tab";
 
 export const handleLocalStorageOnSidebarToggle = (
   currentActiveTab: string | null,
@@ -56,24 +46,10 @@ export const sidebarSlice = createSlice({
       if (id === state.activeTab) return;
       state.activeTab = id;
     },
-    handleToggleSidebar: (state) => {
-      let currentActiveTab: TSidebarTab = null;
-
-      if (!state.activeTab)
-        currentActiveTab = state.lastActiveTab ?? "collections";
-
-      state.lastActiveTab = state.activeTab;
-      state.activeTab = currentActiveTab;
-
-      handleLocalStorageOnSidebarToggle(currentActiveTab, state.activeTab);
-    },
   },
 });
 
-export const {
-  handleInitActiveTab,
-  handleChangeActiveTab,
-  handleToggleSidebar,
-} = sidebarSlice.actions;
+export const { handleInitActiveTab, handleChangeActiveTab } =
+  sidebarSlice.actions;
 
 export default sidebarSlice.reducer;

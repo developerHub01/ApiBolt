@@ -12,9 +12,11 @@ import {
   handleChangeMetaData,
   handleCheckToggleMetaData,
   handleDeleteMetaData,
-  type FormDataInterface,
-  type ParamInterface,
 } from "@/context/redux/request-response/request-response-slice";
+import type {
+  FormDataInterface,
+  ParamInterface,
+} from "@/types/request-response.types";
 
 const headersToPreventCheckList = ["Cookie", "Authorization"];
 

@@ -1,33 +1,33 @@
-import { memo, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 import { ResizablePanel } from "@/components/ui/resizable";
 import RequestListPanel from "@/components/app/collections/request-list/RequestListPanel";
 import type { ImperativePanelHandle } from "react-resizable-panels";
 import { useAppSelector } from "@/context/redux/hooks";
 
 const RequestListPanelWrapper = memo(() => {
-  const activeTab = useAppSelector((state) => state.sidebar.activeTab);
-  const resizableSizelRef = useRef<number | null>(null);
   const resizablePanelRef = useRef<ImperativePanelHandle>(null);
+  const requestListCollapsed = useAppSelector(
+    (state) => state.requestResponse.requestListCollapsed
+  );
 
-  if (!activeTab) return null;
+  useEffect(() => {
+    const panel = resizablePanelRef.current;
+    if (!panel) return;
 
-  const handleResize = (value: number) => {
-    if (value < 20 && value < Number(resizableSizelRef.current)) {
-      resizablePanelRef.current?.collapse();
-    }
-
-    resizableSizelRef.current = value;
-  };
+    if (requestListCollapsed) panel.collapse();
+    else panel.expand();
+  }, [requestListCollapsed]);
 
   return (
     <ResizablePanel
-      collapsible={true}
+      collapsible
       defaultSize={30}
+      minSize={15}
+      maxSize={40}
       className="h-full"
       style={{
         maxWidth: "40vw",
       }}
-      onResize={handleResize}
       ref={resizablePanelRef}
     >
       <RequestListPanel />

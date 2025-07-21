@@ -1,3 +1,4 @@
+import type { TabsDataInterface } from "@/context/tab-sidebar/TabSidebarProvider";
 import type {
   APIPayloadBody,
   AuthorizationPayloadInterface,
@@ -9,8 +10,7 @@ import type {
   ResponseDataBackendInterface,
   ResponseFolderDataInterface,
   ResponseInterface,
-} from "@/context/redux/request-response/request-response-slice";
-import type { TabsDataInterface } from "@/context/tab-sidebar/TabSidebarProvider";
+} from "@/types/request-response.types";
 
 declare global {
   interface Window {
@@ -128,12 +128,3 @@ declare global {
 }
 
 export type TWindowControl = "minimize" | "maximize" | "unmaximize" | "close";
-export type TContentType = "text" | "html" | "xml" | "json" | "javascript";
-export type TAuthType =
-  | "no-auth"
-  | "basic-auth"
-  | "bearer-token"
-  | "jwt-bearer"
-  | "api-key";
-
-export type TMethod = "get" | "post" | "put" | "patch" | "delete";

@@ -4,9 +4,9 @@ import AuthContentInput from "@/components/app/authorization/content/AuthContent
 import AuthContentInoutLabel from "@/components/app/authorization/content/AuthContentInoutLabel";
 import AuthContentSelect from "@/components/app/authorization/content/AuthContentSelect";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { defaultApiKey } from "@/context/redux/request-response/request-response-slice";
 import { useCallback } from "react";
 import { updateAuthorization } from "@/context/redux/request-response/request-response-thunk";
+import { defaultApiKey } from "@/constant/request-response.constant";
 
 const addToList = [
   {

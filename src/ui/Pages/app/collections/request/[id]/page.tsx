@@ -5,21 +5,8 @@ import RequestTop from "@/components/app/collections/request/request/request-top
 // import ResizableWrapper from "@/components/app/request/ResizableWrapper";
 // import ResponsePanel from "@/components/app/request/response/ResponsePanel";
 // import { ResizableHandle } from "@/components/ui/resizable";
-import { useAppSelector } from "@/context/redux/hooks";
-import { useNavigate, useParams } from "react-router-dom";
 
 const RequestPage = () => {
-  const selectedTab = useAppSelector(
-    (state) => state.requestResponse.selectedTab
-  );
-  const { id } = useParams();
-  const navigate = useNavigate();
-
-  if (!selectedTab || !id) {
-    navigate("/");
-    return;
-  }
-
   return (
     <div className="flex flex-col w-full h-full items-center justify-center">
       <div className="w-full p-2.5 flex flex-col gap-2">

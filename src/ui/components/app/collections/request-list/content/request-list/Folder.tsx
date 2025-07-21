@@ -1,6 +1,6 @@
-import type { RequestListItemInterface } from "@/context/redux/request-response/request-response-slice";
-import { FolderClosed as FolderIcon } from "lucide-react";
 import { memo } from "react";
+import { FolderClosed as FolderIcon } from "lucide-react";
+import type { RequestListItemInterface } from "@/types/request-response.types";
 
 const Folder = memo(({ name }: RequestListItemInterface) => {
   return (

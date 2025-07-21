@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/select";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { handleChangeRawRequestBodyType } from "@/context/redux/request-response/request-response-slice";
-import type { TContentType } from "@/types";
+import type { TContentType } from "@/types/request-response.types";
 
 const rawDataTypeList = [
   {

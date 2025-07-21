@@ -1,4 +1,4 @@
-import type { ResponseFileDataInterface } from "@/context/redux/request-response/request-response-slice";
+import type { ResponseFileDataInterface } from "@/types/request-response.types";
 
 export const handleCheckImportedRequestFileValidator = (
   data: ResponseFileDataInterface

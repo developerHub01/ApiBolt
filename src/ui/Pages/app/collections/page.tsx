@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { addNewTab } from "@/context/redux/request-response/request-response-thunk";
 
-const AppPage = () => {
+const CollectionPage = () => {
   const dispatch = useAppDispatch();
 
   const handleAdd = useCallback(() => {
@@ -24,4 +24,4 @@ const AppPage = () => {
   );
 };
 
-export default AppPage;
+export default CollectionPage;

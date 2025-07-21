@@ -1,11 +1,11 @@
 import { memo, useCallback, useEffect, useState } from "react";
 import { formatCode, getParser } from "@/utils/prettierUtils";
 import { toast } from "sonner";
-import type { TContentType } from "@/types";
 import { useRequestBody } from "@/context/collections/request/RequestBodyProvider";
 import Code from "@/components/ui/code";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useAppSelector } from "@/context/redux/hooks";
+import type { TContentType } from "@/types/request-response.types";
 
 const codeFormatter = async (
   rawRequestBodyType: TContentType,

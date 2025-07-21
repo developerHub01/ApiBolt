@@ -1,223 +1,39 @@
+import {
+  defaultApiKey,
+  defaultBasicAuth,
+  defaultFolderDescription,
+  defaultFolderTitle,
+  defaultJWTBearerAuth,
+  generateNewMetaDataItem,
+  initialHiddenHeaderData,
+  ResponsePanelMinLimit,
+} from "@/constant/request-response.constant";
 import { type TMetaTableType } from "@/context/collections/request/RequestMetaTableProvider";
-import type { TAuthType, TContentType } from "@/types";
+import type {
+  APIKeyInterface,
+  AuthorizationPayloadInterface,
+  BasicAuthInterface,
+  EnvironmentInterface,
+  FormDataInterface,
+  JWTBearerAuthInterface,
+  ParamInterface,
+  ProjectInterface,
+  RequestListInterface,
+  RequestListItemInterface,
+  RequestResponseSizeInterface,
+  ResponseFileDataBackendInterface,
+  ResponseFolderDataInterface,
+  ResponseInterface,
+  TActiveTabType,
+  TAuthType,
+  TBearerToken,
+  TContentType,
+  THTTPMethods,
+  TRequestBodyType,
+} from "@/types/request-response.types";
 import { parseUrlParams } from "@/utils";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
-
-export type TActiveTabType = "params" | "headers" | "body";
-export type TAuthAddTo = "header" | "query";
-
-const generateNewMetaDataItem = (type?: TMetaTableType) => ({
-  id: uuidv4(),
-  key: "",
-  value: "",
-  contentType: type !== "form-data" ? undefined : "",
-  description: "",
-});
-
-export interface ProjectInterface {
-  id: string;
-  name: string;
-}
-
-export interface EnvironmentInterface {
-  id: string;
-  variable: string;
-  type: "default" | "secret";
-  value: string;
-  isCheck: boolean;
-  projectId: string;
-  createdAt: string;
-}
-
-export type EnvironmentPayloadInterface = Omit<
-  EnvironmentInterface,
-  "createdAt"
->;
-
-export interface AuthorizationPayloadInterface {
-  id: string;
-  type: TAuthType;
-  projectId: string;
-  apiKeyKey: string;
-  apiKeyValue: string;
-  apiKeyAddTo: TAuthAddTo;
-  /* Bearer Token Auth ============ */
-  bearerToken: string;
-  /* Basic Auth =========== */
-  basicAuthUsername: string;
-  basicAuthPassword: string;
-  /* JWT Bearer Auth ============ */
-  jwtAlgo: string;
-  jwtSecret: string;
-  jwtPayload: string;
-  jwtHeaderPrefix: string;
-  jwtAddTo: TAuthAddTo;
-}
-
-export interface RequestListItemInterface {
-  id: string;
-  name: string;
-  method?: THTTPMethods;
-  children?: Array<string>;
-  parentId?: string;
-  createdAt?: number;
-  isExpended?: boolean;
-}
-
-export interface RequestListInterface {
-  [key: string]: RequestListItemInterface;
-}
-
-export type TRequestBodyType =
-  | "none"
-  | "form-data"
-  | "x-www-form-urlencoded"
-  | "raw"
-  | "binary";
-
-export type THTTPMethods = "get" | "post" | "put" | "patch" | "delete";
-
-export interface ParamInterface<ValueT = string> {
-  id: string;
-  key: string;
-  value: ValueT;
-  description?: string;
-  hide?: boolean;
-  prevent?: boolean;
-  calculateDynamicly?: boolean;
-}
-export interface FormDataInterface
-  extends ParamInterface<string | Array<File>> {
-  contentType?: string;
-}
-
-export interface CookieInterface {
-  name: string;
-  value: string;
-  domain?: string;
-  path?: string;
-  expires?: string;
-  HttpOnly?: boolean;
-  secure?: boolean;
-  samesite?: string;
-}
-
-export interface ResponseInterface {
-  data: unknown;
-  headers: Record<string, unknown>;
-  cookies?: Array<CookieInterface>;
-  status: number;
-  statusText: string;
-  statusDescription?: string;
-}
-
-interface RequestResponseSizeInterface {
-  header: number;
-  body: number;
-}
-
-export interface FileMetadataInterface {
-  name: string;
-  size: number;
-  type: string;
-  lastModified: number;
-  fileName: string;
-  mimeType: string;
-  base64?: string;
-}
-
-export interface FormDataFileMetadataInterface
-  extends Omit<FormDataInterface, "value"> {
-  value: Array<FileMetadataInterface> | string;
-}
-
-export interface ResponseFileDataInterface {
-  name: string;
-  url: string;
-  method: THTTPMethods;
-  params: Array<ParamInterface>;
-  headers: Array<ParamInterface>;
-  authorization: {
-    type: TAuthType;
-    data?:
-      | BasicAuthInterface
-      | TBearerToken
-      | JWTBearerAuthInterface
-      | APIKeyInterface;
-  };
-  body: {
-    selected: TRequestBodyType;
-    rawData: string;
-    formData: Array<FormDataFileMetadataInterface>;
-    xWWWFormUrlencodedData: Array<ParamInterface>;
-    binaryData: FileMetadataInterface | null;
-    rawRequestBodyType: TContentType;
-  };
-  response: ResponseInterface | null;
-  size: {
-    requestSize: RequestResponseSizeInterface;
-    responseSize: RequestResponseSizeInterface;
-  };
-}
-
-export interface ResponseFolderDataInterface {
-  title: string;
-  description: string;
-}
-
-export type ResponseFileDataBackendInterface = Omit<
-  ResponseFileDataInterface,
-  "response" | "name" | "method"
->;
-
-export type ResponseDataBackendInterface =
-  | ResponseFileDataBackendInterface
-  | ResponseFolderDataInterface;
-
-export interface APIPayloadBody {
-  method: THTTPMethods;
-  url: string;
-  headers: Record<string, string>;
-  hiddenHeaders: Record<string, string>;
-  bodyType: TRequestBodyType;
-  formData?: Array<{
-    key: string;
-    value: string | Array<File>;
-  }>;
-  xWWWformDataUrlencoded?: Array<{
-    key: string;
-    value: string;
-  }>;
-  rawData?: string;
-  binaryData?: File;
-  rawSubType?: TContentType;
-}
-
-export interface StatusDataInterface {
-  [key: string]: {
-    reason: string;
-    description: string;
-  };
-}
-
-export interface APIKeyInterface {
-  key: string;
-  value: string;
-  addTo: TAuthAddTo;
-}
-export type TBearerToken = string;
-export interface BasicAuthInterface {
-  username: string;
-  password: string;
-}
-export interface JWTBearerAuthInterface {
-  algo: string;
-  secret: string;
-  payload: string;
-  headerPrefix: string;
-  addTo: TAuthAddTo;
-}
 
 // export const fetchApiUniformError = (error: unknown): ResponseInterface => {
 //   // console.log("error", error);
@@ -241,14 +57,6 @@ export interface JWTBearerAuthInterface {
 //   }
 // };
 
-export const getCookiesByDomain = async (url: string) => {
-  return await window.electronAPI.getCookieByDomain(url);
-};
-
-export const getCookiesStringByDomain = async (url: string) => {
-  return await window.electronAPI.getCookieStringByDomain(url);
-};
-
 // const generateNextHiddenHeaderOrParam = () => {
 //   return {
 //     id: uuidv4(),
@@ -259,17 +67,6 @@ export const getCookiesStringByDomain = async (url: string) => {
 //   };
 // };
 
-export const AuthTypeList = [
-  "no-auth",
-  "basic-auth",
-  "bearer-token",
-  "jwt-bearer",
-  "api-key",
-];
-
-export const localStorageRequestActiveTabKey = (requestId: string) =>
-  `request-active-tab-${requestId}`;
-
 // const getRestOfAuthType = (excludes?: string | Array<string>) => {
 //   if (!excludes) return AuthTypeList;
 
@@ -277,78 +74,6 @@ export const localStorageRequestActiveTabKey = (requestId: string) =>
 //     (item) => !(Array.isArray(excludes) ? excludes : [excludes]).includes(item)
 //   );
 // };
-
-export const ResponsePanelMinLimit = 15;
-
-export const defaultRequestResponseSize = {
-  header: 0,
-  body: 0,
-};
-
-export const defaultEnvironment = (
-  id: string,
-  projectId: string
-): Omit<EnvironmentInterface, "createdAt"> => ({
-  id,
-  type: "default",
-  variable: "",
-  value: "",
-  isCheck: true,
-  projectId,
-});
-
-export const defaultApiKey: APIKeyInterface = {
-  key: "",
-  value: "",
-  addTo: "header",
-};
-
-export const defaultBasicAuth: BasicAuthInterface = {
-  username: "",
-  password: "",
-};
-export const defaultJWTBearerAuth: JWTBearerAuthInterface = {
-  algo: "HS256",
-  secret: "",
-  payload: JSON.stringify({}),
-  headerPrefix: "Bearer",
-  addTo: "header",
-};
-
-export const defaultFolderTitle: string = "New Folder";
-export const defaultFolderDescription: string = `# Heading one`;
-
-const initialHiddenHeaderData = () => [
-  {
-    id: uuidv4(),
-    key: "Cookie",
-    value: "",
-    description: "",
-    prevent: true,
-    calculateDynamicly: true,
-  },
-  {
-    id: uuidv4(),
-    key: "User-Agent",
-    value: `${import.meta.env.VITE_APP_NAME}/${import.meta.env.VITE_APP_VERSION}`,
-    description: "",
-    prevent: true,
-  },
-  {
-    id: uuidv4(),
-    key: "Accept",
-    value: "*/*",
-    description: "",
-    prevent: true,
-  },
-  {
-    id: uuidv4(),
-    key: "Connection",
-    value: "keep-alive",
-    description: "",
-    prevent: true,
-  },
-];
 
 // const useMetaDataManager = <
 //   T extends { id: string; hide?: boolean; value: unknown },
@@ -465,6 +190,7 @@ interface RequestResponseState {
   loadedRequestList: Record<string, boolean>;
   isRequestListLoaded: boolean;
   deleteFolderOrRequestId: string;
+  requestListCollapsed: boolean;
 
   tabList: Array<string>;
   isTabListHovering: boolean;
@@ -532,6 +258,7 @@ const initialState: RequestResponseState = {
   loadedRequestList: {},
   isRequestListLoaded: false,
   deleteFolderOrRequestId: "",
+  requestListCollapsed: false,
 
   tabList: [],
   isTabListHovering: false,
@@ -646,14 +373,12 @@ export const requestResponseSlice = createSlice({
     },
     /* =============== Authorization reducers end ============= */
 
+    /* ================ Requestlist start =================== */
     handleLoadRequestList: (
       state,
       action: PayloadAction<RequestListInterface>
     ) => {
       state.requestList = action.payload;
-    },
-    handleLoadOpenFolderList: (state, action: PayloadAction<Array<string>>) => {
-      state.openFolderList = action.payload;
     },
     handleChangeIsRequestListLoaded: (
       state,
@@ -661,6 +386,18 @@ export const requestResponseSlice = createSlice({
     ) => {
       state.isRequestListLoaded = action.payload ?? !state.isRequestListLoaded;
     },
+    handleToggleRequestList: (
+      state,
+      action: PayloadAction<boolean | undefined>
+    ) => {
+      if (action.payload === state.requestListCollapsed) return;
+
+      state.requestListCollapsed =
+        action.payload ?? !state.requestListCollapsed;
+    },
+
+    /* ================ Requestlist end =================== */
+
     handleToggleFolder: (state, action: PayloadAction<string>) => {
       const folderId = action.payload;
       const isOpen = state.openFolderList.includes(folderId);
@@ -1597,8 +1334,8 @@ export const {
   handleAuthorizations,
 
   handleLoadRequestList,
-  handleLoadOpenFolderList,
   handleChangeIsRequestListLoaded,
+  handleToggleRequestList,
   handleToggleFolder,
   handleChangeRequestName,
   handleChangeSelectedMethod,

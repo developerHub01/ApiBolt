@@ -3,7 +3,7 @@ import ListTopAction from "@/components/app/collections/request-list/ListTopActi
 
 const RequestListPanel = () => {
   return (
-    <div className="flex flex-col h-full gap-1">
+    <div className="w-full flex flex-col h-full gap-1">
       <ListTopAction />
       <RequestListPanelContent />
     </div>

@@ -1,21 +1,31 @@
 import { memo, useCallback } from "react";
-import { Button } from "@/components/ui/button";
 import { Menu as MenuIcon } from "lucide-react";
-import { useAppDispatch } from "@/context/redux/hooks";
-import { handleToggleSidebar } from "@/context/redux/sidebar/sidebar-slice";
+import { motion, AnimatePresence } from "motion/react";
+import { Button } from "@/components/ui/button";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
 
 const SidbarToggler = memo(() => {
   const dispath = useAppDispatch();
+  const activeTab = useAppSelector((state) => state.sidebar.activeTab);
 
   const handleClick = useCallback(
-    () => dispath(handleToggleSidebar()),
+    () => dispath(handleToggleRequestList()),
     [dispath]
   );
 
+  if (activeTab !== "collections") return null;
+
   return (
-    <Button size={"icon"} variant={"ghost"} onClick={handleClick}>
-      <MenuIcon />
-    </Button>
+    <AnimatePresence>
+      {activeTab === "collections" && (
+        <motion.span key="toggle-collection-list" exit={{ opacity: 0 }}>
+          <Button size={"icon"} variant={"ghost"} onClick={handleClick}>
+            <MenuIcon />
+          </Button>
+        </motion.span>
+      )}
+    </AnimatePresence>
   );
 });
 

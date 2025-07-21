@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { loadEnvironmentsList } from "@/context/redux/request-response/request-response-thunk";
-import type { EnvironmentInterface } from "@/context/redux/request-response/request-response-slice";
+import type { EnvironmentInterface } from "@/types/request-response.types";
 
 interface EnvironmentsContext {
   environmentsListState: Record<string, EnvironmentInterface>;

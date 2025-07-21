@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 import useMounted from "@/hooks/use-mounted";
 import { Button } from "@/components/ui/button";
 import { Copy as CopyIcon } from "lucide-react";
-import type { TContentType } from "@/types";
+import type { TContentType } from "@/types/request-response.types";
 
 type TLanguageType = TContentType | "markdown";
 

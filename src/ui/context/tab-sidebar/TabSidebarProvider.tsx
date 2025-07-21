@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import type { THTTPMethods } from "@/context/redux/request-response/request-response-slice";
 import { changeTabsData } from "@/context/redux/request-response/request-response-thunk";
+import type { THTTPMethods } from "@/types/request-response.types";
 
 export interface TabInterface {
   id: string;

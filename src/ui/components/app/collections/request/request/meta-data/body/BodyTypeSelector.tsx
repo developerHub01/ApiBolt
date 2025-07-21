@@ -10,10 +10,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import {
-  handleChangeRequestBodyType,
-  type TRequestBodyType,
-} from "@/context/redux/request-response/request-response-slice";
+import { handleChangeRequestBodyType } from "@/context/redux/request-response/request-response-slice";
+import type { TRequestBodyType } from "@/types/request-response.types";
 
 const bodyList: Array<{
   id: TRequestBodyType;

@@ -1,8 +1,8 @@
+import { memo } from "react";
 import { TableRow } from "@/components/ui/table";
 import VariableCell from "@/components/app/environment/environemnt-variables/VariableCell";
 import CheckCell from "@/components/app/environment/environemnt-variables/CheckCell";
-import type { EnvironmentInterface } from "@/context/redux/request-response/request-response-slice";
-import { memo } from "react";
+import type { EnvironmentInterface } from "@/types/request-response.types";
 
 interface VariableRowProps extends EnvironmentInterface {
   onChange: (

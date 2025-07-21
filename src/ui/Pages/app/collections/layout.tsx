@@ -1,3 +1,4 @@
+import { Outlet } from "react-router-dom";
 import AppMainContentLayoutWrapper from "@/components/app/AppMainContentLayoutWrapper";
 import RequestListPanelWrapper from "@/components/app/collections/request-list/RequestListPanelWrapper";
 import TabSidebar from "@/components/app/tab-sidebar/TabSidebar";
@@ -9,7 +10,6 @@ import {
 import RequestOrFolderProvider from "@/context/collections/request-list/RequestOrFolderProvider";
 import RequestBodyProvider from "@/context/collections/request/RequestBodyProvider";
 import RequestHeaderProvider from "@/context/collections/request/RequestHeaderProvider";
-import { Outlet } from "react-router-dom";
 
 const CollectionsLayout = () => {
   return (

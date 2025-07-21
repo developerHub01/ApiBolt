@@ -19,15 +19,13 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { AnimatePresence } from "motion/react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import {
-  handleChangeSelectedTab,
-  type RequestListItemInterface,
-} from "@/context/redux/request-response/request-response-slice";
+import { handleChangeSelectedTab } from "@/context/redux/request-response/request-response-slice";
 import {
   createSingleRequest,
   moveRequest,
   toggleOpenFolder,
 } from "@/context/redux/request-response/request-response-thunk";
+import type { RequestListItemInterface } from "@/types/request-response.types";
 
 interface RequestListItemProps extends RequestListItemInterface {
   type: "folder" | "request";

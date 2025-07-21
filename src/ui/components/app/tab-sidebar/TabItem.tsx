@@ -2,7 +2,6 @@ import { useState, type DragEvent, type MouseEvent } from "react";
 import RequestMethodTag from "@/components/app/RequestMethodTag";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import type { TMethod } from "@/types";
 import { FolderClosed as FolderIcon, X as CloseIcon } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
@@ -11,6 +10,7 @@ import {
   handleMoveTab,
   handleRemoveTab,
 } from "@/context/redux/request-response/request-response-slice";
+import type { TMethod } from "@/types/request-response.types";
 
 const TabItem = ({ id, index }: { id: string; index: number }) => {
   const dispatch = useAppDispatch();

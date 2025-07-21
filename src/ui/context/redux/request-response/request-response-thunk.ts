@@ -1,8 +1,17 @@
+import {
+  type AuthorizationPayloadInterface,
+  type EnvironmentInterface,
+  type EnvironmentPayloadInterface,
+  type ProjectInterface,
+  type RequestListItemInterface,
+  type ResponseFileDataBackendInterface,
+  type ResponseFolderDataInterface,
+  type THTTPMethods,
+  type TMethod,
+} from "@/types/request-response.types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import {
-  defaultFolderDescription,
-  defaultFolderTitle,
   handleAddTab,
   handleAuthorizations,
   handleChangeActiveProject,
@@ -41,25 +50,20 @@ import {
   handleToggleFolder,
   handleUpdateRequestResponseSelectedTab,
   // type APIKeyInterface,
-  type AuthorizationPayloadInterface,
   // type BasicAuthInterface,
-  type EnvironmentInterface,
-  type EnvironmentPayloadInterface,
   // type FileMetadataInterface,
   // type FormDataFileMetadataInterface,
   // type FormDataInterface,
   // type JWTBearerAuthInterface,
-  type ProjectInterface,
-  type RequestListItemInterface,
-  type ResponseFileDataBackendInterface,
   // type ResponseFileDataInterface,
-  type ResponseFolderDataInterface,
-  type THTTPMethods,
 } from "@/context/redux/request-response/request-response-slice";
 // import { base64ToFileObject, converterFileToMetadata } from "@/utils";
 // import { handleCheckImportedRequestFileValidator } from "@/context/redux/request-response/utils";
-import type { TMethod } from "@/types";
 import { v4 as uuidv4 } from "uuid";
+import {
+  defaultFolderDescription,
+  defaultFolderTitle,
+} from "@/constant/request-response.constant";
 
 export const loadProjectList = createAsyncThunk<
   {

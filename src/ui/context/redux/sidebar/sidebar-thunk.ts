@@ -3,8 +3,8 @@ import type { AppDispatch, RootState } from "@/context/redux/store";
 import {
   handleChangeActiveTab,
   handleLocalStorageOnSidebarToggle,
-  type TSidebarTab,
 } from "@/context/redux/sidebar/sidebar-slice";
+import type { TSidebarTab } from "@/types/sidebar.types";
 
 export const changeActiveTab = createAsyncThunk<
   void,

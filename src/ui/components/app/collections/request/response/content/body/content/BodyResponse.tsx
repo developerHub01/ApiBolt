@@ -3,13 +3,14 @@ import { getResponseType } from "@/utils";
 import { formatCode, getParser } from "@/utils/prettierUtils";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useResponse } from "@/context/collections/request/ResponseProvider";
-import type { TContentType } from "@/types";
 import Code from "@/components/ui/code";
 import { useAppSelector } from "@/context/redux/hooks";
+import type { TContentType } from "@/types/request-response.types";
 
 const BodyResponse = memo(() => {
   const response = useAppSelector(
-    (state) => state.requestResponse.response[state.requestResponse.selectedTab!]
+    (state) =>
+      state.requestResponse.response[state.requestResponse.selectedTab!]
   );
   const { responseCodeWrap } = useResponse();
   const [formattedCode, setFormattedCode] = useState("");

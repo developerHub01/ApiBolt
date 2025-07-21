@@ -1,13 +1,18 @@
 import { useEffect } from "react";
-import {
-  handleChangeActiveTab,
-  localStorageSidebarActiveTabKey,
-  type TSidebarTab,
-} from "@/context/redux/sidebar/sidebar-slice";
+import { handleChangeActiveTab } from "@/context/redux/sidebar/sidebar-slice";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import type { TSidebarTab } from "@/types/sidebar.types";
+import {
+  localStorageSidebarActiveTabKey,
+  sidebarMenuList,
+} from "@/constant/sidebar.constant";
 
 const Redirector = () => {
+  const location = useLocation();
+
+  console.log(location.pathname);
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const activeProjectId = useAppSelector(
@@ -19,13 +24,17 @@ const Redirector = () => {
 
     if (activeProjectId) {
       const savedTab = localStorage.getItem(localStorageSidebarActiveTabKey);
-      console.log({ savedTab });
+
       if (savedTab) activeSidebarTab = savedTab as TSidebarTab;
     }
 
     /* this is because I dont want to update localstorage just need to sync it in redux state */
     dispatch(handleChangeActiveTab(activeSidebarTab));
-    navigate(`/${activeSidebarTab}`);
+
+    /* find the path from the list */
+    navigate(
+      sidebarMenuList.find((item) => item.id === activeSidebarTab)?.path ?? "/"
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeProjectId]);
 
