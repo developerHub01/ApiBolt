@@ -186,7 +186,6 @@ interface RequestResponseState {
   environmentsList: Record<string, EnvironmentInterface>;
 
   requestList: RequestListInterface;
-  openFolderList: Array<string>;
   loadedRequestList: Record<string, boolean>;
   isRequestListLoaded: boolean;
   deleteFolderOrRequestId: string;
@@ -254,7 +253,6 @@ const initialState: RequestResponseState = {
   environmentsList: {},
 
   requestList: {},
-  openFolderList: [],
   loadedRequestList: {},
   isRequestListLoaded: false,
   deleteFolderOrRequestId: "",
@@ -350,7 +348,6 @@ export const requestResponseSlice = createSlice({
         jwtAddTo,
       } = action.payload;
 
-      console.log("handleAuthorizations", action.payload);
       state.authType = type;
 
       state.apiKeyAuth = {
@@ -395,36 +392,6 @@ export const requestResponseSlice = createSlice({
       state.requestListCollapsed =
         action.payload ?? !state.requestListCollapsed;
     },
-    handleUpdateRequestOrFolder: (
-      state,
-      action: PayloadAction<RequestListItemUpdatePayloadInterface>
-    ) => {
-      const { id } = action.payload;
-
-      if (!state.requestList[id]) return;
-
-      state.requestList[id] = {
-        ...state.requestList[id],
-        ...action.payload,
-      };
-    },
-
-    /* ================ Requestlist end =================== */
-
-    handleToggleFolder: (state, action: PayloadAction<string>) => {
-      const folderId = action.payload;
-      const isOpen = state.openFolderList.includes(folderId);
-
-      state.openFolderList = isOpen
-        ? state.openFolderList.filter((id) => id !== folderId)
-        : [...state.openFolderList, folderId];
-    },
-    handleChangeDeleteFolderOrRequestId: (
-      state,
-      action: PayloadAction<string>
-    ) => {
-      state.deleteFolderOrRequestId = action.payload;
-    },
     handleCreateSingleRequest: (
       state,
       action: PayloadAction<RequestListItemInterface>
@@ -437,7 +404,8 @@ export const requestResponseSlice = createSlice({
 
       if (parentId && state.requestList[parentId]) {
         const parentData = state.requestList[parentId];
-        parentData.children?.push(payload.id);
+        if (!parentData.children) parentData.children = [];
+        parentData.children.push(payload.id);
       }
 
       state.requestList[payload.id] = payload;
@@ -458,6 +426,30 @@ export const requestResponseSlice = createSlice({
         ...state.requestList,
         ...payload,
       };
+    },
+    handleUpdateRequestOrFolder: (
+      state,
+      action: PayloadAction<RequestListItemUpdatePayloadInterface>
+    ) => {
+      const { id } = action.payload;
+
+      if (!state.requestList[id]) return;
+
+      state.requestList[id] = {
+        ...state.requestList[id],
+        ...action.payload,
+      };
+    },
+    handleDeleteAllRequestOrFolder: (state) => {
+      state.requestList = {};
+    },
+    /* ================ Requestlist end =================== */
+
+    handleChangeDeleteFolderOrRequestId: (
+      state,
+      action: PayloadAction<string>
+    ) => {
+      state.deleteFolderOrRequestId = action.payload;
     },
 
     handleChangeIsTabListHovering: (
@@ -1324,7 +1316,7 @@ export const {
   handleChangeIsRequestListLoaded,
   handleToggleRequestList,
   handleUpdateRequestOrFolder,
-  handleToggleFolder,
+  handleDeleteAllRequestOrFolder,
   handleChangeDeleteFolderOrRequestId,
   handleCreateSingleRequest,
   handleCreateRestApiBasic,

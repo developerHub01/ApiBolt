@@ -123,7 +123,8 @@ declare global {
       updateRequestOrFolderMeta(
         payload: RequestListItemUpdatePayloadInterface
       ): Promise<boolean>;
-      deleteAuth(id?: string): Promise<boolean>;
+      moveRequestOrFolderMeta(id: string, parentId?: string): Promise<boolean>;
+      deleteRequestOrFolderMetaByProjectId(id?: string): Promise<boolean>;
     };
   }
 }

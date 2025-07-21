@@ -46,8 +46,6 @@ const AuthTypeTab = ({ className = "" }: Props) => {
   const authType = useAppSelector((state) => state.requestResponse.authType);
   useAppSelector((state) => console.log(state.requestResponse));
 
-  console.log("AuthTypeTab", authType);
-
   return (
     <Select
       value={authType ?? authTypeList[0].id}

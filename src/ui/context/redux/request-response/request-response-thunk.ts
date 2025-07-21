@@ -30,6 +30,7 @@ import {
   handleChangeTabList,
   handleCreateRestApiBasic,
   handleCreateSingleRequest,
+  handleDeleteAllRequestOrFolder,
   handleInitFolder,
   handleInitRequest,
   handleLoadEnvironmentsList,
@@ -45,7 +46,6 @@ import {
   // handleSetParams,
   // handleSetResponse,
   // handleSetXWWWFormUrlencodedData,
-  handleToggleFolder,
   handleUpdateRequestOrFolder,
   handleUpdateRequestResponseSelectedTab,
   // type APIKeyInterface,
@@ -94,6 +94,9 @@ export const changeActiveProject = createAsyncThunk<
 >("request-response/changeActiveProject", async (id, { dispatch }) => {
   dispatch(handleChangeActiveProject(id));
   const response = await window.electronAPIProjectsDB.changeActiveProject(id);
+
+  if (response) dispatch(handleChangeIsRequestListLoaded(false));
+
   return response;
 });
 
@@ -122,6 +125,7 @@ export const deleteProject = createAsyncThunk<
   if (response) {
     dispatch(loadProjectList());
     dispatch(handleChangeActiveProject(null));
+    dispatch(handleChangeIsRequestListLoaded(false));
   }
 
   return response;
@@ -314,7 +318,6 @@ export const createSingleRequest = createAsyncThunk<
   }
 >("request-response/createSingleRequest", async (parentId, { dispatch }) => {
   try {
-    console.log("createSingleRequest===========");
     const payload: RequestListItemInterface = {
       id: uuidv4(),
       name: "Request",
@@ -336,7 +339,6 @@ export const createCollection = createAsyncThunk<
   { dispatch: AppDispatch; state: RootState }
 >("request-response/createCollection", async (parentId, { dispatch }) => {
   try {
-    console.log("createCollection=========");
     const payload = {
       id: uuidv4(),
       name: parentId ? "Folder" : "Collection",
@@ -345,9 +347,10 @@ export const createCollection = createAsyncThunk<
 
     dispatch(handleCreateSingleRequest(payload));
 
-    await window.electronAPIRequestOrFolderMetaDB.createRequestOrFolderMeta(
-      payload
-    );
+    await window.electronAPIRequestOrFolderMetaDB.createRequestOrFolderMeta({
+      ...payload,
+      children: [],
+    });
   } catch {
     console.log("Request JSON file is not valid");
   }
@@ -358,7 +361,6 @@ export const createRestApiBasic = createAsyncThunk<
   { dispatch: AppDispatch }
 >("request-response/createSingleRequest", async (_, { dispatch }) => {
   try {
-    console.log("createRestApiBasic==========");
     const parentFolder: RequestListItemInterface = {
       id: uuidv4(),
       name: "REST API basics: CRUD, test & variable",
@@ -402,6 +404,39 @@ export const updateRequestOrFolder = createAsyncThunk<
     dispatch(handleUpdateRequestOrFolder(payload));
     await window.electronAPIRequestOrFolderMetaDB.updateRequestOrFolderMeta(
       payload
+    );
+  } catch {
+    console.log("Request JSON file is not valid");
+  }
+});
+export const moveRequestOrFolder = createAsyncThunk<
+  void,
+  { requestId: string; parentId: string | undefined },
+  { dispatch: AppDispatch }
+>(
+  "request-response/moveRequestOrFolder",
+  async ({ requestId, parentId }, { dispatch }) => {
+    try {
+      await window.electronAPIRequestOrFolderMetaDB.moveRequestOrFolderMeta(
+        requestId,
+        parentId
+      );
+      dispatch(handleChangeIsRequestListLoaded(false));
+    } catch {
+      console.log("Request JSON file is not valid");
+    }
+  }
+);
+
+export const deleteAllRequestOrFolder = createAsyncThunk<
+  void,
+  string | undefined,
+  { dispatch: AppDispatch }
+>("request-response/deleteAllRequestOrFolder", async (id, { dispatch }) => {
+  try {
+    dispatch(handleDeleteAllRequestOrFolder());
+    await window.electronAPIRequestOrFolderMetaDB.deleteRequestOrFolderMetaByProjectId(
+      id
     );
   } catch {
     console.log("Request JSON file is not valid");
@@ -713,35 +748,6 @@ export const loadRequestData = createAsyncThunk<
 //     }
 //   }
 // );
-
-export const moveRequest = createAsyncThunk<
-  void,
-  { requestId: string; folderId: string | undefined; index: number },
-  { dispatch: AppDispatch }
->(
-  "request-response/moveRequest",
-  async ({ requestId, folderId, index = 0 }, { dispatch }) => {
-    try {
-      await window.electronAPIDB.moveBoltCore(requestId, folderId, index);
-      dispatch(handleChangeIsRequestListLoaded(false));
-    } catch {
-      console.log("Request JSON file is not valid");
-    }
-  }
-);
-
-export const toggleOpenFolder = createAsyncThunk<
-  void,
-  string,
-  { dispatch: AppDispatch }
->("request-response/toggleOpenFolder", async (id: string, { dispatch }) => {
-  try {
-    dispatch(handleToggleFolder(id));
-    await window.electronAPIDB.toggleFolder(id);
-  } catch {
-    console.log("toggleOpenFolder error");
-  }
-});
 
 export const loadTabList = createAsyncThunk<
   void,

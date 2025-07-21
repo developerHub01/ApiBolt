@@ -1,5 +1,6 @@
 import {
   memo,
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -22,7 +23,7 @@ import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { handleChangeSelectedTab } from "@/context/redux/request-response/request-response-slice";
 import {
   createSingleRequest,
-  moveRequest,
+  moveRequestOrFolder,
   updateRequestOrFolder,
 } from "@/context/redux/request-response/request-response-thunk";
 import type { RequestListItemInterface } from "@/types/request-response.types";
@@ -49,11 +50,19 @@ const RequestListItem = memo(
 
     if (!requestDetails) return null;
 
+    /* if have children then as usual but if not and not have method means folder so add and empty children else children will be undefined means acutally it is a request*/
+    const children =
+      requestDetails.children ??
+      (!requestDetails["method"] && !requestDetails["children"]
+        ? []
+        : undefined);
+
     return (
       <RequestOrFolderProvider>
         <RequestListItemContent
           {...requestDetails}
-          type={requestDetails.children ? "folder" : "request"}
+          children={children}
+          type={children ? "folder" : "request"}
           lavel={lavel}
           index={index}
         />
@@ -63,15 +72,7 @@ const RequestListItem = memo(
 );
 
 const RequestListItemContent = memo(
-  ({
-    id,
-    type,
-    children,
-    parentId,
-    lavel,
-    index,
-    ...props
-  }: RequestListItemProps) => {
+  ({ id, type, children, parentId, lavel, ...props }: RequestListItemProps) => {
     const dispatch = useAppDispatch();
     const selectedTab = useAppSelector(
       (state) => state.requestResponse.selectedTab
@@ -111,71 +112,96 @@ const RequestListItemContent = memo(
       }
     }, [isRenameActive]);
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
-      setNameState(e.target.value);
+    const handleChange = useCallback(
+      (e: ChangeEvent<HTMLInputElement>) => setNameState(e.target.value),
+      []
+    );
 
-    const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      if (!value) return setNameState(name);
-      handleChangeName(id, e.target.value);
-      window.getSelection()?.removeAllRanges();
-    };
-
-    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === "Enter") {
+    const handleBlur = useCallback(
+      (e: FocusEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        if (!value) return setNameState(name);
+        handleChangeName(id, e.target.value);
         window.getSelection()?.removeAllRanges();
-        handleChangeName(id, nameState.trim() || name);
-      }
-    };
+      },
+      [handleChangeName, id, name]
+    );
 
-    const handleAddRequest = () => dispatch(createSingleRequest(id));
+    const handleKeyDown = useCallback(
+      (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter") {
+          window.getSelection()?.removeAllRanges();
+          handleChangeName(id, nameState.trim() || name);
+        }
+      },
+      [handleChangeName, id, name, nameState]
+    );
 
-    const handleDragStart = (e: DragEvent<HTMLDivElement>) => {
-      e.dataTransfer.setData("text/plain", id);
-      e.dataTransfer.effectAllowed = "move";
-    };
+    const handleAddRequest = useCallback(
+      async () => await dispatch(createSingleRequest(id)),
+      [dispatch, id]
+    );
 
-    const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
+    const handleDragStart = useCallback(
+      (e: DragEvent<HTMLDivElement>) => {
+        e.dataTransfer.setData("text/plain", id);
+        e.dataTransfer.effectAllowed = "move";
+      },
+      [id]
+    );
+
+    const handleDragOver = useCallback((e: DragEvent<HTMLDivElement>) => {
       e.preventDefault();
       e.dataTransfer.dropEffect = "move";
 
       setIsDragging(true);
-    };
+    }, []);
 
-    const handleDrop = (e: DragEvent<HTMLDivElement>) => {
-      e.preventDefault();
-      const draggedId = e.dataTransfer.getData("text/plain");
+    const handleDrop = useCallback(
+      (e: DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        const draggedId = e.dataTransfer.getData("text/plain");
 
-      setIsDragging(false);
-      if (draggedId === id) return;
+        setIsDragging(false);
+        if (draggedId === id) return;
 
-      dispatch(
-        moveRequest({
-          requestId: draggedId,
-          folderId: children ? id : parentId,
-          index,
-        })
-      );
-    };
+        dispatch(
+          moveRequestOrFolder({
+            requestId: draggedId,
+            parentId: children ? id : parentId,
+          })
+        );
+      },
+      [children, dispatch, id, parentId]
+    );
 
-    const handleDragLeave = () => setIsDragging(false);
+    const handleDragLeave = useCallback(() => setIsDragging(false), []);
 
-    const handleArrowButtonClick = (e: MouseEvent<HTMLButtonElement>) => {
-      e.stopPropagation();
-      dispatch(
-        updateRequestOrFolder({
-          id,
-          isExpended: !isExpended,
-        })
-      );
-    };
+    const handleArrowButtonClick = useCallback(
+      (e: MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation();
+        dispatch(
+          updateRequestOrFolder({
+            id,
+            isExpended: !isExpended,
+          })
+        );
+      },
+      [dispatch, id, isExpended]
+    );
 
-    const handleNameDoubleClick = (e: MouseEvent<HTMLInputElement>) => {
-      e.stopPropagation();
-      handleRenameAction();
-    };
+    const handleNameDoubleClick = useCallback(
+      (e: MouseEvent<HTMLInputElement>) => {
+        e.stopPropagation();
+        handleRenameAction();
+      },
+      [handleRenameAction]
+    );
 
-    const handleRequestClick = () => dispatch(handleChangeSelectedTab(id));
+    const handleRequestClick = useCallback(
+      () => dispatch(handleChangeSelectedTab(id)),
+      [dispatch, id]
+    );
 
     return (
       <>
@@ -199,7 +225,7 @@ const RequestListItemContent = memo(
             )}
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
-            draggable
+            draggable={!isRenameActive}
             onDragStart={handleDragStart}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
@@ -250,10 +276,13 @@ const RequestListItemContent = memo(
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
                     onBlur={handleBlur}
+                    draggable={false}
+                    onClick={(e) => e.stopPropagation()}
+                    onDragStart={(e) => e.stopPropagation()}
                     id={`request_list_item_input_${id}`}
                     ref={inputRef}
                     className={cn(
-                      "w-full h-full outline-0 focus:bg-background px-1 rounded-md text-sm ring-1 ring-primary/80",
+                      "w-full h-full outline-0 focus:bg-background/20 px-1 rounded-md text-sm ring-1 ring-primary/80",
                       {
                         "bg-background cursor-text": isRenameActive,
                         "bg-transparent cursor-pointer": !isRenameActive,
@@ -263,8 +292,10 @@ const RequestListItemContent = memo(
                 ) : (
                   <input
                     id={`request_list_item_${id}`}
-                    value={name}
+                    // value={name}
+                    value={id}
                     readOnly
+                    onClick={(e) => e.stopPropagation()}
                     onDoubleClick={handleNameDoubleClick}
                     className="w-full h-full outline-0 px-1 rounded-md text-sm p-1 whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer select-none"
                   />

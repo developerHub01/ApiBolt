@@ -67,7 +67,7 @@ const RequestResponseProvider = ({
       // link.click();
       // URL.revokeObjectURL(url);
     },
-    [dispatch]
+    []
   );
 
   return (
