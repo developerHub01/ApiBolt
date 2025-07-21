@@ -65,6 +65,9 @@ import {
   defaultFolderTitle,
 } from "@/constant/request-response.constant";
 
+/* ==============================
+========== Projects start =========
+================================= */
 export const loadProjectList = createAsyncThunk<
   {
     activeProject: string | null;
@@ -144,6 +147,9 @@ export const updateProject = createAsyncThunk<
 
   return response;
 });
+/* ==============================
+========== Projects end =========
+================================= */
 
 /* ==============================
 ===== Environment start =========
