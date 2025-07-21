@@ -23,7 +23,7 @@ import { handleChangeSelectedTab } from "@/context/redux/request-response/reques
 import {
   createSingleRequest,
   moveRequest,
-  toggleOpenFolder,
+  updateRequestOrFolder,
 } from "@/context/redux/request-response/request-response-thunk";
 import type { RequestListItemInterface } from "@/types/request-response.types";
 
@@ -82,6 +82,10 @@ const RequestListItemContent = memo(
     const name = useAppSelector(
       (state) => state.requestResponse.requestList[id].name ?? props.name
     );
+    const isExpended = useAppSelector(
+      (state) =>
+        state.requestResponse.requestList[id].isExpended ?? props.isExpended
+    );
 
     const {
       isRenameActive,
@@ -94,10 +98,6 @@ const RequestListItemContent = memo(
     const [isHovering, setIsHovering] = useState<boolean>(false);
     const [isDragging, setIsDragging] = useState<boolean>(false);
     const inputRef = useRef<HTMLInputElement>(null);
-
-    const isExpend = useAppSelector((state) =>
-      state.requestResponse.openFolderList.includes(id)
-    );
 
     useEffect(() => {
       if (name === nameState) return;
@@ -162,7 +162,12 @@ const RequestListItemContent = memo(
 
     const handleArrowButtonClick = (e: MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
-      dispatch(toggleOpenFolder(id));
+      dispatch(
+        updateRequestOrFolder({
+          id,
+          isExpended: !isExpended,
+        })
+      );
     };
 
     const handleNameDoubleClick = (e: MouseEvent<HTMLInputElement>) => {
@@ -219,8 +224,8 @@ const RequestListItemContent = memo(
                   className={cn(
                     "p-0.5 aspect-square cursor-pointer duration-100 transition-all",
                     {
-                      "rotate-90": isExpend,
-                      "rotate-0": !isExpend,
+                      "rotate-90": isExpended,
+                      "rotate-0": !isExpended,
                     }
                   )}
                   onClick={handleArrowButtonClick}
@@ -274,7 +279,7 @@ const RequestListItemContent = memo(
             </div>
           </div>
         </div>
-        {isExpend && (
+        {isExpended && (
           <div className="w-full select-text cursor-text">
             {!Array.isArray(children) || !children.length ? (
               <div

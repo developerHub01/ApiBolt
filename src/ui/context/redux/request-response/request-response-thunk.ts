@@ -4,9 +4,9 @@ import {
   type EnvironmentPayloadInterface,
   type ProjectInterface,
   type RequestListItemInterface,
+  type RequestListItemUpdatePayloadInterface,
   type ResponseFileDataBackendInterface,
   type ResponseFolderDataInterface,
-  type THTTPMethods,
   type TMethod,
 } from "@/types/request-response.types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
@@ -25,9 +25,7 @@ import {
   // handleChangeRawData,
   // handleChangeRawRequestBodyType,
   // handleChangeRequestBodyType,
-  handleChangeRequestName,
   // handleChangeRequestResponseSize,
-  handleChangeSelectedMethod,
   handleChangeSelectedTab,
   handleChangeTabList,
   handleCreateRestApiBasic,
@@ -48,6 +46,7 @@ import {
   // handleSetResponse,
   // handleSetXWWWFormUrlencodedData,
   handleToggleFolder,
+  handleUpdateRequestOrFolder,
   handleUpdateRequestResponseSelectedTab,
   // type APIKeyInterface,
   // type BasicAuthInterface,
@@ -394,6 +393,20 @@ export const createRestApiBasic = createAsyncThunk<
     console.log("Request JSON file is not valid");
   }
 });
+export const updateRequestOrFolder = createAsyncThunk<
+  void,
+  RequestListItemUpdatePayloadInterface,
+  { dispatch: AppDispatch }
+>("request-response/updateRequestOrFolder", async (payload, { dispatch }) => {
+  try {
+    dispatch(handleUpdateRequestOrFolder(payload));
+    await window.electronAPIRequestOrFolderMetaDB.updateRequestOrFolderMeta(
+      payload
+    );
+  } catch {
+    console.log("Request JSON file is not valid");
+  }
+});
 /* ==============================
 ===== RequestList end =========
 ================================= */
@@ -713,60 +726,6 @@ export const moveRequest = createAsyncThunk<
       dispatch(handleChangeIsRequestListLoaded(false));
     } catch {
       console.log("Request JSON file is not valid");
-    }
-  }
-);
-
-export const changeRequestName = createAsyncThunk<
-  void,
-  { id?: string; name: string },
-  { state: RootState; dispatch: AppDispatch }
->(
-  "request-response/changeRequestName",
-  async ({ id, name }, { dispatch, getState }) => {
-    const requestId = id ?? getState().requestResponse.selectedTab;
-
-    if (!requestId) return;
-
-    try {
-      dispatch(
-        handleChangeRequestName({
-          id: requestId,
-          name,
-        })
-      );
-      await window.electronAPIDB.updateBoltCore(requestId, {
-        name,
-      });
-    } catch {
-      console.log("changeRequestName error");
-    }
-  }
-);
-
-export const changeRequestMethod = createAsyncThunk<
-  void,
-  { id?: string; method: THTTPMethods },
-  { state: RootState; dispatch: AppDispatch }
->(
-  "request-response/changeRequestName",
-  async ({ id, method }, { dispatch, getState }) => {
-    const requestId = id ?? getState().requestResponse.selectedTab;
-
-    if (!requestId) return;
-
-    try {
-      dispatch(
-        handleChangeSelectedMethod({
-          id: requestId,
-          method,
-        })
-      );
-      await window.electronAPIDB.updateBoltCore(requestId, {
-        method,
-      });
-    } catch {
-      console.log("changeRequestName error");
     }
   }
 );

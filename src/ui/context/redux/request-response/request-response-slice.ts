@@ -20,6 +20,7 @@ import type {
   ProjectInterface,
   RequestListInterface,
   RequestListItemInterface,
+  RequestListItemUpdatePayloadInterface,
   RequestResponseSizeInterface,
   ResponseFileDataBackendInterface,
   ResponseFolderDataInterface,
@@ -28,7 +29,6 @@ import type {
   TAuthType,
   TBearerToken,
   TContentType,
-  THTTPMethods,
   TRequestBodyType,
 } from "@/types/request-response.types";
 import { parseUrlParams } from "@/utils";
@@ -395,6 +395,19 @@ export const requestResponseSlice = createSlice({
       state.requestListCollapsed =
         action.payload ?? !state.requestListCollapsed;
     },
+    handleUpdateRequestOrFolder: (
+      state,
+      action: PayloadAction<RequestListItemUpdatePayloadInterface>
+    ) => {
+      const { id } = action.payload;
+
+      if (!state.requestList[id]) return;
+
+      state.requestList[id] = {
+        ...state.requestList[id],
+        ...action.payload,
+      };
+    },
 
     /* ================ Requestlist end =================== */
 
@@ -405,32 +418,6 @@ export const requestResponseSlice = createSlice({
       state.openFolderList = isOpen
         ? state.openFolderList.filter((id) => id !== folderId)
         : [...state.openFolderList, folderId];
-    },
-    handleChangeRequestName: (
-      state,
-      action: PayloadAction<{
-        id?: string;
-        name: string;
-      }>
-    ) => {
-      const { name } = action.payload;
-      const id = action.payload.id ?? state.selectedTab;
-      if (!id || !state.requestList[id]?.name) return;
-
-      state.requestList[id].name = name;
-    },
-    handleChangeSelectedMethod: (
-      state,
-      action: PayloadAction<{
-        id?: string;
-        method: THTTPMethods;
-      }>
-    ) => {
-      const { method } = action.payload;
-      const id = action.payload.id ?? state.selectedTab;
-      if (!id || !state.requestList[id]?.method) return;
-
-      state.requestList[id].method = method;
     },
     handleChangeDeleteFolderOrRequestId: (
       state,
@@ -1336,9 +1323,8 @@ export const {
   handleLoadRequestList,
   handleChangeIsRequestListLoaded,
   handleToggleRequestList,
+  handleUpdateRequestOrFolder,
   handleToggleFolder,
-  handleChangeRequestName,
-  handleChangeSelectedMethod,
   handleChangeDeleteFolderOrRequestId,
   handleCreateSingleRequest,
   handleCreateRestApiBasic,

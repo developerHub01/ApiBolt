@@ -12,7 +12,6 @@ import "./ipc/boltCoreDB.js";
 import { boltCoreDBHandlers } from "./ipc/boltCoreDB.js";
 import { openFoldersDBHandlers } from "./ipc/openFoldersDB.js";
 import { tabsDBHandlers } from "./ipc/tabsDB.js";
-import { requestOrFolderDBHandlers } from "./ipc/requestOrFolder.js";
 import "./db/index.js";
 import { projectsHandlers } from "./ipc/projectsHandlers.js";
 import { enviromentsHandlers } from "./ipc/environmentsHandler.js";
@@ -42,7 +41,6 @@ app.whenReady().then(() => {
   boltCoreDBHandlers();
   openFoldersDBHandlers();
   tabsDBHandlers();
-  requestOrFolderDBHandlers();
   projectsHandlers();
   enviromentsHandlers();
   authorizationHandler();

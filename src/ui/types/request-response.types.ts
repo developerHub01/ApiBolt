@@ -62,6 +62,11 @@ export interface RequestListItemInterface {
   isExpended?: boolean;
 }
 
+export type RequestListItemUpdatePayloadInterface = Required<
+  Pick<RequestListItemInterface, "id">
+> &
+  Partial<Omit<RequestListItemInterface, "id" | "createdAt" | "children">>;
+
 export interface RequestListInterface {
   [key: string]: RequestListItemInterface;
 }

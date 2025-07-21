@@ -85,15 +85,6 @@ contextBridge.exposeInMainWorld("electronAPIDB", {
   },
 });
 
-contextBridge.exposeInMainWorld("electronAPIRequestAndFolderDB", {
-  findRequestOrFolderById: async (id) =>
-    await ipcRenderer.invoke("findRequestOrFolderById", id),
-  updateRequestOrFolderById: async (id, payload) =>
-    await ipcRenderer.invoke("updateRequestOrFolderById", id, payload),
-  deleteRequestOrFolderById: async (id) =>
-    await ipcRenderer.invoke("deleteRequestOrFolderById", id),
-});
-
 contextBridge.exposeInMainWorld("electronAPIProjectsDB", {
   getProjects: async () => await ipcRenderer.invoke("getProjects"),
   createProjects: async (payload) =>
@@ -133,6 +124,8 @@ contextBridge.exposeInMainWorld("electronAPIRequestOrFolderMetaDB", {
     await ipcRenderer.invoke("getRequestOrFolderMeta"),
   createRequestOrFolderMeta: async (...payload) =>
     await ipcRenderer.invoke("createRequestOrFolderMeta", ...payload),
+  updateRequestOrFolderMeta: async (...payload) =>
+    await ipcRenderer.invoke("updateRequestOrFolderMeta", ...payload),
   deleteRequestOrFolderMetaByProjectId: async (...payload) =>
     await ipcRenderer.invoke(
       "deleteRequestOrFolderMetaByProjectId",

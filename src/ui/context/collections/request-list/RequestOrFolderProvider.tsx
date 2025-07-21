@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useContext, useState } from "react";
 import { useAppDispatch } from "@/context/redux/hooks";
-import { changeRequestName } from "@/context/redux/request-response/request-response-thunk";
+import { updateRequestOrFolder } from "@/context/redux/request-response/request-response-thunk";
 
 interface RequestOrFolderContext {
   isContextMenuOpen: boolean;
@@ -51,7 +51,7 @@ const RequestOrFolderProvider = ({
   const handleChangeName = useCallback(
     (id: string, name: string) => {
       setIsRenameActive(false);
-      dispatch(changeRequestName({ id, name }));
+      dispatch(updateRequestOrFolder({ id, name }));
     },
     [dispatch]
   );

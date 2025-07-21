@@ -7,6 +7,7 @@ import type {
   JWTBearerAuthInterface,
   ProjectInterface,
   RequestListItemInterface,
+  RequestListItemUpdatePayloadInterface,
   ResponseDataBackendInterface,
   ResponseFolderDataInterface,
   ResponseInterface,
@@ -119,8 +120,8 @@ declare global {
       createRequestOrFolderMeta(
         payload: RequestListItemInterface | Array<RequestListItemInterface>
       ): Promise<boolean>;
-      updateAuth(
-        payload: Partial<Omit<AuthorizationPayloadInterface, "id">>
+      updateRequestOrFolderMeta(
+        payload: RequestListItemUpdatePayloadInterface
       ): Promise<boolean>;
       deleteAuth(id?: string): Promise<boolean>;
     };
