@@ -1,4 +1,4 @@
-import ProjectMenuProvider from "@/context/collections/project/ProjectMenuProvider";
+import ProjectMenuProvider from "@/context/project/ProjectMenuProvider";
 import { Outlet } from "react-router-dom";
 
 const ProjectsLayout = () => {
