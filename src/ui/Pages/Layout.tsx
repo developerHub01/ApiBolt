@@ -1,6 +1,7 @@
+import { Outlet, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { isElectron } from "@/utils/electron";
-import { Outlet, useLocation } from "react-router-dom";
+import Redirector from "@/components/app/Redirector";
 
 const RootLayout = () => {
   const location = useLocation();
@@ -14,6 +15,7 @@ const RootLayout = () => {
       })}
     >
       <Outlet />
+      <Redirector />
     </section>
   );
 };

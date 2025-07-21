@@ -1,7 +1,12 @@
 import { Outlet } from "react-router-dom";
+import RequestResponseProvider from "@/context/collections/request/RequestResponseProvider";
 
 const RequestLayout = () => {
-  return <Outlet />;
+  return (
+    <RequestResponseProvider>
+      <Outlet />
+    </RequestResponseProvider>
+  );
 };
 
 export default RequestLayout;

@@ -18,10 +18,10 @@ const initialState: SidebarState = {
   lastActiveTab: "collections",
 };
 
-const localStorageSidebarActiveTabKey = "sidebar-active-tab";
-const localStorageSidebarLastActiveTabKey = "sidebar-last-active-tab";
+export const localStorageSidebarActiveTabKey = "sidebar-active-tab";
+export const localStorageSidebarLastActiveTabKey = "sidebar-last-active-tab";
 
-const handleLocalStorageOnSidebarToggle = (
+export const handleLocalStorageOnSidebarToggle = (
   currentActiveTab: string | null,
   lastActiveTab: string | null
 ) => {
@@ -50,14 +50,11 @@ export const sidebarSlice = createSlice({
       state,
       action: PayloadAction<TSidebarTab | null>
     ) => {
-      const id = action.payload;
-      state.lastActiveTab = state.activeTab;
+      const id = action.payload ?? "projects";
+      state.lastActiveTab = state.activeTab ?? "projects";
 
-      let currentActiveTab = id;
-      if (id === state.activeTab) currentActiveTab = null;
-      state.activeTab = currentActiveTab;
-
-      handleLocalStorageOnSidebarToggle(currentActiveTab, id);
+      if (id === state.activeTab) return;
+      state.activeTab = id;
     },
     handleToggleSidebar: (state) => {
       let currentActiveTab: TSidebarTab = null;

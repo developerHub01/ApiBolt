@@ -12,13 +12,11 @@ import {
   Layers as ProjectsIcon,
   KeyRound as AuthorizationIcon,
 } from "lucide-react";
-import {
-  handleChangeActiveTab,
-  type TSidebarTab,
-} from "@/context/redux/sidebar/sidebar-slice";
+import { type TSidebarTab } from "@/context/redux/sidebar/sidebar-slice";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { Link, useNavigate } from "react-router-dom";
 import { loadProjectList } from "@/context/redux/request-response/request-response-thunk";
+import { changeActiveTab as changeSidebarActiveTab } from "@/context/redux/sidebar/sidebar-thunk";
 
 const menuList: Array<{
   id: TSidebarTab;
@@ -73,7 +71,7 @@ const SidebarMenu = memo(() => {
   }, []);
 
   const handleClick = useCallback(
-    (id: TSidebarTab) => dispatch(handleChangeActiveTab(id)),
+    (id: TSidebarTab) => dispatch(changeSidebarActiveTab(id)),
     [dispatch]
   );
   const activeProjectId = useAppSelector(

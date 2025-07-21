@@ -1,4 +1,4 @@
-import { useProjectMenu } from "@/context/collections/project/ProjectMenuProvider";
+import { useProjectMenu } from "@/context/project/ProjectMenuProvider";
 import ProjectItem from "@/components/app/projects/project-list/ProjectItem";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ProjectNotFound from "@/components/app/projects/project-list/ProjectNotFound";
