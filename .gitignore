@@ -15,9 +15,6 @@ dist-react
 .env
 cookies.json
 test
-boltCore
-openFolder
-tabsState
 out
 src/electron/storage/request-or-folder/*
 db/
