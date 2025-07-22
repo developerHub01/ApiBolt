@@ -1,4 +1,4 @@
-import { useState, type DragEvent, type MouseEvent } from "react";
+import { useCallback, useState, type DragEvent, type MouseEvent } from "react";
 import RequestMethodTag from "@/components/app/RequestMethodTag";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -11,6 +11,7 @@ import {
   handleRemoveTab,
 } from "@/context/redux/request-response/request-response-slice";
 import type { TMethod } from "@/types/request-response.types";
+import { expendParentsOnSelectedChangeTabsData } from "@/context/redux/request-response/request-response-thunk";
 
 const TabItem = ({ id, index }: { id: string; index: number }) => {
   const dispatch = useAppDispatch();
@@ -66,12 +67,19 @@ const TabItem = ({ id, index }: { id: string; index: number }) => {
     (state) => state.requestResponse.requestList[id]?.name ?? tabDetails.name
   );
 
-  if (!tabDetails) return null;
-
   const handleCloseBtnClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     dispatch(handleRemoveTab(id));
   };
+
+  const handleClick = useCallback(async () => {
+    dispatch(handleChangeSelectedTab(id));
+
+    if (selectedTab === id) return;
+    dispatch(expendParentsOnSelectedChangeTabsData(id));
+  }, [dispatch, id, selectedTab]);
+
+  if (!tabDetails) return null;
 
   return (
     <div
@@ -83,7 +91,7 @@ const TabItem = ({ id, index }: { id: string; index: number }) => {
       })}
       onMouseEnter={() => setIsTabHovering(true)}
       onMouseLeave={() => setIsTabHovering(false)}
-      onClick={() => dispatch(handleChangeSelectedTab(id))}
+      onClick={handleClick}
       draggable
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}

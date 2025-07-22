@@ -7,6 +7,8 @@ export const getTabList = async () => {
   try {
     const activeProjectId = await getActiveProject();
 
+    if (!activeProjectId) return null;
+
     let tabList = await db
       .select()
       .from(tabsTable)

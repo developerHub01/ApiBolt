@@ -131,6 +131,10 @@ declare global {
         payload: Array<Omit<RequestListItemInterface, "children" | "createdAt">>
       ): Promise<boolean>;
       deleteRequestOrFolderMetaByProjectId(id?: string): Promise<boolean>;
+      expendOrCollapseRequestOrFolderMetaAll(
+        id?: string | Array<string>,
+        isExpended?: boolean
+      ): Promise<boolean>;
     };
 
     electronAPITabsDB: {

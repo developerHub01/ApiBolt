@@ -85,6 +85,11 @@ contextBridge.exposeInMainWorld("electronAPIRequestOrFolderMetaDB", {
     await ipcRenderer.invoke("duplicateRequestOrFolderMeta", ...payload),
   deleteRequestOrFolderMetaAll: async () =>
     await ipcRenderer.invoke("deleteRequestOrFolderMetaAll"),
+  expendOrCollapseRequestOrFolderMetaAll: async (...payload) =>
+    await ipcRenderer.invoke(
+      "expendOrCollapseRequestOrFolderMetaAll",
+      ...payload
+    ),
 });
 
 contextBridge.exposeInMainWorld("electronAPITabsDB", {

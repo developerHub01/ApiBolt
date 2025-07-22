@@ -67,6 +67,7 @@ import {
 import {
   duplicateRequestOrFolderNode,
   getNestedIds,
+  getNodeParentsIdList,
 } from "@/utils/request-response.utils";
 
 /* ==============================
@@ -291,7 +292,7 @@ export const updateAuthorization = createAsyncThunk<
   return response;
 });
 /* ==============================
-===== Auth end =========
+============== Auth end =========
 ================================= */
 
 /* ==============================
@@ -476,6 +477,12 @@ export const deleteRequestOrFolder = createAsyncThunk<
         id: rootId,
       });
 
+      console.log("before===");
+      console.log(deletionCandidates);
+      deletionCandidates.reverse();
+      console.log("after===");
+      console.log(deletionCandidates);
+
       const response =
         await window.electronAPIRequestOrFolderMetaDB.deleteRequestOrFolderMetaById(
           deletionCandidates
@@ -536,8 +543,8 @@ export const loadTabsData = createAsyncThunk<
     const tabsListData = await window.electronAPITabsDB.getTabList();
     dispatch(handleChangeTabList(tabsListData.openTabs ?? []));
     dispatch(handleChangeSelectedTab(tabsListData.selectedTab ?? null));
-  } catch {
-    console.log("loadTabList error");
+  } catch (error) {
+    console.log(error);
   }
 });
 
@@ -578,9 +585,38 @@ export const addNewTabsData = createAsyncThunk<
       payload
     );
   } catch {
-    console.log("changeTabsData error");
+    console.log("addNewTabsData error");
   }
 });
+
+export const expendParentsOnSelectedChangeTabsData = createAsyncThunk<
+  void,
+  string,
+  { state: RootState; dispatch: AppDispatch }
+>(
+  "request-response/expendParentsOnSelectedChangeTabsData",
+  async (id, { dispatch, getState }) => {
+    try {
+      const state = getState() as RootState;
+      const requestList = state.requestResponse.requestList;
+
+      const payload = getNodeParentsIdList({
+        source: requestList,
+        id,
+      });
+
+      const response =
+        await window.electronAPIRequestOrFolderMetaDB.expendOrCollapseRequestOrFolderMetaAll(
+          payload,
+          true
+        );
+
+      if (response) dispatch(handleChangeIsRequestListLoaded(false));
+    } catch {
+      console.log("changeTabsData error");
+    }
+  }
+);
 /* ==============================
 ========= TabList end =========
 ================================= */
