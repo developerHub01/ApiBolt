@@ -194,7 +194,7 @@ interface RequestResponseState {
   tabList: Array<string>;
   isTabListHovering: boolean;
 
-  selectedTab: string | null;
+  selectedTab: string | null /* selectedTabId in tabList */;
   isResponseCollapsed: Record<string, boolean>;
   activeMetaTab: Record<string, TActiveTabType>;
   isApiUrlError: Record<string, boolean>;
@@ -449,8 +449,8 @@ export const requestResponseSlice = createSlice({
     ) => {
       state.deleteFolderOrRequestId = action.payload;
     },
-    /* ================ Requestlist end =================== */
 
+    /* ================ Requestlist end =================== */
     handleChangeIsTabListHovering: (
       state,
       action: PayloadAction<boolean | undefined>
@@ -551,6 +551,7 @@ export const requestResponseSlice = createSlice({
 
       state.selectedTab = id;
     },
+    /* ================ TabsList end =================== */
 
     handleToggleCollapse: (
       state,

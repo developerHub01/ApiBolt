@@ -524,6 +524,67 @@ export const duplicateRequestOrFolder = createAsyncThunk<
 ======= RequestList end =========
 ================================= */
 
+/* ==============================
+========= TabList start =========
+================================= */
+export const loadTabsData = createAsyncThunk<
+  void,
+  void,
+  { dispatch: AppDispatch }
+>("request-response/loadTabsData", async (_, { dispatch }) => {
+  try {
+    const tabsListData = await window.electronAPITabsDB.getTabList();
+    dispatch(handleChangeTabList(tabsListData.openTabs ?? []));
+    dispatch(handleChangeSelectedTab(tabsListData.selectedTab ?? null));
+  } catch {
+    console.log("loadTabList error");
+  }
+});
+
+export const changeTabsData = createAsyncThunk<
+  void,
+  void,
+  { state: RootState }
+>("request-response/changeTabsData", async (_, { getState }) => {
+  const state = getState() as RootState;
+  try {
+    await window.electronAPITabsDB.updateTabList({
+      openTabs: state.requestResponse.tabList,
+      selectedTab: state.requestResponse.selectedTab,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+export const addNewTabsData = createAsyncThunk<
+  void,
+  void,
+  { state: RootState; dispatch: AppDispatch }
+>("request-response/addNewTabsData", async (_, { dispatch }) => {
+  try {
+    const newTabId = uuidv4();
+
+    const payload: RequestListItemInterface = {
+      id: newTabId,
+      name: "Request",
+      method: "get",
+    };
+
+    dispatch(handleAddTab(newTabId));
+    dispatch(handleChangeSelectedTab(newTabId));
+    dispatch(handleCreateSingleRequest(payload));
+    await window.electronAPIRequestOrFolderMetaDB.createRequestOrFolderMeta(
+      payload
+    );
+  } catch {
+    console.log("changeTabsData error");
+  }
+});
+/* ==============================
+========= TabList end =========
+================================= */
+
 export const loadRequestData = createAsyncThunk<
   void,
   string | null,
@@ -826,59 +887,6 @@ export const loadRequestData = createAsyncThunk<
 //     }
 //   }
 // );
-
-export const loadTabList = createAsyncThunk<
-  void,
-  void,
-  { dispatch: AppDispatch }
->("request-response/loadTabList", async (_, { dispatch }) => {
-  try {
-    const tabsListData = await window.electronAPIDB.getTabList();
-    dispatch(handleChangeTabList(tabsListData.openTabs ?? []));
-    dispatch(handleChangeSelectedTab(tabsListData.selectedTab ?? null));
-  } catch {
-    console.log("loadTabList error");
-  }
-});
-
-export const changeTabsData = createAsyncThunk<
-  void,
-  void,
-  { state: RootState }
->("request-response/changeTabsData", async (_, { getState }) => {
-  const state = getState() as RootState;
-  try {
-    await window.electronAPIDB.changeTabsData({
-      openTabs: state.requestResponse.tabList,
-      selectedTab: state.requestResponse.selectedTab,
-    });
-  } catch {
-    console.log("changeTabsData error");
-  }
-});
-
-export const addNewTab = createAsyncThunk<
-  void,
-  void,
-  { state: RootState; dispatch: AppDispatch }
->("request-response/addNewTab", async (_, { dispatch }) => {
-  try {
-    const newTabId = uuidv4();
-
-    const payload: RequestListItemInterface = {
-      id: newTabId,
-      name: "Request",
-      method: "get",
-    };
-
-    dispatch(handleAddTab(newTabId));
-    dispatch(handleChangeSelectedTab(newTabId));
-    dispatch(handleCreateSingleRequest(payload));
-    await window.electronAPIDB.addBoltCore(payload);
-  } catch {
-    console.log("changeTabsData error");
-  }
-});
 
 export const changeFolderContent = createAsyncThunk<
   void,

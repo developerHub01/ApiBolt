@@ -1,4 +1,4 @@
-import type { DragEvent } from "react";
+import { type DragEvent } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import TabItem from "@/components/app/tab-sidebar/TabItem";
 import { cn } from "@/lib/utils";
@@ -11,6 +11,7 @@ import {
 } from "@/context/redux/request-response/request-response-slice";
 import TabActionWrapper from "@/components/app/tab-sidebar/TabActionWrapper";
 import TabSidebarWrapper from "@/components/app/tab-sidebar/TabSidebarWrapper";
+import AutoScrollActiveWrapper from "@/components/ui/auto-scroll-active-wrapper";
 
 const TabSidebar = () => {
   const dispatch = useAppDispatch();
@@ -47,11 +48,11 @@ const TabSidebar = () => {
           )}
         >
           <ScrollArea
-            className="w-full h-full min-h-0 flex-1 pt-2 pb-0"
+            className="w-full h-full min-h-0 flex-1 pb-0"
             onDrop={handleDrop}
             onDragOver={(e) => e.preventDefault()}
           >
-            <div className="w-full flex flex-col gap-1 pb-1">
+            <AutoScrollActiveWrapper className="py-1">
               {tabList.length ? (
                 <>
                   {tabList.map((tabId, index) => (
@@ -65,7 +66,7 @@ const TabSidebar = () => {
                   )}
                 </div>
               )}
-            </div>
+            </AutoScrollActiveWrapper>
           </ScrollArea>
           <TabActionWrapper />
         </motion.div>

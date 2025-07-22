@@ -1,8 +1,8 @@
 import { memo, useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { addNewTab } from "@/context/redux/request-response/request-response-thunk";
 import TabBottomCTA from "@/components/app/tab-sidebar/TabBottomCTA";
 import { Plus as AddIcon } from "lucide-react";
+import { addNewTabsData } from "@/context/redux/request-response/request-response-thunk";
 
 const AddNewTab = memo(() => {
   const dispatch = useAppDispatch();
@@ -11,7 +11,7 @@ const AddNewTab = memo(() => {
   );
 
   const handleAdd = useCallback(() => {
-    dispatch(addNewTab());
+    dispatch(addNewTabsData());
   }, [dispatch]);
 
   return (

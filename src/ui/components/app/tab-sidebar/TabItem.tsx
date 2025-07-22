@@ -76,6 +76,7 @@ const TabItem = ({ id, index }: { id: string; index: number }) => {
   return (
     <div
       key={id}
+      data-active={selectedTab === id}
       className={cn("w-full h-8 cursor-pointer hover:bg-accent px-1", {
         "bg-accent": selectedTab === id,
         "bg-transparent": selectedTab !== id,

@@ -1,7 +1,10 @@
 import React, { createContext, useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { changeTabsData } from "@/context/redux/request-response/request-response-thunk";
+import {
+  changeTabsData,
+  loadTabsData,
+} from "@/context/redux/request-response/request-response-thunk";
 import type { THTTPMethods } from "@/types/request-response.types";
 
 export interface TabInterface {
@@ -48,6 +51,12 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
     (state) => state.requestResponse.selectedTab
   );
   const navigate = useNavigate();
+
+  /* load tabsList */
+  useEffect(() => {
+    dispatch(loadTabsData());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   let changeTabDataTimeout;
   useEffect(() => {

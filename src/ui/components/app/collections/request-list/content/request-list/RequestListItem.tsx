@@ -292,10 +292,8 @@ const RequestListItemContent = memo(
                 ) : (
                   <input
                     id={`request_list_item_${id}`}
-                    // value={name}
-                    value={id}
+                    value={name}
                     readOnly
-                    onClick={(e) => e.stopPropagation()}
                     onDoubleClick={handleNameDoubleClick}
                     className="w-full h-full outline-0 px-1 rounded-md text-sm p-1 whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer select-none"
                   />
