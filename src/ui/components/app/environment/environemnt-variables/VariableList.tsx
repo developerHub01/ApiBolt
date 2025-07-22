@@ -65,7 +65,7 @@ const VariableList = memo(() => {
         label="No variables available. Create one."
         description="Your currently have no variables. You can start by clicking on the '+ Add New Variable' button or from right side tab list."
         showFallback
-        className="border-0 max-w-md"
+        className="max-w-md"
       />
     );
 
