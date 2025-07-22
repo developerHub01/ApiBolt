@@ -96,6 +96,7 @@ export const tabsTable = sqliteTable("tabs_table", {
   selectedTab: text().references(() => requestOrFolderMetaTable.id),
   projectId: text()
     .notNull()
+    .unique()
     .references(() => projectTable.id),
   createdAt: text()
     .notNull()
