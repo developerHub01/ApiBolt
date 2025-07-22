@@ -31,10 +31,12 @@ const Redirector = () => {
     /* this is because I dont want to update localstorage just need to sync it in redux state */
     dispatch(handleChangeActiveTab(activeSidebarTab));
 
+    const route =
+      sidebarMenuList.find((item) => item.id === activeSidebarTab)?.path ?? "/";
+
+    console.log({ route });
     /* find the path from the list */
-    navigate(
-      sidebarMenuList.find((item) => item.id === activeSidebarTab)?.path ?? "/"
-    );
+    navigate(route);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeProjectId]);
 

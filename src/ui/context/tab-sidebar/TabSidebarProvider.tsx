@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect } from "react";
-import { useNavigate } from "react-router";
+// import { useNavigate } from "react-router";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
   changeTabsData,
@@ -44,13 +44,13 @@ interface TabSidebarProviderProps {
 const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
   const dispatch = useAppDispatch();
   const tabList = useAppSelector((state) => state.requestResponse.tabList);
-  const requestList = useAppSelector(
-    (state) => state.requestResponse.requestList
-  );
+  // const requestList = useAppSelector(
+  //   (state) => state.requestResponse.requestList
+  // );
   const selectedTab = useAppSelector(
     (state) => state.requestResponse.selectedTab
   );
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   /* load tabsList */
   useEffect(() => {
@@ -66,20 +66,20 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
     }, 500);
   }, [tabList, selectedTab, changeTabDataTimeout, dispatch]);
 
-  useEffect(() => {
-    const defaultPath = "/";
+  // useEffect(() => {
+  //   const defaultPath = "/";
 
-    if (!selectedTab || !tabList.length) {
-      navigate(defaultPath);
-      return;
-    }
+  //   if (!selectedTab || !tabList.length) {
+  //     navigate(defaultPath);
+  //     return;
+  //   }
 
-    const tabDetails = requestList[selectedTab];
+  //   const tabDetails = requestList[selectedTab];
 
-    if (!tabDetails) navigate(defaultPath);
-    else
-      navigate(`/${tabDetails.children ? "folder" : "request"}/${selectedTab}`);
-  }, [selectedTab, tabList, requestList, navigate]);
+  //   if (!tabDetails) navigate(defaultPath);
+  //   else
+  //     navigate(`/${tabDetails.children ? "folder" : "request"}/${selectedTab}`);
+  // }, [selectedTab, tabList, requestList, navigate]);
 
   return (
     <TabSidebarContext.Provider value={undefined}>
