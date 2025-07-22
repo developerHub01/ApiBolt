@@ -7,6 +7,7 @@ interface EmptyProps {
   description?: string;
   children?: React.ReactNode;
   className?: string;
+  fallbackClassName?: string;
   icon?: React.ReactNode;
   animationSrc?: string;
   showFallback?: boolean;
@@ -19,6 +20,7 @@ const Empty = ({
   description,
   children,
   className = "",
+  fallbackClassName = "",
   icon,
   animationSrc = "./lottie/empty-box.lottie",
   showFallback = false,
@@ -37,8 +39,8 @@ const Empty = ({
       {icon && <div className="mb-2">{icon}</div>}
 
       {showFallback && (
-        <div className="w-32 h-32 mb-2">
-          <DotLottieReact src={animationSrc} loop autoplay />
+        <div className={cn("w-32 mb-2", fallbackClassName)}>
+          <DotLottieReact src={animationSrc} loop autoplay width={"100%"} />
         </div>
       )}
 

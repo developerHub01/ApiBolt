@@ -8,10 +8,11 @@ import {
   updateEnvironments,
 } from "@/context/redux/request-response/request-response-thunk";
 import { useEnvironments } from "@/context/environments/EnvironmentsProvider";
+import Empty from "@/components/ui/empty";
 
 const VariableList = memo(() => {
   const dispatch = useAppDispatch();
-  const { environmentsListState } = useEnvironments();
+  const { environmentsListState, searchQuery } = useEnvironments();
 
   const list = Object.values(environmentsListState ?? {}).sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -41,6 +42,17 @@ const VariableList = memo(() => {
     },
     [dispatch]
   );
+
+  if (searchQuery && !list.length)
+    return (
+      <Empty
+        label="No item matched"
+        animationSrc="./lottie/no-search-item-available.lottie"
+        showFallback
+        className="border-0"
+        fallbackClassName="w-52"
+      />
+    );
 
   return (
     <Table>
