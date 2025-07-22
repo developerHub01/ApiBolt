@@ -66,7 +66,6 @@ import {
 } from "@/constant/request-response.constant";
 import {
   duplicateRequestOrFolderNode,
-  getNestedIds,
   getNodeParentsIdList,
 } from "@/utils/request-response.utils";
 
@@ -470,22 +469,9 @@ export const deleteRequestOrFolder = createAsyncThunk<
           : payload;
       dispatch(handleChangeDeleteFolderOrRequestId(""));
 
-      const requestList = state.requestResponse.requestList;
-
-      const deletionCandidates = getNestedIds({
-        source: requestList,
-        id: rootId,
-      });
-
-      console.log("before===");
-      console.log(deletionCandidates);
-      deletionCandidates.reverse();
-      console.log("after===");
-      console.log(deletionCandidates);
-
       const response =
         await window.electronAPIRequestOrFolderMetaDB.deleteRequestOrFolderMetaById(
-          deletionCandidates
+          rootId
         );
 
       if (response) dispatch(handleChangeIsRequestListLoaded(false));

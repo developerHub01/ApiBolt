@@ -5,9 +5,6 @@ import {
   activeProjectTable,
   ACTIVE_PROJECT_ID,
 } from "./schema.js";
-import { deleteAuthByProjectId } from "./authorizationDB.js";
-import { deleteEnvironmentsByProjectId } from "./environmentsDB.js";
-import { deleteRequestOrFolderMetaByProjectId } from "./requestOrFolderMetaDB.js";
 
 export const getProjects = async () => {
   try {
@@ -44,14 +41,6 @@ export const updateProjects = async (id, payload = {}) => {
 
 export const deleteProjects = async (id) => {
   try {
-    await deleteAuthByProjectId(id);
-    await deleteEnvironmentsByProjectId(id);
-    await deleteRequestOrFolderMetaByProjectId(id);
-    /* delete active project from that table if deleting project is active project  */
-    await db
-      .delete(activeProjectTable)
-      .where(eq(activeProjectTable.activeProjectId, id));
-
     const deleted = await db
       .delete(projectTable)
       .where(eq(projectTable.id, id));
