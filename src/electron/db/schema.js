@@ -4,13 +4,6 @@ import { v4 as uuidv4 } from "uuid";
 
 export const ACTIVE_PROJECT_ID = "singleton";
 
-export const usersTable = sqliteTable("users_table", {
-  id: int().primaryKey({ autoIncrement: true }),
-  name: text().notNull(),
-  age: int().notNull(),
-  email: text().notNull().unique(),
-});
-
 export const projectTable = sqliteTable("projects_table", {
   id: text("id")
     .primaryKey()
@@ -28,7 +21,9 @@ export const environmentTable = sqliteTable("environments_table", {
   isCheck: int().notNull().default(1),
   projectId: text()
     .notNull()
-    .references(() => projectTable.id),
+    .references(() => projectTable.id, {
+      onDelete: "cascade",
+    }),
   createdAt: text()
     .notNull()
     .default(sql`(current_timestamp)`),
@@ -36,7 +31,9 @@ export const environmentTable = sqliteTable("environments_table", {
 
 export const activeProjectTable = sqliteTable("active_project_table", {
   id: text().primaryKey().default(ACTIVE_PROJECT_ID),
-  activeProjectId: text("active_project_id"),
+  activeProjectId: text("active_project_id").references(() => projectTable.id, {
+    onDelete: "cascade",
+  }),
 });
 
 export const authorizationTable = sqliteTable("authorization_table", {
@@ -51,7 +48,9 @@ export const authorizationTable = sqliteTable("authorization_table", {
   projectId: text()
     .notNull()
     .unique()
-    .references(() => projectTable.id),
+    .references(() => projectTable.id, {
+      onDelete: "cascade",
+    }),
   /* API Key Auth =========== */
   apiKeyKey: text(),
   apiKeyValue: text(),
@@ -79,8 +78,12 @@ export const requestOrFolderMetaTable = sqliteTable(
     name: text().default(""),
     projectId: text()
       .notNull()
-      .references(() => projectTable.id),
-    parentId: text().references(() => requestOrFolderMetaTable.id),
+      .references(() => projectTable.id, {
+        onDelete: "cascade",
+      }),
+    parentId: text().references(() => requestOrFolderMetaTable.id, {
+      onDelete: "cascade",
+    }),
     isExpended: integer({ mode: "boolean" }).notNull().default(0),
     createdAt: text()
       .notNull()
@@ -97,7 +100,9 @@ export const tabsTable = sqliteTable("tabs_table", {
   projectId: text()
     .notNull()
     .unique()
-    .references(() => projectTable.id),
+    .references(() => projectTable.id, {
+      onDelete: "cascade",
+    }),
   createdAt: text()
     .notNull()
     .default(sql`(current_timestamp)`),
