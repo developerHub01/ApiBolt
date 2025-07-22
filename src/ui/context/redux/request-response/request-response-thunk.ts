@@ -527,8 +527,9 @@ export const loadTabsData = createAsyncThunk<
 >("request-response/loadTabsData", async (_, { dispatch }) => {
   try {
     const tabsListData = await window.electronAPITabsDB.getTabList();
-    dispatch(handleChangeTabList(tabsListData.openTabs ?? []));
-    dispatch(handleChangeSelectedTab(tabsListData.selectedTab ?? null));
+
+    dispatch(handleChangeTabList(tabsListData?.openTabs ?? []));
+    dispatch(handleChangeSelectedTab(tabsListData?.selectedTab ?? null));
   } catch (error) {
     console.log(error);
   }
