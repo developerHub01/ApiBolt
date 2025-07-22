@@ -8,8 +8,6 @@ import type {
   ProjectInterface,
   RequestListItemInterface,
   RequestListItemUpdatePayloadInterface,
-  ResponseDataBackendInterface,
-  ResponseFolderDataInterface,
   ResponseInterface,
 } from "@/types/request-response.types";
 
@@ -62,19 +60,6 @@ declare global {
       /* Tabs ============== */
       getTabList(): Promise<TabsDataInterface>;
       changeTabsData(payload: TabsDataInterface): Promise<void>;
-    };
-
-    electronAPIRequestAndFolderDB: {
-      findRequestOrFolderById(
-        id: string
-      ): Promise<
-        ResponseDataBackendInterface | undefined | Record<string, unknown>
-      >;
-      updateRequestOrFolderById(
-        id: string,
-        payload: ResponseDataBackendInterface | ResponseFolderDataInterface
-      ): Promise<void>;
-      deleteRequestOrFolderById(id: string): Promise<void>;
     };
 
     electronAPIProjectsDB: {

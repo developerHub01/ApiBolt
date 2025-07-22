@@ -5,8 +5,6 @@ import {
   type ProjectInterface,
   type RequestListItemInterface,
   type RequestListItemUpdatePayloadInterface,
-  type ResponseFileDataBackendInterface,
-  type ResponseFolderDataInterface,
   type TMethod,
 } from "@/types/request-response.types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
@@ -32,8 +30,6 @@ import {
   handleCreateRestApiBasic,
   handleCreateSingleRequest,
   handleDeleteAllRequestOrFolder,
-  handleInitFolder,
-  handleInitRequest,
   handleLoadEnvironmentsList,
   handleLoadProjectsList,
   handleLoadRequestList,
@@ -60,10 +56,10 @@ import {
 // import { base64ToFileObject, converterFileToMetadata } from "@/utils";
 // import { handleCheckImportedRequestFileValidator } from "@/context/redux/request-response/utils";
 import { v4 as uuidv4 } from "uuid";
-import {
-  defaultFolderDescription,
-  defaultFolderTitle,
-} from "@/constant/request-response.constant";
+// import {
+//   defaultFolderDescription,
+//   defaultFolderTitle,
+// } from "@/constant/request-response.constant";
 import {
   duplicateRequestOrFolderNode,
   getNodeParentsIdList,
@@ -626,28 +622,28 @@ export const loadRequestData = createAsyncThunk<
 
     if (!selectedTab || isSelectedRequestAlreadyLoaded) return;
 
-    const requestDetails =
-      await window.electronAPIRequestAndFolderDB.findRequestOrFolderById(
-        selectedTab
-      );
+    // const requestDetails =
+    //   await window.electronAPIRequestAndFolderDB.findRequestOrFolderById(
+    //     selectedTab
+    //   );
 
-    if (state.requestResponse.requestList[selectedTab]?.children) {
-      dispatch(
-        handleInitFolder({
-          id: selectedTab,
-          payload: requestDetails as ResponseFolderDataInterface | undefined,
-        })
-      );
-    } else {
-      dispatch(
-        handleInitRequest({
-          id: selectedTab,
-          payload: requestDetails as
-            | ResponseFileDataBackendInterface
-            | undefined,
-        })
-      );
-    }
+    // if (state.requestResponse.requestList[selectedTab]?.children) {
+    //   dispatch(
+    //     handleInitFolder({
+    //       id: selectedTab,
+    //       payload: requestDetails as ResponseFolderDataInterface | undefined,
+    //     })
+    //   );
+    // } else {
+    //   dispatch(
+    //     handleInitRequest({
+    //       id: selectedTab,
+    //       payload: requestDetails as
+    //         | ResponseFileDataBackendInterface
+    //         | undefined,
+    //     })
+    //   );
+    // }
   }
 );
 
@@ -934,23 +930,23 @@ export const changeFolderContent = createAsyncThunk<
               value,
             })
       );
-      await window.electronAPIRequestAndFolderDB.updateRequestOrFolderById(
-        requestId,
-        {
-          title:
-            type === "title"
-              ? value
-              : (state.requestResponse.folderTitle[requestId] ??
-                defaultFolderTitle),
-          description:
-            type === "description"
-              ? value
-              : (state.requestResponse.folderDescription[requestId] ??
-                defaultFolderDescription),
-        }
-      );
-    } catch {
-      console.log("changeFolderContent error");
+      // await window.electronAPIRequestAndFolderDB.updateRequestOrFolderById(
+      //   requestId,
+      //   {
+      //     title:
+      //       type === "title"
+      //         ? value
+      //         : (state.requestResponse.folderTitle[requestId] ??
+      //           defaultFolderTitle),
+      //     description:
+      //       type === "description"
+      //         ? value
+      //         : (state.requestResponse.folderDescription[requestId] ??
+      //           defaultFolderDescription),
+      //   }
+      // );
+    } catch (error) {
+      console.log(error);
     }
   }
 );
