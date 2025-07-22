@@ -13,37 +13,37 @@ const ProjectList = () => {
     (state) => state.requestResponse.activeProjectId
   );
 
-  if (!projectListFromStore.length)
-    return (
-      <Empty
-        label="No project available. Create one."
-        description="Your currently have no projects. You can start by clicking on the '+ Create New Variable' button."
-        showFallback
-      />
-    );
-
-  if (!projectList?.length)
-    return (
-      <Empty
-        label="No item matched"
-        animationSrc="./lottie/no-search-item-available.lottie"
-        showFallback
-        fallbackClassName="w-56"
-      />
-    );
-
   return (
     <div className="w-full h-full flex-1 min-h-0">
       <ScrollArea className="w-full min-h-0 h-full overflow-x-hidden [&>div>div]:h-full">
-        <div className="h-full flex flex-col gap-3 p-0.5">
-          {projectList.map((project) => (
-            <ProjectItem
-              key={project.id}
-              {...project}
-              activeProjectId={activeProjectId}
-            />
-          ))}
-        </div>
+        {/* if no project exist */}
+        {!projectListFromStore.length ? (
+          <Empty
+            label="No project available. Create one."
+            description="Your currently have no projects. You can start by clicking on the '+ Create New Variable' button."
+            showFallback
+            className="min-h-14"
+          />
+        ) : /* if no search result */
+        !projectList?.length ? (
+          <Empty
+            label="No item matched"
+            animationSrc="./lottie/no-search-item-available.lottie"
+            showFallback
+            fallbackClassName="w-40 h-40 md:w-56 md:h-56"
+          />
+        ) : (
+          /* else where show the list */
+          <div className="h-full flex flex-col gap-3 p-0.5">
+            {projectList.map((project) => (
+              <ProjectItem
+                key={project.id}
+                {...project}
+                activeProjectId={activeProjectId}
+              />
+            ))}
+          </div>
+        )}
       </ScrollArea>
     </div>
   );

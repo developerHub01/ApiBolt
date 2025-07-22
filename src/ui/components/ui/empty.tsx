@@ -42,8 +42,18 @@ const Empty = ({
 
       <AnimatePresence>
         {showFallback && (
-          <AnimationWrapper className={cn("w-32 mb-2", fallbackClassName)}>
-            <DotLottieReact src={animationSrc} loop autoplay width={"100%"} />
+          <AnimationWrapper
+            className={cn(
+              "w-32 mb-2 flex justify-center items-center [&_canvas]:object-contain!",
+              fallbackClassName
+            )}
+          >
+            <DotLottieReact
+              src={animationSrc}
+              loop
+              autoplay
+              width={"100%"}
+            />
           </AnimationWrapper>
         )}
       </AnimatePresence>

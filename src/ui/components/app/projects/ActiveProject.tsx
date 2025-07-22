@@ -87,27 +87,31 @@ const ActiveProject = () => {
 
   return (
     <div className="w-full border-2 border-dotted rounded-md p-4 flex gap-2 bg-accent/50 group">
-      <div className="flex flex-col flex-1">
+      <div className="w-full flex flex-col flex-1">
         <p className="text-sm font-semibold pb-0.5">Active Project</p>
-        <h3 className="text-xl font-bold flex items-center gap-3 pb-3">
+        <h3 className="w-full text-xl font-bold flex items-center gap-3 pb-3">
           <span className="inline-block w-2 h-2 rounded-full bg-green-500 shadow-md shadow-green-400"></span>
           <input
-            className="w-full outline-none border-b border-transparent focus:border-b-primary"
+            className="w-full flex-1 outline-none border-b border-transparent focus:border-b-primary"
             onKeyDown={handleKeydownName}
             onBlur={handleBlurName}
             ref={nameRef}
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
+          <Button
+            size={"iconSm"}
+            variant={"destructive"}
+            className="ml-2.5"
+            onClick={handleDelete}
+          >
+            <DeleteIcon />
+          </Button>
         </h3>
         <p className="text-muted-foreground text-sm">
           This is the project you are currently working on.
         </p>
       </div>
-
-      <Button size={"iconSm"} variant={"destructive"} onClick={handleDelete}>
-        <DeleteIcon />
-      </Button>
     </div>
   );
 };

@@ -5,7 +5,7 @@ import ActiveProject from "@/components/app/projects/ActiveProject";
 
 const ProjectsPage = () => {
   return (
-    <section className="w-full h-full flex justify-center items-center">
+    <section className="w-full h-full max-w-2xl flex justify-center items-center">
       <div className="h-full flex flex-col gap-4 p-5 pb-8 justify-center items-center">
         <ProjectTop />
         <ActiveProject />

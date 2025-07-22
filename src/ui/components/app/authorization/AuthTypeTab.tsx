@@ -44,7 +44,6 @@ interface Props {
 const AuthTypeTab = ({ className = "" }: Props) => {
   const dispatch = useAppDispatch();
   const authType = useAppSelector((state) => state.requestResponse.authType);
-  useAppSelector((state) => console.log(state.requestResponse));
 
   return (
     <Select
