@@ -14,6 +14,7 @@ import {
   sidebarMenuList,
 } from "@/constant/sidebar.constant";
 import type { TSidebarTab } from "@/types/sidebar.types";
+import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
 
 const SidebarMenu = memo(() => {
   const dispatch = useAppDispatch();
@@ -25,8 +26,14 @@ const SidebarMenu = memo(() => {
   }, []);
 
   const handleClick = useCallback(
-    (id: TSidebarTab) => dispatch(changeSidebarActiveTab(id)),
-    [dispatch]
+    (id: TSidebarTab) => {
+      if (id === "collections" && activeTab === id) {
+        dispatch(handleToggleRequestList());
+        return;
+      }
+      dispatch(changeSidebarActiveTab(id));
+    },
+    [activeTab, dispatch]
   );
   const activeProjectId = useAppSelector(
     (state) => state.requestResponse.activeProjectId
