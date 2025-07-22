@@ -24,6 +24,23 @@ export const getNestedIds = ({
   return [...new Set(ids)];
 };
 
+export const getNodeParentsIdList = ({
+  source,
+  id,
+  ids = [],
+}: {
+  source: RequestListInterface;
+  id: string;
+  ids?: Array<string>;
+}): string[] => {
+  const data = source[id];
+  if (!data || !data.parentId) return [...new Set(ids)];
+
+  ids.push(data.parentId);
+
+  return getNodeParentsIdList({ source, id: data.parentId, ids });
+};
+
 export const duplicateRequestOrFolderNode = ({
   source,
   id,
