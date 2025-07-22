@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { handleChangeActiveTab } from "@/context/redux/sidebar/sidebar-slice";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import type { TSidebarTab } from "@/types/sidebar.types";
 import {
   localStorageSidebarActiveTabKey,
@@ -9,10 +9,6 @@ import {
 } from "@/constant/sidebar.constant";
 
 const Redirector = () => {
-  const location = useLocation();
-
-  console.log(location.pathname);
-
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const activeProjectId = useAppSelector(
@@ -34,7 +30,6 @@ const Redirector = () => {
     const route =
       sidebarMenuList.find((item) => item.id === activeSidebarTab)?.path ?? "/";
 
-    console.log({ route });
     /* find the path from the list */
     navigate(route);
     // eslint-disable-next-line react-hooks/exhaustive-deps
