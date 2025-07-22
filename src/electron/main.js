@@ -7,16 +7,12 @@ import { initialCookieJar } from "./utils/cookieManager.js";
 import { registerCookieHandlers } from "./ipc/cookies.js";
 import { registerWindowHandlers } from "./ipc/windowControls.js";
 import { jsonWebTokenHandlers } from "./ipc/jsonWebToken.js";
-import "./db/boltcoreDB.js";
-import "./ipc/boltCoreDB.js";
-import { boltCoreDBHandlers } from "./ipc/boltCoreDB.js";
-import { openFoldersDBHandlers } from "./ipc/openFoldersDB.js";
-import { tabsDBHandlers } from "./ipc/tabsDB.js";
 import "./db/index.js";
 import { projectsHandlers } from "./ipc/projectsHandlers.js";
 import { enviromentsHandlers } from "./ipc/environmentsHandler.js";
 import { authorizationHandler } from "./ipc/authorizationHandler.js";
 import { requestOrFolderMetaHandler } from "./ipc/requestOrFolderMetaHandler.js";
+import { tabsHandler } from "./ipc/tabsHandler.js";
 
 // browser style cookies holder by domain/path
 export const jar = initialCookieJar(undefined, { rejectPublicSuffixes: false });
@@ -38,13 +34,11 @@ app.whenReady().then(() => {
   registerCookieHandlers();
   registerWindowHandlers(mainWindow);
   jsonWebTokenHandlers();
-  boltCoreDBHandlers();
-  openFoldersDBHandlers();
-  tabsDBHandlers();
   projectsHandlers();
   enviromentsHandlers();
   authorizationHandler();
   requestOrFolderMetaHandler();
+  tabsHandler();
 });
 
 app.on("window-all-closed", () => {

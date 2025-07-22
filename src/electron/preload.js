@@ -30,61 +30,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
   generateJWTToken: (data) => ipcRenderer.invoke("generateJWTToken", data),
 });
 
-contextBridge.exposeInMainWorld("electronAPIDB", {
-  toggleFolder: async (id) => await ipcRenderer.invoke("toggleFolder", id),
-  getAllOpenFolder: async () => await ipcRenderer.invoke("getAllOpenFolder"),
-
-  addBoltCore: async (payload) => {
-    if (typeof payload !== "object") return;
-
-    payload._id = payload.id;
-    delete payload.id;
-    return await ipcRenderer.invoke("addBoltCore", payload);
-  },
-  addMultipleBoltCore: async (payload) => {
-    if (typeof payload !== "object") return;
-
-    payload = payload.map((item) => ({
-      ...item,
-      _id: item.id,
-      id: undefined,
-    }));
-    return await ipcRenderer.invoke("addMultipleBoltCore", payload);
-  },
-  updateBoltCore: async (id, payload) => {
-    if (typeof payload !== "object" || !id) return;
-
-    if (payload.id) payload._id = payload.id;
-    delete payload.id;
-    return await ipcRenderer.invoke("updateBoltCore", id, payload);
-  },
-  duplicateBoltCore: async (id) => {
-    if (!id) return;
-
-    return await ipcRenderer.invoke("duplicateBoltCore", id);
-  },
-  deleteBoltCore: async (id) => {
-    if (!id) return;
-    return await ipcRenderer.invoke("deleteBoltCore", id);
-  },
-  moveBoltCore: async (id, folderId, index) => {
-    if (!id) return;
-    return await ipcRenderer.invoke("moveBoltCore", id, folderId, index ?? 0);
-  },
-  getAllBoltCore: async () => {
-    return await ipcRenderer.invoke("getAllBoltCore");
-  },
-  onBoltCoreChange: (cb) => ipcRenderer.on("boltCoreChange", cb),
-
-  /* Tabs ============== */
-  getTabList: async () => {
-    return await ipcRenderer.invoke("getTabList");
-  },
-  changeTabsData: async (payload) => {
-    return await ipcRenderer.invoke("changeTabsData", payload);
-  },
-});
-
 contextBridge.exposeInMainWorld("electronAPIProjectsDB", {
   getProjects: async () => await ipcRenderer.invoke("getProjects"),
   createProjects: async (payload) =>
@@ -119,6 +64,7 @@ contextBridge.exposeInMainWorld("electronAPIAuthorizationDB", {
   deleteAuth: async (...payload) =>
     await ipcRenderer.invoke("deleteAuth", ...payload),
 });
+
 contextBridge.exposeInMainWorld("electronAPIRequestOrFolderMetaDB", {
   getRequestOrFolderMeta: async () =>
     await ipcRenderer.invoke("getRequestOrFolderMeta"),
@@ -139,4 +85,13 @@ contextBridge.exposeInMainWorld("electronAPIRequestOrFolderMetaDB", {
     await ipcRenderer.invoke("duplicateRequestOrFolderMeta", ...payload),
   deleteRequestOrFolderMetaAll: async () =>
     await ipcRenderer.invoke("deleteRequestOrFolderMetaAll"),
+});
+
+contextBridge.exposeInMainWorld("electronAPITabsDB", {
+  getTabList: async () => await ipcRenderer.invoke("getTabList"),
+  updateTabList: async (...payload) =>
+    await ipcRenderer.invoke("updateTabList", ...payload),
+  deleteAllTabList: async () => await ipcRenderer.invoke("deleteAllTabList"),
+  deleteTabListByProjectId: async (...payload) =>
+    await ipcRenderer.invoke("deleteTabListByProjectId", ...payload),
 });
