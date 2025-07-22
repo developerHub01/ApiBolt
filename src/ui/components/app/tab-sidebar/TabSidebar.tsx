@@ -1,4 +1,4 @@
-import { type DragEvent } from "react";
+import { memo, type DragEvent } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import TabItem from "@/components/app/tab-sidebar/TabItem";
 import { cn } from "@/lib/utils";
@@ -60,11 +60,7 @@ const TabSidebar = () => {
                   ))}
                 </>
               ) : (
-                <div className="p-2.5">
-                  {isTabListHovering && (
-                    <Empty label="No tab open" className="min-h-36" />
-                  )}
-                </div>
+                <div className="p-2.5">{isTabListHovering && <EmptyBox />}</div>
               )}
             </AutoScrollActiveWrapper>
           </ScrollArea>
@@ -74,5 +70,15 @@ const TabSidebar = () => {
     </TabSidebarWrapper>
   );
 };
+
+const EmptyBox = memo(() => (
+  <div className="w-full p-2">
+    <Empty
+      label="No tab open"
+      description="Your currently tab list is empty. You can start by selecting a request or folder or clicking on the '+' add button to add new tab."
+      showFallback
+    />
+  </div>
+));
 
 export default TabSidebar;
