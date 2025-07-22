@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { isElectron } from "@/utils/electron";
 import { Settings as SettingIcon } from "lucide-react";
 import WindowControls from "@/components/header/WindowControls";
-import HeaderNavigation from "@/components/header/HeaderNavigation";
+// import HeaderNavigation from "@/components/header/HeaderNavigation";
 
 const Header = () => {
   return (
@@ -21,7 +21,7 @@ const Header = () => {
         <p className="select-none text-lg md:text-xl font-bold tracking-wide">
           ApiBolt
         </p>
-        <HeaderNavigation />
+        {/* <HeaderNavigation /> */}
         <Button
           size={"iconSm"}
           variant={"ghost"}
