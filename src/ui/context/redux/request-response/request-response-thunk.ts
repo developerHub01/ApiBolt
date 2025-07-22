@@ -181,6 +181,7 @@ export const loadEnvironmentsList = createAsyncThunk<
       {} as Record<string, EnvironmentInterface>
     );
 
+    console.log({ list });
     dispatch(handleLoadEnvironmentsList(list));
 
     return list;

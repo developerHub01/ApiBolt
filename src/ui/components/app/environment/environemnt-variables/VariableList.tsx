@@ -2,7 +2,7 @@ import { memo, useCallback } from "react";
 import { Table, TableBody } from "@/components/ui/table";
 import VariableListHeader from "@/components/app/environment/environemnt-variables/VariableListHeader";
 import VariableRow from "@/components/app/environment/environemnt-variables/VariableRow";
-import { useAppDispatch } from "@/context/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
   deleteEnvironments,
   updateEnvironments,
@@ -13,6 +13,9 @@ import Empty from "@/components/ui/empty";
 const VariableList = memo(() => {
   const dispatch = useAppDispatch();
   const { environmentsListState, searchQuery } = useEnvironments();
+  const environmentsList = useAppSelector(
+    (state) => state.requestResponse.environmentsList ?? {}
+  );
 
   const list = Object.values(environmentsListState ?? {}).sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -43,6 +46,7 @@ const VariableList = memo(() => {
     [dispatch]
   );
 
+  /* search result not found */
   if (searchQuery && !list.length)
     return (
       <Empty
@@ -50,7 +54,18 @@ const VariableList = memo(() => {
         animationSrc="./lottie/no-search-item-available.lottie"
         showFallback
         className="border-0"
-        fallbackClassName="w-52"
+        innerClassName="w-56"
+      />
+    );
+
+  /* not variables found */
+  if (!Object.keys(environmentsList).length)
+    return (
+      <Empty
+        label="No variables available. Create one."
+        description="Your currently have no variables. You can start by clicking on the '+ Add New Variable' button or from right side tab list."
+        showFallback
+        className="border-0 max-w-md"
       />
     );
 

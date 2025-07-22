@@ -1,6 +1,8 @@
 import React from "react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { cn } from "@/lib/utils";
+import { AnimatePresence } from "motion/react";
+import AnimationWrapper from "./AnimationWrapper";
 
 interface EmptyProps {
   label?: string;
@@ -38,17 +40,21 @@ const Empty = ({
     >
       {icon && <div className="mb-2">{icon}</div>}
 
-      {showFallback && (
-        <div className={cn("w-32 mb-2", fallbackClassName)}>
-          <DotLottieReact src={animationSrc} loop autoplay width={"100%"} />
-        </div>
-      )}
+      <AnimatePresence>
+        {showFallback && (
+          <AnimationWrapper className={cn("w-32 mb-2", fallbackClassName)}>
+            <DotLottieReact src={animationSrc} loop autoplay width={"100%"} />
+          </AnimationWrapper>
+        )}
+      </AnimatePresence>
 
-      {label && <h4 className="font-medium">{label}</h4>}
+      <div className="mx-auto w-full max-w-md">
+        {label && <h4 className="font-medium">{label}</h4>}
 
-      {description && (
-        <p className="text-sm text-muted-foreground/80">{description}</p>
-      )}
+        {description && (
+          <p className="text-sm text-muted-foreground/80">{description}</p>
+        )}
+      </div>
 
       {children && <div className="mt-2">{children}</div>}
     </div>

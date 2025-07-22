@@ -10,7 +10,7 @@ const EnvironmentVariables = () => {
   return (
     <>
       <ScrollArea className="w-full min-h-0 h-full pb-5">
-        <div className="w-full h-full flex flex-col gap-5 p-2.5">
+        <div className="w-full h-full flex flex-col justify-center items-center gap-5 p-2.5">
           <VariableList />
           <AddNewData
             onClick={() => dispatch(createEnvironments())}
