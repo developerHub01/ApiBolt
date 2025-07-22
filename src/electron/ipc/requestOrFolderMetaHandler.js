@@ -2,6 +2,7 @@ import { ipcMain } from "electron";
 import {
   createRequestOrFolderMeta,
   deleteRequestOrFolderMetaAll,
+  deleteRequestOrFolderMetaById,
   deleteRequestOrFolderMetaByProjectId,
   getRequestOrFolderMeta,
   moveRequestOrFolderMeta,
@@ -24,6 +25,10 @@ export const requestOrFolderMetaHandler = () => {
   ipcMain.handle(
     "moveRequestOrFolderMeta",
     async (_, ...rest) => await moveRequestOrFolderMeta(...rest)
+  );
+  ipcMain.handle(
+    "deleteRequestOrFolderMetaById",
+    async (_, ...rest) => await deleteRequestOrFolderMetaById(...rest)
   );
   ipcMain.handle(
     "deleteRequestOrFolderMetaByProjectId",

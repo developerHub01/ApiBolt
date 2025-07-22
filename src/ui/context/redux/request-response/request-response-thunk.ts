@@ -15,10 +15,11 @@ import {
   handleAddTab,
   handleAuthorizations,
   handleChangeActiveProject,
+  handleChangeDeleteFolderOrRequestId,
   // handleChangeApiUrl,
   // handleChangeAuthType,
   // handleChangeBearerTokenAuth,
-  handleChangeDeleteFolderOrRequestId,
+  // handleChangeDeleteFolderOrRequestId,
   handleChangeFolderDescription,
   handleChangeFolderTitle,
   handleChangeIsRequestListLoaded,
@@ -36,7 +37,7 @@ import {
   handleLoadEnvironmentsList,
   handleLoadProjectsList,
   handleLoadRequestList,
-  handleRemoveTab,
+  // handleRemoveTab,
   // handleSetAPIKey,
   // handleSetBasicAuth,
   // handleSetBinary,
@@ -63,6 +64,7 @@ import {
   defaultFolderDescription,
   defaultFolderTitle,
 } from "@/constant/request-response.constant";
+import { getNestedIds } from "@/utils/request-response.utils";
 
 /* ==============================
 ========== Projects start =========
@@ -427,7 +429,6 @@ export const moveRequestOrFolder = createAsyncThunk<
     }
   }
 );
-
 export const deleteAllRequestOrFolder = createAsyncThunk<
   void,
   string | undefined,
@@ -442,8 +443,49 @@ export const deleteAllRequestOrFolder = createAsyncThunk<
     console.log("Request JSON file is not valid");
   }
 });
+export const deleteRequestOrFolder = createAsyncThunk<
+  void,
+  boolean | string,
+  { state: RootState; dispatch: AppDispatch }
+>(
+  "request-response/deleteRequestOrFolder",
+  async (payload, { getState, dispatch }) => {
+    try {
+      const state = getState() as RootState;
+
+      /* if false then cancel the deletion */
+      if (!payload) {
+        dispatch(handleChangeDeleteFolderOrRequestId(""));
+        return;
+      }
+
+      /* if true then get the id else take passed id as payload */
+      const rootId =
+        payload === true
+          ? state.requestResponse.deleteFolderOrRequestId
+          : payload;
+      dispatch(handleChangeDeleteFolderOrRequestId(""));
+
+      const requestList = state.requestResponse.requestList;
+
+      const deletionCandidates = getNestedIds({
+        source: requestList,
+        id: rootId,
+      });
+
+      const response =
+        await window.electronAPIRequestOrFolderMetaDB.deleteRequestOrFolderMetaById(
+          deletionCandidates
+        );
+
+      if (response) dispatch(handleChangeIsRequestListLoaded(false));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 /* ==============================
-===== RequestList end =========
+======= RequestList end =========
 ================================= */
 
 export const loadRequestData = createAsyncThunk<
@@ -816,32 +858,6 @@ export const duplicateRequestOrFolder = createAsyncThunk<
       dispatch(handleChangeSelectedTab(newRequestId));
     } catch {
       console.log("duplicateRequestOrFolder error");
-    }
-  }
-);
-
-export const deleteFolderOrRequest = createAsyncThunk<
-  void,
-  boolean,
-  { state: RootState; dispatch: AppDispatch }
->(
-  "request-response/deleteFolderOrRequest",
-  async (value, { getState, dispatch }) => {
-    const state = getState() as RootState;
-
-    const deleteCandidateId = state.requestResponse.deleteFolderOrRequestId;
-
-    try {
-      if (value && state.requestResponse.deleteFolderOrRequestId) {
-        await window.electronAPIDB.deleteBoltCore(deleteCandidateId);
-        dispatch(handleChangeIsRequestListLoaded(false));
-        if (state.requestResponse.tabList.includes(deleteCandidateId))
-          dispatch(handleRemoveTab(deleteCandidateId));
-      }
-
-      dispatch(handleChangeDeleteFolderOrRequestId(""));
-    } catch {
-      console.log("deleteFolderOrRequest error");
     }
   }
 );

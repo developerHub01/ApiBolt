@@ -443,14 +443,13 @@ export const requestResponseSlice = createSlice({
     handleDeleteAllRequestOrFolder: (state) => {
       state.requestList = {};
     },
-    /* ================ Requestlist end =================== */
-
     handleChangeDeleteFolderOrRequestId: (
       state,
       action: PayloadAction<string>
     ) => {
       state.deleteFolderOrRequestId = action.payload;
     },
+    /* ================ Requestlist end =================== */
 
     handleChangeIsTabListHovering: (
       state,

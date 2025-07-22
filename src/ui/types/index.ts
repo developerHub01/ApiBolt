@@ -124,6 +124,9 @@ declare global {
         payload: RequestListItemUpdatePayloadInterface
       ): Promise<boolean>;
       moveRequestOrFolderMeta(id: string, parentId?: string): Promise<boolean>;
+      deleteRequestOrFolderMetaById(
+        id?: string | Array<string>
+      ): Promise<boolean>;
       deleteRequestOrFolderMetaByProjectId(id?: string): Promise<boolean>;
     };
   }

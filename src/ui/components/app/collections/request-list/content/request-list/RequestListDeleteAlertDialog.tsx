@@ -1,3 +1,4 @@
+import { memo } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,8 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { deleteFolderOrRequest } from "@/context/redux/request-response/request-response-thunk";
-import { memo } from "react";
+import { deleteRequestOrFolder } from "@/context/redux/request-response/request-response-thunk";
 
 const RequestListDeleteAlertDialog = memo(() => {
   const dispatch = useAppDispatch();
@@ -40,14 +40,14 @@ const RequestListDeleteAlertDialog = memo(() => {
           <AlertDialogCancel asChild>
             <Button
               variant={"secondary"}
-              onClick={() => dispatch(deleteFolderOrRequest(false))}
+              onClick={() => dispatch(deleteRequestOrFolder(false))}
             >
               Cancel
             </Button>
           </AlertDialogCancel>
           <AlertDialogAction asChild>
             <Button
-              onClick={() => dispatch(deleteFolderOrRequest(true))}
+              onClick={() => dispatch(deleteRequestOrFolder(true))}
               className={cn(
                 "text-foreground bg-red-500",
                 "hover:text-foreground hover:bg-red-700"
