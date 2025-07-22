@@ -127,6 +127,9 @@ declare global {
       deleteRequestOrFolderMetaById(
         id?: string | Array<string>
       ): Promise<boolean>;
+      duplicateRequestOrFolderMeta(
+        payload: Array<Omit<RequestListItemInterface, "children" | "createdAt">>
+      ): Promise<boolean>;
       deleteRequestOrFolderMetaByProjectId(id?: string): Promise<boolean>;
     };
   }

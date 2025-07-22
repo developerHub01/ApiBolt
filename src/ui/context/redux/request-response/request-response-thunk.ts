@@ -64,7 +64,10 @@ import {
   defaultFolderDescription,
   defaultFolderTitle,
 } from "@/constant/request-response.constant";
-import { getNestedIds } from "@/utils/request-response.utils";
+import {
+  duplicateRequestOrFolderNode,
+  getNestedIds,
+} from "@/utils/request-response.utils";
 
 /* ==============================
 ========== Projects start =========
@@ -484,6 +487,39 @@ export const deleteRequestOrFolder = createAsyncThunk<
     }
   }
 );
+export const duplicateRequestOrFolder = createAsyncThunk<
+  void,
+  string,
+  { state: RootState; dispatch: AppDispatch }
+>(
+  "request-response/duplicateRequestOrFolder",
+  async (id: string, { dispatch, getState }) => {
+    try {
+      const state = getState() as RootState;
+      const requestList = state.requestResponse.requestList;
+
+      const duplicatedNodes = duplicateRequestOrFolderNode({
+        source: requestList,
+        id,
+        parentId: requestList[id]?.parentId,
+      });
+
+      const duplicatedData = Object.values(duplicatedNodes).map(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        ({ children, createdAt, ...rest }) => rest
+      );
+
+      const response =
+        await window.electronAPIRequestOrFolderMetaDB.duplicateRequestOrFolderMeta(
+          duplicatedData
+        );
+
+      if (response) dispatch(handleChangeIsRequestListLoaded(false));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 /* ==============================
 ======= RequestList end =========
 ================================= */
@@ -843,24 +879,6 @@ export const addNewTab = createAsyncThunk<
     console.log("changeTabsData error");
   }
 });
-
-export const duplicateRequestOrFolder = createAsyncThunk<
-  void,
-  string,
-  { state: RootState; dispatch: AppDispatch }
->(
-  "request-response/duplicateRequestOrFolder",
-  async (id: string, { dispatch }) => {
-    try {
-      const newRequestId = uuidv4();
-      await window.electronAPIDB.duplicateBoltCore(id, newRequestId);
-      dispatch(handleChangeIsRequestListLoaded(false));
-      dispatch(handleChangeSelectedTab(newRequestId));
-    } catch {
-      console.log("duplicateRequestOrFolder error");
-    }
-  }
-);
 
 export const changeFolderContent = createAsyncThunk<
   void,

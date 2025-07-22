@@ -7,6 +7,7 @@ import {
   getRequestOrFolderMeta,
   moveRequestOrFolderMeta,
   updateRequestOrFolderMeta,
+  duplicateRequestOrFolderMeta,
 } from "../db/requestOrFolderMetaDB.js";
 
 export const requestOrFolderMetaHandler = () => {
@@ -33,6 +34,10 @@ export const requestOrFolderMetaHandler = () => {
   ipcMain.handle(
     "deleteRequestOrFolderMetaByProjectId",
     async (_, ...rest) => await deleteRequestOrFolderMetaByProjectId(...rest)
+  );
+  ipcMain.handle(
+    "duplicateRequestOrFolderMeta",
+    async (_, ...rest) => await duplicateRequestOrFolderMeta(...rest)
   );
   ipcMain.handle(
     "deleteRequestOrFolderMetaAll",
