@@ -87,3 +87,17 @@ export const requestOrFolderMetaTable = sqliteTable(
       .default(sql`(current_timestamp)`),
   }
 );
+
+export const tabsTable = sqliteTable("tabs_table", {
+  id: text()
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  openTabs: text().notNull().default("[]"),
+  selectedTab: text().references(() => requestOrFolderMetaTable.id),
+  projectId: text()
+    .notNull()
+    .references(() => projectTable.id),
+  createdAt: text()
+    .notNull()
+    .default(sql`(current_timestamp)`),
+});
