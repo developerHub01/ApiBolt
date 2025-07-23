@@ -487,11 +487,15 @@ export const duplicateRequestOrFolder = createAsyncThunk<
       const state = getState() as RootState;
       const requestList = state.requestResponse.requestList;
 
-      const duplicatedNodes = duplicateRequestOrFolderNode({
-        source: requestList,
-        id,
-        parentId: requestList[id]?.parentId,
-      });
+      const { newParentId, nodes: duplicatedNodes } =
+        duplicateRequestOrFolderNode({
+          source: requestList,
+          id,
+          parentId: requestList[id]?.parentId,
+        });
+
+      if (duplicatedNodes?.[newParentId]?.name)
+        duplicatedNodes[newParentId].name += " copy";
 
       const duplicatedData = Object.values(duplicatedNodes).map(
         // eslint-disable-next-line @typescript-eslint/no-unused-vars

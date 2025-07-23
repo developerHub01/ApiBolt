@@ -45,21 +45,31 @@ export const duplicateRequestOrFolderNode = ({
   source,
   id,
   parentId,
-  nodes = {},
+  result = {
+    nodes: {},
+    newParentId: "",
+  },
 }: {
   source: RequestListInterface;
   id: string;
   parentId?: string;
-  nodes?: RequestListInterface;
-}): RequestListInterface => {
+  result?: {
+    nodes: RequestListInterface;
+    newParentId: string;
+  };
+}): {
+  nodes: RequestListInterface;
+  newParentId: string;
+} => {
   const nodeId = uuidv4();
   const data = source[id];
 
-  nodes[nodeId] = {
+  result.nodes[nodeId] = {
     ...data,
     parentId,
     id: nodeId,
   };
+  if (!result.newParentId) result.newParentId = nodeId;
 
   if (data.children && data.children.length) {
     for (const childId of data.children) {
@@ -67,10 +77,10 @@ export const duplicateRequestOrFolderNode = ({
         source,
         id: childId,
         parentId: nodeId,
-        nodes,
+        result,
       });
     }
   }
 
-  return nodes;
+  return result;
 };
