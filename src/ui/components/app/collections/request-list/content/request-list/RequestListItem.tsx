@@ -239,9 +239,14 @@ const RequestListItemContent = memo(
              * = 1 * 8 + 1 * 8 = 16
              * for level 2
              * = 2 * 8 + 1 * 8 = 24
+             * if that is a request and have lavel then add more 8
+             * = 2 * 8 + 1 * 8 + (8 or 0)
              */
             style={{
-              paddingLeft: lavel * 8 + Number(Boolean(lavel)) * 8,
+              paddingLeft:
+                lavel * 8 +
+                Number(Boolean(lavel)) * 8 +
+                (!children && lavel ? 8 : 0),
             }}
           >
             <div className="h-7 flex items-center">
