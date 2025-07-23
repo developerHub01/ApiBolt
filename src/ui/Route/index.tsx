@@ -26,16 +26,14 @@ const routes = [
     children: [
       {
         /* app layout */
-        path: "",
         element: <AppLayout />,
         children: [
           /* collection ==>> root page, request, folder */
           {
-            path: "",
             element: <CollectionsLayout />,
             children: [
               {
-                path: "",
+                index: true,
                 element: <CollectionPage />,
               },
               {
@@ -43,7 +41,7 @@ const routes = [
                 element: <FolderLayout />,
                 children: [
                   {
-                    path: "",
+                    index: true,
                     element: <FolderPage />,
                   },
                 ],
@@ -53,7 +51,7 @@ const routes = [
                 element: <RequestLayout />,
                 children: [
                   {
-                    path: "",
+                    index: true,
                     element: <RequestPage />,
                   },
                 ],
@@ -65,7 +63,7 @@ const routes = [
             element: <EnvironmentLayout />,
             children: [
               {
-                path: "",
+                index: true,
                 element: <EnvironmentPage />,
               },
             ],
@@ -75,7 +73,7 @@ const routes = [
             element: <ProjectsLayout />,
             children: [
               {
-                path: "",
+                index: true,
                 element: <ProjectsPage />,
               },
             ],
@@ -85,7 +83,7 @@ const routes = [
             element: <AuthorizationLayout />,
             children: [
               {
-                path: "",
+                index: true,
                 element: <AuthorizationPage />,
               },
             ],

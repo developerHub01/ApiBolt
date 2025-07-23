@@ -1,3 +1,4 @@
+import type React from "react";
 import { Outlet } from "react-router-dom";
 import AppMainContentLayoutWrapper from "@/components/app/AppMainContentLayoutWrapper";
 import RequestListPanelWrapper from "@/components/app/collections/request-list/RequestListPanelWrapper";
@@ -12,28 +13,38 @@ import RequestBodyProvider from "@/context/collections/request/RequestBodyProvid
 import RequestHeaderProvider from "@/context/collections/request/RequestHeaderProvider";
 
 const CollectionsLayout = () => {
+  console.log("================");
   return (
     <>
       <AppMainContentLayoutWrapper>
         <RequestListPanelWrapper />
         <ResizableHandle />
         <ResizablePanel defaultSize={70}>
-          <ResizablePanelGroup direction="vertical">
-            <ResizablePanel defaultSize={25}>
-              <RequestOrFolderProvider>
-                <RequestBodyProvider>
-                  <RequestHeaderProvider>
-                    <Outlet />
-                  </RequestHeaderProvider>
-                </RequestBodyProvider>
-              </RequestOrFolderProvider>
-            </ResizablePanel>
-          </ResizablePanelGroup>
+          <section className="flex w-full h-full">
+            <ResizablePanelGroup direction="vertical">
+              <ResizablePanel defaultSize={25}>
+                <ProviderStack>
+                  <Outlet />
+                </ProviderStack>
+              </ResizablePanel>
+            </ResizablePanelGroup>
+            <TabSidebar />
+          </section>
         </ResizablePanel>
       </AppMainContentLayoutWrapper>
-      <TabSidebar />
     </>
   );
 };
+
+interface ProviderStackProps {
+  children: React.ReactNode;
+}
+const ProviderStack = ({ children }: ProviderStackProps) => (
+  <RequestOrFolderProvider>
+    <RequestBodyProvider>
+      <RequestHeaderProvider>{children}</RequestHeaderProvider>
+    </RequestBodyProvider>
+  </RequestOrFolderProvider>
+);
 
 export default CollectionsLayout;
