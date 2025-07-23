@@ -13,8 +13,8 @@ const Sidebar = () => {
           <ThemeToggle />
         </div>
         <div className="flex flex-col gap-2">
-          <FullScreenToggle />
           <SidbarToggle />
+          <FullScreenToggle />
         </div>
       </div>
     </TooltipProvider>

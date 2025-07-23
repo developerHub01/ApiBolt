@@ -19,7 +19,21 @@ const SidbarToggle = memo(() => {
   return (
     <AnimatePresence>
       {activeTab === "collections" && (
-        <motion.span key="toggle-collection-list" exit={{ opacity: 0 }}>
+        <motion.span
+          key="toggle-collection-list"
+          initial={{
+            opacity: 0,
+            scale: 0,
+          }}
+          animate={{
+            opacity: 1,
+            scale: 1,
+          }}
+          exit={{
+            opacity: 0,
+            scale: 0,
+          }}
+        >
           <Button size={"icon"} variant={"outline"} onClick={handleClick}>
             <MenuIcon />
           </Button>
