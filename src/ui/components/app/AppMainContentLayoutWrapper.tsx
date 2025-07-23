@@ -14,7 +14,7 @@ const AppMainContentLayoutWrapper = ({
   return (
     <ResizablePanelGroup
       direction="horizontal"
-      className="w-full h-full md:min-w-[450px]"
+      className="w-full h-full md:min-w-[450px] relative"
       style={{
         height: "auto",
       }}
