@@ -100,3 +100,10 @@ contextBridge.exposeInMainWorld("electronAPITabsDB", {
   deleteTabListByProjectId: async (...payload) =>
     await ipcRenderer.invoke("deleteTabListByProjectId", ...payload),
 });
+
+contextBridge.exposeInMainWorld("electronAPIFolderDB", {
+  getFolder: async (...payload) =>
+    await ipcRenderer.invoke("getFolder", ...payload),
+  updateFolder: async (...payload) =>
+    await ipcRenderer.invoke("updateFolder", ...payload),
+});

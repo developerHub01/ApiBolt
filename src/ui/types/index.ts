@@ -134,6 +134,18 @@ declare global {
       deleteAllTabList(): Promise<boolean>;
       deleteTabListByProjectId(id?: string): Promise<boolean>;
     };
+
+    electronAPIFolderDB: {
+      getFolder(requestOrFolderMetaId: string): Promise<{
+        title: string;
+        description: string;
+      }>;
+      updateFolder(payload: {
+        title?: string;
+        description?: string;
+        requestOrFolderMetaId: string;
+      }): Promise<boolean>;
+    };
   }
 }
 

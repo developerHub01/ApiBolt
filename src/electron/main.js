@@ -13,6 +13,7 @@ import { enviromentsHandlers } from "./ipc/environmentsHandler.js";
 import { authorizationHandler } from "./ipc/authorizationHandler.js";
 import { requestOrFolderMetaHandler } from "./ipc/requestOrFolderMetaHandler.js";
 import { tabsHandler } from "./ipc/tabsHandler.js";
+import { folderHandlers } from "./ipc/folderHandlers.js";
 
 // browser style cookies holder by domain/path
 export const jar = initialCookieJar(undefined, { rejectPublicSuffixes: false });
@@ -39,6 +40,7 @@ app.whenReady().then(() => {
   authorizationHandler();
   requestOrFolderMetaHandler();
   tabsHandler();
+  folderHandlers();
 });
 
 app.on("window-all-closed", () => {
