@@ -195,7 +195,7 @@ const Code = ({
         <Button
           size={"iconSm"}
           variant={"outline"}
-          className="absolute top-1.5 right-1.5 z-50"
+          className="absolute top-1.5 right-1.5 z-10"
           onClick={handleCopy}
         >
           <CopyIcon />
