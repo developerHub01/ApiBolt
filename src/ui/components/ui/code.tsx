@@ -78,6 +78,7 @@ interface CodeProps {
   code: string;
   onChange?: (code: string) => void;
   onBlur?: () => void;
+  transparentBg?: boolean;
   editable?: boolean;
   className?: string;
   innerClassName?: string;
@@ -96,6 +97,7 @@ const Code = ({
   code,
   onChange,
   onBlur,
+  transparentBg = true,
   editable = true,
   className = "",
   innerClassName = "",
@@ -200,7 +202,14 @@ const Code = ({
         </Button>
       )}
       <CodeMirror
-        className={cn("w-full h-full [&>div]:bg-background!", innerClassName)}
+        className={cn(
+          "w-full h-full",
+          {
+            "[&>div]:bg-background!": !transparentBg,
+            "[&>div]:bg-transparent!": transparentBg,
+          },
+          innerClassName
+        )}
         height="100%"
         theme={theme}
         style={{
