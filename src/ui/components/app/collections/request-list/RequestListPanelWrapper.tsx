@@ -25,11 +25,11 @@ const RequestListPanelWrapper = memo(() => {
   }, [requestListCollapsed]);
 
   /* when resize to desktop from mini devices it will expend the collapse to resolve collision */
-  // useEffect(() => {
-  //   if (isSmallDevice) return;
-  //   // dispath(handleToggleRequestList(false));
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [isSmallDevice]);
+  useEffect(() => {
+    if (isSmallDevice) return;
+    dispath(handleToggleRequestList(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSmallDevice]);
 
   const handleCollapse = useCallback(
     () => dispath(handleToggleRequestList(true)),
