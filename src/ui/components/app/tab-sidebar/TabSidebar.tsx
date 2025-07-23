@@ -1,4 +1,4 @@
-import { memo, type DragEvent } from "react";
+import { memo, useCallback, type DragEvent } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import TabItem from "@/components/app/tab-sidebar/TabItem";
 import { cn } from "@/lib/utils";
@@ -20,36 +20,49 @@ const TabSidebar = () => {
   );
   const tabList = useAppSelector((state) => state.requestResponse.tabList);
 
-  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const draggedId = e.dataTransfer.getData("text/plain");
-    if (!draggedId) return;
+  const handleDrop = useCallback(
+    (e: DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      const draggedId = e.dataTransfer.getData("text/plain");
+      if (!draggedId) return;
 
-    dispatch(
-      handleMoveTab({
-        id: draggedId,
-      })
-    );
-  };
+      dispatch(
+        handleMoveTab({
+          id: draggedId,
+        })
+      );
+    },
+    [dispatch]
+  );
+
+  const handleTabListHovering = useCallback(
+    (value: boolean) => {
+      dispatch(handleChangeIsTabListHovering(value));
+    },
+    [dispatch]
+  );
 
   return (
     <TabSidebarWrapper>
       <div
-        className="w-12 relative shrink-0"
-        onMouseEnter={() => dispatch(handleChangeIsTabListHovering(true))}
-        onMouseLeave={() => dispatch(handleChangeIsTabListHovering(false))}
+        className="relative shrink-0"
+        style={{
+          width: "60px",
+        }}
       >
         <motion.div
-          initial={{ width: 48 }}
-          animate={{ width: isTabListHovering ? 280 : 48 }}
+          initial={{ width: 60 }}
+          animate={{ width: isTabListHovering ? 280 : 60 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
           className={cn(
             "h-full flex flex-col absolute right-0 top-0 z-40 gap-2 shadow-2xl border-l border-muted-foreground/20",
-            "backdrop-blur-xs hover:backdrop-blur-md transition-all duration-100 ease-in-out"
+            "backdrop-blur-xs hover:backdrop-blur-sm"
           )}
+          onMouseEnter={() => handleTabListHovering(true)}
+          onMouseLeave={() => handleTabListHovering(false)}
         >
           <ScrollArea
-            className="w-full h-full min-h-0 flex-1 pb-0"
+            className="w-full h-full min-h-0 flex-1 pb-0 [&>div>div]:w-full"
             onDrop={handleDrop}
             onDragOver={(e) => e.preventDefault()}
           >

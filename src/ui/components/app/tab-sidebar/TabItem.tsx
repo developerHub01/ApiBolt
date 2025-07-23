@@ -86,10 +86,21 @@ const TabItem = ({ id, index }: { id: string; index: number }) => {
     <div
       key={id}
       data-active={selectedTab === id}
-      className={cn("w-full h-8 cursor-pointer hover:bg-accent px-1", {
-        "bg-accent": selectedTab === id,
-        "bg-transparent": selectedTab !== id,
-      })}
+      className={cn(
+        "w-full h-8 cursor-pointer px-1 border-x-4 border-transparent",
+        {
+          /* active tab style */
+          "bg-accent hover:bg-accent/80": selectedTab === id,
+          /* active tab border color */
+          "bg-transparent hover:bg-accent/40": selectedTab !== id,
+          "border-green-500": selectedTab === id && method === "get",
+          "border-blue-500": selectedTab === id && method === "post",
+          "border-yellow-500": selectedTab === id && method === "put",
+          "border-orange-500": selectedTab === id && method === "patch",
+          "border-red-500": selectedTab === id && method === "delete",
+          "border-primary": selectedTab === id && !method,
+        }
+      )}
       onMouseEnter={() => setIsTabHovering(true)}
       onMouseLeave={() => setIsTabHovering(false)}
       onClick={handleClick}
@@ -101,7 +112,7 @@ const TabItem = ({ id, index }: { id: string; index: number }) => {
     >
       <div
         className={cn(
-          "w-full h-full flex items-center justify-center cursor-pointer hover:bg-accent px-1 ring-2 rounded-md",
+          "w-full h-full flex items-center justify-center px-1 ring-2",
           {
             "ring-primary/50": isDragging,
             "ring-transparent": !isDragging,
