@@ -40,7 +40,7 @@ const SidebarMenu = memo(() => {
   );
 
   return (
-    <div className="flex flex-col gap-2">
+    <>
       {sidebarMenuList.map(({ id, Icon, label, path }) => {
         if (!activeProjectId && hiddenTabsWhenNotProjectSelected.includes(id))
           return null;
@@ -65,7 +65,7 @@ const SidebarMenu = memo(() => {
           </Tooltip>
         );
       })}
-    </div>
+    </>
   );
 });
 
