@@ -107,3 +107,21 @@ export const tabsTable = sqliteTable("tabs_table", {
     .notNull()
     .default(sql`(current_timestamp)`),
 });
+
+export const folderTable = sqliteTable("folder_table", {
+  id: text()
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  title: text().notNull().default(""),
+  description: text().notNull().default(""),
+  projectId: text()
+    .notNull()
+    .references(() => projectTable.id, {
+      onDelete: "cascade",
+    }),
+  requestOrFolderMetaId: text()
+    .notNull()
+    .references(() => requestOrFolderMetaTable.id, {
+      onDelete: "cascade",
+    }),
+});

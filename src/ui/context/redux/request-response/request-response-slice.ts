@@ -193,8 +193,8 @@ interface RequestResponseState {
 
   tabList: Array<string>;
   isTabListHovering: boolean;
-
   selectedTab: string | null /* selectedTabId in tabList */;
+  
   isResponseCollapsed: Record<string, boolean>;
   activeMetaTab: Record<string, TActiveTabType>;
   isApiUrlError: Record<string, boolean>;
