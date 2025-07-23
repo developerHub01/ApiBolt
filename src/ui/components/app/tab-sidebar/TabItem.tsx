@@ -57,7 +57,8 @@ const TabItem = ({ id, index }: { id: string; index: number }) => {
 
   const handleDragLeave = () => setIsDragging(false);
 
-  const { children } = tabDetails || {};
+  /* children represent is it a folder or request | if children at least empty array then folder. so for that we will asign a [] in children if it is a folder to represent */
+  const children = tabDetails.method ? undefined : (tabDetails.children ?? []);
 
   const method = useAppSelector(
     (state) =>
