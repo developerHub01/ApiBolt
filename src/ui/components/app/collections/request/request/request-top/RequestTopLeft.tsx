@@ -1,6 +1,6 @@
 import React, {
   type ChangeEvent,
-  // type FocusEvent,
+  type FocusEvent,
   useCallback,
   useEffect,
   useRef,
@@ -8,19 +8,19 @@ import React, {
 } from "react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import {
-  // useAppDispatch,
-  useAppSelector,
-} from "@/context/redux/hooks";
-// import { changeRequestName } from "@/context/redux/request-response/request-response-thunk";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import { updateRequestOrFolder } from "@/context/redux/request-response/request-response-thunk";
 
 const RequestTopLeft = () => {
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   const requestName = useAppSelector(
     (state) =>
       state.requestResponse.requestList[state.requestResponse.selectedTab!]
         ?.name ?? "Request"
   );
+  const selectedTab = useAppSelector(
+    (state) => state.requestResponse.selectedTab
+  )!;
   const [requestNameState, setRequestNameState] = useState<string>(requestName);
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -41,17 +41,19 @@ const RequestTopLeft = () => {
     setRequestNameState(e.target.value);
   }, []);
 
-  // const handleBlur = useCallback(
-  //   (e: FocusEvent<HTMLInputElement>) => {
-  //     setIsFocused(false);
-  //     dispatch(
-  //       changeRequestName({
-  //         name: e.target.value,
-  //       })
-  //     );
-  //   },
-  //   [dispatch]
-  // );
+  const handleBlur = useCallback(
+    (e: FocusEvent<HTMLInputElement>) => {
+      setIsFocused(false);
+
+      dispatch(
+        updateRequestOrFolder({
+          name: e.target.value,
+          id: selectedTab,
+        })
+      );
+    },
+    [dispatch]
+  );
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -76,7 +78,7 @@ const RequestTopLeft = () => {
         value={requestNameState}
         onChange={handleChange}
         onFocus={handleInputFocus}
-        // onBlur={handleBlur}
+        onBlur={handleBlur}
         onKeyUp={handleKeyDown}
         ref={nameInputRef}
         readOnly={!isFocused}
