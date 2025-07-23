@@ -14,6 +14,15 @@ const Redirector = () => {
   const activeProjectId = useAppSelector(
     (state) => state.requestResponse.activeProjectId
   );
+  const selectedTab = useAppSelector(
+    (state) => state.requestResponse.selectedTab
+  );
+  const activeRequestOrFolder = useAppSelector(
+    (state) =>
+      state.requestResponse.requestList?.[
+        state.requestResponse.selectedTab ?? ""
+      ] ?? null
+  );
 
   useEffect(() => {
     let activeSidebarTab: TSidebarTab = "projects";
@@ -27,13 +36,21 @@ const Redirector = () => {
     /* this is because I dont want to update localstorage just need to sync it in redux state */
     dispatch(handleChangeActiveTab(activeSidebarTab));
 
-    const route =
+    let route =
       sidebarMenuList.find((item) => item.id === activeSidebarTab)?.path ?? "/";
+
+    /* if route is activeTab is collection so route '/' and have activeRequestOrFolder */
+    if (activeSidebarTab === "collections" && activeRequestOrFolder) {
+      if (route === "/") route = "";
+      route = `${route}/${activeRequestOrFolder.method ? "request" : "folder"}/${activeRequestOrFolder.id}`;
+    }
 
     /* find the path from the list */
     navigate(route);
+
+    /* activeProjectId, selectedTab === so that in both case update the url */
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeProjectId]);
+  }, [activeProjectId, selectedTab]);
 
   return null;
 };
