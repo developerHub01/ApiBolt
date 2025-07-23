@@ -61,7 +61,7 @@ const ActionButton = ({ children, id, onClick }: ActionButtonProps) => {
     <Button
       variant={"secondary"}
       className={cn(
-        "rounded-none h-full aspect-square",
+        "rounded-none h-full aspect-square bg-transparent",
         "hover:bg-foreground/10"
       )}
       onClick={async () => {

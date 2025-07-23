@@ -1,8 +1,8 @@
+import { memo } from "react";
 import Sidebar from "@/components/app/sidebar/Sidebar";
 import CopyRight from "@/components/copy-right";
 import Header from "@/components/header/Header";
 import TabSidebarProvider from "@/context/tab-sidebar/TabSidebarProvider";
-import { memo } from "react";
 import { Outlet } from "react-router-dom";
 
 const bg =
@@ -10,16 +10,16 @@ const bg =
 
 const AppLayout = () => {
   return (
-    <section className="h-dvh overflow-hidden flex flex-col">
+    <CustomizedBgWrapper>
       <ProviderStack>
         <Header />
-        <CustomizedBgWrapper>
+        <div className="relative z-10 min-h-0 h-full flex-1 flex content-stretch">
           <Sidebar />
           <Outlet />
-        </CustomizedBgWrapper>
+        </div>
       </ProviderStack>
       <CopyRight />
-    </section>
+    </CustomizedBgWrapper>
   );
 };
 
@@ -34,7 +34,7 @@ interface CustomizedBgWrapperProps {
 const CustomizedBgWrapper = memo(({ children }: CustomizedBgWrapperProps) => {
   return (
     <section
-      className="min-h-0 h-full flex-1 relative"
+      className="h-dvh overflow-hidden relative"
       style={{
         background: `url(${bg})`,
         backgroundRepeat: "no-repeat",
@@ -42,9 +42,9 @@ const CustomizedBgWrapper = memo(({ children }: CustomizedBgWrapperProps) => {
         backgroundPosition: "center",
       }}
     >
-      <div className="relative z-10 min-h-0 h-full flex-1 flex content-stretch">
+      <section className="h-full relative z-[1] flex flex-col">
         {children}
-      </div>
+      </section>
       <span
         className="absolute top-0 left-0 w-full h-full bg-background -z-0 pointer-events-none"
         style={{

@@ -41,7 +41,7 @@ const CopyRight = memo(() => {
   if (!mounted || !isVisible) return null;
 
   return (
-    <div className="p-1 pt-1 bg-accent relative">
+    <div className="p-1 pt-1 bg-accent/50 relative">
       <p className="text-center text-xs md:text-sm select-none">
         All rights reserved for
         <Link

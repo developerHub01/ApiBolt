@@ -8,7 +8,7 @@ import WindowControls from "@/components/header/WindowControls";
 const Header = () => {
   return (
     <div
-      className="bg-accent flex justify-between items-center gap-2"
+      className="bg-accent/80 flex justify-between items-center gap-2"
       style={{
         ...(isElectron()
           ? ({
