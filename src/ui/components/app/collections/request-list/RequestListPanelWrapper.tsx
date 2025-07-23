@@ -24,7 +24,7 @@ const RequestListPanelWrapper = memo(() => {
       defaultSize={30}
       minSize={15}
       maxSize={40}
-      className="h-full"
+      className="h-full backdrop-blur-xs"
       style={{
         maxWidth: "40vw",
       }}

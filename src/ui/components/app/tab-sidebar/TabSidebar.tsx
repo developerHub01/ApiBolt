@@ -44,7 +44,8 @@ const TabSidebar = () => {
           animate={{ width: isTabListHovering ? 280 : 48 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
           className={cn(
-            "h-full flex flex-col absolute right-0 top-0 z-[99] gap-2 shadow-2xl border-l border-muted-foreground/20"
+            "h-full flex flex-col absolute right-0 top-0 z-[99] gap-2 shadow-2xl border-l border-muted-foreground/20",
+            "backdrop-blur-xs hover:backdrop-blur-md transition-all duration-100 ease-in-out"
           )}
         >
           <ScrollArea
