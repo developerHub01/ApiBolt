@@ -26,8 +26,8 @@ const RequestListPanelWrapper = memo(() => {
 
   /* when resize to desktop from mini devices it will expend the collapse to resolve collision */
   useEffect(() => {
-    if (isSmallDevice) return;
-    dispath(handleToggleRequestList(false));
+    if (isSmallDevice) dispath(handleToggleRequestList(true));
+    else dispath(handleToggleRequestList(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSmallDevice]);
 
@@ -111,6 +111,9 @@ const SmallDeviceListWrapper = memo(
               initial={{
                 opacity: 0,
                 x: -100,
+                transition: {
+                  delay: 0.2,
+                },
               }}
               animate={{
                 opacity: 1,
@@ -122,7 +125,7 @@ const SmallDeviceListWrapper = memo(
               }}
               transition={{
                 duration: 0.5,
-                delay: 0.2,
+                type: "spring",
                 ease: "anticipate",
               }}
             >
