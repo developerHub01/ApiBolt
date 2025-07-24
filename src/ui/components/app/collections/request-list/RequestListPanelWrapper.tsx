@@ -4,9 +4,10 @@ import RequestListPanel from "@/components/app/collections/request-list/RequestL
 import type { ImperativePanelHandle } from "react-resizable-panels";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import useIsSmallDevice from "@/hooks/use-is-small-device";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
+import { AnimatedDialog } from "@/components/ui/animated-dialog";
 
 const RequestListPanelWrapper = memo(() => {
   const dispath = useAppDispatch();
@@ -71,69 +72,41 @@ interface SmallDeviceListWrapperProps {
 const SmallDeviceListWrapper = memo(
   ({ isCollapsed, handleCollapse }: SmallDeviceListWrapperProps) => {
     return (
-      <AnimatePresence>
-        {!isCollapsed && (
-          <section
-            className="absolute w-full h-full top-0 left-0 z-50 flex overflow-hidden"
-            onClick={handleCollapse}
-          >
-            {/* ✅ Backdrop */}
-            <motion.div
-              className="bg-background/20 absolute top-0 left-0 w-full h-full"
-              initial={{
-                opacity: 0,
-              }}
-              animate={{
-                opacity: 1,
-              }}
-              exit={{
-                opacity: 0,
-                transition: {
-                  /* total 0.6 s */
-                  delay: 0.1,
-                  duration: 0.5,
-                  ease: "linear",
-                },
-              }}
-              transition={{
-                duration: 0.1,
-                ease: "linear",
-              }}
-            />
-
-            {/* ✅ Sliding Panel */}
-            <motion.div
-              className={cn("w-full backdrop-blur-2xl h-full border-r-2")}
-              onClick={(e) => e.stopPropagation()}
-              style={{
-                maxWidth: "40vw",
-              }}
-              initial={{
-                opacity: 0,
-                x: -100,
-                transition: {
-                  delay: 0.2,
-                },
-              }}
-              animate={{
-                opacity: 1,
-                x: 0,
-              }}
-              exit={{
-                opacity: 0,
-                x: -100,
-              }}
-              transition={{
-                duration: 0.5,
-                type: "spring",
-                ease: "anticipate",
-              }}
-            >
-              <RequestListPanel />
-            </motion.div>
-          </section>
-        )}
-      </AnimatePresence>
+      <AnimatedDialog
+        isOpen={!isCollapsed}
+        onClose={handleCollapse}
+        className="p-0 justify-start"
+      >
+        <motion.div
+          className={cn("w-full backdrop-blur-2xl h-full border-r-2")}
+          onClick={(e) => e.stopPropagation()}
+          style={{
+            maxWidth: "40vw",
+          }}
+          initial={{
+            opacity: 0,
+            x: -100,
+            transition: {
+              delay: 0.2,
+            },
+          }}
+          animate={{
+            opacity: 1,
+            x: 0,
+          }}
+          exit={{
+            opacity: 0,
+            x: -100,
+          }}
+          transition={{
+            duration: 0.5,
+            type: "spring",
+            ease: "anticipate",
+          }}
+        >
+          <RequestListPanel />
+        </motion.div>
+      </AnimatedDialog>
     );
   }
 );
