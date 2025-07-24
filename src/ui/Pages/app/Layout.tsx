@@ -4,6 +4,7 @@ import Sidebar from "@/components/app/sidebar/Sidebar";
 import CopyRight from "@/components/copy-right";
 import TabSidebarProvider from "@/context/tab-sidebar/TabSidebarProvider";
 import Header from "@/components/app/header/Header";
+import Setting from "@/components/app/setting/Setting";
 
 const bg =
   "https://images.unsplash.com/photo-1480497490787-505ec076689f?q=80&w=869&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
@@ -16,6 +17,7 @@ const AppLayout = () => {
         <div className="relative z-10 min-h-0 h-full flex-1 flex content-stretch">
           <Sidebar />
           <Outlet />
+          <Setting />
         </div>
       </ProviderStack>
       <CopyRight />

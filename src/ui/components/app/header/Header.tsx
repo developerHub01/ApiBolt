@@ -3,6 +3,8 @@ import { Settings as SettingIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { isElectron } from "@/utils/electron";
 import WindowControls from "@/components/app/header/WindowControls";
+import { useAppDispatch } from "@/context/redux/hooks";
+import { handleChangeIsSettingOpen } from "@/context/redux/setting/setting-slice";
 // import HeaderNavigation from "@/components/header/HeaderNavigation";
 
 const Header = () => {
@@ -22,23 +24,34 @@ const Header = () => {
           ApiBolt
         </p>
         {/* <HeaderNavigation /> */}
-        <Button
-          size={"iconSm"}
-          variant={"ghost"}
-          style={{
-            ...(isElectron()
-              ? ({
-                  appRegion: "no-drag",
-                } as CSSProperties)
-              : {}),
-          }}
-          className="ml-auto"
-        >
-          <SettingIcon />
-        </Button>
+        <SettingButton />
       </div>
       {isElectron() && <WindowControls />}
     </div>
+  );
+};
+
+const SettingButton = () => {
+  const dispatch = useAppDispatch();
+
+  const handleToggle = () => dispatch(handleChangeIsSettingOpen());
+
+  return (
+    <Button
+      size={"iconSm"}
+      variant={"ghost"}
+      style={{
+        ...(isElectron()
+          ? ({
+              appRegion: "no-drag",
+            } as CSSProperties)
+          : {}),
+      }}
+      className="ml-auto"
+      onClick={handleToggle}
+    >
+      <SettingIcon />
+    </Button>
   );
 };
 
