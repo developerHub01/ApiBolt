@@ -1,8 +1,8 @@
 import type { CSSProperties } from "react";
+import { Settings as SettingIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { isElectron } from "@/utils/electron";
-import { Settings as SettingIcon } from "lucide-react";
-import WindowControls from "@/components/header/WindowControls";
+import WindowControls from "@/components/app/header/WindowControls";
 // import HeaderNavigation from "@/components/header/HeaderNavigation";
 
 const Header = () => {

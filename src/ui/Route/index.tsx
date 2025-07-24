@@ -4,7 +4,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { isElectron } from "@/utils/electron";
-import RootLayout from "@/pages/layout";
+import RootLayout from "@/pages/Layout";
 import AppLayout from "@/pages/app/layout";
 import FolderLayout from "@/pages/app/collections/folder/[id]/layout";
 import FolderPage from "@/pages/app/collections/folder/[id]/page";

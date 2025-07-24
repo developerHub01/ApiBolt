@@ -7,11 +7,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import {
-  // useAppDispatch,
-  useAppSelector,
-} from "@/context/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import type { THTTPMethods } from "@/types/request-response.types";
+import { updateRequestOrFolder } from "@/context/redux/request-response/request-response-thunk";
 
 const methodList: Array<{
   id: THTTPMethods;
@@ -40,35 +38,39 @@ const methodList: Array<{
 ];
 
 const ApiMethodSelector = memo(() => {
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
+  const selectedTab = useAppSelector(
+    (state) => state.requestResponse.selectedTab
+  )!;
   const methodType = useAppSelector(
     (state) =>
       state.requestResponse.requestList[state.requestResponse.selectedTab!]
         ?.method ?? "get"
   );
 
-  // const handleChange = (value: THTTPMethods) => {
-  //   dispatch(
-  //     changeRequestMethod({
-  //       method: value,
-  //     })
-  //   );
-  // };
+  const handleChange = (value: THTTPMethods) => {
+    dispatch(
+      updateRequestOrFolder({
+        method: value,
+        id: selectedTab,
+      })
+    );
+  };
 
   return (
     <div className="w-[150px] select-none">
       <Select
         defaultValue={methodType ?? methodList[0].id}
-        // onValueChange={handleChange}
+        onValueChange={handleChange}
         value={methodType}
       >
         <SelectTrigger
           className={cn("w-full rounded-r-none font-semibold", {
-            "text-green-500": methodType === "get",
-            "text-blue-500": methodType === "post",
-            "text-yellow-500": methodType === "put",
-            "text-orange-500": methodType === "patch",
-            "text-red-500": methodType === "delete",
+            "text-green-500/80": methodType === "get",
+            "text-blue-500/80": methodType === "post",
+            "text-yellow-500/80": methodType === "put",
+            "text-orange-500/80": methodType === "patch",
+            "text-red-500/80": methodType === "delete",
           })}
         >
           <SelectValue placeholder="Method" />
