@@ -56,7 +56,7 @@ const TabSidebar = () => {
           transition={{ duration: 0.3, ease: "easeInOut" }}
           className={cn(
             "h-full flex flex-col absolute right-0 top-0 z-40 gap-2 shadow-2xl border-l border-muted-foreground/20",
-            "backdrop-blur-xs hover:backdrop-blur-sm"
+            "backdrop-blur-xs hover:backdrop-blur-md transition-all duration-150"
           )}
           onMouseEnter={() => handleTabListHovering(true)}
           onMouseLeave={() => handleTabListHovering(false)}

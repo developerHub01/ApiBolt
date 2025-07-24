@@ -92,7 +92,7 @@ const TabItem = ({ id, index }: { id: string; index: number }) => {
           /* active tab style */
           "bg-accent hover:bg-accent/80": selectedTab === id,
           /* active tab border color */
-          "bg-transparent hover:bg-accent/40": selectedTab !== id,
+          "bg-transparent hover:bg-accent/50": selectedTab !== id,
           "border-green-500": selectedTab === id && method === "get",
           "border-blue-500": selectedTab === id && method === "post",
           "border-yellow-500": selectedTab === id && method === "put",
