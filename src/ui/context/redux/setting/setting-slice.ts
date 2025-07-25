@@ -18,6 +18,8 @@ export const settingSlice = createSlice({
       state,
       action: PayloadAction<boolean | undefined>
     ) => {
+      if (state.isSettingOpen === action.payload) return;
+
       state.isSettingOpen = action.payload ?? !state.isSettingOpen;
     },
   },

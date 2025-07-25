@@ -5,6 +5,11 @@ import { isElectron } from "@/utils/electron";
 import WindowControls from "@/components/app/header/WindowControls";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { handleChangeIsSettingOpen } from "@/context/redux/setting/setting-slice";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 // import HeaderNavigation from "@/components/header/HeaderNavigation";
 
 const Header = () => {
@@ -37,21 +42,28 @@ const SettingButton = () => {
   const handleToggle = () => dispatch(handleChangeIsSettingOpen());
 
   return (
-    <Button
-      size={"iconSm"}
-      variant={"ghost"}
-      style={{
-        ...(isElectron()
-          ? ({
-              appRegion: "no-drag",
-            } as CSSProperties)
-          : {}),
-      }}
-      className="ml-auto"
-      onClick={handleToggle}
-    >
-      <SettingIcon />
-    </Button>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button
+          size={"iconSm"}
+          variant={"ghost"}
+          style={{
+            ...(isElectron()
+              ? ({
+                  appRegion: "no-drag",
+                } as CSSProperties)
+              : {}),
+          }}
+          className="ml-auto"
+          onClick={handleToggle}
+        >
+          <SettingIcon />
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>Setting (Ctrl+,)</p>
+      </TooltipContent>
+    </Tooltip>
   );
 };
 

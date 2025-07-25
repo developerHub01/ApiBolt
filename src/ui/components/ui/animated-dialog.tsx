@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "motion/react";
 import SettingProvider from "@/context/setting/SettingProvider";
 import { cn } from "@/lib/utils";
-import { memo } from "react";
+import { memo, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface AnimatedDialogProps {
@@ -20,6 +20,16 @@ const AnimatedDialog = memo(
     className = "",
     overlayClassName = "",
   }: AnimatedDialogProps) => {
+    useEffect(() => {
+      const handleKeyEsc = (e: KeyboardEvent) => {
+        if (e.key === "Escape") onClose();
+      };
+
+      window.addEventListener("keydown", handleKeyEsc);
+
+      return () => window.removeEventListener("keydown", handleKeyEsc);
+    }, [onClose]);
+
     return (
       <SettingProvider>
         <AnimatePresence>
