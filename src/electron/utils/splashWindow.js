@@ -7,12 +7,11 @@ export const createSplashWindow = () => {
     height: 330,
     frame: false,
     transparent: true,
-    alwaysOnTop: true,
     resizable: false,
     titleBarStyle: "hidden",
   });
 
   win.loadFile(path.join(app.getAppPath(), "dist-react", "splash.html"));
-  win.webContents.openDevTools();
+
   return win;
 };
