@@ -16,7 +16,11 @@ const SettingIsZoomable = () => {
   const isZoomableLocal = useAppSelector(
     (state) => state.setting.settings?.isZoomable
   );
-  useAppSelector((state) => state.setting.isSettingOpen);
+
+  const isZoomable =
+    activeTab === "global"
+      ? isZoomableGlobal
+      : (isZoomableLocal ?? isZoomableGlobal);
 
   const handleIsZoomableChange = (checked: boolean) => {
     dispatch(
@@ -26,13 +30,6 @@ const SettingIsZoomable = () => {
       })
     );
   };
-
-  const isZoomable =
-    activeTab === "global"
-      ? isZoomableGlobal
-      : (isZoomableLocal ?? isZoomableGlobal);
-
-  console.log({ isZoomable, isZoomableGlobal, isZoomableLocal });
 
   return (
     <SettingItemHorizontalLayout>

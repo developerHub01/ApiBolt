@@ -8,27 +8,46 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import SettingItemHorizontalLayout from "@/components/app/setting/content/zoom/SettingItemHorizontalLayout";
+import { useSetting } from "@/context/setting/SettingProvider";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import { updateSettings } from "@/context/redux/setting/setting-thunk";
 
 const zoomList = Array.from({ length: 11 }).map((_, index) => (index + 5) * 10);
 
 const SettingZoomLevel = () => {
-  // const zoomLevelGlobal = useAppSelector(
-  //   (state) => state.setting.globalSetting.zoomLevel
-  // );
-  // const zoomLevelLocal = useAppSelector(
-  //   (state) => state.setting.settings?.zoomLevel
-  // );
+  const { activeTab } = useSetting();
+  const dispatch = useAppDispatch();
+  const activeProjectId = useAppSelector(
+    (state) => state.requestResponse.activeProjectId
+  );
+  const zoomLevelGlobal = useAppSelector(
+    (state) => state.setting.globalSetting.zoomLevel
+  );
+  const zoomLevelLocal = useAppSelector(
+    (state) => state.setting.settings?.zoomLevel
+  );
 
-  // const [zoomLevel, setZoomLevel] = useState(zoomLevelLocal ?? zoomLevelGlobal);
+  const zoomable =
+    activeTab === "global"
+      ? zoomLevelGlobal
+      : (zoomLevelLocal ?? zoomLevelGlobal);
 
-  // useEffect(()=>{
-
-  // }, [])
+  const handleZoomLevelChange = (value: string) => {
+    dispatch(
+      updateSettings({
+        zoomLevel: Number(value) / 100,
+        projectId: activeTab === "global" ? null : activeProjectId,
+      })
+    );
+  };
 
   return (
     <SettingItemHorizontalLayout>
       <p>Adjust the interface scale to your preference</p>
-      <Select value="100">
+      <Select
+        value={String(zoomable * 100)}
+        onValueChange={handleZoomLevelChange}
+      >
         <SelectTrigger className="w-full max-w-40">
           <SelectValue placeholder="Select a fruit" />
         </SelectTrigger>

@@ -40,8 +40,8 @@ declare global {
     };
 
     electronAPIZoom: {
-      setZoom: (factor: number) => void;
-      getZoom: () => number;
+      setZoom: (factor: number) => Promise<void>;
+      getZoom: () => Promise<number>;
     };
 
     electronAPIDB: {

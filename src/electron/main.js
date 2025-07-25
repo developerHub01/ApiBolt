@@ -16,6 +16,7 @@ import { requestOrFolderMetaHandler } from "./ipc/requestOrFolderMetaHandler.js"
 import { tabsHandler } from "./ipc/tabsHandler.js";
 import { folderHandlers } from "./ipc/folderHandlers.js";
 import { settingsHandlers } from "./ipc/settingsHandlers.js";
+import { getZoomLevel } from "./db/settingsDB.js";
 
 // browser style cookies holder by domain/path
 export const jar = initialCookieJar(undefined, { rejectPublicSuffixes: false });
@@ -50,6 +51,12 @@ app.whenReady().then(() => {
       },
       remaining > 0 ? remaining : 0
     );
+  });
+
+  mainWindow.webContents.on("did-finish-load", async () => {
+    /* get zoomlevel to update the windows zomm level */
+    const zoomLevel = await getZoomLevel();
+    mainWindow.webContents.send("set-zoom", zoomLevel);
   });
 
   app.on("activate", () => {
