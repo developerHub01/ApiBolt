@@ -13,7 +13,6 @@ import RequestBodyProvider from "@/context/collections/request/RequestBodyProvid
 import RequestHeaderProvider from "@/context/collections/request/RequestHeaderProvider";
 
 const CollectionsLayout = () => {
-  console.log("================");
   return (
     <>
       <AppMainContentLayoutWrapper>

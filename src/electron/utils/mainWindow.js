@@ -1,12 +1,13 @@
 import { app, BrowserWindow } from "electron";
 import path from "path";
 
-export const createWindow = () => {
+export const createMainWindow = () => {
   const win = new BrowserWindow({
+    show: false,
     minHeight: 500,
     minWidth: 650,
     frame: false,
-
+    fullscreen: true,
     titleBarStyle: "hidden",
 
     webPreferences: {
@@ -15,7 +16,6 @@ export const createWindow = () => {
       nodeIntegration: false,
     },
   });
-  win.maximize();
 
   win.loadFile(path.join(app.getAppPath(), "dist-react", "index.html"));
 

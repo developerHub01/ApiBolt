@@ -1,5 +1,6 @@
 import { app } from "electron";
-import { createWindow } from "./utils/window.js";
+import { createMainWindow } from "./utils/mainWindow.js";
+import { createSplashWindow } from "./utils/splashWindow.js";
 import { wrapper } from "axios-cookiejar-support";
 import axios from "axios";
 import electronSquirrelStartup from "electron-squirrel-startup";
@@ -25,11 +26,33 @@ if (electronSquirrelStartup) {
   app.quit();
 }
 
+let splashWindow = null;
+let mainWindow = null;
+
 app.whenReady().then(() => {
-  let mainWindow = createWindow();
+  splashWindow = createSplashWindow();
+  mainWindow = createMainWindow();
+
+  const splashMinDuration = 5000; // 5 sec minimum splash
+  const splashShownAt = Date.now();
+
+  mainWindow.once("ready-to-show", () => {
+    const elapsed = Date.now() - splashShownAt;
+    const remaining = splashMinDuration - elapsed;
+
+    setTimeout(
+      () => {
+        splashWindow?.close();
+        splashWindow = null;
+        mainWindow?.show();
+      },
+      remaining > 0 ? remaining : 0
+    );
+  });
 
   app.on("activate", () => {
-    if (BrowserWindow.getAllWindows().length === 0) mainWindow = createWindow();
+    if (BrowserWindow.getAllWindows().length === 0)
+      mainWindow = createMainWindow();
   });
 
   registerCookieHandlers();
