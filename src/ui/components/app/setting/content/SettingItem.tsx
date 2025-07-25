@@ -8,11 +8,12 @@ interface Props {
   id: string;
   title: string;
   children: React.ReactNode;
+  className?: string;
 }
 
-const SettingItem = ({ children, id, title }: Props) => {
+const SettingItem = ({ children, id, title, className = "" }: Props) => {
   return (
-    <AccordionItem value={id}>
+    <AccordionItem value={id} className={className}>
       <AccordionTrigger className="hover:no-underline cursor-pointer text-lg">
         {title}
       </AccordionTrigger>

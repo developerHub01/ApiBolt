@@ -71,6 +71,27 @@
       "when": 1753233190065,
       "tag": "0009_bent_thundra",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1753466798190,
+      "tag": "0010_eminent_whistler",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "6",
+      "when": 1753470915939,
+      "tag": "0011_elite_boomer",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "6",
+      "when": 1753475012547,
+      "tag": "0012_needy_proudstar",
+      "breakpoints": true
     }
   ]
 }

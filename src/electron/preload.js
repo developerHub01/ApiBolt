@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer } = require("electron");
+const { contextBridge, ipcRenderer, webFrame } = require("electron");
 
 contextBridge.exposeInMainWorld("electronAPI", {
   getCookiesFromUrl: async (url) => {
@@ -30,6 +30,11 @@ contextBridge.exposeInMainWorld("electronAPI", {
   generateJWTToken: (data) => ipcRenderer.invoke("generateJWTToken", data),
 });
 
+contextBridge.exposeInMainWorld("electronAPIZoom", {
+  setZoom: (factor) => webFrame.setZoomFactor(factor),
+  getZoom: () => webFrame.getZoomFactor(),
+});
+
 contextBridge.exposeInMainWorld("electronAPIProjectsDB", {
   getProjects: async () => await ipcRenderer.invoke("getProjects"),
   createProjects: async (payload) =>
@@ -40,6 +45,12 @@ contextBridge.exposeInMainWorld("electronAPIProjectsDB", {
   changeActiveProject: async (id) =>
     await ipcRenderer.invoke("changeActiveProject", id),
   getActiveProject: async () => await ipcRenderer.invoke("getActiveProject"),
+});
+
+contextBridge.exposeInMainWorld("electronAPISettingsDB", {
+  getSettings: async () => await ipcRenderer.invoke("getSettings"),
+  updateSettings: async (...payload) =>
+    await ipcRenderer.invoke("updateSettings", ...payload),
 });
 
 contextBridge.exposeInMainWorld("electronAPIEnvironmentsDB", {

@@ -15,6 +15,7 @@ import {
 } from "@/constant/sidebar.constant";
 import type { TSidebarTab } from "@/types/sidebar.types";
 import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
+import { loadSettings } from "@/context/redux/setting/setting-thunk";
 
 const SidebarMenu = memo(() => {
   const dispatch = useAppDispatch();
@@ -22,6 +23,7 @@ const SidebarMenu = memo(() => {
 
   useEffect(() => {
     dispatch(loadProjectList());
+    dispatch(loadSettings());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

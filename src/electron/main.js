@@ -15,6 +15,7 @@ import { authorizationHandler } from "./ipc/authorizationHandler.js";
 import { requestOrFolderMetaHandler } from "./ipc/requestOrFolderMetaHandler.js";
 import { tabsHandler } from "./ipc/tabsHandler.js";
 import { folderHandlers } from "./ipc/folderHandlers.js";
+import { settingsHandlers } from "./ipc/settingsHandlers.js";
 
 // browser style cookies holder by domain/path
 export const jar = initialCookieJar(undefined, { rejectPublicSuffixes: false });
@@ -45,6 +46,7 @@ app.whenReady().then(() => {
         splashWindow?.close();
         splashWindow = null;
         mainWindow?.show();
+        mainWindow.maximize();
       },
       remaining > 0 ? remaining : 0
     );
@@ -63,6 +65,7 @@ app.whenReady().then(() => {
   authorizationHandler();
   requestOrFolderMetaHandler();
   tabsHandler();
+  settingsHandlers();
   folderHandlers();
 });
 

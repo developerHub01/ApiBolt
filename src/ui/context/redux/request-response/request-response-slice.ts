@@ -194,7 +194,7 @@ interface RequestResponseState {
   tabList: Array<string>;
   isTabListHovering: boolean;
   selectedTab: string | null /* selectedTabId in tabList */;
-  
+
   isResponseCollapsed: Record<string, boolean>;
   activeMetaTab: Record<string, TActiveTabType>;
   isApiUrlError: Record<string, boolean>;
@@ -298,6 +298,7 @@ export const requestResponseSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
+    /* =============== Project reducers start ============= */
     handleLoadProjectsList: (
       state,
       action: PayloadAction<Array<ProjectInterface>>
@@ -311,6 +312,7 @@ export const requestResponseSlice = createSlice({
       if (state.activeProjectId === action.payload) return;
       state.activeProjectId = action.payload;
     },
+    /* =============== Project reducers end ============= */
 
     /* =============== Environment reducers start ============= */
     handleLoadEnvironmentsList: (

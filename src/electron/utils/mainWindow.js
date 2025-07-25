@@ -7,7 +7,6 @@ export const createMainWindow = () => {
     minHeight: 500,
     minWidth: 650,
     frame: false,
-    fullscreen: true,
     titleBarStyle: "hidden",
 
     webPreferences: {

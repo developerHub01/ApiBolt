@@ -1,4 +1,5 @@
 import { sql } from "drizzle-orm";
+import { boolean } from "drizzle-orm/gel-core";
 import { int, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { v4 as uuidv4 } from "uuid";
 
@@ -106,6 +107,23 @@ export const tabsTable = sqliteTable("tabs_table", {
   createdAt: text()
     .notNull()
     .default(sql`(current_timestamp)`),
+});
+
+export const settingTable = sqliteTable("setting_table", {
+  id: text()
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  backgroundImages: text(),
+  backgroundOpacity: int(),
+  backgroundBlur: int(),
+  zoomLevel: int(),
+  isZoomable: int({ mode: boolean }),
+  codeFontSize: int(),
+  indentationSize: int(),
+  layoutType: text() /* ltr | rtl */,
+  projectId: text().references(() => projectTable.id, {
+    onDelete: "cascade",
+  }),
 });
 
 export const folderTable = sqliteTable("folder_table", {

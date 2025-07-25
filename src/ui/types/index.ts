@@ -10,6 +10,10 @@ import type {
   RequestListItemUpdatePayloadInterface,
   ResponseInterface,
 } from "@/types/request-response.types";
+import type {
+  SettingsInterface,
+  SettingsTotalInterface,
+} from "@/types/setting.types";
 
 declare global {
   interface Window {
@@ -33,6 +37,11 @@ declare global {
           algorithm: string;
         }
       ): Promise<string>;
+    };
+
+    electronAPIZoom: {
+      setZoom: (factor: number) => void;
+      getZoom: () => number;
     };
 
     electronAPIDB: {
@@ -72,6 +81,11 @@ declare global {
       deleteProjects(id: string): Promise<boolean>;
       changeActiveProject(id: string): Promise<boolean>;
       getActiveProject(): Promise<string | null>;
+    };
+
+    electronAPISettingsDB: {
+      getSettings(): Promise<SettingsTotalInterface>;
+      updateSettings(payload: Partial<SettingsInterface>): Promise<boolean>;
     };
 
     electronAPIEnvironmentsDB: {
