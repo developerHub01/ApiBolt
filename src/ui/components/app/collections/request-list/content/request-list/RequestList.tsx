@@ -3,6 +3,7 @@ import RequestListItem from "@/components/app/collections/request-list/content/r
 import RequestListDeleteAlertDialog from "@/components/app/collections/request-list/content/request-list/RequestListDeleteAlertDialog";
 import { useAppSelector } from "@/context/redux/hooks";
 import Empty from "@/components/ui/empty";
+import AutoScrollActiveWrapper from "@/components/ui/auto-scroll-active-wrapper";
 
 const RequestList = memo(() => {
   const requestList = useAppSelector(
@@ -17,9 +18,11 @@ const RequestList = memo(() => {
 
   return (
     <div className="flex flex-col w-full py-1 gap-0.5">
-      {rootList.map(({ id }, index) => (
-        <RequestListItem key={id} id={id} lavel={0} index={index} />
-      ))}
+      <AutoScrollActiveWrapper className="py-1">
+        {rootList.map(({ id }, index) => (
+          <RequestListItem key={id} id={id} lavel={0} index={index} />
+        ))}
+      </AutoScrollActiveWrapper>
       {Boolean(rootList?.length) || <EmptyBox />}
       <RequestListDeleteAlertDialog />
     </div>

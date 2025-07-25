@@ -214,6 +214,7 @@ const RequestListItemContent = memo(
           )}
           onContextMenu={() => handleToggleContextMenu(true)}
           onClick={handleRequestClick}
+          data-active={selectedTab === id}
         >
           <div
             className={cn(
