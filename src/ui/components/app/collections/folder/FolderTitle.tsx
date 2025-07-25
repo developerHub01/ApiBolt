@@ -47,7 +47,7 @@ const FolderTitle = memo(() => {
         suppressContentEditableWarning
         onKeyDown={handleKeydown}
         onBlur={handleBlur}
-        className="text-3xl font-semibold hover:bg-accent focus:bg-accent py-1 px-2 rounded-sm"
+        className="text-3xl font-semibold hover:bg-accent/50 focus:bg-accent/50 py-1 px-2 rounded-sm"
       >
         {titleState}
       </h2>
