@@ -207,9 +207,19 @@ const RequestListItemContent = memo(
       <>
         <div
           className={cn(
-            "hover:bg-accent/50 focus-within:bg-accent/50 duration-100 transition-all px-2",
+            "cursor-pointer hover:bg-accent/50 focus-within:bg-accent/50 duration-100 transition-all px-1 border-x-2 border-transparent",
             {
+              /* active tab style */
               "bg-accent": selectedTab === id,
+
+              /* active tab border color */
+              "bg-transparent hover:bg-accent/50": selectedTab !== id,
+              "border-green-500": selectedTab === id && method === "get",
+              "border-blue-500": selectedTab === id && method === "post",
+              "border-yellow-500": selectedTab === id && method === "put",
+              "border-orange-500": selectedTab === id && method === "patch",
+              "border-red-500": selectedTab === id && method === "delete",
+              "border-primary": selectedTab === id && !method,
             }
           )}
           onContextMenu={() => handleToggleContextMenu(true)}
@@ -218,7 +228,7 @@ const RequestListItemContent = memo(
         >
           <div
             className={cn(
-              "pr-0.5 py-0.5 flex gap-1 items-start justify-between cursor-pointer select-none group ring-2 rounded-md",
+              "pr-0.5 py-0.5 flex gap-1 items-start justify-between select-none group ring-2 rounded-md",
               {
                 "ring-primary/50": isDragging,
                 "ring-transparent": !isDragging,
