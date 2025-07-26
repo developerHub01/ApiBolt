@@ -1,3 +1,5 @@
+export type TKeyboardShortcutKey = "+" | "-" | "=" | "0";
+
 export interface SettingsInterface {
   backgroundImages: Array<string>;
   backgroundOpacity: number;

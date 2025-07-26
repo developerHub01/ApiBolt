@@ -1,10 +1,18 @@
 import type {
   SettingsInterface,
   SettingsTotalInterface,
+  TKeyboardShortcutKey,
 } from "@/types/setting.types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import { handleLoadSettings, handleUpdateSettings } from "./setting-slice";
+import {
+  defaultZoomLevel,
+  maxZoomLevel,
+  minZoomLevel,
+  stepAmountZoomLevel,
+} from "@/constant/settings.constant";
+import { calculateIntoFixedPoint } from "@/utils";
 
 export const loadSettings = createAsyncThunk<
   SettingsTotalInterface,
@@ -33,3 +41,48 @@ export const updateSettings = createAsyncThunk<
 
   return response;
 });
+export const updateSettingsZoomByKeyboard = createAsyncThunk<
+  boolean,
+  TKeyboardShortcutKey,
+  { dispatch: AppDispatch; state: RootState }
+>(
+  "request-response/updateSettingsZoomByKeyboard",
+  async (type, { dispatch, getState }) => {
+    const state = getState() as RootState;
+
+    const activeProjectId = state.requestResponse.activeProjectId ?? null;
+    const oldZoomLevel =
+      (state.setting.settings || state.setting.globalSetting).zoomLevel ?? 1;
+
+    /* first updating level basded on keybord key then normalizing between min and max elvel */
+    const newZoomLevel = Math.max(
+      Math.min(
+        type === "+"
+          ? calculateIntoFixedPoint(oldZoomLevel + stepAmountZoomLevel, 1)
+          : type === "-"
+            ? calculateIntoFixedPoint(oldZoomLevel - stepAmountZoomLevel, 1)
+            : defaultZoomLevel,
+        maxZoomLevel
+      ),
+      minZoomLevel
+    );
+
+    if (oldZoomLevel === newZoomLevel) return false;
+
+    const response = await window.electronAPISettingsDB.updateSettings({
+      zoomLevel: newZoomLevel,
+      projectId: activeProjectId,
+    });
+
+    dispatch(
+      handleUpdateSettings({
+        type: activeProjectId ? "project" : "global",
+        payload: {
+          zoomLevel: newZoomLevel,
+        },
+      })
+    );
+
+    return response;
+  }
+);

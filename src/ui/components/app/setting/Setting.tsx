@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { handleChangeIsSettingOpen } from "@/context/redux/setting/setting-slice";
 import SettingTop from "@/components/app/setting/content/SettingTop";
@@ -16,26 +16,16 @@ const Setting = () => {
     [dispatch]
   );
 
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.code === "Comma") {
-        dispatch(handleChangeIsSettingOpen(true));
-      }
-    };
-
-    window.addEventListener("keydown", handler);
-
-    return () => window.removeEventListener("keydown", handler);
-  }, [dispatch]);
-
   return (
-    <AnimatedDialog isOpen={isSettingOpen} onClose={handleClose}>
-      <AnimatedDialogContentWrapper>
-        <SettingTop />
-        <SettingContent />
-        <SettingBottom />
-      </AnimatedDialogContentWrapper>
-    </AnimatedDialog>
+    <>
+      <AnimatedDialog isOpen={isSettingOpen} onClose={handleClose}>
+        <AnimatedDialogContentWrapper>
+          <SettingTop />
+          <SettingContent />
+          <SettingBottom />
+        </AnimatedDialogContentWrapper>
+      </AnimatedDialog>
+    </>
   );
 };
 

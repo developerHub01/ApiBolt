@@ -11,6 +11,7 @@ import SettingItemHorizontalLayout from "@/components/app/setting/content/zoom/S
 import { useSetting } from "@/context/setting/SettingProvider";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { updateSettings } from "@/context/redux/setting/setting-thunk";
+import { calculateIntoFixedPoint } from "@/utils";
 
 const zoomList = Array.from({ length: 11 }).map((_, index) => (index + 5) * 10);
 
@@ -27,15 +28,16 @@ const SettingZoomLevel = () => {
     (state) => state.setting.settings?.zoomLevel
   );
 
-  const zoomable =
-    activeTab === "global"
+  const zoomLevel = calculateIntoFixedPoint(
+    (activeTab === "global"
       ? zoomLevelGlobal
-      : (zoomLevelLocal ?? zoomLevelGlobal);
+      : (zoomLevelLocal ?? zoomLevelGlobal)) * 100
+  );
 
   const handleZoomLevelChange = (value: string) => {
     dispatch(
       updateSettings({
-        zoomLevel: Number(value) / 100,
+        zoomLevel: calculateIntoFixedPoint(Number(value) / 100, 1),
         projectId: activeTab === "global" ? null : activeProjectId,
       })
     );
@@ -44,10 +46,7 @@ const SettingZoomLevel = () => {
   return (
     <SettingItemHorizontalLayout>
       <p>Adjust the interface scale to your preference</p>
-      <Select
-        value={String(zoomable * 100)}
-        onValueChange={handleZoomLevelChange}
-      >
+      <Select value={String(zoomLevel)} onValueChange={handleZoomLevelChange}>
         <SelectTrigger className="w-full max-w-40">
           <SelectValue placeholder="Select a fruit" />
         </SelectTrigger>

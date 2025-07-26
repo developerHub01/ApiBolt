@@ -5,6 +5,7 @@ import CopyRight from "@/components/copy-right";
 import TabSidebarProvider from "@/context/tab-sidebar/TabSidebarProvider";
 import Header from "@/components/app/header/Header";
 import Setting from "@/components/app/setting/Setting";
+import KeyboardEvents from "@/components/app/KeyboardEvents";
 
 const bg =
   "https://images.unsplash.com/photo-1480497490787-505ec076689f?q=80&w=869&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
@@ -26,7 +27,12 @@ const AppLayout = () => {
 };
 
 const ProviderStack = ({ children }: { children: React.ReactNode }) => {
-  return <TabSidebarProvider>{children}</TabSidebarProvider>;
+  return (
+    <TabSidebarProvider>
+      {children}
+      <KeyboardEvents />
+    </TabSidebarProvider>
+  );
 };
 
 interface CustomizedBgWrapperProps {

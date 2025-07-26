@@ -1,6 +1,12 @@
 import axios from "axios";
 import { isElectron } from "@/utils/electron";
-import type { APIPayloadBody, TRequestBodyType } from "@/types/request-response.types";
+import type {
+  APIPayloadBody,
+  TRequestBodyType,
+} from "@/types/request-response.types";
+
+export const calculateIntoFixedPoint = (result: number, point: number = 1) =>
+  Number(result.toFixed(point));
 
 export const getResponseType = (contentType: string) => {
   if (contentType.includes("application/json")) {
@@ -138,7 +144,7 @@ export const sendRequest = async ({
     default:
       throw new Error("Unsupported body type");
   }
-  
+
   return axios({
     method,
     url,
