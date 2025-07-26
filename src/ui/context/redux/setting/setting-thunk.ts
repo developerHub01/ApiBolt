@@ -51,6 +51,16 @@ export const updateSettingsZoomByKeyboard = createAsyncThunk<
     const state = getState() as RootState;
 
     const activeProjectId = state.requestResponse.activeProjectId ?? null;
+
+    /* if activeProject have and not global or nor project isZoomable enabled or not any activeProject and nor global isZommable active then return not have to update  */
+    if (
+      (activeProjectId &&
+        !state.setting.settings?.isZoomable &&
+        !state.setting.globalSetting.isZoomable) ||
+      (!activeProjectId && !state.setting.globalSetting.isZoomable)
+    )
+      return false;
+
     const oldZoomLevel =
       (state.setting.settings || state.setting.globalSetting).zoomLevel ?? 1;
 
