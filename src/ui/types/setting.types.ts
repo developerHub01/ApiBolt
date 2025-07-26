@@ -1,5 +1,7 @@
 export type TKeyboardShortcutKey = "+" | "-" | "=" | "0";
 
+export type TLayoutSetting = "ltr" | "rtl";
+
 export interface SettingsInterface {
   backgroundImages: Array<string>;
   backgroundOpacity: number;

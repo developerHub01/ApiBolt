@@ -5,7 +5,7 @@ import SettingIsZoomable from "@/components/app/setting/content/zoom/SettingIsZo
 const SettingZoom = () => {
   return (
     <SettingItem id="zoom" title="Zoom Settings">
-      <div className="w-full flex flex-col gap-2">
+      <div className="w-full flex flex-col gap-4">
         <SettingZoomLevel />
         <SettingIsZoomable />
       </div>

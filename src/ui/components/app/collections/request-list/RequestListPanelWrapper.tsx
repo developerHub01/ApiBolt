@@ -8,6 +8,8 @@ import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
 import { AnimatedDialog } from "@/components/ui/animated-dialog";
+import useCheckApplyingLayout from "@/hooks/use-check-applying-layout";
+import type { TLayoutSetting } from "@/types/setting.types";
 
 const RequestListPanelWrapper = memo(() => {
   const dispath = useAppDispatch();
@@ -71,21 +73,29 @@ interface SmallDeviceListWrapperProps {
 
 const SmallDeviceListWrapper = memo(
   ({ isCollapsed, handleCollapse }: SmallDeviceListWrapperProps) => {
+    const layoutTypes: TLayoutSetting = useCheckApplyingLayout();
+
     return (
       <AnimatedDialog
         isOpen={!isCollapsed}
         onClose={handleCollapse}
-        className="p-0 justify-start"
+        className={cn("p-0 justify-start", {
+          "justify-start": layoutTypes === "ltr",
+          "justify-end": layoutTypes === "rtl",
+        })}
       >
         <motion.div
-          className={cn("w-full backdrop-blur-2xl h-full border-r-2")}
+          className={cn("w-full backdrop-blur-lg h-full border-r-2", {
+            "border-r-2": layoutTypes === "ltr",
+            "border-l-2": layoutTypes === "rtl",
+          })}
           onClick={(e) => e.stopPropagation()}
           style={{
             maxWidth: "40vw",
           }}
           initial={{
             opacity: 0,
-            x: -100,
+            x: layoutTypes === "ltr" ? -100 : 100,
             transition: {
               delay: 0.2,
             },
@@ -96,7 +106,7 @@ const SmallDeviceListWrapper = memo(
           }}
           exit={{
             opacity: 0,
-            x: -100,
+            x: layoutTypes === "ltr" ? -100 : 100,
           }}
           transition={{
             duration: 0.5,

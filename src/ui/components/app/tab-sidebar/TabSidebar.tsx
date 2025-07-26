@@ -12,9 +12,12 @@ import {
 import TabActionWrapper from "@/components/app/tab-sidebar/TabActionWrapper";
 import TabSidebarWrapper from "@/components/app/tab-sidebar/TabSidebarWrapper";
 import AutoScrollActiveWrapper from "@/components/ui/auto-scroll-active-wrapper";
+import useCheckApplyingLayout from "@/hooks/use-check-applying-layout";
+import type { TLayoutSetting } from "@/types/setting.types";
 
 const TabSidebar = () => {
   const dispatch = useAppDispatch();
+  const layoutTypes: TLayoutSetting = useCheckApplyingLayout();
   const isTabListHovering = useAppSelector(
     (state) => state.requestResponse.isTabListHovering
   );
@@ -56,7 +59,11 @@ const TabSidebar = () => {
           transition={{ duration: 0.3, ease: "easeInOut" }}
           className={cn(
             "h-full flex flex-col absolute right-0 top-0 z-40 gap-2 shadow-2xl border-l border-muted-foreground/20",
-            "backdrop-blur-xs hover:backdrop-blur-md transition-all duration-150"
+            "backdrop-blur-xs hover:backdrop-blur-md transition-all duration-150",
+            {
+              "right-0 border-l": layoutTypes === "ltr",
+              "left-0 border-r": layoutTypes === "rtl",
+            }
           )}
           onMouseEnter={() => handleTabListHovering(true)}
           onMouseLeave={() => handleTabListHovering(false)}

@@ -44,10 +44,10 @@ const SettingZoomLevel = () => {
   };
 
   return (
-    <SettingItemHorizontalLayout>
+    <SettingItemHorizontalLayout className="items-center">
       <p>Adjust the interface scale to your preference</p>
       <Select value={String(zoomLevel)} onValueChange={handleZoomLevelChange}>
-        <SelectTrigger className="w-full max-w-40">
+        <SelectTrigger className="w-full max-w-40" size="sm">
           <SelectValue placeholder="Select a fruit" />
         </SelectTrigger>
         <SelectContent>

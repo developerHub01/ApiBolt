@@ -3,6 +3,7 @@ import { Accordion } from "@/components/ui/accordion";
 import { AnimatedDialogContent } from "@/components/ui/animated-dialog";
 import SettingZoom from "@/components/app/setting/content/zoom/SettingZoom";
 import BackgroundImage from "@/components/app/setting/content/BackgroundImage";
+import SettingLayout from "@/components/app/setting/content/layout/SettingLayout";
 import { motion } from "motion/react";
 import { useSetting } from "@/context/setting/SettingProvider";
 
@@ -34,6 +35,7 @@ const SettingContent = memo(() => {
         <Accordion type="multiple" className="w-full">
           <BackgroundImage />
           <SettingZoom />
+          <SettingLayout />
         </Accordion>
       </motion.section>
     </AnimatedDialogContent>

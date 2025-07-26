@@ -6,6 +6,9 @@ import TabSidebarProvider from "@/context/tab-sidebar/TabSidebarProvider";
 import Header from "@/components/app/header/Header";
 import Setting from "@/components/app/setting/Setting";
 import KeyboardEvents from "@/components/app/KeyboardEvents";
+import type { TLayoutSetting } from "@/types/setting.types";
+import { cn } from "@/lib/utils";
+import useCheckApplyingLayout from "@/hooks/use-check-applying-layout";
 
 const bg =
   "https://images.unsplash.com/photo-1480497490787-505ec076689f?q=80&w=869&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
@@ -16,8 +19,10 @@ const AppLayout = () => {
       <ProviderStack>
         <Header />
         <div className="relative z-10 min-h-0 h-full flex-1 flex content-stretch">
-          <Sidebar />
-          <Outlet />
+          <InnerLayout>
+            <Sidebar />
+            <Outlet />
+          </InnerLayout>
           <Setting />
         </div>
       </ProviderStack>
@@ -62,5 +67,19 @@ const CustomizedBgWrapper = memo(({ children }: CustomizedBgWrapperProps) => {
     </section>
   );
 });
+
+const InnerLayout = ({ children }: CustomizedBgWrapperProps) => {
+  const layoutTypes: TLayoutSetting = useCheckApplyingLayout();
+
+  return (
+    <div
+      className={cn("w-full h-full flex", {
+        "flex-row-reverse": layoutTypes === "rtl",
+      })}
+    >
+      {children}
+    </div>
+  );
+};
 
 export default AppLayout;
