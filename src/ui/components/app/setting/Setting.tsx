@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { handleChangeIsSettingOpen } from "@/context/redux/setting/setting-slice";
 import SettingTop from "@/components/app/setting/content/SettingTop";
@@ -6,6 +6,7 @@ import SettingContent from "@/components/app/setting/content/SettingContent";
 import SettingBottom from "@/components/app/setting/content/SettingBottom";
 import { AnimatedDialogContentWrapper } from "@/components/ui/animated-dialog";
 import { AnimatedDialog } from "@/components/ui/animated-dialog";
+import { loadSettings } from "@/context/redux/setting/setting-thunk";
 
 const Setting = () => {
   const dispatch = useAppDispatch();
@@ -25,8 +26,22 @@ const Setting = () => {
           <SettingBottom />
         </AnimatedDialogContentWrapper>
       </AnimatedDialog>
+      <SettingLoader />
     </>
   );
+};
+
+const SettingLoader = () => {
+  const activeProjectId = useAppSelector(
+    (state) => state.requestResponse.activeProjectId
+  );
+
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(loadSettings());
+  }, [dispatch, activeProjectId]);
+
+  return null;
 };
 
 export default Setting;
