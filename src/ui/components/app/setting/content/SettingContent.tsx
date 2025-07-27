@@ -6,6 +6,7 @@ import BackgroundImage from "@/components/app/setting/content/BackgroundImage";
 import SettingLayout from "@/components/app/setting/content/layout/SettingLayout";
 import { motion } from "motion/react";
 import { useSetting } from "@/context/setting/SettingProvider";
+import SettingCode from "@/components/app/setting/content/code/SettingCode";
 
 const SettingContent = memo(() => {
   const { activeTab } = useSetting();
@@ -36,6 +37,7 @@ const SettingContent = memo(() => {
           <BackgroundImage />
           <SettingZoom />
           <SettingLayout />
+          <SettingCode />
         </Accordion>
       </motion.section>
     </AnimatedDialogContent>
