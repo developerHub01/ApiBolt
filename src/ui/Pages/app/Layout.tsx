@@ -9,6 +9,7 @@ import KeyboardEvents from "@/components/app/KeyboardEvents";
 import type { TLayoutSetting } from "@/types/setting.types";
 import { cn } from "@/lib/utils";
 import useCheckApplyingLayout from "@/hooks/use-check-applying-layout";
+import GlobalProvider from "@/context/global/GlobalProvider";
 
 const bg =
   "https://images.unsplash.com/photo-1480497490787-505ec076689f?q=80&w=869&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
@@ -33,10 +34,12 @@ const AppLayout = () => {
 
 const ProviderStack = ({ children }: { children: React.ReactNode }) => {
   return (
-    <TabSidebarProvider>
-      {children}
-      <KeyboardEvents />
-    </TabSidebarProvider>
+    <GlobalProvider>
+      <TabSidebarProvider>
+        {children}
+        <KeyboardEvents />
+      </TabSidebarProvider>
+    </GlobalProvider>
   );
 };
 
