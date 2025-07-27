@@ -1,4 +1,4 @@
-import SettingItemHorizontalLayout from "@/components/app/setting/content/zoom/SettingItemHorizontalLayout";
+import SettingItemHorizontalLayout from "@/components/app/setting/content/SettingItemHorizontalLayout";
 import { Switch } from "@/components/ui/switch";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { updateSettings } from "@/context/redux/setting/setting-thunk";

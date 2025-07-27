@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import SettingItemHorizontalLayout from "@/components/app/setting/content/zoom/SettingItemHorizontalLayout";
+import SettingItemHorizontalLayout from "@/components/app/setting/content/SettingItemHorizontalLayout";
 import { useSetting } from "@/context/setting/SettingProvider";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { updateSettings } from "@/context/redux/setting/setting-thunk";
@@ -48,7 +48,7 @@ const SettingZoomLevel = () => {
       <p>Adjust the interface scale to your preference</p>
       <Select value={String(zoomLevel)} onValueChange={handleZoomLevelChange}>
         <SelectTrigger className="w-full max-w-40" size="sm">
-          <SelectValue placeholder="Select a fruit" />
+          <SelectValue placeholder="Zoom level" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
