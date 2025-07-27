@@ -1,5 +1,6 @@
 import { defaultSettings } from "@/constant/settings.constant";
 import type {
+  ProjectSettingsInterface,
   SettingsInterface,
   SettingsTotalInterface,
 } from "@/types/setting.types";
@@ -8,7 +9,7 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 interface SettingStateInterface {
   isSettingOpen: boolean;
   globalSetting: SettingsInterface;
-  settings: Partial<SettingsInterface> | null;
+  settings: ProjectSettingsInterface | null;
 }
 
 // Define the initial state using that type
@@ -43,7 +44,7 @@ export const settingSlice = createSlice({
     handleUpdateSettings: (
       state,
       action: PayloadAction<{
-        payload: Partial<SettingsInterface>;
+        payload: Partial<SettingsInterface | ProjectSettingsInterface>;
         type: "global" | "project";
       }>
     ) => {
@@ -52,7 +53,7 @@ export const settingSlice = createSlice({
       if (type === "global")
         state.globalSetting = {
           ...state.globalSetting,
-          ...payload,
+          ...(payload as SettingsInterface),
         };
       else
         state.settings = {

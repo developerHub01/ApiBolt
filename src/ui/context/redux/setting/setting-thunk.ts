@@ -1,4 +1,5 @@
 import type {
+  ProjectSettingsInterface,
   SettingsInterface,
   SettingsTotalInterface,
   TKeyboardShortcutKey,
@@ -27,7 +28,7 @@ export const loadSettings = createAsyncThunk<
 });
 export const updateSettings = createAsyncThunk<
   boolean,
-  Partial<SettingsInterface>,
+  Partial<SettingsInterface | ProjectSettingsInterface>,
   { dispatch: AppDispatch; state: RootState }
 >("request-response/updateSettings", async (payload, { dispatch }) => {
   const response = await window.electronAPISettingsDB.updateSettings(payload);

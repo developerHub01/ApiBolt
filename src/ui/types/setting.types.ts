@@ -14,7 +14,11 @@ export interface SettingsInterface {
   projectId?: string | null;
 }
 
+export type ProjectSettingsInterface = {
+  [K in keyof SettingsInterface]?: SettingsInterface[K] | null;
+};
+
 export interface SettingsTotalInterface {
   globalSetting: SettingsInterface;
-  settings: SettingsInterface | null;
+  settings: ProjectSettingsInterface;
 }

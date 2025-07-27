@@ -11,6 +11,7 @@ import type {
   ResponseInterface,
 } from "@/types/request-response.types";
 import type {
+  ProjectSettingsInterface,
   SettingsInterface,
   SettingsTotalInterface,
 } from "@/types/setting.types";
@@ -85,7 +86,9 @@ declare global {
 
     electronAPISettingsDB: {
       getSettings(): Promise<SettingsTotalInterface>;
-      updateSettings(payload: Partial<SettingsInterface>): Promise<boolean>;
+      updateSettings(
+        payload: Partial<SettingsInterface | ProjectSettingsInterface>
+      ): Promise<boolean>;
     };
 
     electronAPIEnvironmentsDB: {

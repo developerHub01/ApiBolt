@@ -32,12 +32,12 @@ const SettingCodeIndentationSize = () => {
   const indentationSize =
     activeTab === "global"
       ? indentationSizeGlobal
-      : (indentationSizeLocal ?? indentationSizeGlobal);
+      : (indentationSizeLocal ?? "Global Setting");
 
   const handleIndentationSizeChange = (value: string) => {
     dispatch(
       updateSettings({
-        indentationSize: value === "Global Setting" ? undefined : Number(value),
+        indentationSize: value === "Global Setting" ? null : Number(value),
         projectId: activeTab === "global" ? null : activeProjectId,
       })
     );

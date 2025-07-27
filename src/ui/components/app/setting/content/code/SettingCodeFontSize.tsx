@@ -32,12 +32,12 @@ const SettingCodeFontSize = () => {
   const codeFontSize =
     activeTab === "global"
       ? codeFontSizeGlobal
-      : (codeFontSizeLocal ?? codeFontSizeGlobal);
+      : (codeFontSizeLocal ?? "Global Setting");
 
   const handleCodeFontSizeChange = (value: string) => {
     dispatch(
       updateSettings({
-        codeFontSize: value === "Global Setting" ? undefined : Number(value),
+        codeFontSize: value === "Global Setting" ? null : Number(value),
         projectId: activeTab === "global" ? null : activeProjectId,
       })
     );
