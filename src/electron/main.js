@@ -35,7 +35,7 @@ app.whenReady().then(() => {
   splashWindow = createSplashWindow();
   mainWindow = createMainWindow();
 
-  const splashMinDuration = 5000; // 5 sec minimum splash
+  const splashMinDuration = 3000; // 3 sec minimum splash
   const splashShownAt = Date.now();
 
   mainWindow.once("ready-to-show", () => {
@@ -57,6 +57,7 @@ app.whenReady().then(() => {
     /* get zoomlevel to update the windows zomm level */
     const zoomLevel = await getZoomLevel();
     mainWindow.webContents.send("set-zoom", zoomLevel);
+    mainWindow.maximize();
   });
 
   app.on("activate", () => {
