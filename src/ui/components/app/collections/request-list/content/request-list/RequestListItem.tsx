@@ -10,9 +10,6 @@ import {
   type KeyboardEvent,
   type MouseEvent,
 } from "react";
-import RequestOrFolderProvider, {
-  useRequestFolder,
-} from "@/context/collections/request-list/RequestOrFolderProvider";
 import { ChevronRight as ArrowIcon } from "lucide-react";
 import ItemCTA from "@/components/app/collections/request-list/content/request-list/item-cta/ItemCTA";
 import RequestMethodTag from "@/components/app/RequestMethodTag";
@@ -27,6 +24,9 @@ import {
   updateRequestOrFolder,
 } from "@/context/redux/request-response/request-response-thunk";
 import type { RequestListItemInterface } from "@/types/request-response.types";
+import RequestListProvider, {
+  useRequestList,
+} from "@/context/collections/request-list/RequestListProvider";
 
 interface RequestListItemProps extends RequestListItemInterface {
   type: "folder" | "request";
@@ -58,7 +58,7 @@ const RequestListItem = memo(
         : undefined);
 
     return (
-      <RequestOrFolderProvider>
+      <RequestListProvider>
         <RequestListItemContent
           {...requestDetails}
           children={children}
@@ -66,7 +66,7 @@ const RequestListItem = memo(
           lavel={lavel}
           index={index}
         />
-      </RequestOrFolderProvider>
+      </RequestListProvider>
     );
   }
 );
@@ -94,7 +94,7 @@ const RequestListItemContent = memo(
       handleRenameAction,
       isContextMenuOpen,
       handleToggleContextMenu,
-    } = useRequestFolder();
+    } = useRequestList();
     const [nameState, setNameState] = useState<string>(name ?? "");
     const [isHovering, setIsHovering] = useState<boolean>(false);
     const [isDragging, setIsDragging] = useState<boolean>(false);

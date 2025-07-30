@@ -7,7 +7,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { EllipsisVertical as ThreeDotIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useRequestFolder } from "@/context/collections/request-list/RequestOrFolderProvider";
 import { motion } from "motion/react";
 import {
   createCollection,
@@ -17,6 +16,7 @@ import {
 import { useAppDispatch } from "@/context/redux/hooks";
 import { handleChangeDeleteFolderOrRequestId } from "@/context/redux/request-response/request-response-slice";
 import { memo, useCallback, type MouseEvent } from "react";
+import { useRequestList } from "@/context/collections/request-list/RequestListProvider";
 
 type TActionType =
   | "add_request"
@@ -77,7 +77,7 @@ interface ItemCTAProps {
 const ItemCTA = memo(({ type, id }: ItemCTAProps) => {
   const dispatch = useAppDispatch();
   const { isContextMenuOpen, handleToggleContextMenu, handleRenameAction } =
-    useRequestFolder();
+    useRequestList();
 
   const handleCTAAction = (actionType: string) => {
     switch (actionType as TActionType) {

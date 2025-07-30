@@ -9,7 +9,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import RequestOrFolderProvider from "@/context/collections/request-list/RequestOrFolderProvider";
+import RequestListProvider from "@/context/collections/request-list/RequestListProvider";
 import RequestBodyProvider from "@/context/collections/request/RequestBodyProvider";
 import RequestHeaderProvider from "@/context/collections/request/RequestHeaderProvider";
 import useCheckApplyingLayout from "@/hooks/use-check-applying-layout";
@@ -29,11 +29,11 @@ interface ProviderStackProps {
   children: React.ReactNode;
 }
 const ProviderStack = ({ children }: ProviderStackProps) => (
-  <RequestOrFolderProvider>
+  <RequestListProvider>
     <RequestBodyProvider>
       <RequestHeaderProvider>{children}</RequestHeaderProvider>
     </RequestBodyProvider>
-  </RequestOrFolderProvider>
+  </RequestListProvider>
 );
 
 const LTRLayout = memo(() => {

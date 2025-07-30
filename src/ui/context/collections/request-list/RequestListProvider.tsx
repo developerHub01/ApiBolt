@@ -2,7 +2,7 @@ import React, { createContext, useCallback, useContext, useState } from "react";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { updateRequestOrFolder } from "@/context/redux/request-response/request-response-thunk";
 
-interface RequestOrFolderContext {
+interface RequestListContext {
   isContextMenuOpen: boolean;
   handleToggleContextMenu: (value?: boolean) => void;
   isRenameActive: boolean;
@@ -10,30 +10,26 @@ interface RequestOrFolderContext {
   handleChangeName: (id: string, name: string) => void;
 }
 
-const RequestOrFolderContext = createContext<RequestOrFolderContext | null>(
-  null
-);
+const RequestListContext = createContext<RequestListContext | null>(null);
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const useRequestFolder = () => {
-  const context = useContext(RequestOrFolderContext);
+export const useRequestList = () => {
+  const context = useContext(RequestListContext);
 
   if (!context) {
     throw new Error(
-      "useRequestFolder must be used within a RequestFolderProvider."
+      "useRequestList must be used within a RequestListProvider."
     );
   }
 
   return context;
 };
 
-interface RequestOrFolderProviderProps {
+interface RequestListProviderProps {
   children: React.ReactNode;
 }
 
-const RequestOrFolderProvider = ({
-  children,
-}: RequestOrFolderProviderProps) => {
+const RequestListProvider = ({ children }: RequestListProviderProps) => {
   const dispatch = useAppDispatch();
   const [isContextMenuOpen, setIsContextMenuOpen] = useState<boolean>(false);
   const [isRenameActive, setIsRenameActive] = useState<boolean>(false);
@@ -57,7 +53,7 @@ const RequestOrFolderProvider = ({
   );
 
   return (
-    <RequestOrFolderContext.Provider
+    <RequestListContext.Provider
       value={{
         isContextMenuOpen,
         handleToggleContextMenu,
@@ -67,8 +63,8 @@ const RequestOrFolderProvider = ({
       }}
     >
       {children}
-    </RequestOrFolderContext.Provider>
+    </RequestListContext.Provider>
   );
 };
 
-export default RequestOrFolderProvider;
+export default RequestListProvider;
