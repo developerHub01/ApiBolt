@@ -1,4 +1,3 @@
-import type { TabsDataInterface } from "@/context/tab-sidebar/TabSidebarProvider";
 import type {
   APIPayloadBody,
   AuthorizationPayloadInterface,
@@ -66,10 +65,6 @@ declare global {
       ): Promise<void>;
       getAllBoltCore(): Promise<Record<string, RequestListItemInterface>>;
       onBoltCoreChange(cb: () => void): void;
-
-      /* Tabs ============== */
-      getTabList(): Promise<TabsDataInterface>;
-      changeTabsData(payload: TabsDataInterface): Promise<void>;
     };
 
     electronAPIProjectsDB: {

@@ -1,30 +1,24 @@
-import React, { createContext, useContext, useEffect } from "react";
-// import { useNavigate } from "react-router";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
   changeTabsData,
   loadTabsData,
 } from "@/context/redux/request-response/request-response-thunk";
-import type { THTTPMethods } from "@/types/request-response.types";
+import { normalizeText } from "@/utils";
 
-export interface TabInterface {
-  id: string;
-  name: string;
-  method?: THTTPMethods;
-  children?: Array<string>;
+interface TabSidebarContext {
+  tabList: Array<string>;
+  localTabList: Array<string>;
+  handleSearch: (searchTerm: string) => void;
 }
 
-export interface TabsDataInterface {
-  openTabs: Array<string>;
-  selectedTab?: string | null;
-}
-
-// interface TabSidebarContext {
-
-// }
-
-// const TabSidebarContext = createContext<TabSidebarContext | null>(null);
-const TabSidebarContext = createContext<undefined>(undefined);
+const TabSidebarContext = createContext<TabSidebarContext | null>(null);
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useTabSidebar = () => {
@@ -44,11 +38,14 @@ interface TabSidebarProviderProps {
 const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
   const dispatch = useAppDispatch();
   const tabList = useAppSelector((state) => state.requestResponse.tabList);
-  // const requestList = useAppSelector(
-  //   (state) => state.requestResponse.requestList
-  // );
+  const requestList = useAppSelector(
+    (state) => state.requestResponse.requestList
+  );
   const selectedTab = useAppSelector(
     (state) => state.requestResponse.selectedTab
+  );
+  const [localTabList, setLocalTabList] = useState<Array<string>>(
+    tabList ?? []
   );
   // const navigate = useNavigate();
 
@@ -57,6 +54,10 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
     dispatch(loadTabsData());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    setLocalTabList(tabList);
+  }, [tabList]);
 
   let changeTabDataTimeout;
   useEffect(() => {
@@ -81,8 +82,32 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
   //     navigate(`/${tabDetails.children ? "folder" : "request"}/${selectedTab}`);
   // }, [selectedTab, tabList, requestList, navigate]);
 
+  const handleSearch = useCallback(
+    (searchTerm: string) => {
+      searchTerm = normalizeText(searchTerm);
+      if (!searchTerm) return setLocalTabList(tabList);
+
+      setLocalTabList(
+        tabList.filter((tab) => {
+          const tabDetails = requestList[tab];
+
+          if (!tabDetails) return false;
+
+          return normalizeText(tabDetails.name).includes(searchTerm);
+        })
+      );
+    },
+    [requestList, tabList]
+  );
+
   return (
-    <TabSidebarContext.Provider value={undefined}>
+    <TabSidebarContext.Provider
+      value={{
+        tabList,
+        localTabList,
+        handleSearch,
+      }}
+    >
       {children}
     </TabSidebarContext.Provider>
   );

@@ -14,6 +14,7 @@ import TabSidebarWrapper from "@/components/app/tab-sidebar/TabSidebarWrapper";
 import AutoScrollActiveWrapper from "@/components/ui/auto-scroll-active-wrapper";
 import useCheckApplyingLayout from "@/hooks/use-check-applying-layout";
 import type { TLayoutSetting } from "@/types/setting.types";
+import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 
 const TabSidebar = () => {
   const dispatch = useAppDispatch();
@@ -21,7 +22,8 @@ const TabSidebar = () => {
   const isTabListHovering = useAppSelector(
     (state) => state.requestResponse.isTabListHovering
   );
-  const tabList = useAppSelector((state) => state.requestResponse.tabList);
+  // const tabList = useAppSelector((state) => state.requestResponse.tabList);
+  const { localTabList } = useTabSidebar();
 
   const handleDrop = useCallback(
     (e: DragEvent<HTMLDivElement>) => {
@@ -58,7 +60,7 @@ const TabSidebar = () => {
           animate={{ width: isTabListHovering ? 280 : 60 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
           className={cn(
-            "h-full flex flex-col absolute right-0 top-0 z-40 gap-2 shadow-2xl border-l border-muted-foreground/20",
+            "h-full flex flex-col absolute right-0 top-0 z-40 gap-0.5 shadow-2xl border-l border-muted-foreground/20",
             "backdrop-blur-xs hover:backdrop-blur-md transition-all duration-150",
             {
               "right-0 border-l": layoutTypes === "ltr",
@@ -74,9 +76,9 @@ const TabSidebar = () => {
             onDragOver={(e) => e.preventDefault()}
           >
             <AutoScrollActiveWrapper className="py-1">
-              {tabList.length ? (
+              {localTabList.length ? (
                 <>
-                  {tabList.map((tabId, index) => (
+                  {localTabList.map((tabId, index) => (
                     <TabItem id={tabId} index={index} />
                   ))}
                 </>
