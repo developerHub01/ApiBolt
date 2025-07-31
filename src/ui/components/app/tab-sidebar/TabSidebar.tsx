@@ -1,9 +1,8 @@
-import { memo, useCallback, type DragEvent } from "react";
+import {  useCallback, type DragEvent } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import TabItem from "@/components/app/tab-sidebar/TabItem";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
-import Empty from "@/components/ui/empty";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
   handleChangeIsTabListHovering,
@@ -15,6 +14,7 @@ import AutoScrollActiveWrapper from "@/components/ui/auto-scroll-active-wrapper"
 import useCheckApplyingLayout from "@/hooks/use-check-applying-layout";
 import type { TLayoutSetting } from "@/types/setting.types";
 import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
+import EmptyBox from "@/components/app/tab-sidebar/EmptyBox";
 
 const TabSidebar = () => {
   const dispatch = useAppDispatch();
@@ -94,14 +94,5 @@ const TabSidebar = () => {
   );
 };
 
-const EmptyBox = memo(() => (
-  <div className="w-full p-2">
-    <Empty
-      label="No tab open"
-      description="Your currently tab list is empty. You can start by selecting a request or folder or clicking on the '+' add button to add new tab."
-      showFallback
-    />
-  </div>
-));
 
 export default TabSidebar;
