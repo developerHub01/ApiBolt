@@ -17,6 +17,8 @@ import { useAppDispatch } from "@/context/redux/hooks";
 import { handleChangeDeleteFolderOrRequestId } from "@/context/redux/request-response/request-response-slice";
 import { memo, useCallback, type MouseEvent } from "react";
 import { useRequestList } from "@/context/collections/request-list/RequestListProvider";
+import useCheckApplyingLayout from "@/hooks/use-check-applying-layout";
+import type { TLayoutSetting } from "@/types/setting.types";
 
 type TActionType =
   | "add_request"
@@ -78,6 +80,7 @@ const ItemCTA = memo(({ type, id }: ItemCTAProps) => {
   const dispatch = useAppDispatch();
   const { isContextMenuOpen, handleToggleContextMenu, handleRenameAction } =
     useRequestList();
+  const layoutTypes: TLayoutSetting = useCheckApplyingLayout();
 
   const handleCTAAction = (actionType: string) => {
     switch (actionType as TActionType) {
@@ -138,7 +141,7 @@ const ItemCTA = memo(({ type, id }: ItemCTAProps) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent
           className="w-40 [&>div]:cursor-pointer"
-          align="start"
+          align={layoutTypes === "rtl" ? "end" : "start"}
           onClick={handlePreventPropagation}
         >
           <CTAList
