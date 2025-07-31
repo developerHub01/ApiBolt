@@ -1,70 +1,43 @@
 import type { CSSProperties } from "react";
-import { Settings as SettingIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { isElectron } from "@/utils/electron";
 import WindowControls from "@/components/app/header/WindowControls";
-import { useAppDispatch } from "@/context/redux/hooks";
-import { handleChangeIsSettingOpen } from "@/context/redux/setting/setting-slice";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-// import HeaderNavigation from "@/components/header/HeaderNavigation";
+import HeaderSearch from "@/components/app/header/search/HeaderSearch";
+import SettingButton from "@/components/app/header/SettingButton";
 
 const Header = () => {
   return (
-    <div
-      className="bg-accent/80 flex justify-between items-center gap-2"
-      style={{
-        ...(isElectron()
-          ? ({
-              appRegion: "drag",
-            } as CSSProperties)
-          : {}),
-      }}
-    >
-      <div className="flex items-center justify-between gap-2 w-full flex-1 px-2 py-1.5">
-        <p className="select-none text-lg md:text-xl font-bold tracking-wide">
-          ApiBolt
-        </p>
-        {/* <HeaderNavigation /> */}
-        <SettingButton />
+    <Wrapper>
+      <p className="select-none text-lg md:text-xl font-bold tracking-wide px-2 py-1.5">
+        ApiBolt
+      </p>
+      <div className="w-full flex justify-center items-center">
+        <HeaderSearch />
       </div>
-      {isElectron() && <WindowControls />}
-    </div>
+      <div className="flex gap-2 items-center h-full">
+        <SettingButton />
+        {isElectron() && <WindowControls />}
+      </div>
+    </Wrapper>
   );
 };
 
-const SettingButton = () => {
-  const dispatch = useAppDispatch();
+interface WrapperProps {
+  children: React.ReactNode;
+}
 
-  const handleToggle = () => dispatch(handleChangeIsSettingOpen());
-
-  return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Button
-          size={"iconSm"}
-          variant={"ghost"}
-          style={{
-            ...(isElectron()
-              ? ({
-                  appRegion: "no-drag",
-                } as CSSProperties)
-              : {}),
-          }}
-          className="ml-auto"
-          onClick={handleToggle}
-        >
-          <SettingIcon />
-        </Button>
-      </TooltipTrigger>
-      <TooltipContent>
-        <p>Setting (Ctrl+,)</p>
-      </TooltipContent>
-    </Tooltip>
-  );
-};
+const Wrapper = ({ children }: WrapperProps) => (
+  <div
+    className="bg-accent/80 grid grid-cols-[auto_1fr_auto] gap-2 min-h-12 items-center"
+    style={{
+      ...(isElectron()
+        ? ({
+            appRegion: "drag",
+          } as CSSProperties)
+        : {}),
+    }}
+  >
+    {children}
+  </div>
+);
 
 export default Header;
