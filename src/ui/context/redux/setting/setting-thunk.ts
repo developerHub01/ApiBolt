@@ -30,18 +30,24 @@ export const updateSettings = createAsyncThunk<
   boolean,
   Partial<SettingsInterface | ProjectSettingsInterface>,
   { dispatch: AppDispatch; state: RootState }
->("request-response/updateSettings", async (payload, { dispatch }) => {
-  const response = await window.electronAPISettingsDB.updateSettings(payload);
+>(
+  "request-response/updateSettings",
+  async (payload, { dispatch, getState }) => {
+    const response = await window.electronAPISettingsDB.updateSettings(payload);
 
-  dispatch(
-    handleUpdateSettings({
-      type: payload.projectId ? "project" : "global",
-      payload,
-    })
-  );
+    const projectId =
+      payload.projectId ?? getState().requestResponse.activeProjectId;
 
-  return response;
-});
+    dispatch(
+      handleUpdateSettings({
+        type: projectId ? "project" : "global",
+        payload,
+      })
+    );
+
+    return response;
+  }
+);
 export const updateSettingsZoomByKeyboard = createAsyncThunk<
   boolean,
   TKeyboardShortcutKey,
