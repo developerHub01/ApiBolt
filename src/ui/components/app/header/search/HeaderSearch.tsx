@@ -89,6 +89,16 @@ const HeaderSearch = () => {
     }
   }, [open]);
 
+  useEffect(() => {
+    const handleKeyDownhandler = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.key === "k" && !open) setOpen(true);
+    };
+
+    document.addEventListener("keydown", handleKeyDownhandler);
+    return () => document.removeEventListener("keydown", handleKeyDownhandler);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   if (activeTab !== "collections" || !activeProjectId) return null;
 
   return (
