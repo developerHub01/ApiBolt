@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import {
   useCellListToShow,
   useGetTableData,
@@ -8,15 +8,15 @@ import MetaTableWrapper from "@/components/app/collections/request/request/meta-
 import MetaTableRow from "@/components/app/collections/request/request/meta-data/meta-table/MetaTableRow";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { selectMetaData } from "@/context/redux/request-response/request-response-selector";
-import {
-  handleChangeMetaData,
-  handleCheckToggleMetaData,
-  handleDeleteMetaData,
-} from "@/context/redux/request-response/request-response-slice";
+import { handleCheckToggleMetaData } from "@/context/redux/request-response/request-response-slice";
 import type {
   FormDataInterface,
   ParamInterface,
 } from "@/types/request-response.types";
+import {
+  deleteParams,
+  updateParams,
+} from "@/context/redux/request-response/request-response-thunk";
 
 const headersToPreventCheckList = ["Cookie", "Authorization"];
 
@@ -45,6 +45,29 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
   let data = tableData.data;
   const type = tableData.type;
 
+  const handleDelete = useCallback(
+    (id: string) => {
+      const handler = type === "params" ? deleteParams : deleteParams;
+      dispatch(handler(id));
+    },
+    [dispatch, type]
+  );
+
+  const handleUpdate = useCallback(
+    (id: string, key: string, value: string | File | boolean) => {
+      const handler = type === "params" ? updateParams : updateParams;
+      dispatch(
+        handler({
+          paramId: id,
+          payload: {
+            [key]: value,
+          },
+        })
+      );
+    },
+    [dispatch, type]
+  );
+
   if (type === "headers" && showHiddenData)
     data = [...hiddenHeader, ...data].map(checkInputType);
   if (type === "params") data = [...hiddenHeader, ...data].map(checkInputType);
@@ -58,25 +81,11 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
           key={param.id}
           {...param}
           keyName={key}
-          handleChangeItem={(id: string, key: string, value: string | File) =>
-            dispatch(
-              handleChangeMetaData({
-                type,
-                id,
-                key,
-                value,
-              })
-            )
-          }
-          handleDeleteItem={(id: string) =>
-            dispatch(
-              handleDeleteMetaData({
-                type,
-                id,
-              })
-            )
-          }
-          handleCheckToggle={(id?: string) =>
+          handleChangeItem={handleUpdate}
+          handleDeleteItem={handleDelete}
+          handleCheckToggle={(id?: string) => {
+            if (!param.prevent && id)
+              return handleUpdate(id, "isCheck", !param.isCheck);
             dispatch(
               handleCheckToggleMetaData({
                 id,
@@ -87,8 +96,8 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
                       ? "hiddenHeaders"
                       : type,
               })
-            )
-          }
+            );
+          }}
           cellList={cellToShow}
         />
       ))}

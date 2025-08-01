@@ -2,7 +2,6 @@ import { memo } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus as AddIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useEnvironments } from "@/context/environments/EnvironmentsProvider";
 
 interface AddNewDataProps {
   label?: string;
@@ -13,10 +12,6 @@ interface AddNewDataProps {
 
 const AddNewData = memo(
   ({ label = "", onClick, className, ...props }: AddNewDataProps) => {
-    const { searchQuery } = useEnvironments();
-
-    if (searchQuery) return null;
-
     return (
       <Button
         variant={"secondary"}

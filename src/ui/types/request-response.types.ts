@@ -80,12 +80,30 @@ export type TRequestBodyType =
 
 export type THTTPMethods = "get" | "post" | "put" | "patch" | "delete";
 
+export interface ParamPayloadInterface {
+  id: string;
+  isCheck: boolean;
+  key: string;
+  value: string;
+  description: string;
+  requestOrFolderMetaId: string;
+  createdAt: string;
+}
+
+export interface ParamBuildPayloadInterface {
+  isCheck?: boolean;
+  key: string;
+  value: string;
+  description: string;
+  requestOrFolderMetaId?: string;
+}
+
 export interface ParamInterface<ValueT = string> {
   id: string;
   key: string;
   value: ValueT;
   description?: string;
-  hide?: boolean;
+  isCheck?: boolean;
   prevent?: boolean;
   calculateDynamicly?: boolean;
 }

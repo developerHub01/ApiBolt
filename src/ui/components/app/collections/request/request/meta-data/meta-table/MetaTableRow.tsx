@@ -15,7 +15,7 @@ interface MetaTableRowProps {
   value: string | Array<File>;
   description?: string;
   contentType?: string;
-  hide?: boolean;
+  isCheck?: boolean;
   preventCheck?: boolean;
   prevent?: boolean;
   calculateDynamicly?: boolean;
@@ -34,7 +34,7 @@ const MetaTableRow = memo(
     value = "",
     description = "",
     contentType = "",
-    hide = false,
+    isCheck = false,
     preventCheck = false,
     prevent = false,
     calculateDynamicly = false,
@@ -73,8 +73,8 @@ const MetaTableRow = memo(
           <div className="w-full flex justify-center items-center">
             <Checkbox
               className="cursor-pointer"
-              id={`${type}-hide-${id}`}
-              checked={!hide}
+              id={`${type}-check-${id}`}
+              checked={isCheck}
               disabled={preventCheck}
               onCheckedChange={handleCheckChange}
             />

@@ -4,6 +4,8 @@ import type {
   EnvironmentInterface,
   EnvironmentPayloadInterface,
   JWTBearerAuthInterface,
+  ParamBuildPayloadInterface,
+  ParamPayloadInterface,
   ProjectInterface,
   RequestListItemInterface,
   RequestListItemUpdatePayloadInterface,
@@ -157,6 +159,24 @@ declare global {
         description?: string;
         requestOrFolderMetaId: string;
       }): Promise<boolean>;
+    };
+
+    electronAPIParamsDB: {
+      getParams(id?: string): Promise<Array<ParamPayloadInterface>>;
+      deleteParams(paramId: string): Promise<boolean>;
+      deleteParamsByRequestMetaId(
+        requestOrFolderMetaId?: string
+      ): Promise<boolean>;
+      createParams(
+        payload: Partial<ParamBuildPayloadInterface>
+      ): Promise<boolean>;
+      updateParams(
+        paramId: string,
+        payload: Partial<ParamBuildPayloadInterface>
+      ): Promise<boolean>;
+      checkAllParamsByRequestMetaId(
+        requestOrFolderMetaId?: string
+      ): Promise<boolean>;
     };
   }
 }

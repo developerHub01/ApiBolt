@@ -17,11 +17,11 @@ import {
   type ShowColumnInterface,
   type TMetaTableType,
 } from "@/context/collections/request/RequestMetaTableProvider";
-import {
-  handleAddMetaData,
-  handleRemoveAllMetaData,
-} from "@/context/redux/request-response/request-response-slice";
 import { useAppDispatch } from "@/context/redux/hooks";
+import {
+  addParams,
+  deleteParamsByRequestMetaId,
+} from "@/context/redux/request-response/request-response-thunk";
 
 interface MetaTableThreeDotActionProps {
   type: TMetaTableType;
@@ -32,24 +32,18 @@ const MetaTableThreeDotAction = memo(
     const dispatch = useAppDispatch();
     const { showColumn, toggleShowColumn } = useRequestMetaTable();
 
-    const handleAddNewData = useCallback(
-      () =>
-        dispatch(
-          handleAddMetaData({
-            type,
-          })
-        ),
-      [dispatch, type]
-    );
-    const handleDeleteAllData = useCallback(
-      () =>
-        dispatch(
-          handleRemoveAllMetaData({
-            type,
-          })
-        ),
-      [dispatch, type]
-    );
+    const handleAddNewData = useCallback(() => {
+      const handleAdd = type === "params" ? addParams : addParams;
+      dispatch(handleAdd());
+    }, [dispatch, type]);
+
+    const handleDeleteAllData = useCallback(() => {
+      const handleDeleteAll =
+        type === "params"
+          ? deleteParamsByRequestMetaId
+          : deleteParamsByRequestMetaId;
+      dispatch(handleDeleteAll());
+    }, [dispatch, type]);
 
     return (
       <Popover>

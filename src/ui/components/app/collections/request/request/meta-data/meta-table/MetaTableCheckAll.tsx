@@ -1,9 +1,9 @@
-import { memo } from "react";
+import { memo, useCallback, useMemo } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { useGetTableData } from "@/context/collections/request/RequestMetaTableProvider";
-import { handleCheckToggleMetaData } from "@/context/redux/request-response/request-response-slice";
 import { useAppDispatch } from "@/context/redux/hooks";
+import { checkAllParamsByRequestMetaId } from "@/context/redux/request-response/request-response-thunk";
 
 interface MetaTableCheckAllProps {
   id?: string;
@@ -15,9 +15,21 @@ const MetaTableCheckAll = memo(
     const dispatch = useAppDispatch();
     const { data, type } = useGetTableData() ?? {};
 
+    const isAllChecked = useMemo(() => {
+      return data?.length ? data.every((item) => item.isCheck) : false;
+    }, [data]);
+
+    const handleCheck = useCallback(() => {
+      const handler =
+        type === "params"
+          ? checkAllParamsByRequestMetaId
+          : checkAllParamsByRequestMetaId;
+      dispatch(handler());
+    }, [dispatch, type]);
+
     if (!type || !data || !data.length) return null;
 
-    const isAllChecked = data.every((item) => !item.hide);
+    console.log(data);
 
     return (
       <div className={cn("w-full flex justify-center items-center", className)}>
@@ -25,13 +37,7 @@ const MetaTableCheckAll = memo(
           id={id}
           className="cursor-pointer"
           checked={isAllChecked}
-          onCheckedChange={() =>
-            dispatch(
-              handleCheckToggleMetaData({
-                type,
-              })
-            )
-          }
+          onCheckedChange={handleCheck}
         />
       </div>
     );

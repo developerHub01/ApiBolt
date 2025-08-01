@@ -2,17 +2,13 @@ import { memo, useCallback } from "react";
 import MetaTable from "@/components/app/collections/request/request/meta-data/meta-table/MetaTable";
 import MetaDataWrapper from "@/components/app/collections/request/request/meta-data/meta-table/MetaDataWrapper";
 import AddNewData from "@/components/AddNewData";
-import { handleAddMetaData } from "@/context/redux/request-response/request-response-slice";
 import { useAppDispatch } from "@/context/redux/hooks";
+import { addParams } from "@/context/redux/request-response/request-response-thunk";
 
 const Params = memo(() => {
   const dispatch = useAppDispatch();
   const handleAddNewMetaData = useCallback(() => {
-    dispatch(
-      handleAddMetaData({
-        type: "params",
-      })
-    );
+    dispatch(addParams());
   }, [dispatch]);
 
   return (
