@@ -33,13 +33,12 @@ const RequestTopLeft = () => {
     setRequestNameState(requestName);
   }, [requestName]);
 
-  const handleInputFocus = useCallback(() => {
-    setIsFocused(true);
-  }, []);
+  const handleInputFocus = useCallback(() => setIsFocused(true), []);
 
-  const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setRequestNameState(e.target.value);
-  }, []);
+  const handleChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => setRequestNameState(e.target.value),
+    []
+  );
 
   const handleBlur = useCallback(
     (e: FocusEvent<HTMLInputElement>) => {
@@ -52,7 +51,7 @@ const RequestTopLeft = () => {
         })
       );
     },
-    [dispatch]
+    [dispatch, selectedTab]
   );
 
   const handleKeyDown = useCallback(
@@ -72,7 +71,6 @@ const RequestTopLeft = () => {
       </span>
       <Input
         className={cn("w-fit max-w-full", {
-          "": isFocused,
           "border-transparent bg-transparent": !isFocused,
         })}
         value={requestNameState}
