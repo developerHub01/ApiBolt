@@ -124,3 +124,33 @@ contextBridge.exposeInMainWorld("electronAPIFolderDB", {
   updateFolder: async (...payload) =>
     await ipcRenderer.invoke("updateFolder", ...payload),
 });
+
+contextBridge.exposeInMainWorld("electronAPIParamsDB", {
+  getParams: async (...payload) =>
+    await ipcRenderer.invoke("getParams", ...payload),
+  deleteParams: async (...payload) =>
+    await ipcRenderer.invoke("deleteParams", ...payload),
+  deleteParamsByRequestMetaId: async (...payload) =>
+    await ipcRenderer.invoke("deleteParamsByRequestMetaId", ...payload),
+  createParams: async (...payload) =>
+    await ipcRenderer.invoke("createParams", ...payload),
+  updateParams: async (...payload) =>
+    await ipcRenderer.invoke("updateParams", ...payload),
+  checkAllParamsByRequestMetaId: async (...payload) =>
+    await ipcRenderer.invoke("checkAllParamsByRequestMetaId", ...payload),
+});
+
+contextBridge.exposeInMainWorld("electronAPIHeadersDB", {
+  getHeaders: async (...payload) =>
+    await ipcRenderer.invoke("getHeaders", ...payload),
+  deleteHeaders: async (...payload) =>
+    await ipcRenderer.invoke("deleteHeaders", ...payload),
+  deleteHeadersByRequestMetaId: async (...payload) =>
+    await ipcRenderer.invoke("deleteHeadersByRequestMetaId", ...payload),
+  createHeaders: async (...payload) =>
+    await ipcRenderer.invoke("createHeaders", ...payload),
+  updateHeaders: async (...payload) =>
+    await ipcRenderer.invoke("updateHeaders", ...payload),
+  checkAllParamsByRequestMetaId: async (...payload) =>
+    await ipcRenderer.invoke("checkAllParamsByRequestMetaId", ...payload),
+});

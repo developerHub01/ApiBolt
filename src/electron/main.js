@@ -17,6 +17,10 @@ import { tabsHandler } from "./ipc/tabsHandler.js";
 import { folderHandlers } from "./ipc/folderHandlers.js";
 import { settingsHandlers } from "./ipc/settingsHandlers.js";
 import { getZoomLevel } from "./db/settingsDB.js";
+import { paramsHandlers } from "./ipc/paramsHandlers.js";
+import { headersHandlers } from "./ipc/headersHandlers.js";
+
+export const userDataDir = app.getPath("userData");
 
 // browser style cookies holder by domain/path
 export const jar = initialCookieJar(undefined, { rejectPublicSuffixes: false });
@@ -74,6 +78,8 @@ app.whenReady().then(() => {
   tabsHandler();
   settingsHandlers();
   folderHandlers();
+  paramsHandlers();
+  headersHandlers();
 });
 
 app.on("window-all-closed", () => {
