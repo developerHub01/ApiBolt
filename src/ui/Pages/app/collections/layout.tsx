@@ -1,6 +1,6 @@
 import { memo } from "react";
 import type React from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useParams } from "react-router-dom";
 import AppMainContentLayoutWrapper from "@/components/app/AppMainContentLayoutWrapper";
 import RequestListPanelWrapper from "@/components/app/collections/request-list/RequestListPanelWrapper";
 import TabSidebar from "@/components/app/tab-sidebar/TabSidebar";
@@ -37,20 +37,28 @@ const ProviderStack = ({ children }: ProviderStackProps) => (
 );
 
 const LTRLayout = memo(() => {
+  const { id: requestId } = useParams<{ id?: string }>();
+
   return (
     <>
       <RequestListPanelWrapper />
       <ResizableHandle />
       <ResizablePanel defaultSize={70}>
         <section className="flex w-full h-full">
-          <ResizablePanelGroup direction="vertical">
-            <ResizablePanel defaultSize={25}>
-              <ProviderStack>
-                <Outlet />
-              </ProviderStack>
-            </ResizablePanel>
-          </ResizablePanelGroup>
-          <TabSidebar />
+          {requestId ? (
+            <>
+              <ResizablePanelGroup direction="vertical">
+                <ResizablePanel defaultSize={25}>
+                  <ProviderStack>
+                    <Outlet />
+                  </ProviderStack>
+                </ResizablePanel>
+              </ResizablePanelGroup>
+              <TabSidebar />
+            </>
+          ) : (
+            <Outlet />
+          )}
         </section>
       </ResizablePanel>
     </>
@@ -58,18 +66,26 @@ const LTRLayout = memo(() => {
 });
 
 const RTLLayout = memo(() => {
+  const { id: requestId } = useParams<{ id?: string }>();
+
   return (
     <>
       <ResizablePanel defaultSize={70}>
         <section className="flex w-full h-full">
-          <TabSidebar />
-          <ResizablePanelGroup direction="vertical">
-            <ResizablePanel defaultSize={25}>
-              <ProviderStack>
-                <Outlet />
-              </ProviderStack>
-            </ResizablePanel>
-          </ResizablePanelGroup>
+          {requestId ? (
+            <>
+              <TabSidebar />
+              <ResizablePanelGroup direction="vertical">
+                <ResizablePanel defaultSize={25}>
+                  <ProviderStack>
+                    <Outlet />
+                  </ProviderStack>
+                </ResizablePanel>
+              </ResizablePanelGroup>
+            </>
+          ) : (
+            <Outlet />
+          )}
         </section>
       </ResizablePanel>
       <ResizableHandle />
