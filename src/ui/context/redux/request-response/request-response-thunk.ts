@@ -592,6 +592,8 @@ export const expendParentsOnSelectedChangeTabsData = createAsyncThunk<
         id,
       });
 
+      if (!payload?.length) return;
+
       const response =
         await window.electronAPIRequestOrFolderMetaDB.expendOrCollapseRequestOrFolderMetaAll(
           payload,
