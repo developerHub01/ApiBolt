@@ -1,14 +1,20 @@
-import { useCallback, useEffect, useState, type ChangeEvent } from "react";
+import {
+  memo,
+  useCallback,
+  useEffect,
+  useState,
+  type ChangeEvent,
+} from "react";
 import { Button } from "@/components/ui/button";
-import { X as ClearIcon, Search as SearchIcon } from "lucide-react";
 import { useAppSelector } from "@/context/redux/hooks";
-import { motion } from "motion/react";
 import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
+import { X as ClearIcon, Search as SearchIcon } from "lucide-react";
+import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 
 const DEBOUNCE_DELAY = 300;
 
-const TabSearch = () => {
+const TabSearchBar = memo(() => {
   const { handleSearch } = useTabSidebar();
   const isTabListHovering = useAppSelector(
     (state) => state.requestResponse.isTabListHovering
@@ -30,9 +36,10 @@ const TabSearch = () => {
     return () => clearTimeout(timeout);
   }, [searchTerm, handleSearch, skipEffect]);
 
-  const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-  }, []);
+  const handleChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value),
+    []
+  );
 
   const handleClear = useCallback(() => {
     setSkipEffect(true);
@@ -87,6 +94,6 @@ const TabSearch = () => {
       </div>
     </Button>
   );
-};
+});
 
-export default TabSearch;
+export default TabSearchBar;

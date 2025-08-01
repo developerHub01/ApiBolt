@@ -1,6 +1,6 @@
 import AddNewTab from "@/components/app/tab-sidebar/AddNewTab";
 import ClearAllTabs from "@/components/app/tab-sidebar/ClearAllTabs";
-import TabSearch from "@/components/app/tab-sidebar/TabSearch";
+import TabSearch from "@/components/app/tab-sidebar/tab-search/TabSearch";
 
 const TabActionWrapper = () => {
   return (
