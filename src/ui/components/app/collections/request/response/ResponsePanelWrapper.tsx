@@ -10,19 +10,22 @@ interface ResponsePanelWrapperProps {
 
 const ResponsePanelWrapper = memo(({ children }: ResponsePanelWrapperProps) => {
   const dispatch = useAppDispatch();
-  const handleResize = useCallback((size: number) => {
-    dispatch(
-      handleToggleCollapse({
-        size,
-      })
-    );
-  }, [dispatch]);
+  const handleResize = useCallback(
+    (size: number) => {
+      dispatch(
+        handleToggleCollapse({
+          size,
+        })
+      );
+    },
+    [dispatch]
+  );
 
   return (
     <ResizablePanel
       onResize={handleResize}
       id="response-panel"
-      className="min-h-12"
+      className="min-h-12 border-t-4"
       defaultSize={0}
     >
       {children}
