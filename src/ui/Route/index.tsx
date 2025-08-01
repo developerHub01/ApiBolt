@@ -4,20 +4,20 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { isElectron } from "@/utils/electron";
-import RootLayout from "@/pages/templayout";
-import AppLayout from "@/pages/app/templayout";
-import FolderLayout from "@/pages/app/collections/folder/[id]/templayout";
-import FolderPage from "@/pages/app/collections/folder/[id]/temppage";
-import RequestLayout from "@/pages/app/collections/request/[id]/templayout";
-import RequestPage from "@/pages/app/collections/request/[id]/temppage";
-import EnvironmentLayout from "@/pages/app/environment/templayout";
-import EnvironmentPage from "@/pages/app/environment/temppage";
-import ProjectsLayout from "@/pages/app/projects/templayout";
-import ProjectsPage from "@/pages/app/projects/temppage";
-import AuthorizationLayout from "@/pages/app/authorization/templayout";
-import AuthorizationPage from "@/pages/app/authorization/temppage";
-import CollectionsLayout from "@/pages/app/collections/temp";
-import CollectionPage from "@/pages/app/collections/Temppage";
+import RootLayout from "@/pages/layout";
+import AppLayout from "@/pages/app/layout";
+import FolderLayout from "@/pages/app/collections/folder/[id]/layout";
+import FolderPage from "@/pages/app/collections/folder/[id]/page";
+import RequestLayout from "@/pages/app/collections/request/[id]/layout";
+import RequestPage from "@/pages/app/collections/request/[id]/page";
+import EnvironmentLayout from "@/pages/app/environment/layout";
+import EnvironmentPage from "@/pages/app/environment/page";
+import ProjectsLayout from "@/pages/app/projects/layout";
+import ProjectsPage from "@/pages/app/projects/page";
+import AuthorizationLayout from "@/pages/app/authorization/layout";
+import AuthorizationPage from "@/pages/app/authorization/page";
+import CollectionsLayout from "@/pages/app/collections/layout";
+import CollectionPage from "@/pages/app/collections/page";
 
 const routes = [
   {
