@@ -4,19 +4,25 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useAppDispatch } from "@/context/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { deleteAllEnvironments } from "@/context/redux/request-response/request-response-thunk";
 import {
   EllipsisVertical as ThreeDotIcon,
-  Download as ExportIcon,
+  Upload as ExportIcon,
   FileDown as ImportIcon,
   Trash2 as DeleteIcon,
   type LucideIcon,
 } from "lucide-react";
 import { memo, useCallback, useMemo } from "react";
 
+const listItemToHide = ["export", "delete"];
+
 const ThreeeDotAction = () => {
   const dispatch = useAppDispatch();
+  const haveListItem = useAppSelector((state) =>
+    Boolean(Object.keys(state.requestResponse.environmentsList ?? {}).length)
+  );
+
   const handleDeleteAll = useCallback(() => {
     dispatch(deleteAllEnvironments());
   }, [dispatch]);
@@ -27,25 +33,28 @@ const ThreeeDotAction = () => {
     Icon: LucideIcon;
     onClick?: () => void;
   }> = useMemo(
-    () => [
-      {
-        id: "import",
-        label: "Import",
-        Icon: ImportIcon,
-      },
-      {
-        id: "export",
-        label: "Export",
-        Icon: ExportIcon,
-      },
-      {
-        id: "delete",
-        label: "Delete All",
-        Icon: DeleteIcon,
-        onClick: handleDeleteAll,
-      },
-    ],
-    [handleDeleteAll]
+    () =>
+      [
+        {
+          id: "import",
+          label: "Import",
+          Icon: ImportIcon,
+        },
+        {
+          id: "export",
+          label: "Export",
+          Icon: ExportIcon,
+        },
+        {
+          id: "delete",
+          label: "Delete All",
+          Icon: DeleteIcon,
+          onClick: handleDeleteAll,
+        },
+      ].filter((item /* if no list item then dont hide listItemToHides */) =>
+        haveListItem ? true : !listItemToHide.includes(item.id)
+      ),
+    [handleDeleteAll, haveListItem]
   );
 
   return (
