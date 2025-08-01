@@ -143,3 +143,39 @@ export const folderTable = sqliteTable("folder_table", {
       onDelete: "cascade",
     }),
 });
+
+export const paramsTable = sqliteTable("params_table", {
+  id: text()
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  isCheck: int({ mode: boolean }).default(1),
+  key: text().notNull().default(""),
+  value: text().notNull().default(""),
+  description: text().notNull().default(""),
+  requestOrFolderMetaId: text()
+    .notNull()
+    .references(() => requestOrFolderMetaTable.id, {
+      onDelete: "cascade",
+    }),
+  createdAt: text()
+    .notNull()
+    .default(sql`(current_timestamp)`),
+});
+
+export const headersTable = sqliteTable("headers_table", {
+  id: text()
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  isCheck: int({ mode: boolean }).default(1),
+  key: text().notNull().default(""),
+  value: text().notNull().default(""),
+  description: text().notNull().default(""),
+  requestOrFolderMetaId: text()
+    .notNull()
+    .references(() => requestOrFolderMetaTable.id, {
+      onDelete: "cascade",
+    }),
+  createdAt: text()
+    .notNull()
+    .default(sql`(current_timestamp)`),
+});
