@@ -17,6 +17,7 @@ import type { RequestListItemInterface } from "@/types/request-response.types";
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 import SearchBar from "@/components/app/header/search/SearchBar";
 import SearchResult from "@/components/app/header/search/SearchResult";
+import { Search as SearchIcon } from "lucide-react";
 
 const DELAY_TIME = 300;
 
@@ -135,8 +136,8 @@ const HeaderSearch = () => {
                   onChange={handleSearchChange}
                 />
               ) : (
-                <p className="text-center capitalize text-accent-foreground">
-                  {activeProjectName}
+                <p className="text-center capitalize text-accent-foreground flex items-center justify-center gap-2 font-normal">
+                  <SearchIcon size={16} /> {activeProjectName}
                 </p>
               )}
             </div>
@@ -144,7 +145,8 @@ const HeaderSearch = () => {
         </PopoverTrigger>
         <PopoverContent
           onPointerDown={(e) => e.stopPropagation()}
-          className="lg:w-xl md:w-96 w-72 bg-transparent backdrop-blur-sm px-0 py-2 border"
+          className="lg:w-xl md:w-96 w-72 bg-transparent backdrop-blur-sm px-0 py-2 border rounded-lg"
+          sideOffset={12}
         >
           <SearchResult
             searchTerm={searchTerm}

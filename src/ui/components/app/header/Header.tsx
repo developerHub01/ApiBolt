@@ -7,13 +7,13 @@ import SettingButton from "@/components/app/header/SettingButton";
 const Header = () => {
   return (
     <Wrapper>
-      <p className="select-none text-lg md:text-xl font-bold tracking-wide px-2 py-1.5">
+      <p className="justify-start flex-1 select-none text-lg md:text-xl font-bold tracking-wide px-2 py-1.5">
         ApiBolt
       </p>
-      <div className="w-full flex justify-center items-center">
+      <div className="w-full flex-[2] flex justify-center items-center">
         <HeaderSearch />
       </div>
-      <div className="flex gap-2 items-center h-full">
+      <div className="justify-end flex-1 flex gap-2 items-center h-full">
         <SettingButton />
         {isElectron() && <WindowControls />}
       </div>
@@ -27,7 +27,7 @@ interface WrapperProps {
 
 const Wrapper = ({ children }: WrapperProps) => (
   <div
-    className="bg-accent/80 grid grid-cols-[auto_1fr_auto] gap-2 min-h-12 items-center"
+    className="bg-accent/80 flex justify-center gap-2 min-h-12 items-center"
     style={{
       ...(isElectron()
         ? ({
