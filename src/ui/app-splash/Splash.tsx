@@ -38,7 +38,7 @@ const Splash = () => {
 
   return (
     <div
-      className="w-full h-full aspect-square bg-primary/95 backdrop-blur-3xl flex flex-col justify-center items-center overflow-hidden relative rounded-lg border border-border/20 p-3"
+      className="w-full h-full aspect-square bg-primary backdrop-blur-3xl flex flex-col justify-center items-center overflow-hidden relative rounded-lg border border-border/20 p-3"
       style={dragableStyle}
     >
       {/* Subtle Light Effects */}
