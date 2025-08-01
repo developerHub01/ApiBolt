@@ -17,6 +17,7 @@ import type {
   FormDataInterface,
   JWTBearerAuthInterface,
   ParamInterface,
+  ParamPayloadInterface,
   ProjectInterface,
   RequestListInterface,
   RequestListItemInterface,
@@ -555,6 +556,17 @@ export const requestResponseSlice = createSlice({
     },
     /* ================ TabsList end =================== */
 
+    /* ================ Params start =================== */
+    handleLoadParams: (
+      state,
+      action: PayloadAction<Array<ParamPayloadInterface>>
+    ) => {
+      if (!state.selectedTab) return;
+
+      state.params[state.selectedTab] = action.payload;
+    },
+    /* ================ Params end =================== */
+
     handleToggleCollapse: (
       state,
       action: PayloadAction<
@@ -794,7 +806,7 @@ export const requestResponseSlice = createSlice({
         let index = 0;
         updatedParams = state.params[id]?.reduce(
           (acc, curr) =>
-            curr.hide
+            curr.isCheck
               ? [...acc, curr]
               : urlParams[index]
                 ? [
@@ -1170,12 +1182,12 @@ export const requestResponseSlice = createSlice({
           if (item.id !== id) return item;
           return {
             ...item,
-            hide: item.hide ? undefined : true,
+            hide: item.isCheck ? undefined : true,
           };
         });
       } else {
         const isAllChecked = Boolean(
-          (targetList[requestId] ?? [])?.every((item) => !item.hide)
+          (targetList[requestId] ?? [])?.every((item) => !item.isCheck)
         );
 
         targetList[requestId] = targetList[requestId].map((item) => ({
@@ -1330,6 +1342,10 @@ export const {
   handleRemoveTab,
   handleMoveTab,
   handleChangeSelectedTab,
+
+  /* params start =========== */
+  handleLoadParams,
+  /* params end =========== */
 
   handleToggleCollapse,
   handleInitRequest,
