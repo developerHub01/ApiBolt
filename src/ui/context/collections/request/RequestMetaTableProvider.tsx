@@ -7,7 +7,11 @@ import React, {
 } from "react";
 import { useParams } from "react-router-dom";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectMetaData } from "@/context/redux/request-response/request-response-selector";
+import {
+  selectActiveMetaTab,
+  selectMetaData,
+  selectRequestBodyType,
+} from "@/context/redux/request-response/request-response-selector";
 
 export type TMetaTableType =
   | "params"
@@ -72,15 +76,8 @@ export const useCellListToShow = () => {
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useGetTableData = () => {
-  const activeMetaTab = useAppSelector(
-    (state) =>
-      state.requestResponse.activeMetaTab[state.requestResponse.selectedTab!] ??
-      "params"
-  );
-  const requestBodyType = useAppSelector(
-    (state) =>
-      state.requestResponse.requestBodyType[state.requestResponse.selectedTab!]
-  );
+  const activeMetaTab = useAppSelector(selectActiveMetaTab);
+  const requestBodyType = useAppSelector(selectRequestBodyType);
 
   const type: TMetaTableType = useMemo(() => {
     if (["params", "headers"].includes(activeMetaTab))

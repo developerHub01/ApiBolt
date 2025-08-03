@@ -2,7 +2,13 @@ import { memo, useMemo } from "react";
 import TabV1 from "@/components/tab-v1";
 import SelectV1 from "@/components/select-v1";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { selectActiveTabList } from "@/context/redux/request-response/request-response-selector";
+import {
+  selectActiveMetaTab,
+  selectActiveTabList,
+  selectHeaders,
+  selectHiddenHeaders,
+  selectParams,
+} from "@/context/redux/request-response/request-response-selector";
 import { handleChangeActiveMetaTab } from "@/context/redux/request-response/request-response-slice";
 import type { TActiveTabType } from "@/types/request-response.types";
 
@@ -29,20 +35,10 @@ const tabList: Array<{
 const MetaDataTab = memo(() => {
   const dispatch = useAppDispatch();
   const activeTabList = useAppSelector(selectActiveTabList);
-  const activeMetaTab = useAppSelector(
-    (state) =>
-      state.requestResponse.activeMetaTab[state.requestResponse.selectedTab!]
-  );
-  const params = useAppSelector(
-    (state) => state.requestResponse.params[state.requestResponse.selectedTab!]
-  );
-  const hiddenHeaders = useAppSelector(
-    (state) =>
-      state.requestResponse.hiddenHeaders[state.requestResponse.selectedTab!]
-  );
-  const headers = useAppSelector(
-    (state) => state.requestResponse.headers[state.requestResponse.selectedTab!]
-  );
+  const activeMetaTab = useAppSelector(selectActiveMetaTab);
+  const params = useAppSelector(selectParams);
+  const hiddenHeaders = useAppSelector(selectHiddenHeaders);
+  const headers = useAppSelector(selectHeaders);
 
   const tabListWithActivity = useMemo(
     () =>

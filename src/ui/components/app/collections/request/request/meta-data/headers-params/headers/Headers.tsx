@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { memo, useCallback } from "react";
 import MetaDataWrapper from "@/components/app/collections/request/request/meta-data/meta-table/MetaDataWrapper";
 import MetaTable from "@/components/app/collections/request/request/meta-data/meta-table/MetaTable";
 import { useRequestHeader } from "@/context/collections/request/RequestHeaderProvider";
@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { selectMetaData } from "@/context/redux/request-response/request-response-selector";
 import { addHeaders } from "@/context/redux/request-response/request-response-thunk";
 
-const Headers = () => {
+const Headers = memo(() => {
   const dispatch = useAppDispatch();
   const { showHiddenHeader } = useRequestHeader();
   const handleAddNewHeader = useCallback(() => {
@@ -21,7 +21,7 @@ const Headers = () => {
       <AddNewData onClick={handleAddNewHeader} label="Add New Headers" />
     </MetaDataWrapper>
   );
-};
+});
 Headers.displayName = "Headers";
 
 const LabelPrefix = () => {

@@ -3,13 +3,10 @@ import Params from "@/components/app/collections/request/request/meta-data/heade
 import Headers from "@/components/app/collections/request/request/meta-data/headers-params/headers/Headers";
 import Body from "@/components/app/collections/request/request/meta-data/body/Body";
 import { useAppSelector } from "@/context/redux/hooks";
+import { selectActiveMetaTab } from "@/context/redux/request-response/request-response-selector";
 
 const MetaDataContent = memo(() => {
-  const activeMetaTab = useAppSelector(
-    (state) =>
-      state.requestResponse.activeMetaTab[state.requestResponse.selectedTab!] ??
-      "params"
-  );
+  const activeMetaTab = useAppSelector(selectActiveMetaTab);
 
   return (
     <div className="h-full p-2.5 pt-1">

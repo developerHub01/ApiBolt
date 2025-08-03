@@ -1,7 +1,8 @@
 import { useAppSelector } from "@/context/redux/hooks";
+import { selectAuthType } from "@/context/redux/request-response/request-response-selector";
 
 const AuthDetails = () => {
-  const authType = useAppSelector((state) => state.requestResponse.authType);
+  const authType = useAppSelector(selectAuthType);
 
   if (authType === "no-auth") return null;
 

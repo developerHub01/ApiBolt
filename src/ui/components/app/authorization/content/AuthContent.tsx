@@ -5,9 +5,10 @@ import JWTBearer from "@/components/app/authorization/content/jwt-bearer/JWTBear
 import APIKey from "@/components/app/authorization/content/api-key/APIKey";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAppSelector } from "@/context/redux/hooks";
+import { selectAuthType } from "@/context/redux/request-response/request-response-selector";
 
 const AuthContent = () => {
-  const authType = useAppSelector((state) => state.requestResponse.authType);
+  const authType = useAppSelector(selectAuthType);
 
   return (
     <div className="h-full min-h-0 w-full">

@@ -5,6 +5,8 @@ import type {
   FormDataInterface,
   ParamInterface,
   TActiveTabType,
+  TAuthType,
+  TRequestBodyType,
 } from "@/types/request-response.types";
 
 export const selectActiveTabList = createSelector(
@@ -82,3 +84,70 @@ export const selectMetaData = (type: TMetaTableType | null) =>
       return [];
     }
   );
+
+export const selectActiveMetaTab = createSelector(
+  [
+    (state: RootState) => state.requestResponse.selectedTab!,
+    (state: RootState) => state.requestResponse.activeMetaTab,
+  ],
+  (selectedTab, activeMetaTab): TActiveTabType => {
+    if (!selectedTab) return "params";
+
+    return activeMetaTab[selectedTab];
+  }
+);
+
+export const selectParams = createSelector(
+  [
+    (state: RootState) => state.requestResponse.selectedTab!,
+    (state: RootState) => state.requestResponse.params,
+  ],
+  (selectedTab, params): Array<ParamInterface> => {
+    if (!selectedTab) return [];
+
+    return params[selectedTab];
+  }
+);
+
+export const selectHiddenHeaders = createSelector(
+  [
+    (state: RootState) => state.requestResponse.selectedTab!,
+    (state: RootState) => state.requestResponse.hiddenHeaders,
+  ],
+  (selectedTab, hiddenHeaders): Array<ParamInterface> => {
+    if (!selectedTab) return [];
+
+    return hiddenHeaders[selectedTab];
+  }
+);
+
+export const selectHeaders = createSelector(
+  [
+    (state: RootState) => state.requestResponse.selectedTab!,
+    (state: RootState) => state.requestResponse.headers,
+  ],
+  (selectedTab, headers): Array<ParamInterface> => {
+    if (!selectedTab) return [];
+
+    return headers[selectedTab];
+  }
+);
+
+export const selectRequestBodyType = createSelector(
+  [
+    (state: RootState) => state.requestResponse.selectedTab!,
+    (state: RootState) => state.requestResponse.requestBodyType,
+  ],
+  (selectedTab, requestBodyType): TRequestBodyType => {
+    if (!selectedTab) return "none";
+
+    return requestBodyType[selectedTab];
+  }
+);
+
+export const selectAuthType = createSelector(
+  [(state: RootState) => state.requestResponse.authType ?? "no-auth"],
+  (authType): TAuthType => {
+    return authType;
+  }
+);

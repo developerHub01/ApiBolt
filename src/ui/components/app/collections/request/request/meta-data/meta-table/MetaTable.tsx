@@ -1,4 +1,4 @@
-import { memo, useCallback } from "react";
+import { memo, useEffect, useCallback } from "react";
 import {
   useCellListToShow,
   useGetTableData,
@@ -44,6 +44,13 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
   const cellToShow = useCellListToShow();
   const hiddenHeader = useAppSelector(selectMetaData("hiddenHeaders")) ?? [];
   const hiddenParams = useAppSelector(selectMetaData("hiddenParams")) ?? [];
+
+  console.log({ hiddenHeader });
+  console.log({ hiddenParams });
+
+  useEffect(() => {
+    console.log("Re-rendered==================");
+  });
 
   let data = tableData.data;
   const type = tableData.type;

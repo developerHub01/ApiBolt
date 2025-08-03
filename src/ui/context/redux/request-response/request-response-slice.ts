@@ -452,8 +452,9 @@ export const requestResponseSlice = createSlice({
     ) => {
       state.deleteFolderOrRequestId = action.payload;
     },
-
     /* ================ Requestlist end =================== */
+
+    /* ================ TabList start =================== */
     handleChangeIsTabListHovering: (
       state,
       action: PayloadAction<boolean | undefined>
@@ -565,16 +566,42 @@ export const requestResponseSlice = createSlice({
 
       state.params[state.selectedTab] = action.payload;
     },
+    handleSetParams: (
+      state,
+      action: PayloadAction<{
+        id?: string;
+        params: Array<ParamInterface>;
+      }>
+    ) => {
+      const { params } = action.payload;
+      const id = action.payload.id ?? state.selectedTab;
+      if (!id) return;
+
+      state.params[id] = params;
+    },
     /* ================ Params end =================== */
 
     /* ================ Headers start =================== */
     handleLoadHeaders: (
-    state,
-    action: PayloadAction<Array<ParamHeaderPayloadInterface>>
+      state,
+      action: PayloadAction<Array<ParamHeaderPayloadInterface>>
     ) => {
       if (!state.selectedTab) return;
 
       state.headers[state.selectedTab] = action.payload;
+    },
+    handleSetHeaders: (
+      state,
+      action: PayloadAction<{
+        id?: string;
+        headers: Array<ParamInterface>;
+      }>
+    ) => {
+      const { headers } = action.payload;
+      const id = action.payload.id ?? state.selectedTab;
+      if (!id) return;
+
+      state.headers[id] = headers;
     },
     /* ================ Headers end =================== */
 
@@ -652,32 +679,6 @@ export const requestResponseSlice = createSlice({
       if (!id) return;
 
       state.activeMetaTab[id] = type;
-    },
-    handleSetParams: (
-      state,
-      action: PayloadAction<{
-        id?: string;
-        params: Array<ParamInterface>;
-      }>
-    ) => {
-      const { params } = action.payload;
-      const id = action.payload.id ?? state.selectedTab;
-      if (!id) return;
-
-      state.params[id] = params;
-    },
-    handleSetHeaders: (
-      state,
-      action: PayloadAction<{
-        id?: string;
-        headers: Array<ParamInterface>;
-      }>
-    ) => {
-      const { headers } = action.payload;
-      const id = action.payload.id ?? state.selectedTab;
-      if (!id) return;
-
-      state.headers[id] = headers;
     },
     handleSetResponse: (
       state,
