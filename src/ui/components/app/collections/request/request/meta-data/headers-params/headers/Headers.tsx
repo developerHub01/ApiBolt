@@ -4,19 +4,15 @@ import MetaTable from "@/components/app/collections/request/request/meta-data/me
 import { useRequestHeader } from "@/context/collections/request/RequestHeaderProvider";
 import { Eye as ShowIcon, EyeOff as HideIcon } from "lucide-react";
 import AddNewData from "@/components/AddNewData";
-import { handleAddMetaData } from "@/context/redux/request-response/request-response-slice";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { selectMetaData } from "@/context/redux/request-response/request-response-selector";
+import { addHeaders } from "@/context/redux/request-response/request-response-thunk";
 
 const Headers = () => {
   const dispatch = useAppDispatch();
   const { showHiddenHeader } = useRequestHeader();
   const handleAddNewHeader = useCallback(() => {
-    dispatch(
-      handleAddMetaData({
-        type: "headers",
-      })
-    );
+    dispatch(addHeaders());
   }, [dispatch]);
 
   return (

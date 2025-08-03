@@ -17,7 +17,7 @@ import type {
   FormDataInterface,
   JWTBearerAuthInterface,
   ParamInterface,
-  ParamPayloadInterface,
+  ParamHeaderPayloadInterface,
   ProjectInterface,
   RequestListInterface,
   RequestListItemInterface,
@@ -559,13 +559,24 @@ export const requestResponseSlice = createSlice({
     /* ================ Params start =================== */
     handleLoadParams: (
       state,
-      action: PayloadAction<Array<ParamPayloadInterface>>
+      action: PayloadAction<Array<ParamHeaderPayloadInterface>>
     ) => {
       if (!state.selectedTab) return;
 
       state.params[state.selectedTab] = action.payload;
     },
     /* ================ Params end =================== */
+
+    /* ================ Headers start =================== */
+    handleLoadHeaders: (
+    state,
+    action: PayloadAction<Array<ParamHeaderPayloadInterface>>
+    ) => {
+      if (!state.selectedTab) return;
+
+      state.headers[state.selectedTab] = action.payload;
+    },
+    /* ================ Headers end =================== */
 
     handleToggleCollapse: (
       state,
@@ -1346,6 +1357,10 @@ export const {
   /* params start =========== */
   handleLoadParams,
   /* params end =========== */
+
+  /* headers start =========== */
+  handleLoadHeaders,
+  /* headers end =========== */
 
   handleToggleCollapse,
   handleInitRequest,

@@ -80,7 +80,7 @@ export type TRequestBodyType =
 
 export type THTTPMethods = "get" | "post" | "put" | "patch" | "delete";
 
-export interface ParamPayloadInterface {
+export interface ParamHeaderPayloadInterface {
   id: string;
   isCheck: boolean;
   key: string;
@@ -90,7 +90,7 @@ export interface ParamPayloadInterface {
   createdAt: string;
 }
 
-export interface ParamBuildPayloadInterface {
+export interface ParamHeaderBuildPayloadInterface {
   isCheck?: boolean;
   key: string;
   value: string;
@@ -107,6 +107,7 @@ export interface ParamInterface<ValueT = string> {
   prevent?: boolean;
   calculateDynamicly?: boolean;
 }
+
 export interface FormDataInterface
   extends ParamInterface<string | Array<File>> {
   contentType?: string;

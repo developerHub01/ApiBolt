@@ -2,7 +2,7 @@ import {
   type AuthorizationPayloadInterface,
   type EnvironmentInterface,
   type EnvironmentPayloadInterface,
-  type ParamBuildPayloadInterface,
+  type ParamHeaderBuildPayloadInterface,
   type ProjectInterface,
   type RequestListItemInterface,
   type RequestListItemUpdatePayloadInterface,
@@ -32,6 +32,7 @@ import {
   handleCreateSingleRequest,
   handleDeleteAllRequestOrFolder,
   handleLoadEnvironmentsList,
+  handleLoadHeaders,
   handleLoadParams,
   handleLoadProjectsList,
   handleLoadRequestList,
@@ -638,7 +639,7 @@ export const loadParams = createAsyncThunk<
 
 export const addParams = createAsyncThunk<
   boolean,
-  Partial<ParamBuildPayloadInterface> | undefined,
+  Partial<ParamHeaderBuildPayloadInterface> | undefined,
   { dispatch: AppDispatch; state: RootState }
 >("request-response/addParams", async (payload, { getState, dispatch }) => {
   const state = getState() as RootState;
@@ -694,7 +695,7 @@ export const updateParams = createAsyncThunk<
   boolean,
   {
     paramId: string;
-    payload: Partial<ParamBuildPayloadInterface>;
+    payload: Partial<ParamHeaderBuildPayloadInterface>;
   },
   { dispatch: AppDispatch; state: RootState }
 >(
@@ -715,7 +716,7 @@ export const checkAllParamsByRequestMetaId = createAsyncThunk<
   string | undefined,
   { dispatch: AppDispatch; state: RootState }
 >(
-  "request-response/updateParams",
+  "request-response/checkAllParamsByRequestMetaId",
   async (requestOrFolderMetaId, { dispatch }) => {
     const response =
       await window.electronAPIParamsDB.checkAllParamsByRequestMetaId(
@@ -729,6 +730,125 @@ export const checkAllParamsByRequestMetaId = createAsyncThunk<
 
 /* ==============================
 ======== Params end =============
+================================= */
+
+/* ==============================
+======== Headers start ===========
+================================= */
+export const loadHeaders = createAsyncThunk<
+  void,
+  void | { requestId?: string | null | undefined; once?: boolean },
+  { dispatch: AppDispatch; state: RootState }
+>("request-response/loadHeaders", async (payload, { getState, dispatch }) => {
+  if (!payload) payload = {};
+
+  let selectedTab = payload.requestId;
+  const once = payload.once ?? false;
+
+  const state = getState() as RootState;
+
+  if (!selectedTab) selectedTab = state.requestResponse.selectedTab;
+  if (!selectedTab || (state.requestResponse.params[selectedTab] && once))
+    return;
+
+  const response = await window.electronAPIHeadersDB.getHeaders(selectedTab);
+
+  dispatch(handleLoadHeaders(response));
+});
+
+export const addHeaders = createAsyncThunk<
+  boolean,
+  Partial<ParamHeaderBuildPayloadInterface> | undefined,
+  { dispatch: AppDispatch; state: RootState }
+>("request-response/addHeaders", async (payload, { getState, dispatch }) => {
+  const state = getState() as RootState;
+
+  const selectedTab = state.requestResponse.selectedTab;
+  if (!selectedTab) return false;
+
+  if (!payload) payload = {};
+  const response = await window.electronAPIHeadersDB.createHeaders(payload);
+
+  if (response) dispatch(loadHeaders());
+
+  return response;
+});
+
+export const deleteHeaders = createAsyncThunk<
+  boolean,
+  string,
+  { dispatch: AppDispatch; state: RootState }
+>("request-response/deleteHeaders", async (id, { getState, dispatch }) => {
+  const state = getState() as RootState;
+
+  const selectedTab = state.requestResponse.selectedTab;
+  if (!selectedTab) return false;
+
+  const response = await window.electronAPIHeadersDB.deleteHeaders(id);
+
+  if (response) dispatch(loadHeaders());
+  return response;
+});
+
+export const deleteHeadersByRequestMetaId = createAsyncThunk<
+  boolean,
+  string | undefined | null,
+  { dispatch: AppDispatch; state: RootState }
+>(
+  "request-response/deleteHeadersByRequestMetaId",
+  async (id, { getState, dispatch }) => {
+    const state = getState() as RootState;
+    if (!id) id = state.requestResponse.selectedTab;
+
+    if (!id) return false;
+
+    const response =
+      await window.electronAPIHeadersDB.deleteHeadersByRequestMetaId(id);
+
+    if (response) dispatch(handleLoadHeaders([]));
+    return response;
+  }
+);
+
+export const updateheaders = createAsyncThunk<
+  boolean,
+  {
+    paramId: string;
+    payload: Partial<ParamHeaderBuildPayloadInterface>;
+  },
+  { dispatch: AppDispatch; state: RootState }
+>(
+  "request-response/updateHeaders",
+  async ({ paramId, payload }, { dispatch }) => {
+    const response = await window.electronAPIHeadersDB.updateHeaders(
+      paramId,
+      payload
+    );
+
+    if (response) dispatch(loadHeaders());
+    return response;
+  }
+);
+
+export const checkAllHeadersByRequestMetaId = createAsyncThunk<
+  boolean,
+  string | undefined,
+  { dispatch: AppDispatch; state: RootState }
+>(
+  "request-response/checkAllHeadersByRequestMetaId",
+  async (requestOrFolderMetaId, { dispatch }) => {
+    const response =
+      await window.electronAPIHeadersDB.checkAllHeadersByRequestMetaId(
+        requestOrFolderMetaId
+      );
+
+    if (response) dispatch(loadHeaders());
+    return response;
+  }
+);
+
+/* ==============================
+======== Headers end =============
 ================================= */
 
 export const loadRequestData = createAsyncThunk<

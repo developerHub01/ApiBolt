@@ -19,7 +19,9 @@ import {
 } from "@/context/collections/request/RequestMetaTableProvider";
 import { useAppDispatch } from "@/context/redux/hooks";
 import {
+  addHeaders,
   addParams,
+  deleteHeadersByRequestMetaId,
   deleteParamsByRequestMetaId,
 } from "@/context/redux/request-response/request-response-thunk";
 
@@ -33,7 +35,12 @@ const MetaTableThreeDotAction = memo(
     const { showColumn, toggleShowColumn } = useRequestMetaTable();
 
     const handleAddNewData = useCallback(() => {
-      const handleAdd = type === "params" ? addParams : addParams;
+      const handleAdd =
+        type === "params"
+          ? addParams
+          : type === "headers"
+            ? addHeaders
+            : addHeaders;
       dispatch(handleAdd());
     }, [dispatch, type]);
 
@@ -41,7 +48,9 @@ const MetaTableThreeDotAction = memo(
       const handleDeleteAll =
         type === "params"
           ? deleteParamsByRequestMetaId
-          : deleteParamsByRequestMetaId;
+          : type === "headers"
+            ? deleteHeadersByRequestMetaId
+            : deleteHeadersByRequestMetaId;
       dispatch(handleDeleteAll());
     }, [dispatch, type]);
 

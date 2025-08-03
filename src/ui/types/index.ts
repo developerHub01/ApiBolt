@@ -4,8 +4,8 @@ import type {
   EnvironmentInterface,
   EnvironmentPayloadInterface,
   JWTBearerAuthInterface,
-  ParamBuildPayloadInterface,
-  ParamPayloadInterface,
+  ParamHeaderBuildPayloadInterface,
+  ParamHeaderPayloadInterface,
   ProjectInterface,
   RequestListItemInterface,
   RequestListItemUpdatePayloadInterface,
@@ -162,19 +162,37 @@ declare global {
     };
 
     electronAPIParamsDB: {
-      getParams(id?: string): Promise<Array<ParamPayloadInterface>>;
+      getParams(id?: string): Promise<Array<ParamHeaderPayloadInterface>>;
       deleteParams(paramId: string): Promise<boolean>;
       deleteParamsByRequestMetaId(
         requestOrFolderMetaId?: string
       ): Promise<boolean>;
       createParams(
-        payload: Partial<ParamBuildPayloadInterface>
+        payload: Partial<ParamHeaderBuildPayloadInterface>
       ): Promise<boolean>;
       updateParams(
         paramId: string,
-        payload: Partial<ParamBuildPayloadInterface>
+        payload: Partial<ParamHeaderBuildPayloadInterface>
       ): Promise<boolean>;
       checkAllParamsByRequestMetaId(
+        requestOrFolderMetaId?: string
+      ): Promise<boolean>;
+    };
+
+    electronAPIHeadersDB: {
+      getHeaders(id?: string): Promise<Array<ParamHeaderPayloadInterface>>;
+      deleteHeaders(paramId: string): Promise<boolean>;
+      deleteHeadersByRequestMetaId(
+        requestOrFolderMetaId?: string
+      ): Promise<boolean>;
+      createHeaders(
+        payload: Partial<ParamHeaderBuildPayloadInterface>
+      ): Promise<boolean>;
+      updateHeaders(
+        paramId: string,
+        payload: Partial<ParamHeaderBuildPayloadInterface>
+      ): Promise<boolean>;
+      checkAllHeadersByRequestMetaId(
         requestOrFolderMetaId?: string
       ): Promise<boolean>;
     };

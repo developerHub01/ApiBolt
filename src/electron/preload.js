@@ -151,6 +151,6 @@ contextBridge.exposeInMainWorld("electronAPIHeadersDB", {
     await ipcRenderer.invoke("createHeaders", ...payload),
   updateHeaders: async (...payload) =>
     await ipcRenderer.invoke("updateHeaders", ...payload),
-  checkAllParamsByRequestMetaId: async (...payload) =>
-    await ipcRenderer.invoke("checkAllParamsByRequestMetaId", ...payload),
+  checkAllHeadersByRequestMetaId: async (...payload) =>
+    await ipcRenderer.invoke("checkAllHeadersByRequestMetaId", ...payload),
 });

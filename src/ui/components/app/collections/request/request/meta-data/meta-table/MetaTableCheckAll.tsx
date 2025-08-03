@@ -3,7 +3,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { useGetTableData } from "@/context/collections/request/RequestMetaTableProvider";
 import { useAppDispatch } from "@/context/redux/hooks";
-import { checkAllParamsByRequestMetaId } from "@/context/redux/request-response/request-response-thunk";
+import {
+  checkAllHeadersByRequestMetaId,
+  checkAllParamsByRequestMetaId,
+} from "@/context/redux/request-response/request-response-thunk";
 
 interface MetaTableCheckAllProps {
   id?: string;
@@ -23,13 +26,13 @@ const MetaTableCheckAll = memo(
       const handler =
         type === "params"
           ? checkAllParamsByRequestMetaId
-          : checkAllParamsByRequestMetaId;
+          : type === "headers"
+            ? checkAllHeadersByRequestMetaId
+            : checkAllHeadersByRequestMetaId;
       dispatch(handler());
     }, [dispatch, type]);
 
     if (!type || !data || !data.length) return null;
-
-    console.log(data);
 
     return (
       <div className={cn("w-full flex justify-center items-center", className)}>

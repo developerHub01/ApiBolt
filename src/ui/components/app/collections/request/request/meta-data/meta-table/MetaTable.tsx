@@ -14,7 +14,9 @@ import type {
   ParamInterface,
 } from "@/types/request-response.types";
 import {
+  deleteHeaders,
   deleteParams,
+  updateheaders,
   updateParams,
 } from "@/context/redux/request-response/request-response-thunk";
 
@@ -40,14 +42,20 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
   const dispatch = useAppDispatch();
   const tableData = useGetTableData();
   const cellToShow = useCellListToShow();
-  const hiddenHeader = useAppSelector(selectMetaData("headers")) ?? [];
+  const hiddenHeader = useAppSelector(selectMetaData("hiddenHeaders")) ?? [];
+  const hiddenParams = useAppSelector(selectMetaData("hiddenParams")) ?? [];
 
   let data = tableData.data;
   const type = tableData.type;
 
   const handleDelete = useCallback(
     (id: string) => {
-      const handler = type === "params" ? deleteParams : deleteParams;
+      const handler =
+        type === "params"
+          ? deleteParams
+          : type === "headers"
+            ? deleteHeaders
+            : deleteHeaders;
       dispatch(handler(id));
     },
     [dispatch, type]
@@ -55,7 +63,12 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
 
   const handleUpdate = useCallback(
     (id: string, key: string, value: string | File | boolean) => {
-      const handler = type === "params" ? updateParams : updateParams;
+      const handler =
+        type === "params"
+          ? updateParams
+          : type === "headers"
+            ? updateheaders
+            : updateheaders;
       dispatch(
         handler({
           paramId: id,
@@ -70,7 +83,7 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
 
   if (type === "headers" && showHiddenData)
     data = [...hiddenHeader, ...data].map(checkInputType);
-  if (type === "params") data = [...hiddenHeader, ...data].map(checkInputType);
+  if (type === "params") data = [...hiddenParams, ...data].map(checkInputType);
 
   return (
     <MetaTableWrapper header={<MetaTableHeader type={type} />}>
