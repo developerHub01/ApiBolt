@@ -4,10 +4,35 @@ import type { TMetaTableType } from "@/context/collections/request/RequestMetaTa
 import type {
   FormDataInterface,
   ParamInterface,
+  ProjectInterface,
   TActiveTabType,
   TAuthType,
   TRequestBodyType,
 } from "@/types/request-response.types";
+
+export const selectActiveProjectId = () =>
+  createSelector(
+    [(state: RootState) => state.requestResponse.activeProjectId],
+    (activeProjectId): string | null => {
+      if (!activeProjectId) return null;
+
+      return activeProjectId;
+    }
+  );
+
+export const selectActiveProject = createSelector(
+  [
+    (state: RootState) => state.requestResponse.activeProjectId,
+    (state: RootState) => state.requestResponse.projectList,
+  ],
+  (activeProjectId, projectList): ProjectInterface | null => {
+    if (!activeProjectId) return null;
+
+    return (
+      projectList.find((project) => project.id === activeProjectId) ?? null
+    );
+  }
+);
 
 export const selectActiveTabList = createSelector(
   [
@@ -51,6 +76,7 @@ export const selectMetaData = (type: TMetaTableType | null) =>
       (state: RootState) => state.requestResponse.params,
       (state: RootState) => state.requestResponse.hiddenParams,
       (state: RootState) => state.requestResponse.headers,
+      (state: RootState) => state.requestResponse.hiddenCookie,
       (state: RootState) => state.requestResponse.hiddenHeaders,
       (state: RootState) => state.requestResponse.formData,
       (state: RootState) => state.requestResponse.xWWWFormUrlencodedData,
@@ -60,6 +86,7 @@ export const selectMetaData = (type: TMetaTableType | null) =>
       params,
       hiddenParams,
       headers,
+      hiddenCookie,
       hiddenHeaders,
       formData,
       xWWWFormUrlencodedData
@@ -74,13 +101,12 @@ export const selectMetaData = (type: TMetaTableType | null) =>
         case "headers":
           return headers[selectedTab] ?? [];
         case "hiddenHeaders":
-          return hiddenHeaders[selectedTab] ?? [];
+          return [hiddenCookie, ...(hiddenHeaders[selectedTab] ?? [])];
         case "form-data":
           return formData[selectedTab] ?? [];
         case "x-www-form-urlencoded":
           return xWWWFormUrlencodedData[selectedTab] ?? [];
       }
-
       return [];
     }
   );
@@ -112,12 +138,13 @@ export const selectParams = createSelector(
 export const selectHiddenHeaders = createSelector(
   [
     (state: RootState) => state.requestResponse.selectedTab!,
+    (state: RootState) => state.requestResponse.hiddenCookie,
     (state: RootState) => state.requestResponse.hiddenHeaders,
   ],
-  (selectedTab, hiddenHeaders): Array<ParamInterface> => {
+  (selectedTab, hiddenCookie, hiddenHeaders): Array<ParamInterface> => {
     if (!selectedTab) return [];
 
-    return hiddenHeaders[selectedTab];
+    return [hiddenCookie, ...(hiddenHeaders[selectedTab] ?? [])];
   }
 );
 

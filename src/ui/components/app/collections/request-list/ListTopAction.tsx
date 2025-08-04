@@ -1,11 +1,11 @@
-import { Input } from "@/components/ui/input";
 import AddAction from "@/components/app/collections/request-list/AddAction";
+import ProjectName from "@/components/app/collections/request-list/ProjectName";
 
 const ListTopAction = () => {
   return (
-    <div className="flex items-center-safe gap-1 p-2">
+    <div className="flex items-center justify-between gap-1 px-2 py-1.5 border-b-2">
+      <ProjectName />
       <AddAction />
-      <Input />
     </div>
   );
 };

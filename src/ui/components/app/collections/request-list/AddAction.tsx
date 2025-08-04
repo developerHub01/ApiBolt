@@ -52,11 +52,11 @@ const AddAction = memo(() => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size={"iconSm"}>
+        <Button size={"iconSm"} variant={"ghost"}>
           <PlusIcon />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-40" align="start" sideOffset={10}>
+      <DropdownMenuContent className="w-40" align="end" sideOffset={10}>
         <DropdownMenuGroup>
           {actionsList.map(({ id, label }) => (
             <DropdownMenuItem
