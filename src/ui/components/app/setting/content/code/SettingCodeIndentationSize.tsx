@@ -71,29 +71,39 @@ const SettingCodeIndentationSize = () => {
         <SettingType value={settingType} onChange={handleChangeSettingType} />
       </SettingItemHorizontalLayout>
       {settingType === "custom" && (
-        <div className="flex items-center justify-center gap-2">
-          <Select
-            value={String(indentationSize)}
-            onValueChange={handleIndentationSizeChange}
-          >
-            <SelectTrigger className="w-full max-w-40" size="sm">
-              <SelectValue placeholder="Code Indentation Size" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Indentation size</SelectLabel>
-                {indentationList.map((size: string) => (
-                  <SelectItem key={size} value={size}>
-                    {size}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
+        <IndentationSizeSelector
+          value={String(indentationSize)}
+          onChange={handleIndentationSizeChange}
+        />
       )}
     </SettingItemHorizontalLayout>
   );
 };
+
+interface IndentationSizeSelectorProps {
+  value: string;
+  onChange: (value?: string) => void;
+}
+
+const IndentationSizeSelector = ({
+  value,
+  onChange,
+}: IndentationSizeSelectorProps) => (
+  <Select value={value} onValueChange={onChange}>
+    <SelectTrigger className="w-full max-w-32" size="sm">
+      <SelectValue placeholder="Code Indentation Size" />
+    </SelectTrigger>
+    <SelectContent>
+      <SelectGroup>
+        <SelectLabel>Indentation size</SelectLabel>
+        {indentationList.map((size: string) => (
+          <SelectItem key={size} value={size}>
+            {size}
+          </SelectItem>
+        ))}
+      </SelectGroup>
+    </SelectContent>
+  </Select>
+);
 
 export default SettingCodeIndentationSize;

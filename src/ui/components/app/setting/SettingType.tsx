@@ -31,7 +31,7 @@ const SettingType = memo(({ value = "default", onChange }: Props) => {
 
   return (
     <Select value={value} defaultValue={"default"} onValueChange={onChange}>
-      <SelectTrigger className="w-[180px] capitalize" size="sm">
+      <SelectTrigger className="w-full max-w-32 capitalize" size="sm">
         <SelectValue placeholder="Setting Type" />
       </SelectTrigger>
       <SelectContent>
