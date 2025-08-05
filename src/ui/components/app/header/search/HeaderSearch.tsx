@@ -18,6 +18,7 @@ import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 import SearchBar from "@/components/app/header/search/SearchBar";
 import SearchResult from "@/components/app/header/search/SearchResult";
 import { Search as SearchIcon } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 
 const DELAY_TIME = 300;
 
@@ -128,18 +129,42 @@ const HeaderSearch = () => {
             }}
           >
             <div>
-              {open ? (
-                <SearchBar
-                  inputRef={inputRef}
-                  projectName={activeProjectName}
-                  value={searchTerm}
-                  onChange={handleSearchChange}
-                />
-              ) : (
-                <p className="text-center capitalize text-accent-foreground flex items-center justify-center gap-2 font-normal">
-                  <SearchIcon size={16} /> {activeProjectName}
-                </p>
-              )}
+              <AnimatePresence>
+                {open && (
+                  <SearchBar
+                    inputRef={inputRef}
+                    projectName={activeProjectName}
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                  />
+                )}
+                {!open && (
+                  <motion.div
+                    initial={{
+                      opacity: 0,
+                      scaleX: 1,
+                    }}
+                    exit={{
+                      opacity: 0,
+                      scaleX: 0.4,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      scaleX: 1,
+                    }}
+                    transition={{
+                      duration: 0.4,
+                      ease: "anticipate",
+                      type: "decay",
+                    }}
+                    className="text-center capitalize text-accent-foreground flex items-center justify-center gap-2 font-medium overflow-hidden"
+                  >
+                    <SearchIcon size={16} />
+                    <p className="truncate w-full">{activeProjectName}</p>
+                    <p className="text-muted-foreground text-xs">(Ctrl + k)</p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </ButtonLikeDiv>
         </PopoverTrigger>
