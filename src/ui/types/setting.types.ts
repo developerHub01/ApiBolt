@@ -22,3 +22,5 @@ export interface SettingsTotalInterface {
   globalSetting: SettingsInterface;
   settings: ProjectSettingsInterface;
 }
+
+export type SettingsType = "default" | "global" | "custom";
