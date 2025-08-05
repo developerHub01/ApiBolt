@@ -22,6 +22,7 @@ const fontList = Array.from({ length: 14 })
 
 const SettingCodeFontSize = () => {
   const [settingType, setSettingType] = useState<SettingsType>("default");
+  const [isUpdate, setIsUpdate] = useState<boolean>(false);
   const { activeTab } = useSetting();
   const dispatch = useAppDispatch();
   const activeProjectId = useAppSelector(
@@ -34,10 +35,32 @@ const SettingCodeFontSize = () => {
     (state) => state.setting.settings?.codeFontSize
   );
 
+  useEffect(() => {
+    let type: SettingsType = "custom";
+
+    if (activeTab === "project") {
+      if (!codeFontSizeLocal) type = "global";
+      else if (
+        codeFontSizeLocal === null ||
+        codeFontSizeLocal === undefined ||
+        codeFontSizeLocal === defaultSettings.codeFontSize
+      )
+        type = "default";
+    } else {
+      if (
+        codeFontSizeGlobal === null ||
+        codeFontSizeGlobal === undefined ||
+        codeFontSizeGlobal === defaultSettings.codeFontSize
+      )
+        type = "default";
+    }
+    setSettingType(type);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const codeFontSize =
-    activeTab === "global"
-      ? codeFontSizeGlobal
-      : (codeFontSizeLocal ?? "Global Setting");
+    (activeTab === "project" ? codeFontSizeLocal : codeFontSizeGlobal) ??
+    defaultSettings.codeFontSize;
 
   const handleCodeFontSizeChange = useCallback(
     (value?: string) => {
@@ -51,7 +74,7 @@ const SettingCodeFontSize = () => {
       dispatch(
         updateSettings({
           codeFontSize,
-          projectId: activeTab === "global" ? null : activeProjectId,
+          projectId: activeTab === "project" ? activeProjectId : null,
         })
       );
     },
@@ -59,13 +82,16 @@ const SettingCodeFontSize = () => {
   );
 
   useEffect(() => {
+    if (!isUpdate) return;
     handleCodeFontSizeChange();
+    setIsUpdate(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [settingType]);
+  }, [isUpdate]);
 
   const handleChangeSettingType = useCallback((value: SettingsType) => {
     setSettingType(value);
     if (value === "custom") return;
+    setIsUpdate(true);
   }, []);
 
   return (
