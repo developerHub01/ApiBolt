@@ -42,7 +42,9 @@ const SettingZoomLevel = () => {
       key: "zoomLevel",
     });
 
-  const senitizedValue = senitizeValue(value, defaultSettings.zoomLevel);
+  const senitizedValue = calculateIntoFixedPoint(
+    Number(senitizeValue(value, defaultSettings.zoomLevel)) * 100
+  );
 
   return (
     <SettingItemHorizontalLayout className="items-center">
@@ -50,7 +52,7 @@ const SettingZoomLevel = () => {
       <SettingType value={settingType} onChange={handleChangeSettingType} />
       {settingType === "custom" && (
         <ZoomLevelSelector
-          value={String(Number(senitizedValue) * 100)}
+          value={String(senitizedValue)}
           onChange={(value) =>
             handleChange(calculateIntoFixedPoint(Number(value) / 100, 1))
           }
