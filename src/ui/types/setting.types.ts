@@ -8,7 +8,7 @@ export interface SettingsInterface {
   backgroundOpacity: number;
   backgroundBlur: number;
   zoomLevel: number;
-  isZoomable: boolean;
+  isZoomable: number;
   codeFontSize: number;
   indentationSize: number;
   layoutType: "ltr" | "rtl";
