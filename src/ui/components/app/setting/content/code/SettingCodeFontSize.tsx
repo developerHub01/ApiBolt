@@ -72,10 +72,9 @@ const FontSizeSelector = ({ value, onChange }: FontSizeSelectorProps) => (
         <SelectLabel>Font size</SelectLabel>
         {fontList.map((size: string) => (
           <SelectItem key={size} value={size}>
-            {size} px
             {size === String(defaultSettings.codeFontSize)
-              ? " (default)"
-              : null}
+              ? `Default (${size}px)`
+              : `${size}px`}
           </SelectItem>
         ))}
       </SelectGroup>

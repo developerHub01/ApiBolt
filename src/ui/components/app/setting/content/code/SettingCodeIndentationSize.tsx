@@ -41,7 +41,7 @@ const SettingCodeIndentationSize = () => {
       key: "indentationSize",
     });
 
-  const senitizedValue = senitizeValue(value, defaultSettings.codeFontSize);
+  const senitizedValue = senitizeValue(value, defaultSettings.indentationSize);
 
   return (
     <SettingItemHorizontalLayout className="items-center gap-2">
@@ -67,7 +67,7 @@ const IndentationSizeSelector = ({
   onChange,
 }: IndentationSizeSelectorProps) => (
   <Select value={value} onValueChange={onChange}>
-    <SelectTrigger className="w-full max-w-32" size="sm">
+    <SelectTrigger className="w-full max-w-36" size="sm">
       <SelectValue placeholder="Code Indentation Size" />
     </SelectTrigger>
     <SelectContent>
@@ -75,10 +75,9 @@ const IndentationSizeSelector = ({
         <SelectLabel>Indentation size</SelectLabel>
         {indentationList.map((size: string) => (
           <SelectItem key={size} value={size}>
-            {size}
             {size === String(defaultSettings.indentationSize)
-              ? " (default)"
-              : null}
+              ? `Default (${size})`
+              : `${size}`}
           </SelectItem>
         ))}
       </SelectGroup>

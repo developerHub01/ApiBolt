@@ -56,11 +56,11 @@ const SettingLayout = () => {
       key: "layoutType",
     });
 
-  const senitizedValue = senitizeValue(value, defaultSettings.codeFontSize);
+  const senitizedValue = senitizeValue(value, defaultSettings.layoutType);
 
   return (
     <SettingItem id="layout" title="Layout Settings">
-      <SettingItemHorizontalLayout className="flex-col">
+      <SettingItemHorizontalLayout className="flex-col gap-4">
         <SettingItemHorizontalLayout className="items-center gap-2">
           <p className="flex-1">Change Layout</p>
           <SettingType value={settingType} onChange={handleChangeSettingType} />

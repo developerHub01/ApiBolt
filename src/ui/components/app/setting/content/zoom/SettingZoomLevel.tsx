@@ -69,7 +69,7 @@ interface ZoomLevelSelectorProps {
 
 const ZoomLevelSelector = ({ value, onChange }: ZoomLevelSelectorProps) => (
   <Select value={value} onValueChange={onChange}>
-    <SelectTrigger className="w-full max-w-32" size="sm">
+    <SelectTrigger className="w-full max-w-36" size="sm">
       <SelectValue placeholder="Zoom level" />
     </SelectTrigger>
     <SelectContent>
@@ -77,8 +77,10 @@ const ZoomLevelSelector = ({ value, onChange }: ZoomLevelSelectorProps) => (
         <SelectLabel>Zoom</SelectLabel>
         {zoomList.map((size: string) => (
           <SelectItem key={size} value={size}>
-            {size}%
-            {size === String(defaultSettings.zoomLevel) ? " (default)" : null}
+            {size ===
+            String(calculateIntoFixedPoint(defaultSettings.zoomLevel * 100))
+              ? `Default (${size}%)`
+              : `${size}%`}
           </SelectItem>
         ))}
       </SelectGroup>

@@ -1,3 +1,4 @@
+import { useCallback, useMemo } from "react";
 import SettingItemHorizontalLayout from "@/components/app/setting/content/SettingItemHorizontalLayout";
 import {
   Select,
@@ -11,7 +12,6 @@ import {
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { updateSettings } from "@/context/redux/setting/setting-thunk";
 import { useSetting } from "@/context/setting/SettingProvider";
-import { useMemo } from "react";
 
 const zoomableLocalOptions = ["default", "global", "enable", "disable"];
 const zoomableGlobalOptions = ["default", "enable", "disable"];
@@ -45,20 +45,23 @@ const SettingIsZoomable = () => {
     return value;
   }, [activeTab, isZoomableGlobal, isZoomableLocal]);
 
-  const handleIsZoomableChange = (value?: string | undefined) => {
-    let updatedValue: number | null = -1;
-    if (value === "default") updatedValue = -1;
-    else if (value === "global") updatedValue = null;
-    else if (value === "disable") updatedValue = 0;
-    else if (value === "enable") updatedValue = 1;
+  const handleIsZoomableChange = useCallback(
+    (value?: string | undefined) => {
+      let updatedValue: number | null = -1;
+      if (value === "default") updatedValue = -1;
+      else if (value === "global") updatedValue = null;
+      else if (value === "disable") updatedValue = 0;
+      else if (value === "enable") updatedValue = 1;
 
-    dispatch(
-      updateSettings({
-        isZoomable: updatedValue,
-        projectId: activeTab === "global" ? null : activeProjectId,
-      })
-    );
-  };
+      dispatch(
+        updateSettings({
+          isZoomable: updatedValue,
+          projectId: activeTab === "global" ? null : activeProjectId,
+        })
+      );
+    },
+    [activeProjectId, activeTab, dispatch]
+  );
 
   return (
     <SettingItemHorizontalLayout>
