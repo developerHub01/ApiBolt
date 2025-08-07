@@ -93,7 +93,7 @@ const useGlobalLocalSettingv1 = ({
 
   const handleChangeSettingType = useCallback((value: SettingsType) => {
     setSettingType(value);
-    if (value === "custom") return;
+    // if (value === "custom") return;
     setIsUpdate(true);
   }, []);
 
