@@ -4,7 +4,7 @@ import FullScreenToggle from "@/components/app/sidebar/FullScreenToggle";
 import ThemeToggle from "@/components/app/sidebar/ThemeToggle";
 import SidbarToggle from "@/components/app/sidebar/SidbarToggle";
 import { cn } from "@/lib/utils";
-import useCheckApplyingLayout from "@/hooks/use-check-applying-layout";
+import useCheckApplyingLayout from "@/hooks/setting/use-check-applying-layout";
 import type { TLayoutSetting } from "@/types/setting.types";
 import SidebarContextMenuWrapper from "@/components/app/sidebar/SidebarContextMenuWrapper";
 

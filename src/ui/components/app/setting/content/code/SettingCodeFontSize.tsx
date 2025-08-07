@@ -13,6 +13,7 @@ import { useAppSelector } from "@/context/redux/hooks";
 import { useSetting } from "@/context/setting/SettingProvider";
 import SettingType from "@/components/app/setting/SettingType";
 import useGlobalLocalSettingv1 from "@/hooks/setting/use-global-local-settingv1";
+import { senitizeValue } from "@/utils/settings.utils";
 
 const fontList = Array.from({ length: 14 })
   .map((_, index) => index + 12)
@@ -40,12 +41,17 @@ const SettingCodeFontSize = () => {
       key: "codeFontSize",
     });
 
+  const senitizedValue = senitizeValue(value, defaultSettings.codeFontSize);
+
   return (
     <SettingItemHorizontalLayout className="items-center gap-2">
       <p className="flex-1">Adjust code font size</p>
       <SettingType value={settingType} onChange={handleChangeSettingType} />
       {settingType === "custom" && (
-        <FontSizeSelector value={String(value)} onChange={handleChange} />
+        <FontSizeSelector
+          value={String(senitizedValue)}
+          onChange={handleChange}
+        />
       )}
     </SettingItemHorizontalLayout>
   );
@@ -58,7 +64,7 @@ interface FontSizeSelectorProps {
 
 const FontSizeSelector = ({ value, onChange }: FontSizeSelectorProps) => (
   <Select value={value} onValueChange={onChange}>
-    <SelectTrigger className="w-full max-w-32" size="sm">
+    <SelectTrigger className="w-full max-w-36" size="sm">
       <SelectValue placeholder="Code Font Size" />
     </SelectTrigger>
     <SelectContent>

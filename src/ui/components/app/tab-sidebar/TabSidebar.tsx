@@ -11,7 +11,7 @@ import {
 import TabActionWrapper from "@/components/app/tab-sidebar/TabActionWrapper";
 import TabSidebarWrapper from "@/components/app/tab-sidebar/TabSidebarWrapper";
 import AutoScrollActiveWrapper from "@/components/ui/auto-scroll-active-wrapper";
-import useCheckApplyingLayout from "@/hooks/use-check-applying-layout";
+import useCheckApplyingLayout from "@/hooks/setting/use-check-applying-layout";
 import type { TLayoutSetting } from "@/types/setting.types";
 import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 import EmptyBox from "@/components/app/tab-sidebar/EmptyBox";

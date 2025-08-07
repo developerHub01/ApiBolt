@@ -14,6 +14,7 @@ import { calculateIntoFixedPoint } from "@/utils";
 import SettingType from "@/components/app/setting/SettingType";
 import useGlobalLocalSettingv1 from "@/hooks/setting/use-global-local-settingv1";
 import { defaultSettings } from "@/constant/settings.constant";
+import { senitizeValue } from "@/utils/settings.utils";
 
 const zoomList = Array.from({ length: 11 })
   .map((_, index) => (index + 5) * 10)
@@ -41,13 +42,15 @@ const SettingZoomLevel = () => {
       key: "zoomLevel",
     });
 
+  const senitizedValue = senitizeValue(value, defaultSettings.codeFontSize);
+
   return (
     <SettingItemHorizontalLayout className="items-center">
       <p className="flex-1">Adjust the interface scale to your preference</p>
       <SettingType value={settingType} onChange={handleChangeSettingType} />
       {settingType === "custom" && (
         <ZoomLevelSelector
-          value={String(Number(value) * 100)}
+          value={String(Number(senitizedValue) * 100)}
           onChange={(value) =>
             handleChange(calculateIntoFixedPoint(Number(value) / 100, 1))
           }

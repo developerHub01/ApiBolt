@@ -1,6 +1,7 @@
 export type TKeyboardShortcutKey = "+" | "-" | "=" | "0";
 
 export type TLayoutSetting = "ltr" | "rtl";
+export type TLayoutSettingNoSenitize = "ltr" | "rtl" | "default";
 
 export interface SettingsInterface {
   backgroundImages: Array<string>;

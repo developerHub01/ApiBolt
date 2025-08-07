@@ -8,7 +8,7 @@ import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
 import { AnimatedDialog } from "@/components/ui/animated-dialog";
-import useCheckApplyingLayout from "@/hooks/use-check-applying-layout";
+import useCheckApplyingLayout from "@/hooks/setting/use-check-applying-layout";
 import type { TLayoutSetting } from "@/types/setting.types";
 
 const RequestListPanelWrapper = memo(() => {

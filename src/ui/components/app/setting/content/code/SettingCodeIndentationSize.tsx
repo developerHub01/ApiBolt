@@ -13,6 +13,7 @@ import { useSetting } from "@/context/setting/SettingProvider";
 import SettingType from "@/components/app/setting/SettingType";
 import { defaultSettings } from "@/constant/settings.constant";
 import useGlobalLocalSettingv1 from "@/hooks/setting/use-global-local-settingv1";
+import { senitizeValue } from "@/utils/settings.utils";
 
 const indentationList = Array.from({ length: 7 })
   .map((_, index) => index + 2)
@@ -40,13 +41,15 @@ const SettingCodeIndentationSize = () => {
       key: "indentationSize",
     });
 
+  const senitizedValue = senitizeValue(value, defaultSettings.codeFontSize);
+
   return (
     <SettingItemHorizontalLayout className="items-center gap-2">
       <p className="flex-1">Adjust code indentation size</p>
       <SettingType value={settingType} onChange={handleChangeSettingType} />
       {settingType === "custom" && (
         <IndentationSizeSelector
-          value={String(value)}
+          value={String(senitizedValue)}
           onChange={handleChange}
         />
       )}

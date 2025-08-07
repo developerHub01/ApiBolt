@@ -8,7 +8,7 @@ import Setting from "@/components/app/setting/Setting";
 import KeyboardEvents from "@/components/app/KeyboardEvents";
 import type { TLayoutSetting } from "@/types/setting.types";
 import { cn } from "@/lib/utils";
-import useCheckApplyingLayout from "@/hooks/use-check-applying-layout";
+import useCheckApplyingLayout from "@/hooks/setting/use-check-applying-layout";
 import GlobalProvider from "@/context/global/GlobalProvider";
 
 const bg =

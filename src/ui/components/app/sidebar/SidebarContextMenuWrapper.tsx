@@ -5,7 +5,7 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import useCheckApplyingLayout from "@/hooks/use-check-applying-layout";
+import useCheckApplyingLayout from "@/hooks/setting/use-check-applying-layout";
 import type { TLayoutSetting } from "@/types/setting.types";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { updateSettings } from "@/context/redux/setting/setting-thunk";

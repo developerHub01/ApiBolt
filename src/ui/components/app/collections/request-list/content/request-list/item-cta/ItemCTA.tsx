@@ -17,7 +17,7 @@ import { useAppDispatch } from "@/context/redux/hooks";
 import { handleChangeDeleteFolderOrRequestId } from "@/context/redux/request-response/request-response-slice";
 import { memo, useCallback, type MouseEvent } from "react";
 import { useRequestList } from "@/context/collections/request-list/RequestListProvider";
-import useCheckApplyingLayout from "@/hooks/use-check-applying-layout";
+import useCheckApplyingLayout from "@/hooks/setting/use-check-applying-layout";
 import type { TLayoutSetting } from "@/types/setting.types";
 
 type TActionType =

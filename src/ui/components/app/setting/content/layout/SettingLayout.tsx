@@ -13,6 +13,7 @@ import {
 import { motion } from "motion/react";
 import SettingItemHorizontalLayout from "@/components/app/setting/content/SettingItemHorizontalLayout";
 import SettingType from "@/components/app/setting/SettingType";
+import { senitizeValue } from "@/utils/settings.utils";
 
 const layoutList: Array<{
   id: TLayoutSetting;
@@ -55,6 +56,8 @@ const SettingLayout = () => {
       key: "layoutType",
     });
 
+  const senitizedValue = senitizeValue(value, defaultSettings.codeFontSize);
+
   return (
     <SettingItem id="layout" title="Layout Settings">
       <SettingItemHorizontalLayout className="flex-col">
@@ -63,7 +66,10 @@ const SettingLayout = () => {
           <SettingType value={settingType} onChange={handleChangeSettingType} />
         </SettingItemHorizontalLayout>
         {settingType === "custom" && (
-          <SettingSelector value={String(value)} onChange={handleChange} />
+          <SettingSelector
+            value={String(senitizedValue)}
+            onChange={handleChange}
+          />
         )}
       </SettingItemHorizontalLayout>
     </SettingItem>

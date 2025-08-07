@@ -12,7 +12,7 @@ import {
 import RequestListProvider from "@/context/collections/request-list/RequestListProvider";
 import RequestBodyProvider from "@/context/collections/request/RequestBodyProvider";
 import RequestHeaderProvider from "@/context/collections/request/RequestHeaderProvider";
-import useCheckApplyingLayout from "@/hooks/use-check-applying-layout";
+import useCheckApplyingLayout from "@/hooks/setting/use-check-applying-layout";
 import type { TLayoutSetting } from "@/types/setting.types";
 
 const CollectionsLayout = () => {

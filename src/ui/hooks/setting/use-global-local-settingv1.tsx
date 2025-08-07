@@ -4,6 +4,9 @@ import { useAppDispatch } from "@/context/redux/hooks";
 import type { TSettingTab } from "@/context/setting/SettingProvider";
 import { updateSettings } from "@/context/redux/setting/setting-thunk";
 
+const checkIsDefaultType = (value: unknown) =>
+  [-1, "default"].includes(value as number | string);
+
 interface useGlobalLocalSettingv1Props {
   globalSetting: unknown;
   localSetting: unknown;
@@ -38,14 +41,14 @@ const useGlobalLocalSettingv1 = ({
       else if (
         localSetting === null ||
         localSetting === undefined ||
-        localSetting === defaultSettings
+        checkIsDefaultType(localSetting)
       )
         type = "default";
     } else {
       if (
         globalSetting === null ||
         globalSetting === undefined ||
-        globalSetting === defaultSettings
+        checkIsDefaultType(globalSetting)
       )
         type = "default";
     }
@@ -58,14 +61,18 @@ const useGlobalLocalSettingv1 = ({
 
   const handleChange = useCallback(
     (value?: unknown) => {
+      const isNumberType = !isNaN(Number(value ?? defaultSettings));
+      const defaultValue = isNumberType ? -1 : "default";
+      const localValue = isNumberType
+        ? Number(value ?? defaultSettings)
+        : (value ?? defaultSettings);
+
       const updatedValue =
         settingType === "default"
-          ? defaultSettings
+          ? defaultValue
           : settingType === "global"
             ? null
-            : isNaN(Number(value ?? defaultSettings))
-              ? (value ?? defaultSettings)
-              : Number(value ?? defaultSettings);
+            : localValue;
 
       dispatch(
         updateSettings({

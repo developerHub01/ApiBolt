@@ -1,5 +1,8 @@
 import { useAppSelector } from "@/context/redux/hooks";
-import type { TLayoutSetting } from "@/types/setting.types";
+import type {
+  TLayoutSetting,
+  TLayoutSettingNoSenitize,
+} from "@/types/setting.types";
 
 const useCheckApplyingLayout = (): TLayoutSetting => {
   const activeProjectId = useAppSelector(
@@ -12,12 +15,14 @@ const useCheckApplyingLayout = (): TLayoutSetting => {
     (state) => state.setting.settings?.layoutType
   );
 
-  const layoutTypes: TLayoutSetting =
-    (!activeProjectId
-      ? layoutTypeGlobal
-      : (layoutTypeLocal ?? layoutTypeGlobal)) ?? "ltr";
+  let layoutTypes = ((!activeProjectId
+    ? layoutTypeGlobal
+    : (layoutTypeLocal ?? layoutTypeGlobal)) ??
+    "ltr") as TLayoutSettingNoSenitize;
 
-  return layoutTypes;
+  if (layoutTypes === "default") layoutTypes = "ltr";
+
+  return layoutTypes as TLayoutSetting;
 };
 
 export default useCheckApplyingLayout;
