@@ -22,7 +22,7 @@ const useGlobalLocalSettingv1 = ({
   key,
 }: useGlobalLocalSettingv1Props): {
   value: unknown;
-  handleChange: (value?: string) => void;
+  handleChange: (value?: unknown) => void;
   handleChangeSettingType: (value: SettingsType) => void;
   settingType: SettingsType;
 } => {
@@ -57,7 +57,7 @@ const useGlobalLocalSettingv1 = ({
     (activeTab === "project" ? localSetting : globalSetting) ?? defaultSettings;
 
   const handleChange = useCallback(
-    (value?: string) => {
+    (value?: unknown) => {
       const updatedValue =
         settingType === "default"
           ? defaultSettings

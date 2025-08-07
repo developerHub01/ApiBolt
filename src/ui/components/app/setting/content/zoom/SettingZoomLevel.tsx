@@ -9,15 +9,18 @@ import {
 } from "@/components/ui/select";
 import SettingItemHorizontalLayout from "@/components/app/setting/content/SettingItemHorizontalLayout";
 import { useSetting } from "@/context/setting/SettingProvider";
-import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { updateSettings } from "@/context/redux/setting/setting-thunk";
+import { useAppSelector } from "@/context/redux/hooks";
 import { calculateIntoFixedPoint } from "@/utils";
+import SettingType from "@/components/app/setting/SettingType";
+import useGlobalLocalSettingv1 from "@/hooks/setting/use-global-local-settingv1";
+import { defaultSettings } from "@/constant/settings.constant";
 
-const zoomList = Array.from({ length: 11 }).map((_, index) => (index + 5) * 10);
+const zoomList = Array.from({ length: 11 })
+  .map((_, index) => (index + 5) * 10)
+  .map(String);
 
 const SettingZoomLevel = () => {
   const { activeTab } = useSetting();
-  const dispatch = useAppDispatch();
   const activeProjectId = useAppSelector(
     (state) => state.requestResponse.activeProjectId
   );
@@ -28,41 +31,54 @@ const SettingZoomLevel = () => {
     (state) => state.setting.settings?.zoomLevel
   );
 
-  const zoomLevel = calculateIntoFixedPoint(
-    (activeTab === "global"
-      ? zoomLevelGlobal
-      : (zoomLevelLocal ?? zoomLevelGlobal)) * 100
-  );
-
-  const handleZoomLevelChange = (value: string) => {
-    dispatch(
-      updateSettings({
-        zoomLevel: calculateIntoFixedPoint(Number(value) / 100, 1),
-        projectId: activeTab === "global" ? null : activeProjectId,
-      })
-    );
-  };
+  const { value, handleChange, handleChangeSettingType, settingType } =
+    useGlobalLocalSettingv1({
+      globalSetting: zoomLevelGlobal,
+      localSetting: zoomLevelLocal,
+      defaultSettings: defaultSettings.zoomLevel,
+      activeTab,
+      activeProjectId,
+      key: "zoomLevel",
+    });
 
   return (
     <SettingItemHorizontalLayout className="items-center">
-      <p>Adjust the interface scale to your preference</p>
-      <Select value={String(zoomLevel)} onValueChange={handleZoomLevelChange}>
-        <SelectTrigger className="w-full max-w-40" size="sm">
-          <SelectValue placeholder="Zoom level" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>Zoom</SelectLabel>
-            {zoomList.map((size: number) => (
-              <SelectItem key={size} value={String(size)}>
-                {size}%
-              </SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+      <p className="flex-1">Adjust the interface scale to your preference</p>
+      <SettingType value={settingType} onChange={handleChangeSettingType} />
+      {settingType === "custom" && (
+        <ZoomLevelSelector
+          value={String(Number(value) * 100)}
+          onChange={(value) =>
+            handleChange(calculateIntoFixedPoint(Number(value) / 100, 1))
+          }
+        />
+      )}
     </SettingItemHorizontalLayout>
   );
 };
+
+interface ZoomLevelSelectorProps {
+  value: string;
+  onChange: (value?: string) => void;
+}
+
+const ZoomLevelSelector = ({ value, onChange }: ZoomLevelSelectorProps) => (
+  <Select value={value} onValueChange={onChange}>
+    <SelectTrigger className="w-full max-w-32" size="sm">
+      <SelectValue placeholder="Zoom level" />
+    </SelectTrigger>
+    <SelectContent>
+      <SelectGroup>
+        <SelectLabel>Zoom</SelectLabel>
+        {zoomList.map((size: string) => (
+          <SelectItem key={size} value={size}>
+            {size}%
+            {size === String(defaultSettings.zoomLevel) ? " (default)" : null}
+          </SelectItem>
+        ))}
+      </SelectGroup>
+    </SelectContent>
+  </Select>
+);
 
 export default SettingZoomLevel;

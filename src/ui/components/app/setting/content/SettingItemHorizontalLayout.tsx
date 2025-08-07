@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import type { HTMLProps } from "react";
+import type { ComponentProps } from "react";
 
 interface SettingItemHorizontalLayoutProps {
   children: React.ReactNode;
@@ -8,7 +8,7 @@ interface SettingItemHorizontalLayoutProps {
 const SettingItemHorizontalLayout = ({
   children,
   className = "",
-}: SettingItemHorizontalLayoutProps & HTMLProps<"section">) => {
+}: SettingItemHorizontalLayoutProps & ComponentProps<"section">) => {
   return (
     <div className={cn("flex justify-between gap-3", className)}>
       {children}

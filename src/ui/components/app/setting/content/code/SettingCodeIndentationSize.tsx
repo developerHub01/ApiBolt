@@ -41,17 +41,15 @@ const SettingCodeIndentationSize = () => {
     });
 
   return (
-    <SettingItemHorizontalLayout className="flex-col">
-      <SettingItemHorizontalLayout className="items-center gap-2">
-        <p className="flex-1">Adjust code indentation size</p>
-        <SettingType value={settingType} onChange={handleChangeSettingType} />
-        {settingType === "custom" && (
-          <IndentationSizeSelector
-            value={String(value)}
-            onChange={handleChange}
-          />
-        )}
-      </SettingItemHorizontalLayout>
+    <SettingItemHorizontalLayout className="items-center gap-2">
+      <p className="flex-1">Adjust code indentation size</p>
+      <SettingType value={settingType} onChange={handleChangeSettingType} />
+      {settingType === "custom" && (
+        <IndentationSizeSelector
+          value={String(value)}
+          onChange={handleChange}
+        />
+      )}
     </SettingItemHorizontalLayout>
   );
 };

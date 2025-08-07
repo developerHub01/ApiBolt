@@ -1,12 +1,10 @@
 import { memo } from "react";
 import { Accordion } from "@/components/ui/accordion";
 import { AnimatedDialogContent } from "@/components/ui/animated-dialog";
-import SettingZoom from "@/components/app/setting/content/zoom/SettingZoom";
-import BackgroundImage from "@/components/app/setting/content/BackgroundImage";
-import SettingLayout from "@/components/app/setting/content/layout/SettingLayout";
 import { motion } from "motion/react";
 import { useSetting } from "@/context/setting/SettingProvider";
-import SettingCode from "@/components/app/setting/content/code/SettingCode";
+import GlobalSettings from "@/components/app/setting/content/GlobalSettings";
+import LocalSettings from "@/components/app/setting/content/LocalSettings";
 
 const SettingContent = memo(() => {
   const { activeTab } = useSetting();
@@ -33,11 +31,8 @@ const SettingContent = memo(() => {
           ease: "anticipate",
         }}
       >
-        <Accordion type="multiple" className="w-full">
-          <BackgroundImage />
-          <SettingZoom />
-          <SettingLayout />
-          <SettingCode />
+        <Accordion type="multiple" className="w-full px-3">
+          {activeTab === "global" ? <GlobalSettings /> : <LocalSettings />}
         </Accordion>
       </motion.section>
     </AnimatedDialogContent>

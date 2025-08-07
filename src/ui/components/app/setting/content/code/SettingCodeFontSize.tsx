@@ -41,14 +41,12 @@ const SettingCodeFontSize = () => {
     });
 
   return (
-    <SettingItemHorizontalLayout className="flex-col">
-      <SettingItemHorizontalLayout className="items-center gap-2">
-        <p className="flex-1">Adjust code font size</p>
-        <SettingType value={settingType} onChange={handleChangeSettingType} />
-        {settingType === "custom" && (
-          <FontSizeSelector value={String(value)} onChange={handleChange} />
-        )}
-      </SettingItemHorizontalLayout>
+    <SettingItemHorizontalLayout className="items-center gap-2">
+      <p className="flex-1">Adjust code font size</p>
+      <SettingType value={settingType} onChange={handleChangeSettingType} />
+      {settingType === "custom" && (
+        <FontSizeSelector value={String(value)} onChange={handleChange} />
+      )}
     </SettingItemHorizontalLayout>
   );
 };
