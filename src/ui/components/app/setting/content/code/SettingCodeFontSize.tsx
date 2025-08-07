@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useState } from "react";
 import SettingItemHorizontalLayout from "@/components/app/setting/content/SettingItemHorizontalLayout";
 import {
   Select,
@@ -10,21 +9,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { defaultSettings } from "@/constant/settings.constant";
-import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { updateSettings } from "@/context/redux/setting/setting-thunk";
+import { useAppSelector } from "@/context/redux/hooks";
 import { useSetting } from "@/context/setting/SettingProvider";
 import SettingType from "@/components/app/setting/SettingType";
-import type { SettingsType } from "@/types/setting.types";
+import useGlobalLocalSettingv1 from "@/hooks/setting/use-global-local-settingv1";
 
 const fontList = Array.from({ length: 14 })
   .map((_, index) => index + 12)
   .map(String);
 
 const SettingCodeFontSize = () => {
-  const [settingType, setSettingType] = useState<SettingsType>("default");
-  const [isUpdate, setIsUpdate] = useState<boolean>(false);
   const { activeTab } = useSetting();
-  const dispatch = useAppDispatch();
   const activeProjectId = useAppSelector(
     (state) => state.requestResponse.activeProjectId
   );
@@ -35,64 +30,15 @@ const SettingCodeFontSize = () => {
     (state) => state.setting.settings?.codeFontSize
   );
 
-  useEffect(() => {
-    let type: SettingsType = "custom";
-
-    if (activeTab === "project") {
-      if (!codeFontSizeLocal) type = "global";
-      else if (
-        codeFontSizeLocal === null ||
-        codeFontSizeLocal === undefined ||
-        codeFontSizeLocal === defaultSettings.codeFontSize
-      )
-        type = "default";
-    } else {
-      if (
-        codeFontSizeGlobal === null ||
-        codeFontSizeGlobal === undefined ||
-        codeFontSizeGlobal === defaultSettings.codeFontSize
-      )
-        type = "default";
-    }
-    setSettingType(type);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const codeFontSize =
-    (activeTab === "project" ? codeFontSizeLocal : codeFontSizeGlobal) ??
-    defaultSettings.codeFontSize;
-
-  const handleCodeFontSizeChange = useCallback(
-    (value?: string) => {
-      const codeFontSize =
-        settingType === "default"
-          ? defaultSettings.codeFontSize
-          : settingType === "global"
-            ? null
-            : Number(value ?? defaultSettings.codeFontSize);
-
-      dispatch(
-        updateSettings({
-          codeFontSize,
-          projectId: activeTab === "project" ? activeProjectId : null,
-        })
-      );
-    },
-    [activeProjectId, activeTab, dispatch, settingType]
-  );
-
-  useEffect(() => {
-    if (!isUpdate) return;
-    handleCodeFontSizeChange();
-    setIsUpdate(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isUpdate]);
-
-  const handleChangeSettingType = useCallback((value: SettingsType) => {
-    setSettingType(value);
-    if (value === "custom") return;
-    setIsUpdate(true);
-  }, []);
+  const { value, handleChange, handleChangeSettingType, settingType } =
+    useGlobalLocalSettingv1({
+      globalSetting: codeFontSizeGlobal,
+      localSetting: codeFontSizeLocal,
+      defaultSettings: defaultSettings.codeFontSize,
+      activeTab,
+      activeProjectId,
+      key: "codeFontSize",
+    });
 
   return (
     <SettingItemHorizontalLayout className="flex-col">
@@ -100,10 +46,7 @@ const SettingCodeFontSize = () => {
         <p className="flex-1">Adjust code font size</p>
         <SettingType value={settingType} onChange={handleChangeSettingType} />
         {settingType === "custom" && (
-          <FontSizeSelector
-            value={String(codeFontSize)}
-            onChange={handleCodeFontSizeChange}
-          />
+          <FontSizeSelector value={String(value)} onChange={handleChange} />
         )}
       </SettingItemHorizontalLayout>
     </SettingItemHorizontalLayout>
@@ -126,6 +69,9 @@ const FontSizeSelector = ({ value, onChange }: FontSizeSelectorProps) => (
         {fontList.map((size: string) => (
           <SelectItem key={size} value={size}>
             {size} px
+            {size === String(defaultSettings.codeFontSize)
+              ? " (default)"
+              : null}
           </SelectItem>
         ))}
       </SelectGroup>

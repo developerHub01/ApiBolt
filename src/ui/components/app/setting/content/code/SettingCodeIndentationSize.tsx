@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useState } from "react";
 import SettingItemHorizontalLayout from "@/components/app/setting/content/SettingItemHorizontalLayout";
 import {
   Select,
@@ -9,21 +8,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { updateSettings } from "@/context/redux/setting/setting-thunk";
+import { useAppSelector } from "@/context/redux/hooks";
 import { useSetting } from "@/context/setting/SettingProvider";
 import SettingType from "@/components/app/setting/SettingType";
-import type { SettingsType } from "@/types/setting.types";
 import { defaultSettings } from "@/constant/settings.constant";
+import useGlobalLocalSettingv1 from "@/hooks/setting/use-global-local-settingv1";
 
 const indentationList = Array.from({ length: 7 })
   .map((_, index) => index + 2)
   .map(String);
 
 const SettingCodeIndentationSize = () => {
-  const [settingType, setSettingType] = useState<SettingsType>("default");
   const { activeTab } = useSetting();
-  const dispatch = useAppDispatch();
   const activeProjectId = useAppSelector(
     (state) => state.requestResponse.activeProjectId
   );
@@ -34,48 +30,28 @@ const SettingCodeIndentationSize = () => {
     (state) => state.setting.settings?.indentationSize
   );
 
-  const indentationSize =
-    (activeTab === "global" ? indentationSizeGlobal : indentationSizeLocal) ??
-    defaultSettings.indentationSize;
-
-  const handleIndentationSizeChange = (value?: string) => {
-    const indentationSize =
-      settingType === "default"
-        ? defaultSettings.indentationSize
-        : settingType === "global"
-          ? null
-          : Number(value ?? defaultSettings.indentationSize);
-
-    dispatch(
-      updateSettings({
-        indentationSize,
-        projectId: activeTab === "global" ? null : activeProjectId,
-      })
-    );
-  };
-
-  useEffect(() => {
-    handleIndentationSizeChange();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [settingType]);
-
-  const handleChangeSettingType = useCallback((value: SettingsType) => {
-    setSettingType(value);
-    if (value === "custom") return;
-  }, []);
+  const { value, handleChange, handleChangeSettingType, settingType } =
+    useGlobalLocalSettingv1({
+      globalSetting: indentationSizeGlobal,
+      localSetting: indentationSizeLocal,
+      defaultSettings: defaultSettings.indentationSize,
+      activeTab,
+      activeProjectId,
+      key: "indentationSize",
+    });
 
   return (
     <SettingItemHorizontalLayout className="flex-col">
       <SettingItemHorizontalLayout className="items-center gap-2">
-        <p>Adjust code indentation size</p>
+        <p className="flex-1">Adjust code indentation size</p>
         <SettingType value={settingType} onChange={handleChangeSettingType} />
+        {settingType === "custom" && (
+          <IndentationSizeSelector
+            value={String(value)}
+            onChange={handleChange}
+          />
+        )}
       </SettingItemHorizontalLayout>
-      {settingType === "custom" && (
-        <IndentationSizeSelector
-          value={String(indentationSize)}
-          onChange={handleIndentationSizeChange}
-        />
-      )}
     </SettingItemHorizontalLayout>
   );
 };
@@ -99,6 +75,9 @@ const IndentationSizeSelector = ({
         {indentationList.map((size: string) => (
           <SelectItem key={size} value={size}>
             {size}
+            {size === String(defaultSettings.indentationSize)
+              ? " (default)"
+              : null}
           </SelectItem>
         ))}
       </SelectGroup>
