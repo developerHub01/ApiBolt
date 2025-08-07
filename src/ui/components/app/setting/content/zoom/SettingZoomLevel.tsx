@@ -42,7 +42,7 @@ const SettingZoomLevel = () => {
       key: "zoomLevel",
     });
 
-  const senitizedValue = senitizeValue(value, defaultSettings.codeFontSize);
+  const senitizedValue = senitizeValue(value, defaultSettings.zoomLevel);
 
   return (
     <SettingItemHorizontalLayout className="items-center">
