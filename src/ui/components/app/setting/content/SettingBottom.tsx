@@ -5,7 +5,7 @@ const SettingBottom = memo(() => {
   return (
     <AnimatedDialogBottom>
       <p className="line-clamp-1 text-center max-w-lg text-sm">
-        Customize your setting to personalize the UI
+        Customize your settings to make ApiBolt yours.
       </p>
     </AnimatedDialogBottom>
   );
