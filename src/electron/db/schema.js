@@ -179,3 +179,23 @@ export const headersTable = sqliteTable("headers_table", {
     .notNull()
     .default(sql`(current_timestamp)`),
 });
+
+export const hiddenHeadersCheckTable = sqliteTable(
+  "hidden_headers_check_table",
+  {
+    id: text()
+      .primaryKey()
+      .$defaultFn(() => uuidv4()),
+    requestOrFolderMetaId: text()
+      .notNull()
+      .unique()
+      .references(() => requestOrFolderMetaTable.id, {
+        onDelete: "cascade",
+      }),
+    userAgent: int({ mode: boolean }).default(1),
+    contentLength: int({ mode: boolean }).default(1),
+    accept: int({ mode: boolean }).default(1),
+    acceptEncoding: int({ mode: boolean }).default(1),
+    connection: int({ mode: boolean }).default(1),
+  }
+);

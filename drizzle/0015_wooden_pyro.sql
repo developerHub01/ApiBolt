@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX `hidden_headers_check_table_requestOrFolderMetaId_unique` ON `hidden_headers_check_table` (`requestOrFolderMetaId`);
