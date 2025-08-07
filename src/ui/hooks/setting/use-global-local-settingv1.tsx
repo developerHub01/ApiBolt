@@ -5,9 +5,9 @@ import type { TSettingTab } from "@/context/setting/SettingProvider";
 import { updateSettings } from "@/context/redux/setting/setting-thunk";
 
 interface useGlobalLocalSettingv1Props {
-  globalSetting: number | null | undefined;
-  localSetting: number | null | undefined;
-  defaultSettings?: number;
+  globalSetting: unknown;
+  localSetting: unknown;
+  defaultSettings?: unknown;
   activeTab: TSettingTab;
   activeProjectId: string | null;
   key: string;
@@ -21,7 +21,7 @@ const useGlobalLocalSettingv1 = ({
   activeProjectId,
   key,
 }: useGlobalLocalSettingv1Props): {
-  value: number | undefined;
+  value: unknown;
   handleChange: (value?: string) => void;
   handleChangeSettingType: (value: SettingsType) => void;
   settingType: SettingsType;
@@ -63,7 +63,9 @@ const useGlobalLocalSettingv1 = ({
           ? defaultSettings
           : settingType === "global"
             ? null
-            : Number(value ?? defaultSettings);
+            : isNaN(Number(value ?? defaultSettings))
+              ? (value ?? defaultSettings)
+              : Number(value ?? defaultSettings);
 
       dispatch(
         updateSettings({
@@ -72,7 +74,7 @@ const useGlobalLocalSettingv1 = ({
         })
       );
     },
-    [activeProjectId, activeTab, defaultSettings, dispatch, settingType]
+    [activeProjectId, activeTab, defaultSettings, dispatch, key, settingType]
   );
 
   useEffect(() => {
