@@ -2,7 +2,7 @@ const { contextBridge, ipcRenderer, webFrame } = require("electron");
 
 /* =================================== */
 ipcRenderer.on("set-zoom", (_, zoomLevel) => {
-  webFrame.setZoomFactor(zoomLevel);
+  webFrame.setZoomFactor(zoomLevel < 0 ? 1 : zoomLevel);
 });
 /* =================================== */
 
@@ -153,4 +153,13 @@ contextBridge.exposeInMainWorld("electronAPIHeadersDB", {
     await ipcRenderer.invoke("updateHeaders", ...payload),
   checkAllHeadersByRequestMetaId: async (...payload) =>
     await ipcRenderer.invoke("checkAllHeadersByRequestMetaId", ...payload),
+});
+
+contextBridge.exposeInMainWorld("electronAPIHiddenHeadersCheckTableDB", {
+  getHiddenHeadersCheck: async (...payload) =>
+    await ipcRenderer.invoke("getHiddenHeadersCheck", ...payload),
+  createHiddenHeadersCheck: async (...payload) =>
+    await ipcRenderer.invoke("createHiddenHeadersCheck", ...payload),
+  updateHiddenHeadersCheck: async (...payload) =>
+    await ipcRenderer.invoke("updateHiddenHeadersCheck", ...payload),
 });

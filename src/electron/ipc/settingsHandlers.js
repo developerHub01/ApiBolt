@@ -13,8 +13,9 @@ export const settingsHandlers = () => {
         /* getting access of focused window */
         const window = BrowserWindow.getFocusedWindow();
         /* getting zoomLevel comparing both global and project based */
-        const zoomLevel = await getZoomLevel();
+        let zoomLevel = await getZoomLevel();
 
+        if (zoomLevel === -1) zoomLevel = 1;
         /* window and zoomlevel found then update zoomLevel */
         if (window && typeof zoomLevel === "number")
           window.webContents.setZoomFactor(zoomLevel);
