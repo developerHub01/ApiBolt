@@ -8,12 +8,14 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import { handleLoadSettings, handleUpdateSettings } from "./setting-slice";
 import {
+  defaultSettings,
   defaultZoomLevel,
   maxZoomLevel,
   minZoomLevel,
   stepAmountZoomLevel,
 } from "@/constant/settings.constant";
 import { calculateIntoFixedPoint } from "@/utils";
+import { checkApplyingZoomable } from "@/utils/settings.utils";
 
 export const loadSettings = createAsyncThunk<
   SettingsTotalInterface,
@@ -53,14 +55,15 @@ export const updateSettingsZoomByKeyboard = createAsyncThunk<
 
     const activeProjectId = state.requestResponse.activeProjectId ?? null;
 
-    /* if activeProject have and not global or nor project isZoomable enabled or not any activeProject and nor global isZommable active then return not have to update  */
-    if (
-      (activeProjectId &&
-        !state.setting.settings?.isZoomable &&
-        !state.setting.globalSetting.isZoomable) ||
-      (!activeProjectId && !state.setting.globalSetting.isZoomable)
-    )
-      return false;
+    /* first checking do we can zoom? based on the local(project based), global, default */
+    const isZoomable = checkApplyingZoomable({
+      activeProjectId,
+      isZoomableLocal: state.setting.settings?.isZoomable,
+      isZoomableGlobal: state.setting.globalSetting?.isZoomable,
+      defaultZoomable: defaultSettings.isZoomable,
+    });
+
+    if (!isZoomable) return false;
 
     const oldZoomLevel =
       (state.setting.settings || state.setting.globalSetting).zoomLevel ?? 1;
