@@ -1,6 +1,6 @@
 import { sql } from "drizzle-orm";
 import { boolean } from "drizzle-orm/gel-core";
-import { int, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { int, integer, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { v4 as uuidv4 } from "uuid";
 
 export const ACTIVE_PROJECT_ID = "singleton";
@@ -114,9 +114,9 @@ export const settingTable = sqliteTable("setting_table", {
     .primaryKey()
     .$defaultFn(() => uuidv4()),
   backgroundImages: text(),
-  backgroundOpacity: int(),
+  backgroundOpacity: real(),
   backgroundBlur: int(),
-  zoomLevel: int(),
+  zoomLevel: real(),
   isZoomable: int({ mode: boolean }),
   codeFontSize: int(),
   indentationSize: int(),
