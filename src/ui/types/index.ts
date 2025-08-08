@@ -3,6 +3,7 @@ import type {
   AuthorizationPayloadInterface,
   EnvironmentInterface,
   EnvironmentPayloadInterface,
+  HiddenHeadersCheckInterface,
   JWTBearerAuthInterface,
   ParamHeaderBuildPayloadInterface,
   ParamHeaderPayloadInterface,
@@ -15,6 +16,7 @@ import type {
   ProjectSettingsInterface,
   SettingsInterface,
   SettingsTotalInterface,
+  UpdateBackgroundImagePayloadInterface,
 } from "@/types/setting.types";
 
 declare global {
@@ -86,6 +88,7 @@ declare global {
       updateSettings(
         payload: Partial<SettingsInterface | ProjectSettingsInterface>
       ): Promise<boolean>;
+      updateSettingsBackgroundImages(payload: UpdateBackgroundImagePayloadInterface): Promise<boolean>;
     };
 
     electronAPIEnvironmentsDB: {
@@ -195,6 +198,16 @@ declare global {
       checkAllHeadersByRequestMetaId(
         requestOrFolderMetaId?: string
       ): Promise<boolean>;
+    };
+
+    electronAPIHiddenHeadersCheckTableDB: {
+      getHiddenHeadersCheck(id?: string): Promise<HiddenHeadersCheckInterface>;
+      createHiddenHeadersCheck(
+        paramId: string
+      ): Promise<Partial<HiddenHeadersCheckInterface>>;
+      updateHiddenHeadersCheck(
+        requestOrFolderMetaId?: string
+      ): Promise<Partial<HiddenHeadersCheckInterface>>;
     };
   }
 }
