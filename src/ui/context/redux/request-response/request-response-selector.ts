@@ -10,15 +10,14 @@ import type {
   TRequestBodyType,
 } from "@/types/request-response.types";
 
-export const selectActiveProjectId = () =>
-  createSelector(
-    [(state: RootState) => state.requestResponse.activeProjectId],
-    (activeProjectId): string | null => {
-      if (!activeProjectId) return null;
+export const selectActiveProjectId = createSelector(
+  [(state: RootState) => state.requestResponse.activeProjectId],
+  (activeProjectId): string | null => {
+    if (!activeProjectId) return null;
 
-      return activeProjectId;
-    }
-  );
+    return activeProjectId;
+  }
+);
 
 export const selectActiveProject = createSelector(
   [
