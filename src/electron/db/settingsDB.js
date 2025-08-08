@@ -5,7 +5,7 @@ import { getActiveProject } from "./projectsDB.js";
 
 export const defaultSettings = {
   backgroundImages: null /* default == "default" | global == null */,
-  backgroundOpacity: 0.9,
+  backgroundOpacity: 1,
   backgroundBlur: 0,
   codeFontSize: 16,
   indentationSize: 4,
@@ -42,13 +42,6 @@ export const getSettings = async () => {
 
     settings = settings?.[0] ?? null;
     globalSetting = globalSetting?.[0] ?? null;
-
-    // if (settings)
-    //   settings["backgroundImages"] = JSON.parse(settings["backgroundImages"]);
-    // if (globalSetting)
-    //   globalSetting["backgroundImages"] = JSON.parse(
-    //     globalSetting["backgroundImages"]
-    //   );
 
     return {
       settings,
@@ -91,9 +84,6 @@ export const updateSettings = async (payload) => {
     const value = updatePayload[key];
     if (value == undefined) updatePayload[key] = null;
   }
-
-  // if (payload.backgroundImages && Array.isArray(payload.backgroundImages))
-  //   updatePayload.backgroundImages = JSON.stringify(payload.backgroundImages);
 
   if (
     typeof payload.isZoomable === "number" &&
