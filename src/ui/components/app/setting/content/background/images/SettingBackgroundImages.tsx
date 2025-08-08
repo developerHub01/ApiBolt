@@ -1,7 +1,6 @@
 import SettingItemHorizontalLayout from "@/components/app/setting/content/SettingItemHorizontalLayout";
 import { useAppSelector } from "@/context/redux/hooks";
 import { useSetting } from "@/context/setting/SettingProvider";
-// import SettingBackgroundImage from "@/components/app/setting/content/background/images/SettingBackgroundImage";
 import SettingType from "@/components/app/setting/SettingType";
 import useGlobalLocalBgImages, {
   type SettingBackgroundImagesValueType,
@@ -40,14 +39,15 @@ const SettingBackgroundImages = () => {
       </SettingItemHorizontalLayout>
       {settingType === "custom" && (
         <SettingItemHorizontalLayout className="flex-col justify-center items-center gap-4">
-          <div className="w-full max-w-64 grid grid-cols-3 gap-2 justify-center items-center">
-            {/* bg list */}
-            {Array.isArray(senitizedValue) &&
-              senitizedValue.map((img) => (
+          {/* bg list */}
+          {Array.isArray(senitizedValue) && (
+            <div className="w-full max-w-64 grid grid-cols-3 gap-2 justify-center items-center">
+              {senitizedValue.map((img) => (
                 <SettingBackgroundImage src={img} key={img} />
               ))}
-          </div>
-          <Button onClick={handleChange} variant={"secondary"}>
+            </div>
+          )}
+          <Button onClick={() => handleChange("upload")} variant={"secondary"}>
             Choose background folder
           </Button>
         </SettingItemHorizontalLayout>
@@ -57,20 +57,3 @@ const SettingBackgroundImages = () => {
 };
 
 export default SettingBackgroundImages;
-
-// const Test = () => {
-//   return (
-//     <div className="w-full flex flex-col gap-4">
-//       {/* <SettingItemHorizontalLayout className="flex-col items-center gap-2">
-//         <SettingItemHorizontalLayout className="items-center gap-2">
-//           <p className="flex-1">
-//             Manage your background images. Uploaded images will fade one after
-//             another.
-//           </p>
-//           <SettingType value={settingType} onChange={handleChangeSettingType} />
-//         </SettingItemHorizontalLayout>
-//         {settingType === "custom" && <SettingBackgroundImages />}
-//       </SettingItemHorizontalLayout> */}
-//     </div>
-//   );
-// };

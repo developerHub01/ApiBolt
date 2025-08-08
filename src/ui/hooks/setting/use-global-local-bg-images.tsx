@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
-import type { SettingsType } from "@/types/setting.types";
+import type {
+  SettingsType,
+  UpdateBackgroundImagePayloadMethodType,
+} from "@/types/setting.types";
 import type { TSettingTab } from "@/context/setting/SettingProvider";
 import { defaultSettings } from "@/constant/settings.constant";
 import { updateSettingsBackgroundImages } from "@/context/redux/setting/setting-thunk";
@@ -26,7 +29,7 @@ const useGlobalLocalBgImages = ({
   activeTab,
 }: UseGlobalLocalBgImagesProps): {
   value: SettingBackgroundImagesValueType;
-  handleChange: () => void;
+  handleChange: (method?: UpdateBackgroundImagePayloadMethodType) => void;
   handleChangeSettingType: (value: SettingsType) => void;
   settingType: SettingsType;
 } => {
@@ -61,21 +64,31 @@ const useGlobalLocalBgImages = ({
     (activeTab === "project" ? localSetting : globalSetting) ??
     defaultSettings.backgroundImages;
 
-  const handleChange = useCallback(() => {
-    const method =
-      settingType === "default"
-        ? "default"
-        : settingType === "global"
-          ? "remove"
-          : "upload";
+  const handleChange = useCallback(
+    (method?: UpdateBackgroundImagePayloadMethodType) => {
+      /**
+       * ["default", "custom"] in both case default because if select custom then also I dont want to trigger "File Explorer dialog"
+       * so when click in custom it will be set as default and only custom will apply when user click on "Choose background folder" button and select folder
+       * if global then remove the background images because I want that field as null so it follow global setting
+       * else as upload the background images though it is unreachable case because we already check the settingType
+       * but just to be sure I am adding this
+       * **/
+      if (!method)
+        method = ["default", "custom"].includes(settingType)
+          ? "default"
+          : settingType === "global"
+            ? "remove"
+            : "upload";
 
-    dispatch(
-      updateSettingsBackgroundImages({
-        method,
-        type: activeTab,
-      })
-    );
-  }, [activeTab, dispatch, settingType]);
+      dispatch(
+        updateSettingsBackgroundImages({
+          method,
+          type: activeTab,
+        })
+      );
+    },
+    [activeTab, dispatch, settingType]
+  );
 
   useEffect(() => {
     if (!isUpdate) return;
@@ -87,8 +100,10 @@ const useGlobalLocalBgImages = ({
   const handleChangeSettingType = useCallback((value: SettingsType) => {
     setSettingType(value);
 
-    /* if custom then emetiately dont say to upload instead let use the upload button click if needed */
-    if (value === "custom") return;
+    /**
+     * if custom then emetiately dont say to upload instead let use the upload button click if needed
+     * **/
+    // if (value === "custom") return;
     setIsUpdate(true);
   }, []);
 
