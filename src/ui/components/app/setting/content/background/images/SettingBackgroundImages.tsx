@@ -1,0 +1,76 @@
+import SettingItemHorizontalLayout from "@/components/app/setting/content/SettingItemHorizontalLayout";
+import { useAppSelector } from "@/context/redux/hooks";
+import { useSetting } from "@/context/setting/SettingProvider";
+// import SettingBackgroundImage from "@/components/app/setting/content/background/images/SettingBackgroundImage";
+import SettingType from "@/components/app/setting/SettingType";
+import useGlobalLocalBgImages, {
+  type SettingBackgroundImagesValueType,
+} from "@/hooks/setting/use-global-local-bg-images";
+import { defaultSettings } from "@/constant/settings.constant";
+import { senitizeValue } from "@/utils/settings.utils";
+import SettingBackgroundImage from "./SettingBackgroundImage";
+import { Button } from "@/components/ui/button";
+
+const SettingBackgroundImages = () => {
+  const { activeTab } = useSetting();
+  const backgroundImagesGlobal = useAppSelector(
+    (state) => state.setting.globalSetting.backgroundImages
+  );
+  const backgroundImagesLocal = useAppSelector(
+    (state) => state.setting.settings?.backgroundImages
+  );
+
+  const { value, settingType, handleChange, handleChangeSettingType } =
+    useGlobalLocalBgImages({
+      globalSetting: backgroundImagesGlobal,
+      localSetting: backgroundImagesLocal,
+      activeTab,
+    });
+
+  const senitizedValue = senitizeValue(
+    value,
+    defaultSettings.backgroundImages
+  ) as SettingBackgroundImagesValueType;
+
+  return (
+    <SettingItemHorizontalLayout className="flex-col gap-4 justify-center">
+      <SettingItemHorizontalLayout className="items-center gap-2">
+        <p className="flex-1">Choose Background images</p>
+        <SettingType value={settingType} onChange={handleChangeSettingType} />
+      </SettingItemHorizontalLayout>
+      {settingType === "custom" && (
+        <SettingItemHorizontalLayout className="flex-col justify-center items-center gap-4">
+          <div className="w-full max-w-64 grid grid-cols-3 gap-2 justify-center items-center">
+            {/* bg list */}
+            {Array.isArray(senitizedValue) &&
+              senitizedValue.map((img) => (
+                <SettingBackgroundImage src={img} key={img} />
+              ))}
+          </div>
+          <Button onClick={handleChange} variant={"secondary"}>
+            Choose background folder
+          </Button>
+        </SettingItemHorizontalLayout>
+      )}
+    </SettingItemHorizontalLayout>
+  );
+};
+
+export default SettingBackgroundImages;
+
+// const Test = () => {
+//   return (
+//     <div className="w-full flex flex-col gap-4">
+//       {/* <SettingItemHorizontalLayout className="flex-col items-center gap-2">
+//         <SettingItemHorizontalLayout className="items-center gap-2">
+//           <p className="flex-1">
+//             Manage your background images. Uploaded images will fade one after
+//             another.
+//           </p>
+//           <SettingType value={settingType} onChange={handleChangeSettingType} />
+//         </SettingItemHorizontalLayout>
+//         {settingType === "custom" && <SettingBackgroundImages />}
+//       </SettingItemHorizontalLayout> */}
+//     </div>
+//   );
+// };

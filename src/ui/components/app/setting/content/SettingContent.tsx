@@ -3,8 +3,10 @@ import { Accordion } from "@/components/ui/accordion";
 import { AnimatedDialogContent } from "@/components/ui/animated-dialog";
 import { motion } from "motion/react";
 import { useSetting } from "@/context/setting/SettingProvider";
-import GlobalSettings from "@/components/app/setting/content/GlobalSettings";
-import LocalSettings from "@/components/app/setting/content/LocalSettings";
+import SettingZoom from "@/components/app/setting/content/zoom/SettingZoom";
+import SettingLayout from "@/components/app/setting/content/layout/SettingLayout";
+import SettingCode from "@/components/app/setting/content/code/SettingCode";
+import SettingBackground from "@/components/app/setting/content/background/SettingBackground";
 
 const SettingContent = memo(() => {
   const { activeTab } = useSetting();
@@ -32,7 +34,10 @@ const SettingContent = memo(() => {
         }}
       >
         <Accordion type="multiple" className="w-full px-3">
-          {activeTab === "global" ? <GlobalSettings /> : <LocalSettings />}
+          <SettingBackground />
+          <SettingZoom />
+          <SettingLayout />
+          <SettingCode />
         </Accordion>
       </motion.section>
     </AnimatedDialogContent>

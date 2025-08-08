@@ -3,6 +3,7 @@ import type {
   SettingsInterface,
   SettingsTotalInterface,
   TKeyboardShortcutKey,
+  UpdateBackgroundImagePayloadInterface,
 } from "@/types/setting.types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
@@ -100,3 +101,32 @@ export const updateSettingsZoomByKeyboard = createAsyncThunk<
     return response;
   }
 );
+export const updateSettingsBackgroundImages = createAsyncThunk<
+  boolean,
+  Pick<UpdateBackgroundImagePayloadInterface, "method"> & {
+    type: "project" | "global";
+  },
+  { dispatch: AppDispatch; state: RootState }
+>(
+  "request-response/updateSettingsBackgroundImages",
+  async ({ type, method }, { dispatch, getState }) => {
+    const state = getState() as RootState;
+
+    const activeProjectId = state.requestResponse.activeProjectId ?? null;
+
+    const response =
+      await window.electronAPISettingsDB.updateSettingsBackgroundImages({
+        projectId: type === "global" ? null : activeProjectId,
+        method,
+      });
+
+    if (response) await dispatch(loadSettings());
+
+    return response;
+  }
+);
+
+/* 
+
+      updateupdateBackgroundImage(payload: UpdateBackgroundImagePayloadInterface): Promise<void>;
+*/

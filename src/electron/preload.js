@@ -57,6 +57,8 @@ contextBridge.exposeInMainWorld("electronAPISettingsDB", {
   getSettings: async () => await ipcRenderer.invoke("getSettings"),
   updateSettings: async (...payload) =>
     await ipcRenderer.invoke("updateSettings", ...payload),
+  updateSettingsBackgroundImages: async (...payload) =>
+    await ipcRenderer.invoke("updateSettingsBackgroundImages", ...payload),
 });
 
 contextBridge.exposeInMainWorld("electronAPIEnvironmentsDB", {

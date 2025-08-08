@@ -5,7 +5,7 @@ export const defaultZoomLevel = 1;
 export const maxZoomLevel = 1.5;
 export const minZoomLevel = 0.5;
 
-export const maxBackgroundImagesCount = 5;
+export const maxBackgroundImagesCount = 6;
 
 export const defaultSettings: SettingsInterface = {
   backgroundImages: [],

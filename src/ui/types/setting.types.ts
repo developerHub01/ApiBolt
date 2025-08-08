@@ -25,3 +25,8 @@ export interface SettingsTotalInterface {
 }
 
 export type SettingsType = "default" | "global" | "custom";
+
+export interface UpdateBackgroundImagePayloadInterface {
+  projectId?: string | null;
+  method: "upload" | "remove" | "default";
+}

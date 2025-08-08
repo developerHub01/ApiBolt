@@ -7,6 +7,7 @@ import SettingBottom from "@/components/app/setting/content/SettingBottom";
 import { AnimatedDialogContentWrapper } from "@/components/ui/animated-dialog";
 import { AnimatedDialog } from "@/components/ui/animated-dialog";
 import { loadSettings } from "@/context/redux/setting/setting-thunk";
+import SettingProvider from "@/context/setting/SettingProvider";
 
 const Setting = () => {
   const dispatch = useAppDispatch();
@@ -18,7 +19,7 @@ const Setting = () => {
   );
 
   return (
-    <>
+    <SettingProvider>
       <AnimatedDialog isOpen={isSettingOpen} onClose={handleClose}>
         <AnimatedDialogContentWrapper>
           <SettingTop />
@@ -27,7 +28,7 @@ const Setting = () => {
         </AnimatedDialogContentWrapper>
       </AnimatedDialog>
       <SettingLoader />
-    </>
+    </SettingProvider>
   );
 };
 

@@ -4,7 +4,7 @@ import { db } from "./index.js";
 import { getActiveProject } from "./projectsDB.js";
 
 export const defaultSettings = {
-  backgroundImages: JSON.stringify([]),
+  backgroundImages: null /* default == "default" | global == null */,
   backgroundOpacity: 0.9,
   backgroundBlur: 0,
   codeFontSize: 16,
@@ -43,12 +43,12 @@ export const getSettings = async () => {
     settings = settings?.[0] ?? null;
     globalSetting = globalSetting?.[0] ?? null;
 
-    if (settings)
-      settings["backgroundImages"] = JSON.parse(settings["backgroundImages"]);
-    if (globalSetting)
-      globalSetting["backgroundImages"] = JSON.parse(
-        globalSetting["backgroundImages"]
-      );
+    // if (settings)
+    //   settings["backgroundImages"] = JSON.parse(settings["backgroundImages"]);
+    // if (globalSetting)
+    //   globalSetting["backgroundImages"] = JSON.parse(
+    //     globalSetting["backgroundImages"]
+    //   );
 
     return {
       settings,
@@ -92,8 +92,8 @@ export const updateSettings = async (payload) => {
     if (value == undefined) updatePayload[key] = null;
   }
 
-  if (payload.backgroundImages && Array.isArray(payload.backgroundImages))
-    updatePayload.backgroundImages = JSON.stringify(payload.backgroundImages);
+  // if (payload.backgroundImages && Array.isArray(payload.backgroundImages))
+  //   updatePayload.backgroundImages = JSON.stringify(payload.backgroundImages);
 
   if (
     typeof payload.isZoomable === "number" &&

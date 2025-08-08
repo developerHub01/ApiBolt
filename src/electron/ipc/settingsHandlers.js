@@ -1,8 +1,48 @@
-import { BrowserWindow, ipcMain } from "electron";
+import { BrowserWindow, dialog, ipcMain } from "electron";
 import { getSettings, getZoomLevel, updateSettings } from "../db/settingsDB.js";
+import fs from "fs";
+import path from "path";
+
+const imageExtensions = [".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp"];
+
+function getImageFilesFromFolder(folderPath) {
+  try {
+    const allFiles = fs.readdirSync(folderPath)?.slice(0, 6);
+
+    const imageFiles = allFiles.filter((file) => {
+      const ext = path.extname(file).toLowerCase();
+      return imageExtensions.includes(ext);
+    });
+
+    // Return full paths
+    return imageFiles.map((file) => path.join(folderPath, file));
+  } catch (error) {
+    return null;
+  }
+}
 
 export const settingsHandlers = () => {
-  ipcMain.handle("getSettings", async (_) => await getSettings());
+  ipcMain.handle("getSettings", async (_) => {
+    const result = await getSettings();
+
+    if (
+      result?.globalSetting?.backgroundImages &&
+      result?.globalSetting?.backgroundImages !== "default"
+    )
+      result.globalSetting.backgroundImages = getImageFilesFromFolder(
+        result?.globalSetting?.backgroundImages
+      );
+
+    if (
+      result?.settings?.backgroundImages &&
+      result?.settings?.backgroundImages !== "default"
+    )
+      result.settings.backgroundImages = getImageFilesFromFolder(
+        result?.settings?.backgroundImages
+      );
+
+    return result;
+  });
   ipcMain.handle("updateSettings", async (_, ...rest) => {
     try {
       const result = await updateSettings(...rest);
@@ -23,7 +63,31 @@ export const settingsHandlers = () => {
 
       return result;
     } catch (error) {
-      console.log(error);
+      console.error(error);
+    }
+  });
+  ipcMain.handle("updateSettingsBackgroundImages", async (_, ...rest) => {
+    try {
+      let payload = rest?.[0] ?? {};
+      const method = payload?.method ?? "upload";
+      let result = null;
+
+      if (method === "upload") {
+        result = await dialog.showOpenDialog({
+          properties: ["openDirectory"],
+        });
+
+        result = result?.filePaths?.[0];
+      } else if (method === "default") result = "default";
+
+      payload = {
+        projectId: payload?.projectId ?? null,
+        backgroundImages: result,
+      };
+
+      return await updateSettings(payload);
+    } catch (error) {
+      console.error(error);
     }
   });
 };
