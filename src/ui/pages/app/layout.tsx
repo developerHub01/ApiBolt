@@ -10,9 +10,7 @@ import type { TLayoutSetting } from "@/types/setting.types";
 import { cn } from "@/lib/utils";
 import useCheckApplyingLayout from "@/hooks/setting/use-check-applying-layout";
 import GlobalProvider from "@/context/global/GlobalProvider";
-
-const bg =
-  "https://images.unsplash.com/photo-1480497490787-505ec076689f?q=80&w=869&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+import BackgroundWallpaper from "@/components/app/BackgroundWallpaper";
 
 const AppLayout = () => {
   return (
@@ -49,24 +47,11 @@ interface CustomizedBgWrapperProps {
 
 const CustomizedBgWrapper = memo(({ children }: CustomizedBgWrapperProps) => {
   return (
-    <section
-      className="h-dvh overflow-hidden relative"
-      style={{
-        background: `url(${bg})`,
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
-      <section className="h-full relative z-[1] flex flex-col">
+    <section className="h-dvh overflow-hidden relative">
+      <section className="h-full relative z-[2] flex flex-col">
         {children}
       </section>
-      <span
-        className="absolute top-0 left-0 w-full h-full bg-background -z-0 pointer-events-none"
-        style={{
-          opacity: 0.9,
-        }}
-      ></span>
+      <BackgroundWallpaper />
     </section>
   );
 });
