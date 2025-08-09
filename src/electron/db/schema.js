@@ -32,9 +32,11 @@ export const environmentTable = sqliteTable("environments_table", {
 
 export const activeProjectTable = sqliteTable("active_project_table", {
   id: text().primaryKey().default(ACTIVE_PROJECT_ID),
-  activeProjectId: text("active_project_id").references(() => projectTable.id, {
-    onDelete: "cascade",
-  }),
+  activeProjectId: text("active_project_id")
+    .unique()
+    .references(() => projectTable.id, {
+      onDelete: "cascade",
+    }),
 });
 
 export const authorizationTable = sqliteTable("authorization_table", {
@@ -121,9 +123,11 @@ export const settingTable = sqliteTable("setting_table", {
   codeFontSize: int(),
   indentationSize: int(),
   layoutType: text() /* ltr | rtl */,
-  projectId: text().references(() => projectTable.id, {
-    onDelete: "cascade",
-  }),
+  projectId: text()
+    .unique()
+    .references(() => projectTable.id, {
+      onDelete: "cascade",
+    }),
 });
 
 export const folderTable = sqliteTable("folder_table", {
@@ -139,6 +143,7 @@ export const folderTable = sqliteTable("folder_table", {
     }),
   requestOrFolderMetaId: text()
     .notNull()
+    .unique()
     .references(() => requestOrFolderMetaTable.id, {
       onDelete: "cascade",
     }),
