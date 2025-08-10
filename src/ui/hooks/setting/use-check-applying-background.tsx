@@ -17,24 +17,32 @@ const useCheckApplyingBackground = (): {
     (activeProjectId
       ? (local.backgroundImages ?? global.backgroundImages)
       : global.backgroundImages) ?? defaultSettings.backgroundImages;
-  const backgroundOpacity =
+
+  let backgroundOpacity =
     (activeProjectId
       ? (local.backgroundOpacity ?? global.backgroundOpacity)
       : global.backgroundOpacity) ?? defaultSettings.backgroundOpacity;
-  const backgroundBlur =
+  if (backgroundOpacity < 0)
+    backgroundOpacity = defaultSettings.backgroundOpacity;
+
+  let backgroundBlur =
     (activeProjectId
       ? (local.backgroundBlur ?? global.backgroundBlur)
       : global.backgroundBlur) ?? defaultSettings.backgroundBlur;
+  if (backgroundBlur < 0) backgroundBlur = defaultSettings.backgroundBlur;
 
-  const maxNumberOfImages =
+  let maxNumberOfImages =
     (activeProjectId
       ? (local.maxNumberOfImages ?? global.maxNumberOfImages)
       : global.maxNumberOfImages) ?? defaultSettings.maxNumberOfImages!;
+  if (maxNumberOfImages < 0)
+    maxNumberOfImages = defaultSettings.maxNumberOfImages!;
 
-  const slideInterval =
+  let slideInterval =
     (activeProjectId
       ? (local.slideInterval ?? global.slideInterval)
       : global.slideInterval) ?? defaultSettings.slideInterval!;
+  if (slideInterval < 0) slideInterval = defaultSettings.slideInterval!;
 
   if (!backgroundImages?.length) return null;
 
