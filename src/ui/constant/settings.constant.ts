@@ -9,7 +9,7 @@ export const defaultBackgroundBlur = 0;
 export const minBackgroundBlur = 0;
 export const maxBackgroundBlur = 30;
 
-export const defaultBackgroundOpacity = 1;
+export const defaultBackgroundOpacity = 0.9;
 export const minBackgroundOpacity = 0.3;
 export const maxBackgroundOpacity = 1;
 
