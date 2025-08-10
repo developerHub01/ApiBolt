@@ -1,7 +1,6 @@
 import { memo, useEffect, useState } from "react";
 import useCheckApplyingBackground from "@/hooks/setting/use-check-applying-background";
-
-const SLIDE_INTERVAL = 5000;
+import { defaultSettings } from "@/constant/settings.constant";
 
 const BackgroundWallpaper = () => {
   const backgroundSettings = useCheckApplyingBackground();
@@ -10,6 +9,7 @@ const BackgroundWallpaper = () => {
     backgroundImages = [],
     backgroundOpacity = 1,
     backgroundBlur = 0,
+    slideInterval,
   } = backgroundSettings || {};
 
   if (
@@ -21,7 +21,11 @@ const BackgroundWallpaper = () => {
   return (
     <div className="absolute top-0 left-0 w-full h-full z-0 pointer-events-none overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-full bg-background z-0 pointer-events-none transition-opacity duration-1000 ease-in-out overflow-hidden">
-        <BackgroundImageSlider list={backgroundImages} blur={backgroundBlur} />
+        <BackgroundImageSlider
+          list={backgroundImages}
+          blur={backgroundBlur}
+          slideInterval={slideInterval! * 1000}
+        />
       </div>
       <span
         className="absolute top-0 left-0 w-full h-full bg-background z-[1] pointer-events-none"
@@ -36,9 +40,14 @@ const BackgroundWallpaper = () => {
 interface BackgroundImageSliderProps {
   list: string[];
   blur?: number;
+  slideInterval: number;
 }
 const BackgroundImageSlider = memo(
-  ({ list, blur = 0 }: BackgroundImageSliderProps) => {
+  ({
+    list,
+    blur = 0,
+    slideInterval = defaultSettings.slideInterval! * 1000,
+  }: BackgroundImageSliderProps) => {
     const [currentIndex, setCurrentIndex] = useState<number>(0);
 
     const imagesLength = list.length;
@@ -48,10 +57,10 @@ const BackgroundImageSlider = memo(
 
       const interval = setInterval(() => {
         setCurrentIndex((prev) => (prev + 1) % imagesLength);
-      }, SLIDE_INTERVAL);
+      }, slideInterval);
 
       return () => clearInterval(interval);
-    }, [imagesLength]);
+    }, [imagesLength, slideInterval]);
 
     return (
       <>

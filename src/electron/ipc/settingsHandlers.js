@@ -7,7 +7,7 @@ const imageExtensions = [".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp"];
 
 function getImageFilesFromFolder(folderPath) {
   try {
-    const allFiles = fs.readdirSync(folderPath)?.slice(0, 6);
+    const allFiles = fs.readdirSync(folderPath)?.slice(0, 30);
 
     const imageFiles = allFiles.filter((file) => {
       const ext = path.extname(file).toLowerCase();

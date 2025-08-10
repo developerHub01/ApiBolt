@@ -19,11 +19,15 @@ export const selectSettingBackground = createSelector(
         backgroundImages: globalSettings.backgroundImages,
         backgroundBlur: globalSettings.backgroundBlur,
         backgroundOpacity: globalSettings.backgroundOpacity,
+        slideInterval: globalSettings.slideInterval,
+        maxNumberOfImages: globalSettings.maxNumberOfImages,
       },
       local: {
         backgroundImages: localSettings?.backgroundImages,
         backgroundBlur: localSettings?.backgroundBlur,
         backgroundOpacity: localSettings?.backgroundOpacity,
+        slideInterval: localSettings?.slideInterval,
+        maxNumberOfImages: localSettings?.maxNumberOfImages,
       },
     };
   }

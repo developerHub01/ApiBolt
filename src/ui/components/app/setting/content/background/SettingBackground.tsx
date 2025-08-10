@@ -3,6 +3,8 @@ import SettingBackgroundImages from "@/components/app/setting/content/background
 import SettingBackgroundBlur from "@/components/app/setting/content/background/SettingBackgroundBlur";
 import SettingBackgroundOpacity from "@/components/app/setting/content/background/SettingBackgroundOpacity";
 import SettingBackgroundOptionWrapper from "@/components/app/setting/content/background/SettingBackgroundOptionWrapper";
+import SettingBackgroundMaxNumberOfImages from "@/components/app/setting/content/background/SettingBackgroundMaxNumberOfImages";
+import SettingBackgroundSlideInterval from "@/components/app/setting/content/background/SettingBackgroundSlideInterval";
 
 const SettingBackground = () => {
   return (
@@ -12,6 +14,8 @@ const SettingBackground = () => {
         <SettingBackgroundOptionWrapper>
           <SettingBackgroundOpacity />
           <SettingBackgroundBlur />
+          <SettingBackgroundMaxNumberOfImages />
+          <SettingBackgroundSlideInterval />
         </SettingBackgroundOptionWrapper>
       </div>
     </SettingItem>

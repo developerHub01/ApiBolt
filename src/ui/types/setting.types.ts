@@ -7,6 +7,8 @@ export interface SettingsInterface {
   backgroundImages: Array<string>;
   backgroundOpacity: number;
   backgroundBlur: number;
+  slideInterval?: number | null; // in milliseconds
+  maxNumberOfImages?: number | null;
   zoomLevel: number;
   isZoomable: number;
   codeFontSize: number;
@@ -26,7 +28,10 @@ export interface SettingsTotalInterface {
 
 export type SettingsType = "default" | "global" | "custom";
 
-export type UpdateBackgroundImagePayloadMethodType = "upload" | "remove" | "default";
+export type UpdateBackgroundImagePayloadMethodType =
+  | "upload"
+  | "remove"
+  | "default";
 
 export interface UpdateBackgroundImagePayloadInterface {
   projectId?: string | null;

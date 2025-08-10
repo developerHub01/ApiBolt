@@ -7,6 +7,8 @@ const useCheckApplyingBackground = (): {
   backgroundImages: Array<string>;
   backgroundOpacity: number;
   backgroundBlur: number;
+  slideInterval: number;
+  maxNumberOfImages: number;
 } | null => {
   const activeProjectId = useAppSelector(selectActiveProjectId);
   const { global, local } = useAppSelector(selectSettingBackground);
@@ -24,12 +26,24 @@ const useCheckApplyingBackground = (): {
       ? (local.backgroundBlur ?? global.backgroundBlur)
       : global.backgroundBlur) ?? defaultSettings.backgroundBlur;
 
+  const maxNumberOfImages =
+    (activeProjectId
+      ? (local.maxNumberOfImages ?? global.maxNumberOfImages)
+      : global.maxNumberOfImages) ?? defaultSettings.maxNumberOfImages!;
+
+  const slideInterval =
+    (activeProjectId
+      ? (local.slideInterval ?? global.slideInterval)
+      : global.slideInterval) ?? defaultSettings.slideInterval!;
+
   if (!backgroundImages?.length) return null;
-  
+
   return {
-    backgroundImages,
+    backgroundImages: backgroundImages.slice(0, maxNumberOfImages),
     backgroundOpacity,
     backgroundBlur,
+    maxNumberOfImages,
+    slideInterval,
   };
 };
 
