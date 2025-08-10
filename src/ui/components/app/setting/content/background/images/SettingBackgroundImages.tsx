@@ -9,6 +9,8 @@ import { defaultSettings } from "@/constant/settings.constant";
 import { senitizeValue } from "@/utils/settings.utils";
 import SettingBackgroundImage from "./SettingBackgroundImage";
 import { Button } from "@/components/ui/button";
+import useCheckApplyingSettingScopeBackgroundImages from "@/hooks/setting/use-check-applying-setting-scope-background-images";
+import { cn } from "@/lib/utils";
 
 const SettingBackgroundImages = () => {
   const { activeTab } = useSetting();
@@ -18,6 +20,7 @@ const SettingBackgroundImages = () => {
   const backgroundImagesLocal = useAppSelector(
     (state) => state.setting.settings?.backgroundImages
   );
+  const backgroundImages = useCheckApplyingSettingScopeBackgroundImages();
 
   const { value, settingType, handleChange, handleChangeSettingType } =
     useGlobalLocalBgImages({
@@ -31,8 +34,15 @@ const SettingBackgroundImages = () => {
     defaultSettings.backgroundImages
   ) as SettingBackgroundImagesValueType;
 
+  const isHideMoreData =
+    !Array.isArray(backgroundImages) || !backgroundImages.length;
+
   return (
-    <SettingItemHorizontalLayout className="flex-col gap-4 justify-center border-b py-2.5">
+    <SettingItemHorizontalLayout
+      className={cn("flex-col gap-4 justify-center border-b py-2.5", {
+        "border-none": isHideMoreData,
+      })}
+    >
       <SettingItemHorizontalLayout className="items-center gap-2">
         <p className="flex-1">Choose Background images</p>
         <SettingType value={settingType} onChange={handleChangeSettingType} />

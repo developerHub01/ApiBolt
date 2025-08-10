@@ -1,5 +1,5 @@
 import type React from "react";
-import useCheckApplyingBackgroundImages from "@/hooks/setting/use-check-applying-setting-scope-background-images";
+import useCheckApplyingSettingScopeBackgroundImages from "@/hooks/setting/use-check-applying-setting-scope-background-images";
 
 interface SettingBackgroundOptionWrapperProps {
   children?: React.ReactNode;
@@ -8,7 +8,7 @@ interface SettingBackgroundOptionWrapperProps {
 const SettingBackgroundOptionWrapper = ({
   children,
 }: SettingBackgroundOptionWrapperProps) => {
-  const backgroundImages = useCheckApplyingBackgroundImages();
+  const backgroundImages = useCheckApplyingSettingScopeBackgroundImages();
 
   if (!Array.isArray(backgroundImages) || !backgroundImages.length) return null;
 

@@ -14,7 +14,7 @@ interface Props {
 const SettingItem = ({ children, id, title, className = "" }: Props) => {
   return (
     <AccordionItem value={id} className={className}>
-      <AccordionTrigger className="hover:no-underline cursor-pointer text-lg">
+      <AccordionTrigger className="hover:no-underline cursor-pointer text-base">
         {title}
       </AccordionTrigger>
       <AccordionContent className="flex flex-col gap-4 text-balance">
