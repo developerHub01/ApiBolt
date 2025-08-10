@@ -119,7 +119,7 @@ export const settingTable = sqliteTable("setting_table", {
   backgroundOpacity: real(),
   backgroundBlur: int(),
   maxNumberOfImages: int(),
-  slideInterval: real(),
+  slideInterval: int(),
   zoomLevel: real(),
   isZoomable: int({ mode: boolean }),
   codeFontSize: int(),

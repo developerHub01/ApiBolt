@@ -77,9 +77,9 @@ const SlideIntervalSlider = ({
 
   return (
     <div className="w-full max-w-2xs flex flex-col justify-center items-center p-4 gap-3">
-      <p className="text-center">{slideIntervalValue}</p>
+      <p className="text-center">{slideIntervalValue} seconds</p>
       <div className="w-full flex justify-center items-center gap-3">
-        <p>{minBackgroundslideInterval}</p>
+        <p>{minBackgroundslideInterval}s</p>
         <Slider
           defaultValue={[defaultValue]}
           value={[slideIntervalValue]}
@@ -90,7 +90,7 @@ const SlideIntervalSlider = ({
           onValueChange={handleOnChange}
           onValueCommit={(value) => onChange(value[0])}
         />
-        <p>{maxBackgroundslideInterval}</p>
+        <p>{maxBackgroundslideInterval}s</p>
       </div>
     </div>
   );

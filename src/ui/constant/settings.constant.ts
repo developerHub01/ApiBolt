@@ -13,7 +13,7 @@ export const maxBackgroundOpacity = 1;
 export const minBackgroundMaxNumberOfImages = 1;
 export const maxBackgroundMaxNumberOfImages = 30;
 export const defaultBackgroundMaxNumberOfImages = 6;
-export const minBackgroundslideInterval = 3;
+export const minBackgroundslideInterval = 1;
 export const maxBackgroundslideInterval = 15;
 export const defaultBackgroundslideInterval = 5;
 
