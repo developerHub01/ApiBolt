@@ -25,14 +25,7 @@ const useCheckApplyingBackground = (): {
       : global.backgroundBlur) ?? defaultSettings.backgroundBlur;
 
   if (!backgroundImages?.length) return null;
-
-  console.log({
-    activeProjectId,
-    backgroundImages,
-    backgroundOpacity,
-    backgroundBlur,
-  });
-
+  
   return {
     backgroundImages,
     backgroundOpacity,

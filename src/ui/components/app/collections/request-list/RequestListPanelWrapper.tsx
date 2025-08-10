@@ -53,7 +53,7 @@ const RequestListPanelWrapper = memo(() => {
       defaultSize={30}
       minSize={15}
       maxSize={40}
-      className="backdrop-blur-xs w-full"
+      className="backdrop-blur-xs w-full bg-background/30"
       style={{
         maxWidth: "40vw",
       }}
