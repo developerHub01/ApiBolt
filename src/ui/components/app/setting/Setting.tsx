@@ -21,7 +21,7 @@ const Setting = () => {
   return (
     <SettingProvider>
       <AnimatedDialog isOpen={isSettingOpen} onClose={handleClose}>
-        <AnimatedDialogContentWrapper>
+        <AnimatedDialogContentWrapper className="border">
           <SettingTop />
           <SettingContent />
           <SettingBottom />
