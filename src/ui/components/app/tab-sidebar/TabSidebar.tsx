@@ -1,4 +1,4 @@
-import {  useCallback, type DragEvent } from "react";
+import { useCallback, type DragEvent } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import TabItem from "@/components/app/tab-sidebar/TabItem";
 import { cn } from "@/lib/utils";
@@ -61,6 +61,7 @@ const TabSidebar = () => {
           transition={{ duration: 0.3, ease: "easeInOut" }}
           className={cn(
             "h-full flex flex-col absolute right-0 top-0 z-40 gap-0.5 shadow-2xl border-l border-muted-foreground/20",
+            "bg-background/30",
             "backdrop-blur-xs hover:backdrop-blur-md transition-all duration-150",
             {
               "right-0 border-l": layoutTypes === "ltr",
@@ -93,6 +94,5 @@ const TabSidebar = () => {
     </TabSidebarWrapper>
   );
 };
-
 
 export default TabSidebar;

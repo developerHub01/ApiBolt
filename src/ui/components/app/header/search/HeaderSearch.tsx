@@ -170,7 +170,7 @@ const HeaderSearch = () => {
         </PopoverTrigger>
         <PopoverContent
           onPointerDown={(e) => e.stopPropagation()}
-          className="lg:w-xl md:w-96 w-72 bg-transparent backdrop-blur-sm px-0 py-2 border rounded-lg"
+          className="lg:w-xl md:w-96 w-72 bg-background/30 backdrop-blur-sm px-0 py-2 border rounded-lg"
           sideOffset={12}
         >
           <SearchResult

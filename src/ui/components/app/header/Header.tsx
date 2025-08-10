@@ -7,7 +7,7 @@ import SettingButton from "@/components/app/header/SettingButton";
 const Header = () => {
   return (
     <Wrapper>
-      <p className="justify-start flex-1 select-none text-lg md:text-xl font-bold tracking-wide px-2 py-1.5">
+      <p className="justify-start flex-1 select-none text-lg md:text-xl font-bold tracking-wide px-2.5 py-1.5">
         ApiBolt
       </p>
       <div className="w-full flex-[2] flex justify-center items-center">
@@ -27,7 +27,7 @@ interface WrapperProps {
 
 const Wrapper = ({ children }: WrapperProps) => (
   <div
-    className="bg-accent/80 flex justify-center gap-2 min-h-12 items-center"
+    className="bg-accent/80 flex justify-center gap-2 min-h-[50px] items-center border-b"
     style={{
       ...(isElectron()
         ? ({
