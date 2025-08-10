@@ -1,26 +1,13 @@
-import SettingItemHorizontalLayout from "@/components/app/setting/content/SettingItemHorizontalLayout";
 import {
   defaultSettings,
   maxBackgroundBlur,
+  minBackgroundBlur,
 } from "@/constant/settings.constant";
 import { useAppSelector } from "@/context/redux/hooks";
 import { useSetting } from "@/context/setting/SettingProvider";
-import SettingType from "@/components/app/setting/SettingType";
 import useGlobalLocalSettingv1 from "@/hooks/setting/use-global-local-settingv1";
 import { senitizeValue } from "@/utils/settings.utils";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
-const blurList = Array.from({ length: maxBackgroundBlur + 1 })
-  .map((_, index) => index)
-  .map(String);
+import SettingContextBasedLayout from "@/components/app/setting/content/SettingContextBasedLayout";
 
 const SettingBackgroundBlur = () => {
   const { activeTab } = useSetting();
@@ -44,51 +31,23 @@ const SettingBackgroundBlur = () => {
       key: "backgroundBlur",
     });
 
-  const senitizedValue = senitizeValue(value, defaultSettings.backgroundBlur);
+  const senitizedValue = Number(
+    senitizeValue(value, defaultSettings.backgroundBlur) ?? 0
+  );
 
   return (
-    <SettingItemHorizontalLayout className="items-center gap-2">
-      <p className="flex-1">Adjust background blur</p>
-      <SettingType value={settingType} onChange={handleChangeSettingType} />
-      {settingType === "custom" && (
-        <OpacitySelector
-          defaultValue={String(defaultSettings.backgroundBlur)}
-          value={String(senitizedValue)}
-          onChange={handleChange}
-        />
-      )}
-    </SettingItemHorizontalLayout>
+    <SettingContextBasedLayout
+      label="Adjust background blur"
+      settingType={settingType}
+      handleChangeSettingType={handleChangeSettingType}
+      defaultValue={defaultSettings.backgroundBlur}
+      value={senitizedValue}
+      onChange={handleChange}
+      min={minBackgroundBlur}
+      max={maxBackgroundBlur}
+      suffixLable="px"
+    />
   );
 };
-
-interface OpacitySelectorProps {
-  value: string;
-  defaultValue: string;
-  onChange: (value?: string) => void;
-}
-
-const OpacitySelector = ({
-  value,
-  defaultValue,
-  onChange,
-}: OpacitySelectorProps) => (
-  <Select value={value} onValueChange={onChange}>
-    <SelectTrigger className="w-full max-w-36" size="sm">
-      <SelectValue placeholder="Background Blur" />
-    </SelectTrigger>
-    <SelectContent>
-      <SelectGroup>
-        <SelectLabel>Background Blur</SelectLabel>
-        {blurList.map((size: string) => (
-          <SelectItem key={size} value={size}>
-            {size === String(defaultValue)
-              ? `Default (${size}px)`
-              : `${size}px`}
-          </SelectItem>
-        ))}
-      </SelectGroup>
-    </SelectContent>
-  </Select>
-);
 
 export default SettingBackgroundBlur;

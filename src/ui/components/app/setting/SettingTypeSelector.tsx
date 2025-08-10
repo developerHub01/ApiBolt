@@ -8,22 +8,22 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useSetting } from "@/context/setting/SettingProvider";
-import type { SettingsType } from "@/types/setting.types";
+import type { SettingType } from "@/types/setting.types";
 
-const globalSettingsTypeList: Array<SettingsType> = ["default", "custom"];
+const globalSettingsTypeList: Array<SettingType> = ["default", "custom"];
 
-const localSettingsTypeList: Array<SettingsType> = [
+const localSettingsTypeList: Array<SettingType> = [
   "default",
   "global",
   "custom",
 ];
 
 interface Props {
-  value: SettingsType;
-  onChange: (value: SettingsType) => void;
+  value: SettingType;
+  onChange: (value: SettingType) => void;
 }
 
-const SettingType = memo(({ value = "default", onChange }: Props) => {
+const SettingTypeSelector = memo(({ value = "default", onChange }: Props) => {
   const { activeTab } = useSetting();
 
   const list =
@@ -47,4 +47,4 @@ const SettingType = memo(({ value = "default", onChange }: Props) => {
   );
 });
 
-export default SettingType;
+export default SettingTypeSelector;

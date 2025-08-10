@@ -9,7 +9,7 @@ import SettingBackgroundSlideInterval from "@/components/app/setting/content/bac
 const SettingBackground = () => {
   return (
     <SettingItem id="background" title="Background Images">
-      <div className="w-full flex flex-col gap-4">
+      <div className="w-full flex flex-col">
         <SettingBackgroundImages />
         <SettingBackgroundOptionWrapper>
           <SettingBackgroundOpacity />

@@ -26,7 +26,7 @@ export interface SettingsTotalInterface {
   settings: ProjectSettingsInterface;
 }
 
-export type SettingsType = "default" | "global" | "custom";
+export type SettingType = "default" | "global" | "custom";
 
 export type UpdateBackgroundImagePayloadMethodType =
   | "upload"

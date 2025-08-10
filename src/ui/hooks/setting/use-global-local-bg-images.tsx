@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import type {
-  SettingsType,
+  SettingType,
   UpdateBackgroundImagePayloadMethodType,
 } from "@/types/setting.types";
 import type { TSettingTab } from "@/context/setting/SettingProvider";
@@ -30,15 +30,15 @@ const useGlobalLocalBgImages = ({
 }: UseGlobalLocalBgImagesProps): {
   value: SettingBackgroundImagesValueType;
   handleChange: (method?: UpdateBackgroundImagePayloadMethodType) => void;
-  handleChangeSettingType: (value: SettingsType) => void;
-  settingType: SettingsType;
+  handleChangeSettingType: (value: SettingType) => void;
+  settingType: SettingType;
 } => {
   const dispatch = useAppDispatch();
-  const [settingType, setSettingType] = useState<SettingsType>("default");
+  const [settingType, setSettingType] = useState<SettingType>("default");
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
 
   useEffect(() => {
-    let type: SettingsType = "custom";
+    let type: SettingType = "custom";
 
     if (activeTab === "project") {
       if (!localSetting) type = "global";
@@ -97,7 +97,7 @@ const useGlobalLocalBgImages = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUpdate]);
 
-  const handleChangeSettingType = useCallback((value: SettingsType) => {
+  const handleChangeSettingType = useCallback((value: SettingType) => {
     setSettingType(value);
 
     /**

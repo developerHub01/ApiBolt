@@ -64,7 +64,7 @@ const SettingIsZoomable = () => {
   );
 
   return (
-    <SettingItemHorizontalLayout>
+    <SettingItemHorizontalLayout className="py-2.5">
       <p className="flex-1">Allow keyboard shortcuts to zoom in/out</p>
       {activeTab === "project" ? (
         <ZoomableOptionSelector

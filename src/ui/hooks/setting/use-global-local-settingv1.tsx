@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import type { SettingsType } from "@/types/setting.types";
+import type { SettingType } from "@/types/setting.types";
 import { useAppDispatch } from "@/context/redux/hooks";
 import type { TSettingTab } from "@/context/setting/SettingProvider";
 import { updateSettings } from "@/context/redux/setting/setting-thunk";
@@ -26,15 +26,15 @@ const useGlobalLocalSettingv1 = ({
 }: useGlobalLocalSettingv1Props): {
   value: unknown;
   handleChange: (value?: unknown) => void;
-  handleChangeSettingType: (value: SettingsType) => void;
-  settingType: SettingsType;
+  handleChangeSettingType: (value: SettingType) => void;
+  settingType: SettingType;
 } => {
   const dispatch = useAppDispatch();
-  const [settingType, setSettingType] = useState<SettingsType>("default");
+  const [settingType, setSettingType] = useState<SettingType>("default");
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
 
   useEffect(() => {
-    let type: SettingsType = "custom";
+    let type: SettingType = "custom";
 
     if (activeTab === "project") {
       if (!localSetting) type = "global";
@@ -91,7 +91,7 @@ const useGlobalLocalSettingv1 = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUpdate]);
 
-  const handleChangeSettingType = useCallback((value: SettingsType) => {
+  const handleChangeSettingType = useCallback((value: SettingType) => {
     setSettingType(value);
     // if (value === "custom") return;
     setIsUpdate(true);

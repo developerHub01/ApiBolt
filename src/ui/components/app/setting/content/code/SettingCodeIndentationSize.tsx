@@ -1,23 +1,14 @@
-import SettingItemHorizontalLayout from "@/components/app/setting/content/SettingItemHorizontalLayout";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useAppSelector } from "@/context/redux/hooks";
 import { useSetting } from "@/context/setting/SettingProvider";
-import SettingType from "@/components/app/setting/SettingType";
-import { defaultSettings } from "@/constant/settings.constant";
+import {
+  defaultIndentationSize,
+  defaultSettings,
+  maxIndentationSize,
+  minIndentationSize,
+} from "@/constant/settings.constant";
 import useGlobalLocalSettingv1 from "@/hooks/setting/use-global-local-settingv1";
 import { senitizeValue } from "@/utils/settings.utils";
-
-const indentationList = Array.from({ length: 7 })
-  .map((_, index) => index + 2)
-  .map(String);
+import SettingContextBasedLayout from "@/components/app/setting/content/SettingContextBasedLayout";
 
 const SettingCodeIndentationSize = () => {
   const { activeTab } = useSetting();
@@ -41,48 +32,23 @@ const SettingCodeIndentationSize = () => {
       key: "indentationSize",
     });
 
-  const senitizedValue = senitizeValue(value, defaultSettings.indentationSize);
+  const senitizedValue = Number(
+    senitizeValue(value, defaultSettings.indentationSize)
+  );
 
   return (
-    <SettingItemHorizontalLayout className="items-center gap-2">
-      <p className="flex-1">Adjust code indentation size</p>
-      <SettingType value={settingType} onChange={handleChangeSettingType} />
-      {settingType === "custom" && (
-        <IndentationSizeSelector
-          value={String(senitizedValue)}
-          onChange={handleChange}
-        />
-      )}
-    </SettingItemHorizontalLayout>
+    <SettingContextBasedLayout
+      label="Adjust code indentation size"
+      settingType={settingType}
+      handleChangeSettingType={handleChangeSettingType}
+      value={senitizedValue}
+      defaultValue={defaultIndentationSize}
+      min={minIndentationSize}
+      max={maxIndentationSize}
+      onChange={handleChange}
+      isLast
+    />
   );
 };
-
-interface IndentationSizeSelectorProps {
-  value: string;
-  onChange: (value?: string) => void;
-}
-
-const IndentationSizeSelector = ({
-  value,
-  onChange,
-}: IndentationSizeSelectorProps) => (
-  <Select value={value} onValueChange={onChange}>
-    <SelectTrigger className="w-full max-w-36" size="sm">
-      <SelectValue placeholder="Code Indentation Size" />
-    </SelectTrigger>
-    <SelectContent>
-      <SelectGroup>
-        <SelectLabel>Indentation size</SelectLabel>
-        {indentationList.map((size: string) => (
-          <SelectItem key={size} value={size}>
-            {size === String(defaultSettings.indentationSize)
-              ? `Default (${size})`
-              : `${size}`}
-          </SelectItem>
-        ))}
-      </SelectGroup>
-    </SelectContent>
-  </Select>
-);
 
 export default SettingCodeIndentationSize;

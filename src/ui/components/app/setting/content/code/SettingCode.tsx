@@ -5,7 +5,7 @@ import SettingCodeIndentationSize from "@/components/app/setting/content/code/Se
 const SettingCode = () => {
   return (
     <SettingItem id="code" title="Code Settings">
-      <div className="w-full flex flex-col gap-4">
+      <div className="w-full flex flex-col">
         <SettingCodeFontSize />
         <SettingCodeIndentationSize />
       </div>

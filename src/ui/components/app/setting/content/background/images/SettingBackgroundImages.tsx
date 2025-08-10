@@ -1,7 +1,7 @@
 import SettingItemHorizontalLayout from "@/components/app/setting/content/SettingItemHorizontalLayout";
 import { useAppSelector } from "@/context/redux/hooks";
 import { useSetting } from "@/context/setting/SettingProvider";
-import SettingType from "@/components/app/setting/SettingType";
+import SettingType from "@/components/app/setting/SettingTypeSelector";
 import useGlobalLocalBgImages, {
   type SettingBackgroundImagesValueType,
 } from "@/hooks/setting/use-global-local-bg-images";
@@ -32,7 +32,7 @@ const SettingBackgroundImages = () => {
   ) as SettingBackgroundImagesValueType;
 
   return (
-    <SettingItemHorizontalLayout className="flex-col gap-4 justify-center">
+    <SettingItemHorizontalLayout className="flex-col gap-4 justify-center border-b py-2.5">
       <SettingItemHorizontalLayout className="items-center gap-2">
         <p className="flex-1">Choose Background images</p>
         <SettingType value={settingType} onChange={handleChangeSettingType} />
