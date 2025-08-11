@@ -1,12 +1,12 @@
 import { useCallback, useState, type ChangeEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { X as CloseIcon } from "lucide-react";
-import { useProjectMenu } from "@/context/project/ProjectMenuProvider";
 import { useAppSelector } from "@/context/redux/hooks";
+import { useProject } from "@/context/project/ProjectProvider";
 
 const ProjectSearch = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const { handleSearchProjects } = useProjectMenu();
+  const { handleSearchProjects } = useProject();
   const projectListFromStore = useAppSelector(
     (state) => state.requestResponse.projectList
   );

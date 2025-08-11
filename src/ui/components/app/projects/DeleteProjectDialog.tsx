@@ -10,8 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import LoaderV1 from "@/components/LoaderV1";
-import { useAppDispatch } from "@/context/redux/hooks";
-import { createProject } from "@/context/redux/request-response/request-response-thunk";
+import { useAppSelector } from "@/context/redux/hooks";
 import {
   AnimatedDialog,
   AnimatedDialogBottom,
@@ -19,24 +18,39 @@ import {
   AnimatedDialogTop,
 } from "@/components/ui/animated-dialog";
 import { useProject } from "@/context/project/ProjectProvider";
+import { selectProjectById } from "@/context/redux/request-response/request-response-selector";
+import { Badge } from "@/components/ui/badge";
 
-const defaultName = "New Project";
+const defaultName = "";
 
-const AddProjectDialog = memo(() => {
-  const dispatch = useAppDispatch();
-  const { isCreateDialogOpen, handleChangeIsCreateDialogOpen } = useProject();
+const DeleteProjectDialog = memo(() => {
+  const {
+    deletionCandidate,
+    handleChangeDeletionCandidate,
+    handleDeleteProject,
+  } = useProject();
+  const projectDetails = useAppSelector(selectProjectById(deletionCandidate));
+  const projectName = projectDetails?.name;
   const [name, setName] = useState<string>(defaultName);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleCreate = useCallback(async () => {
+  const handleClose = useCallback(() => {
+    handleChangeDeletionCandidate();
+    setIsLoading(false);
+    setName(defaultName);
+  }, [handleChangeDeletionCandidate]);
+
+  const handleDelete = useCallback(async () => {
+    if (name.trim() !== projectName) return;
+
     setIsLoading(true);
-    const response = await dispatch(createProject(name)).unwrap();
+    const response = await handleDeleteProject();
     setIsLoading(false);
     setName(defaultName);
 
-    if (response) handleChangeIsCreateDialogOpen();
-    toast(response ? "Project Created Successfully!" : "Something went wrong!");
-  }, [dispatch, handleChangeIsCreateDialogOpen, name]);
+    if (response) handleClose();
+    toast(response ? "Project Deleted Successfully!" : "Something went wrong!");
+  }, [handleClose, handleDeleteProject, name, projectName]);
 
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -46,36 +60,36 @@ const AddProjectDialog = memo(() => {
     (e: KeyboardEvent<HTMLInputElement>) => {
       if (e.key === "Enter") {
         e.preventDefault();
-        handleCreate();
+        handleDelete();
       }
     },
-    [handleCreate]
+    [handleDelete]
   );
-  const handleClose = useCallback(() => {
-    handleChangeIsCreateDialogOpen(false);
-    setIsLoading(false);
-    setName(defaultName);
-  }, [handleChangeIsCreateDialogOpen]);
 
-  const isDisabled = isLoading || !name;
+  if (!projectName) return;
+
+  const isDisabled = isLoading || !name.trim() || name.trim() !== projectName;
 
   return (
-    <AnimatedDialog isOpen={isCreateDialogOpen} onClose={handleClose}>
+    <AnimatedDialog isOpen={Boolean(deletionCandidate)} onClose={handleClose}>
       <AnimatedDialogContentWrapper className="border max-h-[350px] max-w-[450px] md:max-w-[500px]">
         <AnimatedDialogTop className="flex flex-col gap-3 px-4 py-3">
-          <h3 className="text-lg leading-none font-semibold">New Project</h3>
+          <h3 className="text-lg leading-none font-semibold">Delete Project</h3>
           <p className="text-muted-foreground text-sm">
-            Create new project here
+            To delete project type{" "}
+            <Badge variant={"outline"} className="select-text">
+              {projectName}
+            </Badge>
           </p>
         </AnimatedDialogTop>
         <div className="flex-1 flex flex-col gap-3 px-4 py-5">
-          <Label htmlFor="name-1" className="font-normal text-sm">
+          <Label htmlFor="project-name" className="font-normal text-sm">
             Project Name
           </Label>
           <Input
-            id="name-1"
-            name="name"
-            placeholder="Project name..."
+            id="project-name"
+            name="project-name"
+            placeholder={projectName}
             value={name}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
@@ -86,8 +100,12 @@ const AddProjectDialog = memo(() => {
           <Button variant="outline" onClick={handleClose}>
             Close
           </Button>
-          <Button onClick={handleCreate} disabled={isDisabled}>
-            Create
+          <Button
+            variant={"destructive"}
+            onClick={handleDelete}
+            disabled={isDisabled}
+          >
+            Delete
           </Button>
         </AnimatedDialogBottom>
         <Loader isLoading={isLoading} />
@@ -107,4 +125,4 @@ const Loader = memo(({ isLoading }: LoaderProps) => {
   );
 });
 
-export default AddProjectDialog;
+export default DeleteProjectDialog;

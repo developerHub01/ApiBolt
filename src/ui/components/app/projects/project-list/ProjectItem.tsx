@@ -1,12 +1,10 @@
+import { useCallback, type MouseEvent } from "react";
 import { Button } from "@/components/ui/button";
+import { useProject } from "@/context/project/ProjectProvider";
 import { useAppDispatch } from "@/context/redux/hooks";
-import {
-  changeActiveProject,
-  deleteProject,
-} from "@/context/redux/request-response/request-response-thunk";
+import { changeActiveProject } from "@/context/redux/request-response/request-response-thunk";
 import { cn } from "@/lib/utils";
 import { Trash2 as DeleteIcon } from "lucide-react";
-import { useCallback, type MouseEvent } from "react";
 
 interface ProjectItemProps {
   id: string;
@@ -16,6 +14,7 @@ interface ProjectItemProps {
 
 const ProjectItem = ({ id, name, activeProjectId }: ProjectItemProps) => {
   const dispatch = useAppDispatch();
+  const { handleChangeDeletionCandidate } = useProject();
 
   const handleChangeActiveProject = useCallback(() => {
     dispatch(changeActiveProject(id));
@@ -24,9 +23,9 @@ const ProjectItem = ({ id, name, activeProjectId }: ProjectItemProps) => {
   const handleDeleteActiveProject = useCallback(
     (e: MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
-      dispatch(deleteProject(id));
+      handleChangeDeletionCandidate(id);
     },
-    [dispatch, id]
+    [handleChangeDeletionCandidate, id]
   );
 
   return (

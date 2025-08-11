@@ -1,14 +1,14 @@
-import { useProjectMenu } from "@/context/project/ProjectMenuProvider";
 import ProjectItem from "@/components/app/projects/project-list/ProjectItem";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAppSelector } from "@/context/redux/hooks";
 import Empty from "@/components/ui/empty";
+import { useProject } from "@/context/project/ProjectProvider";
 
 const ProjectList = () => {
   const projectListFromStore = useAppSelector(
     (state) => state.requestResponse.projectList
   );
-  const { projectList } = useProjectMenu();
+  const { projectList } = useProject();
   const activeProjectId = useAppSelector(
     (state) => state.requestResponse.activeProjectId
   );

@@ -6,42 +6,47 @@ import React, {
   useState,
 } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { changeActiveProject } from "@/context/redux/request-response/request-response-thunk";
+import {
+  changeActiveProject,
+  deleteProject,
+} from "@/context/redux/request-response/request-response-thunk";
 import type { ProjectInterface } from "@/types/request-response.types";
 
-interface ProjectMenuContext {
+interface ProjectContext {
   projectList: Array<ProjectInterface>;
   isCreateDialogOpen: boolean;
   handleChangeActiveProject: (value: string) => void;
   handleChangeIsCreateDialogOpen: (value?: boolean) => void;
   handleSearchProjects: (term: string) => void;
+  deletionCandidate?: string | null;
+  handleChangeDeletionCandidate: (value?: string | null) => void;
+  handleDeleteProject: () => Promise<boolean>;
 }
 
-const ProjectMenuContext = createContext<ProjectMenuContext | null>(null);
+const ProjectContext = createContext<ProjectContext | null>(null);
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const useProjectMenu = () => {
-  const context = useContext(ProjectMenuContext);
+export const useProject = () => {
+  const context = useContext(ProjectContext);
 
   if (!context) {
-    throw new Error(
-      "useProjectMenu must be used within a ProjectMenuProvider."
-    );
+    throw new Error("useProject must be used within a ProjectProvider.");
   }
 
   return context;
 };
 
-interface ProjectMenuProviderProps {
+interface ProjectProviderProps {
   children: React.ReactNode;
 }
 
-const ProjectMenuProvider = ({ children }: ProjectMenuProviderProps) => {
+const ProjectProvider = ({ children }: ProjectProviderProps) => {
   const dispatch = useAppDispatch();
   const projectListFromStore = useAppSelector(
     (state) => state.requestResponse.projectList
   );
 
+  const [deletionCandidate, setDeletionCandidate] = useState<string | null>();
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState<boolean>(false);
   const [projectList, setProjectList] = useState<Array<ProjectInterface>>([]);
 
@@ -73,19 +78,33 @@ const ProjectMenuProvider = ({ children }: ProjectMenuProviderProps) => {
     [projectListFromStore]
   );
 
+  const handleChangeDeletionCandidate = useCallback(
+    (value?: string | null) => setDeletionCandidate(value ?? null),
+    []
+  );
+
+  const handleDeleteProject = useCallback(async (): Promise<boolean> => {
+    if (!deletionCandidate) return false;
+
+    return await dispatch(deleteProject(deletionCandidate)).unwrap();
+  }, [deletionCandidate, dispatch]);
+
   return (
-    <ProjectMenuContext.Provider
+    <ProjectContext.Provider
       value={{
         projectList,
         handleChangeActiveProject,
         isCreateDialogOpen,
         handleChangeIsCreateDialogOpen,
         handleSearchProjects,
+        deletionCandidate,
+        handleChangeDeletionCandidate,
+        handleDeleteProject,
       }}
     >
       {children}
-    </ProjectMenuContext.Provider>
+    </ProjectContext.Provider>
   );
 };
 
-export default ProjectMenuProvider;
+export default ProjectProvider;

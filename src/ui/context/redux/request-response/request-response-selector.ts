@@ -68,6 +68,16 @@ export const selectActiveTabList = createSelector(
   }
 );
 
+export const selectProjectById = (id?: string | null) =>
+  createSelector(
+    [(state: RootState) => state.requestResponse.projectList],
+    (projectList): ProjectInterface | null => {
+      if (!id) return null;
+
+      return projectList.find((project) => project.id === id) ?? null;
+    }
+  );
+
 export const selectMetaData = (type: TMetaTableType | null) =>
   createSelector(
     [

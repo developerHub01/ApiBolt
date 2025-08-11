@@ -10,13 +10,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { Trash2 as DeleteIcon } from "lucide-react";
-import {
-  deleteProject,
-  updateProject,
-} from "@/context/redux/request-response/request-response-thunk";
+import { updateProject } from "@/context/redux/request-response/request-response-thunk";
+import { useProject } from "@/context/project/ProjectProvider";
 
 const ActiveProject = () => {
   const dispatch = useAppDispatch();
+  const { handleChangeDeletionCandidate } = useProject();
   const [name, setName] = useState("");
   const nameRef = useRef<HTMLInputElement>(null);
 
@@ -80,8 +79,8 @@ const ActiveProject = () => {
 
   const handleDelete = useCallback(() => {
     if (!activeProject) return;
-    dispatch(deleteProject(activeProject.id));
-  }, [activeProject, dispatch]);
+    handleChangeDeletionCandidate(activeProject.id);
+  }, [activeProject, handleChangeDeletionCandidate]);
 
   if (!activeProject) return null;
 
