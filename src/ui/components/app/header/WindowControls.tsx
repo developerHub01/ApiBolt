@@ -16,9 +16,7 @@ const WindowControls = () => {
   useEffect(() => {
     if (!isElectron()) return;
 
-    window.electronAPI.onWindowMaximizeChange((value) => {
-      setIsMaximized(value);
-    });
+    window.electronAPI.onWindowMaximizeChange((value) => setIsMaximized(value));
   }, []);
 
   return (
@@ -33,19 +31,20 @@ const WindowControls = () => {
       className="flex h-full"
     >
       <ActionButton id={"minimize"}>
-        <MinimizeIcon />
+        <MinimizeIcon size={18} />
       </ActionButton>
-      {isMaximized ? (
-        <ActionButton id={"unmaximize"}>
-          <UnMaximizeIcon />
-        </ActionButton>
-      ) : (
-        <ActionButton id={"maximize"}>
-          <MaximizeIcon />
-        </ActionButton>
-      )}
-      <ActionButton id={"close"}>
-        <CloseIcon />
+      <ActionButton id={isMaximized ? "unmaximize" : "maximize"}>
+        {isMaximized ? (
+          <UnMaximizeIcon size={18} />
+        ) : (
+          <MaximizeIcon size={18} />
+        )}
+      </ActionButton>
+      <ActionButton
+        id={"close"}
+        className="hover:bg-destructive hover:text-white"
+      >
+        <CloseIcon size={18} />
       </ActionButton>
     </div>
   );
@@ -55,14 +54,21 @@ interface ActionButtonProps {
   id: TWindowControl;
   children: React.ReactNode;
   onClick?: () => void;
+  className?: string;
 }
-const ActionButton = ({ children, id, onClick }: ActionButtonProps) => {
+const ActionButton = ({
+  children,
+  id,
+  onClick,
+  className = "",
+}: ActionButtonProps) => {
   return (
     <Button
       variant={"secondary"}
       className={cn(
         "rounded-none h-full aspect-square bg-transparent",
-        "hover:bg-foreground/10"
+        "hover:bg-foreground/10",
+        className
       )}
       onClick={async () => {
         await window.electronAPI.windowControls(id);
