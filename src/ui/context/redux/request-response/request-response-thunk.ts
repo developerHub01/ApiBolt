@@ -2,6 +2,7 @@ import {
   type AuthorizationPayloadInterface,
   type EnvironmentInterface,
   type EnvironmentPayloadInterface,
+  type HiddenHeadersCheckInterface,
   type ParamHeaderBuildPayloadInterface,
   type ProjectInterface,
   type RequestListItemInterface,
@@ -36,6 +37,7 @@ import {
   handleLoadParams,
   handleLoadProjectsList,
   handleLoadRequestList,
+  handleUpdateHiddenHeaders,
   // handleRemoveTab,
   // handleSetAPIKey,
   // handleSetBasicAuth,
@@ -810,7 +812,7 @@ export const deleteHeadersByRequestMetaId = createAsyncThunk<
   }
 );
 
-export const updateheaders = createAsyncThunk<
+export const updateHeaders = createAsyncThunk<
   boolean,
   {
     paramId: string;
@@ -844,6 +846,40 @@ export const checkAllHeadersByRequestMetaId = createAsyncThunk<
 
     if (response) dispatch(loadHeaders());
     return response;
+  }
+);
+
+export const updateHiddenHeaders = createAsyncThunk<
+  void,
+  {
+    keyName: keyof HiddenHeadersCheckInterface;
+  },
+  { dispatch: AppDispatch; state: RootState }
+>(
+  "request-response/updateHiddenHeaders",
+  async ({ keyName }, { dispatch, getState }) => {
+    const state = getState() as RootState;
+
+    if (!state.requestResponse.selectedTab) return;
+
+    const newValue = !state.requestResponse.hiddenHeaders?.[
+      state.requestResponse.selectedTab!
+    ]?.find((header) => header.isCheck);
+
+    const response =
+      await window.electronAPIHiddenHeadersCheckTableDB.updateHiddenHeadersCheck(
+        {
+          [keyName]: newValue,
+        }
+      );
+
+    if (response)
+      dispatch(
+        handleUpdateHiddenHeaders({
+          keyName,
+        })
+      );
+    return;
   }
 );
 

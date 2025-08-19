@@ -67,7 +67,6 @@ const MetaItemInput = memo(
           onBlur={handleBlur}
           className={cn(
             "w-full p-0.5 outline-none",
-            "focus:bg-background",
             className
           )}
           {...props}

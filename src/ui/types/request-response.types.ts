@@ -108,6 +108,14 @@ export interface ParamInterface<ValueT = string> {
   calculateDynamicly?: boolean;
 }
 
+export interface HiddenHeadersCheckInterface {
+  userAgent: boolean;
+  contentLength: boolean;
+  accept: boolean;
+  acceptEncoding: boolean;
+  connection: boolean;
+}
+
 export interface FormDataInterface
   extends ParamInterface<string | Array<File>> {
   contentType?: string;

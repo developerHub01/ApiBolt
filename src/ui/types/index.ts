@@ -88,7 +88,9 @@ declare global {
       updateSettings(
         payload: Partial<SettingsInterface | ProjectSettingsInterface>
       ): Promise<boolean>;
-      updateSettingsBackgroundImages(payload: UpdateBackgroundImagePayloadInterface): Promise<boolean>;
+      updateSettingsBackgroundImages(
+        payload: UpdateBackgroundImagePayloadInterface
+      ): Promise<boolean>;
     };
 
     electronAPIEnvironmentsDB: {
@@ -206,7 +208,7 @@ declare global {
         paramId: string
       ): Promise<Partial<HiddenHeadersCheckInterface>>;
       updateHiddenHeadersCheck(
-        requestOrFolderMetaId?: string
+        payload: Partial<HiddenHeadersCheckInterface>
       ): Promise<Partial<HiddenHeadersCheckInterface>>;
     };
   }

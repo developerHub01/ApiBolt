@@ -1,6 +1,6 @@
 import { type ChangeEvent, memo, useCallback } from "react";
 import { TableCell } from "@/components/ui/table";
-import { Plus as AddIcon, X as CloseIcon } from "lucide-react";
+import { Plus as AddIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -13,6 +13,8 @@ import { type TMetaTableType } from "@/context/collections/request/RequestMetaTa
 import MetaItemInput from "@/components/app/collections/request/request/meta-data/meta-table/MetaItemInput";
 import { handleRemoveFormDataFile } from "@/context/redux/request-response/request-response-slice";
 import { useAppDispatch } from "@/context/redux/hooks";
+import LockTooltip from "@/components/app/collections/request/request/meta-data/meta-table/LockTooltip";
+import FileTag from "@/components/app/collections/request/request/meta-data/meta-table/FileTag";
 
 interface MetaTableCellProps {
   keyType: string;
@@ -47,19 +49,24 @@ const MetaTableCell = memo(
     );
 
     return (
-      <TableCell className="p-1.5 relative overflow-visible min-w-auto md:min-w-24">
+      <TableCell
+        className={cn("p-1.5 relative overflow-visible min-w-auto md:min-w-24")}
+      >
         <Popover>
           <div className="w-full flex gap-1 items-center">
             {typeof value === "string" ||
             (Array.isArray(value) && !value.length) ? (
-              <MetaItemInput
-                keyType={keyType}
-                id={id}
-                value={Array.isArray(value) ? "" : value}
-                onBlur={onBlur}
-                disabled={prevent}
-                type={inputType}
-              />
+              <>
+                {keyType === "key" && prevent && <LockTooltip />}
+                <MetaItemInput
+                  keyType={keyType}
+                  id={id}
+                  value={Array.isArray(value) ? "" : value}
+                  onBlur={onBlur}
+                  disabled={prevent}
+                  type={inputType}
+                />
+              </>
             ) : (
               <PopoverTrigger asChild>
                 <FileTag
@@ -124,39 +131,5 @@ const MetaTableCell = memo(
   }
 );
 MetaTableCell.displayName = "Meta table cell";
-
-interface FileTagProps {
-  name: string;
-  onClose?: () => void;
-  className?: string;
-  [key: string]: unknown;
-}
-
-const FileTag = ({ name, onClose, className = "", ...props }: FileTagProps) => {
-  return (
-    <div
-      className={cn(
-        "bg-secondary/80 hover:bg-secondary rounded-sm flex items-center gap-1 p-0.5 w-60 select-none text-sm mx-auto",
-        className
-      )}
-      {...props}
-    >
-      <p className="text-muted-foreground w-full truncate">{name}</p>
-      {onClose && (
-        <>
-          <Button
-            size={"iconXs"}
-            variant={"ghost"}
-            onClick={onClose}
-            className="border-l-2 rounded-none"
-          >
-            <CloseIcon />
-          </Button>
-        </>
-      )}
-    </div>
-  );
-};
-FileTag.displayName = "File tag";
 
 export default MetaTableCell;

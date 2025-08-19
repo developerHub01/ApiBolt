@@ -8,6 +8,10 @@ import type {
 export const calculateIntoFixedPoint = (result: number, point: number = 1) =>
   Number(result.toFixed(point));
 
+export const normalizeText = (text: string) =>
+  // Convert to lowercase and remove anything that's not a letter or number
+  text.toLowerCase().replace(/[^a-z0-9]/g, "");
+
 export const getResponseType = (contentType: string) => {
   if (contentType.includes("application/json")) {
     return "JSON";

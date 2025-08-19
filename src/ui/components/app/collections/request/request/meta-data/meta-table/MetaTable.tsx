@@ -1,4 +1,4 @@
-import { memo, useEffect, useCallback } from "react";
+import { memo, useCallback } from "react";
 import {
   useCellListToShow,
   useGetTableData,
@@ -11,12 +11,14 @@ import { selectMetaData } from "@/context/redux/request-response/request-respons
 import { handleCheckToggleMetaData } from "@/context/redux/request-response/request-response-slice";
 import type {
   FormDataInterface,
+  HiddenHeadersCheckInterface,
   ParamInterface,
 } from "@/types/request-response.types";
 import {
   deleteHeaders,
   deleteParams,
-  updateheaders,
+  updateHeaders,
+  updateHiddenHeaders,
   updateParams,
 } from "@/context/redux/request-response/request-response-thunk";
 
@@ -45,13 +47,6 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
   const hiddenHeader = useAppSelector(selectMetaData("hiddenHeaders")) ?? [];
   const hiddenParams = useAppSelector(selectMetaData("hiddenParams")) ?? [];
 
-  console.log({ hiddenHeader });
-  console.log({ hiddenParams });
-
-  useEffect(() => {
-    console.log("Re-rendered==================");
-  });
-
   let data = tableData.data;
   const type = tableData.type;
 
@@ -74,8 +69,8 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
         type === "params"
           ? updateParams
           : type === "headers"
-            ? updateheaders
-            : updateheaders;
+            ? updateHeaders
+            : updateHeaders;
       dispatch(
         handler({
           paramId: id,
@@ -87,6 +82,26 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
     },
     [dispatch, type]
   );
+
+  const handleUpdateHiddenHeader = useCallback(
+    (keyName: string) => {
+      dispatch(
+        updateHiddenHeaders({
+          keyName: keyName as keyof HiddenHeadersCheckInterface,
+        })
+      );
+    },
+    [dispatch]
+  );
+
+  // const handleCheckToggle = useCallback( (id: string, value: boolean)=>{
+  //    const handler =
+  //       type === "params"
+  //         ? updateParams
+  //         : type === "headers"
+  //           ? updateHeaders
+  //           : updateHeaders;
+  // }, [])
 
   if (type === "headers" && showHiddenData)
     data = [...hiddenHeader, ...data].map(checkInputType);
@@ -106,6 +121,8 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
           handleCheckToggle={(id?: string) => {
             if (!param.prevent && id)
               return handleUpdate(id, "isCheck", !param.isCheck);
+            else if (param.prevent && id) handleUpdateHiddenHeader(param.id);
+
             dispatch(
               handleCheckToggleMetaData({
                 id,

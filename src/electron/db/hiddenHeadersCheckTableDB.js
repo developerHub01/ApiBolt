@@ -43,31 +43,29 @@ export const createHiddenHeadersCheck = async (payload = {}) => {
   }
 };
 
-export const updateHiddenHeadersCheck = async (
-  requestOrFolderMetaId,
-  payload
-) => {
+export const updateHiddenHeadersCheck = async (payload) => {
   if (!payload) return false;
 
   delete payload["id"];
   delete payload["requestOrFolderMetaId"];
+
+  const selectedTab = (await getTabList()).selectedTab;
+  if (!selectedTab) return false;
+
+  for (const key in payload)
+    if (typeof payload[key] === "boolean") payload[key] = payload[key] ? 1 : 0;
 
   try {
     const isExist = (
       await db
         .select()
         .from(hiddenHeadersCheckTable)
-        .where(
-          eq(
-            hiddenHeadersCheckTable.requestOrFolderMetaId,
-            requestOrFolderMetaId
-          )
-        )
+        .where(eq(hiddenHeadersCheckTable.requestOrFolderMetaId, selectedTab))
     )?.[0];
 
     if (!isExist)
       await createHiddenHeadersCheck({
-        requestOrFolderMetaId,
+        selectedTab,
       });
 
     const updated = await db
@@ -75,9 +73,7 @@ export const updateHiddenHeadersCheck = async (
       .set({
         ...payload,
       })
-      .where(
-        eq(hiddenHeadersCheckTable.requestOrFolderMetaId, requestOrFolderMetaId)
-      );
+      .where(eq(hiddenHeadersCheckTable.requestOrFolderMetaId, selectedTab));
     return updated?.changes > 0;
   } catch (error) {
     console.log(error);

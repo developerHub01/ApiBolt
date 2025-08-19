@@ -6,7 +6,7 @@ import { useAppSelector } from "@/context/redux/hooks";
 import { selectActiveMetaTab } from "@/context/redux/request-response/request-response-selector";
 
 const MetaDataContent = memo(() => {
-  const activeMetaTab = useAppSelector(selectActiveMetaTab);
+  const activeMetaTab = useAppSelector(selectActiveMetaTab) ?? "params";
 
   return (
     <div className="h-full p-2.5 pt-1">

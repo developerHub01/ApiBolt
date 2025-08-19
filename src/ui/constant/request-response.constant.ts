@@ -1,5 +1,10 @@
 import type { TMetaTableType } from "@/context/collections/request/RequestMetaTableProvider";
-import type { APIKeyInterface, BasicAuthInterface, EnvironmentInterface, JWTBearerAuthInterface } from "@/types/request-response.types";
+import type {
+  APIKeyInterface,
+  BasicAuthInterface,
+  EnvironmentInterface,
+  JWTBearerAuthInterface,
+} from "@/types/request-response.types";
 import { v4 as uuidv4 } from "uuid";
 
 export const generateNewMetaDataItem = (type?: TMetaTableType) => ({
@@ -69,34 +74,49 @@ export const defaultJWTBearerAuth: JWTBearerAuthInterface = {
 export const defaultFolderTitle: string = "New Folder";
 export const defaultFolderDescription: string = `# Heading one`;
 
+export const initialHiddenCookie = () => ({
+  id: uuidv4(),
+  key: "Cookie",
+  value: "",
+  description: "",
+  prevent: true,
+  calculateDynamicly: true,
+});
 export const initialHiddenHeaderData = () => [
   {
-    id: uuidv4(),
-    key: "Cookie",
+    id: "userAgent",
+    key: "User-Agent",
     value: "",
-    description: "",
     prevent: true,
+    isCheck: true,
     calculateDynamicly: true,
   },
   {
-    id: uuidv4(),
-    key: "User-Agent",
+    id: "contentLength",
+    key: "Content-Length",
     value: `${import.meta.env.VITE_APP_NAME}/${import.meta.env.VITE_APP_VERSION}`,
-    description: "",
     prevent: true,
+    isCheck: true,
   },
   {
-    id: uuidv4(),
+    id: "accept",
     key: "Accept",
     value: "*/*",
-    description: "",
     prevent: true,
+    isCheck: true,
   },
   {
-    id: uuidv4(),
+    id: "acceptEncoding",
+    key: "Accept-Encoding",
+    value: "gzip, deflate, br",
+    prevent: true,
+    isCheck: true,
+  },
+  {
+    id: "connection",
     key: "Connection",
     value: "keep-alive",
-    description: "",
     prevent: true,
+    isCheck: true,
   },
 ];

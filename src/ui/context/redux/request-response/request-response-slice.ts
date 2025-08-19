@@ -5,6 +5,7 @@ import {
   defaultFolderTitle,
   defaultJWTBearerAuth,
   generateNewMetaDataItem,
+  initialHiddenCookie,
   initialHiddenHeaderData,
   ResponsePanelMinLimit,
 } from "@/constant/request-response.constant";
@@ -23,7 +24,7 @@ import type {
   RequestListItemInterface,
   RequestListItemUpdatePayloadInterface,
   RequestResponseSizeInterface,
-  ResponseFileDataBackendInterface,
+  // ResponseFileDataBackendInterface,
   ResponseFolderDataInterface,
   ResponseInterface,
   TActiveTabType,
@@ -211,6 +212,7 @@ interface RequestResponseState {
   params: Record<string, Array<ParamInterface>>;
   hiddenParams: Record<string, Array<ParamInterface>>;
   headers: Record<string, Array<ParamInterface>>;
+  hiddenCookie: ParamInterface;
   hiddenHeaders: Record<string, Array<ParamInterface>>;
   binaryData: Record<string, File | null>;
   formData: Record<string, Array<FormDataInterface>>;
@@ -278,6 +280,7 @@ const initialState: RequestResponseState = {
   params: {},
   hiddenParams: {},
   headers: {},
+  hiddenCookie: initialHiddenCookie(),
   hiddenHeaders: {},
   binaryData: {},
   formData: {},
@@ -586,9 +589,13 @@ export const requestResponseSlice = createSlice({
       state,
       action: PayloadAction<Array<ParamHeaderPayloadInterface>>
     ) => {
-      if (!state.selectedTab) return;
+      const selectedTab = state.selectedTab;
+      if (!selectedTab) return;
 
-      state.headers[state.selectedTab] = action.payload;
+      state.headers[selectedTab] = action.payload;
+
+      if (!state.hiddenHeaders[selectedTab])
+        state.hiddenHeaders[selectedTab] = initialHiddenHeaderData();
     },
     handleSetHeaders: (
       state,
@@ -602,6 +609,27 @@ export const requestResponseSlice = createSlice({
       if (!id) return;
 
       state.headers[id] = headers;
+    },
+    handleUpdateHiddenHeaders: (
+      state,
+      action: PayloadAction<{
+        keyName: string;
+      }>
+    ) => {
+      const { keyName } = action.payload;
+      const selectedTab = state.selectedTab;
+
+      if (!selectedTab || !state.hiddenHeaders[selectedTab]) return;
+
+      state.hiddenHeaders[selectedTab].map((header: ParamInterface) => {
+        if (header.id === keyName) {
+          console.log(header);
+
+          header["isCheck"] = !header["isCheck"];
+        }
+
+        return header;
+      });
     },
     /* ================ Headers end =================== */
 
@@ -630,37 +658,35 @@ export const requestResponseSlice = createSlice({
 
       state.isResponseCollapsed[id] = !state.isResponseCollapsed[id];
     },
-    handleInitRequest: (
-      state,
-      action: PayloadAction<{
-        id: string;
-        payload?: ResponseFileDataBackendInterface;
-      }>
-    ) => {
-      const { id, payload } = action.payload;
-      if (!id) return;
-
-      if (state.loadedRequestList[id]) return;
-
-      /**
-       * If payload have that value then good else check if already loaded data or not if not then assign default value
-       * **/
-      state.activeMetaTab[id] = state.activeMetaTab[id] ?? "params";
-      state.apiUrl[id] = payload?.url ?? state.apiUrl[id] ?? "";
-      state.requestBodyType[id] = state.requestBodyType[id] ?? "none";
-      state.rawRequestBodyType[id] = state.rawRequestBodyType[id] ?? "text";
-      state.params[id] = payload?.params ?? state.params[id] ?? [];
-      state.hiddenParams[id] = state.hiddenParams[id] ?? [];
-      state.headers[id] = payload?.headers ?? state.headers[id] ?? [];
-      state.hiddenHeaders[id] =
-        state.hiddenHeaders[id] ?? initialHiddenHeaderData();
-      state.formData[id] = state.formData[id] ?? [];
-      state.xWWWFormUrlencodedData[id] =
-        payload?.body?.xWWWFormUrlencodedData ??
-        state.xWWWFormUrlencodedData[id] ??
-        [];
-      state.loadedRequestList[id] = true;
-    },
+    handleInitRequest: () =>
+      // state,
+      // action: PayloadAction<{
+      //   id: string;
+      //   payload?: ResponseFileDataBackendInterface;
+      // }>
+      {
+        // const { id, payload } = action.payload;
+        // if (!id) return;
+        // if (state.loadedRequestList[id]) return;
+        // /**
+        //  * If payload have that value then good else check if already loaded data or not if not then assign default value
+        //  * **/
+        // state.activeMetaTab[id] = state.activeMetaTab[id] ?? "params";
+        // state.apiUrl[id] = payload?.url ?? state.apiUrl[id] ?? "";
+        // state.requestBodyType[id] = state.requestBodyType[id] ?? "none";
+        // state.rawRequestBodyType[id] = state.rawRequestBodyType[id] ?? "text";
+        // state.params[id] = payload?.params ?? state.params[id] ?? [];
+        // state.hiddenParams[id] = state.hiddenParams[id] ?? [];
+        // state.headers[id] = payload?.headers ?? state.headers[id] ?? [];
+        // state.hiddenHeaders[id] =
+        //   state.hiddenHeaders[id] ?? initialHiddenHeaderData();
+        // state.formData[id] = state.formData[id] ?? [];
+        // state.xWWWFormUrlencodedData[id] =
+        //   payload?.body?.xWWWFormUrlencodedData ??
+        //   state.xWWWFormUrlencodedData[id] ??
+        //   [];
+        // state.loadedRequestList[id] = true;
+      },
     handleUpdateRequestResponseSelectedTab: (
       state,
       action: PayloadAction<string | null>
@@ -977,40 +1003,39 @@ export const requestResponseSlice = createSlice({
 
       state.isDownloadRequestWithBase64[selectedTab] = action.payload;
     },
-    handleClearRequestResponse: (
-      state,
-      action: PayloadAction<
-        | {
-            id?: string;
-          }
-        | undefined
-      >
-    ) => {
-      const id = action?.payload?.id ?? state.selectedTab;
-      if (!id) return;
-
-      delete state.isLoading[id];
-      delete state.isApiUrlError[id];
-      delete state.isResposneError[id];
-      state.apiUrl[id] = "";
-      state.params[id] = [];
-      state.headers[id] = [];
-      state.headers[id] = [];
-      // delete state.basicAuth[id];
-      // delete state.bearerTokenAuth[id];
-      // delete state.jwtBearerAuth[id];
-      // delete state.apiKeyAuth[id];
-      state.requestBodyType[id] = "none";
-      state.rawRequestBodyType[id] = "json";
-      state.formData[id] = [];
-      delete state.binaryData[id];
-      state.xWWWFormUrlencodedData[id] = [];
-      delete state.response[id];
-      delete state.requestSize[id];
-      delete state.responseSize[id];
-      state.hiddenParams[id] = [];
-      state.hiddenHeaders[id] = [];
-    },
+    handleClearRequestResponse: () =>
+      // state,
+      // action: PayloadAction<
+      //   | {
+      //       id?: string;
+      //     }
+      //   | undefined
+      // >
+      {
+        // const id = action?.payload?.id ?? state.selectedTab;
+        // if (!id) return;
+        // delete state.isLoading[id];
+        // delete state.isApiUrlError[id];
+        // delete state.isResposneError[id];
+        // state.apiUrl[id] = "";
+        // state.params[id] = [];
+        // state.headers[id] = [];
+        // state.headers[id] = [];
+        // // delete state.basicAuth[id];
+        // // delete state.bearerTokenAuth[id];
+        // // delete state.jwtBearerAuth[id];
+        // // delete state.apiKeyAuth[id];
+        // state.requestBodyType[id] = "none";
+        // state.rawRequestBodyType[id] = "json";
+        // state.formData[id] = [];
+        // delete state.binaryData[id];
+        // state.xWWWFormUrlencodedData[id] = [];
+        // delete state.response[id];
+        // delete state.requestSize[id];
+        // delete state.responseSize[id];
+        // state.hiddenParams[id] = [];
+        // state.hiddenHeaders[id] = [];
+      },
     handleAddMetaData: (
       state,
       action: PayloadAction<{
@@ -1369,6 +1394,7 @@ export const {
   handleChangeActiveMetaTab,
   handleSetParams,
   handleSetHeaders,
+  handleUpdateHiddenHeaders,
   handleSetResponse,
   handleSetFormData,
   handleSetXWWWFormUrlencodedData,

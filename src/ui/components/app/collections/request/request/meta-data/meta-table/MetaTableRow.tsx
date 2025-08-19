@@ -5,6 +5,7 @@ import { Trash2 as DeleteIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { TMetaTableType } from "@/context/collections/request/RequestMetaTableProvider";
 import MetaTableCell from "@/components/app/collections/request/request/meta-data/meta-table/MetaTableCell";
+import { cn } from "@/lib/utils";
 
 const calculateDynamicText = "<calculated when request is sent>";
 
@@ -67,14 +68,17 @@ const MetaTableRow = memo(
     return (
       <TableRow
         key={id}
-        className="[&>td]:border-r [&>td]:last:border-r-0 [&>td>input]:outline-none [&>td>div>input]:outline-none [&>td>input]:rounded-md [&>td>div>input]:rounded-md"
+        className={cn(
+          "[&>td]:border-r [&>td]:last:border-r-0 [&>td>input]:outline-none [&>td>div>input]:outline-none [&>td>input]:rounded-md [&>td>div>input]:rounded-md",
+          "focus-within:bg-accent/80 duration-75 transition-colors"
+        )}
       >
         <TableCell className="px-0">
           <div className="w-full flex justify-center items-center">
             <Checkbox
               className="cursor-pointer"
               id={`${type}-check-${id}`}
-              checked={isCheck}
+              checked={isCheck || preventCheck}
               disabled={preventCheck}
               onCheckedChange={handleCheckChange}
             />

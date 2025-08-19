@@ -39,7 +39,7 @@ const MetaDataTab = memo(() => {
   const params = useAppSelector(selectParams);
   const hiddenHeaders = useAppSelector(selectHiddenHeaders);
   const headers = useAppSelector(selectHeaders);
-
+  
   const tabListWithActivity = useMemo(
     () =>
       tabList
