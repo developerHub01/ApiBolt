@@ -1,7 +1,7 @@
-import React, { createContext, useCallback, useContext, useState } from "react";
+import React, { createContext, useCallback, useContext } from "react";
 import { useParams } from "react-router-dom";
-import { useAppDispatch } from "@/context/redux/hooks";
-import { handleChangeRawData } from "@/context/redux/request-response/request-response-slice";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import { updateRequestBodyRaw } from "@/context/redux/request-response/request-response-thunk";
 
 interface RequestBodyContext {
   handleChangeRawData: (data: string) => void;
@@ -31,18 +31,32 @@ interface RequestBodyProviderProps {
 const RequestBodyProvider = ({ children }: RequestBodyProviderProps) => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
-  const [codeLineWrap, setCodeLineWrap] = useState<boolean>(false);
+  const codeLineWrap = useAppSelector(
+    (state) =>
+      state.requestResponse.rawDataLineWrap?.[
+        state.requestResponse.selectedTab!
+      ] ?? true
+  );
 
   const handleToggleCodeLineWrap = useCallback(() => {
-    setCodeLineWrap((prev) => !prev);
-  }, []);
+    dispatch(
+      updateRequestBodyRaw({
+        lineWrap: !codeLineWrap,
+      })
+    );
+  }, [codeLineWrap, dispatch]);
 
   if (!id) return null;
 
   return (
     <RequestBodyContext.Provider
       value={{
-        handleChangeRawData: (raw) => dispatch(handleChangeRawData({ raw })),
+        handleChangeRawData: (rawData) =>
+          dispatch(
+            updateRequestBodyRaw({
+              rawData,
+            })
+          ),
         codeLineWrap,
         handleToggleCodeLineWrap,
       }}

@@ -206,3 +206,18 @@ export const hiddenHeadersCheckTable = sqliteTable(
     connection: int({ mode: boolean }).default(1),
   }
 );
+
+export const bodyRawTable = sqliteTable("body_raw_table", {
+  id: text()
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  requestOrFolderMetaId: text()
+    .notNull()
+    .unique()
+    .references(() => requestOrFolderMetaTable.id, {
+      onDelete: "cascade",
+    }),
+  type: text().default("json") /* text, javascript, json, html, xml */,
+  rawData: text().default(""),
+  lineWrap: int({ mode: boolean }).default(1),
+});

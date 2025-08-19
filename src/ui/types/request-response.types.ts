@@ -247,3 +247,10 @@ export interface JWTBearerAuthInterface {
   headerPrefix: string;
   addTo: TAuthAddTo;
 }
+
+export type BodyRawInterface = {
+  requestOrFolderMetaId?: string;
+  type: TContentType /* text, javascript, json, html, xml */;
+  rawData: string;
+  lineWrap: boolean;
+};

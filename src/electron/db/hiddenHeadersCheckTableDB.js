@@ -53,7 +53,7 @@ export const updateHiddenHeadersCheck = async (payload) => {
   if (!selectedTab) return false;
 
   for (const key in payload)
-    if (typeof payload[key] === "boolean") payload[key] = payload[key] ? 1 : 0;
+    if (typeof payload[key] === "boolean") payload[key] = Number(payload[key]);
 
   try {
     const isExist = (

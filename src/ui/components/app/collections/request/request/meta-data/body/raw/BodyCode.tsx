@@ -22,11 +22,14 @@ const codeFormatter = async (
 const BodyCode = memo(() => {
   const { handleChangeRawData, codeLineWrap } = useRequestBody();
   const rawData = useAppSelector(
-    (state) => state.requestResponse.rawData[state.requestResponse.selectedTab!]
+    (state) =>
+      state.requestResponse.rawData[state.requestResponse.selectedTab!] ?? ""
   );
   const rawRequestBodyType = useAppSelector(
     (state) =>
-      state.requestResponse.rawRequestBodyType[state.requestResponse.selectedTab!]
+      state.requestResponse.rawRequestBodyType[
+        state.requestResponse.selectedTab!
+      ]
   );
 
   const [code, setCode] = useState<string>(rawData);
@@ -48,7 +51,7 @@ const BodyCode = memo(() => {
   );
 
   return (
-    <ScrollArea className="flex-1 min-h-0 h-full overflow-hidden [&>div>div]:h-full relative">
+    <ScrollArea className="flex-1 min-h-0 h-full overflow-hidden [&>div>div]:h-full relative bg-background/50 rounded-md">
       <Code
         code={code}
         contentType={rawRequestBodyType}

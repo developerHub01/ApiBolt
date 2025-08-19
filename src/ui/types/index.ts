@@ -1,6 +1,7 @@
 import type {
   APIPayloadBody,
   AuthorizationPayloadInterface,
+  BodyRawInterface,
   EnvironmentInterface,
   EnvironmentPayloadInterface,
   HiddenHeadersCheckInterface,
@@ -210,6 +211,16 @@ declare global {
       updateHiddenHeadersCheck(
         payload: Partial<HiddenHeadersCheckInterface>
       ): Promise<Partial<HiddenHeadersCheckInterface>>;
+    };
+
+    electronAPIBodyRawDB: {
+      getBodyRaw(requestId?: string): Promise<BodyRawInterface>;
+      createBodyRaw(
+        payload: Partial<BodyRawInterface> &
+          Required<Pick<BodyRawInterface, "requestOrFolderMetaId">>
+      ): Promise<Partial<boolean>>;
+      /* if in payload requestOrFolderMetaId not exist then it will pick active tab from backend */
+      updateBodyRaw(payload: Partial<BodyRawInterface>): Promise<boolean>;
     };
   }
 }

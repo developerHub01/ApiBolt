@@ -32,6 +32,7 @@ import type {
   TBearerToken,
   TContentType,
   TRequestBodyType,
+  BodyRawInterface,
 } from "@/types/request-response.types";
 import { parseUrlParams } from "@/utils";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
@@ -203,6 +204,7 @@ interface RequestResponseState {
   isLoading: Record<string, boolean>;
   apiUrl: Record<string, string>;
   rawData: Record<string, string>;
+  rawDataLineWrap: Record<string, boolean>;
   response: Record<string, ResponseInterface | null>;
   requestSize: Record<string, RequestResponseSizeInterface>;
   responseSize: Record<string, RequestResponseSizeInterface>;
@@ -271,6 +273,7 @@ const initialState: RequestResponseState = {
   isLoading: {},
   apiUrl: {},
   rawData: {},
+  rawDataLineWrap: {},
   response: {},
   requestSize: {},
   responseSize: {},
@@ -287,6 +290,7 @@ const initialState: RequestResponseState = {
   xWWWFormUrlencodedData: {},
   isDownloadRequestWithBase64: {},
   requestIdShouldFetch: "",
+
   authType: "no-auth",
   apiKeyAuth: defaultApiKey,
   basicAuth: defaultBasicAuth,
@@ -632,6 +636,19 @@ export const requestResponseSlice = createSlice({
       });
     },
     /* ================ Headers end =================== */
+
+    /* ================ BodyRaw start =================== */
+    handleLoadBodyRaw: (state, action: PayloadAction<BodyRawInterface>) => {
+      const payload = action.payload;
+      const selectedTab = state.selectedTab;
+
+      if (!selectedTab) return;
+
+      state.rawData[selectedTab] = payload.rawData ?? "";
+      state.rawRequestBodyType[selectedTab] = payload.type ?? "json";
+      state.rawDataLineWrap[selectedTab] = payload.lineWrap ?? true;
+    },
+    /* ================ BodyRaw end =================== */
 
     handleToggleCollapse: (
       state,
@@ -1395,6 +1412,9 @@ export const {
   handleSetParams,
   handleSetHeaders,
   handleUpdateHiddenHeaders,
+
+  handleLoadBodyRaw,
+
   handleSetResponse,
   handleSetFormData,
   handleSetXWWWFormUrlencodedData,

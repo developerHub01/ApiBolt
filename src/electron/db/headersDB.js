@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { db } from "./index.js";
-import { headersTable, hiddenHeadersCheckTable } from "./schema.js";
+import { headersTable } from "./schema.js";
 import { getTabList } from "./tabsDB.js";
 import {
   createHiddenHeadersCheck,

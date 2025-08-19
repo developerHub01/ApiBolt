@@ -1,5 +1,6 @@
 import {
   type AuthorizationPayloadInterface,
+  type BodyRawInterface,
   type EnvironmentInterface,
   type EnvironmentPayloadInterface,
   type HiddenHeadersCheckInterface,
@@ -32,6 +33,7 @@ import {
   handleCreateRestApiBasic,
   handleCreateSingleRequest,
   handleDeleteAllRequestOrFolder,
+  handleLoadBodyRaw,
   handleLoadEnvironmentsList,
   handleLoadHeaders,
   handleLoadParams,
@@ -885,6 +887,68 @@ export const updateHiddenHeaders = createAsyncThunk<
 
 /* ==============================
 ======== Headers end =============
+================================= */
+
+/* ==============================
+======== Body raw start =============
+================================= */
+export const loadRequestBodyRaw = createAsyncThunk<
+  void,
+  void | { requestId?: string | null | undefined; once?: boolean },
+  { dispatch: AppDispatch; state: RootState }
+>(
+  "request-response/loadRequestBodyRaw",
+  async (payload, { dispatch, getState }) => {
+    if (!payload) payload = {};
+
+    const once = payload.once ?? false;
+
+    const state = getState() as RootState;
+
+    const selectedTab = state.requestResponse.selectedTab;
+    if (
+      !selectedTab ||
+      (typeof state.requestResponse.rawData[selectedTab] !== "undefined" &&
+        once)
+    )
+      return;
+
+    const response = await window.electronAPIBodyRawDB.getBodyRaw();
+
+    console.log({ response });
+
+    if (response) dispatch(handleLoadBodyRaw(response));
+    return;
+  }
+);
+export const updateRequestBodyRaw = createAsyncThunk<
+  void,
+  Omit<Partial<BodyRawInterface>, "requestOrFolderMetaId">,
+  { dispatch: AppDispatch; state: RootState }
+>(
+  "request-response/updateRequestBodyRaw",
+  async (payload, { dispatch, getState }) => {
+    if (!payload) payload = {};
+
+    const state = getState() as RootState;
+
+    const selectedTab = state.requestResponse.selectedTab;
+
+    const response = await window.electronAPIBodyRawDB.updateBodyRaw({
+      ...payload,
+      ...(selectedTab
+        ? {
+            requestOrFolderMetaId: selectedTab,
+          }
+        : {}),
+    });
+
+    if (response) dispatch(loadRequestBodyRaw());
+    return;
+  }
+);
+/* ==============================
+======== Body raw end =============
 ================================= */
 
 export const loadRequestData = createAsyncThunk<

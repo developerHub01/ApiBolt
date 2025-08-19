@@ -165,3 +165,12 @@ contextBridge.exposeInMainWorld("electronAPIHiddenHeadersCheckTableDB", {
   updateHiddenHeadersCheck: async (...payload) =>
     await ipcRenderer.invoke("updateHiddenHeadersCheck", ...payload),
 });
+
+contextBridge.exposeInMainWorld("electronAPIBodyRawDB", {
+  getBodyRaw: async (...payload) =>
+    await ipcRenderer.invoke("getBodyRaw", ...payload),
+  createBodyRaw: async (...payload) =>
+    await ipcRenderer.invoke("createBodyRaw", ...payload),
+  updateBodyRaw: async (...payload) =>
+    await ipcRenderer.invoke("updateBodyRaw", ...payload),
+});

@@ -20,6 +20,7 @@ import { getZoomLevel } from "./db/settingsDB.js";
 import { paramsHandlers } from "./ipc/paramsHandlers.js";
 import { headersHandlers } from "./ipc/headersHandlers.js";
 import { hiddenHeadersCheckTableHandler } from "./ipc/hiddenHeadersCheckTableHandler.js";
+import { bodyRawHandler } from "./ipc/bodyRawHandler.js";
 
 export const userDataDir = app.getPath("userData");
 
@@ -82,6 +83,7 @@ app.whenReady().then(() => {
   paramsHandlers();
   headersHandlers();
   hiddenHeadersCheckTableHandler();
+  bodyRawHandler();
 });
 
 app.on("window-all-closed", () => {

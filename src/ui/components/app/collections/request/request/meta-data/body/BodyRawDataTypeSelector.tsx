@@ -8,10 +8,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { handleChangeRawRequestBodyType } from "@/context/redux/request-response/request-response-slice";
 import type { TContentType } from "@/types/request-response.types";
+import { updateRequestBodyRaw } from "@/context/redux/request-response/request-response-thunk";
 
-const rawDataTypeList = [
+const rawDataTypeList: Array<{
+  id: TContentType;
+  label: string;
+}> = [
   {
     id: "text",
     label: "Text",
@@ -38,17 +41,21 @@ const BodyRawDataTypeSelector = memo(() => {
   const dispatch = useAppDispatch();
   const requestBodyType = useAppSelector(
     (state) =>
-      state.requestResponse.requestBodyType[state.requestResponse.selectedTab!]
+      state.requestResponse.requestBodyType[
+        state.requestResponse.selectedTab!
+      ] ?? "none"
   );
   const rawRequestBodyType = useAppSelector(
     (state) =>
-      state.requestResponse.rawRequestBodyType[state.requestResponse.selectedTab!]
+      state.requestResponse.rawRequestBodyType[
+        state.requestResponse.selectedTab!
+      ] ?? "json"
   );
 
   const handleChange = useCallback(
     (type: TContentType) => {
       dispatch(
-        handleChangeRawRequestBodyType({
+        updateRequestBodyRaw({
           type,
         })
       );

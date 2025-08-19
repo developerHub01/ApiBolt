@@ -1,10 +1,11 @@
+import { useEffect } from "react";
 import { Outlet, useParams } from "react-router-dom";
 import RequestResponseProvider from "@/context/collections/request/RequestResponseProvider";
-import { useEffect } from "react";
 import { useAppDispatch } from "@/context/redux/hooks";
 import {
   loadHeaders,
   loadParams,
+  loadRequestBodyRaw,
 } from "@/context/redux/request-response/request-response-thunk";
 
 const RequestLayout = () => {
@@ -12,15 +13,9 @@ const RequestLayout = () => {
   const { id: requestId } = useParams();
 
   useEffect(() => {
-    dispatch(
-      loadParams({
-        once: true,
-      })
-    );
-    dispatch(
-      loadHeaders({
-        once: true,
-      })
+    const payload = { once: true };
+    [loadParams, loadHeaders, loadRequestBodyRaw].forEach((action) =>
+      dispatch(action(payload))
     );
   }, [dispatch, requestId]);
 
