@@ -94,13 +94,12 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
   );
 
   const handleUpdateHiddenHeader = useCallback(
-    (keyName: string) => {
+    (keyName: string) =>
       dispatch(
         updateHiddenHeaders({
           keyName: keyName as keyof HiddenHeadersCheckInterface,
         })
-      );
-    },
+      ),
     [dispatch]
   );
 
