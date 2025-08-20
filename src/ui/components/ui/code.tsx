@@ -93,7 +93,7 @@ interface CodeProps {
 
 const Code = ({
   contentType,
-  fontSize = 14,
+  fontSize = 16,
   code,
   onChange,
   onBlur,

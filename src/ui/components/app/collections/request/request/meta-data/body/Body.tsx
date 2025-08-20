@@ -1,17 +1,13 @@
 import BodyDetails from "@/components/app/collections/request/request/meta-data/body/BodyDetails";
-import BodyRawDataTypeSelector from "@/components/app/collections/request/request/meta-data/body/BodyRawDataTypeSelector";
 import BodyTypeSelector from "@/components/app/collections/request/request/meta-data/body/BodyTypeSelector";
-import CodeFormatter from "@/components/app/collections/request/request/meta-data/body/raw/CodeFormatter";
+import BodyRight from "@/components/app/collections/request/request/meta-data/body/BodyRight";
 
 const Body = () => {
   return (
     <div className="h-full flex flex-col gap-3">
       <div className="flex gap-3 items-center flex-wrap">
         <BodyTypeSelector />
-        <BodyRawDataTypeSelector />
-
-        {/* format code block */}
-        <CodeFormatter />
+        <BodyRight />
       </div>
       <BodyDetails />
     </div>

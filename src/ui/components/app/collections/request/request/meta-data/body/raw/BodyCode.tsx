@@ -6,6 +6,7 @@ import Code from "@/components/ui/code";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useAppSelector } from "@/context/redux/hooks";
 import type { TContentType } from "@/types/request-response.types";
+import { cn } from "@/lib/utils";
 
 const codeFormatter = async (
   rawRequestBodyType: TContentType,
@@ -51,7 +52,12 @@ const BodyCode = memo(() => {
   );
 
   return (
-    <ScrollArea className="flex-1 min-h-0 h-full overflow-hidden [&>div>div]:h-full relative bg-background/50 rounded-md">
+    <ScrollArea
+      className={cn(
+        "flex-1 min-h-0 h-full overflow-hidden [&>div>div]:h-full relative bg-background/10 rounded-md border",
+        "backdrop-blur-xs"
+      )}
+    >
       <Code
         code={code}
         contentType={rawRequestBodyType}

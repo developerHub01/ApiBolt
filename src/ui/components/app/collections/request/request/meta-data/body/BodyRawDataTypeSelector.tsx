@@ -71,7 +71,7 @@ const BodyRawDataTypeSelector = memo(() => {
       value={rawRequestBodyType ?? rawDataTypeList[0].id}
       onValueChange={handleChange}
     >
-      <SelectTrigger className="border-none" size="sm">
+      <SelectTrigger className="border-none ml-auto" size="sm">
         <SelectValue placeholder="Select Raw Body Type" />
       </SelectTrigger>
       <SelectContent>

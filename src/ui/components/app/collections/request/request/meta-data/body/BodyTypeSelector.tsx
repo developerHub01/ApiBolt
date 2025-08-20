@@ -30,12 +30,12 @@ const bodyList: Array<{
     label: "x-www-form-urlencoded",
   },
   {
-    id: "raw",
-    label: "raw",
-  },
-  {
     id: "binary",
     label: "binary",
+  },
+  {
+    id: "raw",
+    label: "raw",
   },
 ];
 

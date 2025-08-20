@@ -22,7 +22,7 @@ const ResizableWrapper = ({ children }: ResizableWrapperProps) => {
     const currentLayout = layout.getLayout();
     if (!currentLayout || currentLayout.length !== 2) return;
 
-    const safeLayout = isResponseCollapsed ? [99, 1] : [30, 70];
+    const safeLayout = isResponseCollapsed ? [99, 1] : [50, 50];
     layout.setLayout(safeLayout);
   }, [isResponseCollapsed]);
 
