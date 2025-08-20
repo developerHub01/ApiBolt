@@ -188,7 +188,9 @@ declare global {
     };
 
     electronAPIHeadersDB: {
-      getHeaders(id?: string): Promise<Array<ParamHeaderPayloadInterface>>;
+      getHeaders(
+        requestOrFolderMetaId?: string
+      ): Promise<Array<ParamHeaderPayloadInterface>>;
       deleteHeaders(paramId: string): Promise<boolean>;
       deleteHeadersByRequestMetaId(
         requestOrFolderMetaId?: string
@@ -241,6 +243,26 @@ declare global {
         payload: Partial<RequestTabInterface>
       ): Promise<boolean>;
       deleteRequestMetaTab(requestId?: string): Promise<boolean>;
+    };
+
+    electronAPIBodyXWWWFormUrlencodedDB: {
+      getBodyXWWWFormUrlencoded(
+        requestOrFolderMetaId?: string
+      ): Promise<Array<ParamHeaderPayloadInterface>>;
+      deleteBodyXWWWFormUrlencoded(formId: string): Promise<boolean>;
+      deleteBodyXWWWFormUrlencodedByRequestMetaId(
+        requestOrFolderMetaId?: string
+      ): Promise<boolean>;
+      createBodyXWWWFormUrlencoded(
+        payload: Partial<ParamHeaderBuildPayloadInterface>
+      ): Promise<boolean>;
+      updateBodyXWWWFormUrlencoded(
+        formId: string,
+        payload: Partial<ParamHeaderBuildPayloadInterface>
+      ): Promise<boolean>;
+      checkAllBodyXWWWFormUrlencodedByRequestMetaId(
+        requestOrFolderMetaId?: string
+      ): Promise<boolean>;
     };
   }
 }

@@ -196,3 +196,24 @@ contextBridge.exposeInMainWorld("electronAPIRequestMetaTabDB", {
   deleteRequestMetaTab: async (...payload) =>
     await ipcRenderer.invoke("deleteRequestMetaTab", ...payload),
 });
+
+contextBridge.exposeInMainWorld("electronAPIBodyXWWWFormUrlencodedDB", {
+  getBodyXWWWFormUrlencoded: async (...payload) =>
+    await ipcRenderer.invoke("getBodyXWWWFormUrlencoded", ...payload),
+  deleteBodyXWWWFormUrlencoded: async (...payload) =>
+    await ipcRenderer.invoke("deleteBodyXWWWFormUrlencoded", ...payload),
+  deleteBodyXWWWFormUrlencodedByRequestMetaId: async (...payload) =>
+    await ipcRenderer.invoke(
+      "deleteBodyXWWWFormUrlencodedByRequestMetaId",
+      ...payload
+    ),
+  createBodyXWWWFormUrlencoded: async (...payload) =>
+    await ipcRenderer.invoke("createBodyXWWWFormUrlencoded", ...payload),
+  updateBodyXWWWFormUrlencoded: async (...payload) =>
+    await ipcRenderer.invoke("updateBodyXWWWFormUrlencoded", ...payload),
+  checkAllBodyXWWWFormUrlencodedByRequestMetaId: async (...payload) =>
+    await ipcRenderer.invoke(
+      "checkAllBodyXWWWFormUrlencodedByRequestMetaId",
+      ...payload
+    ),
+});

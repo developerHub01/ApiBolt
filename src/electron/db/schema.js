@@ -207,6 +207,21 @@ export const hiddenHeadersCheckTable = sqliteTable(
   }
 );
 
+export const requestMetaTabTable = sqliteTable("request_meta_tab_table", {
+  id: text()
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  requestOrFolderMetaId: text()
+    .notNull()
+    .unique()
+    .references(() => requestOrFolderMetaTable.id, {
+      onDelete: "cascade",
+    }),
+  activeMetaTab: text() /* "params" | "headers" | "body" */,
+  requestBodyType:
+    text() /* "none" | "form-data" | "x-www-form-urlencoded" | "raw" | "binary" */,
+});
+
 export const bodyRawTable = sqliteTable("body_raw_table", {
   id: text()
     .primaryKey()
@@ -235,17 +250,20 @@ export const bodyBinaryTable = sqliteTable("body_binary_table", {
   path: text(),
 });
 
-export const requestMetaTabTable = sqliteTable("request_meta_tab_table", {
+export const bodyXWWWFormUrlencodedTable = sqliteTable("body_x_www_form_urlencoded_table", {
   id: text()
     .primaryKey()
     .$defaultFn(() => uuidv4()),
+  isCheck: int({ mode: boolean }).default(1),
+  key: text().notNull().default(""),
+  value: text().notNull().default(""),
+  description: text().notNull().default(""),
   requestOrFolderMetaId: text()
     .notNull()
-    .unique()
     .references(() => requestOrFolderMetaTable.id, {
       onDelete: "cascade",
     }),
-  activeMetaTab: text() /* "params" | "headers" | "body" */,
-  requestBodyType:
-    text() /* "none" | "form-data" | "x-www-form-urlencoded" | "raw" | "binary" */,
+  createdAt: text()
+    .notNull()
+    .default(sql`(current_timestamp)`),
 });

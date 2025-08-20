@@ -14,8 +14,19 @@ import type {
   HiddenHeadersCheckInterface,
   ParamInterface,
 } from "@/types/request-response.types";
-import { deleteParams, updateParams } from "@/context/redux/request-response/thunks/params";
-import { deleteHeaders, updateHeaders, updateHiddenHeaders } from "@/context/redux/request-response/thunks/headers";
+import {
+  deleteParams,
+  updateParams,
+} from "@/context/redux/request-response/thunks/params";
+import {
+  deleteHeaders,
+  updateHeaders,
+  updateHiddenHeaders,
+} from "@/context/redux/request-response/thunks/headers";
+import {
+  deleteBodyXWWWFormUrlencoded,
+  updateBodyXWWWFormUrlencoded,
+} from "@/context/redux/request-response/thunks/body-x-www-form-urlencoded";
 
 const headersToPreventCheckList = ["Cookie", "Authorization"];
 
@@ -52,7 +63,9 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
           ? deleteParams
           : type === "headers"
             ? deleteHeaders
-            : deleteHeaders;
+            : type === "x-www-form-urlencoded"
+              ? deleteBodyXWWWFormUrlencoded
+              : deleteBodyXWWWFormUrlencoded;
       dispatch(handler(id));
     },
     [dispatch, type]
@@ -65,7 +78,9 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
           ? updateParams
           : type === "headers"
             ? updateHeaders
-            : updateHeaders;
+            : type === "x-www-form-urlencoded"
+              ? updateBodyXWWWFormUrlencoded
+              : updateBodyXWWWFormUrlencoded;
       dispatch(
         handler({
           paramId: id,

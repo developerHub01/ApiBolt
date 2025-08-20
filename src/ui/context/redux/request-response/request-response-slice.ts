@@ -634,6 +634,31 @@ export const requestResponseSlice = createSlice({
     },
     /* ================ Headers end =================== */
 
+    /* ================ BodyXWWWFormUrlencoded start =================== */
+    handleLoadBodyXWWWFormUrlencoded: (
+      state,
+      action: PayloadAction<Array<ParamHeaderPayloadInterface>>
+    ) => {
+      const selectedTab = state.selectedTab;
+      if (!selectedTab) return;
+
+      state.xWWWFormUrlencodedData[selectedTab] = action.payload;
+    },
+    handleSetBodyXWWWFormUrlencoded: (
+      state,
+      action: PayloadAction<{
+        id?: string;
+        bodyXWWWFormUrlencoded: Array<ParamInterface>;
+      }>
+    ) => {
+      const { bodyXWWWFormUrlencoded } = action.payload;
+      const id = action.payload.id ?? state.selectedTab;
+      if (!id) return;
+
+      state.xWWWFormUrlencodedData[id] = bodyXWWWFormUrlencoded;
+    },
+    /* ================ BodyXWWWFormUrlencoded end =================== */
+
     /* ================ BodyRaw start =================== */
     handleLoadBodyRaw: (state, action: PayloadAction<BodyRawInterface>) => {
       const payload = action.payload;
@@ -1416,6 +1441,9 @@ export const {
   handleSetParams,
   handleSetHeaders,
   handleUpdateHiddenHeaders,
+
+  handleLoadBodyXWWWFormUrlencoded,
+  handleSetBodyXWWWFormUrlencoded,
 
   handleLoadBodyRaw,
   handleLoadBodyBinary,

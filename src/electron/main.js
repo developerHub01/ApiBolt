@@ -23,6 +23,7 @@ import { hiddenHeadersCheckTableHandler } from "./ipc/hiddenHeadersCheckTableHan
 import { bodyRawHandler } from "./ipc/bodyRawHandler.js";
 import { bodyBinaryHandler } from "./ipc/bodyBinaryHandler.js";
 import { requestMetaTabHandler } from "./ipc/requestMetaTabHandler.js";
+import { bodyXWWWFormUrlencodedHandlers } from "./ipc/bodyXWWWFormUrlencodedHandlers.js";
 
 export const userDataDir = app.getPath("userData");
 
@@ -88,6 +89,7 @@ app.whenReady().then(() => {
   bodyRawHandler();
   bodyBinaryHandler();
   requestMetaTabHandler();
+  bodyXWWWFormUrlencodedHandlers();
 });
 
 app.on("window-all-closed", () => {
