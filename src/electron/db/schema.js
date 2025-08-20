@@ -250,13 +250,35 @@ export const bodyBinaryTable = sqliteTable("body_binary_table", {
   path: text(),
 });
 
-export const bodyXWWWFormUrlencodedTable = sqliteTable("body_x_www_form_urlencoded_table", {
+export const bodyXWWWFormUrlencodedTable = sqliteTable(
+  "body_x_www_form_urlencoded_table",
+  {
+    id: text()
+      .primaryKey()
+      .$defaultFn(() => uuidv4()),
+    isCheck: int({ mode: boolean }).default(1),
+    key: text().notNull().default(""),
+    value: text().notNull().default(""),
+    description: text().notNull().default(""),
+    requestOrFolderMetaId: text()
+      .notNull()
+      .references(() => requestOrFolderMetaTable.id, {
+        onDelete: "cascade",
+      }),
+    createdAt: text()
+      .notNull()
+      .default(sql`(current_timestamp)`),
+  }
+);
+
+export const bodyFormDataTable = sqliteTable("body_form_data_table", {
   id: text()
     .primaryKey()
     .$defaultFn(() => uuidv4()),
   isCheck: int({ mode: boolean }).default(1),
   key: text().notNull().default(""),
   value: text().notNull().default(""),
+  valueType: text().notNull().default("text") /* text | file */,
   description: text().notNull().default(""),
   requestOrFolderMetaId: text()
     .notNull()

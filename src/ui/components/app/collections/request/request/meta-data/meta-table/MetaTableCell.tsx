@@ -1,4 +1,4 @@
-import { type ChangeEvent, memo, useCallback } from "react";
+import { memo, useCallback } from "react";
 import { TableCell } from "@/components/ui/table";
 import { Plus as AddIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,18 +11,21 @@ import {
 import { cn } from "@/lib/utils";
 import { type TMetaTableType } from "@/context/collections/request/RequestMetaTableProvider";
 import MetaItemInput from "@/components/app/collections/request/request/meta-data/meta-table/MetaItemInput";
-import { handleRemoveFormDataFile } from "@/context/redux/request-response/request-response-slice";
 import { useAppDispatch } from "@/context/redux/hooks";
 import LockTooltip from "@/components/app/collections/request/request/meta-data/meta-table/LockTooltip";
 import FileTag from "@/components/app/collections/request/request/meta-data/meta-table/FileTag";
+import {
+  deleteBodyFormDataFile,
+  updateBodyFormDataFile,
+} from "@/context/redux/request-response/thunks/body-form-data";
 
 interface MetaTableCellProps {
   keyType: string;
   type?: TMetaTableType;
   id: string;
-  value: string | Array<File>;
+  value: string | Array<string>;
   inputType: "text" | "password";
-  onBlur: (id: string, key: string, value: string | File) => void;
+  onBlur: (id: string, key: string, value: string) => void;
   prevent?: boolean;
 }
 
@@ -38,14 +41,19 @@ const MetaTableCell = memo(
   }: MetaTableCellProps) => {
     const dispatch = useAppDispatch();
     const handleUploadFile = useCallback(
-      (e: ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
+      () => dispatch(updateBodyFormDataFile(id)),
+      [dispatch, id]
+    );
 
-        if (!file) return;
-
-        onBlur(id, keyType, file);
-      },
-      [onBlur, id, keyType]
+    const handleDeleteFormFile = useCallback(
+      (id: string, index: number) =>
+        dispatch(
+          deleteBodyFormDataFile({
+            id,
+            index,
+          })
+        ),
+      [dispatch]
     );
 
     return (
@@ -97,26 +105,19 @@ const MetaTableCell = memo(
                         {value.map((file, index) => (
                           <FileTag
                             key={index}
-                            name={file.name ?? "unknown"}
-                            onClose={() =>
-                              dispatch(
-                                handleRemoveFormDataFile({
-                                  id,
-                                  index,
-                                })
-                              )
-                            }
+                            name={file ?? "unknown"}
+                            onClose={() => handleDeleteFormFile(id, index)}
                           />
                         ))}
                       </div>
                     </ScrollArea>
                   )}
                   <label className="cursor-pointer">
-                    <input type="file" hidden onChange={handleUploadFile} />
                     <Button
                       className="w-full pointer-events-none"
                       size={"sm"}
                       variant={"secondary"}
+                      onClick={handleUploadFile}
                     >
                       <AddIcon /> Add new file
                     </Button>

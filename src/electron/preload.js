@@ -217,3 +217,22 @@ contextBridge.exposeInMainWorld("electronAPIBodyXWWWFormUrlencodedDB", {
       ...payload
     ),
 });
+
+contextBridge.exposeInMainWorld("electronAPIBodyFormDataDB", {
+  getBodyFormData: async (...payload) =>
+    await ipcRenderer.invoke("getBodyFormData", ...payload),
+  deleteBodyFormData: async (...payload) =>
+    await ipcRenderer.invoke("deleteBodyFormData", ...payload),
+  deleteBodyFormDataByRequestMetaId: async (...payload) =>
+    await ipcRenderer.invoke("deleteBodyFormDataByRequestMetaId", ...payload),
+  deleteBodyFormDataFile: async (...payload) =>
+    await ipcRenderer.invoke("deleteBodyFormDataFile", ...payload),
+  createBodyFormData: async (...payload) =>
+    await ipcRenderer.invoke("createBodyFormData", ...payload),
+  updateBodyFormData: async (...payload) =>
+    await ipcRenderer.invoke("updateBodyFormData", ...payload),
+  updateBodyFormDataFile: async (...payload) =>
+    await ipcRenderer.invoke("updateBodyFormDataFile", ...payload),
+  checkAllBodyFormDataByRequestMetaId: async (...payload) =>
+    await ipcRenderer.invoke("checkAllBodyFormDataByRequestMetaId", ...payload),
+});

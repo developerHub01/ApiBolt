@@ -2,17 +2,14 @@ import { memo, useCallback } from "react";
 import MetaTable from "@/components/app/collections/request/request/meta-data/meta-table/MetaTable";
 import AddNewData from "@/components/AddNewData";
 import { useAppDispatch } from "@/context/redux/hooks";
-import { handleAddMetaData } from "@/context/redux/request-response/request-response-slice";
+import { addBodyFormData } from "@/context/redux/request-response/thunks/body-form-data";
 
 const FormDataContent = memo(() => {
   const dispatch = useAppDispatch();
-  const handleAddNewMetaData = useCallback(() => {
-    dispatch(
-      handleAddMetaData({
-        type: "form-data",
-      })
-    );
-  }, [dispatch]);
+  const handleAddNewMetaData = useCallback(
+    () => dispatch(addBodyFormData()),
+    [dispatch]
+  );
 
   return (
     <>

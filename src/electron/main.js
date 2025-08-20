@@ -24,6 +24,7 @@ import { bodyRawHandler } from "./ipc/bodyRawHandler.js";
 import { bodyBinaryHandler } from "./ipc/bodyBinaryHandler.js";
 import { requestMetaTabHandler } from "./ipc/requestMetaTabHandler.js";
 import { bodyXWWWFormUrlencodedHandlers } from "./ipc/bodyXWWWFormUrlencodedHandlers.js";
+import { bodyFormDataHandlers } from "./ipc/bodyFormDataHandlers.js";
 
 export const userDataDir = app.getPath("userData");
 
@@ -90,6 +91,7 @@ app.whenReady().then(() => {
   bodyBinaryHandler();
   requestMetaTabHandler();
   bodyXWWWFormUrlencodedHandlers();
+  bodyFormDataHandlers();
 });
 
 app.on("window-all-closed", () => {

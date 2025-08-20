@@ -13,7 +13,7 @@ interface MetaTableRowProps {
   type?: TMetaTableType;
   id: string;
   keyName?: string;
-  value: string | Array<File>;
+  value: string | Array<string>;
   description?: string;
   contentType?: string;
   isCheck?: boolean;
@@ -21,7 +21,7 @@ interface MetaTableRowProps {
   prevent?: boolean;
   calculateDynamicly?: boolean;
   inputType?: "text" | "password";
-  handleChangeItem: (id: string, key: string, value: string | File) => void;
+  handleChangeItem: (id: string, key: string, value: string) => void;
   handleDeleteItem: (id: string) => void;
   handleCheckToggle: (id?: string) => void;
   cellList: Array<string>;
@@ -45,7 +45,7 @@ const MetaTableRow = memo(
     handleCheckToggle,
     cellList,
   }: MetaTableRowProps) => {
-    const data: Record<string, string | Array<File>> = useMemo(
+    const data: Record<string, string | Array<string>> = useMemo(
       () => ({
         key: keyName,
         value,

@@ -5,6 +5,7 @@ import type {
   BodyRawInterface,
   EnvironmentInterface,
   EnvironmentPayloadInterface,
+  FormDataPayloadInterface,
   HiddenHeadersCheckInterface,
   JWTBearerAuthInterface,
   ParamHeaderBuildPayloadInterface,
@@ -261,6 +262,28 @@ declare global {
         payload: Partial<ParamHeaderBuildPayloadInterface>
       ): Promise<boolean>;
       checkAllBodyXWWWFormUrlencodedByRequestMetaId(
+        requestOrFolderMetaId?: string
+      ): Promise<boolean>;
+    };
+
+    electronAPIBodyFormDataDB: {
+      getBodyFormData(
+        requestOrFolderMetaId?: string
+      ): Promise<Array<ParamHeaderPayloadInterface>>;
+      deleteBodyFormData(formId: string): Promise<boolean>;
+      deleteBodyFormDataByRequestMetaId(
+        requestOrFolderMetaId?: string
+      ): Promise<boolean>;
+      deleteBodyFormDataFile(formId: string, index: number): Promise<boolean>;
+      createBodyFormData(
+        payload: Partial<FormDataPayloadInterface>
+      ): Promise<boolean>;
+      updateBodyFormData(
+        formId: string,
+        payload: Partial<FormDataPayloadInterface>
+      ): Promise<boolean>;
+      updateBodyFormDataFile(formId: string): Promise<boolean>;
+      checkAllBodyFormDataByRequestMetaId(
         requestOrFolderMetaId?: string
       ): Promise<boolean>;
     };

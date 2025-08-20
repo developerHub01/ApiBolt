@@ -117,7 +117,7 @@ export interface HiddenHeadersCheckInterface {
 }
 
 export interface FormDataInterface
-  extends ParamInterface<string | Array<File>> {
+  extends ParamInterface<string | Array<string>> {
   contentType?: string;
 }
 
@@ -265,3 +265,7 @@ export type RequestTabInterface = {
   activeMetaTab: TActiveTabType;
   requestBodyType: TRequestBodyType;
 };
+
+export interface FormDataPayloadInterface extends ParamHeaderPayloadInterface {
+  type: "text" | "file";
+}

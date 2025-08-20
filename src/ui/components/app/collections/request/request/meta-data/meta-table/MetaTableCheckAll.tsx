@@ -6,6 +6,7 @@ import { useAppDispatch } from "@/context/redux/hooks";
 import { checkAllParamsByRequestMetaId } from "@/context/redux/request-response/thunks/params";
 import { checkAllHeadersByRequestMetaId } from "@/context/redux/request-response/thunks/headers";
 import { checkAllBodyXWWWFormUrlencodedByRequestMetaId } from "@/context/redux/request-response/thunks/body-x-www-form-urlencoded";
+import { checkAllBodyFormDataByRequestMetaId } from "@/context/redux/request-response/thunks/body-form-data";
 
 interface MetaTableCheckAllProps {
   id?: string;
@@ -29,7 +30,9 @@ const MetaTableCheckAll = memo(
             ? checkAllHeadersByRequestMetaId
             : type === "x-www-form-urlencoded"
               ? checkAllBodyXWWWFormUrlencodedByRequestMetaId
-              : checkAllBodyXWWWFormUrlencodedByRequestMetaId;
+              : type === "form-data"
+                ? checkAllBodyFormDataByRequestMetaId
+                : checkAllBodyFormDataByRequestMetaId;
       dispatch(handler());
     }, [dispatch, type]);
 

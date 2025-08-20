@@ -27,6 +27,10 @@ import {
   deleteBodyXWWWFormUrlencoded,
   updateBodyXWWWFormUrlencoded,
 } from "@/context/redux/request-response/thunks/body-x-www-form-urlencoded";
+import {
+  deleteBodyFormData,
+  updateBodyFormData,
+} from "@/context/redux/request-response/thunks/body-form-data";
 
 const headersToPreventCheckList = ["Cookie", "Authorization"];
 
@@ -65,7 +69,9 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
             ? deleteHeaders
             : type === "x-www-form-urlencoded"
               ? deleteBodyXWWWFormUrlencoded
-              : deleteBodyXWWWFormUrlencoded;
+              : type === "form-data"
+                ? deleteBodyFormData
+                : deleteBodyFormData;
       dispatch(handler(id));
     },
     [dispatch, type]
@@ -80,7 +86,9 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
             ? updateHeaders
             : type === "x-www-form-urlencoded"
               ? updateBodyXWWWFormUrlencoded
-              : updateBodyXWWWFormUrlencoded;
+              : type === "form-data"
+                ? updateBodyFormData
+                : updateBodyFormData;
       dispatch(
         handler({
           paramId: id,

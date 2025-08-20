@@ -1,0 +1,200 @@
+import { eq } from "drizzle-orm";
+import { db } from "./index.js";
+import { bodyFormDataTable } from "./schema.js";
+import { getTabList } from "./tabsDB.js";
+
+export const getBodyFormDataByFormId = async (id) => {
+  try {
+    const result = (
+      await db
+        .select()
+        .from(bodyFormDataTable)
+        .where(eq(bodyFormDataTable.id, id))
+    )?.[0];
+
+    if (result) result["isCheck"] = Boolean(result["isCheck"]);
+
+    try {
+      result["value"] = JSON.parse(result["value"]);
+    } catch {}
+
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getBodyFormData = async (requestOrFolderMetaId) => {
+  try {
+    if (!requestOrFolderMetaId)
+      requestOrFolderMetaId = (await getTabList())?.selectedTab;
+    if (!requestOrFolderMetaId) return [];
+
+    let result = await db
+      .select()
+      .from(bodyFormDataTable)
+      .where(
+        eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId)
+      );
+
+    result = result.map((item) => {
+      item = {
+        ...item,
+        isCheck: Boolean(item.isCheck),
+      };
+
+      try {
+        item["value"] = JSON.parse(item["value"]);
+      } catch {}
+
+      return item;
+    });
+
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteBodyFormData = async (formId) => {
+  try {
+    const deleted = await db
+      .delete(bodyFormDataTable)
+      .where(eq(bodyFormDataTable.id, formId));
+
+    return deleted?.changes > 0;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+/* id === requestOrFolderMetaId */
+export const deleteBodyFormDataByRequestMetaId = async (
+  requestOrFolderMetaId
+) => {
+  try {
+    if (!requestOrFolderMetaId)
+      requestOrFolderMetaId = (await getTabList())?.selectedTab;
+    if (!requestOrFolderMetaId) return false;
+
+    const deleted = await db
+      .delete(bodyFormDataTable)
+      .where(
+        eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId)
+      );
+    return deleted?.changes > 0;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteBodyFormDataFile = async (formId, index = 0) => {
+  try {
+    const formData = await getBodyFormDataByFormId(formId);
+    
+    if (
+      !formData ||
+      !Array.isArray(formData?.value) ||
+      formData?.value?.length <= index
+    )
+      return false;
+
+    formData.value?.splice(index, 1);
+    formData.value = formData.value ?? [];
+
+    const updatedValue = formData.value.length
+      ? JSON.stringify(formData.value)
+      : "";
+
+    const updated = await db
+      .update(bodyFormDataTable)
+      .set({
+        value: updatedValue,
+      })
+      .where(eq(bodyFormDataTable.id, formId));
+
+    return updated?.changes > 0;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const createBodyFormData = async (payload = {}) => {
+  try {
+    if (!("requestOrFolderMetaId" in payload))
+      payload["requestOrFolderMetaId"] = (await getTabList())?.selectedTab;
+    if (!payload.requestOrFolderMetaId) return false;
+    if ("isCheck" in payload) payload["isCheck"] = Number(payload["isCheck"]);
+
+    const result = await db.insert(bodyFormDataTable).values(payload);
+
+    return result?.changes > 0;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateBodyFormData = async (formId, payload) => {
+  if (!payload) return false;
+
+  delete payload["id"];
+  delete payload["requestOrFolderMetaId"];
+  delete payload["createdAt"];
+  if ("isCheck" in payload) payload["isCheck"] = Number(payload["isCheck"]);
+
+  try {
+    const isExist = (
+      await db
+        .select()
+        .from(bodyFormDataTable)
+        .where(eq(bodyFormDataTable.id, formId))
+    )?.[0];
+
+    if (!isExist)
+      await createBodyFormData({
+        id: formId,
+      });
+
+    const updated = await db
+      .update(bodyFormDataTable)
+      .set({
+        ...payload,
+      })
+      .where(eq(bodyFormDataTable.id, formId));
+    return updated?.changes > 0;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const checkAllBodyFormDataByRequestMetaId = async (
+  requestOrFolderMetaId
+) => {
+  try {
+    if (!requestOrFolderMetaId)
+      requestOrFolderMetaId = (await getTabList())?.selectedTab;
+    if (!requestOrFolderMetaId) return false;
+
+    const rows =
+      (await db
+        .select()
+        .from(bodyFormDataTable)
+        .where(
+          eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId)
+        )) ?? [];
+
+    const checkValue = Number(!rows.every((row) => row.isCheck));
+
+    const updated = await db
+      .update(bodyFormDataTable)
+      .set({
+        isCheck: checkValue,
+      })
+      .where(
+        eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId)
+      );
+    return updated?.changes > 0;
+  } catch (error) {
+    console.log(error);
+  }
+};
