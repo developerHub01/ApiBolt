@@ -1,4 +1,4 @@
-import { memo, useCallback } from "react";
+import { memo, useCallback, useRef, useState } from "react";
 import { TableCell } from "@/components/ui/table";
 import { Plus as AddIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -40,6 +40,8 @@ const MetaTableCell = memo(
     prevent = false,
   }: MetaTableCellProps) => {
     const dispatch = useAppDispatch();
+    const addButtonRef = useRef<HTMLButtonElement>(null);
+    const [popoverOpen, setPopoverOpen] = useState<boolean>(false);
     const handleUploadFile = useCallback(
       () => dispatch(updateBodyFormDataFile(id)),
       [dispatch, id]
@@ -56,77 +58,77 @@ const MetaTableCell = memo(
       [dispatch]
     );
 
+    const openPopover = () => {
+      if (addButtonRef.current) setPopoverOpen(true);
+    };
+
     return (
       <TableCell
         className={cn("p-1.5 relative overflow-visible min-w-auto md:min-w-24")}
       >
-        <Popover>
-          <div className="w-full flex gap-1 items-center">
-            {typeof value === "string" ||
-            (Array.isArray(value) && !value.length) ? (
-              <>
-                {keyType === "key" && prevent && <LockTooltip />}
-                <MetaItemInput
-                  keyType={keyType}
-                  id={id}
-                  value={Array.isArray(value) ? "" : value}
-                  onBlur={onBlur}
-                  disabled={prevent}
-                  type={inputType}
-                />
-              </>
-            ) : (
+        <div className="w-full flex gap-1 items-center">
+          {Array.isArray(value) && value.length ? (
+            <div onClick={openPopover} className="w-full cursor-pointer">
+              <FileTag
+                className="w-full px-1.5 rounded-md max-w-full"
+                name={`${value.length} Files`}
+              />
+            </div>
+          ) : (
+            <>
+              {keyType === "key" && prevent && <LockTooltip />}
+              <MetaItemInput
+                keyType={keyType}
+                id={id}
+                value={Array.isArray(value) ? "" : value}
+                onBlur={onBlur}
+                disabled={prevent}
+                type={inputType}
+              />
+            </>
+          )}
+          {type === "form-data" && keyType === "value" && !prevent && (
+            <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
               <PopoverTrigger asChild>
-                <FileTag
-                  className="w-full px-1.5 rounded-md max-w-full"
-                  name={`${value.length} Files`}
-                />
-              </PopoverTrigger>
-            )}
-            {type === "form-data" && keyType === "value" && !prevent && (
-              <>
-                <PopoverTrigger asChild>
-                  <Button
-                    size={"iconXs"}
-                    variant={"secondary"}
-                    className="size-6"
-                  >
-                    <AddIcon />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent
-                  className="w-3xs min-h-full shadow-2xs bg-background p-1 border rounded-md flex flex-col gap-1.5"
-                  side="left"
-                  align="start"
+                <Button
+                  ref={addButtonRef}
+                  size={"iconXs"}
+                  variant={"secondary"}
+                  className="size-6"
                 >
-                  {Array.isArray(value) && !!value.length && (
-                    <ScrollArea className="w-full h-full min-h-0">
-                      <div className="max-h-24 w-full h-full flex flex-col gap-1.5 select-none">
-                        {value.map((file, index) => (
-                          <FileTag
-                            key={index}
-                            name={file ?? "unknown"}
-                            onClose={() => handleDeleteFormFile(id, index)}
-                          />
-                        ))}
-                      </div>
-                    </ScrollArea>
-                  )}
-                  <label className="cursor-pointer">
-                    <Button
-                      className="w-full pointer-events-none"
-                      size={"sm"}
-                      variant={"secondary"}
-                      onClick={handleUploadFile}
-                    >
-                      <AddIcon /> Add new file
-                    </Button>
-                  </label>
-                </PopoverContent>
-              </>
-            )}
-          </div>
-        </Popover>
+                  <AddIcon />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent
+                className="w-3xs min-h-full shadow-2xs bg-background p-1 border rounded-md flex flex-col gap-1.5"
+                side="bottom"
+                align="end"
+              >
+                {Array.isArray(value) && !!value.length && (
+                  <ScrollArea className="w-full h-full min-h-0">
+                    <div className="max-h-24 w-full h-full flex flex-col gap-1.5 select-none">
+                      {value.map((file, index) => (
+                        <FileTag
+                          key={`${file}-${index}`}
+                          name={file ?? "unknown"}
+                          onClose={() => handleDeleteFormFile(id, index)}
+                        />
+                      ))}
+                    </div>
+                  </ScrollArea>
+                )}
+                <Button
+                  className="w-full"
+                  size={"sm"}
+                  variant={"secondary"}
+                  onClick={handleUploadFile}
+                >
+                  <AddIcon /> Add new file
+                </Button>
+              </PopoverContent>
+            </Popover>
+          )}
+        </div>
       </TableCell>
     );
   }
