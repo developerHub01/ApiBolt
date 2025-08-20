@@ -70,7 +70,7 @@ const MetaTableRow = memo(
         key={id}
         className={cn(
           "[&>td]:border-r [&>td]:last:border-r-0 [&>td>input]:outline-none [&>td>div>input]:outline-none [&>td>input]:rounded-md [&>td>div>input]:rounded-md",
-          "focus-within:bg-accent/80 duration-75 transition-colors"
+          "focus-within:bg-accent/60 duration-75 transition-colors"
         )}
       >
         <TableCell className="px-0">

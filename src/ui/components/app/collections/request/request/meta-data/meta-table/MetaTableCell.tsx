@@ -70,7 +70,7 @@ const MetaTableCell = memo(
           {Array.isArray(value) && value.length ? (
             <div onClick={openPopover} className="w-full cursor-pointer">
               <FileTag
-                className="w-full px-1.5 rounded-md max-w-full"
+                className="w-full px-1.5 rounded-md max-w-full min-w-40"
                 name={`${value.length} Files`}
               />
             </div>
@@ -103,6 +103,7 @@ const MetaTableCell = memo(
                 className="w-3xs min-h-full shadow-2xs bg-background p-1 border rounded-md flex flex-col gap-1.5"
                 side="bottom"
                 align="end"
+                sideOffset={5}
               >
                 {Array.isArray(value) && !!value.length && (
                   <ScrollArea className="w-full h-full min-h-0">
