@@ -33,6 +33,7 @@ import type {
   TContentType,
   TRequestBodyType,
   BodyRawInterface,
+  RequestTabInterface,
 } from "@/types/request-response.types";
 import { parseUrlParams } from "@/utils";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
@@ -659,6 +660,25 @@ export const requestResponseSlice = createSlice({
       state.binaryData[selectedTab] = payload ?? null;
     },
     /* ================ BodyBinary end =================== */
+
+    /* ================ ReqestMetaTab start =================== */
+    handleLoadReqestMetaTab: (
+      state,
+      action: PayloadAction<RequestTabInterface | undefined | null>
+    ) => {
+      const { activeMetaTab = "params", requestBodyType = "none" } =
+        action.payload ?? {};
+      const selectedTab = state.selectedTab;
+
+      if (!selectedTab) return;
+
+      if (state.activeMetaTab[selectedTab] !== activeMetaTab)
+        state.activeMetaTab[selectedTab] = activeMetaTab;
+
+      if (state.requestBodyType[selectedTab] !== requestBodyType)
+        state.requestBodyType[selectedTab] = requestBodyType;
+    },
+    /* ================ ReqestMetaTab end =================== */
 
     handleToggleCollapse: (
       state,
@@ -1398,8 +1418,8 @@ export const {
   handleUpdateHiddenHeaders,
 
   handleLoadBodyRaw,
-
   handleLoadBodyBinary,
+  handleLoadReqestMetaTab,
 
   handleSetResponse,
   handleSetFormData,

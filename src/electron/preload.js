@@ -185,3 +185,14 @@ contextBridge.exposeInMainWorld("electronAPIBodyBinaryDB", {
   deleteBodyBinary: async (...payload) =>
     await ipcRenderer.invoke("deleteBodyBinary", ...payload),
 });
+
+contextBridge.exposeInMainWorld("electronAPIRequestMetaTabDB", {
+  getRequestMetaTab: async (...payload) =>
+    await ipcRenderer.invoke("getRequestMetaTab", ...payload),
+  createRequestMetaTab: async (...payload) =>
+    await ipcRenderer.invoke("createRequestMetaTab", ...payload),
+  updateRequestMetaTab: async (...payload) =>
+    await ipcRenderer.invoke("updateRequestMetaTab", ...payload),
+  deleteRequestMetaTab: async (...payload) =>
+    await ipcRenderer.invoke("deleteRequestMetaTab", ...payload),
+});

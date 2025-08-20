@@ -16,14 +16,6 @@ export const getHiddenHeadersCheck = async (id) => {
         .where(eq(hiddenHeadersCheckTable.requestOrFolderMetaId, id))
     )?.[0];
 
-    // return result.map((item) => ({
-    //   ...item,
-    //   isCheck: Boolean(item.isCheck),
-    // }));
-
-    // Object.entries(result)
-    console.log(result);
-
     return result;
   } catch (error) {
     console.log(error);

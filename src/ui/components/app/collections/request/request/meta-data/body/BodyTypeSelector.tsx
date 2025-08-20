@@ -10,8 +10,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { handleChangeRequestBodyType } from "@/context/redux/request-response/request-response-slice";
 import type { TRequestBodyType } from "@/types/request-response.types";
+import { updateRequestMetaTab } from "@/context/redux/request-response/request-response-thunk";
 
 const bodyList: Array<{
   id: TRequestBodyType;
@@ -50,8 +50,8 @@ const BodyTypeSelector = () => {
   const handleChange = useCallback(
     (type: TRequestBodyType) => {
       dispatch(
-        handleChangeRequestBodyType({
-          type,
+        updateRequestMetaTab({
+          requestBodyType: type,
         })
       );
     },
@@ -84,7 +84,7 @@ const BodyTypeSelector = () => {
         defaultValue={requestBodyType ?? bodyList[0].id}
         value={requestBodyType ?? bodyList[0].id}
         onValueChange={handleChange}
-        className="hidden md:flex items-center flex-wrap gap-3"
+        className="hidden md:flex items-center flex-wrap gap-3 py-2"
       >
         {bodyList.map(({ id, label }) => (
           <Label

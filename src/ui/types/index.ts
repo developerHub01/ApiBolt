@@ -12,6 +12,7 @@ import type {
   ProjectInterface,
   RequestListItemInterface,
   RequestListItemUpdatePayloadInterface,
+  RequestTabInterface,
   ResponseInterface,
 } from "@/types/request-response.types";
 import type {
@@ -229,6 +230,17 @@ declare global {
       createBodyBinary(): Promise<boolean>;
       updateBodyBinary(requestId?: string): Promise<boolean>;
       deleteBodyBinary(requestId?: string): Promise<boolean>;
+    };
+
+    electronAPIRequestMetaTabDB: {
+      getRequestMetaTab(requestId?: string): Promise<RequestTabInterface>;
+      createRequestMetaTab(
+        payload: Partial<RequestTabInterface>
+      ): Promise<boolean>;
+      updateRequestMetaTab(
+        payload: Partial<RequestTabInterface>
+      ): Promise<boolean>;
+      deleteRequestMetaTab(requestId?: string): Promise<boolean>;
     };
   }
 }

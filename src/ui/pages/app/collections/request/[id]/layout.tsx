@@ -7,6 +7,7 @@ import {
   loadParams,
   loadRequestBodyBinary,
   loadRequestBodyRaw,
+  loadRequestMetaTab,
 } from "@/context/redux/request-response/request-response-thunk";
 
 const RequestLayout = () => {
@@ -20,6 +21,7 @@ const RequestLayout = () => {
       loadHeaders,
       loadRequestBodyRaw,
       loadRequestBodyBinary,
+      loadRequestMetaTab,
     ].forEach((action) => dispatch(action(payload)));
   }, [dispatch, requestId]);
 

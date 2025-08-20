@@ -1,4 +1,4 @@
-import { memo, useMemo } from "react";
+import { memo, useCallback, useMemo } from "react";
 import TabV1 from "@/components/tab-v1";
 import SelectV1 from "@/components/select-v1";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
@@ -9,8 +9,8 @@ import {
   selectHiddenHeaders,
   selectParams,
 } from "@/context/redux/request-response/request-response-selector";
-import { handleChangeActiveMetaTab } from "@/context/redux/request-response/request-response-slice";
 import type { TActiveTabType } from "@/types/request-response.types";
+import { updateRequestMetaTab } from "@/context/redux/request-response/request-response-thunk";
 
 const tabList: Array<{
   id: TActiveTabType;
@@ -39,7 +39,7 @@ const MetaDataTab = memo(() => {
   const params = useAppSelector(selectParams);
   const hiddenHeaders = useAppSelector(selectHiddenHeaders);
   const headers = useAppSelector(selectHeaders);
-  
+
   const tabListWithActivity = useMemo(
     () =>
       tabList
@@ -65,30 +65,28 @@ const MetaDataTab = memo(() => {
     [activeTabList, params, headers, hiddenHeaders]
   );
 
+  const handleChange = useCallback(
+    (activeMetaTab: TActiveTabType) =>
+      dispatch(
+        updateRequestMetaTab({
+          activeMetaTab,
+        })
+      ),
+    [dispatch]
+  );
+
   return (
     <>
       <SelectV1
         list={tabList}
         value={activeMetaTab ?? "params"}
-        handleChange={(value) =>
-          dispatch(
-            handleChangeActiveMetaTab({
-              type: value as TActiveTabType,
-            })
-          )
-        }
+        handleChange={(value) => handleChange(value as TActiveTabType)}
         className="block md:hidden"
       />
       <TabV1
         list={tabListWithActivity}
         activeTab={activeMetaTab ?? "params"}
-        handleSelect={(value) =>
-          dispatch(
-            handleChangeActiveMetaTab({
-              type: value as TActiveTabType,
-            })
-          )
-        }
+        handleSelect={(value) => handleChange(value as TActiveTabType)}
         className="hidden md:flex select-none"
       />
     </>

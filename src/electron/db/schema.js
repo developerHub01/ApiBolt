@@ -234,3 +234,18 @@ export const bodyBinaryTable = sqliteTable("body_binary_table", {
     }),
   path: text(),
 });
+
+export const requestMetaTabTable = sqliteTable("request_meta_tab_table", {
+  id: text()
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  requestOrFolderMetaId: text()
+    .notNull()
+    .unique()
+    .references(() => requestOrFolderMetaTable.id, {
+      onDelete: "cascade",
+    }),
+  activeMetaTab: text() /* "params" | "headers" | "body" */,
+  requestBodyType:
+    text() /* "none" | "form-data" | "x-www-form-urlencoded" | "raw" | "binary" */,
+});

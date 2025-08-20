@@ -22,6 +22,7 @@ import { headersHandlers } from "./ipc/headersHandlers.js";
 import { hiddenHeadersCheckTableHandler } from "./ipc/hiddenHeadersCheckTableHandler.js";
 import { bodyRawHandler } from "./ipc/bodyRawHandler.js";
 import { bodyBinaryHandler } from "./ipc/bodyBinaryHandler.js";
+import { requestMetaTabHandler } from "./ipc/requestMetaTabHandler.js";
 
 export const userDataDir = app.getPath("userData");
 
@@ -86,6 +87,7 @@ app.whenReady().then(() => {
   hiddenHeadersCheckTableHandler();
   bodyRawHandler();
   bodyBinaryHandler();
+  requestMetaTabHandler();
 });
 
 app.on("window-all-closed", () => {

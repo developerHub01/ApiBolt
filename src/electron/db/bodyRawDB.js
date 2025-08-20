@@ -17,7 +17,7 @@ export const getBodyRaw = async (requestOrFolderMetaId) => {
         .where(eq(bodyRawTable.requestOrFolderMetaId, requestOrFolderMetaId))
     )?.[0];
 
-    result["lineWrap"] = Boolean(result["lineWrap"]);
+    if (result) result["lineWrap"] = Boolean(result["lineWrap"]);
 
     return result;
   } catch (error) {

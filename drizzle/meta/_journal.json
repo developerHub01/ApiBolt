@@ -169,6 +169,27 @@
       "when": 1755646788371,
       "tag": "0023_secret_strong_guy",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "6",
+      "when": 1755655281601,
+      "tag": "0024_nosy_xavin",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "6",
+      "when": 1755657744424,
+      "tag": "0025_lethal_la_nuit",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "6",
+      "when": 1755659553544,
+      "tag": "0026_stiff_sentry",
+      "breakpoints": true
     }
   ]
 }
