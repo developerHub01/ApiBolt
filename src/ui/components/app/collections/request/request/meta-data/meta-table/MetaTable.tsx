@@ -103,15 +103,6 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
     [dispatch]
   );
 
-  // const handleCheckToggle = useCallback( (id: string, value: boolean)=>{
-  //    const handler =
-  //       type === "params"
-  //         ? updateParams
-  //         : type === "headers"
-  //           ? updateHeaders
-  //           : updateHeaders;
-  // }, [])
-
   if (type === "headers" && showHiddenData)
     data = [...hiddenHeader, ...data].map(checkInputType);
   if (type === "params") data = [...hiddenParams, ...data].map(checkInputType);
