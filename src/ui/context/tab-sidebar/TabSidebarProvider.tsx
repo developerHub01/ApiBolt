@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
   changeTabsData,
   loadTabsData,
-} from "@/context/redux/request-response/request-response-thunk";
+} from "@/context/redux/request-response/thunks/tab-list";
 import { normalizeText } from "@/utils";
 
 interface TabSidebarContext {

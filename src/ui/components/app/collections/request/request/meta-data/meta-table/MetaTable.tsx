@@ -14,13 +14,8 @@ import type {
   HiddenHeadersCheckInterface,
   ParamInterface,
 } from "@/types/request-response.types";
-import {
-  deleteHeaders,
-  deleteParams,
-  updateHeaders,
-  updateHiddenHeaders,
-  updateParams,
-} from "@/context/redux/request-response/request-response-thunk";
+import { deleteParams, updateParams } from "@/context/redux/request-response/thunks/params";
+import { deleteHeaders, updateHeaders, updateHiddenHeaders } from "@/context/redux/request-response/thunks/headers";
 
 const headersToPreventCheckList = ["Cookie", "Authorization"];
 

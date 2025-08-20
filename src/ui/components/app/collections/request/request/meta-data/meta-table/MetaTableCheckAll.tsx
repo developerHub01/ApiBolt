@@ -3,10 +3,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { useGetTableData } from "@/context/collections/request/RequestMetaTableProvider";
 import { useAppDispatch } from "@/context/redux/hooks";
-import {
-  checkAllHeadersByRequestMetaId,
-  checkAllParamsByRequestMetaId,
-} from "@/context/redux/request-response/request-response-thunk";
+import { checkAllParamsByRequestMetaId } from "@/context/redux/request-response/thunks/params";
+import { checkAllHeadersByRequestMetaId } from "@/context/redux/request-response/thunks/headers";
 
 interface MetaTableCheckAllProps {
   id?: string;

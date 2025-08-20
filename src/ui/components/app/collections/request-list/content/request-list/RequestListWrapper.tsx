@@ -1,7 +1,7 @@
 import { memo, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { loadRequestList } from "@/context/redux/request-response/request-response-thunk";
 import RequestList from "@/components/app/collections/request-list/content/request-list/RequestList";
+import { loadRequestList } from "@/context/redux/request-response/thunks/request-list";
 
 const RequestListWrapper = memo(() => {
   const dispatch = useAppDispatch();

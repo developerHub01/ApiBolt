@@ -2,13 +2,11 @@ import { useEffect } from "react";
 import { Outlet, useParams } from "react-router-dom";
 import RequestResponseProvider from "@/context/collections/request/RequestResponseProvider";
 import { useAppDispatch } from "@/context/redux/hooks";
-import {
-  loadHeaders,
-  loadParams,
-  loadRequestBodyBinary,
-  loadRequestBodyRaw,
-  loadRequestMetaTab,
-} from "@/context/redux/request-response/request-response-thunk";
+import { loadParams } from "@/context/redux/request-response/thunks/params";
+import { loadHeaders } from "@/context/redux/request-response/thunks/headers";
+import { loadRequestBodyRaw } from "@/context/redux/request-response/thunks/body-raw";
+import { loadRequestBodyBinary } from "@/context/redux/request-response/thunks/body-binary";
+import { loadRequestMetaTab } from "@/context/redux/request-response/thunks/request-meta-tab";
 
 const RequestLayout = () => {
   const dispatch = useAppDispatch();

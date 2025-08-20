@@ -18,12 +18,8 @@ import {
   type TMetaTableType,
 } from "@/context/collections/request/RequestMetaTableProvider";
 import { useAppDispatch } from "@/context/redux/hooks";
-import {
-  addHeaders,
-  addParams,
-  deleteHeadersByRequestMetaId,
-  deleteParamsByRequestMetaId,
-} from "@/context/redux/request-response/request-response-thunk";
+import { addParams, deleteParamsByRequestMetaId } from "@/context/redux/request-response/thunks/params";
+import { addHeaders, deleteHeadersByRequestMetaId } from "@/context/redux/request-response/thunks/headers";
 
 interface MetaTableThreeDotActionProps {
   type: TMetaTableType;

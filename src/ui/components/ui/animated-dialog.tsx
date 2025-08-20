@@ -1,6 +1,6 @@
+import { memo, useEffect } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/lib/utils";
-import { memo, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface AnimatedDialogProps {

@@ -10,7 +10,7 @@ import {
   selectParams,
 } from "@/context/redux/request-response/request-response-selector";
 import type { TActiveTabType } from "@/types/request-response.types";
-import { updateRequestMetaTab } from "@/context/redux/request-response/request-response-thunk";
+import { updateRequestMetaTab } from "@/context/redux/request-response/thunks/request-meta-tab";
 
 const tabList: Array<{
   id: TActiveTabType;

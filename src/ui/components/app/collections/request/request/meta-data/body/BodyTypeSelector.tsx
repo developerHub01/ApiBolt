@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import type { TRequestBodyType } from "@/types/request-response.types";
-import { updateRequestMetaTab } from "@/context/redux/request-response/request-response-thunk";
+import { updateRequestMetaTab } from "@/context/redux/request-response/thunks/request-meta-tab";
 
 const bodyList: Array<{
   id: TRequestBodyType;

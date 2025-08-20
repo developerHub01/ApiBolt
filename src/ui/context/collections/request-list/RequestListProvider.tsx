@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useContext, useState } from "react";
 import { useAppDispatch } from "@/context/redux/hooks";
-import { updateRequestOrFolder } from "@/context/redux/request-response/request-response-thunk";
+import { updateRequestOrFolder } from "@/context/redux/request-response/thunks/request-list";
 
 interface RequestListContext {
   isContextMenuOpen: boolean;

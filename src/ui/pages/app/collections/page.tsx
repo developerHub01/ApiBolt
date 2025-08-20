@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { useAppDispatch } from "@/context/redux/hooks";
-import { addNewTabsData } from "@/context/redux/request-response/request-response-thunk";
+import { addNewTabsData } from "@/context/redux/request-response/thunks/tab-list";
 
 const CollectionPage = () => {
   const dispatch = useAppDispatch();

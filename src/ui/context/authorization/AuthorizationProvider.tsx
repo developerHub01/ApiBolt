@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect } from "react";
 import { useAppDispatch } from "@/context/redux/hooks";
-import { loadAuthorization } from "@/context/redux/request-response/request-response-thunk";
+import { loadAuthorization } from "@/context/redux/request-response/thunks/auth";
 
 // interface AuthorizationContext {}
 

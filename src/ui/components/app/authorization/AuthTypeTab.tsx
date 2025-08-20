@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/select";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { selectAuthType } from "@/context/redux/request-response/request-response-selector";
-import { updateAuthorization } from "@/context/redux/request-response/request-response-thunk";
+import { updateAuthorization } from "@/context/redux/request-response/thunks/auth";
 import { cn } from "@/lib/utils";
 import type { TAuthType } from "@/types/request-response.types";
 

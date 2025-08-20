@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
   changeActiveProject,
   deleteProject,
-} from "@/context/redux/request-response/request-response-thunk";
+} from "@/context/redux/request-response/thunks/projects";
 import type { ProjectInterface } from "@/types/request-response.types";
 
 interface ProjectContext {

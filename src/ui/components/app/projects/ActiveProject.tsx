@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { Trash2 as DeleteIcon } from "lucide-react";
-import { updateProject } from "@/context/redux/request-response/request-response-thunk";
+import { updateProject } from "@/context/redux/request-response/thunks/projects";
 import { useProject } from "@/context/project/ProjectProvider";
 
 const ActiveProject = () => {

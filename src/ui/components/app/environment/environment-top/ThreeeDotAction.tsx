@@ -1,3 +1,4 @@
+import { memo, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -5,7 +6,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { deleteAllEnvironments } from "@/context/redux/request-response/request-response-thunk";
+import { deleteAllEnvironments } from "@/context/redux/request-response/thunks/environment";
 import {
   EllipsisVertical as ThreeDotIcon,
   Upload as ExportIcon,
@@ -13,7 +14,6 @@ import {
   Trash2 as DeleteIcon,
   type LucideIcon,
 } from "lucide-react";
-import { memo, useCallback, useMemo } from "react";
 
 const listItemToHide = ["export", "delete"];
 

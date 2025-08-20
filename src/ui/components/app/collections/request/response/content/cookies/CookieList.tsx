@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import {
   Table,
   TableBody,
@@ -7,7 +8,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import DataTableCellContent from "@/components/app/collections/request/response/content/DataTableCellContent";
-import { useMemo } from "react";
 import { getCookiePropertyList } from "@/utils/cookie";
 import type { CookieInterface } from "@/types/request-response.types";
 

@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus as PlusIcon } from "lucide-react";
 import {
@@ -7,13 +8,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAppDispatch } from "@/context/redux/hooks";
 import {
   createCollection,
   createRestApiBasic,
   createSingleRequest,
-} from "@/context/redux/request-response/request-response-thunk";
-import { useAppDispatch } from "@/context/redux/hooks";
-import { memo } from "react";
+} from "@/context/redux/request-response/thunks/request-list";
 
 type TAction = "blank_collection" | "single_request" | "rest_api_basics";
 

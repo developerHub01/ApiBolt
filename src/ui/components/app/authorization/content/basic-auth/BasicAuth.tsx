@@ -4,8 +4,8 @@ import AuthKeyValueWrapper from "@/components/app/authorization/content/AuthKeyV
 import AuthContentInput from "@/components/app/authorization/content/AuthContentInput";
 import AuthContentInoutLabel from "@/components/app/authorization/content/AuthContentInoutLabel";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { updateAuthorization } from "@/context/redux/request-response/request-response-thunk";
 import { defaultBasicAuth } from "@/constant/request-response.constant";
+import { updateAuthorization } from "@/context/redux/request-response/thunks/auth";
 
 const BasicAuth = () => {
   const dispatch = useAppDispatch();

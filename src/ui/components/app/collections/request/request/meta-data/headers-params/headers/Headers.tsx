@@ -6,14 +6,15 @@ import { Eye as ShowIcon, EyeOff as HideIcon } from "lucide-react";
 import AddNewData from "@/components/AddNewData";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { selectMetaData } from "@/context/redux/request-response/request-response-selector";
-import { addHeaders } from "@/context/redux/request-response/request-response-thunk";
+import { addHeaders } from "@/context/redux/request-response/thunks/headers";
 
 const Headers = memo(() => {
   const dispatch = useAppDispatch();
   const { showHiddenHeader } = useRequestHeader();
-  const handleAddNewHeader = useCallback(() => {
-    dispatch(addHeaders());
-  }, [dispatch]);
+  const handleAddNewHeader = useCallback(
+    () => dispatch(addHeaders()),
+    [dispatch]
+  );
 
   return (
     <MetaDataWrapper label="Headers" labelPrefix={<LabelPrefix />}>

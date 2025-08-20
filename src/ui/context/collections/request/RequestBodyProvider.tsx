@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { updateRequestBodyRaw } from "@/context/redux/request-response/request-response-thunk";
+import { updateRequestBodyRaw } from "@/context/redux/request-response/thunks/body-raw";
 
 interface RequestBodyContext {
   handleChangeRawData: (data: string) => void;

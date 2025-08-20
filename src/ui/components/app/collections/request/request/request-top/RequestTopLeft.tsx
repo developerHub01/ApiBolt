@@ -9,7 +9,7 @@ import React, {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { updateRequestOrFolder } from "@/context/redux/request-response/request-response-thunk";
+import { updateRequestOrFolder } from "@/context/redux/request-response/thunks/request-list";
 
 const RequestTopLeft = () => {
   const dispatch = useAppDispatch();

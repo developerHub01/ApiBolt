@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/tooltip";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { Link } from "react-router-dom";
-import { loadProjectList } from "@/context/redux/request-response/request-response-thunk";
+import { loadProjectList } from "@/context/redux/request-response/thunks/projects";
 import { changeActiveTab as changeSidebarActiveTab } from "@/context/redux/sidebar/sidebar-thunk";
 import {
   hiddenTabsWhenNotProjectSelected,

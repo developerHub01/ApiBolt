@@ -18,15 +18,11 @@ import { Button } from "@/components/ui/button";
 import { AnimatePresence } from "motion/react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { handleChangeSelectedTab } from "@/context/redux/request-response/request-response-slice";
-import {
-  createSingleRequest,
-  moveRequestOrFolder,
-  updateRequestOrFolder,
-} from "@/context/redux/request-response/request-response-thunk";
 import type { RequestListItemInterface } from "@/types/request-response.types";
 import RequestListProvider, {
   useRequestList,
 } from "@/context/collections/request-list/RequestListProvider";
+import { createSingleRequest, moveRequestOrFolder, updateRequestOrFolder } from "@/context/redux/request-response/thunks/request-list";
 
 interface RequestListItemProps extends RequestListItemInterface {
   type: "folder" | "request";

@@ -8,7 +8,7 @@ import { FolderClosed as FolderIcon } from "lucide-react";
 import RequestMethodTag from "@/components/app/RequestMethodTag";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { handleChangeSelectedTab } from "@/context/redux/request-response/request-response-slice";
-import { expendParentsOnSelectedChangeTabsData } from "@/context/redux/request-response/request-response-thunk";
+import { expendParentsOnSelectedChangeTabsData } from "@/context/redux/request-response/thunks/tab-list";
 
 interface Props extends RequestListItemInterface {
   selectedTab?: string | null;

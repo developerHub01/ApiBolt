@@ -9,7 +9,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import type { THTTPMethods } from "@/types/request-response.types";
-import { updateRequestOrFolder } from "@/context/redux/request-response/request-response-thunk";
+import { updateRequestOrFolder } from "@/context/redux/request-response/thunks/request-list";
 
 const methodList: Array<{
   id: THTTPMethods;

@@ -2,7 +2,7 @@ import { memo, useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import TabBottomCTA from "@/components/app/tab-sidebar/TabBottomCTA";
 import { Plus as AddIcon } from "lucide-react";
-import { addNewTabsData } from "@/context/redux/request-response/request-response-thunk";
+import { addNewTabsData } from "@/context/redux/request-response/thunks/tab-list";
 
 const AddNewTab = memo(() => {
   const dispatch = useAppDispatch();

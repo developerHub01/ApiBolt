@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import LoaderV1 from "@/components/LoaderV1";
 import { useAppDispatch } from "@/context/redux/hooks";
-import { createProject } from "@/context/redux/request-response/request-response-thunk";
+import { createProject } from "@/context/redux/request-response/thunks/projects";
 import {
   AnimatedDialog,
   AnimatedDialogBottom,

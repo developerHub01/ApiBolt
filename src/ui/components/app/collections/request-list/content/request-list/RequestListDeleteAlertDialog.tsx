@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { deleteRequestOrFolder } from "@/context/redux/request-response/request-response-thunk";
+import { deleteRequestOrFolder } from "@/context/redux/request-response/thunks/request-list";
 
 const RequestListDeleteAlertDialog = memo(() => {
   const dispatch = useAppDispatch();

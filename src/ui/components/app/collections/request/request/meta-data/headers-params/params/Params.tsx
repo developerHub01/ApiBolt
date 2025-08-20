@@ -3,13 +3,14 @@ import MetaTable from "@/components/app/collections/request/request/meta-data/me
 import MetaDataWrapper from "@/components/app/collections/request/request/meta-data/meta-table/MetaDataWrapper";
 import AddNewData from "@/components/AddNewData";
 import { useAppDispatch } from "@/context/redux/hooks";
-import { addParams } from "@/context/redux/request-response/request-response-thunk";
+import { addParams } from "@/context/redux/request-response/thunks/params";
 
 const Params = memo(() => {
   const dispatch = useAppDispatch();
-  const handleAddNewMetaData = useCallback(() => {
-    dispatch(addParams());
-  }, [dispatch]);
+  const handleAddNewMetaData = useCallback(
+    () => dispatch(addParams()),
+    [dispatch]
+  );
 
   return (
     <MetaDataWrapper label="Query Params">

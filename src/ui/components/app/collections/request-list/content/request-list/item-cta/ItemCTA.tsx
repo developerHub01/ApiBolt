@@ -1,3 +1,4 @@
+import { memo, useCallback, type MouseEvent } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,17 +9,12 @@ import { Button } from "@/components/ui/button";
 import { EllipsisVertical as ThreeDotIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
-import {
-  createCollection,
-  createSingleRequest,
-  duplicateRequestOrFolder,
-} from "@/context/redux/request-response/request-response-thunk";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { handleChangeDeleteFolderOrRequestId } from "@/context/redux/request-response/request-response-slice";
-import { memo, useCallback, type MouseEvent } from "react";
 import { useRequestList } from "@/context/collections/request-list/RequestListProvider";
 import useCheckApplyingLayout from "@/hooks/setting/use-check-applying-layout";
 import type { TLayoutSetting } from "@/types/setting.types";
+import { createCollection, createSingleRequest, duplicateRequestOrFolder } from "@/context/redux/request-response/thunks/request-list";
 
 type TActionType =
   | "add_request"

@@ -1,12 +1,12 @@
+import { useCallback } from "react";
 import ContentWrapper from "@/components/app/authorization/content/ContentWrapper";
 import AuthKeyValueWrapper from "@/components/app/authorization/content/AuthKeyValueWrapper";
 import AuthContentInput from "@/components/app/authorization/content/AuthContentInput";
 import AuthContentInoutLabel from "@/components/app/authorization/content/AuthContentInoutLabel";
 import AuthContentSelect from "@/components/app/authorization/content/AuthContentSelect";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { useCallback } from "react";
-import { updateAuthorization } from "@/context/redux/request-response/request-response-thunk";
 import { defaultApiKey } from "@/constant/request-response.constant";
+import { updateAuthorization } from "@/context/redux/request-response/thunks/auth";
 
 const addToList = [
   {

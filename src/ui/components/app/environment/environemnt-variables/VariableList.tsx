@@ -3,12 +3,12 @@ import { Table, TableBody } from "@/components/ui/table";
 import VariableListHeader from "@/components/app/environment/environemnt-variables/VariableListHeader";
 import VariableRow from "@/components/app/environment/environemnt-variables/VariableRow";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import { useEnvironments } from "@/context/environments/EnvironmentsProvider";
+import Empty from "@/components/ui/empty";
 import {
   deleteEnvironments,
   updateEnvironments,
-} from "@/context/redux/request-response/request-response-thunk";
-import { useEnvironments } from "@/context/environments/EnvironmentsProvider";
-import Empty from "@/components/ui/empty";
+} from "@/context/redux/request-response/thunks/environment";
 
 const VariableList = memo(() => {
   const dispatch = useAppDispatch();
@@ -26,7 +26,7 @@ const VariableList = memo(() => {
       id: string,
       key: "isCheck" | "variable" | "type" | "value",
       value: string | boolean
-    ) => {
+    ) =>
       dispatch(
         updateEnvironments({
           id,
@@ -34,15 +34,12 @@ const VariableList = memo(() => {
             [key]: value,
           },
         })
-      );
-    },
+      ),
     [dispatch]
   );
 
   const handleDelete = useCallback(
-    (id: string) => {
-      dispatch(deleteEnvironments(id));
-    },
+    (id: string) => dispatch(deleteEnvironments(id)),
     [dispatch]
   );
 

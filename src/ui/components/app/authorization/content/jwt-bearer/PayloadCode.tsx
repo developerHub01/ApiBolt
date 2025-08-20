@@ -1,6 +1,6 @@
+import { useEffect, useState } from "react";
 import Code from "@/components/ui/code";
 import { formatCode } from "@/utils/prettierUtils";
-import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const codeFormatter = async (

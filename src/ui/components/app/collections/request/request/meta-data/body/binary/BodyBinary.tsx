@@ -3,10 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Plus as AddIcon, X as CloseIcon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import {
-  deleteRequestBodyBinary,
-  updateRequestBodyBinary,
-} from "@/context/redux/request-response/request-response-thunk";
+import { deleteRequestBodyBinary, updateRequestBodyBinary } from "@/context/redux/request-response/thunks/body-binary";
 
 const BodyBinary = memo(() => {
   const dispatch = useAppDispatch();
