@@ -75,6 +75,8 @@ export const settingsHandlers = () => {
       if (method === "upload") {
         result = await dialog.showOpenDialog({
           properties: ["openDirectory"],
+          title: "Select background images folder",
+          buttonLabel: "Select",
         });
 
         result = result?.filePaths?.[0];

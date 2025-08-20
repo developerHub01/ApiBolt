@@ -1,37 +1,28 @@
-import { type ChangeEvent, memo, useCallback } from "react";
+import { memo, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus as AddIcon, X as CloseIcon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { handleChangeBinaryData } from "@/context/redux/request-response/request-response-slice";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import {
+  deleteRequestBodyBinary,
+  updateRequestBodyBinary,
+} from "@/context/redux/request-response/request-response-thunk";
 
 const BodyBinary = memo(() => {
   const dispatch = useAppDispatch();
-  // const { binaryData, selectedTab, handleChangeBinaryData } =
-  // useRequestResponse();
   const binaryData = useAppSelector(
-    (state) => state.requestResponse.binaryData[state.requestResponse.selectedTab!]
+    (state) =>
+      state.requestResponse.binaryData[state.requestResponse.selectedTab!]
   );
 
-  const handleChange = useCallback(
-    (file: File | null = null) => {
-      dispatch(
-        handleChangeBinaryData({
-          file,
-        })
-      );
-    },
+  const handleUpdateBinary = useCallback(
+    () => dispatch(updateRequestBodyBinary()),
     [dispatch]
   );
 
-  const handleFile = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
-      if (!file) return;
-
-      handleChange(file);
-    },
-    [handleChange]
+  const handleDeleteBinary = useCallback(
+    () => dispatch(deleteRequestBodyBinary()),
+    [dispatch]
   );
 
   return (
@@ -44,7 +35,7 @@ const BodyBinary = memo(() => {
               className="rounded-r-none w-full max-w-96 cursor-auto"
             >
               <span className="w-full overflow-hidden truncate">
-                {binaryData?.name}
+                {binaryData}
               </span>
             </Button>
             <Separator orientation="vertical" />
@@ -52,15 +43,19 @@ const BodyBinary = memo(() => {
               size={"icon"}
               variant={"secondary"}
               className="rounded-l-none"
-              onClick={() => handleChange()}
+              onClick={handleDeleteBinary}
             >
               <CloseIcon />
             </Button>
           </>
         ) : (
           <>
-            <input type="file" id="binary-data" hidden onChange={handleFile} />
-            <label htmlFor="binary-data" className="cursor-pointer">
+            {/* <input type="file" id="binary-data" hidden onChange={handleFile} /> */}
+            <label
+              htmlFor="binary-data"
+              className="cursor-pointer"
+              onClick={handleUpdateBinary}
+            >
               <Button variant={"secondary"} className="pointer-events-none">
                 <AddIcon size={16} /> Add new file from local machine
               </Button>

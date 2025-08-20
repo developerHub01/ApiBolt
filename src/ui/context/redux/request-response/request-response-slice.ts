@@ -216,7 +216,7 @@ interface RequestResponseState {
   headers: Record<string, Array<ParamInterface>>;
   hiddenCookie: ParamInterface;
   hiddenHeaders: Record<string, Array<ParamInterface>>;
-  binaryData: Record<string, File | null>;
+  binaryData: Record<string, string | null>;
   formData: Record<string, Array<FormDataInterface>>;
   xWWWFormUrlencodedData: Record<string, Array<ParamInterface>>;
   isDownloadRequestWithBase64: Record<string, boolean>;
@@ -626,11 +626,7 @@ export const requestResponseSlice = createSlice({
       if (!selectedTab || !state.hiddenHeaders[selectedTab]) return;
 
       state.hiddenHeaders[selectedTab].map((header: ParamInterface) => {
-        if (header.id === keyName) {
-          console.log(header);
-
-          header["isCheck"] = !header["isCheck"];
-        }
+        if (header.id === keyName) header["isCheck"] = !header["isCheck"];
 
         return header;
       });
@@ -649,6 +645,20 @@ export const requestResponseSlice = createSlice({
       state.rawDataLineWrap[selectedTab] = payload.lineWrap ?? true;
     },
     /* ================ BodyRaw end =================== */
+
+    /* ================ BodyBinary start =================== */
+    handleLoadBodyBinary: (
+      state,
+      action: PayloadAction<string | null | undefined>
+    ) => {
+      const payload = action.payload;
+      const selectedTab = state.selectedTab;
+
+      if (!selectedTab) return;
+
+      state.binaryData[selectedTab] = payload ?? null;
+    },
+    /* ================ BodyBinary end =================== */
 
     handleToggleCollapse: (
       state,
@@ -761,19 +771,6 @@ export const requestResponseSlice = createSlice({
       if (!id) return;
 
       state.xWWWFormUrlencodedData[id] = xWWWFormUrlencoded;
-    },
-    handleSetBinary: (
-      state,
-      action: PayloadAction<{
-        id?: string;
-        binary: File | null;
-      }>
-    ) => {
-      const { binary } = action.payload;
-      const id = action.payload.id ?? state.selectedTab;
-      if (!id) return;
-
-      state.binaryData[id] = binary;
     },
     handleChangeRequestBodyType: (
       state,
@@ -1276,19 +1273,6 @@ export const requestResponseSlice = createSlice({
           return;
       }
     },
-    handleChangeBinaryData: (
-      state,
-      action: PayloadAction<{
-        id?: string;
-        file: File | null;
-      }>
-    ) => {
-      const id = action.payload.id ?? state.selectedTab;
-      if (!id) return;
-      const { file } = action.payload;
-
-      state.binaryData[id] = file;
-    },
     handleRemoveFormDataFile: (
       state,
       action: PayloadAction<{
@@ -1415,10 +1399,11 @@ export const {
 
   handleLoadBodyRaw,
 
+  handleLoadBodyBinary,
+
   handleSetResponse,
   handleSetFormData,
   handleSetXWWWFormUrlencodedData,
-  handleSetBinary,
   handleChangeRawData,
   handleChangeRequestBodyType,
   handleChangeRawRequestBodyType,
@@ -1441,7 +1426,6 @@ export const {
   handleDeleteMetaData,
   handleCheckToggleMetaData,
   handleRemoveAllMetaData,
-  handleChangeBinaryData,
   handleRemoveFormDataFile,
 
   handleInitFolder,

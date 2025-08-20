@@ -254,3 +254,7 @@ export type BodyRawInterface = {
   rawData: string;
   lineWrap: boolean;
 };
+export type BodyBinaryInterface = {
+  requestOrFolderMetaId?: string;
+  file: string;
+};

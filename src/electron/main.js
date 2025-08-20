@@ -21,6 +21,7 @@ import { paramsHandlers } from "./ipc/paramsHandlers.js";
 import { headersHandlers } from "./ipc/headersHandlers.js";
 import { hiddenHeadersCheckTableHandler } from "./ipc/hiddenHeadersCheckTableHandler.js";
 import { bodyRawHandler } from "./ipc/bodyRawHandler.js";
+import { bodyBinaryHandler } from "./ipc/bodyBinaryHandler.js";
 
 export const userDataDir = app.getPath("userData");
 
@@ -84,6 +85,7 @@ app.whenReady().then(() => {
   headersHandlers();
   hiddenHeadersCheckTableHandler();
   bodyRawHandler();
+  bodyBinaryHandler();
 });
 
 app.on("window-all-closed", () => {

@@ -1,9 +1,9 @@
 import { eq } from "drizzle-orm";
 import { db } from "./index.js";
-import { bodyRawTable } from "./schema.js";
+import { bodyBinaryTable } from "./schema.js";
 import { getTabList } from "./tabsDB.js";
 
-export const getBodyRaw = async (requestOrFolderMetaId) => {
+export const getBodyBinary = async (requestOrFolderMetaId) => {
   if (!requestOrFolderMetaId)
     requestOrFolderMetaId = (await getTabList())?.selectedTab;
 
@@ -13,11 +13,9 @@ export const getBodyRaw = async (requestOrFolderMetaId) => {
     const result = (
       await db
         .select()
-        .from(bodyRawTable)
-        .where(eq(bodyRawTable.requestOrFolderMetaId, requestOrFolderMetaId))
+        .from(bodyBinaryTable)
+        .where(eq(bodyBinaryTable.requestOrFolderMetaId, requestOrFolderMetaId))
     )?.[0];
-
-    result["lineWrap"] = Boolean(result["lineWrap"]);
 
     return result;
   } catch (error) {
@@ -25,17 +23,13 @@ export const getBodyRaw = async (requestOrFolderMetaId) => {
   }
 };
 
-export const createBodyRaw = async (payload) => {
+export const createBodyBinary = async (payload) => {
   try {
     if (!payload.requestOrFolderMetaId)
       payload.requestOrFolderMetaId = (await getTabList())?.selectedTab;
     if (!payload.requestOrFolderMetaId) return false;
 
-    for (const key in payload)
-      if (typeof payload[key] === "boolean")
-        payload[key] = Number(payload[key]);
-
-    const result = await db.insert(bodyRawTable).values({
+    const result = await db.insert(bodyBinaryTable).values({
       ...payload,
       requestOrFolderMetaId,
     });
@@ -46,7 +40,7 @@ export const createBodyRaw = async (payload) => {
   }
 };
 
-export const updateBodyRaw = async (payload = {}) => {
+export const updateBodyBinary = async (payload = {}) => {
   try {
     let { requestOrFolderMetaId, ...rest } = payload;
 
@@ -56,32 +50,47 @@ export const updateBodyRaw = async (payload = {}) => {
 
     payload = rest;
 
-    for (const key in payload)
-      if (typeof payload[key] === "boolean")
-        payload[key] = Number(payload[key]);
-
     const bodyRawData = await db
       .select()
-      .from(bodyRawTable)
-      .where(eq(bodyRawTable.requestOrFolderMetaId, requestOrFolderMetaId));
+      .from(bodyBinaryTable)
+      .where(eq(bodyBinaryTable.requestOrFolderMetaId, requestOrFolderMetaId));
 
     let updated;
 
     if (!bodyRawData.length) {
-      updated = await db.insert(bodyRawTable).values({
+      updated = await db.insert(bodyBinaryTable).values({
         ...rest,
         requestOrFolderMetaId,
       });
     } else {
       updated = await db
-        .update(bodyRawTable)
+        .update(bodyBinaryTable)
         .set({
           ...rest,
         })
-        .where(eq(bodyRawTable.requestOrFolderMetaId, requestOrFolderMetaId));
+        .where(
+          eq(bodyBinaryTable.requestOrFolderMetaId, requestOrFolderMetaId)
+        );
     }
 
     return updated?.changes > 0;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteBodyBinary = async (requestOrFolderMetaId) => {
+  try {
+    if (!requestOrFolderMetaId)
+      requestOrFolderMetaId = (await getTabList())?.selectedTab;
+
+    if (!requestOrFolderMetaId) return null;
+
+    const deleted = await db
+      .delete(bodyBinaryTable)
+      .where(eq(bodyBinaryTable.requestOrFolderMetaId, requestOrFolderMetaId));
+
+    return deleted.changes > 0;
   } catch (error) {
     console.log(error);
   }

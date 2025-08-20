@@ -174,3 +174,14 @@ contextBridge.exposeInMainWorld("electronAPIBodyRawDB", {
   updateBodyRaw: async (...payload) =>
     await ipcRenderer.invoke("updateBodyRaw", ...payload),
 });
+
+contextBridge.exposeInMainWorld("electronAPIBodyBinaryDB", {
+  getBodyBinary: async (...payload) =>
+    await ipcRenderer.invoke("getBodyBinary", ...payload),
+  createBodyBinary: async (...payload) =>
+    await ipcRenderer.invoke("createBodyBinary", ...payload),
+  updateBodyBinary: async (...payload) =>
+    await ipcRenderer.invoke("updateBodyBinary", ...payload),
+  deleteBodyBinary: async (...payload) =>
+    await ipcRenderer.invoke("deleteBodyBinary", ...payload),
+});

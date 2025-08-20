@@ -5,6 +5,7 @@ import { useAppDispatch } from "@/context/redux/hooks";
 import {
   loadHeaders,
   loadParams,
+  loadRequestBodyBinary,
   loadRequestBodyRaw,
 } from "@/context/redux/request-response/request-response-thunk";
 
@@ -14,9 +15,12 @@ const RequestLayout = () => {
 
   useEffect(() => {
     const payload = { once: true };
-    [loadParams, loadHeaders, loadRequestBodyRaw].forEach((action) =>
-      dispatch(action(payload))
-    );
+    [
+      loadParams,
+      loadHeaders,
+      loadRequestBodyRaw,
+      loadRequestBodyBinary,
+    ].forEach((action) => dispatch(action(payload)));
   }, [dispatch, requestId]);
 
   return (

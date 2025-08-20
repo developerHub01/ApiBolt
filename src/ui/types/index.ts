@@ -1,6 +1,7 @@
 import type {
   APIPayloadBody,
   AuthorizationPayloadInterface,
+  BodyBinaryInterface,
   BodyRawInterface,
   EnvironmentInterface,
   EnvironmentPayloadInterface,
@@ -218,9 +219,16 @@ declare global {
       createBodyRaw(
         payload: Partial<BodyRawInterface> &
           Required<Pick<BodyRawInterface, "requestOrFolderMetaId">>
-      ): Promise<Partial<boolean>>;
+      ): Promise<boolean>;
       /* if in payload requestOrFolderMetaId not exist then it will pick active tab from backend */
       updateBodyRaw(payload: Partial<BodyRawInterface>): Promise<boolean>;
+    };
+
+    electronAPIBodyBinaryDB: {
+      getBodyBinary(requestId?: string): Promise<BodyBinaryInterface>;
+      createBodyBinary(): Promise<boolean>;
+      updateBodyBinary(requestId?: string): Promise<boolean>;
+      deleteBodyBinary(requestId?: string): Promise<boolean>;
     };
   }
 }
