@@ -1,16 +1,23 @@
-import { memo, useCallback, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import Code from "@/components/ui/code";
 import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectMetaBulkData } from "@/context/redux/request-response/request-response-selector";
 
+interface MetaDataInterface {
+  key: string;
+  value: string;
+  description: string;
+  isCheck: boolean;
+}
+
 const placeholder = `Rows are separated by new lines
 Keys and values are separated by :
 Prepend // to any row you want to add but keep disabled`;
 
-const textToMetaData = (text: string) => {
-  return text
+const textToMetaData = (text: string) =>
+  text
     .split("\n")
     .map((line) => {
       const tempLine = line.trim();
@@ -40,19 +47,38 @@ const textToMetaData = (text: string) => {
 
       return [key, value, description, enabled];
     });
+
+const metaDataToText = (data: Array<MetaDataInterface>) => {
+  return data
+    .reduce((acc: Array<string>, curr: MetaDataInterface) => {
+      const isCheck = curr.isCheck ?? true;
+      let line = [
+        curr.key ?? "",
+        curr.value ?? "",
+        curr.description ?? "",
+      ].join(":");
+      if (!isCheck) line = "//" + line;
+
+      return [...acc, line];
+    }, [])
+    .join("\n");
 };
 
 const BulkEditor = memo(() => {
   const [value, setValue] = useState<string>("");
   const metaData = useAppSelector(selectMetaBulkData);
-  console.log(metaData);
 
   const handleChange = useCallback((code: string) => {
     setValue(code);
   }, []);
+
   const handleBlur = useCallback(() => {
     console.log(textToMetaData(value));
   }, [value]);
+
+  useEffect(() => {
+    setValue(metaDataToText(metaData as Array<MetaDataInterface>));
+  }, [metaData]);
 
   return (
     <ScrollArea
