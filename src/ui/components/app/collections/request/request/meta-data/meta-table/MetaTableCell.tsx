@@ -1,4 +1,4 @@
-import { memo, useCallback, useRef, useState } from "react";
+import { memo, useCallback, useRef, useState, type MouseEvent } from "react";
 import { TableCell } from "@/components/ui/table";
 import { Plus as AddIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -41,6 +41,7 @@ const MetaTableCell = memo(
   }: MetaTableCellProps) => {
     const dispatch = useAppDispatch();
     const addButtonRef = useRef<HTMLButtonElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
     const [popoverOpen, setPopoverOpen] = useState<boolean>(false);
     const handleUploadFile = useCallback(
       () => dispatch(updateBodyFormDataFile(id)),
@@ -58,15 +59,21 @@ const MetaTableCell = memo(
       [dispatch]
     );
 
-    const openPopover = () => {
+    const openPopover = (e: MouseEvent<HTMLDivElement>) => {
+      e.stopPropagation();
       if (addButtonRef.current) setPopoverOpen(true);
     };
 
+    const handleClickCell = useCallback(() => {
+      inputRef.current?.focus();
+    }, []);
+
     return (
       <TableCell
-        className={cn("p-1.5 relative overflow-visible min-w-auto md:min-w-24")}
+        className={cn("p-1.5 relative overflow-visible min-w-auto md:min-w-24 group")}
+        onClick={handleClickCell}
       >
-        <div className="w-full flex gap-1 items-center">
+        <div className="w-full flex gap-1.5 items-center">
           {Array.isArray(value) && value.length ? (
             <div onClick={openPopover} className="w-full cursor-pointer">
               <FileTag
@@ -78,6 +85,7 @@ const MetaTableCell = memo(
             <>
               {keyType === "key" && prevent && <LockTooltip />}
               <MetaItemInput
+                ref={inputRef}
                 keyType={keyType}
                 id={id}
                 value={Array.isArray(value) ? "" : value}
@@ -104,6 +112,7 @@ const MetaTableCell = memo(
                 side="bottom"
                 align="end"
                 sideOffset={5}
+                onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}
               >
                 {Array.isArray(value) && !!value.length && (
                   <ScrollArea className="w-full h-full min-h-0">

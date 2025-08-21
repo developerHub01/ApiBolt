@@ -2,6 +2,7 @@ import {
   type ChangeEvent,
   type FocusEvent,
   memo,
+  type RefObject,
   useCallback,
   useEffect,
   useState,
@@ -12,9 +13,10 @@ import { Eye as ShowIcon, EyeOff as HideIcon } from "lucide-react";
 interface MetaItemInputProps
   extends Omit<
     React.ComponentProps<"input">,
-    "id" | "value" | "onBlur" | "className"
+    "id" | "value" | "onBlur" | "className" | "ref"
   > {
   id: string;
+  ref: RefObject<HTMLInputElement | null>;
   keyType: string;
   value?: string;
   type: "text" | "password";
@@ -25,6 +27,7 @@ interface MetaItemInputProps
 const MetaItemInput = memo(
   ({
     id,
+    ref,
     keyType,
     value = "",
     onBlur,
@@ -56,6 +59,7 @@ const MetaItemInput = memo(
     return (
       <div className="w-full flex gap-1 justify-between items-center group">
         <input
+          ref={ref}
           type={"text"}
           data-meta-item-type={keyType}
           value={
@@ -67,6 +71,7 @@ const MetaItemInput = memo(
           onBlur={handleBlur}
           className={cn(
             "w-full p-0.5 outline-none",
+            "border-b border-transparent group-hover:border-border focus:border-border",
             className
           )}
           {...props}
