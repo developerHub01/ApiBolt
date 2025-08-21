@@ -268,7 +268,7 @@ export const selectMetaBulkData = createSelector(
     if (activeMetaTab === "params") return params;
     else if (activeMetaTab === "headers") return headers;
     if (activeMetaTab === "body" && requestBodyType === "form-data")
-      return formData;
+      return formData?.filter((form) => !Array.isArray(form.value));
     if (activeMetaTab === "body" && requestBodyType === "x-www-form-urlencoded")
       return xWWWFormUrlencodedData;
 

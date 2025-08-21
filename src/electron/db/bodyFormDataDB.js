@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq, like, not } from "drizzle-orm";
 import { db } from "./index.js";
 import { bodyFormDataTable } from "./schema.js";
 import { getTabList } from "./tabsDB.js";
@@ -180,11 +180,18 @@ export const replaceBodyFormData = async (requestOrFolderMetaId, payload) => {
   });
 
   try {
-    await db
-      .delete(bodyFormDataTable)
-      .where(
-        eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId)
-      );
+    await db.delete(bodyFormDataTable).where(
+      and(
+        eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId),
+        /* it only remove valued value not file */
+        not(
+          and(
+            like(bodyFormDataTable.value, "[%"), // starts with [
+            like(bodyFormDataTable.value, "%]") // ends with ]
+          )
+        )
+      )
+    );
 
     const created = await db.insert(bodyFormDataTable).values(payload);
 
