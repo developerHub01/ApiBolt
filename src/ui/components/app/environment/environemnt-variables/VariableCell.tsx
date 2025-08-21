@@ -15,6 +15,7 @@ import {
 import { TableCell } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Trash2 as DeleteIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface VariableCellProps {
   id: string;
@@ -86,7 +87,10 @@ const VariableCell = memo(
           {type === "input" && (
             <input
               type={isSecretView ? "password" : "text"}
-              className="w-full py-0.5 border-b border-transparent focus:border-primary"
+              className={cn(
+                "w-full py-0.5 border-b border-transparent focus:border-primary",
+                "placeholder:capitalize placeholder:opacity-50"
+              )}
               value={inputValue}
               onChange={handleInputChange}
               onBlur={handleBlur}
@@ -95,7 +99,7 @@ const VariableCell = memo(
           )}
           {type === "select" && (
             <Select value={value} onValueChange={handleValueChange}>
-              <SelectTrigger size="sm" className="w-28 capitalize">
+              <SelectTrigger size="sm" className="min-w-28 w-full capitalize">
                 <SelectValue
                   className="capitalize"
                   placeholder="Select Type"

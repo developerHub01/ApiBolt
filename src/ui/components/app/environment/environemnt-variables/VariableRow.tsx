@@ -3,6 +3,7 @@ import { TableRow } from "@/components/ui/table";
 import VariableCell from "@/components/app/environment/environemnt-variables/VariableCell";
 import CheckCell from "@/components/app/environment/environemnt-variables/CheckCell";
 import type { EnvironmentInterface } from "@/types/request-response.types";
+import { cn } from "@/lib/utils";
 
 interface VariableRowProps extends EnvironmentInterface {
   onChange: (
@@ -23,7 +24,14 @@ const VariableRow = memo(
     onDelete,
   }: VariableRowProps) => {
     return (
-      <TableRow key={id} className="group">
+      <TableRow
+        key={id}
+        className={cn(
+          "group",
+          "[&>td]:border-r [&>td]:last:border-r-0 [&>td>input]:outline-none [&>td>div>input]:outline-none [&>td>input]:rounded-md [&>td>div>input]:rounded-md",
+          "focus-within:bg-accent/60 duration-75 transition-colors"
+        )}
+      >
         <CheckCell
           id={id}
           value={isCheck}

@@ -21,7 +21,7 @@ const CheckCell = memo(({ id, value = true, onChange }: CheckCellProps) => {
       <div className="flex justify-center">
         <Checkbox
           id={`check_${id}`}
-          className=""
+          className="cursor-pointer"
           checked={value}
           onCheckedChange={handleChange}
           defaultChecked
