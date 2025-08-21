@@ -86,7 +86,9 @@ interface CodeProps {
   lineWrap?: boolean;
   lineNumbers?: boolean;
   foldLine?: boolean;
+  indentWithTab?: boolean;
   copy?: boolean;
+  placeholder?: string;
   [key: string]: unknown;
   handleFormat?: () => void;
 }
@@ -105,7 +107,9 @@ const Code = ({
   lineWrap = false,
   lineNumbers = true,
   foldLine = true,
+  indentWithTab = true,
   copy = true,
+  placeholder = "",
   handleFormat,
   ...props
 }: CodeProps) => {
@@ -216,6 +220,8 @@ const Code = ({
           fontSize: fontSizeState,
         }}
         value={code}
+        placeholder={placeholder}
+        indentWithTab={indentWithTab}
         extensions={extensions}
         {...getEditableOptions({
           editable,
