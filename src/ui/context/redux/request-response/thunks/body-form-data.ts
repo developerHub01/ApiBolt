@@ -102,7 +102,6 @@ export const deleteBodyFormDataFile = createAsyncThunk<
 >(
   "request-response/deleteBodyFormDataFile",
   async ({ id, index }, { dispatch }) => {
-    console.log({ id, index });
     const response =
       await window.electronAPIBodyFormDataDB.deleteBodyFormDataFile(id, index);
 

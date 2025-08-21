@@ -25,6 +25,7 @@ import { bodyBinaryHandler } from "./ipc/bodyBinaryHandler.js";
 import { requestMetaTabHandler } from "./ipc/requestMetaTabHandler.js";
 import { bodyXWWWFormUrlencodedHandlers } from "./ipc/bodyXWWWFormUrlencodedHandlers.js";
 import { bodyFormDataHandlers } from "./ipc/bodyFormDataHandlers.js";
+import { metaShowColumnHandlers } from "./ipc/metaShowColumnHandlers.js";
 
 export const userDataDir = app.getPath("userData");
 
@@ -92,6 +93,7 @@ app.whenReady().then(() => {
   requestMetaTabHandler();
   bodyXWWWFormUrlencodedHandlers();
   bodyFormDataHandlers();
+  metaShowColumnHandlers();
 });
 
 app.on("window-all-closed", () => {

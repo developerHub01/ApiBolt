@@ -9,7 +9,6 @@ import {
   initialHiddenHeaderData,
   ResponsePanelMinLimit,
 } from "@/constant/request-response.constant";
-import { type TMetaTableType } from "@/context/collections/request/RequestMetaTableProvider";
 import type {
   APIKeyInterface,
   AuthorizationPayloadInterface,
@@ -24,7 +23,6 @@ import type {
   RequestListItemInterface,
   RequestListItemUpdatePayloadInterface,
   RequestResponseSizeInterface,
-  // ResponseFileDataBackendInterface,
   ResponseFolderDataInterface,
   ResponseInterface,
   TActiveTabType,
@@ -34,6 +32,8 @@ import type {
   TRequestBodyType,
   BodyRawInterface,
   RequestTabInterface,
+  MetaShowColumnInterface,
+  TMetaTableType,
 } from "@/types/request-response.types";
 import { parseUrlParams } from "@/utils";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
@@ -204,6 +204,9 @@ interface RequestResponseState {
   isApiUrlError: Record<string, boolean>;
   isLoading: Record<string, boolean>;
   apiUrl: Record<string, string>;
+
+  metaShowColumn: Record<string, MetaShowColumnInterface>;
+
   rawData: Record<string, string>;
   rawDataLineWrap: Record<string, boolean>;
   response: Record<string, ResponseInterface | null>;
@@ -273,6 +276,9 @@ const initialState: RequestResponseState = {
   isApiUrlError: {},
   isLoading: {},
   apiUrl: {},
+
+  metaShowColumn: {},
+
   rawData: {},
   rawDataLineWrap: {},
   response: {},
@@ -588,6 +594,33 @@ export const requestResponseSlice = createSlice({
       state.params[id] = params;
     },
     /* ================ Params end =================== */
+
+    /* ================ MetaShowColumn start =================== */
+    handleLoadMetaShowColumn: (
+      state,
+      action: PayloadAction<MetaShowColumnInterface>
+    ) => {
+      if (!state.selectedTab) return;
+
+      state.metaShowColumn[state.selectedTab] = action.payload;
+    },
+    handleSetMetaShowColumn: (
+      state,
+      action: PayloadAction<{
+        id?: string;
+        payload: Partial<MetaShowColumnInterface>;
+      }>
+    ) => {
+      const { payload } = action.payload;
+      const id = action.payload.id ?? state.selectedTab;
+      if (!id) return;
+
+      state.params[id] = {
+        ...(state.params[id] ?? {}),
+        ...payload,
+      };
+    },
+    /* ================ MetaShowColumn end =================== */
 
     /* ================ Headers start =================== */
     handleLoadHeaders: (
@@ -1450,6 +1483,11 @@ export const {
   handleRemoveTab,
   handleMoveTab,
   handleChangeSelectedTab,
+
+  /* MetaShowColumn start =========== */
+  handleLoadMetaShowColumn,
+  handleSetMetaShowColumn,
+  /* MetaShowColumn end =========== */
 
   /* params start =========== */
   handleLoadParams,

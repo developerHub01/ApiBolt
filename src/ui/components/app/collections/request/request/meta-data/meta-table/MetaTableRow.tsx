@@ -3,9 +3,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Trash2 as DeleteIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { TMetaTableType } from "@/context/collections/request/RequestMetaTableProvider";
 import MetaTableCell from "@/components/app/collections/request/request/meta-data/meta-table/MetaTableCell";
 import { cn } from "@/lib/utils";
+import type { TMetaTableType } from "@/types/request-response.types";
 
 const calculateDynamicText = "<calculated when request is sent>";
 

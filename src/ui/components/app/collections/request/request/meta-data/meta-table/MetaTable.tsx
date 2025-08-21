@@ -1,8 +1,4 @@
 import { memo } from "react";
-import {
-  useCellListToShow,
-  useGetTableData,
-} from "@/context/collections/request/RequestMetaTableProvider";
 import MetaTableHeader from "@/components/app/collections/request/request/meta-data/meta-table/MetaTableHeader";
 import MetaTableWrapper from "@/components/app/collections/request/request/meta-data/meta-table/MetaTableWrapper";
 import MetaTableRow from "@/components/app/collections/request/request/meta-data/meta-table/MetaTableRow";
@@ -13,6 +9,8 @@ import type {
   FormDataInterface,
   ParamInterface,
 } from "@/types/request-response.types";
+import useGetTableData from "@/hooks/request-response/meta-table/use-get-table-data";
+import { useCellListToShow } from "@/hooks/request-response/meta-table/use-cell-list-to-show";
 
 const headersToPreventCheckList = ["Cookie", "Authorization"];
 

@@ -17,6 +17,15 @@ export interface ProjectInterface {
   name: string;
 }
 
+export type TMetaTableType =
+  | "params"
+  | "hiddenParams"
+  | "headers"
+  | "hiddenHeaders"
+  | "form-data"
+  | "x-www-form-urlencoded"
+  | "environments";
+
 export interface EnvironmentInterface {
   id: string;
   variable: string;
@@ -268,4 +277,18 @@ export type RequestTabInterface = {
 
 export interface FormDataPayloadInterface extends ParamHeaderPayloadInterface {
   type: "text" | "file";
+}
+
+export type TMetaShowColumnKey = "value" | "description";
+
+export interface MetaShowColumnInterface {
+  requestOrFolderMetaId: string;
+  paramsValue: boolean;
+  paramsDescription: boolean;
+  headersValue: boolean;
+  headersDescription: boolean;
+  formDataValue: boolean;
+  formDataDescription: boolean;
+  xWWWFormUrlencodedValue: boolean;
+  xWWWFormUrlencodedDescription: boolean;
 }

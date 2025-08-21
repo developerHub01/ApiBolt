@@ -289,3 +289,26 @@ export const bodyFormDataTable = sqliteTable("body_form_data_table", {
     .notNull()
     .default(sql`(current_timestamp)`),
 });
+
+export const metaShowColumnTable = sqliteTable("meta_show_column_table", {
+  id: text()
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  requestOrFolderMetaId: text()
+    .notNull()
+    .unique()
+    .references(() => requestOrFolderMetaTable.id, {
+      onDelete: "cascade",
+    }),
+  paramsValue: int({ mode: boolean }).default(1),
+  paramsDescription: int({ mode: boolean }).default(0),
+  headersValue: int({ mode: boolean }).default(1),
+  headersDescription: int({ mode: boolean }).default(0),
+  formDataValue: int({ mode: boolean }).default(1),
+  formDataDescription: int({ mode: boolean }).default(0),
+  xWWWFormUrlencodedValue: int({ mode: boolean }).default(1),
+  xWWWFormUrlencodedDescription: int({ mode: boolean }).default(0),
+  createdAt: text()
+    .notNull()
+    .default(sql`(current_timestamp)`),
+});

@@ -1,7 +1,7 @@
 import { memo, useMemo } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
-import { useGetTableData } from "@/context/collections/request/RequestMetaTableProvider";
+import useGetTableData from "@/hooks/request-response/meta-table/use-get-table-data";
 
 interface MetaTableCheckAllProps {
   id?: string;

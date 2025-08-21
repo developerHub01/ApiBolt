@@ -1,12 +1,13 @@
 import { createSelector } from "@reduxjs/toolkit";
 import type { RootState } from "@/context/redux/store";
-import type { TMetaTableType } from "@/context/collections/request/RequestMetaTableProvider";
 import type {
   FormDataInterface,
+  MetaShowColumnInterface,
   ParamInterface,
   ProjectInterface,
   TActiveTabType,
   TAuthType,
+  TMetaTableType,
   TRequestBodyType,
 } from "@/types/request-response.types";
 
@@ -178,6 +179,18 @@ export const selectRequestBodyType = createSelector(
     if (!selectedTab) return "none";
 
     return requestBodyType[selectedTab];
+  }
+);
+
+export const selectRequestMetaShowColumn = createSelector(
+  [
+    (state: RootState) => state.requestResponse.selectedTab!,
+    (state: RootState) => state.requestResponse.metaShowColumn,
+  ],
+  (selectedTab, metaShowColumn): MetaShowColumnInterface | null => {
+    if (!selectedTab) return null;
+
+    return metaShowColumn[selectedTab];
   }
 );
 

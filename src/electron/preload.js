@@ -236,3 +236,14 @@ contextBridge.exposeInMainWorld("electronAPIBodyFormDataDB", {
   checkAllBodyFormDataByRequestMetaId: async (...payload) =>
     await ipcRenderer.invoke("checkAllBodyFormDataByRequestMetaId", ...payload),
 });
+
+contextBridge.exposeInMainWorld("electronAPIMetaShowColumnDB", {
+  getMetaShowColumn: async (...payload) =>
+    await ipcRenderer.invoke("getMetaShowColumn", ...payload),
+  createMetaShowColumn: async (...payload) =>
+    await ipcRenderer.invoke("createMetaShowColumn", ...payload),
+  updateMetaShowColumn: async (...payload) =>
+    await ipcRenderer.invoke("updateMetaShowColumn", ...payload),
+  deleteMetaShowColumn: async (...payload) =>
+    await ipcRenderer.invoke("deleteMetaShowColumn", ...payload),
+});

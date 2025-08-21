@@ -1,9 +1,9 @@
-import type { TMetaTableType } from "@/context/collections/request/RequestMetaTableProvider";
 import type {
   APIKeyInterface,
   BasicAuthInterface,
   EnvironmentInterface,
   JWTBearerAuthInterface,
+  TMetaTableType,
 } from "@/types/request-response.types";
 import { v4 as uuidv4 } from "uuid";
 

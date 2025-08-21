@@ -211,6 +211,20 @@
       "when": 1755714856642,
       "tag": "0029_old_gunslinger",
       "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "6",
+      "when": 1755776712342,
+      "tag": "0030_far_jamie_braddock",
+      "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "6",
+      "when": 1755779944555,
+      "tag": "0031_wide_jamie_braddock",
+      "breakpoints": true
     }
   ]
 }

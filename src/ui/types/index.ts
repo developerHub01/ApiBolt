@@ -8,6 +8,7 @@ import type {
   FormDataPayloadInterface,
   HiddenHeadersCheckInterface,
   JWTBearerAuthInterface,
+  MetaShowColumnInterface,
   ParamHeaderBuildPayloadInterface,
   ParamHeaderPayloadInterface,
   ProjectInterface,
@@ -286,6 +287,19 @@ declare global {
       checkAllBodyFormDataByRequestMetaId(
         requestOrFolderMetaId?: string
       ): Promise<boolean>;
+    };
+
+    electronAPIMetaShowColumnDB: {
+      getMetaShowColumn(
+        requestOrFolderMetaId?: string
+      ): Promise<MetaShowColumnInterface>;
+      createMetaShowColumn(
+        payload: Partial<MetaShowColumnInterface>
+      ): Promise<boolean>;
+      updateMetaShowColumn(
+        payload: Partial<MetaShowColumnInterface>
+      ): Promise<boolean>;
+      deleteMetaShowColumn(requestOrFolderMetaId?: string): Promise<boolean>;
     };
   }
 }

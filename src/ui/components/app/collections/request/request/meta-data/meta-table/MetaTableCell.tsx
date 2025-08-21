@@ -9,7 +9,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { type TMetaTableType } from "@/context/collections/request/RequestMetaTableProvider";
 import MetaItemInput from "@/components/app/collections/request/request/meta-data/meta-table/MetaItemInput";
 import { useAppDispatch } from "@/context/redux/hooks";
 import LockTooltip from "@/components/app/collections/request/request/meta-data/meta-table/LockTooltip";
@@ -18,6 +17,7 @@ import {
   deleteBodyFormDataFile,
   updateBodyFormDataFile,
 } from "@/context/redux/request-response/thunks/body-form-data";
+import type { TMetaTableType } from "@/types/request-response.types";
 
 interface MetaTableCellProps {
   keyType: string;
@@ -70,7 +70,9 @@ const MetaTableCell = memo(
 
     return (
       <TableCell
-        className={cn("p-1.5 relative overflow-visible min-w-auto md:min-w-24 group")}
+        className={cn(
+          "p-1.5 relative overflow-visible min-w-auto md:min-w-24 group"
+        )}
         onClick={handleClickCell}
       >
         <div className="w-full flex gap-1.5 items-center">

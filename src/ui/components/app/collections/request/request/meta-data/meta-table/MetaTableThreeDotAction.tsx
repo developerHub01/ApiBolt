@@ -12,12 +12,11 @@ import {
 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import {
-  useGetTableData,
-  useRequestMetaTable,
-  type ShowColumnInterface,
-  type TMetaTableType,
-} from "@/context/collections/request/RequestMetaTableProvider";
+import useGetTableData from "@/hooks/request-response/meta-table/use-get-table-data";
+import type {
+  TMetaShowColumnKey,
+  TMetaTableType,
+} from "@/types/request-response.types";
 
 interface MetaTableThreeDotActionProps {
   type: TMetaTableType;
@@ -25,8 +24,12 @@ interface MetaTableThreeDotActionProps {
 
 const MetaTableThreeDotAction = memo(
   ({ type }: MetaTableThreeDotActionProps) => {
-    const { showColumn, toggleShowColumn } = useRequestMetaTable();
-    const { handleAddNewData, handleDeleteAllData } = useGetTableData();
+    const {
+      showColumn,
+      handleAddNewData,
+      handleDeleteAllData,
+      handleUpdateMetaShowColumn,
+    } = useGetTableData();
 
     return (
       <Popover>
@@ -48,15 +51,15 @@ const MetaTableThreeDotAction = memo(
               type={type}
               id="value"
               label="Value"
-              value={showColumn.value}
-              onChange={toggleShowColumn}
+              value={showColumn?.value ?? true}
+              onChange={() => handleUpdateMetaShowColumn("value")}
             />
             <CheckItem
               type={type}
               id="description"
               label="Description"
-              value={showColumn.description}
-              onChange={toggleShowColumn}
+              value={showColumn?.description ?? false}
+              onChange={() => handleUpdateMetaShowColumn("description")}
             />
           </div>
           <span className="text-xs px-2 pb-1">Actions</span>
@@ -87,10 +90,10 @@ MetaTableThreeDotAction.displayName = "Meta table three dot action";
 
 interface CheckItemProps {
   type: TMetaTableType;
-  id: keyof ShowColumnInterface;
+  id: TMetaShowColumnKey;
   label: string;
   value: boolean;
-  onChange: (id: keyof ShowColumnInterface) => void;
+  onChange: (id: TMetaShowColumnKey) => void;
 }
 
 const CheckItem = ({ type, id, label, value, onChange }: CheckItemProps) => {
