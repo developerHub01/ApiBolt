@@ -9,6 +9,7 @@ import {
   deleteBodyFormDataFile,
   getBodyFormData,
   getBodyFormDataByFormId,
+  replaceBodyFormData,
   updateBodyFormData,
 } from "../db/bodyFormDataDB.js";
 
@@ -118,6 +119,10 @@ export const bodyFormDataHandlers = () => {
       return false;
     }
   });
+  ipcMain.handle(
+    "replaceBodyFormData",
+    async (_, ...rest) => await replaceBodyFormData(...rest)
+  );
   ipcMain.handle(
     "checkAllBodyFormDataByRequestMetaId",
     async (_, ...rest) => await checkAllBodyFormDataByRequestMetaId(...rest)

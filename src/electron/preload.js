@@ -138,6 +138,8 @@ contextBridge.exposeInMainWorld("electronAPIParamsDB", {
     await ipcRenderer.invoke("createParams", ...payload),
   updateParams: async (...payload) =>
     await ipcRenderer.invoke("updateParams", ...payload),
+  replaceParams: async (...payload) =>
+    await ipcRenderer.invoke("replaceParams", ...payload),
   checkAllParamsByRequestMetaId: async (...payload) =>
     await ipcRenderer.invoke("checkAllParamsByRequestMetaId", ...payload),
 });
@@ -153,6 +155,8 @@ contextBridge.exposeInMainWorld("electronAPIHeadersDB", {
     await ipcRenderer.invoke("createHeaders", ...payload),
   updateHeaders: async (...payload) =>
     await ipcRenderer.invoke("updateHeaders", ...payload),
+  replaceHeaders: async (...payload) =>
+    await ipcRenderer.invoke("replaceHeaders", ...payload),
   checkAllHeadersByRequestMetaId: async (...payload) =>
     await ipcRenderer.invoke("checkAllHeadersByRequestMetaId", ...payload),
 });
@@ -211,6 +215,8 @@ contextBridge.exposeInMainWorld("electronAPIBodyXWWWFormUrlencodedDB", {
     await ipcRenderer.invoke("createBodyXWWWFormUrlencoded", ...payload),
   updateBodyXWWWFormUrlencoded: async (...payload) =>
     await ipcRenderer.invoke("updateBodyXWWWFormUrlencoded", ...payload),
+  replaceBodyXWWWFormUrlencoded: async (...payload) =>
+    await ipcRenderer.invoke("replaceBodyXWWWFormUrlencoded", ...payload),
   checkAllBodyXWWWFormUrlencodedByRequestMetaId: async (...payload) =>
     await ipcRenderer.invoke(
       "checkAllBodyXWWWFormUrlencodedByRequestMetaId",
@@ -233,6 +239,8 @@ contextBridge.exposeInMainWorld("electronAPIBodyFormDataDB", {
     await ipcRenderer.invoke("updateBodyFormData", ...payload),
   updateBodyFormDataFile: async (...payload) =>
     await ipcRenderer.invoke("updateBodyFormDataFile", ...payload),
+  replaceBodyFormData: async (...payload) =>
+    await ipcRenderer.invoke("replaceBodyFormData", ...payload),
   checkAllBodyFormDataByRequestMetaId: async (...payload) =>
     await ipcRenderer.invoke("checkAllBodyFormDataByRequestMetaId", ...payload),
 });

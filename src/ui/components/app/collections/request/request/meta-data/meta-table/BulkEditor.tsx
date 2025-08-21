@@ -2,8 +2,9 @@ import { memo, useCallback, useEffect, useState } from "react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import Code from "@/components/ui/code";
 import { cn } from "@/lib/utils";
-import { useAppSelector } from "@/context/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { selectMetaBulkData } from "@/context/redux/request-response/request-response-selector";
+import { replaceMetaTableData } from "@/context/redux/request-response/thunks/meta-table-data";
 
 interface MetaDataInterface {
   key: string;
@@ -65,6 +66,7 @@ const metaDataToText = (data: Array<MetaDataInterface>) => {
 };
 
 const BulkEditor = memo(() => {
+  const dispatch = useAppDispatch();
   const [value, setValue] = useState<string>("");
   const metaData = useAppSelector(selectMetaBulkData);
 
@@ -73,8 +75,15 @@ const BulkEditor = memo(() => {
   }, []);
 
   const handleBlur = useCallback(() => {
-    console.log(textToMetaData(value));
-  }, [value]);
+    const metaArray = textToMetaData(value);
+    const payload = metaArray.map((arr) => ({
+      key: arr[0] as string,
+      value: arr[1] as string,
+      description: arr[2] as string,
+      isCheck: arr[3] as boolean,
+    }));
+    dispatch(replaceMetaTableData(payload));
+  }, [dispatch, value]);
 
   useEffect(() => {
     setValue(metaDataToText(metaData as Array<MetaDataInterface>));

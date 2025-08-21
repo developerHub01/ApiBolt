@@ -111,6 +111,41 @@ export const updateBodyXWWWFormUrlencoded = async (formId, payload) => {
   }
 };
 
+export const replaceBodyXWWWFormUrlencoded = async (
+  requestOrFolderMetaId,
+  payload
+) => {
+  if (!payload) return false;
+
+  payload.map((XWWFormUrlencoded) => {
+    delete XWWFormUrlencoded["id"];
+    delete XWWFormUrlencoded["requestOrFolderMetaId"];
+    delete XWWFormUrlencoded["createdAt"];
+    if ("isCheck" in XWWFormUrlencoded)
+      XWWFormUrlencoded["isCheck"] = Number(XWWFormUrlencoded["isCheck"]);
+    XWWFormUrlencoded["requestOrFolderMetaId"] = requestOrFolderMetaId;
+  });
+
+  try {
+    await db
+      .delete(bodyXWWWFormUrlencodedTable)
+      .where(
+        eq(
+          bodyXWWWFormUrlencodedTable.requestOrFolderMetaId,
+          requestOrFolderMetaId
+        )
+      );
+
+    const created = await db
+      .insert(bodyXWWWFormUrlencodedTable)
+      .values(payload);
+
+    return created?.changes > 0;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const checkAllBodyXWWWFormUrlencodedByRequestMetaId = async (
   requestOrFolderMetaId
 ) => {

@@ -105,6 +105,30 @@ export const updateParams = async (paramId, payload) => {
   }
 };
 
+export const replaceParams = async (requestOrFolderMetaId, payload) => {
+  if (!payload) return false;
+
+  payload.map((param) => {
+    delete param["id"];
+    delete param["requestOrFolderMetaId"];
+    delete param["createdAt"];
+    if ("isCheck" in param) param["isCheck"] = Number(param["isCheck"]);
+    param["requestOrFolderMetaId"] = requestOrFolderMetaId;
+  });
+
+  try {
+    await db
+      .delete(paramsTable)
+      .where(eq(paramsTable.requestOrFolderMetaId, requestOrFolderMetaId));
+
+    const created = await db.insert(paramsTable).values(payload);
+
+    return created?.changes > 0;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const checkAllParamsByRequestMetaId = async (requestOrFolderMetaId) => {
   try {
     if (!requestOrFolderMetaId)

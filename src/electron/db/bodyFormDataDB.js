@@ -91,7 +91,7 @@ export const deleteBodyFormDataByRequestMetaId = async (
 export const deleteBodyFormDataFile = async (formId, index = 0) => {
   try {
     const formData = await getBodyFormDataByFormId(formId);
-    
+
     if (
       !formData ||
       !Array.isArray(formData?.value) ||
@@ -162,6 +162,33 @@ export const updateBodyFormData = async (formId, payload) => {
       })
       .where(eq(bodyFormDataTable.id, formId));
     return updated?.changes > 0;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const replaceBodyFormData = async (requestOrFolderMetaId, payload) => {
+  if (!payload) return false;
+
+  payload.map((formData) => {
+    delete formData["id"];
+    delete formData["requestOrFolderMetaId"];
+    delete formData["createdAt"];
+    if ("isCheck" in formData)
+      formData["isCheck"] = Number(formData["isCheck"]);
+    formData["requestOrFolderMetaId"] = requestOrFolderMetaId;
+  });
+
+  try {
+    await db
+      .delete(bodyFormDataTable)
+      .where(
+        eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId)
+      );
+
+    const created = await db.insert(bodyFormDataTable).values(payload);
+
+    return created?.changes > 0;
   } catch (error) {
     console.log(error);
   }

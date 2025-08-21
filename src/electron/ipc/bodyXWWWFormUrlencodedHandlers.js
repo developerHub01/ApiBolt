@@ -5,6 +5,7 @@ import {
   deleteBodyXWWWFormUrlencoded,
   deleteBodyXWWWFormUrlencodedByRequestMetaId,
   getBodyXWWWFormUrlencoded,
+  replaceBodyXWWWFormUrlencoded,
   updateBodyXWWWFormUrlencoded,
 } from "../db/bodyXWWWFormUrlencodedDB.js";
 
@@ -29,6 +30,10 @@ export const bodyXWWWFormUrlencodedHandlers = () => {
   ipcMain.handle(
     "updateBodyXWWWFormUrlencoded",
     async (_, ...rest) => await updateBodyXWWWFormUrlencoded(...rest)
+  );
+  ipcMain.handle(
+    "replaceBodyXWWWFormUrlencoded",
+    async (_, ...rest) => await replaceBodyXWWWFormUrlencoded(...rest)
   );
   ipcMain.handle(
     "checkAllBodyXWWWFormUrlencodedByRequestMetaId",

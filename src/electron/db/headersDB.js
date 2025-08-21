@@ -111,6 +111,30 @@ export const updateHeaders = async (headerId, payload) => {
   }
 };
 
+export const replaceHeaders = async (requestOrFolderMetaId, payload) => {
+  if (!payload) return false;
+
+  payload.map((header) => {
+    delete header["id"];
+    delete header["requestOrFolderMetaId"];
+    delete header["createdAt"];
+    if ("isCheck" in header) header["isCheck"] = Number(header["isCheck"]);
+    header["requestOrFolderMetaId"] = requestOrFolderMetaId;
+  });
+
+  try {
+    await db
+      .delete(headersTable)
+      .where(eq(headersTable.requestOrFolderMetaId, requestOrFolderMetaId));
+
+    const created = await db.insert(headersTable).values(payload);
+
+    return created?.changes > 0;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const checkAllHeadersByRequestMetaId = async (requestOrFolderMetaId) => {
   try {
     if (!requestOrFolderMetaId)

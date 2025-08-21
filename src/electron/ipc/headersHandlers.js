@@ -5,6 +5,7 @@ import {
   deleteHeaders,
   deleteHeadersByRequestMetaId,
   getHeaders,
+  replaceHeaders,
   updateHeaders,
 } from "../db/headersDB.js";
 
@@ -25,6 +26,10 @@ export const headersHandlers = () => {
   ipcMain.handle(
     "updateHeaders",
     async (_, ...rest) => await updateHeaders(...rest)
+  );
+  ipcMain.handle(
+    "replaceHeaders",
+    async (_, ...rest) => await replaceHeaders(...rest)
   );
   ipcMain.handle(
     "checkAllHeadersByRequestMetaId",

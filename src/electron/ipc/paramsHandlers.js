@@ -5,6 +5,7 @@ import {
   deleteParams,
   deleteParamsByRequestMetaId,
   getParams,
+  replaceParams,
   updateParams,
 } from "../db/paramsDB.js";
 
@@ -25,6 +26,10 @@ export const paramsHandlers = () => {
   ipcMain.handle(
     "updateParams",
     async (_, ...rest) => await updateParams(...rest)
+  );
+  ipcMain.handle(
+    "replaceParams",
+    async (_, ...rest) => await replaceParams(...rest)
   );
   ipcMain.handle(
     "checkAllParamsByRequestMetaId",

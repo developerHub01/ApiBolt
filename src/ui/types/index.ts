@@ -184,6 +184,10 @@ declare global {
         paramId: string,
         payload: Partial<ParamHeaderBuildPayloadInterface>
       ): Promise<boolean>;
+      replaceParams(
+        requestOrFolderMetaId: string,
+        payload: Array<Partial<ParamHeaderBuildPayloadInterface>>
+      ): Promise<boolean>;
       checkAllParamsByRequestMetaId(
         requestOrFolderMetaId?: string
       ): Promise<boolean>;
@@ -203,6 +207,10 @@ declare global {
       updateHeaders(
         paramId: string,
         payload: Partial<ParamHeaderBuildPayloadInterface>
+      ): Promise<boolean>;
+      replaceHeaders(
+        requestOrFolderMetaId: string,
+        payload: Array<Partial<ParamHeaderBuildPayloadInterface>>
       ): Promise<boolean>;
       checkAllHeadersByRequestMetaId(
         requestOrFolderMetaId?: string
@@ -262,6 +270,10 @@ declare global {
         formId: string,
         payload: Partial<ParamHeaderBuildPayloadInterface>
       ): Promise<boolean>;
+      replaceBodyXWWWFormUrlencoded(
+        requestOrFolderMetaId: string,
+        payload: Array<Partial<FormDataPayloadInterface>>
+      ): Promise<boolean>;
       checkAllBodyXWWWFormUrlencodedByRequestMetaId(
         requestOrFolderMetaId?: string
       ): Promise<boolean>;
@@ -284,6 +296,10 @@ declare global {
         payload: Partial<FormDataPayloadInterface>
       ): Promise<boolean>;
       updateBodyFormDataFile(formId: string): Promise<boolean>;
+      replaceBodyFormData(
+        requestOrFolderMetaId: string,
+        payload: Array<Partial<FormDataPayloadInterface>>
+      ): Promise<boolean>;
       checkAllBodyFormDataByRequestMetaId(
         requestOrFolderMetaId?: string
       ): Promise<boolean>;
