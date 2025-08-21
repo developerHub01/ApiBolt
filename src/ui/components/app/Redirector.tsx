@@ -7,6 +7,7 @@ import {
   localStorageSidebarActiveTabKey,
   sidebarMenuList,
 } from "@/constant/sidebar.constant";
+import { selectSidebarActiveTab } from "@/context/redux/sidebar/sidebar-selector";
 
 const Redirector = () => {
   const dispatch = useAppDispatch();
@@ -23,6 +24,7 @@ const Redirector = () => {
         state.requestResponse.selectedTab ?? ""
       ] ?? null
   );
+  const sidebarActiveTab = useAppSelector(selectSidebarActiveTab);
 
   useEffect(() => {
     let activeSidebarTab: TSidebarTab = "projects";
@@ -46,11 +48,12 @@ const Redirector = () => {
     }
 
     /* find the path from the list */
+    if (location.pathname === route) return;
     navigate(route);
 
     /* activeProjectId, selectedTab === so that in both case update the url */
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeProjectId, selectedTab]);
+  }, [activeProjectId, selectedTab, sidebarActiveTab]);
 
   return null;
 };
