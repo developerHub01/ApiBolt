@@ -1,4 +1,4 @@
-import { memo, useCallback } from "react";
+import { memo } from "react";
 import {
   useCellListToShow,
   useGetTableData,
@@ -11,26 +11,8 @@ import { selectMetaData } from "@/context/redux/request-response/request-respons
 import { handleCheckToggleMetaData } from "@/context/redux/request-response/request-response-slice";
 import type {
   FormDataInterface,
-  HiddenHeadersCheckInterface,
   ParamInterface,
 } from "@/types/request-response.types";
-import {
-  deleteParams,
-  updateParams,
-} from "@/context/redux/request-response/thunks/params";
-import {
-  deleteHeaders,
-  updateHeaders,
-  updateHiddenHeaders,
-} from "@/context/redux/request-response/thunks/headers";
-import {
-  deleteBodyXWWWFormUrlencoded,
-  updateBodyXWWWFormUrlencoded,
-} from "@/context/redux/request-response/thunks/body-x-www-form-urlencoded";
-import {
-  deleteBodyFormData,
-  updateBodyFormData,
-} from "@/context/redux/request-response/thunks/body-form-data";
 
 const headersToPreventCheckList = ["Cookie", "Authorization"];
 
@@ -57,59 +39,11 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
   const hiddenHeader = useAppSelector(selectMetaData("hiddenHeaders")) ?? [];
   const hiddenParams = useAppSelector(selectMetaData("hiddenParams")) ?? [];
 
-  let data = tableData.data;
-  const type = tableData.type;
+  if (!tableData) return null;
 
-  const handleDelete = useCallback(
-    (id: string) => {
-      const handler =
-        type === "params"
-          ? deleteParams
-          : type === "headers"
-            ? deleteHeaders
-            : type === "x-www-form-urlencoded"
-              ? deleteBodyXWWWFormUrlencoded
-              : type === "form-data"
-                ? deleteBodyFormData
-                : deleteBodyFormData;
-      dispatch(handler(id));
-    },
-    [dispatch, type]
-  );
-
-  const handleUpdate = useCallback(
-    (id: string, key: string, value: string | File | boolean) => {
-      const handler =
-        type === "params"
-          ? updateParams
-          : type === "headers"
-            ? updateHeaders
-            : type === "x-www-form-urlencoded"
-              ? updateBodyXWWWFormUrlencoded
-              : type === "form-data"
-                ? updateBodyFormData
-                : updateBodyFormData;
-      dispatch(
-        handler({
-          paramId: id,
-          payload: {
-            [key]: value,
-          },
-        })
-      );
-    },
-    [dispatch, type]
-  );
-
-  const handleUpdateHiddenHeader = useCallback(
-    (keyName: string) =>
-      dispatch(
-        updateHiddenHeaders({
-          keyName: keyName as keyof HiddenHeadersCheckInterface,
-        })
-      ),
-    [dispatch]
-  );
+  const { type, handleDelete, handleUpdate, handleUpdateHiddenHeader } =
+    tableData;
+  let { data } = tableData;
 
   if (type === "headers" && showHiddenData)
     data = [...hiddenHeader, ...data].map(checkInputType);

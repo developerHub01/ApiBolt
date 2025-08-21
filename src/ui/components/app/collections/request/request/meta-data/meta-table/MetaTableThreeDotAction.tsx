@@ -1,4 +1,4 @@
-import { memo, useCallback } from "react";
+import { memo } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -13,13 +13,11 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import {
+  useGetTableData,
   useRequestMetaTable,
   type ShowColumnInterface,
   type TMetaTableType,
 } from "@/context/collections/request/RequestMetaTableProvider";
-import { useAppDispatch } from "@/context/redux/hooks";
-import { addParams, deleteParamsByRequestMetaId } from "@/context/redux/request-response/thunks/params";
-import { addHeaders, deleteHeadersByRequestMetaId } from "@/context/redux/request-response/thunks/headers";
 
 interface MetaTableThreeDotActionProps {
   type: TMetaTableType;
@@ -27,28 +25,8 @@ interface MetaTableThreeDotActionProps {
 
 const MetaTableThreeDotAction = memo(
   ({ type }: MetaTableThreeDotActionProps) => {
-    const dispatch = useAppDispatch();
     const { showColumn, toggleShowColumn } = useRequestMetaTable();
-
-    const handleAddNewData = useCallback(() => {
-      const handleAdd =
-        type === "params"
-          ? addParams
-          : type === "headers"
-            ? addHeaders
-            : addHeaders;
-      dispatch(handleAdd());
-    }, [dispatch, type]);
-
-    const handleDeleteAllData = useCallback(() => {
-      const handleDeleteAll =
-        type === "params"
-          ? deleteParamsByRequestMetaId
-          : type === "headers"
-            ? deleteHeadersByRequestMetaId
-            : deleteHeadersByRequestMetaId;
-      dispatch(handleDeleteAll());
-    }, [dispatch, type]);
+    const { handleAddNewData, handleDeleteAllData } = useGetTableData();
 
     return (
       <Popover>
@@ -61,6 +39,7 @@ const MetaTableThreeDotAction = memo(
         </PopoverTrigger>
         <PopoverContent
           align="end"
+          side="bottom"
           className="flex flex-col gap-1 p-1.5 max-w-40 select-none"
         >
           <span className="text-xs px-2 pb-1">Show columns</span>
@@ -72,15 +51,6 @@ const MetaTableThreeDotAction = memo(
               value={showColumn.value}
               onChange={toggleShowColumn}
             />
-            {type === "form-data" && showColumn.contentType !== undefined && (
-              <CheckItem
-                type={type}
-                id="contentType"
-                label="Content-Type"
-                value={showColumn.contentType}
-                onChange={toggleShowColumn}
-              />
-            )}
             <CheckItem
               type={type}
               id="description"

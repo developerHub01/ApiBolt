@@ -1,25 +1,19 @@
-import { memo, useCallback } from "react";
+import { memo } from "react";
 import MetaDataWrapper from "@/components/app/collections/request/request/meta-data/meta-table/MetaDataWrapper";
 import MetaTable from "@/components/app/collections/request/request/meta-data/meta-table/MetaTable";
 import { useRequestHeader } from "@/context/collections/request/RequestHeaderProvider";
 import { Eye as ShowIcon, EyeOff as HideIcon } from "lucide-react";
 import AddNewData from "@/components/AddNewData";
-import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import { useAppSelector } from "@/context/redux/hooks";
 import { selectMetaData } from "@/context/redux/request-response/request-response-selector";
-import { addHeaders } from "@/context/redux/request-response/thunks/headers";
 
 const Headers = memo(() => {
-  const dispatch = useAppDispatch();
   const { showHiddenHeader } = useRequestHeader();
-  const handleAddNewHeader = useCallback(
-    () => dispatch(addHeaders()),
-    [dispatch]
-  );
 
   return (
     <MetaDataWrapper label="Headers" labelPrefix={<LabelPrefix />}>
       <MetaTable showHiddenData={showHiddenHeader} />
-      <AddNewData onClick={handleAddNewHeader} label="Add New Headers" />
+      <AddNewData label="Add New Headers" />
     </MetaDataWrapper>
   );
 });

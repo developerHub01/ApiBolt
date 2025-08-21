@@ -6,12 +6,42 @@ import React, {
   useState,
 } from "react";
 import { useParams } from "react-router-dom";
-import { useAppSelector } from "@/context/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
   selectActiveMetaTab,
   selectMetaData,
   selectRequestBodyType,
 } from "@/context/redux/request-response/request-response-selector";
+import type { HiddenHeadersCheckInterface } from "@/types/request-response.types";
+import {
+  addHeaders,
+  checkAllHeadersByRequestMetaId,
+  deleteHeaders,
+  deleteHeadersByRequestMetaId,
+  updateHeaders,
+  updateHiddenHeaders,
+} from "@/context/redux/request-response/thunks/headers";
+import {
+  addParams,
+  checkAllParamsByRequestMetaId,
+  deleteParams,
+  deleteParamsByRequestMetaId,
+  updateParams,
+} from "@/context/redux/request-response/thunks/params";
+import {
+  addBodyXWWWFormUrlencoded,
+  checkAllBodyXWWWFormUrlencodedByRequestMetaId,
+  deleteBodyXWWWFormUrlencoded,
+  deleteBodyXWWWFormUrlencodedByRequestMetaId,
+  updateBodyXWWWFormUrlencoded,
+} from "@/context/redux/request-response/thunks/body-x-www-form-urlencoded";
+import {
+  addBodyFormData,
+  checkAllBodyFormDataByRequestMetaId,
+  deleteBodyFormData,
+  deleteBodyFormDataByRequestMetaId,
+  updateBodyFormData,
+} from "@/context/redux/request-response/thunks/body-form-data";
 
 export type TMetaTableType =
   | "params"
@@ -25,7 +55,6 @@ export type TMetaTableType =
 export interface ShowColumnInterface {
   value: boolean;
   description: boolean;
-  contentType?: boolean;
 }
 
 interface RequestMetaTableContext {
@@ -76,6 +105,7 @@ export const useCellListToShow = () => {
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useGetTableData = () => {
+  const dispatch = useAppDispatch();
   const activeMetaTab = useAppSelector(selectActiveMetaTab);
   const requestBodyType = useAppSelector(selectRequestBodyType);
 
@@ -94,9 +124,108 @@ export const useGetTableData = () => {
 
   const data = useAppSelector(selectMetaData(type)) ?? [];
 
+  const handleDelete = useCallback(
+    (id: string) => {
+      const handler =
+        type === "params"
+          ? deleteParams
+          : type === "headers"
+            ? deleteHeaders
+            : type === "x-www-form-urlencoded"
+              ? deleteBodyXWWWFormUrlencoded
+              : type === "form-data"
+                ? deleteBodyFormData
+                : deleteBodyFormData;
+      dispatch(handler(id));
+    },
+    [dispatch, type]
+  );
+
+  const handleUpdate = useCallback(
+    (id: string, key: string, value: string | File | boolean) => {
+      const handler =
+        type === "params"
+          ? updateParams
+          : type === "headers"
+            ? updateHeaders
+            : type === "x-www-form-urlencoded"
+              ? updateBodyXWWWFormUrlencoded
+              : type === "form-data"
+                ? updateBodyFormData
+                : updateBodyFormData;
+      dispatch(
+        handler({
+          paramId: id,
+          payload: {
+            [key]: value,
+          },
+        })
+      );
+    },
+    [dispatch, type]
+  );
+
+  const handleCheckAll = useCallback(() => {
+    const handler =
+      type === "params"
+        ? checkAllParamsByRequestMetaId
+        : type === "headers"
+          ? checkAllHeadersByRequestMetaId
+          : type === "x-www-form-urlencoded"
+            ? checkAllBodyXWWWFormUrlencodedByRequestMetaId
+            : type === "form-data"
+              ? checkAllBodyFormDataByRequestMetaId
+              : checkAllBodyFormDataByRequestMetaId;
+    dispatch(handler());
+  }, [dispatch, type]);
+
+  const handleUpdateHiddenHeader = useCallback(
+    (keyName: string) =>
+      dispatch(
+        updateHiddenHeaders({
+          keyName: keyName as keyof HiddenHeadersCheckInterface,
+        })
+      ),
+    [dispatch]
+  );
+
+  const handleAddNewData = useCallback(() => {
+    const handleAdd =
+      type === "params"
+        ? addParams
+        : type === "headers"
+          ? addHeaders
+          : type === "form-data"
+            ? addBodyFormData
+            : type === "x-www-form-urlencoded"
+              ? addBodyXWWWFormUrlencoded
+              : addBodyXWWWFormUrlencoded;
+    dispatch(handleAdd());
+  }, [dispatch, type]);
+
+  const handleDeleteAllData = useCallback(() => {
+    const handleDeleteAll =
+      type === "params"
+        ? deleteParamsByRequestMetaId
+        : type === "headers"
+          ? deleteHeadersByRequestMetaId
+          : type === "form-data"
+            ? deleteBodyFormDataByRequestMetaId
+            : type === "x-www-form-urlencoded"
+              ? deleteBodyXWWWFormUrlencodedByRequestMetaId
+              : deleteBodyXWWWFormUrlencodedByRequestMetaId;
+    dispatch(handleDeleteAll());
+  }, [dispatch, type]);
+
   return {
     data,
     type,
+    handleDelete,
+    handleUpdate,
+    handleUpdateHiddenHeader,
+    handleCheckAll,
+    handleAddNewData,
+    handleDeleteAllData,
   };
 };
 
@@ -112,7 +241,6 @@ const RequestMetaTableProvider = ({
   const [showColumn, setShowColumn] = useState<ShowColumnInterface>({
     value: true,
     description: true,
-    contentType: false,
   });
 
   // const {

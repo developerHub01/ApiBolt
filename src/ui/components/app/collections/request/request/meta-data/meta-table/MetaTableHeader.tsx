@@ -13,10 +13,8 @@ interface MetaTableHeaderProps {
 
 const MetaTableHeader = memo(({ type }: MetaTableHeaderProps) => {
   const {
-    showColumn: { description, value, contentType },
+    showColumn: { description, value },
   } = useRequestMetaTable();
-
-  const showContentType = contentType && type === "form-data";
 
   return (
     <TableHeader className="select-none">
@@ -24,19 +22,18 @@ const MetaTableHeader = memo(({ type }: MetaTableHeaderProps) => {
         <TableHead
           className="px-0"
           style={{
-            minWidth: 40,
+            width: 45,
           }}
         >
           <MetaTableCheckAll />
         </TableHead>
         <TableHead>Key</TableHead>
         {value && <TableHead>Value</TableHead>}
-        {showContentType && <TableHead>Content-Type</TableHead>}
         {description && <TableHead>Description</TableHead>}
         <TableHead
           className="p-0"
           style={{
-            minWidth: 40,
+            width: 45,
           }}
         >
           <MetaTableThreeDotAction type={type} />
