@@ -182,6 +182,100 @@ export const selectRequestBodyType = createSelector(
   }
 );
 
+export const selectMetaBulkEditOpen = createSelector(
+  [
+    (state: RootState) => state.requestResponse.selectedTab!,
+    (state: RootState) =>
+      state.requestResponse.activeMetaTab[
+        state.requestResponse.selectedTab ?? ""
+      ],
+    (state: RootState) =>
+      state.requestResponse.requestBodyType[
+        state.requestResponse.selectedTab ?? ""
+      ],
+    (state: RootState) =>
+      state.requestResponse.paramsBulkEditOpen[
+        state.requestResponse.selectedTab ?? ""
+      ],
+    (state: RootState) =>
+      state.requestResponse.headersBulkEditOpen[
+        state.requestResponse.selectedTab ?? ""
+      ],
+    (state: RootState) =>
+      state.requestResponse.formDataBulkEditOpen[
+        state.requestResponse.selectedTab ?? ""
+      ],
+    (state: RootState) =>
+      state.requestResponse.xWWWFormEncodedBulkEditOpen[
+        state.requestResponse.selectedTab ?? ""
+      ],
+  ],
+  (
+    selectedTab,
+    activeMetaTab,
+    requestBodyType,
+    paramsBulkEditOpen,
+    headersBulkEditOpen,
+    formDataBulkEditOpen,
+    xWWWFormEncodedBulkEditOpen
+  ): boolean => {
+    if (!selectedTab) return false;
+
+    if (activeMetaTab === "params") return paramsBulkEditOpen;
+    else if (activeMetaTab === "headers") return headersBulkEditOpen;
+    if (activeMetaTab === "body" && requestBodyType === "form-data")
+      return formDataBulkEditOpen;
+    if (activeMetaTab === "body" && requestBodyType === "x-www-form-urlencoded")
+      return xWWWFormEncodedBulkEditOpen;
+
+    return false;
+  }
+);
+
+export const selectMetaBulkData = createSelector(
+  [
+    (state: RootState) => state.requestResponse.selectedTab!,
+    (state: RootState) =>
+      state.requestResponse.activeMetaTab[
+        state.requestResponse.selectedTab ?? ""
+      ],
+    (state: RootState) =>
+      state.requestResponse.requestBodyType[
+        state.requestResponse.selectedTab ?? ""
+      ],
+    (state: RootState) =>
+      state.requestResponse.params[state.requestResponse.selectedTab ?? ""],
+    (state: RootState) =>
+      state.requestResponse.headers[state.requestResponse.selectedTab ?? ""],
+    (state: RootState) =>
+      state.requestResponse.formData[state.requestResponse.selectedTab ?? ""],
+    (state: RootState) =>
+      state.requestResponse.xWWWFormUrlencodedData[
+        state.requestResponse.selectedTab ?? ""
+      ],
+  ],
+  (
+    selectedTab,
+    activeMetaTab,
+    requestBodyType,
+    params,
+    headers,
+    formData,
+    xWWWFormUrlencodedData
+  ): Array<ParamInterface | FormDataInterface> => {
+    if (!selectedTab) return [];
+
+    if (activeMetaTab === "params") return params;
+    else if (activeMetaTab === "headers") return headers;
+    if (activeMetaTab === "body" && requestBodyType === "form-data")
+      return formData;
+    if (activeMetaTab === "body" && requestBodyType === "x-www-form-urlencoded")
+      return xWWWFormUrlencodedData;
+
+    return [];
+  }
+);
+
 export const selectRequestMetaShowColumn = createSelector(
   [
     (state: RootState) => state.requestResponse.selectedTab!,

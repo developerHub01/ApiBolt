@@ -206,6 +206,10 @@ interface RequestResponseState {
   apiUrl: Record<string, string>;
 
   metaShowColumn: Record<string, MetaShowColumnInterface>;
+  paramsBulkEditOpen: Record<string, boolean>;
+  headersBulkEditOpen: Record<string, boolean>;
+  formDataBulkEditOpen: Record<string, boolean>;
+  xWWWFormEncodedBulkEditOpen: Record<string, boolean>;
 
   rawData: Record<string, string>;
   rawDataLineWrap: Record<string, boolean>;
@@ -278,6 +282,10 @@ const initialState: RequestResponseState = {
   apiUrl: {},
 
   metaShowColumn: {},
+  paramsBulkEditOpen: {},
+  headersBulkEditOpen: {},
+  formDataBulkEditOpen: {},
+  xWWWFormEncodedBulkEditOpen: {},
 
   rawData: {},
   rawDataLineWrap: {},
@@ -570,6 +578,32 @@ export const requestResponseSlice = createSlice({
       state.selectedTab = id;
     },
     /* ================ TabsList end =================== */
+
+    /* ================ MetaTable bulk start =================== */
+    handleToggleMetaBulkEditOpen: (state) => {
+      const selectedTab = state.selectedTab;
+      if (!selectedTab) return;
+
+      if (state.activeMetaTab[selectedTab] === "params")
+        state.paramsBulkEditOpen[selectedTab] =
+          !state.paramsBulkEditOpen[selectedTab];
+      else if (state.activeMetaTab[selectedTab] === "headers")
+        state.headersBulkEditOpen[selectedTab] =
+          !state.headersBulkEditOpen[selectedTab];
+      else if (
+        state.activeMetaTab[selectedTab] === "body" &&
+        state.requestBodyType[selectedTab] === "form-data"
+      )
+        state.formDataBulkEditOpen[selectedTab] =
+          !state.formDataBulkEditOpen[selectedTab];
+      else if (
+        state.activeMetaTab[selectedTab] === "body" &&
+        state.requestBodyType[selectedTab] === "x-www-form-urlencoded"
+      )
+        state.xWWWFormEncodedBulkEditOpen[selectedTab] =
+          !state.xWWWFormEncodedBulkEditOpen[selectedTab];
+    },
+    /* ================ MetaTable bulk end =================== */
 
     /* ================ Params start =================== */
     handleLoadParams: (
@@ -1488,6 +1522,10 @@ export const {
   handleLoadMetaShowColumn,
   handleSetMetaShowColumn,
   /* MetaShowColumn end =========== */
+
+  /* MetaBulkEdit start =========== */
+  handleToggleMetaBulkEditOpen,
+  /* MetaBulkEdit end =========== */
 
   /* params start =========== */
   handleLoadParams,

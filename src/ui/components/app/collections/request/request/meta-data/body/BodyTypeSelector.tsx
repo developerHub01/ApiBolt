@@ -40,7 +40,6 @@ const bodyList: Array<{
 ];
 
 const BodyTypeSelector = () => {
-  // const { handleChangeRequestBodyType } = useRequestBody();
   const dispatch = useAppDispatch();
   const requestBodyType = useAppSelector(
     (state) =>
