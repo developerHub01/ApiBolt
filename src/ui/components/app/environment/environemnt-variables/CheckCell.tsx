@@ -17,8 +17,8 @@ const CheckCell = memo(({ id, value = true, onChange }: CheckCellProps) => {
   );
 
   return (
-    <TableCell>
-      <div className="flex justify-center">
+    <TableCell className="px-0">
+      <div className="flex justify-center items-center">
         <Checkbox
           id={`check_${id}`}
           className="cursor-pointer"

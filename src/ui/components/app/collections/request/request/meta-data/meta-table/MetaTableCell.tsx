@@ -70,9 +70,7 @@ const MetaTableCell = memo(
 
     return (
       <TableCell
-        className={cn(
-          "p-1.5 relative overflow-visible min-w-auto md:min-w-24 group"
-        )}
+        className={cn("p-2 relative overflow-visible min-w-auto md:min-w-24")}
         onClick={handleClickCell}
       >
         <div className="w-full flex gap-1.5 items-center">

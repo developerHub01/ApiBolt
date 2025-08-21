@@ -91,6 +91,9 @@ const VariableCell = memo(
                 "w-full py-0.5 border-b border-transparent focus:border-primary",
                 "placeholder:capitalize placeholder:opacity-50"
               )}
+              style={{
+                borderRadius: 0,
+              }}
               value={inputValue}
               onChange={handleInputChange}
               onBlur={handleBlur}

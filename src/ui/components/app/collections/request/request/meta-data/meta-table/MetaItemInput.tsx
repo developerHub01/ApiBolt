@@ -10,6 +10,8 @@ import {
 import { cn } from "@/lib/utils";
 import { Eye as ShowIcon, EyeOff as HideIcon } from "lucide-react";
 
+const hiddenDummyText = "••••••••••••••••••••";
+
 interface MetaItemInputProps
   extends Omit<
     React.ComponentProps<"input">,
@@ -63,17 +65,17 @@ const MetaItemInput = memo(
           type={"text"}
           data-meta-item-type={keyType}
           value={
-            type === "text" || !hidePassword
-              ? valueState
-              : "••••••••••••••••••••"
+            type === "text" || !hidePassword ? valueState : hiddenDummyText
           }
           onChange={handleChange}
           onBlur={handleBlur}
           className={cn(
             "w-full p-0.5 outline-none",
-            "border-b border-transparent group-hover:border-border focus:border-border",
+            "border-b border-transparent focus:border-primary",
+            "placeholder:capitalize placeholder:opacity-50",
             className
           )}
+          placeholder={keyType}
           {...props}
         />
         {type === "password" && (
