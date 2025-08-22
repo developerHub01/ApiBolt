@@ -9,8 +9,7 @@ import type {
   FormDataInterface,
   ParamInterface,
 } from "@/types/request-response.types";
-import useGetTableData from "@/hooks/request-response/meta-table/use-get-table-data";
-import { useCellListToShow } from "@/hooks/request-response/meta-table/use-cell-list-to-show";
+import { useRequestMetaData } from "@/context/collections/request/RequestMetaDataProvider";
 
 const headersToPreventCheckList = ["Cookie", "Authorization"];
 
@@ -32,8 +31,7 @@ interface MetaTableInterface {
 
 const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
   const dispatch = useAppDispatch();
-  const tableData = useGetTableData();
-  const cellToShow = useCellListToShow();
+  const { cellToShow, ...tableData } = useRequestMetaData();
   const hiddenHeader = useAppSelector(selectMetaData("hiddenHeaders")) ?? [];
   const hiddenParams = useAppSelector(selectMetaData("hiddenParams")) ?? [];
 

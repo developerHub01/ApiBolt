@@ -3,14 +3,14 @@ import { TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import MetaTableCheckAll from "@/components/app/collections/request/request/meta-data/meta-table/MetaTableCheckAll";
 import MetaTableThreeDotAction from "@/components/app/collections/request/request/meta-data/meta-table/MetaTableThreeDotAction";
 import type { TMetaTableType } from "@/types/request-response.types";
-import useGetTableData from "@/hooks/request-response/meta-table/use-get-table-data";
+import { useRequestMetaData } from "@/context/collections/request/RequestMetaDataProvider";
 
 interface MetaTableHeaderProps {
   type: TMetaTableType;
 }
 
 const MetaTableHeader = memo(({ type }: MetaTableHeaderProps) => {
-  const { showColumn } = useGetTableData();
+  const { showColumn } = useRequestMetaData();
 
   if (!showColumn) return null;
   const { value, description } = showColumn;

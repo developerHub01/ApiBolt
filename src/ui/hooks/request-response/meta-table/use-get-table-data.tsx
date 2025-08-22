@@ -94,8 +94,6 @@ export const useGetTableData = () => {
     [metaShowColumn, type]
   );
 
-  console.log({ showColumn, metaShowColumn });
-
   const handleDelete = useCallback(
     (id: string) => {
       const handler =

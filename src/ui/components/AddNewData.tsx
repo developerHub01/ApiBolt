@@ -2,7 +2,7 @@ import { memo } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus as AddIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import useGetTableData from "@/hooks/request-response/meta-table/use-get-table-data";
+import { useRequestMetaData } from "@/context/collections/request/RequestMetaDataProvider";
 
 interface AddNewDataProps {
   label?: string;
@@ -13,7 +13,7 @@ interface AddNewDataProps {
 
 const AddNewData = memo(
   ({ label = "", onClick, className, ...props }: AddNewDataProps) => {
-    const { handleAddNewData } = useGetTableData();
+    const { handleAddNewData } = useRequestMetaData();
 
     return (
       <Button

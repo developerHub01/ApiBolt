@@ -1,7 +1,7 @@
 import { memo, useMemo } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
-import useGetTableData from "@/hooks/request-response/meta-table/use-get-table-data";
+import { useRequestMetaData } from "@/context/collections/request/RequestMetaDataProvider";
 
 interface MetaTableCheckAllProps {
   id?: string;
@@ -10,7 +10,7 @@ interface MetaTableCheckAllProps {
 
 const MetaTableCheckAll = memo(
   ({ id = "", className = "" }: MetaTableCheckAllProps) => {
-    const { data, type, handleCheckAll } = useGetTableData() ?? {};
+    const { data, type, handleCheckAll } = useRequestMetaData();
 
     const isAllChecked = useMemo(() => {
       return data?.length ? data.every((item) => item.isCheck) : false;

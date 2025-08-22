@@ -12,11 +12,11 @@ import {
 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import useGetTableData from "@/hooks/request-response/meta-table/use-get-table-data";
 import type {
   TMetaShowColumnKey,
   TMetaTableType,
 } from "@/types/request-response.types";
+import { useRequestMetaData } from "@/context/collections/request/RequestMetaDataProvider";
 
 interface MetaTableThreeDotActionProps {
   type: TMetaTableType;
@@ -29,7 +29,7 @@ const MetaTableThreeDotAction = memo(
       handleAddNewData,
       handleDeleteAllData,
       handleUpdateMetaShowColumn,
-    } = useGetTableData();
+    } = useRequestMetaData();
 
     return (
       <Popover>
