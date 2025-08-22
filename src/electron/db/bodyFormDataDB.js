@@ -193,6 +193,8 @@ export const replaceBodyFormData = async (requestOrFolderMetaId, payload) => {
       )
     );
 
+    if (!payload?.length) return true;
+
     const created = await db.insert(bodyFormDataTable).values(payload);
 
     return created?.changes > 0;
