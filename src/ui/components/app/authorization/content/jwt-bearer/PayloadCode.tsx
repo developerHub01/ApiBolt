@@ -16,9 +16,10 @@ const codeFormatter = async (
 interface PayloadCodeProps {
   code: string;
   onBlur: (code: string) => void;
+  [key: string]: unknown;
 }
 
-const PayloadCode = ({ code = "", onBlur }: PayloadCodeProps) => {
+const PayloadCode = ({ code = "", onBlur, ...props }: PayloadCodeProps) => {
   const [codeState, setCodeState] = useState<string>(code);
 
   useEffect(() => {
@@ -42,6 +43,7 @@ const PayloadCode = ({ code = "", onBlur }: PayloadCodeProps) => {
       lineWrap={true}
       zoomable={true}
       handleFormat={handleFormat}
+      {...props}
     />
   );
 };

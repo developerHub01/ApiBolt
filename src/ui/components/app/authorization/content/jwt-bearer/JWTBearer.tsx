@@ -54,23 +54,23 @@ const JWTBearer = () => {
   return (
     <ContentWrapper>
       <AuthKeyValueWrapper>
-        <AuthContentInoutLabel htmlFor="api-add-to">
+        <AuthContentInoutLabel htmlFor="api-key-algo">
           Algorithm
         </AuthContentInoutLabel>
         <AuthContentSelect
-          id="api-key"
+          id="api-key-algo"
           className="w-full"
           items={algoList}
-          value={authData.algo ?? algoList[0].id}
+          value={authData.algo || algoList[0].id}
           onChange={(value) => handleBlur("jwtAlgo", value)}
         />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
-        <AuthContentInoutLabel htmlFor="api-add-to">
+        <AuthContentInoutLabel htmlFor="api-key-secret">
           Secret
         </AuthContentInoutLabel>
         <AuthContentInput
-          id="api-key"
+          id="api-key-secret"
           className="w-full"
           type="password"
           value={authData.secret}
@@ -78,31 +78,32 @@ const JWTBearer = () => {
         />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
-        <AuthContentInoutLabel htmlFor="api-add-to">
+        <AuthContentInoutLabel htmlFor="api-key-payload">
           Payload
         </AuthContentInoutLabel>
         <PayloadCode
+          id="api-key-payload"
           code={authData.payload}
           onBlur={(code: string) => handleBlur("jwtPayload", code)}
         />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
-        <AuthContentInoutLabel htmlFor="api-add-to">
+        <AuthContentInoutLabel htmlFor="api-key-prefix">
           Request header prefix
         </AuthContentInoutLabel>
         <AuthContentInput
-          id="api-key"
+          id="api-key-prefix"
           className="max-w-80"
           value={authData.headerPrefix}
           onBlur={(value) => handleBlur("jwtHeaderPrefix", value)}
         />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
-        <AuthContentInoutLabel htmlFor="api-add-to">
+        <AuthContentInoutLabel htmlFor="api-key-add-to">
           Add to
         </AuthContentInoutLabel>
         <AuthContentSelect
-          id="api-key"
+          id="api-key-add-to"
           className="w-full"
           items={addToList}
           value={authData.addTo ?? addToList[0].id}
