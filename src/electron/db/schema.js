@@ -278,7 +278,6 @@ export const bodyFormDataTable = sqliteTable("body_form_data_table", {
   isCheck: int({ mode: boolean }).default(1),
   key: text().notNull().default(""),
   value: text().notNull().default(""),
-  valueType: text().notNull().default("text") /* text | file */,
   description: text().notNull().default(""),
   requestOrFolderMetaId: text()
     .notNull()

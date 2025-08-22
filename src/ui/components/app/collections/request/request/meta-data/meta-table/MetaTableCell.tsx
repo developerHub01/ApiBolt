@@ -115,8 +115,8 @@ const MetaTableCell = memo(
                 onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}
               >
                 {Array.isArray(value) && !!value.length && (
-                  <ScrollArea className="w-full h-full min-h-0">
-                    <div className="max-h-24 w-full h-full flex flex-col gap-1.5 select-none">
+                  <ScrollArea className="w-full h-full min-h-0 p-0">
+                    <div className="max-h-28 w-full h-full flex flex-col gap-1.5 select-none">
                       {value.map((file, index) => (
                         <FileTag
                           key={`${file}-${index}`}

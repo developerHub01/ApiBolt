@@ -68,8 +68,8 @@ export const useGetTableData = () => {
       type === "environments"
         ? null
         : {
-            value:
-              type === "params"
+            value: metaShowColumn
+              ? type === "params"
                 ? metaShowColumn?.paramsValue
                 : type === "headers"
                   ? metaShowColumn?.headersValue
@@ -77,9 +77,10 @@ export const useGetTableData = () => {
                     ? metaShowColumn?.formDataValue
                     : type === "x-www-form-urlencoded"
                       ? metaShowColumn?.xWWWFormUrlencodedValue
-                      : true,
-            description:
-              type === "params"
+                      : true
+              : true,
+            description: metaShowColumn
+              ? type === "params"
                 ? metaShowColumn?.paramsDescription
                 : type === "headers"
                   ? metaShowColumn?.headersDescription
@@ -87,20 +88,13 @@ export const useGetTableData = () => {
                     ? metaShowColumn?.formDataDescription
                     : type === "x-www-form-urlencoded"
                       ? metaShowColumn?.xWWWFormUrlencodedDescription
-                      : true,
+                      : true
+              : false,
           },
-    [
-      metaShowColumn?.formDataDescription,
-      metaShowColumn?.formDataValue,
-      metaShowColumn?.headersDescription,
-      metaShowColumn?.headersValue,
-      metaShowColumn?.paramsDescription,
-      metaShowColumn?.paramsValue,
-      metaShowColumn?.xWWWFormUrlencodedDescription,
-      metaShowColumn?.xWWWFormUrlencodedValue,
-      type,
-    ]
+    [metaShowColumn, type]
   );
+
+  console.log({ showColumn, metaShowColumn });
 
   const handleDelete = useCallback(
     (id: string) => {
