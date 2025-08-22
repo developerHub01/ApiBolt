@@ -17,8 +17,8 @@ const MetaDataWrapper = ({
   children,
 }: MetaDataWrapperProps) => {
   return (
-    <div className="h-full flex flex-col gap-3">
-      <div className="flex items-center gap-3">
+    <>
+      <div className="w-full flex items-center gap-3">
         {label && (
           <p className="text-foreground text-sm select-none">{label}</p>
         )}
@@ -26,7 +26,7 @@ const MetaDataWrapper = ({
         <BulkEditButton />
       </div>
       <Metadata>{children}</Metadata>
-    </div>
+    </>
   );
 };
 
@@ -40,7 +40,7 @@ const Metadata = ({ children }: MetaDataProps) => {
   if (isBulkEditorOpen) return <BulkEditor />;
 
   return (
-    <ScrollArea className="w-full min-h-0 [&>div>div]:h-full border-t">
+    <ScrollArea className="flex-1 overflow-hidden w-full min-h-0 h-full [&>div>div]:h-full border-t">
       <div className="w-full h-full flex flex-col gap-4 items-center pb-5">
         {children}
       </div>

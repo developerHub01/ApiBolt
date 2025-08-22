@@ -16,7 +16,10 @@ const BodyDetails = memo(() => {
   return (
     <>
       {requestBodyType === "none" && (
-        <Empty label="This request doesn't have a body" />
+        <Empty
+          label="This request doesn't have a body"
+          className="min-h-auto"
+        />
       )}
       {requestBodyType === "form-data" && <FormData />}
       {requestBodyType === "x-www-form-urlencoded" && <XWWWFormUrlencoded />}

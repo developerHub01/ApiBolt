@@ -3,7 +3,11 @@ import MetaDataContent from "@/components/app/collections/request/request/meta-d
 
 const RequestPanel = () => {
   return (
-    <ResizablePanel id="request-panel" defaultSize={100}>
+    <ResizablePanel
+      id="request-panel"
+      defaultSize={100}
+      className="p-2.5 pt-1"
+    >
       <MetaDataContent />
     </ResizablePanel>
   );

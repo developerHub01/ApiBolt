@@ -11,7 +11,7 @@ const MetaDataContent = memo(() => {
 
   return (
     <RequestMetaDataProvider>
-      <div className="h-full p-2.5 pt-1">
+      <div className="h-full flex flex-col gap-3">
         {activeMetaTab === "params" && <Params />}
         {activeMetaTab === "headers" && <Headers />}
         {activeMetaTab === "body" && <Body />}

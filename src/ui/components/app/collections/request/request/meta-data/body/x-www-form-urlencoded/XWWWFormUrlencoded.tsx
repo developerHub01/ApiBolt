@@ -3,7 +3,7 @@ import MetaDataWrapper from "@/components/app/collections/request/request/meta-d
 
 const XWWWFormUrlencoded = () => {
   return (
-    <MetaDataWrapper>
+    <MetaDataWrapper label="X-WWW-Form-Urlencoded">
       <XWWWFormUrlencodedContent />
     </MetaDataWrapper>
   );

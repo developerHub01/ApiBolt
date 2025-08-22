@@ -3,7 +3,7 @@ import MetaDataWrapper from "@/components/app/collections/request/request/meta-d
 
 const FormData = () => {
   return (
-    <MetaDataWrapper>
+    <MetaDataWrapper label="Form-data">
       <FormDataContent />
     </MetaDataWrapper>
   );
