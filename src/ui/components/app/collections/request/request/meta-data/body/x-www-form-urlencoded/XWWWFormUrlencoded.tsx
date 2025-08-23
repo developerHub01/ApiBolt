@@ -1,10 +1,12 @@
-import XWWWFormUrlencodedContent from "@/components/app/collections/request/request/meta-data/body/x-www-form-urlencoded/XWWWFormUrlencodedContent";
 import MetaDataWrapper from "@/components/app/collections/request/request/meta-data/meta-table/MetaDataWrapper";
+import MetaTable from "@/components/app/collections/request/request/meta-data/meta-table/MetaTable";
+import AddNewMetaData from "@/components/app/collections/request/request/meta-data/AddNewMetaData";
 
 const XWWWFormUrlencoded = () => {
   return (
     <MetaDataWrapper label="X-WWW-Form-Urlencoded">
-      <XWWWFormUrlencodedContent />
+      <MetaTable />
+      <AddNewMetaData label="Add Form Data" />
     </MetaDataWrapper>
   );
 };
