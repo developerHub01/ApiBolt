@@ -4,9 +4,7 @@ import { loadAuthorization } from "@/context/redux/request-response/thunks/auth"
 
 // interface AuthorizationContext {}
 
-const AuthorizationContext = createContext<
-// AuthorizationContext |
- null>(null);
+const AuthorizationContext = createContext<null>(null);
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useAuthorization = () => {
