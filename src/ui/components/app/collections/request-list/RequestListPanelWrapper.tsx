@@ -39,6 +39,10 @@ const RequestListPanelWrapper = memo(() => {
     [dispath]
   );
 
+  const handleResize = useCallback((size: number) => {
+    console.log({ size });
+  }, []);
+
   if (isSmallDevice)
     return (
       <SmallDeviceListWrapper
@@ -57,6 +61,7 @@ const RequestListPanelWrapper = memo(() => {
       style={{
         maxWidth: "40vw",
       }}
+      onResize={handleResize}
       ref={resizablePanelRef}
     >
       <RequestListPanel />

@@ -1,40 +1,25 @@
 import { memo } from "react";
 import { Outlet, useParams } from "react-router-dom";
-import RequestListPanelWrapper from "@/components/app/collections/request-list/RequestListPanelWrapper";
 import TabSidebar from "@/components/app/tab-sidebar/TabSidebar";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
-import ProviderStack from "@/components/app/collections/request/ProviderStack";
+import { ResizablePanel } from "@/components/ui/resizable";
+import LayoutMainPanel from "@/components/app/collections/request/LayoutMainPanel";
 
 const LTRLayout = memo(() => {
   const { id: requestId } = useParams<{ id?: string }>();
 
   return (
-    <>
-      <RequestListPanelWrapper />
-      <ResizableHandle />
-      <ResizablePanel defaultSize={70}>
-        <section className="flex w-full h-full">
-          {requestId ? (
-            <>
-              <ResizablePanelGroup direction="vertical">
-                <ResizablePanel defaultSize={25}>
-                  <ProviderStack>
-                    <Outlet />
-                  </ProviderStack>
-                </ResizablePanel>
-              </ResizablePanelGroup>
-              <TabSidebar />
-            </>
-          ) : (
-            <Outlet />
-          )}
-        </section>
-      </ResizablePanel>
-    </>
+    <ResizablePanel defaultSize={70}>
+      <section className="flex w-full h-full">
+        {requestId ? (
+          <>
+            <LayoutMainPanel />
+            <TabSidebar />
+          </>
+        ) : (
+          <Outlet />
+        )}
+      </section>
+    </ResizablePanel>
   );
 });
 
