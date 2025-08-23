@@ -12,7 +12,6 @@ export const loadAuthorization = createAsyncThunk<
   void,
   { dispatch: AppDispatch; state: RootState }
 >("request-response/loadAuthorization", async (_, { dispatch }) => {
-  console.log("======= loadAuthorization === call ===========");
   const authorizationData = await window.electronAPIAuthorizationDB.getAuth();
 
   dispatch(handleAuthorizations(authorizationData));

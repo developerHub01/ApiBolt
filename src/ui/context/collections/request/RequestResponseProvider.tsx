@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useState,
 } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
@@ -11,6 +12,8 @@ import {
 } from "@/context/redux/request-response/request-response-thunk";
 
 interface RequestResponseContext {
+  forceCollapse: boolean;
+  handleForceCollapse: (value?: boolean) => void;
   handleDownloadRequest: (id: string) => Promise<void>;
 }
 
@@ -38,6 +41,7 @@ interface RequestResponseProviderProps {
 const RequestResponseProvider = ({
   children,
 }: RequestResponseProviderProps) => {
+  const [forceCollapse, setForceCollapse] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const selectedTab = useAppSelector(
     (state) => state.requestResponse.selectedTab
@@ -47,16 +51,17 @@ const RequestResponseProvider = ({
     dispatch(loadRequestData(selectedTab));
   }, [dispatch, selectedTab]);
 
-  const handleDownloadRequest = useCallback(
-    async (
-      // id: string
-    ) => {
+  const handleForceCollapse = useCallback((value?: boolean) => {
+    setForceCollapse((prev) => value ?? !prev);
+  }, []);
+
+  const handleDownloadRequest = useCallback(async () =>
+    // id: string
+    {
       // const downloadableData = await dispatch(
       //   getDownloadableRequestData(id)
       // ).unwrap();
-
       // if (!downloadableData) return;
-
       // const blob = new Blob([JSON.stringify(downloadableData)], {
       //   type: "application/json",
       // });
@@ -66,12 +71,16 @@ const RequestResponseProvider = ({
       // link.download = `${downloadableData.name || "request"}.json`;
       // link.click();
       // URL.revokeObjectURL(url);
-    },
-    []
-  );
+    }, []);
 
   return (
-    <RequestResponseContext.Provider value={{ handleDownloadRequest }}>
+    <RequestResponseContext.Provider
+      value={{
+        forceCollapse,
+        handleForceCollapse,
+        handleDownloadRequest,
+      }}
+    >
       {children}
     </RequestResponseContext.Provider>
   );
