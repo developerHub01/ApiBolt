@@ -7,6 +7,7 @@ import type {
   ProjectInterface,
   TActiveTabType,
   TAuthType,
+  TContentType,
   TMetaTableType,
   TRequestBodyType,
 } from "@/types/request-response.types";
@@ -293,4 +294,32 @@ export const selectAuthType = createSelector(
   (authType): TAuthType => {
     return authType;
   }
+);
+
+export const selectCodeLineWrap = createSelector(
+  [
+    (state: RootState) =>
+      state.requestResponse.rawDataLineWrap[
+        state.requestResponse.selectedTab ?? ""
+      ],
+  ],
+  (rawDataLineWrap): boolean => rawDataLineWrap ?? true
+);
+
+export const selectRawRequestBodyType = createSelector(
+  [
+    (state: RootState) =>
+      state.requestResponse.rawRequestBodyType[
+        state.requestResponse.selectedTab ?? ""
+      ],
+  ],
+  (bodyType): TContentType => bodyType ?? true
+);
+
+export const selectRawData = createSelector(
+  [
+    (state: RootState) =>
+      state.requestResponse.rawData[state.requestResponse.selectedTab ?? ""],
+  ],
+  (rawData): string => rawData ?? ""
 );

@@ -2,6 +2,7 @@ import React, { createContext, useCallback, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { updateRequestBodyRaw } from "@/context/redux/request-response/thunks/body-raw";
+import { selectCodeLineWrap } from "@/context/redux/request-response/request-response-selector";
 
 interface RequestBodyContext {
   handleChangeRawData: (data: string) => void;
@@ -31,12 +32,7 @@ interface RequestBodyProviderProps {
 const RequestBodyProvider = ({ children }: RequestBodyProviderProps) => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
-  const codeLineWrap = useAppSelector(
-    (state) =>
-      state.requestResponse.rawDataLineWrap?.[
-        state.requestResponse.selectedTab!
-      ] ?? true
-  );
+  const codeLineWrap = useAppSelector(selectCodeLineWrap);
 
   const handleToggleCodeLineWrap = useCallback(() => {
     dispatch(
