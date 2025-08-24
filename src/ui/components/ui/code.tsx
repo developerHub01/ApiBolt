@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type JSX } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import type { Extension } from "@uiw/react-codemirror";
 import { EditorView } from "@codemirror/view";
@@ -91,6 +91,7 @@ interface CodeProps {
   placeholder?: string;
   [key: string]: unknown;
   handleFormat?: () => void;
+  beforeComp?: JSX.Element | null;
 }
 
 const Code = ({
@@ -111,6 +112,7 @@ const Code = ({
   copy = true,
   placeholder = "",
   handleFormat,
+  beforeComp = null,
   ...props
 }: CodeProps) => {
   const [fontSizeState, setFontSizeState] = useState(fontSize);
@@ -190,7 +192,7 @@ const Code = ({
 
   return (
     <div
-      className={cn("w-full h-full relative", className)}
+      className={cn("w-full h-full relative flex flex-col", className)}
       tabIndex={0}
       ref={wrapperRef}
       {...props}
@@ -205,9 +207,10 @@ const Code = ({
           <CopyIcon />
         </Button>
       )}
+      {beforeComp}
       <CodeMirror
         className={cn(
-          "w-full h-full",
+          "w-full h-full flex-1",
           {
             "[&>div]:bg-background!": !transparentBg,
             "[&>div]:bg-transparent!": transparentBg,
