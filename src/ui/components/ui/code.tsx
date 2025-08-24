@@ -239,6 +239,7 @@ const Code = ({
           innerClassName
         )}
         height="100%"
+        width="100%"
         theme={theme}
         style={{
           fontSize: fontSizeState,
