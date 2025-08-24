@@ -14,6 +14,7 @@ import useMounted from "@/hooks/use-mounted";
 import { Button } from "@/components/ui/button";
 import { Copy as CopyIcon } from "lucide-react";
 import type { TContentType } from "@/types/request-response.types";
+import { toast } from "sonner";
 
 type TLanguageType = TContentType | "markdown";
 
@@ -172,10 +173,21 @@ const Code = ({
     };
   }, [zoomable, fontSize, handleFormat]);
 
-  const handleCopy = useCallback(() => {
-    navigator.clipboard.writeText(
-      typeof code === "string" ? code : JSON.stringify(code)
-    );
+  const handleCopy = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(
+        typeof code === "string" ? code : JSON.stringify(code)
+      );
+      toast("Code copied", {
+        description: "Successfully copied code into your clipboard",
+      });
+    } catch (error) {
+      toast("Something went wrong", {
+        description:
+          "Couldn't copy. facing some issue. " +
+          (error instanceof Error ? error.message : ""),
+      });
+    }
   }, [code]);
 
   if (!isMounted) return null;
