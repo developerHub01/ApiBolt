@@ -1,14 +1,13 @@
 import { memo } from "react";
 import MarkdownPreview from "@/components/markdown-preview";
+import { useRequestFolder } from "@/context/collections/folder/FolderProvider";
 
-interface DescriptionPreviewProps {
-  content: string;
-}
+const DescriptionPreview = memo(() => {
+  const { folderDescription } = useRequestFolder();
 
-const DescriptionPreview = memo(({ content = "" }: DescriptionPreviewProps) => {
   return (
     <MarkdownPreview
-      code={content}
+      code={folderDescription}
       className="w-full h-full min-h-96 p-3 overflow-hidden border rounded-md"
     />
   );

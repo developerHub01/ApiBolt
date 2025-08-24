@@ -46,17 +46,19 @@ const getEditableOptions = ({
   onBlur,
   lineNumbers,
   foldLine,
+  autoFocus,
 }: {
   editable: boolean;
   onChange?: (code: string) => void;
   onBlur?: () => void;
   lineNumbers: boolean;
   foldLine: boolean;
+  autoFocus: boolean;
 }) => {
   if (!editable) return {};
 
   return {
-    autoFocus: true,
+    autoFocus,
     basicSetup: {
       autocompletion: true,
       bracketMatching: true,
@@ -89,6 +91,7 @@ interface CodeProps {
   foldLine?: boolean;
   indentWithTab?: boolean;
   copy?: boolean;
+  autoFocus?: boolean;
   placeholder?: string;
   [key: string]: unknown;
   handleFormat?: () => void;
@@ -111,6 +114,7 @@ const Code = ({
   foldLine = true,
   indentWithTab = true,
   copy = true,
+  autoFocus = true,
   placeholder = "",
   handleFormat,
   beforeComp = null,
@@ -249,6 +253,7 @@ const Code = ({
           onBlur,
           lineNumbers,
           foldLine,
+          autoFocus,
         })}
         readOnly={!editable}
       />

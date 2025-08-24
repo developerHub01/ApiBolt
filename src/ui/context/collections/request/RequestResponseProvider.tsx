@@ -1,15 +1,4 @@
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import {
-  // getDownloadableRequestData,
-  loadRequestData,
-} from "@/context/redux/request-response/request-response-thunk";
+import React, { createContext, useCallback, useContext, useState } from "react";
 
 interface RequestResponseContext {
   forceCollapse: boolean;
@@ -42,15 +31,6 @@ const RequestResponseProvider = ({
   children,
 }: RequestResponseProviderProps) => {
   const [forceCollapse, setForceCollapse] = useState<boolean>(false);
-  const dispatch = useAppDispatch();
-  const selectedTab = useAppSelector(
-    (state) => state.requestResponse.selectedTab
-  );
-
-  useEffect(() => {
-    dispatch(loadRequestData(selectedTab));
-  }, [dispatch, selectedTab]);
-
   const handleForceCollapse = useCallback((value?: boolean) => {
     setForceCollapse((prev) => value ?? !prev);
   }, []);

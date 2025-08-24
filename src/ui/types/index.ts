@@ -15,6 +15,7 @@ import type {
   RequestListItemInterface,
   RequestListItemUpdatePayloadInterface,
   RequestTabInterface,
+  ResponseFolderDataInterface,
   ResponseInterface,
 } from "@/types/request-response.types";
 import type {
@@ -160,15 +161,14 @@ declare global {
     };
 
     electronAPIFolderDB: {
-      getFolder(requestOrFolderMetaId: string): Promise<{
-        title: string;
-        description: string;
-      }>;
-      updateFolder(payload: {
-        title?: string;
-        description?: string;
-        requestOrFolderMetaId: string;
-      }): Promise<boolean>;
+      getFolder(
+        requestOrFolderMetaId?: string
+      ): Promise<ResponseFolderDataInterface>;
+      updateFolder(
+        payload: Partial<ResponseFolderDataInterface> & {
+          requestOrFolderMetaId?: string;
+        }
+      ): Promise<boolean>;
     };
 
     electronAPIParamsDB: {

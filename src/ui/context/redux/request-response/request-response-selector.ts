@@ -10,6 +10,7 @@ import type {
   TContentType,
   TMetaTableType,
   TRequestBodyType,
+  TRequestFolderDescriptionTab,
 } from "@/types/request-response.types";
 
 export const selectActiveProjectId = createSelector(
@@ -79,6 +80,52 @@ export const selectProjectById = (id?: string | null) =>
       return projectList.find((project) => project.id === id) ?? null;
     }
   );
+
+export const selectSelectedTab = createSelector(
+  [(state: RootState) => state.requestResponse.selectedTab],
+  (selectedTab): string | null => selectedTab
+);
+
+export const selectRequestFolderTitle = createSelector(
+  [
+    (state: RootState) =>
+      state.requestResponse.folderTitle[
+        state.requestResponse.selectedTab! ?? ""
+      ],
+  ],
+  (folderTitle): string | undefined => folderTitle
+);
+
+export const selectRequestFolderDescription = createSelector(
+  [
+    (state: RootState) =>
+      state.requestResponse.folderDescription[
+        state.requestResponse.selectedTab! ?? ""
+      ],
+  ],
+  (folderDescription): string | undefined => folderDescription
+);
+
+export const selectRequestFolderDescriptionActiveTab = createSelector(
+  [
+    (state: RootState) =>
+      state.requestResponse.folderDescriptionActiveTab[
+        state.requestResponse.selectedTab! ?? ""
+      ] ?? "markdown",
+  ],
+  (folderDescriptionActiveTab): TRequestFolderDescriptionTab =>
+    folderDescriptionActiveTab
+);
+
+export const selectIsFolderLoading = createSelector(
+  [
+    (state: RootState) =>
+      state.requestResponse.isLoadingFolder[
+        state.requestResponse.selectedTab! ?? ""
+      ] ?? "markdown",
+  ],
+  (folderDescriptionActiveTab): boolean => folderDescriptionActiveTab
+);
 
 export const selectMetaData = (type: TMetaTableType | null) =>
   createSelector(

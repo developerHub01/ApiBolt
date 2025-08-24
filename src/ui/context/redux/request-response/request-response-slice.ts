@@ -34,10 +34,12 @@ import type {
   RequestTabInterface,
   MetaShowColumnInterface,
   TMetaTableType,
+  TRequestFolderDescriptionTab,
 } from "@/types/request-response.types";
 import { parseUrlParams } from "@/utils";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
+import { loadFolder } from "@/context/redux/request-response/thunks/folder";
 
 // export const fetchApiUniformError = (error: unknown): ResponseInterface => {
 //   // console.log("error", error);
@@ -256,6 +258,11 @@ interface RequestResponseState {
 
   folderTitle: Record<string, string>;
   folderDescription: Record<string, string>;
+  folderDescriptionActiveTab: Record<string, TRequestFolderDescriptionTab>;
+
+  /* loaders start ================ */
+  isLoadingFolder: Record<string, boolean>;
+  /* loaders end ================ */
 }
 
 // Define the initial state using that type
@@ -314,6 +321,11 @@ const initialState: RequestResponseState = {
 
   folderTitle: {},
   folderDescription: {},
+  folderDescriptionActiveTab: {},
+
+  /* loaders start ================ */
+  isLoadingFolder: {},
+  /* loaders end ================ */
 };
 
 export const requestResponseSlice = createSlice({
@@ -822,35 +834,6 @@ export const requestResponseSlice = createSlice({
 
       state.isResponseCollapsed[id] = !state.isResponseCollapsed[id];
     },
-    handleInitRequest: () =>
-      // state,
-      // action: PayloadAction<{
-      //   id: string;
-      //   payload?: ResponseFileDataBackendInterface;
-      // }>
-      {
-        // const { id, payload } = action.payload;
-        // if (!id) return;
-        // if (state.loadedRequestList[id]) return;
-        // /**
-        //  * If payload have that value then good else check if already loaded data or not if not then assign default value
-        //  * **/
-        // state.activeMetaTab[id] = state.activeMetaTab[id] ?? "params";
-        // state.apiUrl[id] = payload?.url ?? state.apiUrl[id] ?? "";
-        // state.requestBodyType[id] = state.requestBodyType[id] ?? "none";
-        // state.rawRequestBodyType[id] = state.rawRequestBodyType[id] ?? "text";
-        // state.params[id] = payload?.params ?? state.params[id] ?? [];
-        // state.hiddenParams[id] = state.hiddenParams[id] ?? [];
-        // state.headers[id] = payload?.headers ?? state.headers[id] ?? [];
-        // state.hiddenHeaders[id] =
-        //   state.hiddenHeaders[id] ?? initialHiddenHeaderData();
-        // state.formData[id] = state.formData[id] ?? [];
-        // state.xWWWFormUrlencodedData[id] =
-        //   payload?.body?.xWWWFormUrlencodedData ??
-        //   state.xWWWFormUrlencodedData[id] ??
-        //   [];
-        // state.loadedRequestList[id] = true;
-      },
     handleUpdateRequestResponseSelectedTab: (
       state,
       action: PayloadAction<string | null>
@@ -1039,112 +1022,7 @@ export const requestResponseSlice = createSlice({
 
       state.authType = type;
     },
-    // handleSetAPIKey: (
-    //   state,
-    //   action: PayloadAction<{
-    //     id?: string;
-    //     value: APIKeyInterface;
-    //   }>
-    // ) => {
-    //   const { value } = action.payload;
-    //   const id = action.payload.id ?? state.selectedTab;
-    //   if (!id) return;
 
-    //   state.apiKeyAuth[id] = value;
-    // },
-    // handleChangeAPIKey: (
-    //   state,
-    //   action: PayloadAction<{
-    //     id?: string;
-    //     key: "key" | "value" | "addTo";
-    //     value: string;
-    //   }>
-    // ) => {
-    //   const { value, key } = action.payload;
-    //   const id = action.payload.id ?? state.selectedTab;
-    //   if (!id) return;
-
-    //   state.apiKeyAuth[id] = {
-    //     ...defaultApiKey,
-    //     ...(state.apiKeyAuth[id] ?? {}),
-    //     [key]: value,
-    //   };
-    // },
-    // handleSetBasicAuth: (
-    //   state,
-    //   action: PayloadAction<{
-    //     id?: string;
-    //     value: BasicAuthInterface;
-    //   }>
-    // ) => {
-    //   const { value } = action.payload;
-    //   const id = action.payload.id ?? state.selectedTab;
-    //   if (!id) return;
-
-    //   state.basicAuth[id] = value;
-    // },
-    // handleChangeBasicAuth: (
-    //   state,
-    //   action: PayloadAction<{
-    //     id?: string;
-    //     key: "username" | "password";
-    //     value: string;
-    //   }>
-    // ) => {
-    //   const { value, key } = action.payload;
-    //   const id = action.payload.id ?? state.selectedTab;
-    //   if (!id) return;
-
-    //   state.basicAuth[id] = {
-    //     ...defaultBasicAuth,
-    //     ...(state.basicAuth[id] ?? {}),
-    //     [key]: value,
-    //   };
-    // },
-    // handleChangeBearerTokenAuth: (
-    //   state,
-    //   action: PayloadAction<{
-    //     id?: string;
-    //     value: string;
-    //   }>
-    // ) => {
-    //   const { value } = action.payload;
-    //   const id = action.payload.id ?? state.selectedTab;
-    //   if (!id) return;
-
-    //   state.bearerTokenAuth[id] = value;
-    // },
-    // handleSetJWTBearerAuth: (
-    //   state,
-    //   action: PayloadAction<{
-    //     id?: string;
-    //     value: JWTBearerAuthInterface;
-    //   }>
-    // ) => {
-    //   const { value } = action.payload;
-    //   const id = action.payload.id ?? state.selectedTab;
-    //   if (!id) return;
-
-    //   state.jwtBearerAuth[id] = value;
-    // },
-    // handleChangeJWTBearerAuth: (
-    //   state,
-    //   action: PayloadAction<{
-    //     id?: string;
-    //     key: "algo" | "secret" | "payload" | "headerPrefix" | "addTo";
-    //     value: string;
-    //   }>
-    // ) => {
-    //   const { key, value } = action.payload;
-    //   const id = action.payload.id ?? state.selectedTab;
-    //   if (!id) return;
-
-    //   state.jwtBearerAuth[id] = {
-    //     ...defaultJWTBearerAuth,
-    //     ...(state.jwtBearerAuth[id] ?? {}),
-    //     [key]: value,
-    //   };
-    // },
     handleIsDownloadRequestWithBase64: (
       state,
       action: PayloadAction<boolean>
@@ -1431,7 +1309,8 @@ export const requestResponseSlice = createSlice({
       });
     },
 
-    handleInitFolder: (
+    /* ================ Request Folder start =================== */
+    handleLoadFolder: (
       state,
       action: PayloadAction<{
         id?: string;
@@ -1448,45 +1327,81 @@ export const requestResponseSlice = createSlice({
       /**
        * If payload have that value then good else check if already loaded data or not if not then assign default value
        * **/
-      state.folderTitle[id] =
-        payload?.title ?? state.folderTitle[id] ?? defaultFolderTitle;
-      state.folderDescription[id] =
-        payload?.description ??
-        state.folderDescription[id] ??
-        defaultFolderDescription;
+      if (state.folderTitle[id] !== payload?.title)
+        state.folderTitle[id] =
+          payload?.title ?? state.folderTitle[id] ?? defaultFolderTitle;
+
+      if (state.folderDescription[id] !== payload?.description)
+        state.folderDescription[id] =
+          payload?.description ??
+          state.folderDescription[id] ??
+          defaultFolderDescription;
+
+      if (!state.folderDescriptionActiveTab[id])
+        state.folderDescriptionActiveTab[id] = "markdown";
 
       state.loadedRequestList[id] = true;
     },
-    handleChangeFolderTitle: (
+    handleUpdateFolder: (
       state,
       action: PayloadAction<{
         id?: string;
-        value: string;
+        payload?: Partial<ResponseFolderDataInterface>;
       }>
     ) => {
       const id = action.payload.id ?? state.selectedTab;
       if (!id) return;
 
-      state.folderTitle[id] = action.payload.value;
+      const { payload } = action.payload;
+
+      /**
+       * If payload have that value then good else check if already loaded data or not if not then assign default value
+       * **/
+      if (
+        typeof payload?.title === "string" &&
+        state.folderTitle[id] !== payload?.title
+      )
+        state.folderTitle[id] = payload?.title ?? "";
+
+      if (
+        typeof payload?.description === "string" &&
+        state.folderDescription[id] !== payload?.description
+      )
+        state.folderDescription[id] = payload?.description ?? "";
+
+      console.log({
+        ...payload,
+        folderTitle: state.folderTitle[id],
+        folderDescription: state.folderDescription[id],
+      });
     },
-    handleChangeFolderDescription: (
+    handleChangeFolderDescriptionActiveTab: (
       state,
       action: PayloadAction<{
         id?: string;
-        value: string;
+        value: TRequestFolderDescriptionTab;
       }>
     ) => {
       const id = action.payload.id ?? state.selectedTab;
       if (!id) return;
 
-      state.folderDescription[id] = action.payload.value;
+      if (state.folderDescriptionActiveTab[id] === action.payload.value) return;
+
+      state.folderDescriptionActiveTab[id] = action.payload.value;
     },
+    /* ================ Request Folder end =================== */
   },
-  // extraReducers(builder){
-  //   builder.addCase(getDownloadableRequestData.fulfilled, (state, action)=>{
-
-  //   })
-  // }
+  extraReducers(builder) {
+    /* loadFolder */
+    builder.addCase(loadFolder.pending, (state) => {
+      if (!state.selectedTab) return;
+      state.isLoadingFolder[state.selectedTab] = true;
+    });
+    builder.addCase(loadFolder.fulfilled, (state) => {
+      if (!state.selectedTab) return;
+      state.isLoadingFolder[state.selectedTab] = false;
+    });
+  },
 });
 
 export const selectRequestNameById =
@@ -1536,7 +1451,6 @@ export const {
   /* headers end =========== */
 
   handleToggleCollapse,
-  handleInitRequest,
   handleUpdateRequestResponseSelectedTab,
   handleChangeActiveMetaTab,
   handleSetParams,
@@ -1564,13 +1478,6 @@ export const {
   handleChangeApiUrl,
   handleChangeRequestResponseSize,
   handleChangeAuthType,
-  // handleSetAPIKey,
-  // handleChangeAPIKey,
-  // handleSetBasicAuth,
-  // handleChangeBasicAuth,
-  // handleChangeBearerTokenAuth,
-  // handleSetJWTBearerAuth,
-  // handleChangeJWTBearerAuth,
   handleIsDownloadRequestWithBase64,
   handleClearRequestResponse,
   handleAddMetaData,
@@ -1580,9 +1487,9 @@ export const {
   handleRemoveAllMetaData,
   handleRemoveFormDataFile,
 
-  handleInitFolder,
-  handleChangeFolderTitle,
-  handleChangeFolderDescription,
+  handleLoadFolder,
+  handleUpdateFolder,
+  handleChangeFolderDescriptionActiveTab,
 } = requestResponseSlice.actions;
 
 export default requestResponseSlice.reducer;

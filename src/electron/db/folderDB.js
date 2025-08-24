@@ -1,15 +1,29 @@
-import { eq, count } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { db } from "./index.js";
 import { folderTable } from "./schema.js";
 import { getActiveProject } from "./projectsDB.js";
+import { getTabList } from "./tabsDB.js";
 
 /* folder meta id */
 export const getFolder = async (requestOrFolderMetaId) => {
   try {
-    return await db
-      .select()
-      .from(folderTable)
-      .where(eq(folderTable.requestOrFolderMetaId, requestOrFolderMetaId));
+    if (!requestOrFolderMetaId)
+      requestOrFolderMetaId = (await getTabList())?.selectedTab;
+    if (!requestOrFolderMetaId) return null;
+
+    const result = (
+      await db
+        .select()
+        .from(folderTable)
+        .where(eq(folderTable.requestOrFolderMetaId, requestOrFolderMetaId))
+    )?.[0];
+
+    if (!result) return result;
+
+    return {
+      title: result.title,
+      description: result.description,
+    };
   } catch (error) {
     console.log(error);
   }
@@ -24,20 +38,25 @@ payload = {
 export const updateFolder = async (payload) => {
   try {
     if (!payload || typeof payload !== "object") return false;
-    const { requestOrFolderMetaId } = payload;
+    let requestOrFolderMetaId = payload.requestOrFolderMetaId;
 
+    if (!requestOrFolderMetaId)
+      requestOrFolderMetaId = (await getTabList())?.selectedTab;
     if (!requestOrFolderMetaId) return false;
 
     let updated;
-    const folderData = await db
-      .select()
-      .from(folderTable)
-      .where(eq(folderTable.requestOrFolderMetaId, requestOrFolderMetaId));
+    const folderData = (
+      await db
+        .select()
+        .from(folderTable)
+        .where(eq(folderTable.requestOrFolderMetaId, requestOrFolderMetaId))
+    )?.[0];
 
     if (!folderData) {
       const activeProject = await getActiveProject();
       updated = await db.insert(folderTable).values({
         ...payload,
+        requestOrFolderMetaId,
         projectId: activeProject,
       });
     } else {

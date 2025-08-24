@@ -1,19 +1,22 @@
 import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { loadRequestData } from "@/context/redux/request-response/request-response-thunk";
+import { useAppDispatch } from "@/context/redux/hooks";
 import { Outlet } from "react-router-dom";
+import RequestFolderProvider from "@/context/collections/folder/FolderProvider";
+import { loadFolder } from "@/context/redux/request-response/thunks/folder";
 
 const FolderLayout = () => {
   const dispatch = useAppDispatch();
-  const selectedTab = useAppSelector(
-    (state) => state.requestResponse.selectedTab
-  );
 
   useEffect(() => {
-    dispatch(loadRequestData(selectedTab));
-  }, [dispatch, selectedTab]);
+    const payload = { once: true };
+    [loadFolder].forEach((action) => dispatch(action(payload)));
+  }, [dispatch]);
 
-  return <Outlet />;
+  return (
+    <RequestFolderProvider>
+      <Outlet />
+    </RequestFolderProvider>
+  );
 };
 
 export default FolderLayout;
