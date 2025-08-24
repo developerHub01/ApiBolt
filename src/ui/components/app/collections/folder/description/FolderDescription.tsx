@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/context/redux/hooks";
 import DescriptionEditor from "@/components/app/collections/folder/description/DescriptionEditor";
 import DescriptionPreview from "@/components/app/collections/folder/description/DescriptionPreview";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 const buttonList: Array<{
   id: TTab;
@@ -32,7 +33,7 @@ const FolderDescription = memo(() => {
   const handleChangeTab = (id: TTab) => setActiveTab(id);
 
   return (
-    <div className="flex flex-col w-full h-full gap-4">
+    <div className="flex-1 flex flex-col w-full h-full min-h-0 gap-4">
       <div className="flex items-center gap-1.5 px-2">
         {buttonList.map(({ id, label }) => (
           <button
@@ -50,11 +51,19 @@ const FolderDescription = memo(() => {
           </button>
         ))}
       </div>
-      {activeTab === "markdown" ? (
-        <DescriptionEditor content={description} />
-      ) : (
-        <DescriptionPreview content={description} />
-      )}
+      <ScrollArea
+        className={cn(
+          "flex-1 min-h-0 h-full overflow-hidden [&>div>div]:h-full relative bg-background/10 rounded-md border",
+          "backdrop-blur-xs"
+        )}
+      >
+        {activeTab === "markdown" ? (
+          <DescriptionEditor content={description} />
+        ) : (
+          <DescriptionPreview content={description} />
+        )}
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
     </div>
   );
 });

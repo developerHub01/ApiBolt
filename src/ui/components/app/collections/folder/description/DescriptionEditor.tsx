@@ -29,20 +29,17 @@ const DescriptionEditor = memo(({ content = "" }: DescriptionEditorProps) => {
   }, [descriptionState, dispatch]);
 
   return (
-    <div className="w-full h-full min-h-80 md:min-h-96 border rounded-lg overflow-hidden">
-      <Code
-        contentType="markdown"
-        code={descriptionState}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        fontSize={18}
-        lineWrap={true}
-        zoomable={true}
-        lineNumbers={false}
-        foldLine={false}
-        className="p-3 h-full pt-4"
-      />
-    </div>
+    <Code
+      contentType="markdown"
+      code={descriptionState}
+      onChange={handleChange}
+      onBlur={handleBlur}
+      fontSize={18}
+      lineWrap={true}
+      zoomable={true}
+      className="h-full pr-1 static"
+      beforeComp={<div className="w-full h-6 bg-accent/50" />}
+    />
   );
 });
 
