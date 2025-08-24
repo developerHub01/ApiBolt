@@ -208,6 +208,11 @@ const Code = ({
         </Button>
       )}
       {beforeComp}
+      <style>{` 
+        .cm-gutter.cm-lineNumbers {
+            user-select: none;
+        }
+      `}</style>
       <CodeMirror
         className={cn(
           "w-full h-full flex-1",
