@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { cn } from "@/lib/utils";
 import type {
   RequestListItemInterface,
-  TMethod,
+  THTTPMethods,
 } from "@/types/request-response.types";
 import { FolderClosed as FolderIcon } from "lucide-react";
 import RequestMethodTag from "@/components/app/RequestMethodTag";
@@ -53,7 +53,7 @@ const SearchResultItem = ({
             {children && <FolderIcon size={16} />}
             {method && (
               <RequestMethodTag
-                method={method as TMethod}
+                method={method as THTTPMethods}
                 shortCut={true}
                 className={"w-full"}
               />

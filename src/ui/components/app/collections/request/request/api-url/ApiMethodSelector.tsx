@@ -1,98 +1,56 @@
-import { memo } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { cn } from "@/lib/utils";
+import { memo, useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import type { THTTPMethods } from "@/types/request-response.types";
 import { updateRequestOrFolder } from "@/context/redux/request-response/thunks/request-list";
-
-const methodList: Array<{
-  id: THTTPMethods;
-  label: string;
-}> = [
-  {
-    id: "get",
-    label: "GET",
-  },
-  {
-    id: "post",
-    label: "POST",
-  },
-  {
-    id: "put",
-    label: "PUT",
-  },
-  {
-    id: "patch",
-    label: "PATCH",
-  },
-  {
-    id: "delete",
-    label: "DELETE",
-  },
-];
+import {
+  ApiMethodSelect,
+  ApiMethodSelectContent,
+  ApiMethodSelectTrigger,
+} from "@/components/ui/api-method-select";
+import {
+  selectIsHttpMethodType,
+  selectSelectedTab,
+} from "@/context/redux/request-response/request-response-selector";
 
 const ApiMethodSelector = memo(() => {
   const dispatch = useAppDispatch();
-  const selectedTab = useAppSelector(
-    (state) => state.requestResponse.selectedTab
-  )!;
-  const methodType = useAppSelector(
-    (state) =>
-      state.requestResponse.requestList[state.requestResponse.selectedTab!]
-        ?.method ?? "get"
+  const selectedTab = useAppSelector(selectSelectedTab)!;
+  const methodType = useAppSelector(selectIsHttpMethodType);
+
+  const handleChange = useCallback(
+    (value: THTTPMethods) => {
+      dispatch(
+        updateRequestOrFolder({
+          method: value,
+          id: selectedTab,
+        })
+      );
+    },
+    [dispatch, selectedTab]
   );
 
-  const handleChange = (value: THTTPMethods) => {
-    dispatch(
-      updateRequestOrFolder({
-        method: value,
-        id: selectedTab,
-      })
-    );
-  };
+  if (!selectedTab) return null;
 
   return (
-    <div className="w-[150px] select-none">
-      <Select
-        defaultValue={methodType ?? methodList[0].id}
+    <div
+      className="shrink-0 select-none"
+      style={{
+        width: "120px",
+      }}
+    >
+      <ApiMethodSelect
+        defaultValue={methodType}
         onValueChange={handleChange}
         value={methodType}
       >
-        <SelectTrigger
-          className={cn("w-full rounded-r-none font-semibold", {
-            "text-green-500/80": methodType === "get",
-            "text-blue-500/80": methodType === "post",
-            "text-yellow-500/80": methodType === "put",
-            "text-orange-500/80": methodType === "patch",
-            "text-red-500/80": methodType === "delete",
-          })}
-        >
-          <SelectValue placeholder="Method" />
-        </SelectTrigger>
-        <SelectContent>
-          {methodList.map(({ id, label }) => (
-            <SelectItem
-              key={id}
-              value={id}
-              className={cn("font-semibold", {
-                "text-green-500": id === "get",
-                "text-blue-500": id === "post",
-                "text-yellow-500": id === "put",
-                "text-orange-500": id === "patch",
-                "text-red-500": id === "delete",
-              })}
-            >
-              {label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+        <ApiMethodSelectTrigger methodType={methodType} className="w-full" />
+        <ApiMethodSelectContent sideOffset={10}
+          activeValue={methodType}
+          style={{
+            width: "120px",
+          }}
+        />
+      </ApiMethodSelect>
     </div>
   );
 });

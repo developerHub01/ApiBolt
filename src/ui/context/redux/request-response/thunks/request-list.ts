@@ -1,7 +1,7 @@
 import {
   type RequestListItemInterface,
   type RequestListItemUpdatePayloadInterface,
-  type TMethod,
+  type THTTPMethods,
 } from "@/types/request-response.types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
@@ -97,11 +97,11 @@ export const createRestApiBasic = createAsyncThunk<
     };
 
     const payload: Array<RequestListItemInterface> = (
-      ["get", "post", "put", "patch", "delete"] as Array<TMethod>
+      ["get", "post", "put", "patch", "delete"] as Array<THTTPMethods>
     ).map((method) => ({
       id: uuidv4(),
       name: `${method[0].toUpperCase()}${method.substring(1)} data`,
-      method: method as TMethod,
+      method: method as THTTPMethods,
       createdAt: Date.now(),
     }));
 

@@ -10,7 +10,7 @@ import {
   handleMoveTab,
   handleRemoveTab,
 } from "@/context/redux/request-response/request-response-slice";
-import type { TMethod } from "@/types/request-response.types";
+import type { THTTPMethods } from "@/types/request-response.types";
 import { expendParentsOnSelectedChangeTabsData } from "@/context/redux/request-response/thunks/tab-list";
 
 const TabItem = ({ id, index }: { id: string; index: number }) => {
@@ -129,7 +129,7 @@ const TabItem = ({ id, index }: { id: string; index: number }) => {
             {children && <FolderIcon size={20} />}
             {method && (
               <RequestMethodTag
-                method={method as TMethod}
+                method={method as THTTPMethods}
                 shortCut={true}
                 shortCutSizeForAll={isTabListHovering ? undefined : 3}
                 className={"w-full"}

@@ -12,7 +12,8 @@ import {
 const ApiUrl = memo(() => {
   const dispatch = useAppDispatch();
   const apiUrl = useAppSelector(
-    (state) => state.requestResponse.apiUrl[state.requestResponse.selectedTab!] ?? ""
+    (state) =>
+      state.requestResponse.apiUrl[state.requestResponse.selectedTab!] ?? ""
   );
   const isApiUrlError = useAppSelector(
     (state) =>
@@ -52,7 +53,10 @@ const ApiUrl = memo(() => {
     );
 
   return (
-    <form onSubmit={handleSubmit} className="w-full flex items-center">
+    <form
+      onSubmit={handleSubmit}
+      className="w-full flex items-center p-2 rounded-md bg-accent gap-1.5"
+    >
       <ApiMethodSelector />
       <ApiInput
         value={url}

@@ -8,6 +8,7 @@ import type {
   TActiveTabType,
   TAuthType,
   TContentType,
+  THTTPMethods,
   TMetaTableType,
   TRequestBodyType,
   TRequestFolderDescriptionTab,
@@ -115,6 +116,15 @@ export const selectRequestFolderDescriptionActiveTab = createSelector(
   ],
   (folderDescriptionActiveTab): TRequestFolderDescriptionTab =>
     folderDescriptionActiveTab
+);
+
+export const selectIsHttpMethodType = createSelector(
+  [
+    (state: RootState) =>
+      state.requestResponse.requestList[state.requestResponse.selectedTab!]
+        ?.method ?? "get",
+  ],
+  (httpMethodType): THTTPMethods => httpMethodType
 );
 
 export const selectIsFolderLoading = createSelector(
