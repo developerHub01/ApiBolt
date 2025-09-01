@@ -11,38 +11,62 @@ import { cn } from "@/lib/utils";
 import type { TWindowControl } from "@/types";
 
 const WindowControls = () => {
-  const [isMaximized, setIsMaximized] = useState<boolean>(true);
+  const [isMaximized, setIsMaximized] = useState(false);
 
   useEffect(() => {
     if (!isElectron()) return;
 
-    window.electronAPI.onWindowMaximizeChange((value) => setIsMaximized(value));
+    window.electronAPI.isWindowMaximized().then(setIsMaximized);
+    window.electronAPI.onWindowMaximizeChange(setIsMaximized);
+
+    return () => {
+      window.electronAPI.removeWindowMaximizeChange();
+    };
   }, []);
+
+  const handleWindowAction = async (action: TWindowControl) => {
+    if (!isElectron()) return;
+
+    switch (action) {
+      case "minimize":
+        await window.electronAPI.windowMinimize();
+        break;
+      case "maximize":
+        await window.electronAPI.windowMaximize();
+        break;
+      case "unmaximize":
+        await window.electronAPI.windowUnmaximize();
+        break;
+      case "close":
+        await window.electronAPI.windowClose();
+        break;
+    }
+  };
 
   return (
     <div
-      style={{
-        ...(isElectron()
-          ? ({
-              appRegion: "no-drag",
-            } as CSSProperties)
-          : {}),
-      }}
+      style={isElectron() ? ({ appRegion: "no-drag" } as CSSProperties) : {}}
       className="flex h-full"
     >
-      <ActionButton id={"minimize"}>
+      <ActionButton id="minimize" onClick={handleWindowAction}>
         <MinimizeIcon size={18} />
       </ActionButton>
-      <ActionButton id={isMaximized ? "unmaximize" : "maximize"}>
+
+      <ActionButton
+        id={isMaximized ? "unmaximize" : "maximize"}
+        onClick={handleWindowAction}
+      >
         {isMaximized ? (
           <UnMaximizeIcon size={18} />
         ) : (
           <MaximizeIcon size={18} />
         )}
       </ActionButton>
+
       <ActionButton
-        id={"close"}
+        id="close"
         className="hover:bg-destructive hover:text-white"
+        onClick={handleWindowAction}
       >
         <CloseIcon size={18} />
       </ActionButton>
@@ -53,27 +77,25 @@ const WindowControls = () => {
 interface ActionButtonProps {
   id: TWindowControl;
   children: React.ReactNode;
-  onClick?: () => void;
   className?: string;
+  onClick: (action: TWindowControl) => void;
 }
+
 const ActionButton = ({
   children,
   id,
   onClick,
-  className = "",
+  className,
 }: ActionButtonProps) => {
   return (
     <Button
-      variant={"secondary"}
+      variant="secondary"
       className={cn(
         "rounded-none h-full aspect-square bg-transparent",
         "hover:bg-foreground/10",
         className
       )}
-      onClick={async () => {
-        await window.electronAPI.windowControls(id);
-        if (onClick) onClick();
-      }}
+      onClick={() => onClick(id)}
     >
       {children}
     </Button>

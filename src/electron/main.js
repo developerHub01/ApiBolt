@@ -6,7 +6,7 @@ import axios from "axios";
 import electronSquirrelStartup from "electron-squirrel-startup";
 import { initialCookieJar } from "./utils/cookieManager.js";
 import { registerCookieHandlers } from "./ipc/cookies.js";
-import { registerWindowHandlers } from "./ipc/windowControls.js";
+import { windowHandler } from "./ipc/windowHandler.js";
 import { jsonWebTokenHandlers } from "./ipc/jsonWebToken.js";
 import "./db/index.js";
 import { projectsHandlers } from "./ipc/projectsHandlers.js";
@@ -76,7 +76,7 @@ app.whenReady().then(() => {
   });
 
   registerCookieHandlers();
-  registerWindowHandlers(mainWindow);
+  windowHandler(mainWindow);
   jsonWebTokenHandlers();
   projectsHandlers();
   enviromentsHandlers();

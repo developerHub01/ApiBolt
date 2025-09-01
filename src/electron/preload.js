@@ -14,7 +14,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
   fetchApi: async (payload) => {
     return await ipcRenderer.invoke("fetchApi", payload);
   },
-
   getAllCookies: async () => {
     return await ipcRenderer.invoke("getAllCookies");
   },
@@ -25,15 +24,24 @@ contextBridge.exposeInMainWorld("electronAPI", {
     return await ipcRenderer.invoke("getCookieStringByDomain", url);
   },
 
-  windowControls: (type) => ipcRenderer.invoke("windowControls", type),
-  isWindowMaximized: () => ipcRenderer.invoke("isWindowMaximized"),
+  // window controls (matching new camelCase IPC)
+  windowMinimize: async () => ipcRenderer.invoke("windowMinimize"),
+  windowMaximize: async () => ipcRenderer.invoke("windowMaximize"),
+  windowUnmaximize: async () => ipcRenderer.invoke("windowUnmaximize"),
+  windowClose: async () => ipcRenderer.invoke("windowClose"),
+  isWindowMaximized: async () => ipcRenderer.invoke("windowIsMaximized"),
   onWindowMaximizeChange: (callback) => {
     ipcRenderer.on("windowMaximizeChange", (_, isMaximized) => {
       callback(isMaximized);
     });
   },
+  removeWindowMaximizeChange: () => {
+    ipcRenderer.removeAllListeners("windowMaximizeChange");
+  },
 
-  generateJWTToken: (data) => ipcRenderer.invoke("generateJWTToken", data),
+  generateJWTToken: async (data) => {
+    return await ipcRenderer.invoke("generateJWTToken", data);
+  },
 });
 
 contextBridge.exposeInMainWorld("electronAPIZoom", {

@@ -35,9 +35,15 @@ declare global {
       getCookieByDomain(url: string): Promise<unknown>;
       getCookieStringByDomain(url: string): Promise<unknown>;
 
-      windowControls(type: TWindowControl): Promise<void>;
+      // window controls
+      windowMinimize(): Promise<void>;
+      windowMaximize(): Promise<void>;
+      windowUnmaximize(): Promise<void>;
+      windowClose(): Promise<void>;
       isWindowMaximized(): Promise<boolean>;
-      onWindowMaximizeChange(cb: (value: boolean) => void): Promise<boolean>;
+
+      onWindowMaximizeChange(cb: (isMaximized: boolean) => void): void;
+      removeWindowMaximizeChange(): void;
 
       generateJWTToken(
         data: Omit<
@@ -52,29 +58,6 @@ declare global {
     electronAPIZoom: {
       setZoom: (factor: number) => Promise<void>;
       getZoom: () => Promise<number>;
-    };
-
-    electronAPIDB: {
-      toggleFolder(id: string): Promise<void>;
-      getAllOpenFolder(): Promise<Array<string>>;
-
-      addBoltCore(payload: RequestListItemInterface): Promise<unknown>;
-      addMultipleBoltCore(
-        payload: Array<RequestListItemInterface>
-      ): Promise<unknown>;
-      duplicateBoltCore(id: string, newId?: string): Promise<unknown>;
-      updateBoltCore(
-        id: string,
-        payload: Partial<RequestListItemInterface>
-      ): Promise<unknown>;
-      deleteBoltCore(id: string): Promise<void>;
-      moveBoltCore(
-        id: string,
-        folderId: string | undefined,
-        index: number
-      ): Promise<void>;
-      getAllBoltCore(): Promise<Record<string, RequestListItemInterface>>;
-      onBoltCoreChange(cb: () => void): void;
     };
 
     electronAPIProjectsDB: {
