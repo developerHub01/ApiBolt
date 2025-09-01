@@ -14,7 +14,8 @@ import AutoScrollActiveWrapper from "@/components/ui/auto-scroll-active-wrapper"
 import useCheckApplyingLayout from "@/hooks/setting/use-check-applying-layout";
 import type { TLayoutSetting } from "@/types/setting.types";
 import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
-import EmptyBox from "@/components/app/tab-sidebar/EmptyBox";
+import NoTabOpenEmptyBox from "@/components/app/tab-sidebar/empty/NoTabOpenEmptyBox";
+import NoTabSearchResultEmptyBox from "@/components/app/tab-sidebar/empty/NoTabSearchResultEmptyBox";
 
 const TabSidebar = () => {
   const dispatch = useAppDispatch();
@@ -22,8 +23,7 @@ const TabSidebar = () => {
   const isTabListHovering = useAppSelector(
     (state) => state.requestResponse.isTabListHovering
   );
-  // const tabList = useAppSelector((state) => state.requestResponse.tabList);
-  const { localTabList } = useTabSidebar();
+  const { localTabList, totalTabsOpen } = useTabSidebar();
 
   const handleDrop = useCallback(
     (e: DragEvent<HTMLDivElement>) => {
@@ -77,14 +77,27 @@ const TabSidebar = () => {
             onDragOver={(e) => e.preventDefault()}
           >
             <AutoScrollActiveWrapper className="py-1">
-              {localTabList.length ? (
+              {!totalTabsOpen ? (
                 <>
+                  {/* if no tabs open */}
+                  <div className="p-2.5">
+                    {isTabListHovering && <NoTabOpenEmptyBox />}
+                  </div>
+                </>
+              ) : localTabList.length ? (
+                <>
+                  {/* if search list have result */}
                   {localTabList.map((tabId, index) => (
                     <TabItem id={tabId} index={index} />
                   ))}
                 </>
               ) : (
-                <div className="p-2.5">{isTabListHovering && <EmptyBox />}</div>
+                <>
+                  {/* if search list empty */}
+                  <div className="p-2.5">
+                    {isTabListHovering && <NoTabSearchResultEmptyBox />}
+                  </div>
+                </>
               )}
             </AutoScrollActiveWrapper>
           </ScrollArea>

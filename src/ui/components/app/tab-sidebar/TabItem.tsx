@@ -1,4 +1,10 @@
-import { useCallback, useState, type DragEvent, type MouseEvent } from "react";
+import {
+  memo,
+  useCallback,
+  useState,
+  type DragEvent,
+  type MouseEvent,
+} from "react";
 import RequestMethodTag from "@/components/app/RequestMethodTag";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -13,7 +19,7 @@ import {
 import type { THTTPMethods } from "@/types/request-response.types";
 import { expendParentsOnSelectedChangeTabsData } from "@/context/redux/request-response/thunks/tab-list";
 
-const TabItem = ({ id, index }: { id: string; index: number }) => {
+const TabItem = memo(({ id, index }: { id: string; index: number }) => {
   const dispatch = useAppDispatch();
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [isTabHovering, setIsTabHovering] = useState<boolean>(false);
@@ -184,6 +190,6 @@ const TabItem = ({ id, index }: { id: string; index: number }) => {
       </div>
     </div>
   );
-};
+});
 
 export default TabItem;

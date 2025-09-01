@@ -14,6 +14,7 @@ import { normalizeText } from "@/utils";
 
 interface TabSidebarContext {
   tabList: Array<string>;
+  totalTabsOpen: number;
   localTabList: Array<string>;
   handleSearch: (searchTerm: string) => void;
 }
@@ -104,6 +105,7 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
     <TabSidebarContext.Provider
       value={{
         tabList,
+        totalTabsOpen: tabList.length ?? 0,
         localTabList,
         handleSearch,
       }}

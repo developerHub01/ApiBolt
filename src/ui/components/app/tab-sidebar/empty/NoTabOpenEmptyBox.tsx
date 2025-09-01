@@ -1,7 +1,7 @@
 import { memo } from "react";
 import Empty from "@/components/ui/empty";
 
-const EmptyBox = memo(() => (
+const NoTabOpenEmptyBox = memo(() => (
   <div className="w-full p-2">
     <Empty
       label="No tab open"
@@ -11,4 +11,4 @@ const EmptyBox = memo(() => (
   </div>
 ));
 
-export default EmptyBox;
+export default NoTabOpenEmptyBox;
