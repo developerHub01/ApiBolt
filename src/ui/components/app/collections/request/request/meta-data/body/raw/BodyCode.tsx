@@ -24,6 +24,20 @@ const codeFormatter = async (
   callback(data);
 };
 
+const bodyTypeLabel = (type: TContentType) =>
+  type === "html"
+    ? "HTML"
+    : type === "xml"
+      ? "XML"
+      : type === "json"
+        ? "JSON"
+        : type === "javascript"
+          ? "JavaScript"
+          : "TEXT";
+
+const placeholderLabel = (type: TContentType) =>
+  `Write you raw body data in ${bodyTypeLabel(type)}`;
+
 const BodyCode = memo(() => {
   const { handleChangeRawData, codeLineWrap } = useRequestBody();
   const rawData = useAppSelector(selectRawData);
@@ -61,6 +75,7 @@ const BodyCode = memo(() => {
         zoomable={true}
         lineWrap={codeLineWrap}
         handleFormat={handleFormat}
+        placeholder={placeholderLabel(rawRequestBodyType)}
         className="static"
       />
       <ScrollBar orientation="horizontal" />
