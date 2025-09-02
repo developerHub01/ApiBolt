@@ -19,6 +19,10 @@ const tabList: Array<{
   count?: number;
 }> = [
   {
+    id: "url",
+    label: "API Url",
+  },
+  {
     id: "params",
     label: "Params",
   },

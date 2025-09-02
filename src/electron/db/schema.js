@@ -217,7 +217,7 @@ export const requestMetaTabTable = sqliteTable("request_meta_tab_table", {
     .references(() => requestOrFolderMetaTable.id, {
       onDelete: "cascade",
     }),
-  activeMetaTab: text() /* "params" | "headers" | "body" */,
+  activeMetaTab: text() /* "url" | "params" | "headers" | "body" */,
   requestBodyType:
     text() /* "none" | "form-data" | "x-www-form-urlencoded" | "raw" | "binary" */,
 });

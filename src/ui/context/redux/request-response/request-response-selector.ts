@@ -185,7 +185,7 @@ export const selectActiveMetaTab = createSelector(
     (state: RootState) => state.requestResponse.activeMetaTab,
   ],
   (selectedTab, activeMetaTab): TActiveTabType => {
-    if (!selectedTab) return "params";
+    if (!selectedTab) return "url";
 
     return activeMetaTab[selectedTab];
   }

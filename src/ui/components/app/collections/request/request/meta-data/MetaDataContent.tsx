@@ -5,13 +5,15 @@ import Body from "@/components/app/collections/request/request/meta-data/body/Bo
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectActiveMetaTab } from "@/context/redux/request-response/request-response-selector";
 import RequestMetaDataProvider from "@/context/collections/request/RequestMetaDataProvider";
+import Url from "@/components/app/collections/request/request/meta-data/url/Url";
 
 const MetaDataContent = memo(() => {
-  const activeMetaTab = useAppSelector(selectActiveMetaTab) ?? "params";
+  const activeMetaTab = useAppSelector(selectActiveMetaTab) ?? "url";
 
   return (
     <RequestMetaDataProvider>
       <div className="h-full flex flex-col gap-3">
+        {activeMetaTab === "url" && <Url />}
         {activeMetaTab === "params" && <Params />}
         {activeMetaTab === "headers" && <Headers />}
         {activeMetaTab === "body" && <Body />}
