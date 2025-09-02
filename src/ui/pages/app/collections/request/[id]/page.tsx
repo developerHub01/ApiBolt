@@ -1,5 +1,5 @@
 import ApiUrl from "@/components/app/collections/request/request/api-url/ApiUrl";
-import RequestMetaData from "@/components/app/collections/request/request/meta-data/RequestMetaData";
+import MetaDataTab from "@/components/app/collections/request/request/meta-data/MetaDataTab";
 import RequestTop from "@/components/app/collections/request/request/request-top/RequestTop";
 import RequestPanel from "@/components/app/collections/request/request/RequestPanel";
 import ResizableWrapper from "@/components/app/collections/request/ResizableWrapper";
@@ -12,7 +12,7 @@ const RequestPage = () => {
       <div className="w-full p-3 flex flex-col gap-2">
         <RequestTop />
         <ApiUrl />
-        <RequestMetaData />
+        <MetaDataTab />
       </div>
       <ResizableWrapper>
         <RequestPanel />
