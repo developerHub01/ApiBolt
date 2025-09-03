@@ -11,22 +11,26 @@ import { cn } from "@/lib/utils";
 import useCheckApplyingLayout from "@/hooks/setting/use-check-applying-layout";
 import GlobalProvider from "@/context/global/GlobalProvider";
 import BackgroundWallpaper from "@/components/app/BackgroundWallpaper";
+import LoadBasicReduxState from "@/components/app/LoadBasicReduxState";
 
 const AppLayout = () => {
   return (
-    <CustomizedBgWrapper>
-      <ProviderStack>
-        <Header />
-        <div className="relative z-10 min-h-0 h-full flex-1 flex content-stretch">
-          <InnerLayout>
-            <Sidebar />
-            <Outlet />
-          </InnerLayout>
-          <Setting />
-        </div>
-      </ProviderStack>
-      <CopyRight />
-    </CustomizedBgWrapper>
+    <>
+      <CustomizedBgWrapper>
+        <ProviderStack>
+          <Header />
+          <div className="relative z-10 min-h-0 h-full flex-1 flex content-stretch">
+            <InnerLayout>
+              <Sidebar />
+              <Outlet />
+            </InnerLayout>
+            <Setting />
+          </div>
+        </ProviderStack>
+        <CopyRight />
+      </CustomizedBgWrapper>
+      <LoadBasicReduxState />
+    </>
   );
 };
 

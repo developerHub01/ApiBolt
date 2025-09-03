@@ -5,8 +5,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { loadEnvironmentsList } from "@/context/redux/request-response/thunks/environment";
+import { useAppSelector } from "@/context/redux/hooks";
 import type { EnvironmentInterface } from "@/types/request-response.types";
 
 interface EnvironmentsContext {
@@ -53,7 +52,6 @@ interface EnvironmentsProviderProps {
 }
 
 const EnvironmentsProvider = ({ children }: EnvironmentsProviderProps) => {
-  const dispatch = useAppDispatch();
   const [environmentsListState, setEnvironmentsListState] = useState<
     Record<string, EnvironmentInterface>
   >({});
@@ -61,13 +59,6 @@ const EnvironmentsProvider = ({ children }: EnvironmentsProviderProps) => {
     (state) => state.requestResponse.environmentsList ?? {}
   );
   const [searchQuery, setSearchQuery] = useState<string>("");
-
-  useEffect(() => {
-    (async () => {
-      const list = await dispatch(loadEnvironmentsList()).unwrap();
-      setEnvironmentsListState(list);
-    })();
-  }, [dispatch]);
 
   useEffect(() => {
     setEnvironmentsListState(

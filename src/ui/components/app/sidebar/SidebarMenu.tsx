@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect } from "react";
+import { memo, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -7,7 +7,6 @@ import {
 } from "@/components/ui/tooltip";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { Link } from "react-router-dom";
-import { loadProjectList } from "@/context/redux/request-response/thunks/projects";
 import { changeActiveTab as changeSidebarActiveTab } from "@/context/redux/sidebar/sidebar-thunk";
 import {
   hiddenTabsWhenNotProjectSelected,
@@ -19,11 +18,6 @@ import { handleToggleRequestList } from "@/context/redux/request-response/reques
 const SidebarMenu = memo(() => {
   const dispatch = useAppDispatch();
   const activeTab = useAppSelector((state) => state.sidebar.activeTab);
-
-  useEffect(() => {
-    dispatch(loadProjectList());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handleClick = useCallback(
     (id: TSidebarTab) => {

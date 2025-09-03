@@ -1,7 +1,4 @@
-import React, { createContext, useContext, useEffect } from "react";
-import { useAppDispatch } from "@/context/redux/hooks";
-import { loadAuthorization } from "@/context/redux/request-response/thunks/auth";
-
+import React, { createContext, useContext } from "react";
 // interface AuthorizationContext {}
 
 const AuthorizationContext = createContext<null>(null);
@@ -24,14 +21,6 @@ interface AuthorizationProviderProps {
 }
 
 const AuthorizationProvider = ({ children }: AuthorizationProviderProps) => {
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    (async () => {
-      await dispatch(loadAuthorization());
-    })();
-  }, [dispatch]);
-
   return (
     <AuthorizationContext.Provider value={null}>
       {children}
