@@ -1,6 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit";
 import type { RootState } from "@/context/redux/store";
 import type {
+  EnvironmentInterface,
   FormDataInterface,
   MetaShowColumnInterface,
   ParamInterface,
@@ -189,6 +190,18 @@ export const selectActiveMetaTab = createSelector(
 
     return activeMetaTab[selectedTab];
   }
+);
+
+export const selectEnvironmentsList = createSelector(
+  [(state: RootState) => state.requestResponse.environmentsList],
+  (environmentsList: Record<string, EnvironmentInterface>) => environmentsList
+);
+
+export const selectEnvironmentsVariableList = createSelector(
+  [(state: RootState) => state.requestResponse.environmentsList],
+  (
+    environmentsList: Record<string, EnvironmentInterface>
+  ): Array<EnvironmentInterface> => Object.values(environmentsList)
 );
 
 export const selectParams = createSelector(
