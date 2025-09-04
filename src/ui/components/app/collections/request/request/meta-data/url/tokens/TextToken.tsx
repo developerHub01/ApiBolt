@@ -9,13 +9,16 @@ import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 import { Trash2 as DeleteIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import TokenDragHandler from "@/components/app/collections/request/request/meta-data/url/TokenDragHandler";
+import type { DragControls } from "motion/react";
 
 interface TextTokenProps {
   id: string;
   onDelete: (id: string) => void;
+  controls: DragControls;
 }
 
-const TextToken = memo(({ id, onDelete }: TextTokenProps) => {
+const TextToken = memo(({ id, onDelete, controls }: TextTokenProps) => {
   const [value, setValue] = useState<string>("text");
 
   const handleKeydown = (e: KeyboardEvent<HTMLHeadingElement>) => {
@@ -34,11 +37,12 @@ const TextToken = memo(({ id, onDelete }: TextTokenProps) => {
 
   return (
     <div className="flex p-0 gap-0">
-      <FlexibleHightButtonLikeDiv className="flex-1 rounded-r-none">
+      <TokenDragHandler controls={controls} />
+      <FlexibleHightButtonLikeDiv className="flex-1 rounded-none">
         <p
           contentEditable
           suppressContentEditableWarning
-          className="outline-none cursor-text border-b w-full min-w-16 max-w-md text-center break-words break-all whitespace-normal"
+          className="outline-none cursor-text border-b w-full min-w-12 text-center break-words break-all whitespace-normal"
           onKeyDown={handleKeydown}
           onBlur={handleBlur}
           onPaste={handlePaste}

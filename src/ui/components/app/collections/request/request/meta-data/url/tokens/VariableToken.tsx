@@ -19,13 +19,16 @@ import { useAppSelector } from "@/context/redux/hooks";
 import { selectEnvironmentsVariableList } from "@/context/redux/request-response/request-response-selector";
 import { Trash2 as DeleteIcon } from "lucide-react";
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
+import type { DragControls } from "motion/react";
+import TokenDragHandler from "@/components/app/collections/request/request/meta-data/url/TokenDragHandler";
 
 interface VariableTokenProps {
   id: string;
   onDelete: (id: string) => void;
+  controls: DragControls;
 }
 
-const VariableToken = memo(({ id, onDelete }: VariableTokenProps) => {
+const VariableToken = memo(({ id, onDelete, controls }: VariableTokenProps) => {
   const [open, setOpen] = useState<boolean>(false);
   const [value, setValue] = useState<string>("");
   const variableList = useAppSelector(selectEnvironmentsVariableList);
@@ -38,25 +41,24 @@ const VariableToken = memo(({ id, onDelete }: VariableTokenProps) => {
   const isExist = value && isVariableExistInList;
   const isNotExist = value && !isVariableExistInList;
 
-  console.log({
-    isExist,
-    isNotExist,
-  });
-
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <ButtonLikeDiv
-        className={cn("w-fit min-w-40 flex gap-0 p-0 bg-transparent ring", {
-          "ring-green-500/60": isExist,
-          "ring-red-500/60": isNotExist,
-        })}
+        className={cn(
+          "w-fit min-w-40 flex gap-0 p-0 rounded-md bg-transparent hover:bg-transparent ring",
+          {
+            "ring-green-500/60": isExist,
+            "ring-red-500/60": isNotExist,
+          }
+        )}
       >
+        <TokenDragHandler controls={controls} />
         <PopoverTrigger asChild>
           <Button
             variant="secondary"
             role="combobox"
             aria-expanded={open}
-            className={cn("flex-1 justify-between rounded-r-none", {
+            className={cn("flex-1 justify-between rounded-none", {
               "text-green-500/60": isExist,
               "text-red-/60": isNotExist,
             })}
