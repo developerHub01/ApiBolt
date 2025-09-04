@@ -1,33 +1,52 @@
-import { ButtonLikeDiv } from "@/components/ui/button-like-div";
+import { Button } from "@/components/ui/button";
 import {
-  Menubar,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarTrigger,
-} from "@/components/ui/menubar";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import type { TAPIUrlTokenType } from "@/types/request.url.types";
 import { Plus as AddIcon } from "lucide-react";
 
-const urlPartList = ["protocol", "host", "text", "environment variables"];
+const urlPartList: Array<{
+  id: TAPIUrlTokenType;
+  label: string;
+}> = [
+  {
+    id: "text",
+    label: "Text",
+  },
+  {
+    id: "env",
+    label: "Environment Variables",
+  },
+];
 
-const AddUrlPart = () => {
+interface Props {
+  id: string;
+  onAdd: (type: TAPIUrlTokenType, preTokenId?: string) => void;
+}
+
+const AddUrlPart = ({ id, onAdd }: Props) => {
+  const handleAdd = (type: TAPIUrlTokenType) => onAdd(type, id);
   return (
-    <Menubar className="p-0 border-0">
-      <MenubarMenu>
-        <ButtonLikeDiv variant={"secondary"} className="p-0 aspect-square">
-          <MenubarTrigger className="w-full h-full justify-center cursor-pointer">
-            <AddIcon />
-          </MenubarTrigger>
-        </ButtonLikeDiv>
-        <MenubarContent side="bottom" align="end">
-          {urlPartList.map((part) => (
-            <MenubarItem key={part} className="capitalize">
-              {part}
-            </MenubarItem>
+    <DropdownMenu key={id}>
+      <DropdownMenuTrigger asChild>
+        <Button variant="secondary">
+          <AddIcon />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent side="bottom" align="end">
+        <DropdownMenuGroup>
+          {urlPartList.map(({ id, label }) => (
+            <DropdownMenuItem key={id} onClick={() => handleAdd(id)}>
+              {label}
+            </DropdownMenuItem>
           ))}
-        </MenubarContent>
-      </MenubarMenu>
-    </Menubar>
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 

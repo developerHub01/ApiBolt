@@ -19,16 +19,19 @@ import { useAppSelector } from "@/context/redux/hooks";
 import { selectEnvironmentsVariableList } from "@/context/redux/request-response/request-response-selector";
 import { Trash2 as DeleteIcon } from "lucide-react";
 
-const VariableToken = memo(() => {
+interface VariableTokenProps {
+  id: string;
+  onDelete: (id: string) => void;
+}
+
+const VariableToken = memo(({ id, onDelete }: VariableTokenProps) => {
   const [open, setOpen] = useState<boolean>(false);
   const [value, setValue] = useState<string>("");
   const variableList = useAppSelector(selectEnvironmentsVariableList);
 
-  console.log(variableList);
-
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <div className="w-[200px] flex">
+      <div className="w-fit min-w-40 flex">
         <PopoverTrigger asChild>
           <Button
             variant="secondary"
@@ -36,7 +39,7 @@ const VariableToken = memo(() => {
             aria-expanded={open}
             className="flex-1 justify-between rounded-r-none"
           >
-            <p className="flex-1 overflow-hidden">
+            <p className="flex-1 overflow-hidden text-left">
               {value
                 ? variableList.find((framework) => framework.variable === value)
                     ?.variable
@@ -45,7 +48,11 @@ const VariableToken = memo(() => {
             <ChevronsUpDown className="opacity-50" />
           </Button>
         </PopoverTrigger>
-        <Button variant={"secondary"} className="rounded-l-none">
+        <Button
+          variant={"secondary"}
+          className="rounded-l-none"
+          onClick={() => onDelete(id)}
+        >
           <DeleteIcon />
         </Button>
       </div>
