@@ -1,26 +1,45 @@
 import { memo } from "react";
+import { AnimatePresence } from "framer-motion";
 import Params from "@/components/app/collections/request/request/meta-data/headers-params/params/Params";
 import Headers from "@/components/app/collections/request/request/meta-data/headers-params/headers/Headers";
 import Body from "@/components/app/collections/request/request/meta-data/body/Body";
+import Url from "@/components/app/collections/request/request/meta-data/url/Url";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectActiveMetaTab } from "@/context/redux/request-response/request-response-selector";
 import RequestMetaDataProvider from "@/context/collections/request/RequestMetaDataProvider";
-import Url from "@/components/app/collections/request/request/meta-data/url/Url";
+import TabMotionWrapper from "@/components/app/collections/request/request/meta-data/TabMotionWrapper";
 
 const MetaDataContent = memo(() => {
   const activeMetaTab = useAppSelector(selectActiveMetaTab) ?? "url";
 
   return (
     <RequestMetaDataProvider>
-      <div className="h-full flex flex-col gap-3">
-        {activeMetaTab === "url" && <Url />}
-        {activeMetaTab === "params" && <Params />}
-        {activeMetaTab === "headers" && <Headers />}
-        {activeMetaTab === "body" && <Body />}
-      </div>
+      <AnimatePresence>
+        {activeMetaTab === "url" && (
+          <TabMotionWrapper key="url">
+            <Url />
+          </TabMotionWrapper>
+        )}
+        {activeMetaTab === "params" && (
+          <TabMotionWrapper key="params">
+            <Params />
+          </TabMotionWrapper>
+        )}
+        {activeMetaTab === "headers" && (
+          <TabMotionWrapper key="headers">
+            <Headers />
+          </TabMotionWrapper>
+        )}
+        {activeMetaTab === "body" && (
+          <TabMotionWrapper key="body">
+            <Body />
+          </TabMotionWrapper>
+        )}
+      </AnimatePresence>
     </RequestMetaDataProvider>
   );
 });
+
 MetaDataContent.displayName = "Meta data content";
 
 export default MetaDataContent;
