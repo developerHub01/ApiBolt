@@ -39,9 +39,6 @@ export const requestUrlUpdateToken = createAsyncThunk<
   const state = getState() as RootState;
 
   const selectedTab = state.requestResponse.selectedTab;
-
-  console.log({ selectedTab, payload });
-
   if (!selectedTab) return;
 
   dispatch(

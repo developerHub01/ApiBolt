@@ -33,9 +33,9 @@ export const requestUrlSlice = createSlice({
       const newValue = type === "text" ? "text" : "";
       const newToken = { id: uuidv4(), type, value: newValue };
 
-      if (!state.tokens[selectedTab]) {
+      if (!state.tokens[selectedTab])
         state.tokens[selectedTab] = [...initialUrlTokensValue];
-      }
+
       const index =
         (state.tokens[selectedTab].findIndex((t) => t.id === preTokenId) ?? 0) +
         1;
@@ -48,26 +48,20 @@ export const requestUrlSlice = createSlice({
           Pick<UrlTokenInterface, "id"> & { selectedTab: string }
       >
     ) => {
-      try {
-        const { selectedTab, id, ...payload } = action.payload;
+      const { selectedTab, id, ...payload } = action.payload;
 
-        if (!state.tokens[selectedTab]) {
-          state.tokens[selectedTab] = [...initialUrlTokensValue];
-        }
+      if (!state.tokens[selectedTab])
+        state.tokens[selectedTab] = [...initialUrlTokensValue];
 
-        const index = state.tokens[selectedTab].findIndex(
-          (token) => token.id === id
-        );
-        console.log({ index, token: state.tokens[selectedTab] });
-        if (index < 0) return;
+      const index = state.tokens[selectedTab].findIndex(
+        (token) => token.id === id
+      );
+      if (index < 0) return;
 
-        state.tokens[selectedTab][index] = {
-          ...(state.tokens[selectedTab][index] ?? {}),
-          ...payload,
-        };
-      } catch (error) {
-        console.log(error);
-      }
+      state.tokens[selectedTab][index] = {
+        ...(state.tokens[selectedTab][index] ?? {}),
+        ...payload,
+      };
     },
     handleRequestUrlDeleteToken: (
       state,
