@@ -49,7 +49,7 @@ const MetaDataTab = memo(() => {
       tabList
         .map((item) => ({
           ...item,
-          isActive: !!activeTabList[item.id],
+          isActive: Boolean(activeTabList[item.id]),
         }))
         .map((item) => {
           if (item.id === "params") {
@@ -70,10 +70,10 @@ const MetaDataTab = memo(() => {
   );
 
   const handleChange = useCallback(
-    (activeMetaTab: TActiveTabType) =>
+    (tab: TActiveTabType) =>
       dispatch(
         updateRequestMetaTab({
-          activeMetaTab,
+          activeMetaTab: tab,
         })
       ),
     [dispatch]
@@ -82,14 +82,14 @@ const MetaDataTab = memo(() => {
   return (
     <>
       <SelectV1
-        list={tabList}
-        value={activeMetaTab ?? "params"}
+        list={tabListWithActivity}
+        value={activeMetaTab ?? "url"}
         handleChange={(value) => handleChange(value as TActiveTabType)}
         className="block md:hidden"
       />
       <TabV1
         list={tabListWithActivity}
-        activeTab={activeMetaTab ?? "params"}
+        activeTab={activeMetaTab ?? "url"}
         handleSelect={(value) => handleChange(value as TActiveTabType)}
         className="hidden md:flex select-none"
       />
