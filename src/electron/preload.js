@@ -1,4 +1,10 @@
-const { contextBridge, ipcRenderer } = require("electron");
+const { contextBridge, ipcRenderer, webFrame } = require("electron");
+
+/* =================================== */
+ipcRenderer.on("set-zoom", (_, zoomLevel) => {
+  webFrame.setZoomFactor(zoomLevel < 0 ? 1 : zoomLevel);
+});
+/* =================================== */
 
 contextBridge.exposeInMainWorld("electronAPI", {
   getCookiesFromUrl: async (url) => {
@@ -8,7 +14,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
   fetchApi: async (payload) => {
     return await ipcRenderer.invoke("fetchApi", payload);
   },
-
   getAllCookies: async () => {
     return await ipcRenderer.invoke("getAllCookies");
   },
@@ -19,68 +24,242 @@ contextBridge.exposeInMainWorld("electronAPI", {
     return await ipcRenderer.invoke("getCookieStringByDomain", url);
   },
 
-  windowControls: (type) => ipcRenderer.invoke("windowControls", type),
-  isWindowMaximized: () => ipcRenderer.invoke("isWindowMaximized"),
+  // window controls (matching new camelCase IPC)
+  windowMinimize: async () => ipcRenderer.invoke("windowMinimize"),
+  windowMaximize: async () => ipcRenderer.invoke("windowMaximize"),
+  windowUnmaximize: async () => ipcRenderer.invoke("windowUnmaximize"),
+  windowClose: async () => ipcRenderer.invoke("windowClose"),
+  isWindowMaximized: async () => ipcRenderer.invoke("windowIsMaximized"),
   onWindowMaximizeChange: (callback) => {
     ipcRenderer.on("windowMaximizeChange", (_, isMaximized) => {
       callback(isMaximized);
     });
   },
+  removeWindowMaximizeChange: () => {
+    ipcRenderer.removeAllListeners("windowMaximizeChange");
+  },
 
-  generateJWTToken: (data) => ipcRenderer.invoke("generateJWTToken", data),
+  generateJWTToken: async (data) => {
+    return await ipcRenderer.invoke("generateJWTToken", data);
+  },
 });
 
-contextBridge.exposeInMainWorld("electronAPIDB", {
-  toggleFolder: async (id) => await ipcRenderer.invoke("toggleFolder", id),
-  getAllOpenFolder: async () => await ipcRenderer.invoke("getAllOpenFolder"),
+contextBridge.exposeInMainWorld("electronAPIZoom", {
+  setZoom: (factor) => webFrame.setZoomFactor(factor),
+  getZoom: () => webFrame.getZoomFactor(),
+});
 
-  addBoltCore: async (payload) => {
-    if (typeof payload !== "object") return;
+contextBridge.exposeInMainWorld("electronAPIProjectsDB", {
+  getProjects: async () => await ipcRenderer.invoke("getProjects"),
+  createProjects: async (payload) =>
+    await ipcRenderer.invoke("createProjects", payload),
+  updateProjects: async (id, payload) =>
+    await ipcRenderer.invoke("updateProjects", id, payload),
+  deleteProjects: async (id) => await ipcRenderer.invoke("deleteProjects", id),
+  changeActiveProject: async (id) =>
+    await ipcRenderer.invoke("changeActiveProject", id),
+  getActiveProject: async () => await ipcRenderer.invoke("getActiveProject"),
+});
 
-    payload._id = payload.id;
-    delete payload.id;
-    return await ipcRenderer.invoke("addBoltCore", payload);
-  },
-  addMultipleBoltCore: async (payload) => {
-    if (typeof payload !== "object") return;
+contextBridge.exposeInMainWorld("electronAPISettingsDB", {
+  getSettings: async () => await ipcRenderer.invoke("getSettings"),
+  updateSettings: async (...payload) =>
+    await ipcRenderer.invoke("updateSettings", ...payload),
+  updateSettingsBackgroundImages: async (...payload) =>
+    await ipcRenderer.invoke("updateSettingsBackgroundImages", ...payload),
+});
 
-    payload = payload.map((item) => ({
-      ...item,
-      _id: item.id,
-      id: undefined,
-    }));
-    return await ipcRenderer.invoke("addMultipleBoltCore", payload);
-  },
-  updateBoltCore: async (id, payload) => {
-    if (typeof payload !== "object" || !id) return;
+contextBridge.exposeInMainWorld("electronAPIEnvironmentsDB", {
+  getAllEnvironments: async () =>
+    await ipcRenderer.invoke("getAllEnvironments"),
+  getEnvironments: async () => await ipcRenderer.invoke("getEnvironments"),
+  createEnvironments: async (payload) =>
+    await ipcRenderer.invoke("createEnvironments", payload),
+  updateEnvironments: async (payload) =>
+    await ipcRenderer.invoke("updateEnvironments", payload),
+  deleteAllEnvironments: async () =>
+    await ipcRenderer.invoke("deleteAllEnvironments"),
+  deleteEnvironments: async (id) =>
+    await ipcRenderer.invoke("deleteEnvironments", id),
+});
 
-    if (payload.id) payload._id = payload.id;
-    delete payload.id;
-    return await ipcRenderer.invoke("updateBoltCore", id, payload);
-  },
-  duplicateBoltCore: async (id) => {
-    if (!id) return;
+contextBridge.exposeInMainWorld("electronAPIAuthorizationDB", {
+  getAuth: async () => await ipcRenderer.invoke("getAuth"),
+  createAuth: async () => await ipcRenderer.invoke("createAuth"),
+  updateAuth: async (...payload) =>
+    await ipcRenderer.invoke("updateAuth", ...payload),
+  deleteAuth: async (...payload) =>
+    await ipcRenderer.invoke("deleteAuth", ...payload),
+});
 
-    return await ipcRenderer.invoke("duplicateBoltCore", id);
-  },
-  deleteBoltCore: async (id) => {
-    if (!id) return;
-    return await ipcRenderer.invoke("deleteBoltCore", id);
-  },
-  moveBoltCore: async (id, folderId, index) => {
-    if (!id) return;
-    return await ipcRenderer.invoke("moveBoltCore", id, folderId, index ?? 0);
-  },
-  getAllBoltCore: async () => {
-    return await ipcRenderer.invoke("getAllBoltCore");
-  },
-  onBoltCoreChange: (cb) => ipcRenderer.on("boltCoreChange", cb),
+contextBridge.exposeInMainWorld("electronAPIRequestOrFolderMetaDB", {
+  getRequestOrFolderMeta: async () =>
+    await ipcRenderer.invoke("getRequestOrFolderMeta"),
+  createRequestOrFolderMeta: async (...payload) =>
+    await ipcRenderer.invoke("createRequestOrFolderMeta", ...payload),
+  updateRequestOrFolderMeta: async (...payload) =>
+    await ipcRenderer.invoke("updateRequestOrFolderMeta", ...payload),
+  moveRequestOrFolderMeta: async (...payload) =>
+    await ipcRenderer.invoke("moveRequestOrFolderMeta", ...payload),
+  deleteRequestOrFolderMetaById: async (...payload) =>
+    await ipcRenderer.invoke("deleteRequestOrFolderMetaById", ...payload),
+  deleteRequestOrFolderMetaByProjectId: async (...payload) =>
+    await ipcRenderer.invoke(
+      "deleteRequestOrFolderMetaByProjectId",
+      ...payload
+    ),
+  duplicateRequestOrFolderMeta: async (...payload) =>
+    await ipcRenderer.invoke("duplicateRequestOrFolderMeta", ...payload),
+  deleteRequestOrFolderMetaAll: async () =>
+    await ipcRenderer.invoke("deleteRequestOrFolderMetaAll"),
+  expendOrCollapseRequestOrFolderMetaAll: async (...payload) =>
+    await ipcRenderer.invoke(
+      "expendOrCollapseRequestOrFolderMetaAll",
+      ...payload
+    ),
+});
 
-  /* Tabs ============== */
-  getTabList: async () => {
-    return await ipcRenderer.invoke("getTabList");
-  },
-  changeTabsData: async (payload) => {
-    return await ipcRenderer.invoke("changeTabsData", payload);
-  },
+contextBridge.exposeInMainWorld("electronAPITabsDB", {
+  getTabList: async () => await ipcRenderer.invoke("getTabList"),
+  updateTabList: async (...payload) =>
+    await ipcRenderer.invoke("updateTabList", ...payload),
+  deleteAllTabList: async () => await ipcRenderer.invoke("deleteAllTabList"),
+  deleteTabListByProjectId: async (...payload) =>
+    await ipcRenderer.invoke("deleteTabListByProjectId", ...payload),
+});
+
+contextBridge.exposeInMainWorld("electronAPIFolderDB", {
+  getFolder: async (...payload) =>
+    await ipcRenderer.invoke("getFolder", ...payload),
+  updateFolder: async (...payload) =>
+    await ipcRenderer.invoke("updateFolder", ...payload),
+});
+
+contextBridge.exposeInMainWorld("electronAPIParamsDB", {
+  getParams: async (...payload) =>
+    await ipcRenderer.invoke("getParams", ...payload),
+  deleteParams: async (...payload) =>
+    await ipcRenderer.invoke("deleteParams", ...payload),
+  deleteParamsByRequestMetaId: async (...payload) =>
+    await ipcRenderer.invoke("deleteParamsByRequestMetaId", ...payload),
+  createParams: async (...payload) =>
+    await ipcRenderer.invoke("createParams", ...payload),
+  updateParams: async (...payload) =>
+    await ipcRenderer.invoke("updateParams", ...payload),
+  replaceParams: async (...payload) =>
+    await ipcRenderer.invoke("replaceParams", ...payload),
+  checkAllParamsByRequestMetaId: async (...payload) =>
+    await ipcRenderer.invoke("checkAllParamsByRequestMetaId", ...payload),
+});
+
+contextBridge.exposeInMainWorld("electronAPIHeadersDB", {
+  getHeaders: async (...payload) =>
+    await ipcRenderer.invoke("getHeaders", ...payload),
+  deleteHeaders: async (...payload) =>
+    await ipcRenderer.invoke("deleteHeaders", ...payload),
+  deleteHeadersByRequestMetaId: async (...payload) =>
+    await ipcRenderer.invoke("deleteHeadersByRequestMetaId", ...payload),
+  createHeaders: async (...payload) =>
+    await ipcRenderer.invoke("createHeaders", ...payload),
+  updateHeaders: async (...payload) =>
+    await ipcRenderer.invoke("updateHeaders", ...payload),
+  replaceHeaders: async (...payload) =>
+    await ipcRenderer.invoke("replaceHeaders", ...payload),
+  checkAllHeadersByRequestMetaId: async (...payload) =>
+    await ipcRenderer.invoke("checkAllHeadersByRequestMetaId", ...payload),
+});
+
+contextBridge.exposeInMainWorld("electronAPIHiddenHeadersCheckTableDB", {
+  getHiddenHeadersCheck: async (...payload) =>
+    await ipcRenderer.invoke("getHiddenHeadersCheck", ...payload),
+  createHiddenHeadersCheck: async (...payload) =>
+    await ipcRenderer.invoke("createHiddenHeadersCheck", ...payload),
+  updateHiddenHeadersCheck: async (...payload) =>
+    await ipcRenderer.invoke("updateHiddenHeadersCheck", ...payload),
+});
+
+contextBridge.exposeInMainWorld("electronAPIBodyRawDB", {
+  getBodyRaw: async (...payload) =>
+    await ipcRenderer.invoke("getBodyRaw", ...payload),
+  createBodyRaw: async (...payload) =>
+    await ipcRenderer.invoke("createBodyRaw", ...payload),
+  updateBodyRaw: async (...payload) =>
+    await ipcRenderer.invoke("updateBodyRaw", ...payload),
+});
+
+contextBridge.exposeInMainWorld("electronAPIBodyBinaryDB", {
+  getBodyBinary: async (...payload) =>
+    await ipcRenderer.invoke("getBodyBinary", ...payload),
+  createBodyBinary: async (...payload) =>
+    await ipcRenderer.invoke("createBodyBinary", ...payload),
+  updateBodyBinary: async (...payload) =>
+    await ipcRenderer.invoke("updateBodyBinary", ...payload),
+  deleteBodyBinary: async (...payload) =>
+    await ipcRenderer.invoke("deleteBodyBinary", ...payload),
+});
+
+contextBridge.exposeInMainWorld("electronAPIRequestMetaTabDB", {
+  getRequestMetaTab: async (...payload) =>
+    await ipcRenderer.invoke("getRequestMetaTab", ...payload),
+  createRequestMetaTab: async (...payload) =>
+    await ipcRenderer.invoke("createRequestMetaTab", ...payload),
+  updateRequestMetaTab: async (...payload) =>
+    await ipcRenderer.invoke("updateRequestMetaTab", ...payload),
+  deleteRequestMetaTab: async (...payload) =>
+    await ipcRenderer.invoke("deleteRequestMetaTab", ...payload),
+});
+
+contextBridge.exposeInMainWorld("electronAPIBodyXWWWFormUrlencodedDB", {
+  getBodyXWWWFormUrlencoded: async (...payload) =>
+    await ipcRenderer.invoke("getBodyXWWWFormUrlencoded", ...payload),
+  deleteBodyXWWWFormUrlencoded: async (...payload) =>
+    await ipcRenderer.invoke("deleteBodyXWWWFormUrlencoded", ...payload),
+  deleteBodyXWWWFormUrlencodedByRequestMetaId: async (...payload) =>
+    await ipcRenderer.invoke(
+      "deleteBodyXWWWFormUrlencodedByRequestMetaId",
+      ...payload
+    ),
+  createBodyXWWWFormUrlencoded: async (...payload) =>
+    await ipcRenderer.invoke("createBodyXWWWFormUrlencoded", ...payload),
+  updateBodyXWWWFormUrlencoded: async (...payload) =>
+    await ipcRenderer.invoke("updateBodyXWWWFormUrlencoded", ...payload),
+  replaceBodyXWWWFormUrlencoded: async (...payload) =>
+    await ipcRenderer.invoke("replaceBodyXWWWFormUrlencoded", ...payload),
+  checkAllBodyXWWWFormUrlencodedByRequestMetaId: async (...payload) =>
+    await ipcRenderer.invoke(
+      "checkAllBodyXWWWFormUrlencodedByRequestMetaId",
+      ...payload
+    ),
+});
+
+contextBridge.exposeInMainWorld("electronAPIBodyFormDataDB", {
+  getBodyFormData: async (...payload) =>
+    await ipcRenderer.invoke("getBodyFormData", ...payload),
+  deleteBodyFormData: async (...payload) =>
+    await ipcRenderer.invoke("deleteBodyFormData", ...payload),
+  deleteBodyFormDataByRequestMetaId: async (...payload) =>
+    await ipcRenderer.invoke("deleteBodyFormDataByRequestMetaId", ...payload),
+  deleteBodyFormDataFile: async (...payload) =>
+    await ipcRenderer.invoke("deleteBodyFormDataFile", ...payload),
+  createBodyFormData: async (...payload) =>
+    await ipcRenderer.invoke("createBodyFormData", ...payload),
+  updateBodyFormData: async (...payload) =>
+    await ipcRenderer.invoke("updateBodyFormData", ...payload),
+  updateBodyFormDataFile: async (...payload) =>
+    await ipcRenderer.invoke("updateBodyFormDataFile", ...payload),
+  replaceBodyFormData: async (...payload) =>
+    await ipcRenderer.invoke("replaceBodyFormData", ...payload),
+  checkAllBodyFormDataByRequestMetaId: async (...payload) =>
+    await ipcRenderer.invoke("checkAllBodyFormDataByRequestMetaId", ...payload),
+});
+
+contextBridge.exposeInMainWorld("electronAPIMetaShowColumnDB", {
+  getMetaShowColumn: async (...payload) =>
+    await ipcRenderer.invoke("getMetaShowColumn", ...payload),
+  createMetaShowColumn: async (...payload) =>
+    await ipcRenderer.invoke("createMetaShowColumn", ...payload),
+  updateMetaShowColumn: async (...payload) =>
+    await ipcRenderer.invoke("updateMetaShowColumn", ...payload),
+  deleteMetaShowColumn: async (...payload) =>
+    await ipcRenderer.invoke("deleteMetaShowColumn", ...payload),
 });

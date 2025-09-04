@@ -1,17 +1,33 @@
 import { app } from "electron";
-import { createWindow } from "./utils/window.js";
+import { createMainWindow } from "./utils/mainWindow.js";
+import { createSplashWindow } from "./utils/splashWindow.js";
 import { wrapper } from "axios-cookiejar-support";
 import axios from "axios";
 import electronSquirrelStartup from "electron-squirrel-startup";
 import { initialCookieJar } from "./utils/cookieManager.js";
 import { registerCookieHandlers } from "./ipc/cookies.js";
-import { registerWindowHandlers } from "./ipc/windowControls.js";
+import { windowHandler } from "./ipc/windowHandler.js";
 import { jsonWebTokenHandlers } from "./ipc/jsonWebToken.js";
-import "./db/boltcoreDB.js";
-import "./ipc/boltCoreDB.js";
-import { boltCoreDBHandlers } from "./ipc/boltCoreDB.js";
-import { openFoldersDBHandlers } from "./ipc/openFoldersDB.js";
-import { tabsDBHandlers } from "./ipc/tabsDB.js";
+import "./db/index.js";
+import { projectsHandlers } from "./ipc/projectsHandlers.js";
+import { enviromentsHandlers } from "./ipc/environmentsHandler.js";
+import { authorizationHandler } from "./ipc/authorizationHandler.js";
+import { requestOrFolderMetaHandler } from "./ipc/requestOrFolderMetaHandler.js";
+import { tabsHandler } from "./ipc/tabsHandler.js";
+import { folderHandlers } from "./ipc/folderHandlers.js";
+import { settingsHandlers } from "./ipc/settingsHandlers.js";
+import { getZoomLevel } from "./db/settingsDB.js";
+import { paramsHandlers } from "./ipc/paramsHandlers.js";
+import { headersHandlers } from "./ipc/headersHandlers.js";
+import { hiddenHeadersCheckTableHandler } from "./ipc/hiddenHeadersCheckTableHandler.js";
+import { bodyRawHandler } from "./ipc/bodyRawHandler.js";
+import { bodyBinaryHandler } from "./ipc/bodyBinaryHandler.js";
+import { requestMetaTabHandler } from "./ipc/requestMetaTabHandler.js";
+import { bodyXWWWFormUrlencodedHandlers } from "./ipc/bodyXWWWFormUrlencodedHandlers.js";
+import { bodyFormDataHandlers } from "./ipc/bodyFormDataHandlers.js";
+import { metaShowColumnHandlers } from "./ipc/metaShowColumnHandlers.js";
+
+export const userDataDir = app.getPath("userData");
 
 // browser style cookies holder by domain/path
 export const jar = initialCookieJar(undefined, { rejectPublicSuffixes: false });
@@ -23,22 +39,61 @@ if (electronSquirrelStartup) {
   app.quit();
 }
 
+let splashWindow = null;
+let mainWindow = null;
+
 app.whenReady().then(() => {
-  let mainWindow = createWindow();
+  splashWindow = createSplashWindow();
+  mainWindow = createMainWindow();
+
+  const splashMinDuration = 5000; // 5 sec minimum splash
+  const splashShownAt = Date.now();
+
+  mainWindow.once("ready-to-show", () => {
+    const elapsed = Date.now() - splashShownAt;
+    const remaining = splashMinDuration - elapsed;
+
+    setTimeout(
+      () => {
+        splashWindow?.close();
+        splashWindow = null;
+        mainWindow?.show();
+        mainWindow.maximize();
+      },
+      remaining > 0 ? remaining : 0
+    );
+  });
+
+  mainWindow.webContents.on("did-finish-load", async () => {
+    /* get zoomlevel to update the windows zomm level */
+    const zoomLevel = await getZoomLevel();
+    mainWindow.webContents.send("set-zoom", zoomLevel);
+  });
 
   app.on("activate", () => {
-    if (BrowserWindow.getAllWindows().length === 0) mainWindow = createWindow();
+    if (BrowserWindow.getAllWindows().length === 0)
+      mainWindow = createMainWindow();
   });
 
   registerCookieHandlers();
-
-  registerWindowHandlers(mainWindow);
-
+  windowHandler(mainWindow);
   jsonWebTokenHandlers();
-
-  boltCoreDBHandlers();
-  openFoldersDBHandlers();
-  tabsDBHandlers();
+  projectsHandlers();
+  enviromentsHandlers();
+  authorizationHandler();
+  requestOrFolderMetaHandler();
+  tabsHandler();
+  settingsHandlers();
+  folderHandlers();
+  paramsHandlers();
+  headersHandlers();
+  hiddenHeadersCheckTableHandler();
+  bodyRawHandler();
+  bodyBinaryHandler();
+  requestMetaTabHandler();
+  bodyXWWWFormUrlencodedHandlers();
+  bodyFormDataHandlers();
+  metaShowColumnHandlers();
 });
 
 app.on("window-all-closed", () => {

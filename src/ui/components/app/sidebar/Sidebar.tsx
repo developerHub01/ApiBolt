@@ -1,19 +1,39 @@
 import { TooltipProvider } from "@/components/ui/tooltip";
-import SidbarToggler from "@/components/app/sidebar/SidbarToggler";
 import SidebarMenu from "@/components/app/sidebar/SidebarMenu";
 import FullScreenToggle from "@/components/app/sidebar/FullScreenToggle";
 import ThemeToggle from "@/components/app/sidebar/ThemeToggle";
+import SidbarToggle from "@/components/app/sidebar/SidbarToggle";
+import { cn } from "@/lib/utils";
+import useCheckApplyingLayout from "@/hooks/setting/use-check-applying-layout";
+import type { TLayoutSetting } from "@/types/setting.types";
+import SidebarContextMenuWrapper from "@/components/app/sidebar/SidebarContextMenuWrapper";
 
 const Sidebar = () => {
+  const layoutTypes: TLayoutSetting = useCheckApplyingLayout();
+
   return (
-    <TooltipProvider>
-      <div className="max-w-16 bg-background border-r-2 py-2.5 px-2 flex flex-col gap-2.5">
-        <SidbarToggler />
-        <SidebarMenu />
-        <FullScreenToggle />
-        <ThemeToggle />
-      </div>
-    </TooltipProvider>
+    <SidebarContextMenuWrapper>
+      <TooltipProvider>
+        <div
+          className={cn(
+            "max-w-16 py-2.5 px-2 flex flex-col gap-2.5 justify-between items-center h-full bg-accent/50 backdrop-blur-sm",
+            {
+              "border-r-2": layoutTypes !== "rtl",
+              "border-l-2": layoutTypes === "rtl",
+            }
+          )}
+        >
+          <div className="flex flex-col gap-2">
+            <SidebarMenu />
+            <ThemeToggle />
+          </div>
+          <div className="flex flex-col gap-2">
+            <SidbarToggle />
+            <FullScreenToggle />
+          </div>
+        </div>
+      </TooltipProvider>
+    </SidebarContextMenuWrapper>
   );
 };
 

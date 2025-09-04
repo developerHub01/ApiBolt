@@ -11,15 +11,15 @@ const CopyRight = memo(() => {
 
   useEffect(() => {
     try {
-      setIsVisible(!sessionStorage.getItem("copy-right-hide"));
+      setIsVisible(!localStorage.getItem("copy-right-hide"));
     } catch {
-      // fallback if sessionStorage not available
+      // fallback if localStorage not available
       setIsVisible(true);
     }
 
     const handleKeydown = (e: KeyboardEvent) => {
       if (e.code === "Escape") {
-        sessionStorage.setItem("copy-right-hide", "true");
+        localStorage.setItem("copy-right-hide", "true");
         setIsVisible(false);
       }
     };
@@ -31,9 +31,9 @@ const CopyRight = memo(() => {
 
   const handleClick = useCallback(() => {
     try {
-      sessionStorage.setItem("copy-right-hide", "true");
+      localStorage.setItem("copy-right-hide", "true");
     } catch {
-      // Ignoring sessionStorage errors
+      // Ignoring localStorage errors
     }
     setIsVisible(false);
   }, []);
@@ -41,7 +41,7 @@ const CopyRight = memo(() => {
   if (!mounted || !isVisible) return null;
 
   return (
-    <div className="p-1 pt-1 bg-accent relative">
+    <div className="p-1 pt-1 bg-accent/50 relative">
       <p className="text-center text-xs md:text-sm select-none">
         All rights reserved for
         <Link

@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX `tabs_table_projectId_unique` ON `tabs_table` (`projectId`);

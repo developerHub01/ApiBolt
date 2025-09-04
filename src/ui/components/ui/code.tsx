@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type JSX } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import type { Extension } from "@uiw/react-codemirror";
 import { EditorView } from "@codemirror/view";
@@ -13,7 +13,8 @@ import { cn } from "@/lib/utils";
 import useMounted from "@/hooks/use-mounted";
 import { Button } from "@/components/ui/button";
 import { Copy as CopyIcon } from "lucide-react";
-import type { TContentType } from "@/types";
+import type { TContentType } from "@/types/request-response.types";
+import { toast } from "sonner";
 
 type TLanguageType = TContentType | "markdown";
 
@@ -45,17 +46,19 @@ const getEditableOptions = ({
   onBlur,
   lineNumbers,
   foldLine,
+  autoFocus,
 }: {
   editable: boolean;
   onChange?: (code: string) => void;
   onBlur?: () => void;
   lineNumbers: boolean;
   foldLine: boolean;
+  autoFocus: boolean;
 }) => {
   if (!editable) return {};
 
   return {
-    autoFocus: true,
+    autoFocus,
     basicSetup: {
       autocompletion: true,
       bracketMatching: true,
@@ -78,6 +81,7 @@ interface CodeProps {
   code: string;
   onChange?: (code: string) => void;
   onBlur?: () => void;
+  transparentBg?: boolean;
   editable?: boolean;
   className?: string;
   innerClassName?: string;
@@ -85,17 +89,22 @@ interface CodeProps {
   lineWrap?: boolean;
   lineNumbers?: boolean;
   foldLine?: boolean;
+  indentWithTab?: boolean;
   copy?: boolean;
+  autoFocus?: boolean;
+  placeholder?: string;
   [key: string]: unknown;
   handleFormat?: () => void;
+  beforeComp?: JSX.Element | null;
 }
 
 const Code = ({
   contentType,
-  fontSize = 14,
+  fontSize = 16,
   code,
   onChange,
   onBlur,
+  transparentBg = true,
   editable = true,
   className = "",
   innerClassName = "",
@@ -103,8 +112,12 @@ const Code = ({
   lineWrap = false,
   lineNumbers = true,
   foldLine = true,
+  indentWithTab = true,
   copy = true,
+  autoFocus = true,
+  placeholder = "",
   handleFormat,
+  beforeComp = null,
   ...props
 }: CodeProps) => {
   const [fontSizeState, setFontSizeState] = useState(fontSize);
@@ -164,10 +177,21 @@ const Code = ({
     };
   }, [zoomable, fontSize, handleFormat]);
 
-  const handleCopy = useCallback(() => {
-    navigator.clipboard.writeText(
-      typeof code === "string" ? code : JSON.stringify(code)
-    );
+  const handleCopy = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(
+        typeof code === "string" ? code : JSON.stringify(code)
+      );
+      toast("Code copied", {
+        description: "Successfully copied code into your clipboard",
+      });
+    } catch (error) {
+      toast("Something went wrong", {
+        description:
+          "Couldn't copy. facing some issue. " +
+          (error instanceof Error ? error.message : ""),
+      });
+    }
   }, [code]);
 
   if (!isMounted) return null;
@@ -184,7 +208,7 @@ const Code = ({
 
   return (
     <div
-      className={cn("w-full h-full relative", className)}
+      className={cn("w-full h-full relative flex flex-col", className)}
       tabIndex={0}
       ref={wrapperRef}
       {...props}
@@ -193,20 +217,36 @@ const Code = ({
         <Button
           size={"iconSm"}
           variant={"outline"}
-          className="absolute top-1.5 right-1.5 z-50"
+          className="absolute top-1.5 right-1.5 z-10"
           onClick={handleCopy}
         >
           <CopyIcon />
         </Button>
       )}
+      {beforeComp}
+      <style>{` 
+        .cm-gutter.cm-lineNumbers {
+            user-select: none;
+        }
+      `}</style>
       <CodeMirror
-        className={cn("w-full h-full [&>div]:bg-background!", innerClassName)}
+        className={cn(
+          "w-full h-full flex-1",
+          {
+            "[&>div]:bg-background!": !transparentBg,
+            "[&>div]:bg-transparent!": transparentBg,
+          },
+          innerClassName
+        )}
         height="100%"
+        width="100%"
         theme={theme}
         style={{
           fontSize: fontSizeState,
         }}
         value={code}
+        placeholder={placeholder}
+        indentWithTab={indentWithTab}
         extensions={extensions}
         {...getEditableOptions({
           editable,
@@ -214,6 +254,7 @@ const Code = ({
           onBlur,
           lineNumbers,
           foldLine,
+          autoFocus,
         })}
         readOnly={!editable}
       />

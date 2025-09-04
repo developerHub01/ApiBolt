@@ -16,7 +16,10 @@ const MarkdownPreview = ({
   ...props
 }: MarkdownPreviewProps) => {
   return (
-    <div className={cn("text-sm text-foreground", className)} {...props}>
+    <div
+      className={cn("text-sm text-foreground select-text", className)}
+      {...props}
+    >
       <Markdown
         remarkPlugins={[remarkGfm]}
         components={{
@@ -79,6 +82,7 @@ const MarkdownPreview = ({
                   editable={false}
                   copy={true}
                   className="rounded-md overflow-hidden border"
+                  lineWrap
                 />
               );
             } else

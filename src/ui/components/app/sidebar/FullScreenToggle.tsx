@@ -1,4 +1,3 @@
-import { useFullScreen } from "@/hooks/use-full-screen";
 import {
   Expand as FullScreenIcon,
   Minimize as SmallScreenIcon,
@@ -9,17 +8,19 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
-import { isElectron } from "@/utils/electron";
+import { useGlobal } from "@/context/global/GlobalProvider";
 
 const FullScreenToggle = () => {
-  const { isFullscreen, toggleFullscreen } = useFullScreen();
-
-  if (isElectron()) return null;
+  const { isFullscreen, toggleFullscreen } = useGlobal();
 
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Button variant="outline" onClick={toggleFullscreen} size="icon">
+        <Button
+          variant="outline"
+          onClick={() => toggleFullscreen()}
+          size="icon"
+        >
           {isFullscreen ? (
             <SmallScreenIcon size={18} />
           ) : (

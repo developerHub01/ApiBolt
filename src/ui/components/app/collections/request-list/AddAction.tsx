@@ -1,0 +1,76 @@
+import { memo } from "react";
+import { Button } from "@/components/ui/button";
+import { Plus as PlusIcon } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useAppDispatch } from "@/context/redux/hooks";
+import {
+  createCollection,
+  createRestApiBasic,
+  createSingleRequest,
+} from "@/context/redux/request-response/thunks/request-list";
+
+type TAction = "blank_collection" | "single_request" | "rest_api_basics";
+
+const actionsList: Array<{
+  id: TAction;
+  label: string;
+}> = [
+  {
+    id: "blank_collection",
+    label: "Blank Collection",
+  },
+  {
+    id: "single_request",
+    label: "Single Request",
+  },
+  {
+    id: "rest_api_basics",
+    label: "REST API Basics",
+  },
+];
+
+const AddAction = memo(() => {
+  const dispatch = useAppDispatch();
+
+  const handleAction = (id: TAction) => {
+    switch (id) {
+      case "single_request":
+        return dispatch(createSingleRequest());
+      case "blank_collection":
+        return dispatch(createCollection());
+      case "rest_api_basics":
+        return dispatch(createRestApiBasic());
+    }
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button size={"iconSm"} variant={"ghost"}>
+          <PlusIcon />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-40" align="end" sideOffset={10}>
+        <DropdownMenuGroup>
+          {actionsList.map(({ id, label }) => (
+            <DropdownMenuItem
+              key={id}
+              className="cursor-pointer"
+              onClick={() => handleAction(id)}
+            >
+              {label}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+});
+
+export default AddAction;

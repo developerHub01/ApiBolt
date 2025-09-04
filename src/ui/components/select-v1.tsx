@@ -12,6 +12,8 @@ interface SelectV1Props {
   list: Array<{
     id: string;
     label: string;
+    isActive?: boolean;
+    count?: number;
   }>;
   value: string;
   handleChange: (id: string) => void;
@@ -31,9 +33,13 @@ const SelectV1 = ({ list, value, handleChange, className }: SelectV1Props) => {
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            {list.map(({ id, label }) => (
+            {list.map(({ id, label, isActive, count }) => (
               <SelectItem key={id} value={id}>
                 {label}
+                {Boolean(count) && <p className="text-primary">({count})</p>}
+                {isActive && (
+                  <span className="inline-block size-1.5 rounded-full bg-green-500 mt-1"></span>
+                )}
               </SelectItem>
             ))}
           </SelectGroup>

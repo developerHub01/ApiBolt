@@ -1,0 +1,1 @@
+ALTER TABLE `request_or_folder_meta_table` ADD `isExpended` integer DEFAULT 0 NOT NULL;

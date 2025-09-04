@@ -1,0 +1,51 @@
+import { useEffect, useState } from "react";
+import Code from "@/components/ui/code";
+import { formatCode } from "@/utils/prettierUtils";
+import { toast } from "sonner";
+
+const codeFormatter = async (
+  code: string,
+  callback: (code: string) => void
+) => {
+  const { success, data, message } = await formatCode(code, "json");
+  if (!code) return;
+  if (!success || !data) return message && toast(message);
+  callback(data);
+};
+
+interface PayloadCodeProps {
+  code: string;
+  onBlur: (code: string) => void;
+  [key: string]: unknown;
+}
+
+const PayloadCode = ({ code = "", onBlur, ...props }: PayloadCodeProps) => {
+  const [codeState, setCodeState] = useState<string>(code);
+
+  useEffect(() => {
+    setCodeState(code);
+  }, [code]);
+
+  const handleChange = (code: string) => setCodeState(code);
+  const handleBlur = () => onBlur(codeState);
+
+  const handleFormat = () => codeFormatter(codeState, setCodeState);
+
+  return (
+    <Code
+      className="max-w-80 h-52 rounded-lg overflow-hidden border"
+      contentType="json"
+      code={code}
+      onChange={handleChange}
+      onBlur={handleBlur}
+      editable={true}
+      copy={true}
+      lineWrap={true}
+      zoomable={true}
+      handleFormat={handleFormat}
+      {...props}
+    />
+  );
+};
+
+export default PayloadCode;

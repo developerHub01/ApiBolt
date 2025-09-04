@@ -1,0 +1,25 @@
+import SettingItem from "@/components/app/setting/content/SettingItem";
+import SettingBackgroundImages from "@/components/app/setting/content/background/images/SettingBackgroundImages";
+import SettingBackgroundBlur from "@/components/app/setting/content/background/SettingBackgroundBlur";
+import SettingBackgroundOpacity from "@/components/app/setting/content/background/SettingBackgroundOpacity";
+import SettingBackgroundOptionWrapper from "@/components/app/setting/content/background/SettingBackgroundOptionWrapper";
+import SettingBackgroundMaxNumberOfImages from "@/components/app/setting/content/background/SettingBackgroundMaxNumberOfImages";
+import SettingBackgroundSlideInterval from "@/components/app/setting/content/background/SettingBackgroundSlideInterval";
+
+const SettingBackground = () => {
+  return (
+    <SettingItem id="background" title="Background Images">
+      <div className="w-full flex flex-col">
+        <SettingBackgroundImages />
+        <SettingBackgroundOptionWrapper>
+          <SettingBackgroundOpacity />
+          <SettingBackgroundBlur />
+          <SettingBackgroundMaxNumberOfImages />
+          <SettingBackgroundSlideInterval />
+        </SettingBackgroundOptionWrapper>
+      </div>
+    </SettingItem>
+  );
+};
+
+export default SettingBackground;

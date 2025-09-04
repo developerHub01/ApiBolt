@@ -1,0 +1,1 @@
+ALTER TABLE `body_form_data_table` DROP COLUMN `valueType`;

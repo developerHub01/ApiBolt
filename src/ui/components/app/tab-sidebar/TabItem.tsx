@@ -1,27 +1,38 @@
-import { useState, type DragEvent, type MouseEvent } from "react";
+import {
+  memo,
+  useCallback,
+  useState,
+  type DragEvent,
+  type MouseEvent,
+} from "react";
 import RequestMethodTag from "@/components/app/RequestMethodTag";
 import { Button } from "@/components/ui/button";
-import { useRequestList } from "@/context/request-list/RequestListProvider";
-import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 import { cn } from "@/lib/utils";
-import type { TMethod } from "@/types";
 import { FolderClosed as FolderIcon, X as CloseIcon } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import {
+  handleChangeSelectedTab,
+  handleMoveTab,
+  handleRemoveTab,
+} from "@/context/redux/request-response/request-response-slice";
+import type { THTTPMethods } from "@/types/request-response.types";
+import { expendParentsOnSelectedChangeTabsData } from "@/context/redux/request-response/thunks/tab-list";
 
-const TabItem = ({ id, index }: { id: string; index: number }) => {
+const TabItem = memo(({ id, index }: { id: string; index: number }) => {
+  const dispatch = useAppDispatch();
   const [isDragging, setIsDragging] = useState<boolean>(false);
-  const { handleGetRequestOrFolderDetails } = useRequestList();
-
-  const tabDetails = handleGetRequestOrFolderDetails(id) ?? {};
-
-  const {
-    isTabListHovering,
-    selectedTab,
-    changeSelectedTab,
-    removeTab,
-    moveTab,
-  } = useTabSidebar();
   const [isTabHovering, setIsTabHovering] = useState<boolean>(false);
+
+  const tabDetails = useAppSelector(
+    (state) => state.requestResponse.requestList[id] ?? {}
+  );
+  const isTabListHovering = useAppSelector(
+    (state) => state.requestResponse.isTabListHovering
+  );
+  const selectedTab = useAppSelector(
+    (state) => state.requestResponse.selectedTab
+  );
 
   const handleDragStart = (e: DragEvent<HTMLDivElement>) => {
     e.dataTransfer.setData("text/plain", id);
@@ -31,7 +42,6 @@ const TabItem = ({ id, index }: { id: string; index: number }) => {
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
-
     setIsDragging(true);
   };
 
@@ -43,30 +53,63 @@ const TabItem = ({ id, index }: { id: string; index: number }) => {
     setIsDragging(false);
     if (draggedId === id) return;
 
-    moveTab(draggedId, index);
+    dispatch(
+      handleMoveTab({
+        id: draggedId,
+        index,
+      })
+    );
   };
 
   const handleDragLeave = () => setIsDragging(false);
 
-  if (!tabDetails) return null;
+  /* children represent is it a folder or request | if children at least empty array then folder. so for that we will asign a [] in children if it is a folder to represent */
+  const children = tabDetails.method ? undefined : (tabDetails.children ?? []);
 
-  const { name, children, method } = tabDetails;
+  const method = useAppSelector(
+    (state) =>
+      state.requestResponse.requestList[id]?.method ?? tabDetails.method
+  );
+  const name = useAppSelector(
+    (state) => state.requestResponse.requestList[id]?.name ?? tabDetails.name
+  );
 
   const handleCloseBtnClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    removeTab(id);
+    dispatch(handleRemoveTab(id));
   };
+
+  const handleClick = useCallback(async () => {
+    dispatch(handleChangeSelectedTab(id));
+
+    if (selectedTab === id) return;
+    dispatch(expendParentsOnSelectedChangeTabsData(id));
+  }, [dispatch, id, selectedTab]);
+
+  if (!tabDetails) return null;
 
   return (
     <div
       key={id}
-      className={cn("w-full h-8 cursor-pointer hover:bg-accent px-1", {
-        "bg-accent": selectedTab === id,
-        "bg-transparent": selectedTab !== id,
-      })}
+      data-active={selectedTab === id}
+      className={cn(
+        "w-full h-8 cursor-pointer px-1 border-x-2 border-transparent",
+        {
+          /* active tab style */
+          "bg-accent hover:bg-accent/80": selectedTab === id,
+          /* active tab border color */
+          "bg-transparent hover:bg-accent/50": selectedTab !== id,
+          "border-green-500": selectedTab === id && method === "get",
+          "border-blue-500": selectedTab === id && method === "post",
+          "border-yellow-500": selectedTab === id && method === "put",
+          "border-orange-500": selectedTab === id && method === "patch",
+          "border-red-500": selectedTab === id && method === "delete",
+          "border-primary": selectedTab === id && !method,
+        }
+      )}
       onMouseEnter={() => setIsTabHovering(true)}
       onMouseLeave={() => setIsTabHovering(false)}
-      onClick={() => changeSelectedTab(id)}
+      onClick={handleClick}
       draggable
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
@@ -75,7 +118,7 @@ const TabItem = ({ id, index }: { id: string; index: number }) => {
     >
       <div
         className={cn(
-          "w-full h-full flex items-center justify-center cursor-pointer hover:bg-accent px-1 ring-2 rounded-md",
+          "w-full h-full flex items-center justify-center px-1 ring-2",
           {
             "ring-primary/50": isDragging,
             "ring-transparent": !isDragging,
@@ -92,7 +135,7 @@ const TabItem = ({ id, index }: { id: string; index: number }) => {
             {children && <FolderIcon size={20} />}
             {method && (
               <RequestMethodTag
-                method={method as TMethod}
+                method={method as THTTPMethods}
                 shortCut={true}
                 shortCutSizeForAll={isTabListHovering ? undefined : 3}
                 className={"w-full"}
@@ -101,8 +144,14 @@ const TabItem = ({ id, index }: { id: string; index: number }) => {
           </div>
         )}
         <motion.div
-          className="flex-1 cursor-pointer flex items-center transition-all duration-300"
+          className={cn(
+            "cursor-pointer flex items-center transition-all duration-300",
+            {
+              "flex-1": isTabListHovering,
+            }
+          )}
           style={{ transformOrigin: "left" }}
+          key={id}
           animate={{
             opacity: isTabListHovering ? 1 : 0,
             width: isTabListHovering ? "100%" : "0px",
@@ -115,7 +164,7 @@ const TabItem = ({ id, index }: { id: string; index: number }) => {
             type="text"
             value={name}
             readOnly
-            className="w-full h-full outline-0 rounded-md text-sm whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer select-none"
+            className="w-full h-full outline-0 rounded-md text-sm whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer select-none pointer-events-none"
           />
         </motion.div>
         {isTabListHovering && (
@@ -141,6 +190,6 @@ const TabItem = ({ id, index }: { id: string; index: number }) => {
       </div>
     </div>
   );
-};
+});
 
 export default TabItem;

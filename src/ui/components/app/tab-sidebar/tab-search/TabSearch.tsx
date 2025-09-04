@@ -1,0 +1,40 @@
+import { useAppSelector } from "@/context/redux/hooks";
+import { AnimatePresence, motion } from "motion/react";
+import TabSearchBar from "@/components/app/tab-sidebar/tab-search/TabSearchBar";
+import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
+
+const TabSearch = () => {
+  const showTabSearch = useAppSelector((state) =>
+    Boolean(state.requestResponse.tabList?.length ?? 0)
+  );
+  const { totalTabsOpen } = useTabSidebar();
+
+  if (!totalTabsOpen) return null;
+
+  return (
+    <AnimatePresence>
+      {showTabSearch && (
+        <motion.div
+          initial={{
+            opacity: 0,
+          }}
+          exit={{
+            opacity: 0,
+          }}
+          animate={{
+            opacity: 1,
+          }}
+          transition={{
+            duration: 0.4,
+            type: "spring",
+            ease: "anticipate",
+          }}
+        >
+          <TabSearchBar />
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+export default TabSearch;

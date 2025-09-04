@@ -1,0 +1,132 @@
+import type {
+  ProjectSettingsInterface,
+  SettingsInterface,
+  SettingsTotalInterface,
+  TKeyboardShortcutKey,
+  UpdateBackgroundImagePayloadInterface,
+} from "@/types/setting.types";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import type { AppDispatch, RootState } from "@/context/redux/store";
+import { handleLoadSettings, handleUpdateSettings } from "./setting-slice";
+import {
+  defaultSettings,
+  defaultZoomLevel,
+  maxZoomLevel,
+  minZoomLevel,
+  stepAmountZoomLevel,
+} from "@/constant/settings.constant";
+import { calculateIntoFixedPoint } from "@/utils";
+import { checkApplyingZoomable } from "@/utils/settings.utils";
+
+export const loadSettings = createAsyncThunk<
+  SettingsTotalInterface,
+  void,
+  { dispatch: AppDispatch; state: RootState }
+>("request-response/loadSettings", async (_, { dispatch }) => {
+  const response = await window.electronAPISettingsDB.getSettings();
+
+  dispatch(handleLoadSettings(response));
+
+  return response;
+});
+export const updateSettings = createAsyncThunk<
+  boolean,
+  Partial<SettingsInterface | ProjectSettingsInterface>,
+  { dispatch: AppDispatch; state: RootState }
+>("request-response/updateSettings", async (payload, { dispatch }) => {
+  const response = await window.electronAPISettingsDB.updateSettings(payload);
+
+  dispatch(
+    handleUpdateSettings({
+      type: payload.projectId ? "project" : "global",
+      payload,
+    })
+  );
+
+  return response;
+});
+export const updateSettingsZoomByKeyboard = createAsyncThunk<
+  boolean,
+  TKeyboardShortcutKey,
+  { dispatch: AppDispatch; state: RootState }
+>(
+  "request-response/updateSettingsZoomByKeyboard",
+  async (type, { dispatch, getState }) => {
+    const state = getState() as RootState;
+
+    const activeProjectId = state.requestResponse.activeProjectId ?? null;
+
+    /* first checking do we can zoom? based on the local(project based), global, default */
+    const isZoomable = checkApplyingZoomable({
+      activeProjectId,
+      isZoomableLocal: state.setting.settings?.isZoomable,
+      isZoomableGlobal: state.setting.globalSetting?.isZoomable,
+      defaultZoomable: defaultSettings.isZoomable,
+    });
+
+    if (!isZoomable) return false;
+
+    const oldZoomLevel =
+      (state.setting.settings || state.setting.globalSetting).zoomLevel ?? 1;
+
+    /* first updating level basded on keybord key then normalizing between min and max elvel */
+    const newZoomLevel = Math.max(
+      Math.min(
+        type === "+"
+          ? calculateIntoFixedPoint(oldZoomLevel + stepAmountZoomLevel, 1)
+          : type === "-"
+            ? calculateIntoFixedPoint(oldZoomLevel - stepAmountZoomLevel, 1)
+            : defaultZoomLevel,
+        maxZoomLevel
+      ),
+      minZoomLevel
+    );
+
+    if (oldZoomLevel === newZoomLevel) return false;
+
+    const response = await window.electronAPISettingsDB.updateSettings({
+      zoomLevel: newZoomLevel,
+      projectId: activeProjectId,
+    });
+
+    dispatch(
+      handleUpdateSettings({
+        type: activeProjectId ? "project" : "global",
+        payload: {
+          zoomLevel: newZoomLevel,
+        },
+      })
+    );
+
+    return response;
+  }
+);
+export const updateSettingsBackgroundImages = createAsyncThunk<
+  boolean,
+  Pick<UpdateBackgroundImagePayloadInterface, "method"> & {
+    type: "project" | "global";
+  },
+  { dispatch: AppDispatch; state: RootState }
+>(
+  "request-response/updateSettingsBackgroundImages",
+  async ({ type, method }, { dispatch, getState }) => {
+    const state = getState() as RootState;
+
+    const activeProjectId = state.requestResponse.activeProjectId ?? null;
+
+    const response =
+      await window.electronAPISettingsDB.updateSettingsBackgroundImages({
+        projectId: type === "global" ? null : activeProjectId,
+        method,
+      });
+
+    if (response) await dispatch(loadSettings());
+
+    return response;
+  }
+);
+
+/* 
+
+      updateupdateBackgroundImage(payload: UpdateBackgroundImagePayloadInterface): Promise<void>;
+*/
