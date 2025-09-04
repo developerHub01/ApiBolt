@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useMemo, useState } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,7 @@ import {
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectEnvironmentsVariableList } from "@/context/redux/request-response/request-response-selector";
 import { Trash2 as DeleteIcon } from "lucide-react";
+import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 
 interface VariableTokenProps {
   id: string;
@@ -29,15 +30,36 @@ const VariableToken = memo(({ id, onDelete }: VariableTokenProps) => {
   const [value, setValue] = useState<string>("");
   const variableList = useAppSelector(selectEnvironmentsVariableList);
 
+  const isVariableExistInList = useMemo(
+    () => variableList.find((item) => item.variable === value),
+    [value, variableList]
+  );
+
+  const isExist = value && isVariableExistInList;
+  const isNotExist = value && !isVariableExistInList;
+
+  console.log({
+    isExist,
+    isNotExist,
+  });
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <div className="w-fit min-w-40 flex">
+      <ButtonLikeDiv
+        className={cn("w-fit min-w-40 flex gap-0 p-0 bg-transparent ring", {
+          "ring-green-500/60": isExist,
+          "ring-red-500/60": isNotExist,
+        })}
+      >
         <PopoverTrigger asChild>
           <Button
             variant="secondary"
             role="combobox"
             aria-expanded={open}
-            className="flex-1 justify-between rounded-r-none"
+            className={cn("flex-1 justify-between rounded-r-none", {
+              "text-green-500/60": isExist,
+              "text-red-/60": isNotExist,
+            })}
           >
             <p className="flex-1 overflow-hidden text-left">
               {value
@@ -55,8 +77,13 @@ const VariableToken = memo(({ id, onDelete }: VariableTokenProps) => {
         >
           <DeleteIcon />
         </Button>
-      </div>
-      <PopoverContent className="w-[200px] p-0" side="bottom" align="start">
+      </ButtonLikeDiv>
+      <PopoverContent
+        className="w-[200px] p-0"
+        side="bottom"
+        align="start"
+        sideOffset={8}
+      >
         <Command>
           <CommandInput placeholder="Search variable..." className="h-9" />
           <CommandList>

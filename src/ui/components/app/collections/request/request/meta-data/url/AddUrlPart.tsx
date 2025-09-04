@@ -37,7 +37,7 @@ const AddUrlPart = ({ id, onAdd }: Props) => {
           <AddIcon />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent side="bottom" align="end">
+      <DropdownMenuContent side="bottom" align="end" sideOffset={8}>
         <DropdownMenuGroup>
           {urlPartList.map(({ id, label }) => (
             <DropdownMenuItem key={id} onClick={() => handleAdd(id)}>
