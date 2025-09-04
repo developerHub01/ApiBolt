@@ -15,31 +15,48 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useAppSelector } from "@/context/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { selectEnvironmentsVariableList } from "@/context/redux/request-response/request-response-selector";
 import { Trash2 as DeleteIcon } from "lucide-react";
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
-import type { DragControls } from "motion/react";
 import TokenDragHandler from "@/components/app/collections/request/request/meta-data/url/TokenDragHandler";
+import { selectRequestUrlTokenById } from "@/context/redux/request-url/request-url-selector";
+import {
+  requestUrlDeleteToken,
+  requestUrlUpdateToken,
+} from "@/context/redux/request-url/request-url-thunk";
 
 interface VariableTokenProps {
   id: string;
-  onDelete: (id: string) => void;
-  controls: DragControls;
 }
 
-const VariableToken = memo(({ id, onDelete, controls }: VariableTokenProps) => {
+const VariableToken = memo(({ id }: VariableTokenProps) => {
+  const dispatch = useAppDispatch();
   const [open, setOpen] = useState<boolean>(false);
-  const [value, setValue] = useState<string>("");
+  const selectedVariable = useAppSelector(selectRequestUrlTokenById(id));
   const variableList = useAppSelector(selectEnvironmentsVariableList);
 
+  const handleChangeVariable = (variable: string) => {
+    dispatch(
+      requestUrlUpdateToken({
+        id,
+        value: variable === selectedVariable ? "" : variable,
+      })
+    );
+    setOpen(false);
+  };
+
+  const handleDelete = () => {
+    dispatch(requestUrlDeleteToken(id));
+  };
+
   const isVariableExistInList = useMemo(
-    () => variableList.find((item) => item.variable === value),
-    [value, variableList]
+    () => variableList.find((item) => item.variable === selectedVariable),
+    [selectedVariable, variableList]
   );
 
-  const isExist = value && isVariableExistInList;
-  const isNotExist = value && !isVariableExistInList;
+  const isExist = selectedVariable && isVariableExistInList;
+  const isNotExist = selectedVariable && !isVariableExistInList;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -52,7 +69,7 @@ const VariableToken = memo(({ id, onDelete, controls }: VariableTokenProps) => {
           }
         )}
       >
-        <TokenDragHandler controls={controls} />
+        <TokenDragHandler />
         <PopoverTrigger asChild>
           <Button
             variant="secondary"
@@ -64,9 +81,10 @@ const VariableToken = memo(({ id, onDelete, controls }: VariableTokenProps) => {
             })}
           >
             <p className="flex-1 overflow-hidden text-left">
-              {value
-                ? variableList.find((framework) => framework.variable === value)
-                    ?.variable
+              {selectedVariable
+                ? variableList.find(
+                    (framework) => framework.variable === selectedVariable
+                  )?.variable
                 : "Select variable..."}
             </p>
             <ChevronsUpDown className="opacity-50" />
@@ -75,7 +93,7 @@ const VariableToken = memo(({ id, onDelete, controls }: VariableTokenProps) => {
         <Button
           variant={"secondary"}
           className="rounded-l-none"
-          onClick={() => onDelete(id)}
+          onClick={handleDelete}
         >
           <DeleteIcon />
         </Button>
@@ -95,17 +113,16 @@ const VariableToken = memo(({ id, onDelete, controls }: VariableTokenProps) => {
                 <CommandItem
                   key={variable.variable}
                   value={variable.variable}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue);
-                    setOpen(false);
-                  }}
+                  onSelect={handleChangeVariable}
                   className="w-full"
                 >
                   <p className="flex-1 overflow-hidden">{variable.variable}</p>
                   <Check
                     className={cn(
                       "ml-auto",
-                      value === variable.variable ? "opacity-100" : "opacity-0"
+                      selectedVariable === variable.variable
+                        ? "opacity-100"
+                        : "opacity-0"
                     )}
                   />
                 </CommandItem>

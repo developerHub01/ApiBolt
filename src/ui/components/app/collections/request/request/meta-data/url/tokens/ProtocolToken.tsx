@@ -7,18 +7,50 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import { selectRequestUrlTokenProtocol } from "@/context/redux/request-url/request-url-selector";
+import { requestUrlUpdateToken } from "@/context/redux/request-url/request-url-thunk";
+
+const optionList: Array<{
+  id: string;
+  label: string;
+}> = [
+  {
+    id: "http",
+    label: "http://",
+  },
+  {
+    id: "https",
+    label: "https://",
+  },
+];
 
 const ProtocolToken = memo(() => {
+  const dispatch = useAppDispatch();
+  const protocol = useAppSelector(selectRequestUrlTokenProtocol);
+
+  const handleChange = (value: string) => {
+    dispatch(
+      requestUrlUpdateToken({
+        id: "protocol",
+        value,
+      })
+    );
+  };
+
   return (
-    <Select defaultValue="http">
+    <Select defaultValue="http" value={protocol} onValueChange={handleChange}>
       <ButtonLikeDiv variant={"secondary"} className="p-0">
         <SelectTrigger className="w-[120px]">
           <SelectValue placeholder="Select protocol" />
         </SelectTrigger>
       </ButtonLikeDiv>
       <SelectContent>
-        <SelectItem value="http">http://</SelectItem>
-        <SelectItem value="https">https://</SelectItem>
+        {optionList.map(({ id, label }) => (
+          <SelectItem key={id} value={id}>
+            {label}
+          </SelectItem>
+        ))}
       </SelectContent>
     </Select>
   );

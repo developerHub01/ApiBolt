@@ -1,5 +1,6 @@
 import {
   memo,
+  useEffect,
   useState,
   type ClipboardEvent,
   type FocusEvent,
@@ -10,23 +11,44 @@ import { Trash2 as DeleteIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import TokenDragHandler from "@/components/app/collections/request/request/meta-data/url/TokenDragHandler";
-import type { DragControls } from "motion/react";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import { selectRequestUrlTokenById } from "@/context/redux/request-url/request-url-selector";
+import {
+  requestUrlDeleteToken,
+  requestUrlUpdateToken,
+} from "@/context/redux/request-url/request-url-thunk";
 
 interface TextTokenProps {
   id: string;
-  onDelete: (id: string) => void;
-  controls: DragControls;
 }
 
-const TextToken = memo(({ id, onDelete, controls }: TextTokenProps) => {
-  const [value, setValue] = useState<string>("text");
+const TextToken = memo(({ id }: TextTokenProps) => {
+  const dispatch = useAppDispatch();
+  const tokenValue = useAppSelector(selectRequestUrlTokenById(id)) ?? "text";
+  const [value, setValue] = useState<string>(tokenValue);
+
+  useEffect(() => {
+    if (tokenValue === value) return;
+    setValue(tokenValue);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tokenValue]);
 
   const handleKeydown = (e: KeyboardEvent<HTMLHeadingElement>) => {
     if (e.code === "Enter") return e.preventDefault();
   };
 
   const handleBlur = (e: FocusEvent<HTMLHeadingElement>) => {
-    setValue(e.target.innerText.trim());
+    const newValue = e.target.innerText.trim();
+    setValue(newValue);
+
+    if (newValue === value) return;
+
+    dispatch(
+      requestUrlUpdateToken({
+        id,
+        value: newValue,
+      })
+    );
   };
 
   const handlePaste = (e: ClipboardEvent<HTMLHeadingElement>) => {
@@ -35,9 +57,11 @@ const TextToken = memo(({ id, onDelete, controls }: TextTokenProps) => {
     document.execCommand("insertText", false, text);
   };
 
+  const handleDelete = () => dispatch(requestUrlDeleteToken(id));
+
   return (
     <div className="flex p-0 gap-0">
-      <TokenDragHandler controls={controls} />
+      <TokenDragHandler />
       <FlexibleHightButtonLikeDiv className="flex-1 rounded-none">
         <p
           contentEditable
@@ -53,7 +77,7 @@ const TextToken = memo(({ id, onDelete, controls }: TextTokenProps) => {
       <Button
         variant={"secondary"}
         className="rounded-l-none h-full"
-        onClick={() => onDelete(id)}
+        onClick={handleDelete}
       >
         <DeleteIcon />
       </Button>

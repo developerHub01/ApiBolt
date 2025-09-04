@@ -1,18 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { GripVertical as GripVerticalIcon } from "lucide-react";
-import type { DragControls } from "motion/react";
 
-interface Props {
-  controls: DragControls;
-}
+// interface Props {
 
-const TokenDragHandler = ({ controls }: Props) => {
+// }
+
+const TokenDragHandler = () => {
   return (
-    <Button
-      variant="secondary"
-      className="rounded-r-none h-full cursor-grab"
-      onPointerDown={(e) => controls.start(e)}
-    >
+    <Button variant="secondary" className="rounded-r-none h-full cursor-grab">
       <GripVerticalIcon />
     </Button>
   );

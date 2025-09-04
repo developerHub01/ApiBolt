@@ -6,7 +6,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { TAPIUrlTokenType } from "@/types/request.url.types";
+import { useAppDispatch } from "@/context/redux/hooks";
+import { requestUrlAddToken } from "@/context/redux/request-url/request-url-thunk";
+import type { TAPIUrlTokenType } from "@/types/request-url.types";
 import { Plus as AddIcon } from "lucide-react";
 
 const urlPartList: Array<{
@@ -25,11 +27,19 @@ const urlPartList: Array<{
 
 interface Props {
   id: string;
-  onAdd: (type: TAPIUrlTokenType, preTokenId?: string) => void;
 }
 
-const AddUrlPart = ({ id, onAdd }: Props) => {
-  const handleAdd = (type: TAPIUrlTokenType) => onAdd(type, id);
+const AddUrlPart = ({ id }: Props) => {
+  const dispatch = useAppDispatch();
+
+  const handleAdd = (type: TAPIUrlTokenType) =>
+    dispatch(
+      requestUrlAddToken({
+        type,
+        preTokenId: id,
+      })
+    );
+
   return (
     <DropdownMenu key={id}>
       <DropdownMenuTrigger asChild>
