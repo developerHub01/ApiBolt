@@ -1,7 +1,10 @@
 import { type RequestTabInterface } from "@/types/request-response.types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
-import { handleLoadReqestMetaTab } from "@/context/redux/request-response/request-response-slice";
+import {
+  handleLoadReqestMetaTab,
+  handleUpdateReqestMetaTab,
+} from "@/context/redux/request-response/request-response-slice";
 
 /* ==============================
 ======== ReqestMetaTab start =============
@@ -40,7 +43,12 @@ export const updateRequestMetaTab = createAsyncThunk<
   const response =
     await window.electronAPIRequestMetaTabDB.updateRequestMetaTab(payload);
 
-  if (response) dispatch(loadRequestMetaTab());
+  if (response)
+    dispatch(
+      handleUpdateReqestMetaTab({
+        ...payload,
+      })
+    );
   return;
 });
 /* ==============================

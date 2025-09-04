@@ -795,7 +795,7 @@ export const requestResponseSlice = createSlice({
       state,
       action: PayloadAction<RequestTabInterface | undefined | null>
     ) => {
-      const { activeMetaTab = "params", requestBodyType = "none" } =
+      const { activeMetaTab = "url", requestBodyType = "none" } =
         action.payload ?? {};
       const selectedTab = state.selectedTab;
 
@@ -806,6 +806,21 @@ export const requestResponseSlice = createSlice({
 
       if (state.requestBodyType[selectedTab] !== requestBodyType)
         state.requestBodyType[selectedTab] = requestBodyType;
+    },
+    handleUpdateReqestMetaTab: (
+      state,
+      action: PayloadAction<Partial<RequestTabInterface>>
+    ) => {
+      const payload = action.payload ?? {};
+      const selectedTab = state.selectedTab;
+
+      if (!selectedTab) return;
+
+      if (payload.activeMetaTab)
+        state.activeMetaTab[selectedTab] = payload.activeMetaTab;
+
+      if (payload.requestBodyType)
+        state.requestBodyType[selectedTab] = payload.requestBodyType;
     },
     /* ================ ReqestMetaTab end =================== */
 
@@ -1466,6 +1481,7 @@ export const {
   handleLoadBodyRaw,
   handleLoadBodyBinary,
   handleLoadReqestMetaTab,
+  handleUpdateReqestMetaTab,
 
   handleSetResponse,
   handleSetFormData,
