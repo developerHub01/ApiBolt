@@ -7,7 +7,7 @@ import {
 } from "@/context/redux/request-response/request-response-slice";
 
 /* ==============================
-======== ReqestMetaTab start =============
+======== ReqestMetaTab start ====
 ================================= */
 export const loadRequestMetaTab = createAsyncThunk<
   void,
@@ -24,13 +24,17 @@ export const loadRequestMetaTab = createAsyncThunk<
     const selectedTab = state.requestResponse.selectedTab;
     if (
       !selectedTab ||
-      (typeof state.requestResponse.rawData[selectedTab] !== "undefined" &&
+      ([
+        state.requestResponse.activeMetaTab[selectedTab],
+        state.requestResponse.requestBodyType[selectedTab],
+      ].every((data) => typeof data !== "undefined") &&
         once)
     )
       return;
 
     const response =
       await window.electronAPIRequestMetaTabDB.getRequestMetaTab();
+
     dispatch(handleLoadReqestMetaTab(response));
   }
 );
