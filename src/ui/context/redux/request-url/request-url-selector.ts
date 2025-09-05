@@ -1,6 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit";
 import type { RootState } from "@/context/redux/store";
 import type { THostType, UrlTokenInterface } from "@/types/request-url.types";
+import { encodeApiUrl } from "@/utils/request-url.utils";
 
 export const selectRequestUrlTokens = createSelector(
   [
@@ -10,6 +11,17 @@ export const selectRequestUrlTokens = createSelector(
   (tokens: Array<UrlTokenInterface>): Array<UrlTokenInterface> => {
     if (!tokens) return [];
     return tokens;
+  }
+);
+
+export const selectRequestUrl = createSelector(
+  [
+    (state: RootState) =>
+      state.requestUrl.tokens[state.requestResponse.selectedTab ?? ""],
+  ],
+  (tokens: Array<UrlTokenInterface>): string => {
+    if (!tokens) return "";
+    return encodeApiUrl(tokens);
   }
 );
 

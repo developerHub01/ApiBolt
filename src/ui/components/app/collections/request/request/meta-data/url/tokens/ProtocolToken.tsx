@@ -16,12 +16,12 @@ const optionList: Array<{
   label: string;
 }> = [
   {
-    id: "http",
-    label: "http://",
+    id: "http:",
+    label: "http:",
   },
   {
-    id: "https",
-    label: "https://",
+    id: "https:",
+    label: "https:",
   },
 ];
 
@@ -39,7 +39,11 @@ const ProtocolToken = memo(() => {
   };
 
   return (
-    <Select defaultValue="http" value={protocol} onValueChange={handleChange}>
+    <Select
+      defaultValue={optionList[0].id}
+      value={protocol}
+      onValueChange={handleChange}
+    >
       <ButtonLikeDiv variant={"secondary"} className="p-0">
         <SelectTrigger className="w-[120px]">
           <SelectValue placeholder="Select protocol" />

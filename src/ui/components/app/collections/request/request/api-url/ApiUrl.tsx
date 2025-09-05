@@ -3,23 +3,19 @@ import ApiMethodSelector from "@/components/app/collections/request/request/api-
 import ApiInput from "@/components/app/collections/request/request/api-url/ApiInput";
 import ApiCta from "@/components/app/collections/request/request/api-url/ApiCta";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import { handleRequestSend } from "@/context/redux/request-response/request-response-slice";
+import { selectRequestUrl } from "@/context/redux/request-url/request-url-selector";
 import {
-  handleChangeApiUrl,
-  handleIsInputError,
-  handleRequestSend,
-} from "@/context/redux/request-response/request-response-slice";
+  changeRequestApiUrl,
+  changeRequestApiUrlWithBackend,
+} from "@/context/redux/request-url/request-url-thunk";
+import { isValidApiUrl } from "@/utils/request-url.utils";
 
 const ApiUrl = memo(() => {
   const dispatch = useAppDispatch();
-  const apiUrl = useAppSelector(
-    (state) =>
-      state.requestResponse.apiUrl[state.requestResponse.selectedTab!] ?? ""
-  );
-  const isApiUrlError = useAppSelector(
-    (state) =>
-      state.requestResponse.isApiUrlError[state.requestResponse.selectedTab!]
-  );
+  const apiUrl = useAppSelector(selectRequestUrl);
   const [url, setUrl] = useState<string>(apiUrl);
+  const [isError, setIsError] = useState<boolean>(false);
 
   useEffect(() => {
     setUrl(apiUrl);
@@ -34,23 +30,34 @@ const ApiUrl = memo(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsError(!isValidApiUrl(url));
+
+      dispatch(
+        changeRequestApiUrl({
+          url,
+        })
+      );
+    }, 100);
+    return () => clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [url]);
+
   const handleApiUrlChange = (value: string) => setUrl(value);
-  const handleApiUrlFocus = () => {
-    if (isApiUrlError) dispatch(handleIsInputError(false));
-  };
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (!url) return dispatch(handleIsInputError(true));
-
     dispatch(handleRequestSend());
   };
-  const handleChange = () =>
+
+  const handleChange = () => {
     dispatch(
-      handleChangeApiUrl({
+      changeRequestApiUrlWithBackend({
         url,
       })
     );
+  };
 
   return (
     <form
@@ -60,9 +67,9 @@ const ApiUrl = memo(() => {
       <ApiMethodSelector />
       <ApiInput
         value={url}
+        isError={isError}
         onChange={handleApiUrlChange}
         onBlur={handleChange}
-        onFocus={handleApiUrlFocus}
       />
       <ApiCta />
     </form>

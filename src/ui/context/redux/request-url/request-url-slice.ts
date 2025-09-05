@@ -20,6 +20,17 @@ export const requestUrlSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
+    handleRequestUrlReplaceTokens: (
+      state,
+      action: PayloadAction<{
+        tokens: Array<UrlTokenInterface>;
+        selectedTab: string;
+      }>
+    ) => {
+      const { selectedTab, tokens } = action.payload;
+
+      state.tokens[selectedTab] = tokens;
+    },
     handleRequestUrlAddToken: (
       state,
       action: PayloadAction<{
@@ -30,7 +41,7 @@ export const requestUrlSlice = createSlice({
     ) => {
       const { selectedTab, type, preTokenId = "port" } = action.payload;
 
-      const newValue = type === "text" ? "text" : "";
+      const newValue = type === "text" ? "text" : type === "env" ? "env" : "";
       const newToken = { id: uuidv4(), type, value: newValue };
 
       if (!state.tokens[selectedTab])
@@ -86,6 +97,7 @@ export const requestUrlSlice = createSlice({
 });
 
 export const {
+  handleRequestUrlReplaceTokens,
   handleRequestUrlAddToken,
   handleRequestUrlUpdateToken,
   handleRequestUrlDeleteToken,

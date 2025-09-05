@@ -1,39 +1,34 @@
 import { memo, type ChangeEvent, type FocusEvent } from "react";
-import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { useAppSelector } from "@/context/redux/hooks";
 
 interface ApiInputProps {
   value: string;
+  isError: boolean;
   onChange: (value: string) => void;
-  onFocus: () => void;
   onBlur: (value: string) => void;
 }
 
-const ApiInput = memo(({ value, onChange, onFocus, onBlur }: ApiInputProps) => {
-  const isError = useAppSelector(
-    (state) =>
-      state.requestResponse.isApiUrlError[state.requestResponse.selectedTab!]
-  );
-
+const ApiInput = memo(({ value, isError, onChange, onBlur }: ApiInputProps) => {
   const handleApiUrlChange = (e: ChangeEvent<HTMLInputElement>) =>
     onChange(e.target.value);
-  const handleApiUrlFocus = () => onFocus();
   const handleApiUrlBlur = (e: FocusEvent<HTMLInputElement>) =>
     onBlur(e.target.value);
 
   return (
-    <Input
-      placeholder="Enter URL or paste text"
-      className={cn("w-full bg-background dark:bg-background rounded-none", {
+    <div
+      className={cn("w-full h-full border", {
         "border-destructive": isError,
         "border-input": !isError,
       })}
-      value={value}
-      onChange={handleApiUrlChange}
-      onFocus={handleApiUrlFocus}
-      onBlur={handleApiUrlBlur}
-    />
+    >
+      <input
+        placeholder="Enter URL or paste text"
+        className="w-full h-full placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground px-3 bg-background rounded-none border-0 tracking-wide"
+        value={value}
+        onChange={handleApiUrlChange}
+        onBlur={handleApiUrlBlur}
+      />
+    </div>
   );
 });
 

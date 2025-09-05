@@ -36,7 +36,6 @@ import type {
   TMetaTableType,
   TRequestFolderDescriptionTab,
 } from "@/types/request-response.types";
-import { parseUrlParams } from "@/utils";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 import { loadFolder } from "@/context/redux/request-response/thunks/folder";
@@ -203,9 +202,7 @@ interface RequestResponseState {
 
   isResponseCollapsed: Record<string, boolean>;
   activeMetaTab: Record<string, TActiveTabType>;
-  isApiUrlError: Record<string, boolean>;
   isLoading: Record<string, boolean>;
-  apiUrl: Record<string, string>;
 
   metaShowColumn: Record<string, MetaShowColumnInterface>;
   paramsBulkEditOpen: Record<string, boolean>;
@@ -284,9 +281,7 @@ const initialState: RequestResponseState = {
   selectedTab: null,
   isResponseCollapsed: {},
   activeMetaTab: {},
-  isApiUrlError: {},
   isLoading: {},
-  apiUrl: {},
 
   metaShowColumn: {},
   paramsBulkEditOpen: {},
@@ -945,72 +940,9 @@ export const requestResponseSlice = createSlice({
 
       state.rawRequestBodyType[id] = type;
     },
-    handleIsInputError: (state, action: PayloadAction<boolean>) => {
-      if (!state.selectedTab) return;
-      state.isApiUrlError[state.selectedTab] = action.payload;
-    },
     handleRequestSend: (state) => {
       if (!state.selectedTab) return;
       state.requestIdShouldFetch = state.selectedTab;
-    },
-    handleChangeApiUrl: (
-      state,
-      action: PayloadAction<{
-        id?: string;
-        url: string;
-      }>
-    ) => {
-      const id = action.payload.id ?? state.selectedTab;
-      if (!id) return;
-
-      const { url: api } = action.payload;
-
-      const urlParams: Array<{
-        key: string;
-        value: string;
-      }> = parseUrlParams(api).map(([key, value]) => ({
-        key,
-        value,
-      }));
-
-      let updatedParams: Array<ParamInterface> = [];
-      /* 
-      if new params size less then previous means some of them have to filter out
-      
-      so we keep hidden params as it is but for others we checked that is it exist in new param list
-
-      if exist then update it
-      else filter out it.
-      */
-      if (!state.params[id]) state.params[id] = [];
-      if (state.params[id].length < urlParams.length) {
-        updatedParams = urlParams.map((param, index) => ({
-          ...generateNewMetaDataItem("params"),
-          ...state.params[id]?.[index],
-          ...param,
-        }));
-      } else {
-        let index = 0;
-        updatedParams = state.params[id]?.reduce(
-          (acc, curr) =>
-            curr.isCheck
-              ? [...acc, curr]
-              : urlParams[index]
-                ? [
-                    ...acc,
-                    {
-                      ...curr,
-                      ...urlParams[index++],
-                    },
-                  ]
-                : acc,
-          [] as Array<ParamInterface>
-        );
-      }
-
-      // Save it to the state
-      state.params[id] = updatedParams;
-      state.apiUrl[id] = api;
     },
     handleChangeRequestResponseSize: (
       state,
@@ -1059,7 +991,6 @@ export const requestResponseSlice = createSlice({
         // const id = action?.payload?.id ?? state.selectedTab;
         // if (!id) return;
         // delete state.isLoading[id];
-        // delete state.isApiUrlError[id];
         // delete state.isResposneError[id];
         // state.apiUrl[id] = "";
         // state.params[id] = [];
@@ -1489,9 +1420,7 @@ export const {
   handleChangeRawData,
   handleChangeRequestBodyType,
   handleChangeRawRequestBodyType,
-  handleIsInputError,
   handleRequestSend,
-  handleChangeApiUrl,
   handleChangeRequestResponseSize,
   handleChangeAuthType,
   handleIsDownloadRequestWithBase64,

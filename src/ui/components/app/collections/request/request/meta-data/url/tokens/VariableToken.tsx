@@ -77,14 +77,14 @@ const VariableToken = memo(({ id }: VariableTokenProps) => {
             aria-expanded={open}
             className={cn("flex-1 justify-between rounded-none", {
               "text-green-500/60": isExist,
-              "text-red-/60": isNotExist,
+              "text-red-500/60": isNotExist,
             })}
           >
             <p className="flex-1 overflow-hidden text-left">
               {selectedVariable
-                ? variableList.find(
+                ? (variableList.find(
                     (framework) => framework.variable === selectedVariable
-                  )?.variable
+                  )?.variable ?? selectedVariable)
                 : "Select variable..."}
             </p>
             <ChevronsUpDown className="opacity-50" />

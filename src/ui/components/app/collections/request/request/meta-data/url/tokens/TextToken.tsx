@@ -66,7 +66,7 @@ const TextToken = memo(({ id }: TextTokenProps) => {
         <p
           contentEditable
           suppressContentEditableWarning
-          className="outline-none cursor-text border-b w-full min-w-12 text-center break-words break-all whitespace-normal"
+          className="outline-none cursor-text border-b w-full min-w-12 text-center break-words break-all whitespace-normal font-normal"
           onKeyDown={handleKeydown}
           onBlur={handleBlur}
           onPaste={handlePaste}
