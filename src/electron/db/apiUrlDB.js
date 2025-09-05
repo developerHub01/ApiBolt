@@ -35,11 +35,17 @@ export const createApiUrl = async (payload = {}) => {
   }
 };
 
-export const updateApiUrl = async (requestOrFolderMetaId, payload) => {
+export const updateApiUrl = async (payload) => {
   if (!payload) return false;
 
+  let { requestOrFolderMetaId, ...other } = payload;
+  payload = other;
+
+  if (!requestOrFolderMetaId)
+    requestOrFolderMetaId = (await getTabList())?.selectedTab;
+  if (!requestOrFolderMetaId) return false;
+
   delete payload["id"];
-  delete payload["requestOrFolderMetaId"];
   delete payload["createdAt"];
 
   try {
