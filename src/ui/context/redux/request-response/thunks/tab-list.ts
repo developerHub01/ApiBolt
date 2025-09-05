@@ -65,8 +65,8 @@ export const addNewTabsData = createAsyncThunk<
     await window.electronAPIRequestOrFolderMetaDB.createRequestOrFolderMeta(
       payload
     );
-  } catch {
-    console.log("addNewTabsData error");
+  } catch (error) {
+    console.log(error);
   }
 });
 
@@ -95,8 +95,8 @@ export const expendParentsOnSelectedChangeTabsData = createAsyncThunk<
         );
 
       if (response) dispatch(handleChangeIsRequestListLoaded(false));
-    } catch {
-      console.log("changeTabsData error");
+    } catch (error) {
+      console.log(error);
     }
   }
 );

@@ -57,8 +57,8 @@ export const createSingleRequest = createAsyncThunk<
     await window.electronAPIRequestOrFolderMetaDB.createRequestOrFolderMeta(
       payload
     );
-  } catch {
-    console.log("Request JSON file is not valid");
+  } catch (error) {
+    console.log(error);
   }
 });
 export const createCollection = createAsyncThunk<
@@ -79,8 +79,8 @@ export const createCollection = createAsyncThunk<
       ...payload,
       children: [],
     });
-  } catch {
-    console.log("Request JSON file is not valid");
+  } catch (error) {
+    console.log(error);
   }
 });
 export const createRestApiBasic = createAsyncThunk<
@@ -119,8 +119,8 @@ export const createRestApiBasic = createAsyncThunk<
     await window.electronAPIRequestOrFolderMetaDB.createRequestOrFolderMeta(
       requestList
     );
-  } catch {
-    console.log("Request JSON file is not valid");
+  } catch (error) {
+    console.log(error);
   }
 });
 export const updateRequestOrFolder = createAsyncThunk<
@@ -133,8 +133,8 @@ export const updateRequestOrFolder = createAsyncThunk<
     await window.electronAPIRequestOrFolderMetaDB.updateRequestOrFolderMeta(
       payload
     );
-  } catch {
-    console.log("Request JSON file is not valid");
+  } catch (error) {
+    console.log(error);
   }
 });
 export const moveRequestOrFolder = createAsyncThunk<
@@ -150,8 +150,8 @@ export const moveRequestOrFolder = createAsyncThunk<
         parentId
       );
       dispatch(handleChangeIsRequestListLoaded(false));
-    } catch {
-      console.log("Request JSON file is not valid");
+    } catch (error) {
+      console.log(error);
     }
   }
 );
@@ -165,8 +165,8 @@ export const deleteAllRequestOrFolder = createAsyncThunk<
     await window.electronAPIRequestOrFolderMetaDB.deleteRequestOrFolderMetaByProjectId(
       id
     );
-  } catch {
-    console.log("Request JSON file is not valid");
+  } catch (error) {
+    console.log(error);
   }
 });
 export const deleteRequestOrFolder = createAsyncThunk<
