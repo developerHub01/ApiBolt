@@ -5,7 +5,11 @@ import { Trash2 as DeleteIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import MetaTableCell from "@/components/app/collections/request/request/meta-data/meta-table/MetaTableCell";
 import { cn } from "@/lib/utils";
-import type { TMetaTableType } from "@/types/request-response.types";
+import type {
+  FormDataInterface,
+  ParamInterface,
+  TMetaTableType,
+} from "@/types/request-response.types";
 
 const calculateDynamicText = "<calculated when request is sent>";
 
@@ -23,7 +27,12 @@ interface MetaTableRowProps {
   inputType?: "text" | "password";
   handleChangeItem: (id: string, key: string, value: string) => void;
   handleDeleteItem: (id: string) => void;
-  handleCheckToggle: (id?: string) => void;
+  handleCheckToggle: (
+    payload: Pick<
+      ParamInterface<string> | FormDataInterface,
+      "id" | "prevent" | "isCheck"
+    >
+  ) => void;
   cellList: Array<string>;
 }
 
@@ -61,8 +70,13 @@ const MetaTableRow = memo(
     );
 
     const handleCheckChange = useCallback(
-      () => handleCheckToggle(id),
-      [id, handleCheckToggle]
+      () =>
+        handleCheckToggle({
+          id,
+          prevent,
+          isCheck,
+        }),
+      [handleCheckToggle, id, isCheck, prevent]
     );
 
     return (

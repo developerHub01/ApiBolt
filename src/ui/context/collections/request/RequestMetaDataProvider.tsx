@@ -25,6 +25,14 @@ interface RequestMetaDataContext {
     value: string | File | boolean
   ) => void;
   handleUpdateHiddenHeader: (keyName: string) => void;
+  handleCheckToggle: ({
+    id,
+    prevent,
+    isCheck,
+  }: Pick<
+    ParamInterface<string> | FormDataInterface,
+    "id" | "prevent" | "isCheck"
+  >) => void;
   handleUpdateMetaShowColumn: (keyName: "value" | "description") => void;
 }
 
@@ -63,6 +71,7 @@ const RequestMetaDataProvider = ({
     handleDelete,
     handleUpdate,
     handleUpdateHiddenHeader,
+    handleCheckToggle,
     handleUpdateMetaShowColumn,
   } = useGetTableData();
 
@@ -85,6 +94,7 @@ const RequestMetaDataProvider = ({
         handleDelete,
         handleUpdate,
         handleUpdateHiddenHeader,
+        handleCheckToggle,
         handleUpdateMetaShowColumn,
       }}
     >

@@ -2,9 +2,8 @@ import { memo } from "react";
 import MetaTableHeader from "@/components/app/collections/request/request/meta-data/meta-table/MetaTableHeader";
 import MetaTableWrapper from "@/components/app/collections/request/request/meta-data/meta-table/MetaTableWrapper";
 import MetaTableRow from "@/components/app/collections/request/request/meta-data/meta-table/MetaTableRow";
-import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import { useAppSelector } from "@/context/redux/hooks";
 import { selectMetaData } from "@/context/redux/request-response/request-response-selector";
-import { handleCheckToggleMetaData } from "@/context/redux/request-response/request-response-slice";
 import type {
   FormDataInterface,
   ParamInterface,
@@ -30,16 +29,14 @@ interface MetaTableInterface {
 }
 
 const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
-  const dispatch = useAppDispatch();
   const { cellToShow, ...tableData } = useRequestMetaData();
   const hiddenHeader = useAppSelector(selectMetaData("hiddenHeaders")) ?? [];
   const hiddenParams = useAppSelector(selectMetaData("hiddenParams")) ?? [];
 
   if (!tableData) return null;
 
-  const { type, handleDelete, handleUpdate, handleUpdateHiddenHeader } =
-    tableData;
-  let { data } = tableData;
+  const { type, handleDelete, handleUpdate, handleCheckToggle } = tableData;
+  let data = tableData?.data;
 
   if (type === "headers" && showHiddenData)
     data = [...hiddenHeader, ...data].map(checkInputType);
@@ -56,23 +53,7 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
           keyName={key}
           handleChangeItem={handleUpdate}
           handleDeleteItem={handleDelete}
-          handleCheckToggle={(id?: string) => {
-            if (!param.prevent && id)
-              return handleUpdate(id, "isCheck", !param.isCheck);
-            else if (param.prevent && id) handleUpdateHiddenHeader(param.id);
-
-            dispatch(
-              handleCheckToggleMetaData({
-                id,
-                type:
-                  param.prevent && type === "params"
-                    ? "hiddenParams"
-                    : param.prevent && type === "headers"
-                      ? "hiddenHeaders"
-                      : type,
-              })
-            );
-          }}
+          handleCheckToggle={handleCheckToggle}
           cellList={cellToShow}
         />
       ))}

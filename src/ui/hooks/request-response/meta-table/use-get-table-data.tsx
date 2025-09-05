@@ -37,10 +37,13 @@ import {
   updateParams,
 } from "@/context/redux/request-response/thunks/params";
 import type {
+  FormDataInterface,
   HiddenHeadersCheckInterface,
   MetaShowColumnInterface,
+  ParamInterface,
   TMetaTableType,
 } from "@/types/request-response.types";
+import { handleCheckToggleMetaData } from "@/context/redux/request-response/request-response-slice";
 
 export const useGetTableData = () => {
   const dispatch = useAppDispatch();
@@ -159,6 +162,33 @@ export const useGetTableData = () => {
     [dispatch]
   );
 
+  const handleCheckToggle = useCallback(
+    ({
+      id,
+      prevent,
+      isCheck,
+    }: Pick<
+      ParamInterface<string> | FormDataInterface,
+      "id" | "prevent" | "isCheck"
+    >) => {
+      if (!prevent && id) return handleUpdate(id, "isCheck", !isCheck);
+      else if (prevent && id) handleUpdateHiddenHeader(id);
+
+      dispatch(
+        handleCheckToggleMetaData({
+          id,
+          type:
+            prevent && type === "params"
+              ? "hiddenParams"
+              : prevent && type === "headers"
+                ? "hiddenHeaders"
+                : type,
+        })
+      );
+    },
+    [dispatch, handleUpdate, handleUpdateHiddenHeader, type]
+  );
+
   const handleAddNewData = useCallback(() => {
     const handleAdd =
       type === "params"
@@ -229,6 +259,7 @@ export const useGetTableData = () => {
     handleDelete,
     handleUpdate,
     handleUpdateHiddenHeader,
+    handleCheckToggle,
     handleCheckAll,
     handleAddNewData,
     handleDeleteAllData,
