@@ -1,5 +1,5 @@
 import { memo, useMemo, useState } from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,6 +20,7 @@ import { selectEnvironmentsVariableList } from "@/context/redux/request-response
 import { Trash2 as DeleteIcon } from "lucide-react";
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 import TokenDragHandler from "@/components/app/collections/request/request/meta-data/url/TokenDragHandler";
+import ChangeTokenType from "@/components/app/collections/request/request/meta-data/url/tokens/ChangeTokenType";
 import { selectRequestUrlTokenById } from "@/context/redux/request-url/request-url-selector";
 import {
   requestUrlDeleteToken,
@@ -90,6 +91,7 @@ const VariableToken = memo(({ id }: VariableTokenProps) => {
             <ChevronsUpDown className="opacity-50" />
           </Button>
         </PopoverTrigger>
+        <ChangeTokenType id={id} type={"env"} />
         <Button
           variant={"secondary"}
           className="rounded-l-none"

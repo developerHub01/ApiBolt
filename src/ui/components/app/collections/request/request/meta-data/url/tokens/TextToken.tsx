@@ -11,6 +11,7 @@ import { Trash2 as DeleteIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import TokenDragHandler from "@/components/app/collections/request/request/meta-data/url/TokenDragHandler";
+import ChangeTokenType from "@/components/app/collections/request/request/meta-data/url/tokens/ChangeTokenType";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { selectRequestUrlTokenById } from "@/context/redux/request-url/request-url-selector";
 import {
@@ -74,6 +75,7 @@ const TextToken = memo(({ id }: TextTokenProps) => {
           {value}
         </p>
       </FlexibleHightButtonLikeDiv>
+      <ChangeTokenType id={id} type={"text"} />
       <Button
         variant={"secondary"}
         className="rounded-l-none h-full"
