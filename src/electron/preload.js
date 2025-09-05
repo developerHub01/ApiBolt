@@ -263,3 +263,12 @@ contextBridge.exposeInMainWorld("electronAPIMetaShowColumnDB", {
   deleteMetaShowColumn: async (...payload) =>
     await ipcRenderer.invoke("deleteMetaShowColumn", ...payload),
 });
+
+contextBridge.exposeInMainWorld("electronAPIApiUrl", {
+  getApiUrlDB: async (...payload) =>
+    await ipcRenderer.invoke("getApiUrlDB", ...payload),
+  createApiUrl: async (...payload) =>
+    await ipcRenderer.invoke("createApiUrl", ...payload),
+  updateApiUrl: async (...payload) =>
+    await ipcRenderer.invoke("updateApiUrl", ...payload),
+});

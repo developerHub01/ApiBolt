@@ -4,6 +4,7 @@ import { int, integer, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { v4 as uuidv4 } from "uuid";
 
 export const ACTIVE_PROJECT_ID = "singleton";
+export const API_URL_DEFAULT_VALUE = "http://localhost:3000";
 
 export const projectTable = sqliteTable("projects_table", {
   id: text("id")
@@ -149,6 +150,22 @@ export const folderTable = sqliteTable("folder_table", {
     .references(() => requestOrFolderMetaTable.id, {
       onDelete: "cascade",
     }),
+});
+
+export const apiUrlTable = sqliteTable("api_url_table", {
+  id: text()
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  requestOrFolderMetaId: text()
+    .notNull()
+    .unique()
+    .references(() => requestOrFolderMetaTable.id, {
+      onDelete: "cascade",
+    }),
+  url: text().default(API_URL_DEFAULT_VALUE),
+  createdAt: text()
+    .notNull()
+    .default(sql`(current_timestamp)`),
 });
 
 export const paramsTable = sqliteTable("params_table", {
