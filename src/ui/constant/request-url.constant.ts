@@ -7,7 +7,21 @@ export const apiHostTypeList: Array<THostType> = [
 ];
 
 export const initialUrlTokensValue: Array<UrlTokenInterface> = [
-  { id: "protocol", type: "protocol", value: "http" },
-  { id: "host", type: "host", value: "localhost" },
-  { id: "port", type: "port", value: "3000" },
+  {
+    id: "protocol",
+    type: "protocol",
+    value: "http:",
+  },
+  {
+    id: "host",
+    type: "host",
+    value: "localhost",
+  },
+  {
+    id: "port",
+    type: "port",
+    value: "3000",
+  },
 ];
+
+export const urlVariableRegex = /\{\{([^{}]+)\}\}/g;
