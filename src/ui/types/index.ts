@@ -24,6 +24,7 @@ import type {
   SettingsTotalInterface,
   UpdateBackgroundImagePayloadInterface,
 } from "@/types/setting.types";
+import type { ApiUrlPayload } from "@/types/request-url.types";
 
 declare global {
   interface Window {
@@ -299,6 +300,12 @@ declare global {
         payload: Partial<MetaShowColumnInterface>
       ): Promise<boolean>;
       deleteMetaShowColumn(requestOrFolderMetaId?: string): Promise<boolean>;
+    };
+
+    electronAPIApiUrl: {
+      getApiUrlDB(requestOrFolderMetaId?: string): Promise<ApiUrlPayload>;
+      createApiUrl(payload: Partial<ApiUrlPayload>): Promise<boolean>;
+      updateApiUrl(payload: Partial<ApiUrlPayload>): Promise<boolean>;
     };
   }
 }

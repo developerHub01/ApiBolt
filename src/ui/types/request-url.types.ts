@@ -7,3 +7,7 @@ export interface UrlTokenInterface {
   type: TAPIUrlTokenType;
   value: string;
 }
+
+export interface ApiUrlPayload {
+  url: string
+}
