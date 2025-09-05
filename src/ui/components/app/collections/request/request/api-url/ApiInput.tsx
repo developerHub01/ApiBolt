@@ -25,7 +25,7 @@ const ApiInput = memo(({ value, onChange, onFocus, onBlur }: ApiInputProps) => {
   return (
     <Input
       placeholder="Enter URL or paste text"
-      className={cn("w-full rounded-none", {
+      className={cn("w-full bg-background dark:bg-background rounded-none", {
         "border-destructive": isError,
         "border-input": !isError,
       })}

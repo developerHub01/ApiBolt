@@ -55,7 +55,7 @@ const ApiUrl = memo(() => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full flex items-center p-2 rounded-md bg-accent gap-1.5"
+      className="w-full flex items-center p-2 rounded-md bg-accent/50 hover:bg-accent/60 focus-within:bg-accent/70 gap-1.5"
     >
       <ApiMethodSelector />
       <ApiInput

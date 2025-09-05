@@ -18,6 +18,7 @@ const RequestListPanelWrapper = memo(() => {
   const requestListCollapsed = useAppSelector(
     (state) => state.requestResponse.requestListCollapsed
   );
+  const layoutTypes: TLayoutSetting = useCheckApplyingLayout();
 
   useEffect(() => {
     const panel = resizablePanelRef.current;
@@ -57,7 +58,10 @@ const RequestListPanelWrapper = memo(() => {
       defaultSize={30}
       minSize={15}
       maxSize={40}
-      className="backdrop-blur-xs w-full bg-background/30"
+      className={cn("backdrop-blur-xs w-full bg-background/30", {
+        "border-r-4": layoutTypes === "ltr",
+        "border-l-4": layoutTypes === "rtl",
+      })}
       style={{
         maxWidth: "40vw",
       }}
