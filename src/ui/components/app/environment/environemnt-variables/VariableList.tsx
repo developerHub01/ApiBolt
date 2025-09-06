@@ -1,4 +1,4 @@
-import { memo, useCallback } from "react";
+import { memo, useCallback, useMemo } from "react";
 import { Table, TableBody } from "@/components/ui/table";
 import VariableListHeader from "@/components/app/environment/environemnt-variables/VariableListHeader";
 import VariableRow from "@/components/app/environment/environemnt-variables/VariableRow";
@@ -17,9 +17,23 @@ const VariableList = memo(() => {
     (state) => state.requestResponse.environmentsList ?? {}
   );
 
-  const list = Object.values(environmentsListState ?? {}).sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  );
+  const list = useMemo(() => {
+    const seen = new Set();
+
+    return Object.values(environmentsListState ?? {})
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      )
+      .map((item) => {
+        if (item.variable && seen.has(item.variable)) {
+          return { ...item, warning: true };
+        } else {
+          seen.add(item.variable);
+          return { ...item, warning: false };
+        }
+      });
+  }, [environmentsListState]);
 
   const handleChange = useCallback(
     (
@@ -66,6 +80,7 @@ const VariableList = memo(() => {
       />
     );
 
+  console.log({ list });
   return (
     <Table className="border">
       <VariableListHeader />

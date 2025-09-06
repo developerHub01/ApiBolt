@@ -6,6 +6,7 @@ import type { EnvironmentInterface } from "@/types/request-response.types";
 import { cn } from "@/lib/utils";
 
 interface VariableRowProps extends EnvironmentInterface {
+  warning?: boolean;
   onChange: (
     key: "isCheck" | "variable" | "type" | "value",
     value: boolean | string
@@ -20,6 +21,7 @@ const VariableRow = memo(
     type,
     value,
     variable,
+    warning,
     onChange,
     onDelete,
   }: VariableRowProps) => {
@@ -43,6 +45,7 @@ const VariableRow = memo(
           value={variable}
           onChange={(...rest) => onChange("variable", ...rest)}
           placeholder="Variable"
+          warning={warning}
         />
         <VariableCell
           keyName="type"

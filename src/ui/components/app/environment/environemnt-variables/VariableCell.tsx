@@ -16,6 +16,7 @@ import { TableCell } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Trash2 as DeleteIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import VariableWarning from "@/components/app/environment/environemnt-variables/VariableWarning";
 
 interface VariableCellProps {
   id: string;
@@ -23,6 +24,7 @@ interface VariableCellProps {
   value: string;
   placeholder?: string;
   type?: "input" | "select";
+  warning?: boolean;
   selectList?: Array<{
     id: string;
     label: string;
@@ -40,6 +42,7 @@ const VariableCell = memo(
     value = "",
     placeholder = "",
     type = "input",
+    warning = false,
     selectList = [
       {
         id: "default",
@@ -132,6 +135,7 @@ const VariableCell = memo(
               <DeleteIcon />
             </Button>
           )}
+          {warning && <VariableWarning />}
         </div>
       </TableCell>
     );
