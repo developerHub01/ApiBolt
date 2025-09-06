@@ -4,7 +4,6 @@ import {
   defaultFolderDescription,
   defaultFolderTitle,
   defaultJWTBearerAuth,
-  generateNewMetaDataItem,
   initialHiddenCookie,
   initialHiddenHeaderData,
   ResponsePanelMinLimit,
@@ -708,6 +707,66 @@ export const requestResponseSlice = createSlice({
     },
     /* ================ Headers end =================== */
 
+    /* ================ Metadata start =================== */
+    handleCheckToggleMetaData: (
+      state,
+      action: PayloadAction<{
+        requestId?: string;
+        id?: string;
+        type: TMetaTableType;
+      }>
+    ) => {
+      const requestId = action.payload.requestId ?? state.selectedTab;
+      if (!requestId) return;
+
+      const { id, type } = action.payload;
+
+      let targetList:
+        | Record<string, Array<ParamInterface | FormDataInterface>>
+        | undefined;
+
+      switch (type) {
+        case "params":
+          targetList = state.params;
+          break;
+        case "headers":
+          targetList = state.headers;
+          break;
+        case "form-data":
+          targetList = state.formData;
+          break;
+        case "x-www-form-urlencoded":
+          targetList = state.xWWWFormUrlencodedData;
+          break;
+        default:
+          return;
+      }
+
+      if (!targetList[requestId]) {
+        targetList[requestId] = [];
+      }
+
+      if (id) {
+        targetList[requestId] = targetList[requestId].map((item) => {
+          if (item.id !== id) return item;
+          return {
+            ...item,
+            hide: item.isCheck ? undefined : true,
+          };
+        });
+      } else {
+        const isAllChecked = Boolean(
+          (targetList[requestId] ?? [])?.every((item) => !item.isCheck)
+        );
+
+        targetList[requestId] = targetList[requestId].map((item) => ({
+          ...item,
+          hide: isAllChecked ? true : undefined,
+        }));
+      }
+    },
+    /* ================ Metadata end =================== */
+
     /* ================ BodyFormData start =================== */
     handleLoadBodyFormData: (
       state,
@@ -1011,249 +1070,6 @@ export const requestResponseSlice = createSlice({
         // state.hiddenParams[id] = [];
         // state.hiddenHeaders[id] = [];
       },
-    handleAddMetaData: (
-      state,
-      action: PayloadAction<{
-        id?: string;
-        type: Omit<TMetaTableType, "hiddenParams" | "hiddenHeaders">;
-      }>
-    ) => {
-      const { type } = action.payload;
-      const id = action.payload.id ?? state.selectedTab;
-      if (!id) return;
-
-      const newData = generateNewMetaDataItem(type as TMetaTableType);
-
-      switch (type) {
-        case "params":
-          if (!state.params[id]) state.params[id] = [];
-          state.params[id].push(newData);
-          break;
-        case "headers":
-          if (!state.headers[id]) state.headers[id] = [];
-          state.headers[id].push(newData);
-          break;
-        case "form-data":
-          if (!state.formData[id]) state.formData[id] = [];
-          state.formData[id].push(newData);
-          break;
-        case "x-www-form-urlencoded":
-          if (!state.xWWWFormUrlencodedData[id])
-            state.xWWWFormUrlencodedData[id] = [];
-          state.xWWWFormUrlencodedData[id].push(newData);
-          break;
-        default:
-          break;
-      }
-    },
-    handleChangeMetaData: (
-      state,
-      action: PayloadAction<{
-        requestId?: string;
-        id: string;
-        key: string;
-        value: unknown;
-        type: TMetaTableType;
-      }>
-    ) => {
-      const requestId = action.payload.requestId ?? state.selectedTab;
-      if (!requestId) return;
-
-      const { id, key, value, type } = action.payload;
-
-      let targetList:
-        | Record<string, Array<ParamInterface | FormDataInterface>>
-        | undefined;
-
-      switch (type) {
-        case "params":
-          targetList = state.params;
-          break;
-        case "headers":
-          targetList = state.headers;
-          break;
-        case "form-data":
-          targetList = state.formData;
-          break;
-        case "x-www-form-urlencoded":
-          targetList = state.xWWWFormUrlencodedData;
-          break;
-        default:
-          return;
-      }
-
-      if (!targetList[requestId]) {
-        targetList[requestId] = [];
-      }
-
-      targetList[requestId] = targetList[requestId].map((item) => {
-        if (item.id !== id) return item;
-
-        if (value instanceof File) {
-          const existingFiles = (
-            Array.isArray(item[key as keyof typeof item])
-              ? item[key as keyof typeof item]
-              : []
-          ) as Array<unknown>;
-
-          return {
-            ...item,
-            [key]: [...existingFiles, value],
-          };
-        }
-
-        return {
-          ...item,
-          [key]: value,
-        };
-      });
-    },
-    handleDeleteMetaData: (
-      state,
-      action: PayloadAction<{
-        requestId?: string;
-        id: string;
-        type: TMetaTableType;
-      }>
-    ) => {
-      const requestId = action.payload.requestId ?? state.selectedTab;
-      if (!requestId) return;
-
-      const { id, type } = action.payload;
-
-      let targetList:
-        | Record<string, Array<ParamInterface | FormDataInterface>>
-        | undefined;
-
-      switch (type) {
-        case "params":
-          targetList = state.params;
-          break;
-        case "headers":
-          targetList = state.headers;
-          break;
-        case "form-data":
-          targetList = state.formData;
-          break;
-        case "x-www-form-urlencoded":
-          targetList = state.xWWWFormUrlencodedData;
-          break;
-        default:
-          return;
-      }
-
-      if (!targetList[requestId]) {
-        targetList[requestId] = [];
-        return;
-      }
-
-      targetList[requestId] = targetList[requestId]?.filter(
-        (item) => item.id !== id
-      );
-    },
-    handleCheckToggleMetaData: (
-      state,
-      action: PayloadAction<{
-        requestId?: string;
-        id?: string;
-        type: TMetaTableType;
-      }>
-    ) => {
-      const requestId = action.payload.requestId ?? state.selectedTab;
-      if (!requestId) return;
-
-      const { id, type } = action.payload;
-
-      let targetList:
-        | Record<string, Array<ParamInterface | FormDataInterface>>
-        | undefined;
-
-      switch (type) {
-        case "params":
-          targetList = state.params;
-          break;
-        case "headers":
-          targetList = state.headers;
-          break;
-        case "form-data":
-          targetList = state.formData;
-          break;
-        case "x-www-form-urlencoded":
-          targetList = state.xWWWFormUrlencodedData;
-          break;
-        default:
-          return;
-      }
-
-      if (!targetList[requestId]) {
-        targetList[requestId] = [];
-      }
-
-      if (id) {
-        targetList[requestId] = targetList[requestId].map((item) => {
-          if (item.id !== id) return item;
-          return {
-            ...item,
-            hide: item.isCheck ? undefined : true,
-          };
-        });
-      } else {
-        const isAllChecked = Boolean(
-          (targetList[requestId] ?? [])?.every((item) => !item.isCheck)
-        );
-
-        targetList[requestId] = targetList[requestId].map((item) => ({
-          ...item,
-          hide: isAllChecked ? true : undefined,
-        }));
-      }
-    },
-    handleRemoveAllMetaData: (
-      state,
-      action: PayloadAction<{
-        id?: string;
-        type: TMetaTableType;
-      }>
-    ) => {
-      const { type } = action.payload;
-      const id = action.payload.id ?? state.selectedTab;
-      if (!id) return;
-
-      switch (type) {
-        case "params":
-          state.params[id] = [];
-          return;
-        case "headers":
-          state.headers[id] = [];
-          return;
-        case "form-data":
-          state.formData[id] = [];
-          return;
-        case "x-www-form-urlencoded":
-          state.xWWWFormUrlencodedData[id] = [];
-          return;
-      }
-    },
-    handleRemoveFormDataFile: (
-      state,
-      action: PayloadAction<{
-        id: string;
-        index: number;
-      }>
-    ) => {
-      const id = action.payload.id ?? state.selectedTab;
-      if (!id) return;
-
-      const { index } = action.payload;
-
-      (state.formData[id] ?? []).map((item) => {
-        if (item.id !== id || typeof item.value === "string") return item;
-        return {
-          ...item,
-          value: item.value.filter((_, i) => i !== index),
-        };
-      });
-    },
 
     /* ================ Request Folder start =================== */
     handleLoadFolder: (
@@ -1403,6 +1219,8 @@ export const {
   handleSetHeaders,
   handleUpdateHiddenHeaders,
 
+  handleCheckToggleMetaData,
+
   handleLoadBodyFormData,
   handleSetBodyFormData,
 
@@ -1425,12 +1243,6 @@ export const {
   handleChangeAuthType,
   handleIsDownloadRequestWithBase64,
   handleClearRequestResponse,
-  handleAddMetaData,
-  handleChangeMetaData,
-  handleDeleteMetaData,
-  handleCheckToggleMetaData,
-  handleRemoveAllMetaData,
-  handleRemoveFormDataFile,
 
   handleLoadFolder,
   handleUpdateFolder,
