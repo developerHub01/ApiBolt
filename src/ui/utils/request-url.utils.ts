@@ -13,13 +13,12 @@ export const isValidApiUrl = (apiUrl: string) => {
 
 export const decodeApiUrl = (apiUrl: string): Array<UrlTokenInterface> => {
   const url = new URL(apiUrl);
-
   const protocol = url.protocol ?? "http:";
   const host = url.hostname ?? "localhost";
   const port = url.port ?? "";
-  const pathname = decodeURIComponent(
-    (url.pathname ?? "") + (url.search ?? "")
-  );
+  const search = url.search ?? "";
+  const pathname = url.pathname && url.pathname !== "/" ? url.pathname : "";
+  const requestUri = decodeURIComponent(pathname + search);
 
   const tokens: Array<UrlTokenInterface> = [
     { id: "protocol", type: "protocol", value: protocol },
@@ -30,12 +29,12 @@ export const decodeApiUrl = (apiUrl: string): Array<UrlTokenInterface> => {
   let lastIndex = 0;
   let match;
 
-  while ((match = urlVariableRegex.exec(pathname)) !== null) {
+  while ((match = urlVariableRegex.exec(requestUri)) !== null) {
     // text before variable
     if (match.index > lastIndex) {
       tokens.push({
         id: uuidv4(),
-        value: pathname.slice(lastIndex, match.index),
+        value: requestUri.slice(lastIndex, match.index),
         type: "text",
       });
     }
@@ -51,10 +50,10 @@ export const decodeApiUrl = (apiUrl: string): Array<UrlTokenInterface> => {
   }
 
   // remaining text after last variable
-  if (lastIndex < pathname.length) {
+  if (lastIndex < requestUri.length) {
     tokens.push({
       id: uuidv4(),
-      value: pathname.slice(lastIndex),
+      value: requestUri.slice(lastIndex),
       type: "text",
     });
   }

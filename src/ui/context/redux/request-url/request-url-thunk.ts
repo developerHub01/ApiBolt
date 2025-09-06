@@ -30,12 +30,8 @@ export const loadApiUrl = createAsyncThunk<
     )
       return;
 
-    // const response =
-    await window.electronAPIApiUrl.getApiUrlDB();
-
-    const tokens = decodeApiUrl(
-      "http://facebook.com/absdfsdf/abc/ddee{{xyz}}mnop{{ijkl}}pqr?a=10&password=123"
-    );
+    const response = await window.electronAPIApiUrl.getApiUrlDB();
+    const tokens = decodeApiUrl(response.url);
 
     dispatch(
       handleRequestUrlReplaceTokens({
