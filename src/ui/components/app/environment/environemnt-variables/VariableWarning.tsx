@@ -9,9 +9,13 @@ import { TriangleAlert as WarningIcon } from "lucide-react";
 
 const VariableWarning = memo(() => {
   return (
-    <Tooltip open>
+    <Tooltip>
       <TooltipTrigger asChild>
-        <Button variant="secondary" size={"iconXs"} className="rounded-full">
+        <Button
+          variant="warningSecondary"
+          size={"iconXs"}
+          className="rounded-full"
+        >
           <WarningIcon />
         </Button>
       </TooltipTrigger>
