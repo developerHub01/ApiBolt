@@ -88,6 +88,12 @@ export const updateParams = async (paramId, payload) => {
       await db.select().from(paramsTable).where(eq(paramsTable.id, paramId))
     )?.[0];
 
+    console.log({
+      isExist,
+      paramId,
+      allList: await db.select().from(paramsTable),
+    });
+
     if (!isExist)
       await createParams({
         id: paramId,
@@ -109,7 +115,6 @@ export const replaceParams = async (requestOrFolderMetaId, payload) => {
   if (!payload) return false;
 
   payload.map((param) => {
-    delete param["id"];
     delete param["requestOrFolderMetaId"];
     delete param["createdAt"];
     if ("isCheck" in param) param["isCheck"] = Number(param["isCheck"]);
