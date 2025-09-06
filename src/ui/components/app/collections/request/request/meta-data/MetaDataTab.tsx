@@ -55,10 +55,10 @@ const MetaDataTab = memo(() => {
           if (item.id === "params") {
             if (item.count && !params?.length) delete item.count;
             else if (item.count !== params?.length)
-              item.count = params.filter((param) => !param.isCheck)?.length;
+              item.count = params.filter((param) => param.isCheck)?.length;
           } else if (item.id === "headers") {
             const totalHeaders =
-              headers?.filter((header) => !header.isCheck)?.length +
+              headers?.filter((header) => header.isCheck)?.length +
               hiddenHeaders?.length;
             if (item.count && !totalHeaders) delete item.count;
             else if (item.count !== totalHeaders) item.count = totalHeaders;
