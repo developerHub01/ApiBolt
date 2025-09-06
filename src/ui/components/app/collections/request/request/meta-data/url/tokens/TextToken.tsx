@@ -12,8 +12,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import TokenDragHandler from "@/components/app/collections/request/request/meta-data/url/TokenDragHandler";
 import ChangeTokenType from "@/components/app/collections/request/request/meta-data/url/tokens/ChangeTokenType";
-import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { selectRequestUrlTokenById } from "@/context/redux/request-url/request-url-selector";
+import { useAppDispatch } from "@/context/redux/hooks";
 import {
   requestUrlDeleteToken,
   requestUrlUpdateToken,
@@ -21,18 +20,18 @@ import {
 
 interface TextTokenProps {
   id: string;
+  value: string;
 }
 
-const TextToken = memo(({ id }: TextTokenProps) => {
+const TextToken = memo(({ id, value }: TextTokenProps) => {
   const dispatch = useAppDispatch();
-  const tokenValue = useAppSelector(selectRequestUrlTokenById(id)) ?? "text";
-  const [value, setValue] = useState<string>(tokenValue);
+  const [valueState, setValue] = useState<string>(value);
 
   useEffect(() => {
-    if (tokenValue === value) return;
-    setValue(tokenValue);
+    if (value === valueState) return;
+    setValue(value);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tokenValue]);
+  }, [value]);
 
   const handleKeydown = (e: KeyboardEvent<HTMLHeadingElement>) => {
     if (e.code === "Enter") return e.preventDefault();
@@ -41,9 +40,8 @@ const TextToken = memo(({ id }: TextTokenProps) => {
   const handleBlur = (e: FocusEvent<HTMLHeadingElement>) => {
     const newValue = e.target.innerText.trim();
     setValue(newValue);
-
-    if (newValue === value) return;
-
+    if (newValue === valueState) return;
+    
     dispatch(
       requestUrlUpdateToken({
         id,
@@ -72,7 +70,7 @@ const TextToken = memo(({ id }: TextTokenProps) => {
           onBlur={handleBlur}
           onPaste={handlePaste}
         >
-          {value}
+          {valueState}
         </p>
       </FlexibleHightButtonLikeDiv>
       <ChangeTokenType id={id} type={"text"} />

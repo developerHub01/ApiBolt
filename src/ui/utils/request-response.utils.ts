@@ -1,4 +1,7 @@
-import type { RequestListInterface } from "@/types/request-response.types";
+import type {
+  ParamInterface,
+  RequestListInterface,
+} from "@/types/request-response.types";
 import { v4 as uuidv4 } from "uuid";
 
 export const getNestedIds = ({
@@ -83,4 +86,16 @@ export const duplicateRequestOrFolderNode = ({
   }
 
   return result;
+};
+
+export const paramsTableToString = (
+  params: Array<ParamInterface> = []
+): string => {
+  const searchParams = params
+    .filter((param) => param.isCheck)
+    .map((param) => `${param.key}=${param.value}`)
+    .join("&");
+
+  if (searchParams) return `?${searchParams}`;
+  return searchParams;
 };

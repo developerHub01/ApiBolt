@@ -7,7 +7,7 @@ import useGlobalLocalBgImages, {
 } from "@/hooks/setting/use-global-local-bg-images";
 import { defaultSettings } from "@/constant/settings.constant";
 import { senitizeValue } from "@/utils/settings.utils";
-import SettingBackgroundImage from "./SettingBackgroundImage";
+import SettingBackgroundImage from "@/components/app/setting/content/background/images/SettingBackgroundImage";
 import { Button } from "@/components/ui/button";
 import useCheckApplyingSettingScopeBackgroundImages from "@/hooks/setting/use-check-applying-setting-scope-background-images";
 import { cn } from "@/lib/utils";

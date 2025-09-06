@@ -80,7 +80,6 @@ const VariableList = memo(() => {
       />
     );
 
-  console.log({ list });
   return (
     <Table className="border">
       <VariableListHeader />

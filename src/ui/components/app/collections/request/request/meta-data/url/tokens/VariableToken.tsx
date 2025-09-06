@@ -1,5 +1,5 @@
 import { memo, useMemo, useState } from "react";
-import { Check, ChevronsUpDown} from "lucide-react";
+import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,7 +21,6 @@ import { Trash2 as DeleteIcon } from "lucide-react";
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 import TokenDragHandler from "@/components/app/collections/request/request/meta-data/url/TokenDragHandler";
 import ChangeTokenType from "@/components/app/collections/request/request/meta-data/url/tokens/ChangeTokenType";
-import { selectRequestUrlTokenById } from "@/context/redux/request-url/request-url-selector";
 import {
   requestUrlDeleteToken,
   requestUrlUpdateToken,
@@ -29,19 +28,19 @@ import {
 
 interface VariableTokenProps {
   id: string;
+  value: string;
 }
 
-const VariableToken = memo(({ id }: VariableTokenProps) => {
+const VariableToken = memo(({ id, value }: VariableTokenProps) => {
   const dispatch = useAppDispatch();
   const [open, setOpen] = useState<boolean>(false);
-  const selectedVariable = useAppSelector(selectRequestUrlTokenById(id));
   const variableList = useAppSelector(selectEnvironmentsVariableList);
 
   const handleChangeVariable = (variable: string) => {
     dispatch(
       requestUrlUpdateToken({
         id,
-        value: variable === selectedVariable ? "" : variable,
+        value: variable === value ? "" : variable,
       })
     );
     setOpen(false);
@@ -52,12 +51,12 @@ const VariableToken = memo(({ id }: VariableTokenProps) => {
   };
 
   const isVariableExistInList = useMemo(
-    () => variableList.find((item) => item.variable === selectedVariable),
-    [selectedVariable, variableList]
+    () => variableList.find((item) => item.variable === value),
+    [value, variableList]
   );
 
-  const isExist = selectedVariable && isVariableExistInList;
-  const isNotExist = selectedVariable && !isVariableExistInList;
+  const isExist = value && isVariableExistInList;
+  const isNotExist = value && !isVariableExistInList;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -82,10 +81,10 @@ const VariableToken = memo(({ id }: VariableTokenProps) => {
             })}
           >
             <p className="flex-1 overflow-hidden text-left">
-              {selectedVariable
+              {value
                 ? (variableList.find(
-                    (framework) => framework.variable === selectedVariable
-                  )?.variable ?? selectedVariable)
+                    (framework) => framework.variable === value
+                  )?.variable ?? value)
                 : "Select variable..."}
             </p>
             <ChevronsUpDown className="opacity-50" />
@@ -122,9 +121,7 @@ const VariableToken = memo(({ id }: VariableTokenProps) => {
                   <Check
                     className={cn(
                       "ml-auto",
-                      selectedVariable === variable.variable
-                        ? "opacity-100"
-                        : "opacity-0"
+                      value === variable.variable ? "opacity-100" : "opacity-0"
                     )}
                   />
                 </CommandItem>

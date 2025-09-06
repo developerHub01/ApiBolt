@@ -11,7 +11,16 @@ export const isValidApiUrl = (apiUrl: string) => {
   }
 };
 
-export const decodeApiUrl = (apiUrl: string): Array<UrlTokenInterface> => {
+export const filterUrl = (apiUrl: string): string => {
+  const url = new URL(apiUrl);
+  const protocol = url.protocol ?? "http:";
+  const host = url.hostname ?? "localhost";
+  const port = url.port ? `:${url.port}` : "";
+  const pathname = url.pathname && url.pathname !== "/" ? url.pathname : "";
+  return decodeURIComponent(`${protocol}//${host}${port}${pathname}`);
+};
+
+export const encodeApiUrl = (apiUrl: string): Array<UrlTokenInterface> => {
   const url = new URL(apiUrl);
   const protocol = url.protocol ?? "http:";
   const host = url.hostname ?? "localhost";
@@ -61,7 +70,7 @@ export const decodeApiUrl = (apiUrl: string): Array<UrlTokenInterface> => {
   return tokens;
 };
 
-export const encodeApiUrl = (tokens: Array<UrlTokenInterface>): string => {
+export const decodeApiUrl = (tokens: Array<UrlTokenInterface>): string => {
   const protocol = tokens[0]?.value ?? "http:";
   const host = tokens[1]?.value ?? "localhost";
   let port = tokens[2]?.value ? `:${tokens[2]?.value}` : "";

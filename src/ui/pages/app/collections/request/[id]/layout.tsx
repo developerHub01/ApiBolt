@@ -27,7 +27,7 @@ const RequestLayout = () => {
       loadBodyXWWWFormUrlencoded,
       loadRequestBodyRaw,
       loadRequestBodyBinary,
-      loadApiUrl,
+      loadApiUrl
     ].forEach((action) => dispatch(action(payload)));
   }, [dispatch, requestId]);
 

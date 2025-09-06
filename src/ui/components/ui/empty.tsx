@@ -2,7 +2,7 @@ import React from "react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { cn } from "@/lib/utils";
 import { AnimatePresence } from "motion/react";
-import AnimationWrapper from "./AnimationWrapper";
+import AnimationWrapper from "@/components/ui/AnimationWrapper";
 
 interface EmptyProps {
   label?: string;
@@ -48,12 +48,7 @@ const Empty = ({
               fallbackClassName
             )}
           >
-            <DotLottieReact
-              src={animationSrc}
-              loop
-              autoplay
-              width={"100%"}
-            />
+            <DotLottieReact src={animationSrc} loop autoplay width={"100%"} />
           </AnimationWrapper>
         )}
       </AnimatePresence>

@@ -11,8 +11,10 @@ interface Props {
 const ReorderableToken = memo(({ token }: Props) => {
   return (
     <div id={token.id} className="flex gap-2">
-      {token.type === "text" && <TextToken id={token.id} />}
-      {token.type === "env" && <VariableToken id={token.id} />}
+      {token.type === "text" && <TextToken id={token.id} value={token.value} />}
+      {token.type === "env" && (
+        <VariableToken id={token.id} value={token.value} />
+      )}
       <AddUrlPart id={token.id} />
     </div>
   );

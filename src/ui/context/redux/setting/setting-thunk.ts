@@ -7,7 +7,10 @@ import type {
 } from "@/types/setting.types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
-import { handleLoadSettings, handleUpdateSettings } from "./setting-slice";
+import {
+  handleLoadSettings,
+  handleUpdateSettings,
+} from "@/context/redux/setting/setting-slice";
 import {
   defaultSettings,
   defaultZoomLevel,

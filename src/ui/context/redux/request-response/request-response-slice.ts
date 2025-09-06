@@ -614,7 +614,7 @@ export const requestResponseSlice = createSlice({
     /* ================ Params start =================== */
     handleLoadParams: (
       state,
-      action: PayloadAction<Array<ParamHeaderPayloadInterface>>
+      action: PayloadAction<Array<ParamHeaderPayloadInterface | ParamInterface>>
     ) => {
       if (!state.selectedTab) return;
 
@@ -1130,12 +1130,6 @@ export const requestResponseSlice = createSlice({
         state.folderDescription[id] !== payload?.description
       )
         state.folderDescription[id] = payload?.description ?? "";
-
-      console.log({
-        ...payload,
-        folderTitle: state.folderTitle[id],
-        folderDescription: state.folderDescription[id],
-      });
     },
     handleChangeFolderDescriptionActiveTab: (
       state,
