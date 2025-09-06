@@ -6,10 +6,8 @@ import {
   type FocusEvent,
   type KeyboardEvent,
 } from "react";
-import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 import { Trash2 as DeleteIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import TokenDragHandler from "@/components/app/collections/request/request/meta-data/url/TokenDragHandler";
 import ChangeTokenType from "@/components/app/collections/request/request/meta-data/url/tokens/ChangeTokenType";
 import { useAppDispatch } from "@/context/redux/hooks";
@@ -17,6 +15,7 @@ import {
   requestUrlDeleteToken,
   requestUrlUpdateToken,
 } from "@/context/redux/request-url/request-url-thunk";
+import FlexibleHightButtonLikeDiv from "@/components/ui/flexible-hight-button-like-div";
 
 interface TextTokenProps {
   id: string;
@@ -84,24 +83,5 @@ const TextToken = memo(({ id, value }: TextTokenProps) => {
     </div>
   );
 });
-
-interface FlexibleHightButtonLikeDivProps {
-  className?: string;
-  children: React.ReactNode;
-}
-
-const FlexibleHightButtonLikeDiv = ({
-  className = "",
-  children,
-}: FlexibleHightButtonLikeDivProps) => {
-  return (
-    <ButtonLikeDiv
-      variant={"secondary"}
-      className={cn("min-h-9 h-auto", className)}
-    >
-      {children}
-    </ButtonLikeDiv>
-  );
-};
 
 export default TextToken;
