@@ -56,17 +56,20 @@ export const updateApiUrl = async (payload) => {
         .where(eq(apiUrlTable.requestOrFolderMetaId, requestOrFolderMetaId))
     )?.[0];
 
-    if (!isExist)
-      await createApiUrl({
+    if (!isExist) {
+      const result = await createApiUrl({
         requestOrFolderMetaId,
+        ...payload,
       });
+      return result.changes > 0;
+    }
 
     const updated = await db
       .update(apiUrlTable)
       .set({
         ...payload,
       })
-      .where(eq(apiUrlTable.id, requestOrFolderMetaId));
+      .where(eq(apiUrlTable.requestOrFolderMetaId, requestOrFolderMetaId));
     return updated?.changes > 0;
   } catch (error) {
     console.log(error);

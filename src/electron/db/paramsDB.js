@@ -121,6 +121,7 @@ export const replaceParams = async (requestOrFolderMetaId, payload) => {
       .delete(paramsTable)
       .where(eq(paramsTable.requestOrFolderMetaId, requestOrFolderMetaId));
 
+    if (!payload.length) return true;
     const created = await db.insert(paramsTable).values(payload);
 
     return created?.changes > 0;
