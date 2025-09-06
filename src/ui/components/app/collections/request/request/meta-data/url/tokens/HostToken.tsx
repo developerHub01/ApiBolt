@@ -21,7 +21,7 @@ import type { THostType } from "@/types/request-url.types";
 import { apiHostTypeList } from "@/constant/request-url.constant";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { selectRequestUrlTokenHost } from "@/context/redux/request-url/request-url-selector";
-import { requestUrlUpdateToken } from "@/context/redux/request-url/request-url-thunk";
+import { requestUrlUpdateOriginToken } from "@/context/redux/request-url/request-url-thunk";
 
 interface HostTokenProps {
   hostType: THostType;
@@ -42,12 +42,13 @@ const HostToken = memo(({ hostType }: HostTokenProps) => {
     setHostState(e.target.value);
 
   const handleBlurHost = (e: FocusEvent<HTMLInputElement>) => {
-    if (e.target.value === host) return;
+    const value = e.target.value.trim();
+    if (value === host) return;
 
     dispatch(
-      requestUrlUpdateToken({
+      requestUrlUpdateOriginToken({
         id: "host",
-        value: hostState,
+        value,
       })
     );
   };
@@ -58,10 +59,10 @@ const HostToken = memo(({ hostType }: HostTokenProps) => {
         type
       )
         ? type
-        : "";
+        : "custom.com";
 
       dispatch(
-        requestUrlUpdateToken({
+        requestUrlUpdateOriginToken({
           id: "host",
           value,
         })

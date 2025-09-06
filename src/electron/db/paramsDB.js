@@ -88,12 +88,6 @@ export const updateParams = async (paramId, payload) => {
       await db.select().from(paramsTable).where(eq(paramsTable.id, paramId))
     )?.[0];
 
-    console.log({
-      isExist,
-      paramId,
-      allList: await db.select().from(paramsTable),
-    });
-
     if (!isExist)
       await createParams({
         id: paramId,

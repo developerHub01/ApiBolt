@@ -8,7 +8,7 @@ import {
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { selectRequestUrlTokenPort } from "@/context/redux/request-url/request-url-selector";
-import { requestUrlUpdateToken } from "@/context/redux/request-url/request-url-thunk";
+import { requestUrlUpdateOriginToken } from "@/context/redux/request-url/request-url-thunk";
 
 const PortToken = memo(() => {
   const dispatch = useAppDispatch();
@@ -28,7 +28,7 @@ const PortToken = memo(() => {
     if (e.target.value === port) return;
 
     dispatch(
-      requestUrlUpdateToken({
+      requestUrlUpdateOriginToken({
         id: "port",
         value: portState,
       })

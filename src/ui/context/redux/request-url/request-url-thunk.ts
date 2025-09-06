@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import type {
+  TAPIUrlOriginTokenType,
   TAPIUrlTokenType,
   UrlTokenInterface,
 } from "@/types/request-url.types";
@@ -210,6 +211,58 @@ export const requestUrlUpdateToken = createAsyncThunk<
 
       if (apiUrlBefore !== apiUrlAfter)
         await dispatch(updateParamsFromSearchParams(apiUrlAfter));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const requestUrlUpdateOriginToken = createAsyncThunk<
+  void,
+  {
+    id: TAPIUrlOriginTokenType;
+    value: string;
+  },
+  { dispatch: AppDispatch; state: RootState }
+>(
+  "request-url/requestUrlUpdateToken",
+  async ({ id, value }, { dispatch, getState }) => {
+    try {
+      const state = getState() as RootState;
+
+      const selectedTab = state.requestResponse.selectedTab;
+      if (!selectedTab) return;
+
+      const apiUrlBefore = decodeApiUrl(state.requestUrl.tokens[selectedTab]);
+      /* without search params */
+      const pureApiUrlBefore = filterUrl(apiUrlBefore);
+
+      dispatch(
+        handleRequestUrlUpdateToken({
+          id,
+          type: id,
+          value,
+          selectedTab,
+        })
+      );
+
+      const updatedState = getState() as RootState;
+
+      const apiUrlAfter = decodeApiUrl(
+        updatedState.requestUrl.tokens[selectedTab]
+      );
+      /* without search params */
+      const pureApiUrlAfter = filterUrl(apiUrlAfter);
+
+      console.log({
+        apiUrlAfter,
+        pureApiUrlAfter,
+      });
+
+      if (pureApiUrlBefore !== pureApiUrlAfter)
+        await window.electronAPIApiUrl.updateApiUrl({
+          url: pureApiUrlAfter,
+        });
     } catch (error) {
       console.log(error);
     }

@@ -9,7 +9,7 @@ import {
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { selectRequestUrlTokenProtocol } from "@/context/redux/request-url/request-url-selector";
-import { requestUrlUpdateToken } from "@/context/redux/request-url/request-url-thunk";
+import { requestUrlUpdateOriginToken } from "@/context/redux/request-url/request-url-thunk";
 
 const optionList: Array<{
   id: string;
@@ -31,7 +31,7 @@ const ProtocolToken = memo(() => {
 
   const handleChange = (value: string) => {
     dispatch(
-      requestUrlUpdateToken({
+      requestUrlUpdateOriginToken({
         id: "protocol",
         value,
       })

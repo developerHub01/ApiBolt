@@ -76,6 +76,7 @@ export const decodeApiUrl = (tokens: Array<UrlTokenInterface>): string => {
   let port = tokens[2]?.value ? `:${tokens[2]?.value}` : "";
 
   if (["localhost", "127.0.0.1"].includes(host) && !port) port = ":3000";
+  if (!["localhost", "127.0.0.1"].includes(host)) port = "";
 
   let pathname = tokens
     .slice(3)
