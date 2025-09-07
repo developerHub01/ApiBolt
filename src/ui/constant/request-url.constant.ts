@@ -25,3 +25,4 @@ export const initialUrlTokensValue: Array<UrlTokenInterface> = [
 ];
 
 export const urlVariableRegex = /\{\{([^{}]+)\}\}/g;
+export const urlPureVariableRegex = /^\{\{([^{}]+)\}\}$/;

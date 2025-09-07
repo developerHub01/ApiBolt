@@ -1,6 +1,8 @@
+import { urlPureVariableRegex } from "@/constant/request-url.constant";
 import type {
   ParamInterface,
   RequestListInterface,
+  TParamContentType,
 } from "@/types/request-response.types";
 import { v4 as uuidv4 } from "uuid";
 
@@ -93,8 +95,40 @@ export const paramsTableToString = (
 ): string => {
   const searchParams = params
     .filter((param) => param.isCheck)
-    .map((param) => `${param.key}=${param.value}`)
+    .map((param) => {
+      const key = param.keyType === "env" ? `{{${param.key}}}` : param.key;
+      const value =
+        param.valueType === "env" ? `{{${param.value}}}` : param.value;
+      return `${key}=${value}`;
+    })
     .join("&");
 
   return searchParams ? `?${searchParams}` : searchParams;
+};
+
+export const detectAndCleanVariable = (
+  str: string,
+  type: "keyType" | "valueType"
+): {
+  key?: string;
+  value?: string;
+  keyType?: TParamContentType;
+  valueType?: TParamContentType;
+} => {
+  if (!str)
+    return {
+      [type]: "text",
+      [type === "keyType" ? "key" : "value"]: str,
+    };
+  const match = str.match(urlPureVariableRegex);
+  if (match)
+    return {
+      [type]: "env",
+      [type === "keyType" ? "key" : "value"]: match[1],
+    };
+
+  return {
+    [type]: "text",
+    [type === "keyType" ? "key" : "value"]: str,
+  };
 };

@@ -70,7 +70,7 @@ export const encodeApiUrl = (apiUrl: string): Array<UrlTokenInterface> => {
   return tokens;
 };
 
-export const decodeApiUrl = (tokens: Array<UrlTokenInterface>): string => {
+export const decodeApiUrl = (tokens: Array<UrlTokenInterface> = []): string => {
   const protocol = tokens[0]?.value ?? "http:";
   const host = tokens[1]?.value ?? "localhost";
   let port = tokens[2]?.value ? `:${tokens[2]?.value}` : "";

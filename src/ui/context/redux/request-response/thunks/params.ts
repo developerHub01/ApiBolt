@@ -7,7 +7,7 @@ import type { AppDispatch, RootState } from "@/context/redux/store";
 import { handleLoadParams } from "@/context/redux/request-response/request-response-slice";
 import { parseUrlParams } from "@/utils";
 import { generateNewMetaDataItem } from "@/constant/request-response.constant";
-// import { loadApiUrl } from "@/context/redux/request-url/request-url-thunk";
+import { detectAndCleanVariable } from "@/utils/request-response.utils";
 
 /* ==============================
 ======== Params start ===========
@@ -32,7 +32,6 @@ export const loadParams = createAsyncThunk<
     const response = await window.electronAPIParamsDB.getParams(selectedTab);
 
     dispatch(handleLoadParams(response));
-    // dispatch(loadApiUrl());
   } catch (error) {
     console.log(error);
   }
@@ -118,6 +117,20 @@ export const updateParams = createAsyncThunk<
   "request-response/updateParams",
   async ({ paramId, payload }, { dispatch }) => {
     try {
+      if (payload["key"] !== undefined) {
+        const keyDetails = detectAndCleanVariable(payload["key"], "keyType");
+        payload["key"] = keyDetails.key;
+        payload["keyType"] = keyDetails.keyType;
+      }
+      if (payload["value"] !== undefined) {
+        const keyDetails = detectAndCleanVariable(
+          payload["value"],
+          "valueType"
+        );
+        payload["value"] = keyDetails.value;
+        payload["valueType"] = keyDetails.valueType;
+      }
+
       const response = await window.electronAPIParamsDB.updateParams(
         paramId,
         payload
@@ -178,6 +191,7 @@ export const updateParamsFromSearchParams = createAsyncThunk<
         value,
       }));
 
+      console.log({ urlParams });
       let updatedParams: Array<ParamInterface> = [];
       /**
        * if new params size less then previous means some of them have to filter out
@@ -191,32 +205,60 @@ export const updateParamsFromSearchParams = createAsyncThunk<
        */
       if (!state.requestResponse.params[selectedTab])
         state.requestResponse.params[selectedTab] = [];
+
       if (state.requestResponse.params[selectedTab].length < urlParams.length) {
-        updatedParams = urlParams.map((param, index) => ({
-          ...generateNewMetaDataItem("params"),
-          ...state.requestResponse.params[selectedTab]?.[index],
-          ...param,
-          isCheck: true,
-        }));
+        updatedParams = urlParams.map((param, index) => {
+          const payload = {
+            ...generateNewMetaDataItem("params"),
+            ...(state.requestResponse.params[selectedTab]?.[index] ?? {}),
+            ...param,
+          };
+
+          const keyDetails = detectAndCleanVariable(payload.key, "keyType");
+          const valueDetails = detectAndCleanVariable(
+            payload.value,
+            "valueType"
+          );
+
+          return {
+            ...payload,
+            isCheck: true,
+            ...keyDetails,
+            ...valueDetails,
+          };
+        });
       } else {
         let index = 0;
         updatedParams = state.requestResponse.params[selectedTab]?.reduce(
-          (acc, curr) =>
-            !curr.isCheck
-              ? [...acc, curr]
-              : urlParams[index]
-                ? [
-                    ...acc,
-                    {
-                      ...curr,
-                      ...urlParams[index++],
-                    },
-                  ]
-                : acc,
+          (acc, curr) => {
+            if (!curr.isCheck) return [...acc, curr];
+            if (!urlParams[index]) return acc;
+
+            const payload = {
+              ...curr,
+              ...urlParams[index++],
+            };
+
+            const keyDetails = detectAndCleanVariable(payload.key, "keyType");
+            const valueDetails = detectAndCleanVariable(
+              payload.value,
+              "valueType"
+            );
+
+            return [
+              ...acc,
+              {
+                ...payload,
+                ...keyDetails,
+                ...valueDetails,
+              },
+            ];
+          },
           [] as Array<ParamInterface>
         );
       }
 
+      console.log({ updatedParams });
       dispatch(handleLoadParams(updatedParams));
 
       if (!saveBackend) return true;

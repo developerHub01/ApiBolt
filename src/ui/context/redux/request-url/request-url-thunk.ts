@@ -87,6 +87,12 @@ export const changeRequestApiUrl = createAsyncThunk<
         return true;
 
       const apiUrlBefore = decodeApiUrl(state.requestUrl.tokens[selectedTab]);
+
+      /**
+       * TODO ==========================
+       * Need to update checking with before params string and new url params string
+       * TODO ==========================
+       * **/
       if (apiUrlBefore !== url)
         await dispatch(
           updateParamsFromSearchParams({
@@ -139,6 +145,11 @@ export const changeRequestApiUrlWithBackend = createAsyncThunk<
           url: pureApiUrlUpdated,
         });
 
+      /**
+       * TODO ==========================
+       * Need to update checking with before params string and new url params string
+       * TODO ==========================
+       * **/
       if (apiUrlBefore !== url)
         await dispatch(
           updateParamsFromSearchParams({
@@ -192,6 +203,11 @@ export const requestUrlAddToken = createAsyncThunk<
         url: pureApiUrlAfter,
       });
 
+    /**
+     * TODO ==========================
+     * Need to update checking with before params string and new url params string
+     * TODO ==========================
+     * **/
     if (apiUrlBefore !== apiUrlAfter)
       await dispatch(
         updateParamsFromSearchParams({
@@ -240,6 +256,11 @@ export const requestUrlUpdateToken = createAsyncThunk<
           url: pureApiUrlAfter,
         });
 
+      /**
+       * TODO ==========================
+       * Need to update checking with before params string and new url params string
+       * TODO ==========================
+       * **/
       if (apiUrlBefore !== apiUrlAfter)
         await dispatch(
           updateParamsFromSearchParams({
@@ -334,6 +355,11 @@ export const requestUrlDeleteToken = createAsyncThunk<
         url: pureApiUrlAfter,
       });
 
+    /**
+     * TODO ==========================
+     * Need to update checking with before params string and new url params string
+     * TODO ==========================
+     * **/
     if (apiUrlBefore !== apiUrlAfter)
       await dispatch(
         updateParamsFromSearchParams({
