@@ -4,56 +4,28 @@ import type { THostType, UrlTokenInterface } from "@/types/request-url.types";
 import { decodeApiUrl } from "@/utils/request-url.utils";
 import type { ParamInterface } from "@/types/request-response.types";
 import { paramsTableToString } from "@/utils/request-response.utils";
-import { v4 as uuidv4 } from "uuid";
 
 export const selectRequestUrlTokens = createSelector(
   [
     (state: RootState) =>
       state.requestUrl.tokens[state.requestResponse.selectedTab ?? ""],
-    (state: RootState) =>
-      state.requestResponse.params[state.requestResponse.selectedTab ?? ""],
   ],
-  (
-    tokens: Array<UrlTokenInterface>,
-    params: Array<ParamInterface>
-  ): Array<UrlTokenInterface> => {
-    try {
-      const newTokens = tokens ? tokens.map((t) => ({ ...t })) : [];
-      const searchQuery = paramsTableToString(params);
-
-      /* if no query params exist then return the unmodified tokens */
-      if (!searchQuery) return newTokens;
-
-      /* if in last token no text token exist then add one */
-      if (!newTokens.length || newTokens.at(-1)?.type !== "text") {
-        newTokens.push({
-          id: uuidv4(),
-          type: "text",
-          value: "",
-        });
-      }
-
-      const lastIndex = newTokens.length ? newTokens.length - 1 : 0;
-      const url = new URL(decodeApiUrl(newTokens));
-
-      if (url.search)
-        newTokens[lastIndex].value =
-          newTokens[lastIndex].value?.split("?", 2)[0] ?? "";
-
-      newTokens[lastIndex].value += searchQuery;
-      return newTokens;
-    } catch (error) {
-      console.log(error);
-      return [];
-    }
-  }
+  (tokens: Array<UrlTokenInterface>): Array<UrlTokenInterface> => tokens ?? []
 );
 
 export const selectRequestUrl = createSelector(
-  [selectRequestUrlTokens],
-  (tokens: Array<UrlTokenInterface>): string => {
-    if (!tokens) return "";
-    return decodeApiUrl(tokens);
+  (state: RootState) =>
+    state.requestUrl.tokens[state.requestResponse.selectedTab ?? ""],
+  (state: RootState) =>
+    state.requestResponse.params[state.requestResponse.selectedTab ?? ""],
+  (tokens: Array<UrlTokenInterface>, params: Array<ParamInterface>): string => {
+    const queryParams = paramsTableToString(params);
+    try {
+      return decodeApiUrl(tokens) + queryParams;
+    } catch (error) {
+      console.log(error);
+      return queryParams;
+    }
   }
 );
 

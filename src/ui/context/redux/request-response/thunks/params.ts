@@ -156,11 +156,14 @@ export const checkAllParamsByRequestMetaId = createAsyncThunk<
 
 export const updateParamsFromSearchParams = createAsyncThunk<
   boolean,
-  string,
+  {
+    url: string;
+    saveBackend?: boolean;
+  },
   { dispatch: AppDispatch; state: RootState }
 >(
   "request-response/updateParamsFromSearchParams",
-  async (api, { dispatch, getState }) => {
+  async ({ url: api, saveBackend = true }, { dispatch, getState }) => {
     try {
       const state = getState() as RootState;
 
@@ -215,6 +218,8 @@ export const updateParamsFromSearchParams = createAsyncThunk<
       }
 
       dispatch(handleLoadParams(updatedParams));
+
+      if (!saveBackend) return true;
       const response = await window.electronAPIParamsDB.replaceParams(
         selectedTab,
         updatedParams

@@ -41,6 +41,7 @@ const RequestListPanelWrapper = memo(() => {
   );
 
   const handleResize = useCallback((size: number) => {
+    return;
     console.log({ size });
   }, []);
 

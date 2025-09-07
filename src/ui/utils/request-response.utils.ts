@@ -96,6 +96,5 @@ export const paramsTableToString = (
     .map((param) => `${param.key}=${param.value}`)
     .join("&");
 
-  if (searchParams) return `?${searchParams}`;
-  return searchParams;
+  return searchParams ? `?${searchParams}` : searchParams;
 };

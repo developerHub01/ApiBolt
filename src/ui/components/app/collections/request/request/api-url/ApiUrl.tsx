@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { handleRequestSend } from "@/context/redux/request-response/request-response-slice";
 import { selectRequestUrl } from "@/context/redux/request-url/request-url-selector";
 import {
-  // changeRequestApiUrl,
+  changeRequestApiUrl,
   changeRequestApiUrlWithBackend,
 } from "@/context/redux/request-url/request-url-thunk";
 import { isValidApiUrl } from "@/utils/request-url.utils";
@@ -32,16 +32,14 @@ const ApiUrl = memo(() => {
 
   useEffect(() => {
     if (url === apiUrl) return;
-
     const timeout = setTimeout(() => {
       setIsError(!isValidApiUrl(url));
-
-      // dispatch(
-      //   changeRequestApiUrl({
-      //     url,
-      //   })
-      // );
-    }, 100);
+      dispatch(
+        changeRequestApiUrl({
+          url,
+        })
+      );
+    }, 200);
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url]);

@@ -57,28 +57,51 @@ export const changeRequestApiUrl = createAsyncThunk<
   boolean,
   { url: string },
   { dispatch: AppDispatch; state: RootState }
->("request-url/changeRequestApiUrl", ({ url }, { dispatch, getState }) => {
-  try {
-    const state = getState() as RootState;
+>(
+  "request-url/changeRequestApiUrl",
+  async ({ url }, { dispatch, getState }) => {
+    try {
+      const state = getState() as RootState;
 
-    const selectedTab = state.requestResponse.selectedTab;
-    if (!selectedTab || !isValidApiUrl(url)) return false;
+      const selectedTab = state.requestResponse.selectedTab;
+      if (!selectedTab || !isValidApiUrl(url)) return false;
 
-    const tokens = encodeApiUrl(url);
+      const pureUrl = filterUrl(url);
+      const tokens = encodeApiUrl(pureUrl);
 
-    dispatch(
-      handleRequestUrlReplaceTokens({
-        selectedTab,
-        tokens,
-      })
-    );
+      dispatch(
+        handleRequestUrlReplaceTokens({
+          selectedTab,
+          tokens,
+        })
+      );
 
-    return true;
-  } catch (error) {
-    console.log(error);
-    return false;
+      /* if tab is only url or params then update params.   */
+      if (
+        !["url", "params"].includes(
+          state.requestResponse.activeMetaTab[
+            state.requestResponse.selectedTab!
+          ]
+        )
+      )
+        return true;
+
+      const apiUrlBefore = decodeApiUrl(state.requestUrl.tokens[selectedTab]);
+      if (apiUrlBefore !== url)
+        await dispatch(
+          updateParamsFromSearchParams({
+            url,
+            saveBackend: false,
+          })
+        );
+
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   }
-});
+);
 
 export const changeRequestApiUrlWithBackend = createAsyncThunk<
   boolean,
@@ -103,7 +126,7 @@ export const changeRequestApiUrlWithBackend = createAsyncThunk<
       });
       if (!response) return false;
 
-      const tokens = encodeApiUrl(url);
+      const tokens = encodeApiUrl(pureApiUrlUpdated);
       dispatch(
         handleRequestUrlReplaceTokens({
           selectedTab,
@@ -117,7 +140,11 @@ export const changeRequestApiUrlWithBackend = createAsyncThunk<
         });
 
       if (apiUrlBefore !== url)
-        await dispatch(updateParamsFromSearchParams(url));
+        await dispatch(
+          updateParamsFromSearchParams({
+            url,
+          })
+        );
 
       return true;
     } catch (error) {
@@ -166,7 +193,11 @@ export const requestUrlAddToken = createAsyncThunk<
       });
 
     if (apiUrlBefore !== apiUrlAfter)
-      await dispatch(updateParamsFromSearchParams(apiUrlAfter));
+      await dispatch(
+        updateParamsFromSearchParams({
+          url: apiUrlAfter,
+        })
+      );
   } catch (error) {
     console.log(error);
   }
@@ -210,7 +241,11 @@ export const requestUrlUpdateToken = createAsyncThunk<
         });
 
       if (apiUrlBefore !== apiUrlAfter)
-        await dispatch(updateParamsFromSearchParams(apiUrlAfter));
+        await dispatch(
+          updateParamsFromSearchParams({
+            url: apiUrlAfter,
+          })
+        );
     } catch (error) {
       console.log(error);
     }
@@ -300,7 +335,11 @@ export const requestUrlDeleteToken = createAsyncThunk<
       });
 
     if (apiUrlBefore !== apiUrlAfter)
-      await dispatch(updateParamsFromSearchParams(apiUrlAfter));
+      await dispatch(
+        updateParamsFromSearchParams({
+          url: apiUrlAfter,
+        })
+      );
   } catch (error) {
     console.log(error);
   }

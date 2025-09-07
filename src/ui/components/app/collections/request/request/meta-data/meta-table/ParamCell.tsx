@@ -35,13 +35,6 @@ interface ParamCellProps {
 
 const ParamCell = memo(
   ({ id, children, type, cellType, value }: ParamCellProps) => {
-    console.log({
-      id,
-      children,
-      type,
-      cellType,
-      value,
-    });
     const dispatch = useAppDispatch();
 
     const handleChangeType = useCallback(
