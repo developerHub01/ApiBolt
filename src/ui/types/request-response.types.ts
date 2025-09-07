@@ -99,10 +99,14 @@ export interface ParamHeaderPayloadInterface {
   createdAt: string;
 }
 
+export type TParamContentType = "text" | "env";
+
 export interface ParamHeaderBuildPayloadInterface {
   isCheck?: boolean;
   key: string;
   value: string;
+  keyType?: TParamContentType;
+  valueType?: TParamContentType;
   description: string;
   requestOrFolderMetaId?: string;
 }
@@ -114,6 +118,8 @@ export interface ParamInterface<ValueT = string> {
   description?: string;
   isCheck?: boolean;
   prevent?: boolean;
+  keyType?: "text" | "env";
+  valueType?: "text" | "env";
   calculateDynamicly?: boolean;
 }
 
