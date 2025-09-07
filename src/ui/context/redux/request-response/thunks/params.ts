@@ -115,20 +115,32 @@ export const updateParams = createAsyncThunk<
   { dispatch: AppDispatch; state: RootState }
 >(
   "request-response/updateParams",
-  async ({ paramId, payload }, { dispatch }) => {
+  async ({ paramId, payload }, { dispatch, getState }) => {
     try {
-      if (payload["key"] !== undefined) {
+      const state = getState() as RootState;
+      const param = (
+        state.requestResponse.params[state.requestResponse.selectedTab ?? ""] ??
+        []
+      )?.find((param) => param.id === paramId);
+      if (!param) return false;
+
+      /* if updating key and in text formate then check is that key actually any variable or not. if then update keyType as env */
+      if (payload.key && param.keyType === "text") {
         const keyDetails = detectAndCleanVariable(payload["key"], "keyType");
         payload["key"] = keyDetails.key;
-        payload["keyType"] = keyDetails.keyType;
+        if (keyDetails.keyType === "env")
+          payload["keyType"] = keyDetails.keyType;
       }
-      if (payload["value"] !== undefined) {
-        const keyDetails = detectAndCleanVariable(
+
+      /* if updating value and in text formate then check is that value actually any variable or not. if then update valueType as env */
+      if (payload.value && param.valueType === "text") {
+        const valueDetails = detectAndCleanVariable(
           payload["value"],
           "valueType"
         );
-        payload["value"] = keyDetails.value;
-        payload["valueType"] = keyDetails.valueType;
+        payload["value"] = valueDetails.value;
+        if (valueDetails.valueType === "env")
+          payload["valueType"] = valueDetails.valueType;
       }
 
       const response = await window.electronAPIParamsDB.updateParams(
