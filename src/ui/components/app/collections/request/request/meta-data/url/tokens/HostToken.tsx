@@ -55,7 +55,7 @@ const HostToken = memo(({ hostType }: HostTokenProps) => {
   };
 
   const handleKeydown = (e: KeyboardEvent<HTMLHeadingElement>) => {
-    if (e.code === "Enter") return e.preventDefault();
+    if (["Enter", "?"].includes(e.key)) return e.preventDefault();
   };
 
   const handlePaste = (e: ClipboardEvent<HTMLHeadingElement>) => {

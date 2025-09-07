@@ -33,14 +33,14 @@ const TextToken = memo(({ id, value }: TextTokenProps) => {
   }, [value]);
 
   const handleKeydown = (e: KeyboardEvent<HTMLHeadingElement>) => {
-    if (e.code === "Enter") return e.preventDefault();
+    if (["Enter", "?"].includes(e.key)) return e.preventDefault();
   };
 
   const handleBlur = (e: FocusEvent<HTMLHeadingElement>) => {
     const newValue = e.target.innerText.trim();
     setValue(newValue);
     if (newValue === valueState) return;
-    
+
     dispatch(
       requestUrlUpdateToken({
         id,
@@ -64,7 +64,7 @@ const TextToken = memo(({ id, value }: TextTokenProps) => {
         <p
           contentEditable
           suppressContentEditableWarning
-          className="outline-none cursor-text border-b w-full min-w-12 text-center break-words break-all whitespace-normal font-normal"
+          className="outline-none cursor-text border-b w-full min-w-12 max-w-96 text-center break-words break-all whitespace-normal font-normal"
           onKeyDown={handleKeydown}
           onBlur={handleBlur}
           onPaste={handlePaste}
