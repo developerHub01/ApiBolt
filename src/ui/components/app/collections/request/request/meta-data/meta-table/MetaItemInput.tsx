@@ -19,7 +19,7 @@ interface MetaItemInputProps
   > {
   id: string;
   ref: RefObject<HTMLInputElement | null>;
-  keyType: string;
+  cellType: string;
   value?: string;
   type: "text" | "password";
   onBlur: (id: string, key: string, value: string) => void;
@@ -30,7 +30,7 @@ const MetaItemInput = memo(
   ({
     id,
     ref,
-    keyType,
+    cellType,
     value = "",
     onBlur,
     type = "text",
@@ -63,7 +63,7 @@ const MetaItemInput = memo(
         <input
           ref={ref}
           type={"text"}
-          data-meta-item-type={keyType}
+          data-meta-item-type={cellType}
           value={
             type === "text" || !hidePassword ? valueState : hiddenDummyText
           }
@@ -75,7 +75,7 @@ const MetaItemInput = memo(
             "placeholder:capitalize placeholder:opacity-50",
             className
           )}
-          placeholder={keyType}
+          placeholder={cellType}
           {...props}
         />
         {type === "password" && (

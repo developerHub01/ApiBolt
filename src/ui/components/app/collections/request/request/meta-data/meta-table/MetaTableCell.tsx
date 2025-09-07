@@ -1,29 +1,22 @@
 import { memo, useCallback, useRef, useState, type MouseEvent } from "react";
 import { TableCell } from "@/components/ui/table";
-import { Plus as AddIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import MetaItemInput from "@/components/app/collections/request/request/meta-data/meta-table/MetaItemInput";
-import { useAppDispatch } from "@/context/redux/hooks";
 import LockTooltip from "@/components/app/collections/request/request/meta-data/meta-table/LockTooltip";
 import FileTag from "@/components/app/collections/request/request/meta-data/meta-table/FileTag";
-import {
-  deleteBodyFormDataFile,
-  updateBodyFormDataFile,
-} from "@/context/redux/request-response/thunks/body-form-data";
-import type { TMetaTableType } from "@/types/request-response.types";
+import type {
+  TMetaTableType,
+  TParamContentType,
+} from "@/types/request-response.types";
+import FormDataValuePopover from "@/components/app/collections/request/request/meta-data/meta-table/FormDataValuePopover";
+import ParamCell from "@/components/app/collections/request/request/meta-data/meta-table/ParamCell";
 
 interface MetaTableCellProps {
-  keyType: string;
+  cellType: string;
   type?: TMetaTableType;
   id: string;
   value: string | Array<string>;
+  cellContentType?: TParamContentType;
   inputType: "text" | "password";
   onBlur: (id: string, key: string, value: string) => void;
   prevent?: boolean;
@@ -31,33 +24,18 @@ interface MetaTableCellProps {
 
 const MetaTableCell = memo(
   ({
-    keyType,
+    cellType,
     type,
     id,
     value = "",
+    cellContentType,
     onBlur,
     inputType = "text",
     prevent = false,
   }: MetaTableCellProps) => {
-    const dispatch = useAppDispatch();
     const addButtonRef = useRef<HTMLButtonElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const [popoverOpen, setPopoverOpen] = useState<boolean>(false);
-    const handleUploadFile = useCallback(
-      () => dispatch(updateBodyFormDataFile(id)),
-      [dispatch, id]
-    );
-
-    const handleDeleteFormFile = useCallback(
-      (id: string, index: number) =>
-        dispatch(
-          deleteBodyFormDataFile({
-            id,
-            index,
-          })
-        ),
-      [dispatch]
-    );
 
     const openPopover = (e: MouseEvent<HTMLDivElement>) => {
       e.stopPropagation();
@@ -70,10 +48,10 @@ const MetaTableCell = memo(
 
     return (
       <TableCell
-        className={cn("p-2 relative overflow-visible min-w-auto md:min-w-24")}
+        className={cn("p-2 relative overflow-hidden min-w-auto md:min-w-24")}
         onClick={handleClickCell}
       >
-        <div className="w-full flex gap-1.5 items-center">
+        <div className="w-full flex gap-1.5 items-center overflow-hidden">
           {Array.isArray(value) && value.length ? (
             <div onClick={openPopover} className="w-full cursor-pointer">
               <FileTag
@@ -83,60 +61,45 @@ const MetaTableCell = memo(
             </div>
           ) : (
             <>
-              {keyType === "key" && prevent && <LockTooltip />}
-              <MetaItemInput
-                ref={inputRef}
-                keyType={keyType}
-                id={id}
-                value={Array.isArray(value) ? "" : value}
-                onBlur={onBlur}
-                disabled={prevent}
-                type={inputType}
-              />
+              {cellType === "key" && prevent && <LockTooltip />}
+              {type === "params" && ["key", "value"].includes(cellType) ? (
+                <ParamCell
+                  id={id}
+                  type={cellContentType!}
+                  cellType={cellType}
+                  value={Array.isArray(value) ? "" : value}
+                >
+                  <MetaItemInput
+                    ref={inputRef}
+                    cellType={cellType}
+                    id={id}
+                    value={Array.isArray(value) ? "" : value}
+                    onBlur={onBlur}
+                    disabled={prevent}
+                    type={inputType}
+                  />
+                </ParamCell>
+              ) : (
+                <MetaItemInput
+                  ref={inputRef}
+                  cellType={cellType}
+                  id={id}
+                  value={Array.isArray(value) ? "" : value}
+                  onBlur={onBlur}
+                  disabled={prevent}
+                  type={inputType}
+                />
+              )}
             </>
           )}
-          {type === "form-data" && keyType === "value" && !prevent && (
-            <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  ref={addButtonRef}
-                  size={"iconXs"}
-                  variant={"secondary"}
-                  className="size-6"
-                >
-                  <AddIcon />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent
-                className="w-3xs min-h-full shadow-2xs bg-background p-1 border rounded-md flex flex-col gap-1.5"
-                side="bottom"
-                align="end"
-                sideOffset={5}
-                onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}
-              >
-                {Array.isArray(value) && !!value.length && (
-                  <ScrollArea className="w-full h-full min-h-0 p-0">
-                    <div className="max-h-28 w-full h-full flex flex-col gap-1.5 select-none">
-                      {value.map((file, index) => (
-                        <FileTag
-                          key={`${file}-${index}`}
-                          name={file ?? "unknown"}
-                          onClose={() => handleDeleteFormFile(id, index)}
-                        />
-                      ))}
-                    </div>
-                  </ScrollArea>
-                )}
-                <Button
-                  className="w-full"
-                  size={"sm"}
-                  variant={"secondary"}
-                  onClick={handleUploadFile}
-                >
-                  <AddIcon /> Add new file
-                </Button>
-              </PopoverContent>
-            </Popover>
+          {type === "form-data" && cellType === "value" && !prevent && (
+            <FormDataValuePopover
+              id={id}
+              value={value}
+              open={popoverOpen}
+              setOpen={setPopoverOpen}
+              triggerRef={addButtonRef}
+            />
           )}
         </div>
       </TableCell>

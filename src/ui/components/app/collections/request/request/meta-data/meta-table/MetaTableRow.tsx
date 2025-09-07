@@ -9,6 +9,7 @@ import type {
   FormDataInterface,
   ParamInterface,
   TMetaTableType,
+  TParamContentType,
 } from "@/types/request-response.types";
 
 const calculateDynamicText = "<calculated when request is sent>";
@@ -18,6 +19,8 @@ interface MetaTableRowProps {
   id: string;
   keyName?: string;
   value: string | Array<string>;
+  keyType?: TParamContentType;
+  valueType?: TParamContentType;
   description?: string;
   contentType?: string;
   isCheck?: boolean;
@@ -42,6 +45,8 @@ const MetaTableRow = memo(
     id,
     keyName = "",
     value = "",
+    keyType = "text",
+    valueType = "text",
     description = "",
     contentType = "",
     isCheck = false,
@@ -98,17 +103,24 @@ const MetaTableRow = memo(
             />
           </div>
         </TableCell>
-        {cellList.map((keyType) => {
-          const value = data[keyType];
+        {cellList.map((cellType) => {
+          const value = data[cellType];
           return (
             <MetaTableCell
-              key={keyType}
+              key={cellType}
               id={id}
               type={type}
-              keyType={keyType}
-              inputType={keyType === "value" ? inputType : "text"}
+              cellContentType={
+                cellType === "key"
+                  ? keyType
+                  : cellType === "value"
+                    ? valueType
+                    : undefined
+              }
+              cellType={cellType}
+              inputType={cellType === "value" ? inputType : "text"}
               value={
-                calculateDynamicly && keyType === "value" && !value
+                calculateDynamicly && cellType === "value" && !value
                   ? calculateDynamicText
                   : value
               }
