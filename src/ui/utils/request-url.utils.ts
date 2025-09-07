@@ -88,3 +88,11 @@ export const decodeApiUrl = (tokens: Array<UrlTokenInterface>): string => {
 
   return `${protocol}//${host}${port}${pathname}`;
 };
+
+export const isValidPort = (port: string | number): boolean => {
+  if (typeof port === "string") {
+    if (!/^\d+$/.test(port)) return false;
+    port = Number(port);
+  }
+  return Number.isInteger(port) && port > 0 && port <= 65535;
+};
