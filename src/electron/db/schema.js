@@ -175,6 +175,8 @@ export const paramsTable = sqliteTable("params_table", {
   isCheck: int({ mode: boolean }).default(1),
   key: text().notNull().default(""),
   value: text().notNull().default(""),
+  keyType: text().default("text"), // text | env
+  valueType: text().default("text"), // text | env
   description: text().notNull().default(""),
   requestOrFolderMetaId: text()
     .notNull()

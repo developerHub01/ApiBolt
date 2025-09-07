@@ -239,6 +239,13 @@
       "when": 1757089299592,
       "tag": "0033_slim_peter_parker",
       "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "6",
+      "when": 1757266515332,
+      "tag": "0034_productive_scrambler",
+      "breakpoints": true
     }
   ]
 }
