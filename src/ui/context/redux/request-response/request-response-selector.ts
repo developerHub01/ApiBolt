@@ -206,14 +206,19 @@ export const selectEnvironmentsVariableList = createSelector(
 
 export const selectParams = createSelector(
   [
-    (state: RootState) => state.requestResponse.selectedTab!,
-    (state: RootState) => state.requestResponse.params,
+    (state: RootState) =>
+      state.requestResponse.params[state.requestResponse.selectedTab ?? ""],
   ],
-  (selectedTab, params): Array<ParamInterface> => {
-    if (!selectedTab) return [];
+  (params): Array<ParamInterface> => (!params ? [] : params)
+);
 
-    return params[selectedTab];
-  }
+export const selectCheckedParams = createSelector(
+  [
+    (state: RootState) =>
+      state.requestResponse.params[state.requestResponse.selectedTab ?? ""],
+  ],
+  (params): Array<ParamInterface> =>
+    (!params ? [] : params).filter((param) => param.isCheck)
 );
 
 export const selectHiddenHeaders = createSelector(

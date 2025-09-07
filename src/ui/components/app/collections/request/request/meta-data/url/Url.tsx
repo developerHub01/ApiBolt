@@ -5,9 +5,10 @@ import UrlWrapper from "@/components/app/collections/request/request/meta-data/u
 import ReorderableToken from "@/components/app/collections/request/request/meta-data/url/ReorderableToken";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectRequestUrlTokens } from "@/context/redux/request-url/request-url-selector";
+import QueryParamToken from "@/components/app/collections/request/request/meta-data/url/tokens/QueryParamToken";
 
 const Url = () => {
-  const urlToken = useAppSelector(selectRequestUrlTokens);
+  const urlTokens = useAppSelector(selectRequestUrlTokens);
 
   return (
     <UrlWrapper>
@@ -15,9 +16,10 @@ const Url = () => {
         <ProtocolToken />
         <HostPortToken />
         <AddUrlPart id="port" />
-        {urlToken.slice(3).map((token) => (
+        {urlTokens.slice(3).map((token) => (
           <ReorderableToken key={token.id} token={token} />
         ))}
+        <QueryParamToken />
       </div>
     </UrlWrapper>
   );

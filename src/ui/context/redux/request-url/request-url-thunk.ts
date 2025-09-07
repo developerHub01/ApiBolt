@@ -254,11 +254,6 @@ export const requestUrlUpdateOriginToken = createAsyncThunk<
       /* without search params */
       const pureApiUrlAfter = filterUrl(apiUrlAfter);
 
-      console.log({
-        apiUrlAfter,
-        pureApiUrlAfter,
-      });
-
       if (pureApiUrlBefore !== pureApiUrlAfter)
         await window.electronAPIApiUrl.updateApiUrl({
           url: pureApiUrlAfter,
