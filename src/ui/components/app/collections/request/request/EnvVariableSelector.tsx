@@ -50,7 +50,7 @@ const EnvVariableSelector = memo(
             role="combobox"
             aria-expanded={open}
             className={cn(
-              "flex-1 w-full justify-between rounded-none",
+              "flex-1 w-full justify-between rounded-none cursor-pointer",
               {
                 "text-green-500/60": isExist,
                 "text-red-500/60": isNotExist,
@@ -60,8 +60,11 @@ const EnvVariableSelector = memo(
             size={"sm"}
           >
             <input
-              className="w-full h-full flex-1 overflow-hidden text-left select-none"
+              className="w-full h-full flex-1 truncate text-left 
+             bg-transparent border-none outline-none 
+             pointer-events-none select-none"
               readOnly
+              tabIndex={-1}
               value={
                 value
                   ? (variableList.find(
