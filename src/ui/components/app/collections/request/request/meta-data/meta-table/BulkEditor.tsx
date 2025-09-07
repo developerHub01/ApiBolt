@@ -49,7 +49,7 @@ const textToMetaData = (text: string) =>
       return [key, value, description, enabled];
     });
 
-const metaDataToText = (data: Array<MetaDataInterface>) => {
+const metaDataToText = (data: Array<MetaDataInterface> = []) => {
   return data
     .reduce((acc: Array<string>, curr: MetaDataInterface) => {
       const isCheck = curr.isCheck ?? true;

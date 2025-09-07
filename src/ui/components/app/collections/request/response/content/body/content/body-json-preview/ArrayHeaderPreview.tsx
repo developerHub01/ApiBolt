@@ -5,7 +5,7 @@ interface ArrayHeaderPreviewProps {
   lavel?: number;
 }
 
-const ArrayHeaderPreview = ({ data }: ArrayHeaderPreviewProps) => {
+const ArrayHeaderPreview = ({ data = [] }: ArrayHeaderPreviewProps) => {
   const headerList = Array.from(
     data.reduce<Set<string>>((acc, curr) => {
       return new Set([...acc, ...Object.keys(curr)]);
