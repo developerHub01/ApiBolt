@@ -5,8 +5,8 @@ import AuthContentInput from "@/components/app/authorization/content/AuthContent
 import AuthContentInoutLabel from "@/components/app/authorization/content/AuthContentInoutLabel";
 import AuthContentSelect from "@/components/app/authorization/content/AuthContentSelect";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { defaultApiKey } from "@/constant/request-response.constant";
 import { updateAuthorization } from "@/context/redux/request-response/thunks/auth";
+import { selectAuthApiKey } from "@/context/redux/request-response/request-response-selector";
 
 const addToList = [
   {
@@ -21,9 +21,7 @@ const addToList = [
 
 const APIKey = () => {
   const dispatch = useAppDispatch();
-  const authData = useAppSelector(
-    (state) => state.requestResponse.apiKeyAuth ?? defaultApiKey
-  );
+  const authData = useAppSelector(selectAuthApiKey);
 
   const handleBlur = useCallback(
     (key: "apiKeyKey" | "apiKeyValue" | "apiKeyAddTo", value: string) => {

@@ -1,27 +1,43 @@
 import { createSelector } from "@reduxjs/toolkit";
 import type { RootState } from "@/context/redux/store";
 import type {
+  APIKeyInterface,
+  BasicAuthInterface,
   EnvironmentInterface,
   FormDataInterface,
+  JWTBearerAuthInterface,
   MetaShowColumnInterface,
   ParamInterface,
   ProjectInterface,
+  RequestListItemInterface,
   TActiveTabType,
   TAuthType,
+  TBearerToken,
   TContentType,
   THTTPMethods,
   TMetaTableType,
   TRequestBodyType,
   TRequestFolderDescriptionTab,
 } from "@/types/request-response.types";
+import {
+  defaultApiKey,
+  defaultBasicAuth,
+  defaultJWTBearerAuth,
+} from "@/constant/request-response.constant";
+
+export const selectIsResponseCollapsed = createSelector(
+  [
+    (state) =>
+      state.requestResponse.isResponseCollapsed[
+        state.requestResponse.selectedTab!
+      ],
+  ],
+  (isResponseCollapsed): boolean => isResponseCollapsed
+);
 
 export const selectActiveProjectId = createSelector(
   [(state: RootState) => state.requestResponse.activeProjectId],
-  (activeProjectId): string | null => {
-    if (!activeProjectId) return null;
-
-    return activeProjectId;
-  }
+  (activeProjectId): string | null => (activeProjectId ? activeProjectId : null)
 );
 
 export const selectActiveProject = createSelector(
@@ -86,6 +102,16 @@ export const selectProjectById = (id?: string | null) =>
 export const selectSelectedTab = createSelector(
   [(state: RootState) => state.requestResponse.selectedTab],
   (selectedTab): string | null => selectedTab
+);
+
+export const selectActiveRequestOrFolder = createSelector(
+  [
+    (state) =>
+      state.requestResponse.requestList?.[
+        state.requestResponse.selectedTab ?? ""
+      ] ?? null,
+  ],
+  (requestOrFolder): RequestListItemInterface | null => requestOrFolder
 );
 
 export const selectRequestFolderTitle = createSelector(
@@ -202,6 +228,15 @@ export const selectEnvironmentsVariableList = createSelector(
   (
     environmentsList: Record<string, EnvironmentInterface>
   ): Array<EnvironmentInterface> => Object.values(environmentsList)
+);
+
+export const selectRequestName = createSelector(
+  [
+    (state) =>
+      state.requestResponse.requestList[state.requestResponse.selectedTab!]
+        ?.name ?? "Request",
+  ],
+  (name): string => name
 );
 
 export const selectParams = createSelector(
@@ -366,9 +401,27 @@ export const selectRequestMetaShowColumn = createSelector(
 
 export const selectAuthType = createSelector(
   [(state: RootState) => state.requestResponse.authType ?? "no-auth"],
-  (authType): TAuthType => {
-    return authType;
-  }
+  (authType): TAuthType => authType
+);
+
+export const selectAuthApiKey = createSelector(
+  [(state) => state.requestResponse.apiKeyAuth ?? defaultApiKey],
+  (authData): APIKeyInterface => authData
+);
+
+export const selectAuthBasicAuth = createSelector(
+  [(state) => state.requestResponse.basicAuth ?? defaultBasicAuth],
+  (authData): BasicAuthInterface => authData
+);
+
+export const selectAuthBearerTokenAuth = createSelector(
+  [(state) => state.requestResponse.bearerTokenAuth ?? ""],
+  (authData): TBearerToken => authData
+);
+
+export const selectAuthJWTBearerAuth = createSelector(
+  [(state) => state.requestResponse.jwtBearerAuth ?? defaultJWTBearerAuth],
+  (authData): JWTBearerAuthInterface => authData
 );
 
 export const selectCodeLineWrap = createSelector(
@@ -388,7 +441,7 @@ export const selectRawRequestBodyType = createSelector(
         state.requestResponse.selectedTab ?? ""
       ],
   ],
-  (bodyType): TContentType => bodyType ?? true
+  (bodyType): TContentType => bodyType ?? "json"
 );
 
 export const selectRawData = createSelector(
@@ -398,3 +451,29 @@ export const selectRawData = createSelector(
   ],
   (rawData): string => rawData ?? ""
 );
+
+export const selectBinaryData = createSelector(
+  [
+    (state) =>
+      state.requestResponse.binaryData[state.requestResponse.selectedTab!],
+  ],
+  (binaryData): string | null => binaryData
+);
+
+/*
+ * ===============================================
+ * =========== RESPONSE SELECTORS START ==========
+ * ===============================================
+ */
+export const selectIsResponseLoading = createSelector(
+  [
+    (state) =>
+      state.requestResponse.isLoading[state.requestResponse.selectedTab!],
+  ],
+  (isLoading): boolean => isLoading
+);
+/*
+ * ===============================================
+ * =========== RESPONSE SELECTORS END ============
+ * ===============================================
+ */

@@ -12,6 +12,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import type { TRequestBodyType } from "@/types/request-response.types";
 import { updateRequestMetaTab } from "@/context/redux/request-response/thunks/request-meta-tab";
+import { selectRequestBodyType } from "@/context/redux/request-response/request-response-selector";
 
 const bodyList: Array<{
   id: TRequestBodyType;
@@ -41,10 +42,7 @@ const bodyList: Array<{
 
 const BodyTypeSelector = () => {
   const dispatch = useAppDispatch();
-  const requestBodyType = useAppSelector(
-    (state) =>
-      state.requestResponse.requestBodyType[state.requestResponse.selectedTab!]
-  );
+  const requestBodyType = useAppSelector(selectRequestBodyType);
 
   const handleChange = useCallback(
     (type: TRequestBodyType) => {

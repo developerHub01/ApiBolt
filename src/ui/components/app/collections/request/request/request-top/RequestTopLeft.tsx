@@ -10,17 +10,15 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { updateRequestOrFolder } from "@/context/redux/request-response/thunks/request-list";
+import {
+  selectRequestName,
+  selectSelectedTab,
+} from "@/context/redux/request-response/request-response-selector";
 
 const RequestTopLeft = () => {
   const dispatch = useAppDispatch();
-  const requestName = useAppSelector(
-    (state) =>
-      state.requestResponse.requestList[state.requestResponse.selectedTab!]
-        ?.name ?? "Request"
-  );
-  const selectedTab = useAppSelector(
-    (state) => state.requestResponse.selectedTab
-  )!;
+  const requestName = useAppSelector(selectRequestName);
+  const selectedTab = useAppSelector(selectSelectedTab)!;
   const [requestNameState, setRequestNameState] = useState<string>(requestName);
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const nameInputRef = useRef<HTMLInputElement>(null);

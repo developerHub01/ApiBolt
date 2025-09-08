@@ -8,22 +8,18 @@ import {
   sidebarMenuList,
 } from "@/constant/sidebar.constant";
 import { selectSidebarActiveTab } from "@/context/redux/sidebar/sidebar-selector";
+import {
+  selectActiveProjectId,
+  selectActiveRequestOrFolder,
+  selectSelectedTab,
+} from "@/context/redux/request-response/request-response-selector";
 
 const Redirector = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const activeProjectId = useAppSelector(
-    (state) => state.requestResponse.activeProjectId
-  );
-  const selectedTab = useAppSelector(
-    (state) => state.requestResponse.selectedTab
-  );
-  const activeRequestOrFolder = useAppSelector(
-    (state) =>
-      state.requestResponse.requestList?.[
-        state.requestResponse.selectedTab ?? ""
-      ] ?? null
-  );
+  const activeProjectId = useAppSelector(selectActiveProjectId);
+  const selectedTab = useAppSelector(selectSelectedTab);
+  const activeRequestOrFolder = useAppSelector(selectActiveRequestOrFolder);
   const sidebarActiveTab = useAppSelector(selectSidebarActiveTab);
 
   useEffect(() => {

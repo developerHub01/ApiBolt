@@ -3,14 +3,15 @@ import { Button } from "@/components/ui/button";
 import { Plus as AddIcon, X as CloseIcon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { deleteRequestBodyBinary, updateRequestBodyBinary } from "@/context/redux/request-response/thunks/body-binary";
+import {
+  deleteRequestBodyBinary,
+  updateRequestBodyBinary,
+} from "@/context/redux/request-response/thunks/body-binary";
+import { selectBinaryData } from "@/context/redux/request-response/request-response-selector";
 
 const BodyBinary = memo(() => {
   const dispatch = useAppDispatch();
-  const binaryData = useAppSelector(
-    (state) =>
-      state.requestResponse.binaryData[state.requestResponse.selectedTab!]
-  );
+  const binaryData = useAppSelector(selectBinaryData);
 
   const handleUpdateBinary = useCallback(
     () => dispatch(updateRequestBodyBinary()),

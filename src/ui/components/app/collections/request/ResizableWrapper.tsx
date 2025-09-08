@@ -3,6 +3,7 @@ import { ResizablePanelGroup } from "@/components/ui/resizable";
 import { type ImperativePanelGroupHandle } from "react-resizable-panels";
 import { useAppSelector } from "@/context/redux/hooks";
 import { useRequestResponse } from "@/context/collections/request/RequestResponseProvider";
+import { selectIsResponseCollapsed } from "@/context/redux/request-response/request-response-selector";
 
 interface ResizableWrapperProps {
   children: React.ReactNode;
@@ -10,12 +11,7 @@ interface ResizableWrapperProps {
 
 const ResizableWrapper = ({ children }: ResizableWrapperProps) => {
   const panelGroupRef = useRef<ImperativePanelGroupHandle>(null);
-  const isResponseCollapsed = useAppSelector(
-    (state) =>
-      state.requestResponse.isResponseCollapsed[
-        state.requestResponse.selectedTab!
-      ]
-  );
+  const isResponseCollapsed = useAppSelector(selectIsResponseCollapsed);
   const { forceCollapse, handleForceCollapse } = useRequestResponse();
 
   useEffect(() => {

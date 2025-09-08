@@ -4,14 +4,12 @@ import AuthKeyValueWrapper from "@/components/app/authorization/content/AuthKeyV
 import AuthContentInput from "@/components/app/authorization/content/AuthContentInput";
 import AuthContentInoutLabel from "@/components/app/authorization/content/AuthContentInoutLabel";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { defaultBasicAuth } from "@/constant/request-response.constant";
 import { updateAuthorization } from "@/context/redux/request-response/thunks/auth";
+import { selectAuthBasicAuth } from "@/context/redux/request-response/request-response-selector";
 
 const BasicAuth = () => {
   const dispatch = useAppDispatch();
-  const authData = useAppSelector(
-    (state) => state.requestResponse.basicAuth ?? defaultBasicAuth
-  );
+  const authData = useAppSelector(selectAuthBasicAuth);
 
   const handleBlur = useCallback(
     (key: "basicAuthUsername" | "basicAuthPassword", value: string) => {

@@ -10,6 +10,10 @@ import {
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import type { TContentType } from "@/types/request-response.types";
 import { updateRequestBodyRaw } from "@/context/redux/request-response/thunks/body-raw";
+import {
+  selectRawRequestBodyType,
+  selectRequestBodyType,
+} from "@/context/redux/request-response/request-response-selector";
 
 const rawDataTypeList: Array<{
   id: TContentType;
@@ -39,18 +43,8 @@ const rawDataTypeList: Array<{
 
 const BodyRawDataTypeSelector = memo(() => {
   const dispatch = useAppDispatch();
-  const requestBodyType = useAppSelector(
-    (state) =>
-      state.requestResponse.requestBodyType[
-        state.requestResponse.selectedTab!
-      ] ?? "none"
-  );
-  const rawRequestBodyType = useAppSelector(
-    (state) =>
-      state.requestResponse.rawRequestBodyType[
-        state.requestResponse.selectedTab!
-      ] ?? "json"
-  );
+  const requestBodyType = useAppSelector(selectRequestBodyType);
+  const rawRequestBodyType = useAppSelector(selectRawRequestBodyType);
 
   const handleChange = useCallback(
     (type: TContentType) => {

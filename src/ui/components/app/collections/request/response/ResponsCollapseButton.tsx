@@ -10,16 +10,12 @@ import {
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { useRequestResponse } from "@/context/collections/request/RequestResponseProvider";
 import { handleToggleCollapse } from "@/context/redux/request-response/request-response-slice";
+import { selectIsResponseCollapsed } from "@/context/redux/request-response/request-response-selector";
 
 const ResponsCollapseButton = () => {
   const dispatch = useAppDispatch();
   const { handleForceCollapse } = useRequestResponse();
-  const isResponseCollapsed = useAppSelector(
-    (state) =>
-      state.requestResponse.isResponseCollapsed[
-        state.requestResponse.selectedTab!
-      ]
-  );
+  const isResponseCollapsed = useAppSelector(selectIsResponseCollapsed);
 
   const handleCollapseClick = () => {
     handleForceCollapse(true);

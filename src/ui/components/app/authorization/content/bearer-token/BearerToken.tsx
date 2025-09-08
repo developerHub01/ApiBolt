@@ -5,12 +5,11 @@ import AuthContentInput from "@/components/app/authorization/content/AuthContent
 import AuthContentInoutLabel from "@/components/app/authorization/content/AuthContentInoutLabel";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { updateAuthorization } from "@/context/redux/request-response/thunks/auth";
+import { selectAuthBearerTokenAuth } from "@/context/redux/request-response/request-response-selector";
 
 const BearerToken = () => {
   const dispatch = useAppDispatch();
-  const authData = useAppSelector(
-    (state) => state.requestResponse.bearerTokenAuth ?? ""
-  );
+  const authData = useAppSelector(selectAuthBearerTokenAuth);
 
   const handleBlur = useCallback(
     (value: string) => {

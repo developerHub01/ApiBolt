@@ -7,8 +7,8 @@ import AuthContentInoutLabel from "@/components/app/authorization/content/AuthCo
 import { JWT_ALGO_LIST } from "@/constant";
 import PayloadCode from "@/components/app/authorization/content/jwt-bearer/PayloadCode";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { defaultJWTBearerAuth } from "@/constant/request-response.constant";
 import { updateAuthorization } from "@/context/redux/request-response/thunks/auth";
+import { selectAuthJWTBearerAuth } from "@/context/redux/request-response/request-response-selector";
 
 const algoList = JWT_ALGO_LIST.map((algo) => ({
   id: algo,
@@ -28,9 +28,7 @@ const addToList = [
 
 const JWTBearer = () => {
   const dispatch = useAppDispatch();
-  const authData = useAppSelector(
-    (state) => state.requestResponse.jwtBearerAuth ?? defaultJWTBearerAuth
-  );
+  const authData = useAppSelector(selectAuthJWTBearerAuth);
 
   const handleBlur = useCallback(
     (

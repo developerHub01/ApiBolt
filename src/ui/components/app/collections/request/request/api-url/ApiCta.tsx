@@ -2,11 +2,10 @@ import { memo } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader as LoaderIcon } from "lucide-react";
 import { useAppSelector } from "@/context/redux/hooks";
+import { selectIsResponseLoading } from "@/context/redux/request-response/request-response-selector";
 
 const ApiCta = memo(() => {
-  const isLoading = useAppSelector(
-    (state) => state.requestResponse.isLoading[state.requestResponse.selectedTab!]
-  );
+  const isLoading = useAppSelector(selectIsResponseLoading);
 
   return (
     <Button

@@ -5,14 +5,10 @@ import XWWWFormUrlencoded from "@/components/app/collections/request/request/met
 import BodyCode from "@/components/app/collections/request/request/meta-data/body/raw/BodyCode";
 import BodyBinary from "@/components/app/collections/request/request/meta-data/body/binary/BodyBinary";
 import { useAppSelector } from "@/context/redux/hooks";
+import { selectRequestBodyType } from "@/context/redux/request-response/request-response-selector";
 
 const BodyDetails = memo(() => {
-  const requestBodyType = useAppSelector(
-    (state) =>
-      state.requestResponse.requestBodyType[
-        state.requestResponse.selectedTab!
-      ] ?? "none"
-  );
+  const requestBodyType = useAppSelector(selectRequestBodyType);
   return (
     <>
       {requestBodyType === "none" && (
