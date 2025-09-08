@@ -75,7 +75,8 @@ export const decodeApiUrl = (tokens: Array<UrlTokenInterface> = []): string => {
   const host = tokens[1]?.value ?? "localhost";
   let port = tokens[2]?.value ? `:${tokens[2]?.value}` : "";
 
-  if (["localhost", "127.0.0.1"].includes(host) && !port) port = ":3000";
+  if (["localhost", "127.0.0.1"].includes(host) && typeof port === "undefined")
+    port = ":3000";
   if (!["localhost", "127.0.0.1"].includes(host)) port = "";
 
   let pathname = tokens
@@ -95,4 +96,17 @@ export const isValidPort = (port: string | number): boolean => {
     port = Number(port);
   }
   return Number.isInteger(port) && port > 0 && port <= 65535;
+};
+
+export const getUrlSearchParams = (apiUrl: string) => {
+  try {
+    const url = new URL(apiUrl);
+    return url.search;
+  } catch {
+    // fallback: manually extract query string
+    const queryIndex = apiUrl.indexOf("?");
+    if (queryIndex !== -1) return apiUrl.slice(queryIndex);
+
+    return "";
+  }
 };

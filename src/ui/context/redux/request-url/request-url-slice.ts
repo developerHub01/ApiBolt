@@ -69,6 +69,22 @@ export const requestUrlSlice = createSlice({
       );
       if (index < 0) return;
 
+      /***
+       * is updating host?
+       * if then let check that are we updating host into localhost or 127.0.0.1
+       * if yes then have to check what was our previous host? like if previous host was custom type that mean we have to check previous port
+       * if previous port was empty then we have to set default port 3000
+       * if previous host was localhost or 127.0.0.1 then no need to set default port because it was already there
+       */
+      const currentHost = state.tokens[selectedTab][2].value;
+      if (
+        id === "host" &&
+        ["localhost", "127.0.0.1"].includes(payload.value ?? "") &&
+        !["localhost", "127.0.0.1"].includes(currentHost) &&
+        !state.tokens[selectedTab][2]?.value
+      )
+        state.tokens[selectedTab][2].value = "3000";
+
       state.tokens[selectedTab][index] = {
         ...(state.tokens[selectedTab][index] ?? {}),
         ...payload,
