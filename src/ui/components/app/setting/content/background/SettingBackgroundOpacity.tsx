@@ -9,18 +9,17 @@ import useGlobalLocalSettingv1 from "@/hooks/setting/use-global-local-settingv1"
 import { senitizeValue } from "@/utils/settings.utils";
 import { calculateIntoFixedPoint } from "@/utils";
 import SettingContextBasedLayout from "@/components/app/setting/content/SettingContextBasedLayout";
+import { selectActiveProjectId } from "@/context/redux/request-response/request-response-selector";
+import {
+  selectOpacityGlobal,
+  selectOpacityLocal,
+} from "@/context/redux/setting/setting-selector";
 
 const SettingBackgroundOpacity = () => {
   const { activeTab } = useSetting();
-  const activeProjectId = useAppSelector(
-    (state) => state.requestResponse.activeProjectId
-  );
-  const opacityGlobal = useAppSelector(
-    (state) => state.setting.globalSetting.backgroundOpacity
-  );
-  const opacityLocal = useAppSelector(
-    (state) => state.setting.settings?.backgroundOpacity
-  );
+  const activeProjectId = useAppSelector(selectActiveProjectId);
+  const opacityGlobal = useAppSelector(selectOpacityGlobal);
+  const opacityLocal = useAppSelector(selectOpacityLocal);
 
   const { value, handleChange, handleChangeSettingType, settingType } =
     useGlobalLocalSettingv1({

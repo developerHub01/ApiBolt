@@ -3,11 +3,10 @@ import MetaDataTab from "@/components/app/collections/request/response/meta-data
 import ResponsCollapseButton from "@/components/app/collections/request/response/ResponsCollapseButton";
 import ResponseInfo from "@/components/app/collections/request/response/meta-data/response-info/ResponseInfo";
 import { useAppSelector } from "@/context/redux/hooks";
+import { selectResponse } from "@/context/redux/request-response/request-response-selector";
 
 const ResponseMetaData = memo(() => {
-  const response = useAppSelector(
-    (state) => state.requestResponse.response[state.requestResponse.selectedTab!]
-  );
+  const response = useAppSelector(selectResponse);
 
   return (
     <div className="flex justify-between items-center gap-2 px-2.5 h-12 min-h-12">

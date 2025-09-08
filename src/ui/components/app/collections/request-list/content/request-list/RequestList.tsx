@@ -4,11 +4,10 @@ import RequestListDeleteAlertDialog from "@/components/app/collections/request-l
 import { useAppSelector } from "@/context/redux/hooks";
 import Empty from "@/components/ui/empty";
 import AutoScrollActiveWrapper from "@/components/ui/auto-scroll-active-wrapper";
+import { selectRequestOrFolderList } from "@/context/redux/request-response/request-response-selector";
 
 const RequestList = memo(() => {
-  const requestList = useAppSelector(
-    (state) => state.requestResponse.requestList
-  );
+  const requestList = useAppSelector(selectRequestOrFolderList);
 
   const rootList = useMemo(() => {
     return Object.values(requestList)

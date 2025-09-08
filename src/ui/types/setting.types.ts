@@ -13,7 +13,7 @@ export interface SettingsInterface {
   isZoomable: number;
   codeFontSize: number;
   indentationSize: number;
-  layoutType: "ltr" | "rtl";
+  layoutType: TLayoutSetting;
   projectId?: string | null;
 }
 

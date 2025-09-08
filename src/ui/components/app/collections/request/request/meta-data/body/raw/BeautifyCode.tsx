@@ -10,20 +10,17 @@ import {
 import { useRequestBody } from "@/context/collections/request/RequestBodyProvider";
 import { formatCode, getParser } from "@/utils/prettierUtils";
 import { useAppSelector } from "@/context/redux/hooks";
+import {
+  selectRawData,
+  selectRawRequestBodyType,
+  selectRequestBodyType,
+} from "@/context/redux/request-response/request-response-selector";
 
 const BeautifyCode = memo(() => {
   const { handleChangeRawData } = useRequestBody();
-  const requestBodyType = useAppSelector(
-    (state) =>
-      state.requestResponse.requestBodyType[state.requestResponse.selectedTab!]
-  );
-  const rawRequestBodyType = useAppSelector(
-    (state) =>
-      state.requestResponse.rawRequestBodyType[state.requestResponse.selectedTab!]
-  );
-  const code = useAppSelector(
-    (state) => state.requestResponse.rawData[state.requestResponse.selectedTab!]
-  );
+  const requestBodyType = useAppSelector(selectRequestBodyType);
+  const rawRequestBodyType = useAppSelector(selectRawRequestBodyType);
+  const code = useAppSelector(selectRawData);
 
   const parser = useMemo(
     () => getParser(rawRequestBodyType),

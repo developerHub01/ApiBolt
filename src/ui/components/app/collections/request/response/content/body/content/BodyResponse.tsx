@@ -6,12 +6,10 @@ import { useResponse } from "@/context/collections/request/ResponseProvider";
 import Code from "@/components/ui/code";
 import { useAppSelector } from "@/context/redux/hooks";
 import type { TContentType } from "@/types/request-response.types";
+import { selectResponse } from "@/context/redux/request-response/request-response-selector";
 
 const BodyResponse = memo(() => {
-  const response = useAppSelector(
-    (state) =>
-      state.requestResponse.response[state.requestResponse.selectedTab!]
-  );
+  const response = useAppSelector(selectResponse);
   const { responseCodeWrap } = useResponse();
   const [formattedCode, setFormattedCode] = useState("");
 

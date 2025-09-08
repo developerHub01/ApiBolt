@@ -14,17 +14,16 @@ import {
 import { formatSize } from "@/utils";
 import Warning from "@/components/warning";
 import { useAppSelector } from "@/context/redux/hooks";
+import {
+  selectRequestSize,
+  selectResponse,
+  selectResponseSize,
+} from "@/context/redux/request-response/request-response-selector";
 
 const RequestResponseSize = memo(() => {
-  const response = useAppSelector(
-    (state) => state.requestResponse.response[state.requestResponse.selectedTab!]
-  );
-  const requestSize = useAppSelector(
-    (state) => state.requestResponse.requestSize[state.requestResponse.selectedTab!]
-  );
-  const responseSize = useAppSelector(
-    (state) => state.requestResponse.responseSize[state.requestResponse.selectedTab!]
-  );
+  const response = useAppSelector(selectResponse);
+  const requestSize = useAppSelector(selectRequestSize);
+  const responseSize = useAppSelector(selectResponseSize);
 
   if (!response) return null;
 

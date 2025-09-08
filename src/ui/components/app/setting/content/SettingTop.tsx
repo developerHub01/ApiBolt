@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 import { AnimatedDialogTop } from "@/components/ui/animated-dialog";
 import { useAppSelector } from "@/context/redux/hooks";
+import { selectActiveProjectId } from "@/context/redux/request-response/request-response-selector";
 
 const buttonList: Array<{
   id: TSettingTab;
@@ -25,9 +26,7 @@ const buttonList: Array<{
 
 const SettingTop = memo(() => {
   const { activeTab, handleChangeActiveTab } = useSetting();
-  const activeProjectId = useAppSelector(
-    (state) => state.requestResponse.activeProjectId
-  );
+  const activeProjectId = useAppSelector(selectActiveProjectId);
 
   return (
     <AnimatedDialogTop>

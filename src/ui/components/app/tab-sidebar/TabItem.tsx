@@ -18,21 +18,20 @@ import {
 } from "@/context/redux/request-response/request-response-slice";
 import type { THTTPMethods } from "@/types/request-response.types";
 import { expendParentsOnSelectedChangeTabsData } from "@/context/redux/request-response/thunks/tab-list";
+import {
+  selectIsTabListHovering,
+  selectRequestOrFolderById,
+  selectSelectedTab,
+} from "@/context/redux/request-response/request-response-selector";
 
 const TabItem = memo(({ id, index }: { id: string; index: number }) => {
   const dispatch = useAppDispatch();
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [isTabHovering, setIsTabHovering] = useState<boolean>(false);
 
-  const tabDetails = useAppSelector(
-    (state) => state.requestResponse.requestList[id] ?? {}
-  );
-  const isTabListHovering = useAppSelector(
-    (state) => state.requestResponse.isTabListHovering
-  );
-  const selectedTab = useAppSelector(
-    (state) => state.requestResponse.selectedTab
-  );
+  const tabDetails = useAppSelector(selectRequestOrFolderById(id)) ?? {};
+  const isTabListHovering = useAppSelector(selectIsTabListHovering);
+  const selectedTab = useAppSelector(selectSelectedTab);
 
   const handleDragStart = (e: DragEvent<HTMLDivElement>) => {
     e.dataTransfer.setData("text/plain", id);

@@ -8,18 +8,17 @@ import { useSetting } from "@/context/setting/SettingProvider";
 import useGlobalLocalSettingv1 from "@/hooks/setting/use-global-local-settingv1";
 import { senitizeValue } from "@/utils/settings.utils";
 import SettingContextBasedLayout from "@/components/app/setting/content/SettingContextBasedLayout";
+import { selectActiveProjectId } from "@/context/redux/request-response/request-response-selector";
+import {
+  selectMaxImagesGlobal,
+  selectMaxImagesLocal,
+} from "@/context/redux/setting/setting-selector";
 
 const SettingBackgroundMaxNumberOfImages = () => {
   const { activeTab } = useSetting();
-  const activeProjectId = useAppSelector(
-    (state) => state.requestResponse.activeProjectId
-  );
-  const maxImagesGlobal = useAppSelector(
-    (state) => state.setting.globalSetting.maxNumberOfImages
-  );
-  const maxImagesLocal = useAppSelector(
-    (state) => state.setting.settings?.maxNumberOfImages
-  );
+  const activeProjectId = useAppSelector(selectActiveProjectId);
+  const maxImagesGlobal = useAppSelector(selectMaxImagesGlobal);
+  const maxImagesLocal = useAppSelector(selectMaxImagesLocal);
 
   const { value, handleChange, handleChangeSettingType, settingType } =
     useGlobalLocalSettingv1({

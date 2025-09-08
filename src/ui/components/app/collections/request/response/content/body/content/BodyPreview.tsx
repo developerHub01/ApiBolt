@@ -3,12 +3,10 @@ import BodyHTMLPreview from "@/components/app/collections/request/response/conte
 import BodyJSONPreview from "@/components/app/collections/request/response/content/body/content/body-json-preview/BodyJSONPreview";
 import { useAppSelector } from "@/context/redux/hooks";
 import type { TContentType } from "@/types/request-response.types";
+import { selectResponse } from "@/context/redux/request-response/request-response-selector";
 
 const BodyPreview = () => {
-  const response = useAppSelector(
-    (state) =>
-      state.requestResponse.response[state.requestResponse.selectedTab!]
-  );
+  const response = useAppSelector(selectResponse);
 
   if (!response || !response) return null;
 

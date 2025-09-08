@@ -8,18 +8,17 @@ import { useSetting } from "@/context/setting/SettingProvider";
 import useGlobalLocalSettingv1 from "@/hooks/setting/use-global-local-settingv1";
 import { senitizeValue } from "@/utils/settings.utils";
 import SettingContextBasedLayout from "@/components/app/setting/content/SettingContextBasedLayout";
+import { selectActiveProjectId } from "@/context/redux/request-response/request-response-selector";
+import {
+  selectSlideIntervalGlobal,
+  selectSlideIntervalLocal,
+} from "@/context/redux/setting/setting-selector";
 
 const SettingBackgroundSlideInterval = () => {
   const { activeTab } = useSetting();
-  const activeProjectId = useAppSelector(
-    (state) => state.requestResponse.activeProjectId
-  );
-  const slideIntervalGlobal = useAppSelector(
-    (state) => state.setting.globalSetting.slideInterval
-  );
-  const slideIntervalLocal = useAppSelector(
-    (state) => state.setting.settings?.slideInterval
-  );
+  const activeProjectId = useAppSelector(selectActiveProjectId);
+  const slideIntervalGlobal = useAppSelector(selectSlideIntervalGlobal);
+  const slideIntervalLocal = useAppSelector(selectSlideIntervalLocal);
 
   const { value, handleChange, handleChangeSettingType, settingType } =
     useGlobalLocalSettingv1({

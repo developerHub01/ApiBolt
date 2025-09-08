@@ -2,12 +2,10 @@ import Empty from "@/components/ui/empty";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import HeaderContent from "@/components/app/collections/request/response/content/headers/HeaderContent";
 import { useAppSelector } from "@/context/redux/hooks";
+import { selectResponse } from "@/context/redux/request-response/request-response-selector";
 
 const Headers = () => {
-  const response = useAppSelector(
-    (state) => state.requestResponse.response[state.requestResponse.selectedTab!]
-  );
-
+  const response = useAppSelector(selectResponse);
   if (!response) return null;
 
   const headers = response?.headers as Record<string, string>;

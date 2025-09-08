@@ -10,14 +10,13 @@ import { handleToggleRequestList } from "@/context/redux/request-response/reques
 import { AnimatedDialog } from "@/components/ui/animated-dialog";
 import useCheckApplyingLayout from "@/hooks/setting/use-check-applying-layout";
 import type { TLayoutSetting } from "@/types/setting.types";
+import { selectIsRequestListCollapsed } from "@/context/redux/request-response/request-response-selector";
 
 const RequestListPanelWrapper = memo(() => {
   const dispath = useAppDispatch();
   const isSmallDevice = useIsSmallDevice();
   const resizablePanelRef = useRef<ImperativePanelHandle>(null);
-  const requestListCollapsed = useAppSelector(
-    (state) => state.requestResponse.requestListCollapsed
-  );
+  const requestListCollapsed = useAppSelector(selectIsRequestListCollapsed);
   const layoutTypes: TLayoutSetting = useCheckApplyingLayout();
 
   useEffect(() => {

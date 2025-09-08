@@ -22,7 +22,12 @@ import type { RequestListItemInterface } from "@/types/request-response.types";
 import RequestListProvider, {
   useRequestList,
 } from "@/context/collections/request-list/RequestListProvider";
-import { createSingleRequest, moveRequestOrFolder, updateRequestOrFolder } from "@/context/redux/request-response/thunks/request-list";
+import {
+  createSingleRequest,
+  moveRequestOrFolder,
+  updateRequestOrFolder,
+} from "@/context/redux/request-response/thunks/request-list";
+import { selectSelectedTab } from "@/context/redux/request-response/request-response-selector";
 
 interface RequestListItemProps extends RequestListItemInterface {
   type: "folder" | "request";
@@ -70,9 +75,7 @@ const RequestListItem = memo(
 const RequestListItemContent = memo(
   ({ id, type, children, parentId, lavel, ...props }: RequestListItemProps) => {
     const dispatch = useAppDispatch();
-    const selectedTab = useAppSelector(
-      (state) => state.requestResponse.selectedTab
-    );
+    const selectedTab = useAppSelector(selectSelectedTab);
     const method = useAppSelector(
       (state) => state.requestResponse.requestList[id].method ?? props.method
     );

@@ -19,26 +19,23 @@ import SearchBar from "@/components/app/header/search/SearchBar";
 import SearchResult from "@/components/app/header/search/SearchResult";
 import { Search as SearchIcon } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
+import {
+  selectActiveProjectId,
+  selectActiveProjectName,
+  selectRequestOrFolderList,
+  selectSelectedTab,
+} from "@/context/redux/request-response/request-response-selector";
+import { selectSidebarActiveTab } from "@/context/redux/sidebar/sidebar-selector";
 
 const DELAY_TIME = 300;
 
 const HeaderSearch = () => {
-  const activeTab = useAppSelector((state) => state.sidebar.activeTab);
-  const activeProjectId = useAppSelector(
-    (state) => state.requestResponse.activeProjectId
-  );
-  const requestList =
-    useAppSelector((state) => state.requestResponse.requestList) ?? {};
+  const activeTab = useAppSelector(selectSidebarActiveTab);
+  const activeProjectId = useAppSelector(selectActiveProjectId);
+  const requestList = useAppSelector(selectRequestOrFolderList);
 
-  const activeProjectName = useAppSelector(
-    (state) =>
-      state.requestResponse.projectList.find(
-        (project) => project.id === activeProjectId
-      )?.name ?? ""
-  );
-  const selectedTab = useAppSelector(
-    (state) => state.requestResponse.selectedTab
-  );
+  const activeProjectName = useAppSelector(selectActiveProjectName);
+  const selectedTab = useAppSelector(selectSelectedTab);
   const [requestOrFolderList, setRequestOrFolderList] = useState<
     Array<RequestListItemInterface>
   >([]);

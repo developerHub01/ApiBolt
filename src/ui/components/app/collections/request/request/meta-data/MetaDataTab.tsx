@@ -4,7 +4,7 @@ import SelectV1 from "@/components/select-v1";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
   selectActiveMetaTab,
-  selectActiveTabList,
+  selectActiveMetaTabList,
   selectHeaders,
   selectHiddenHeaders,
   selectParams,
@@ -38,7 +38,7 @@ const tabList: Array<{
 
 const MetaDataTab = memo(() => {
   const dispatch = useAppDispatch();
-  const activeTabList = useAppSelector(selectActiveTabList);
+  const activeTabList = useAppSelector(selectActiveMetaTabList);
   const activeMetaTab = useAppSelector(selectActiveMetaTab);
   const params = useAppSelector(selectParams);
   const hiddenHeaders = useAppSelector(selectHiddenHeaders);

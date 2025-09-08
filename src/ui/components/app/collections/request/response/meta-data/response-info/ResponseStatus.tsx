@@ -7,11 +7,10 @@ import {
 } from "@/components/ui/hover-card";
 import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/context/redux/hooks";
+import { selectResponse } from "@/context/redux/request-response/request-response-selector";
 
 const ResponseStatus = memo(() => {
-  const response = useAppSelector(
-    (state) => state.requestResponse.response[state.requestResponse.selectedTab!]
-  );
+  const response = useAppSelector(selectResponse);
   if (!response || !response) return null;
 
   const { status, statusText, statusDescription } = response;

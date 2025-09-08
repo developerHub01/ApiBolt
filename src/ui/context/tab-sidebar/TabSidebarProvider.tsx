@@ -11,6 +11,11 @@ import {
   loadTabsData,
 } from "@/context/redux/request-response/thunks/tab-list";
 import { normalizeText } from "@/utils";
+import {
+  selectRequestOrFolderList,
+  selectSelectedTab,
+  selectTabList,
+} from "@/context/redux/request-response/request-response-selector";
 
 interface TabSidebarContext {
   tabList: Array<string>;
@@ -38,13 +43,9 @@ interface TabSidebarProviderProps {
 
 const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
   const dispatch = useAppDispatch();
-  const tabList = useAppSelector((state) => state.requestResponse.tabList);
-  const requestList = useAppSelector(
-    (state) => state.requestResponse.requestList
-  );
-  const selectedTab = useAppSelector(
-    (state) => state.requestResponse.selectedTab
-  );
+  const tabList = useAppSelector(selectTabList);
+  const requestList = useAppSelector(selectRequestOrFolderList);
+  const selectedTab = useAppSelector(selectSelectedTab);
   const [localTabList, setLocalTabList] = useState<Array<string>>(
     tabList ?? []
   );

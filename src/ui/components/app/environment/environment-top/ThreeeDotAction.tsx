@@ -14,13 +14,14 @@ import {
   Trash2 as DeleteIcon,
   type LucideIcon,
 } from "lucide-react";
+import { selectEnvironmentsList } from "@/context/redux/request-response/request-response-selector";
 
 const listItemToHide = ["export", "delete"];
 
 const ThreeeDotAction = () => {
   const dispatch = useAppDispatch();
   const haveListItem = useAppSelector((state) =>
-    Boolean(Object.keys(state.requestResponse.environmentsList ?? {}).length)
+    Boolean(Object.keys(selectEnvironmentsList(state) ?? {}).length)
   );
 
   const handleDeleteAll = useCallback(() => {

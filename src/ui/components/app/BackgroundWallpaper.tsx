@@ -60,7 +60,6 @@ const BackgroundImageSlider = memo(
       }, slideInterval);
 
       return () => clearInterval(interval);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [slideInterval, imagesLength]);
 
     return (

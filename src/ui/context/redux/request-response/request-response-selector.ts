@@ -9,7 +9,10 @@ import type {
   MetaShowColumnInterface,
   ParamInterface,
   ProjectInterface,
+  RequestListInterface,
   RequestListItemInterface,
+  RequestResponseSizeInterface,
+  ResponseInterface,
   TActiveTabType,
   TAuthType,
   TBearerToken,
@@ -25,9 +28,14 @@ import {
   defaultJWTBearerAuth,
 } from "@/constant/request-response.constant";
 
+export const selectIsRequestListCollapsed = createSelector(
+  [(state: RootState) => state.requestResponse.requestListCollapsed],
+  (requestListCollapsed): boolean => requestListCollapsed ?? false
+);
+
 export const selectIsResponseCollapsed = createSelector(
   [
-    (state) =>
+    (state: RootState) =>
       state.requestResponse.isResponseCollapsed[
         state.requestResponse.selectedTab!
       ],
@@ -40,11 +48,13 @@ export const selectActiveProjectId = createSelector(
   (activeProjectId): string | null => (activeProjectId ? activeProjectId : null)
 );
 
+export const selectProjectList = createSelector(
+  [(state: RootState) => state.requestResponse.projectList],
+  (projectList): Array<ProjectInterface> => projectList ?? []
+);
+
 export const selectActiveProject = createSelector(
-  [
-    (state: RootState) => state.requestResponse.activeProjectId,
-    (state: RootState) => state.requestResponse.projectList,
-  ],
+  [selectActiveProjectId, selectProjectList],
   (activeProjectId, projectList): ProjectInterface | null => {
     if (!activeProjectId) return null;
 
@@ -54,9 +64,58 @@ export const selectActiveProject = createSelector(
   }
 );
 
-export const selectActiveTabList = createSelector(
+export const selectActiveProjectName = createSelector(
+  [selectActiveProjectId, selectProjectList],
+  (projectId, projectList): string =>
+    projectList.find((project) => project.id === projectId)?.name ?? ""
+);
+
+export const selectProjectById = (id?: string | null) =>
+  createSelector(selectProjectList, (projectList): ProjectInterface | null => {
+    if (!id) return null;
+
+    return projectList.find((project) => project.id === id) ?? null;
+  });
+
+export const selectSelectedTab = createSelector(
+  [(state: RootState) => state.requestResponse.selectedTab],
+  (selectedTab): string | null => selectedTab
+);
+
+export const selectIsTabListHovering = createSelector(
+  [(state: RootState) => state.requestResponse.isTabListHovering],
+  (isTabListHovering): boolean => isTabListHovering ?? false
+);
+
+export const selectRequestOrFolderList = createSelector(
+  [(state: RootState) => state.requestResponse.requestList],
+  (requestOrFolder): RequestListInterface => requestOrFolder
+);
+
+export const selectActiveRequestOrFolder = createSelector(
   [
-    (state: RootState) => state.requestResponse.selectedTab,
+    (state: RootState) =>
+      state.requestResponse.requestList?.[
+        state.requestResponse.selectedTab ?? ""
+      ] ?? null,
+  ],
+  (requestOrFolder): RequestListItemInterface | null => requestOrFolder
+);
+
+export const selectRequestOrFolderById = (id: string) =>
+  createSelector(
+    [(state: RootState) => state.requestResponse.requestList[id]],
+    (request): RequestListItemInterface => request
+  );
+
+export const selectTabList = createSelector(
+  [(state: RootState) => state.requestResponse.tabList],
+  (tabList): Array<string> => tabList
+);
+
+export const selectActiveMetaTabList = createSelector(
+  [
+    selectSelectedTab,
     (state: RootState) => state.requestResponse.params,
     (state: RootState) => state.requestResponse.headers,
     (state: RootState) => state.requestResponse.formData,
@@ -87,31 +146,6 @@ export const selectActiveTabList = createSelector(
 
     return tabList;
   }
-);
-
-export const selectProjectById = (id?: string | null) =>
-  createSelector(
-    [(state: RootState) => state.requestResponse.projectList],
-    (projectList): ProjectInterface | null => {
-      if (!id) return null;
-
-      return projectList.find((project) => project.id === id) ?? null;
-    }
-  );
-
-export const selectSelectedTab = createSelector(
-  [(state: RootState) => state.requestResponse.selectedTab],
-  (selectedTab): string | null => selectedTab
-);
-
-export const selectActiveRequestOrFolder = createSelector(
-  [
-    (state) =>
-      state.requestResponse.requestList?.[
-        state.requestResponse.selectedTab ?? ""
-      ] ?? null,
-  ],
-  (requestOrFolder): RequestListItemInterface | null => requestOrFolder
 );
 
 export const selectRequestFolderTitle = createSelector(
@@ -232,7 +266,7 @@ export const selectEnvironmentsVariableList = createSelector(
 
 export const selectRequestName = createSelector(
   [
-    (state) =>
+    (state: RootState) =>
       state.requestResponse.requestList[state.requestResponse.selectedTab!]
         ?.name ?? "Request",
   ],
@@ -405,22 +439,25 @@ export const selectAuthType = createSelector(
 );
 
 export const selectAuthApiKey = createSelector(
-  [(state) => state.requestResponse.apiKeyAuth ?? defaultApiKey],
+  [(state: RootState) => state.requestResponse.apiKeyAuth ?? defaultApiKey],
   (authData): APIKeyInterface => authData
 );
 
 export const selectAuthBasicAuth = createSelector(
-  [(state) => state.requestResponse.basicAuth ?? defaultBasicAuth],
+  [(state: RootState) => state.requestResponse.basicAuth ?? defaultBasicAuth],
   (authData): BasicAuthInterface => authData
 );
 
 export const selectAuthBearerTokenAuth = createSelector(
-  [(state) => state.requestResponse.bearerTokenAuth ?? ""],
+  [(state: RootState) => state.requestResponse.bearerTokenAuth ?? ""],
   (authData): TBearerToken => authData
 );
 
 export const selectAuthJWTBearerAuth = createSelector(
-  [(state) => state.requestResponse.jwtBearerAuth ?? defaultJWTBearerAuth],
+  [
+    (state: RootState) =>
+      state.requestResponse.jwtBearerAuth ?? defaultJWTBearerAuth,
+  ],
   (authData): JWTBearerAuthInterface => authData
 );
 
@@ -454,7 +491,7 @@ export const selectRawData = createSelector(
 
 export const selectBinaryData = createSelector(
   [
-    (state) =>
+    (state: RootState) =>
       state.requestResponse.binaryData[state.requestResponse.selectedTab!],
   ],
   (binaryData): string | null => binaryData
@@ -467,10 +504,31 @@ export const selectBinaryData = createSelector(
  */
 export const selectIsResponseLoading = createSelector(
   [
-    (state) =>
+    (state: RootState) =>
       state.requestResponse.isLoading[state.requestResponse.selectedTab!],
   ],
   (isLoading): boolean => isLoading
+);
+export const selectResponse = createSelector(
+  [
+    (state: RootState) =>
+      state.requestResponse.response[state.requestResponse.selectedTab!],
+  ],
+  (response): ResponseInterface | null => response
+);
+export const selectRequestSize = createSelector(
+  [
+    (state: RootState) =>
+      state.requestResponse.requestSize[state.requestResponse.selectedTab!],
+  ],
+  (requestSize): RequestResponseSizeInterface => requestSize
+);
+export const selectResponseSize = createSelector(
+  [
+    (state: RootState) =>
+      state.requestResponse.responseSize[state.requestResponse.selectedTab!],
+  ],
+  (responseSize): RequestResponseSizeInterface => responseSize
 );
 /*
  * ===============================================

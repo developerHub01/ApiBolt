@@ -11,15 +11,15 @@ import SettingBackgroundImage from "@/components/app/setting/content/background/
 import { Button } from "@/components/ui/button";
 import useCheckApplyingSettingScopeBackgroundImages from "@/hooks/setting/use-check-applying-setting-scope-background-images";
 import { cn } from "@/lib/utils";
+import {
+  selectBackgroundImagesGlobal,
+  selectBackgroundImagesLocal,
+} from "@/context/redux/setting/setting-selector";
 
 const SettingBackgroundImages = () => {
   const { activeTab } = useSetting();
-  const backgroundImagesGlobal = useAppSelector(
-    (state) => state.setting.globalSetting.backgroundImages
-  );
-  const backgroundImagesLocal = useAppSelector(
-    (state) => state.setting.settings?.backgroundImages
-  );
+  const backgroundImagesGlobal = useAppSelector(selectBackgroundImagesGlobal);
+  const backgroundImagesLocal = useAppSelector(selectBackgroundImagesLocal);
   const backgroundImages = useCheckApplyingSettingScopeBackgroundImages();
 
   const { value, settingType, handleChange, handleChangeSettingType } =

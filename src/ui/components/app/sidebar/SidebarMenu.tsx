@@ -14,10 +14,12 @@ import {
 } from "@/constant/sidebar.constant";
 import type { TSidebarTab } from "@/types/sidebar.types";
 import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
+import { selectSidebarActiveTab } from "@/context/redux/sidebar/sidebar-selector";
+import { selectActiveProjectId } from "@/context/redux/request-response/request-response-selector";
 
 const SidebarMenu = memo(() => {
   const dispatch = useAppDispatch();
-  const activeTab = useAppSelector((state) => state.sidebar.activeTab);
+  const activeTab = useAppSelector(selectSidebarActiveTab);
 
   const handleClick = useCallback(
     (id: TSidebarTab) => {
@@ -29,9 +31,7 @@ const SidebarMenu = memo(() => {
     },
     [activeTab, dispatch]
   );
-  const activeProjectId = useAppSelector(
-    (state) => state.requestResponse.activeProjectId
-  );
+  const activeProjectId = useAppSelector(selectActiveProjectId);
 
   return (
     <>

@@ -8,11 +8,10 @@ import {
 import { Copy as CopyIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useAppSelector } from "@/context/redux/hooks";
+import { selectResponse } from "@/context/redux/request-response/request-response-selector";
 
 const BodyTopCopy = () => {
-  const response = useAppSelector(
-    (state) => state.requestResponse.response[state.requestResponse.selectedTab!]
-  );
+  const response = useAppSelector(selectResponse);
 
   const handleCopy = useCallback(async () => {
     const responseData = response?.data ? JSON.stringify(response?.data) : "";

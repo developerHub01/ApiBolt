@@ -12,6 +12,11 @@ import {
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { updateSettings } from "@/context/redux/setting/setting-thunk";
 import { useSetting } from "@/context/setting/SettingProvider";
+import { selectActiveProjectId } from "@/context/redux/request-response/request-response-selector";
+import {
+  selectIsZoomableGlobal,
+  selectIsZoomableLocal,
+} from "@/context/redux/setting/setting-selector";
 
 const zoomableLocalOptions = ["default", "global", "enable", "disable"];
 const zoomableGlobalOptions = ["default", "enable", "disable"];
@@ -19,16 +24,10 @@ const zoomableGlobalOptions = ["default", "enable", "disable"];
 const SettingIsZoomable = () => {
   const { activeTab } = useSetting();
   const dispatch = useAppDispatch();
-  const activeProjectId = useAppSelector(
-    (state) => state.requestResponse.activeProjectId
-  );
-  const isZoomableGlobal = useAppSelector(
-    (state) => state.setting.globalSetting.isZoomable
-  );
-  const isZoomableLocal = useAppSelector(
-    (state) => state.setting.settings?.isZoomable
-  );
-
+  const activeProjectId = useAppSelector(selectActiveProjectId);
+  const isZoomableGlobal = useAppSelector(selectIsZoomableGlobal);
+  const isZoomableLocal = useAppSelector(selectIsZoomableLocal);
+  
   const activeZoomOption = useMemo(() => {
     let value = "default";
     if (activeTab === "project") {

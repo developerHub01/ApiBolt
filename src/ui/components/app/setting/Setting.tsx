@@ -8,10 +8,12 @@ import { AnimatedDialogContentWrapper } from "@/components/ui/animated-dialog";
 import { AnimatedDialog } from "@/components/ui/animated-dialog";
 import { loadSettings } from "@/context/redux/setting/setting-thunk";
 import SettingProvider from "@/context/setting/SettingProvider";
+import { selectIsSettingOpen } from "@/context/redux/setting/setting-selector";
+import { selectActiveProjectId } from "@/context/redux/request-response/request-response-selector";
 
 const Setting = () => {
   const dispatch = useAppDispatch();
-  const isSettingOpen = useAppSelector((state) => state.setting.isSettingOpen);
+  const isSettingOpen = useAppSelector(selectIsSettingOpen);
 
   const handleClose = useCallback(
     () => dispatch(handleChangeIsSettingOpen(false)),
@@ -33,9 +35,7 @@ const Setting = () => {
 };
 
 const SettingLoader = () => {
-  const activeProjectId = useAppSelector(
-    (state) => state.requestResponse.activeProjectId
-  );
+  const activeProjectId = useAppSelector(selectActiveProjectId);
 
   const dispatch = useAppDispatch();
   useEffect(() => {

@@ -4,6 +4,7 @@ import { useEnvironments } from "@/context/environments/EnvironmentsProvider";
 import { Button } from "@/components/ui/button";
 import { AnimatePresence, motion } from "motion/react";
 import { useAppSelector } from "@/context/redux/hooks";
+import { selectEnvironmentsList } from "@/context/redux/request-response/request-response-selector";
 
 const EnvironmentSearch = memo(() => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -11,7 +12,7 @@ const EnvironmentSearch = memo(() => {
   };
   const { searchQuery, handleChangeSearchQuery } = useEnvironments();
   const showSearch = useAppSelector((state) =>
-    Boolean(Object.keys(state.requestResponse.environmentsList ?? {}).length)
+    Boolean(Object.keys(selectEnvironmentsList(state) ?? {}).length)
   );
 
   return (

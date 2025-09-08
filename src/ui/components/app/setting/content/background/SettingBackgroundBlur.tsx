@@ -8,18 +8,17 @@ import { useSetting } from "@/context/setting/SettingProvider";
 import useGlobalLocalSettingv1 from "@/hooks/setting/use-global-local-settingv1";
 import { senitizeValue } from "@/utils/settings.utils";
 import SettingContextBasedLayout from "@/components/app/setting/content/SettingContextBasedLayout";
+import { selectActiveProjectId } from "@/context/redux/request-response/request-response-selector";
+import {
+  selectBlurGlobal,
+  selectBlurLocal,
+} from "@/context/redux/setting/setting-selector";
 
 const SettingBackgroundBlur = () => {
   const { activeTab } = useSetting();
-  const activeProjectId = useAppSelector(
-    (state) => state.requestResponse.activeProjectId
-  );
-  const blurGlobal = useAppSelector(
-    (state) => state.setting.globalSetting.backgroundBlur
-  );
-  const blurLocal = useAppSelector(
-    (state) => state.setting.settings?.backgroundBlur
-  );
+  const activeProjectId = useAppSelector(selectActiveProjectId);
+  const blurGlobal = useAppSelector(selectBlurGlobal);
+  const blurLocal = useAppSelector(selectBlurLocal);
 
   const { value, handleChange, handleChangeSettingType, settingType } =
     useGlobalLocalSettingv1({

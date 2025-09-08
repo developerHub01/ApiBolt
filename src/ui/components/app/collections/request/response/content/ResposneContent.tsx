@@ -5,12 +5,11 @@ import Body from "@/components/app/collections/request/response/content/body/Bod
 import Cookies from "@/components/app/collections/request/response/content/cookies/Cookies";
 import Headers from "@/components/app/collections/request/response/content/headers/Headers";
 import { useAppSelector } from "@/context/redux/hooks";
+import { selectResponse } from "@/context/redux/request-response/request-response-selector";
 
 const ResposneContent = memo(() => {
   const { activeMetaTab } = useResponse();
-  const response = useAppSelector(
-    (state) => state.requestResponse.response[state.requestResponse.selectedTab!]
-  );
+  const response = useAppSelector(selectResponse);
 
   if (!response) return <EmptyResponse />;
 

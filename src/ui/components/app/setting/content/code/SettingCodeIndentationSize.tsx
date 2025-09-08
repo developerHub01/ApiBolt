@@ -9,18 +9,17 @@ import {
 import useGlobalLocalSettingv1 from "@/hooks/setting/use-global-local-settingv1";
 import { senitizeValue } from "@/utils/settings.utils";
 import SettingContextBasedLayout from "@/components/app/setting/content/SettingContextBasedLayout";
+import { selectActiveProjectId } from "@/context/redux/request-response/request-response-selector";
+import {
+  selectIndentationSizeGlobal,
+  selectIndentationSizeLocal,
+} from "@/context/redux/setting/setting-selector";
 
 const SettingCodeIndentationSize = () => {
   const { activeTab } = useSetting();
-  const activeProjectId = useAppSelector(
-    (state) => state.requestResponse.activeProjectId
-  );
-  const indentationSizeGlobal = useAppSelector(
-    (state) => state.setting.globalSetting.indentationSize
-  );
-  const indentationSizeLocal = useAppSelector(
-    (state) => state.setting.settings?.indentationSize
-  );
+  const activeProjectId = useAppSelector(selectActiveProjectId);
+  const indentationSizeGlobal = useAppSelector(selectIndentationSizeGlobal);
+  const indentationSizeLocal = useAppSelector(selectIndentationSizeLocal);
 
   const { value, handleChange, handleChangeSettingType, settingType } =
     useGlobalLocalSettingv1({

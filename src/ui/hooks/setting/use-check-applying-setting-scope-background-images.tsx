@@ -1,14 +1,14 @@
 import { useAppSelector } from "@/context/redux/hooks";
+import {
+  selectBackgroundImagesGlobal,
+  selectBackgroundImagesLocal,
+} from "@/context/redux/setting/setting-selector";
 import { useSetting } from "@/context/setting/SettingProvider";
 
 const useCheckApplyingSettingScopeBackgroundImages = () => {
   const { activeTab } = useSetting();
-  const backgroundImagesGlobal = useAppSelector(
-    (state) => state.setting.globalSetting.backgroundImages
-  );
-  const backgroundImagesLocal = useAppSelector(
-    (state) => state.setting.settings?.backgroundImages
-  );
+  const backgroundImagesGlobal = useAppSelector(selectBackgroundImagesGlobal);
+  const backgroundImagesLocal = useAppSelector(selectBackgroundImagesLocal);
 
   let backgroundImages = (
     activeTab === "project"

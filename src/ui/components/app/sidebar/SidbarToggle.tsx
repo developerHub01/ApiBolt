@@ -4,10 +4,11 @@ import { motion, AnimatePresence } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
+import { selectSidebarActiveTab } from "@/context/redux/sidebar/sidebar-selector";
 
 const SidbarToggle = memo(() => {
   const dispath = useAppDispatch();
-  const activeTab = useAppSelector((state) => state.sidebar.activeTab);
+  const activeTab = useAppSelector(selectSidebarActiveTab);
 
   const handleClick = useCallback(
     () => dispath(handleToggleRequestList()),

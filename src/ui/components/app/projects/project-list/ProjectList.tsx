@@ -3,15 +3,15 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAppSelector } from "@/context/redux/hooks";
 import Empty from "@/components/ui/empty";
 import { useProject } from "@/context/project/ProjectProvider";
+import {
+  selectActiveProjectId,
+  selectProjectList,
+} from "@/context/redux/request-response/request-response-selector";
 
 const ProjectList = () => {
-  const projectListFromStore = useAppSelector(
-    (state) => state.requestResponse.projectList
-  );
+  const projectListFromStore = useAppSelector(selectProjectList);
   const { projectList } = useProject();
-  const activeProjectId = useAppSelector(
-    (state) => state.requestResponse.activeProjectId
-  );
+  const activeProjectId = useAppSelector(selectActiveProjectId);
 
   return (
     <div className="w-full h-full flex-1 min-h-0">

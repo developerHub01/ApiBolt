@@ -9,18 +9,17 @@ import { useSetting } from "@/context/setting/SettingProvider";
 import useGlobalLocalSettingv1 from "@/hooks/setting/use-global-local-settingv1";
 import { senitizeValue } from "@/utils/settings.utils";
 import SettingContextBasedLayout from "@/components/app/setting/content/SettingContextBasedLayout";
+import { selectActiveProjectId } from "@/context/redux/request-response/request-response-selector";
+import {
+  selectCodeFontSizeGlobal,
+  selectCodeFontSizeLocal,
+} from "@/context/redux/setting/setting-selector";
 
 const SettingCodeFontSize = () => {
   const { activeTab } = useSetting();
-  const activeProjectId = useAppSelector(
-    (state) => state.requestResponse.activeProjectId
-  );
-  const codeFontSizeGlobal = useAppSelector(
-    (state) => state.setting.globalSetting.codeFontSize
-  );
-  const codeFontSizeLocal = useAppSelector(
-    (state) => state.setting.settings?.codeFontSize
-  );
+  const activeProjectId = useAppSelector(selectActiveProjectId);
+  const codeFontSizeGlobal = useAppSelector(selectCodeFontSizeGlobal);
+  const codeFontSizeLocal = useAppSelector(selectCodeFontSizeLocal);
 
   const { value, handleChange, handleChangeSettingType, settingType } =
     useGlobalLocalSettingv1({
