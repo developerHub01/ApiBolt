@@ -1,5 +1,10 @@
 import { BrowserWindow, dialog, ipcMain } from "electron";
-import { getSettings, getZoomLevel, updateSettings } from "../db/settingsDB.js";
+import {
+  defaultSettings,
+  getSettings,
+  getZoomLevel,
+  updateSettings,
+} from "../db/settingsDB.js";
 import fs from "fs";
 import path from "path";
 
@@ -86,6 +91,25 @@ export const settingsHandlers = () => {
         projectId: payload?.projectId ?? null,
         backgroundImages: result,
       };
+
+      /* updating opacity based on the result and method */
+      if (result && method === "upload") {
+        const { settings: existingSettings, existingGlobalSetting } =
+          await getSettings();
+
+        console.log({ existingGlobalSetting, existingSettings });
+
+        /* if no opacity fixed in global and not have any value in project based setting then update opacity of local */
+
+        if (
+          (existingGlobalSetting?.backgroundOpacity === null ||
+            typeof existingGlobalSetting?.backgroundOpacity === "undefined") &&
+          (existingSettings?.backgroundOpacity === null ||
+            typeof existingSettings?.backgroundOpacity === "undefined")
+        ) {
+          payload.backgroundOpacity = defaultSettings.backgroundOpacity;
+        }
+      }
 
       return await updateSettings(payload);
     } catch (error) {
