@@ -100,7 +100,9 @@ export const tabsTable = sqliteTable("tabs_table", {
     .primaryKey()
     .$defaultFn(() => uuidv4()),
   openTabs: text().notNull().default("[]"),
-  selectedTab: text().references(() => requestOrFolderMetaTable.id),
+  selectedTab: text().references(() => requestOrFolderMetaTable.id, {
+    onDelete: "cascade",
+  }),
   projectId: text()
     .notNull()
     .unique()

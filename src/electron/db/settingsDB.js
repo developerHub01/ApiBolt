@@ -5,7 +5,7 @@ import { getActiveProject } from "./projectsDB.js";
 
 export const defaultSettings = {
   backgroundImages: null /* default == "default" | global == null */,
-  backgroundOpacity: 1,
+  backgroundOpacity: 0.9,
   backgroundBlur: 0,
   codeFontSize: 16,
   indentationSize: 4,
