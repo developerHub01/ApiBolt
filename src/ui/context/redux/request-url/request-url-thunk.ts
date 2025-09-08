@@ -15,9 +15,11 @@ import {
   decodeApiUrl,
   encodeApiUrl,
   filterUrl,
+  getUrlSearchParams,
   isValidApiUrl,
 } from "@/utils/request-url.utils";
 import { updateParamsFromSearchParams } from "@/context/redux/request-response/thunks/params";
+import { paramsTableToString } from "@/utils/request-response.utils";
 
 export const loadApiUrl = createAsyncThunk<
   void,
@@ -41,7 +43,6 @@ export const loadApiUrl = createAsyncThunk<
     if (!response) return;
 
     const tokens = encodeApiUrl(filterUrl(response.url));
-
     dispatch(
       handleRequestUrlReplaceTokens({
         selectedTab,
@@ -68,7 +69,6 @@ export const changeRequestApiUrl = createAsyncThunk<
 
       const pureUrl = filterUrl(url);
       const tokens = encodeApiUrl(pureUrl);
-
       dispatch(
         handleRequestUrlReplaceTokens({
           selectedTab,
@@ -86,14 +86,14 @@ export const changeRequestApiUrl = createAsyncThunk<
       )
         return true;
 
-      const apiUrlBefore = decodeApiUrl(state.requestUrl.tokens[selectedTab]);
-
       /**
-       * TODO ==========================
        * Need to update checking with before params string and new url params string
-       * TODO ==========================
        * **/
-      if (apiUrlBefore !== url)
+      const searchParams = getUrlSearchParams(url);
+      const paramsString = paramsTableToString(
+        state.requestResponse.params[selectedTab]
+      );
+      if (searchParams !== paramsString)
         await dispatch(
           updateParamsFromSearchParams({
             url,
@@ -146,11 +146,13 @@ export const changeRequestApiUrlWithBackend = createAsyncThunk<
         });
 
       /**
-       * TODO ==========================
        * Need to update checking with before params string and new url params string
-       * TODO ==========================
        * **/
-      if (apiUrlBefore !== url)
+      const searchParams = getUrlSearchParams(url);
+      const paramsString = paramsTableToString(
+        state.requestResponse.params[selectedTab]
+      );
+      if (searchParams !== paramsString)
         await dispatch(
           updateParamsFromSearchParams({
             url,
@@ -202,18 +204,6 @@ export const requestUrlAddToken = createAsyncThunk<
       await window.electronAPIApiUrl.updateApiUrl({
         url: pureApiUrlAfter,
       });
-
-    /**
-     * TODO ==========================
-     * Need to update checking with before params string and new url params string
-     * TODO ==========================
-     * **/
-    if (apiUrlBefore !== apiUrlAfter)
-      await dispatch(
-        updateParamsFromSearchParams({
-          url: apiUrlAfter,
-        })
-      );
   } catch (error) {
     console.log(error);
   }
@@ -255,18 +245,6 @@ export const requestUrlUpdateToken = createAsyncThunk<
         await window.electronAPIApiUrl.updateApiUrl({
           url: pureApiUrlAfter,
         });
-
-      /**
-       * TODO ==========================
-       * Need to update checking with before params string and new url params string
-       * TODO ==========================
-       * **/
-      if (apiUrlBefore !== apiUrlAfter)
-        await dispatch(
-          updateParamsFromSearchParams({
-            url: apiUrlAfter,
-          })
-        );
     } catch (error) {
       console.log(error);
     }
@@ -354,18 +332,6 @@ export const requestUrlDeleteToken = createAsyncThunk<
       await window.electronAPIApiUrl.updateApiUrl({
         url: pureApiUrlAfter,
       });
-
-    /**
-     * TODO ==========================
-     * Need to update checking with before params string and new url params string
-     * TODO ==========================
-     * **/
-    if (apiUrlBefore !== apiUrlAfter)
-      await dispatch(
-        updateParamsFromSearchParams({
-          url: apiUrlAfter,
-        })
-      );
   } catch (error) {
     console.log(error);
   }
