@@ -52,7 +52,7 @@ const EnvVariableSelector = memo(
             role="combobox"
             aria-expanded={open}
             className={cn(
-              "flex-1 w-full justify-between rounded-none cursor-pointer",
+              "flex-1 w-full justify-between cursor-pointer",
               {
                 "text-green-500/60": isExist,
                 "text-red-500/60": isNotExist,
