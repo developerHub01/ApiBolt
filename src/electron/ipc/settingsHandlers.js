@@ -97,8 +97,6 @@ export const settingsHandlers = () => {
         const { settings: existingSettings, existingGlobalSetting } =
           await getSettings();
 
-        console.log({ existingGlobalSetting, existingSettings });
-
         /* if no opacity fixed in global and not have any value in project based setting then update opacity of local */
 
         if (

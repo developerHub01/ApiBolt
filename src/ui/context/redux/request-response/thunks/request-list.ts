@@ -15,7 +15,11 @@ import {
   handleUpdateRequestOrFolder,
 } from "@/context/redux/request-response/request-response-slice";
 import { v4 as uuidv4 } from "uuid";
-import { duplicateRequestOrFolderNode } from "@/utils/request-response.utils";
+import {
+  duplicateRequestOrFolderNode,
+  getNestedIds,
+} from "@/utils/request-response.utils";
+import { loadTabsData } from "@/context/redux/request-response/thunks/tab-list";
 
 /* ==============================
 ===== RequestList start =========
@@ -38,6 +42,7 @@ export const loadRequestList = createAsyncThunk<
     console.log(error);
   }
 });
+
 export const createSingleRequest = createAsyncThunk<
   void,
   string | undefined,
@@ -61,6 +66,7 @@ export const createSingleRequest = createAsyncThunk<
     console.log(error);
   }
 });
+
 export const createCollection = createAsyncThunk<
   void,
   string | undefined,
@@ -83,6 +89,7 @@ export const createCollection = createAsyncThunk<
     console.log(error);
   }
 });
+
 export const createRestApiBasic = createAsyncThunk<
   void,
   void,
@@ -123,6 +130,7 @@ export const createRestApiBasic = createAsyncThunk<
     console.log(error);
   }
 });
+
 export const updateRequestOrFolder = createAsyncThunk<
   void,
   RequestListItemUpdatePayloadInterface,
@@ -137,6 +145,7 @@ export const updateRequestOrFolder = createAsyncThunk<
     console.log(error);
   }
 });
+
 export const moveRequestOrFolder = createAsyncThunk<
   void,
   { requestId: string; parentId: string | undefined },
@@ -155,6 +164,7 @@ export const moveRequestOrFolder = createAsyncThunk<
     }
   }
 );
+
 export const deleteAllRequestOrFolder = createAsyncThunk<
   void,
   string | undefined,
@@ -169,6 +179,7 @@ export const deleteAllRequestOrFolder = createAsyncThunk<
     console.log(error);
   }
 });
+
 export const deleteRequestOrFolder = createAsyncThunk<
   void,
   boolean | string,
@@ -192,17 +203,28 @@ export const deleteRequestOrFolder = createAsyncThunk<
           : payload;
       dispatch(handleChangeDeleteFolderOrRequestId(""));
 
+      const idsToDelete = getNestedIds({
+        source: state.requestResponse.requestList,
+        id: rootId,
+      });
+
       const response =
         await window.electronAPIRequestOrFolderMetaDB.deleteRequestOrFolderMetaById(
-          rootId
+          idsToDelete
         );
 
-      if (response) dispatch(handleChangeIsRequestListLoaded(false));
+      console.log({ response });
+
+      if (response) {
+        dispatch(handleChangeIsRequestListLoaded(false));
+        dispatch(loadTabsData());
+      }
     } catch (error) {
       console.log(error);
     }
   }
 );
+
 export const duplicateRequestOrFolder = createAsyncThunk<
   void,
   string,

@@ -27,14 +27,8 @@ const CollectionsLayout = () => {
             "flex-row-reverse": layoutTypes === "rtl",
           })}
         >
-          {requestId ? (
-            <>
-              <LayoutMainPanel />
-              <TabSidebar />
-            </>
-          ) : (
-            <Outlet />
-          )}
+          {requestId ? <LayoutMainPanel /> : <Outlet />}
+          <TabSidebar />
         </section>
       </ResizablePanel>
       {layoutTypes === "rtl" && (

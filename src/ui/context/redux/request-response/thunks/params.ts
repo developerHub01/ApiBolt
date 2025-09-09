@@ -203,7 +203,6 @@ export const updateParamsFromSearchParams = createAsyncThunk<
         value,
       }));
 
-      console.log({ urlParams });
       let updatedParams: Array<ParamInterface> = [];
       /**
        * if new params size less then previous means some of them have to filter out
@@ -270,7 +269,6 @@ export const updateParamsFromSearchParams = createAsyncThunk<
         );
       }
 
-      console.log({ updatedParams });
       dispatch(handleLoadParams(updatedParams));
 
       if (!saveBackend) return true;

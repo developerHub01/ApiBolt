@@ -71,3 +71,28 @@ export const deleteTabListByProjectId = async (id) => {
     console.log(error);
   }
 };
+
+export const updateTablistBasedRequestOrFolderMetaDeletion = async (
+  deletionCandidates = []
+) => {
+  try {
+    const tabList = await getTabList();
+    console.log({ tabList });
+    if (!tabList || !tabList?.openTabs?.length) return true;
+
+    const openTabs = tabList.openTabs.filter(
+      (tab) => !deletionCandidates.includes(tab)
+    );
+
+    const payload = { openTabs };
+
+    if (tabList.selectedTab && deletionCandidates.includes(tabList.selectedTab))
+      payload.selectedTab = openTabs?.[0] ?? null;
+
+    const response = await updateTabList(payload);
+    return response;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};

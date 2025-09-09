@@ -1,7 +1,8 @@
 import { eq, inArray } from "drizzle-orm";
 import { db } from "./index.js";
-import { requestOrFolderMetaTable } from "./schema.js";
+import { requestOrFolderMetaTable, tabsTable } from "./schema.js";
 import { getActiveProject } from "./projectsDB.js";
+import { updateTablistBasedRequestOrFolderMetaDeletion } from "./tabsDB.js";
 
 /* id === active project id */
 export const getRequestOrFolderMeta = async () => {
@@ -100,10 +101,16 @@ export const moveRequestOrFolderMeta = async (id, parentId) => {
 export const deleteRequestOrFolderMetaById = async (id) => {
   try {
     const deletionCandidates = Array.isArray(id) ? id : [id];
+    if (deletionCandidates.length === 0) return false;
+
+    console.log("deletionCandidates", deletionCandidates);
 
     const deleted = await db
       .delete(requestOrFolderMetaTable)
-      .where(inArray(requestOrFolderMetaTable.id, deletionCandidates));
+      .where(inArray(requestOrFolderMetaTable.id, [deletionCandidates[0]]));
+
+    if (deleted?.changes)
+      await updateTablistBasedRequestOrFolderMetaDeletion(deletionCandidates);
 
     return deleted?.changes > 0;
   } catch (error) {
