@@ -29,8 +29,6 @@ const EnvVariableSelector = memo(
     const [open, setOpen] = useState<boolean>(false);
     const variableList = useAppSelector(selectEnvironmentsVariableListUnique);
 
-    console.log(variableList);
-
     const isVariableExistInList = useMemo(
       () => variableList.find((item) => item.variable === value),
       [value, variableList]

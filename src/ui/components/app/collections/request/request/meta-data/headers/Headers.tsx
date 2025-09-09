@@ -3,7 +3,7 @@ import MetaDataWrapper from "@/components/app/collections/request/request/meta-d
 import MetaTable from "@/components/app/collections/request/request/meta-data/meta-table/MetaTable";
 import { useRequestHeader } from "@/context/collections/request/RequestHeaderProvider";
 import AddNewMetaData from "@/components/app/collections/request/request/meta-data/AddNewMetaData";
-import LabelPrefix from "@/components/app/collections/request/request/meta-data/headers-params/headers/LabelPrefix";
+import LabelPrefix from "@/components/app/collections/request/request/meta-data/headers/LabelPrefix";
 
 const Headers = memo(() => {
   const { showHiddenHeader } = useRequestHeader();
