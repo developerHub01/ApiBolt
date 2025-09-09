@@ -98,6 +98,42 @@ export const isValidPort = (port: string | number): boolean => {
   return Number.isInteger(port) && port > 0 && port <= 65535;
 };
 
+/**
+ * Validate a host (no port included)
+ * Supports:
+ * - localhost
+ * - domain names (example.com, sub.domain.co.uk)
+ * - IPv4 (192.168.0.1)
+ * - IPv6 ([2001:db8::1])
+ * - IDNs (bücher.ch, বাংলা.com)
+ */
+export const isValidHost = (host: string): boolean => {
+  if (!host || typeof host !== "string") return false;
+  host = host.trim();
+
+  // Localhost
+  if (host === "localhost") return true;
+
+  // IPv4
+  const ipv4Regex = /^(\d{1,3}\.){3}\d{1,3}$/;
+  if (ipv4Regex.test(host)) {
+    const octets = host.split(".").map(Number);
+    return octets.every((n) => n >= 0 && n <= 255);
+  }
+
+  // IPv6 (inside square brackets or bare form)
+  const ipv6Regex = /^\[?[0-9a-fA-F:]+\]?$/;
+  if (ipv6Regex.test(host)) return true;
+
+  // Domain / IDN (unicode + punycode)
+  // Each label must start/end with alphanumeric, allow `-` inside
+  const domainRegex =
+    /^([a-zA-Z0-9\u00a1-\uffff-]+\.)+[a-zA-Z\u00a1-\uffff]{2,}$/u;
+  if (domainRegex.test(host)) return true;
+
+  return false;
+};
+
 export const getUrlSearchParams = (apiUrl: string) => {
   try {
     const url = new URL(apiUrl);

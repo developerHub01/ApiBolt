@@ -24,6 +24,9 @@ import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { selectRequestUrlTokenHost } from "@/context/redux/request-url/request-url-selector";
 import { requestUrlUpdateOriginToken } from "@/context/redux/request-url/request-url-thunk";
 import FlexibleHightButtonLikeDiv from "@/components/ui/flexible-hight-button-like-div";
+import { isValidHost } from "@/utils/request-url.utils";
+
+const isInvalidToken = (host: string) => !isValidHost(host);
 
 interface HostTokenProps {
   hostType: THostType;
@@ -33,29 +36,38 @@ const HostToken = memo(({ hostType }: HostTokenProps) => {
   const dispatch = useAppDispatch();
   const host = useAppSelector(selectRequestUrlTokenHost);
   const [hostState, setHostState] = useState<string>(host);
+  const [isError, setIsError] = useState<boolean>(false);
   const hostnameRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (host === hostState) return;
     setHostState(host);
+    setIsError(isInvalidToken(host));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [host]);
 
-  const handleBlurHost = (e: FocusEvent<HTMLInputElement>) => {
-    const newValue = e.target.innerText.trim();
-    setHostState(newValue);
-    if (newValue === hostState) return;
+  const handleUpdate = (value: string) => {
+    const haveError = isInvalidToken(value);
+    setHostState(value);
+    setIsError(haveError);
+
+    if (haveError || value === hostState) return;
 
     dispatch(
       requestUrlUpdateOriginToken({
         id: "host",
-        value: newValue,
+        value,
       })
     );
   };
 
+  const handleBlurHost = (e: FocusEvent<HTMLInputElement>) =>
+    handleUpdate(e.target.innerText.trim());
+
   const handleKeydown = (e: KeyboardEvent<HTMLHeadingElement>) => {
-    if (["Enter", "?"].includes(e.key)) return e.preventDefault();
+    if (["Enter", "?", " ", "Tab"].includes(e.key)) e.preventDefault();
+    if (e.key === "Enter") return handleUpdate(hostState);
+    setIsError(isInvalidToken(hostState));
   };
 
   const handlePaste = (e: ClipboardEvent<HTMLHeadingElement>) => {
@@ -82,12 +94,15 @@ const HostToken = memo(({ hostType }: HostTokenProps) => {
     [dispatch]
   );
 
-  const handleOutterClick = () => {
-    hostnameRef.current?.focus();
-  };
+  const handleOutterClick = () => hostnameRef.current?.focus();
 
   return (
-    <div className="min-w-[150px] w-fit flex items-center p-0 gap-0">
+    <FlexibleHightButtonLikeDiv
+      className={cn("min-w-[150px] w-fit p-0 gap-0 overflow-hidden ring", {
+        "ring-transparent": !isError,
+        "ring-destructive": isError,
+      })}
+    >
       <FlexibleHightButtonLikeDiv
         className="flex-1 rounded-none"
         onClick={handleOutterClick}
@@ -109,7 +124,7 @@ const HostToken = memo(({ hostType }: HostTokenProps) => {
         )}
       </FlexibleHightButtonLikeDiv>
       <Menu value={hostType} onChange={handleChangeHostType} />
-    </div>
+    </FlexibleHightButtonLikeDiv>
   );
 });
 

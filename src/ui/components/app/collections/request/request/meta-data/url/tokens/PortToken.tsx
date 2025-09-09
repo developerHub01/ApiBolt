@@ -70,7 +70,7 @@ const PortToken = memo(() => {
     <ButtonLikeDiv
       variant={"secondary"}
       className={cn("w-28 ring ring-transparent", {
-        "ring-red-500/60": isError,
+        "ring-destructive": isError,
       })}
     >
       <input
