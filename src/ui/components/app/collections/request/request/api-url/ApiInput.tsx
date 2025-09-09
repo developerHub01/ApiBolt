@@ -16,14 +16,14 @@ const ApiInput = memo(({ value, isError, onChange, onBlur }: ApiInputProps) => {
 
   return (
     <div
-      className={cn("w-full h-full border", {
-        "border-destructive": isError,
-        "border-input": !isError,
+      className={cn("w-full h-full border-b", {
+        "border-destructive/80": isError,
+        "border-input/80": !isError,
       })}
     >
       <input
         placeholder="Enter URL or paste text"
-        className="w-full h-full placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground px-3 bg-background rounded-none border-0 tracking-wide"
+        className="w-full h-full placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground px-3 bg-transparent rounded-none border-0 tracking-wide"
         value={value}
         onChange={handleApiUrlChange}
         onBlur={handleApiUrlBlur}

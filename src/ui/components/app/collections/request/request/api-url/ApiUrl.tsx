@@ -10,6 +10,7 @@ import {
   changeRequestApiUrlWithBackend,
 } from "@/context/redux/request-url/request-url-thunk";
 import { isValidApiUrl } from "@/utils/request-url.utils";
+import { cn } from "@/lib/utils";
 
 const ApiUrl = memo(() => {
   const dispatch = useAppDispatch();
@@ -19,6 +20,7 @@ const ApiUrl = memo(() => {
 
   useEffect(() => {
     setUrl(apiUrl);
+    setIsError(!isValidApiUrl(apiUrl));
   }, [apiUrl]);
 
   useEffect(() => {
@@ -62,7 +64,13 @@ const ApiUrl = memo(() => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full flex items-center p-2 rounded-md bg-accent/50 hover:bg-accent/60 focus-within:bg-accent/70 gap-1.5"
+      className={cn(
+        "w-full flex items-center p-2 rounded-md bg-accent/50 hover:bg-accent/60 focus-within:bg-accent/70 gap-1.5 border",
+        {
+          "border-destructive/80": isError,
+          "border-input/80": !isError,
+        }
+      )}
     >
       <ApiMethodSelector />
       <ApiInput
