@@ -264,6 +264,23 @@ export const selectEnvironmentsVariableList = createSelector(
   ): Array<EnvironmentInterface> => Object.values(environmentsList)
 );
 
+export const selectEnvironmentsVariableListUnique = createSelector(
+  [(state: RootState) => state.requestResponse.environmentsList],
+  (
+    environmentsList: Record<string, EnvironmentInterface>
+  ): Array<EnvironmentInterface> => {
+    const map = new Map<string, EnvironmentInterface>();
+
+    Object.values(environmentsList).forEach((env) => {
+      const existing = map.get(env.variable);
+      if (!existing || new Date(env.createdAt) > new Date(existing.createdAt))
+        map.set(env.variable, env);
+    });
+
+    return Array.from(map.values());
+  }
+);
+
 export const selectRequestName = createSelector(
   [
     (state: RootState) =>

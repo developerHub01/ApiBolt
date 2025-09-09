@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { Fragment, memo } from "react";
 import type { UrlTokenInterface } from "@/types/request-url.types";
 import VariableToken from "@/components/app/collections/request/request/meta-data/url/tokens/VariableToken";
 import AddUrlPart from "@/components/app/collections/request/request/meta-data/url/AddUrlPart";
@@ -10,13 +10,13 @@ interface Props {
 
 const ReorderableToken = memo(({ token }: Props) => {
   return (
-    <div id={token.id} className="flex gap-2">
+    <Fragment key={token.id}>
       {token.type === "text" && <TextToken id={token.id} value={token.value} />}
       {token.type === "env" && (
         <VariableToken id={token.id} value={token.value} />
       )}
       <AddUrlPart id={token.id} />
-    </div>
+    </Fragment>
   );
 });
 

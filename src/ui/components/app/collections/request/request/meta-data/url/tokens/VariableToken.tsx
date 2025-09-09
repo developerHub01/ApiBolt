@@ -65,7 +65,7 @@ const VariableToken = memo(({ id, value }: VariableTokenProps) => {
       <ChangeTokenType id={id} type={"env"} />
       <Button
         variant={"secondary"}
-        className="rounded-l-none h-full min-w-20"
+        className="rounded-l-none h-full"
         onClick={handleDelete}
       >
         <DeleteIcon />

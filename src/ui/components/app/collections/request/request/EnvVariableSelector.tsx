@@ -16,7 +16,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectEnvironmentsVariableList } from "@/context/redux/request-response/request-response-selector";
+import { selectEnvironmentsVariableListUnique } from "@/context/redux/request-response/request-response-selector";
 
 interface EnvVariableSelectorProps {
   value: string;
@@ -27,7 +27,9 @@ interface EnvVariableSelectorProps {
 const EnvVariableSelector = memo(
   ({ value, onChange, className = "" }: EnvVariableSelectorProps) => {
     const [open, setOpen] = useState<boolean>(false);
-    const variableList = useAppSelector(selectEnvironmentsVariableList);
+    const variableList = useAppSelector(selectEnvironmentsVariableListUnique);
+
+    console.log(variableList);
 
     const isVariableExistInList = useMemo(
       () => variableList.find((item) => item.variable === value),
