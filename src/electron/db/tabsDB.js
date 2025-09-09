@@ -77,7 +77,6 @@ export const updateTablistBasedRequestOrFolderMetaDeletion = async (
 ) => {
   try {
     const tabList = await getTabList();
-    console.log({ tabList });
     if (!tabList || !tabList?.openTabs?.length) return true;
 
     const openTabs = tabList.openTabs.filter(

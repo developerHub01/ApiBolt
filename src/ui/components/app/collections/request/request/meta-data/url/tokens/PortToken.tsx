@@ -29,6 +29,8 @@ const PortToken = memo(() => {
   const [portState, setPortState] = useState<string>(port);
   const [isError, setIsError] = useState<boolean>(false);
 
+  
+
   useEffect(() => {
     if (port === portState) return;
     setPortState(port);

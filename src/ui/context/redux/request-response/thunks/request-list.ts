@@ -213,8 +213,6 @@ export const deleteRequestOrFolder = createAsyncThunk<
           idsToDelete
         );
 
-      console.log({ response });
-
       if (response) {
         dispatch(handleChangeIsRequestListLoaded(false));
         dispatch(loadTabsData());

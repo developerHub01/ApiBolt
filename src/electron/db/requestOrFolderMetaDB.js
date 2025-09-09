@@ -103,8 +103,6 @@ export const deleteRequestOrFolderMetaById = async (id) => {
     const deletionCandidates = Array.isArray(id) ? id : [id];
     if (deletionCandidates.length === 0) return false;
 
-    console.log("deletionCandidates", deletionCandidates);
-
     const deleted = await db
       .delete(requestOrFolderMetaTable)
       .where(inArray(requestOrFolderMetaTable.id, [deletionCandidates[0]]));
