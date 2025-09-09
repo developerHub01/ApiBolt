@@ -4,13 +4,15 @@ import type { THostType, UrlTokenInterface } from "@/types/request-url.types";
 import { decodeApiUrl } from "@/utils/request-url.utils";
 import type { ParamInterface } from "@/types/request-response.types";
 import { paramsTableToString } from "@/utils/request-response.utils";
+import { initialUrlTokensValue } from "@/constant/request-url.constant";
 
 export const selectRequestUrlTokens = createSelector(
   [
     (state: RootState) =>
       state.requestUrl.tokens[state.requestResponse.selectedTab ?? ""],
   ],
-  (tokens: Array<UrlTokenInterface>): Array<UrlTokenInterface> => tokens ?? []
+  (tokens: Array<UrlTokenInterface>): Array<UrlTokenInterface> =>
+    tokens ?? [...initialUrlTokensValue]
 );
 
 export const selectRequestUrl = createSelector(
@@ -19,6 +21,7 @@ export const selectRequestUrl = createSelector(
   (state: RootState) =>
     state.requestResponse.params[state.requestResponse.selectedTab ?? ""],
   (tokens: Array<UrlTokenInterface>, params: Array<ParamInterface>): string => {
+    tokens = tokens ?? [...initialUrlTokensValue];
     const queryParams = paramsTableToString(params);
     try {
       return decodeApiUrl(tokens) + queryParams;
@@ -36,7 +39,8 @@ export const selectRequestUrlTokenProtocol = createSelector(
   ],
   (tokens: Array<UrlTokenInterface>): string => {
     return (
-      (tokens ?? []).find((token) => token.id === "protocol")?.value ?? "http"
+      (tokens ?? []).find((token) => token.id === "protocol")?.value ??
+      initialUrlTokensValue[0].value
     );
   }
 );
@@ -48,7 +52,8 @@ export const selectRequestUrlTokenHost = createSelector(
   ],
   (tokens: Array<UrlTokenInterface>): string => {
     return (
-      (tokens ?? []).find((token) => token.id === "host")?.value ?? "localhost"
+      (tokens ?? []).find((token) => token.id === "host")?.value ??
+      initialUrlTokensValue[1].value
     );
   }
 );
@@ -74,7 +79,10 @@ export const selectRequestUrlTokenPort = createSelector(
       state.requestUrl.tokens[state.requestResponse.selectedTab ?? ""],
   ],
   (tokens: Array<UrlTokenInterface>): string => {
-    return (tokens ?? []).find((token) => token.id === "port")?.value ?? "3000";
+    return (
+      (tokens ?? []).find((token) => token.id === "port")?.value ??
+      initialUrlTokensValue[2].value
+    );
   }
 );
 
