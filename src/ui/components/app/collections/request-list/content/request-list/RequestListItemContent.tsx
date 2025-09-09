@@ -9,6 +9,7 @@ import { useRequestList } from "@/context/collections/request-list/RequestListPr
 import { updateRequestOrFolder } from "@/context/redux/request-response/thunks/request-list";
 import RequestListItemName from "@/components/app/collections/request-list/content/request-list/RequestListItemName";
 import RequestListItemContentWrapper from "@/components/app/collections/request-list/content/request-list/RequestListItemContentWrapper";
+import RequestListItemWrapperLine from "@/components/app/collections/request-list/content/request-list/RequestListItemWrapperLine";
 
 interface RequestListItemProps extends RequestListItemInterface {
   type: "folder" | "request";
@@ -53,18 +54,28 @@ const RequestListItemContent = memo(
       >
         <div className="h-7 flex items-center">
           {type === "folder" ? (
-            <RequestListItemFolderButton
-              isExpended={isExpended ?? false}
-              onClick={handleFolderButtonClick}
-            />
-          ) : (
-            <div className="w-10 flex justify-end items-center">
-              <RequestMethodTag
-                method={method ?? "get"}
-                shortCut={true}
-                className="w-full"
+            <RequestListItemWrapperLine
+              lavel={lavel}
+              childrenRequest={children}
+            >
+              <RequestListItemFolderButton
+                isExpended={isExpended ?? false}
+                onClick={handleFolderButtonClick}
               />
-            </div>
+            </RequestListItemWrapperLine>
+          ) : (
+            <RequestListItemWrapperLine
+              lavel={lavel}
+              childrenRequest={children}
+            >
+              <div className="w-10 flex justify-end items-center">
+                <RequestMethodTag
+                  method={method ?? "get"}
+                  shortCut={true}
+                  className="w-full"
+                />
+              </div>
+            </RequestListItemWrapperLine>
           )}
         </div>
         <div className="w-full flex flex-col gap-0.5">

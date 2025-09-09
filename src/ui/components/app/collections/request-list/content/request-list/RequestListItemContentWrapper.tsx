@@ -74,22 +74,7 @@ const RequestListItemContentWrapper = ({
     [dispatch, id]
   );
 
-  /**
-   * level wise padding will increase and if not 0 then 8 will add
-   *
-   * for example level 0
-   * = 0 * 8 + 0 * 8 = 0 so that root folder or request don't get extra padding
-   * if level 1
-   * = 1 * 8 + 1 * 8 = 16
-   * for level 2
-   * = 2 * 8 + 1 * 8 = 24
-   * if that is a request and have lavel then add more 8
-   * = 2 * 8 + 1 * 8 + (8 or 0)
-   */
-  const leftSpace =
-    lavel * 8 +
-    Number(Boolean(lavel)) * 8 +
-    (!childrenRequest && lavel ? 8 : 0);
+  const leftSpace = lavel * 16;
 
   return (
     <>
