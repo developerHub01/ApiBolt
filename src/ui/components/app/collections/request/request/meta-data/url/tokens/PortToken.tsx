@@ -14,6 +14,7 @@ import { isValidPort } from "@/utils/request-url.utils";
 import { cn } from "@/lib/utils";
 
 const isInvalidPort = (port: string): boolean => !isValidPort(port);
+
 const allowedKeys = new Set([
   "Backspace",
   "Delete",
@@ -28,8 +29,6 @@ const PortToken = memo(() => {
   const port = useAppSelector(selectRequestUrlTokenPort);
   const [portState, setPortState] = useState<string>(port);
   const [isError, setIsError] = useState<boolean>(false);
-
-  
 
   useEffect(() => {
     if (port === portState) return;
