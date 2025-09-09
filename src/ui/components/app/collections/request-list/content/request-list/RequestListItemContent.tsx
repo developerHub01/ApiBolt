@@ -52,22 +52,14 @@ const RequestListItemContent = memo(
         childrenRequest={children}
         setIsHovering={setIsHovering}
       >
-        <div className="h-7 flex items-center">
-          {type === "folder" ? (
-            <RequestListItemWrapperLine
-              lavel={lavel}
-              childrenRequest={children}
-            >
+        <RequestListItemWrapperLine lavel={lavel} childrenRequest={children}>
+          <div className="h-7 flex items-center">
+            {type === "folder" ? (
               <RequestListItemFolderButton
                 isExpended={isExpended ?? false}
                 onClick={handleFolderButtonClick}
               />
-            </RequestListItemWrapperLine>
-          ) : (
-            <RequestListItemWrapperLine
-              lavel={lavel}
-              childrenRequest={children}
-            >
+            ) : (
               <div className="w-10 flex justify-end items-center">
                 <RequestMethodTag
                   method={method ?? "get"}
@@ -75,9 +67,9 @@ const RequestListItemContent = memo(
                   className="w-full"
                 />
               </div>
-            </RequestListItemWrapperLine>
-          )}
-        </div>
+            )}
+          </div>
+        </RequestListItemWrapperLine>
         <div className="w-full flex flex-col gap-0.5">
           <div className="w-full text-sm h-7 flex justify-between items-center gap-1">
             <RequestListItemName id={id} name={props.name} />

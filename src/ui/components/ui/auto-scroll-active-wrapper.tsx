@@ -30,7 +30,7 @@ const AutoScrollActiveWrapper = ({
 
   return (
     <div
-      className={cn("w-full flex flex-col gap-0.5", className)}
+      className={cn("w-full flex flex-col", className)}
       ref={scrollAreaRef}
     >
       {children}

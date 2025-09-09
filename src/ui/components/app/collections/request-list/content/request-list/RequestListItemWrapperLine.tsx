@@ -1,13 +1,14 @@
 import type { RequestListItemInterface } from "@/types/request-response.types";
 import type React from "react";
 
+const leftSpace = 16 + 8;
+
 interface Props {
   children: React.ReactNode;
   lavel: number;
   childrenRequest: RequestListItemInterface["children"];
 }
 
-const leftSpace = 16;
 const RequestListItemWrapperLine = ({ lavel, children }: Props) => {
   if (!lavel) return children;
   return (

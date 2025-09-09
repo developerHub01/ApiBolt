@@ -74,7 +74,7 @@ const RequestListItemContentWrapper = ({
     [dispatch, id]
   );
 
-  const leftSpace = lavel * 16;
+  const leftSpace = lavel * 16 + 8 + (lavel ? 4 : 0);
 
   return (
     <>
@@ -101,7 +101,7 @@ const RequestListItemContentWrapper = ({
       >
         <div
           className={cn(
-            "pr-0.5 py-0.5 flex gap-1 items-start justify-between select-none group ring-2 rounded-md",
+            "pr-0.5 flex gap-1 items-start justify-between select-none group ring-2 rounded-md",
             {
               "ring-primary/50": isDragging,
               "ring-transparent": !isDragging,

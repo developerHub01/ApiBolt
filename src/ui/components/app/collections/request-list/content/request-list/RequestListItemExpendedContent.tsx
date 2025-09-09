@@ -17,16 +17,18 @@ const RequestListItemExpendedContent = ({ id, children, lavel }: Props) => {
     [dispatch, id]
   );
 
+  const emptyLeftSpace = (lavel + 1) * 16 + 16;
+
   return (
     <div className="w-full select-text cursor-text">
       {!Array.isArray(children) || !children.length ? (
         <div
           className="text-xs text-muted-foreground p-1"
           style={{
-            paddingLeft: (lavel + 1) * 10 + 20,
+            paddingLeft: emptyLeftSpace,
           }}
         >
-          This folder is empty. <br />
+          This folder is empty.{lavel} <br />
           <Button
             variant={"link"}
             size={"sm"}
@@ -38,11 +40,11 @@ const RequestListItemExpendedContent = ({ id, children, lavel }: Props) => {
           to start working.
         </div>
       ) : (
-        <div>
+        <>
           {children.map((id) => (
             <RequestListItem key={id} id={id} lavel={lavel + 1} />
           ))}
-        </div>
+        </>
       )}
     </div>
   );
