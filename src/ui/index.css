@@ -143,3 +143,10 @@
     @apply outline-none;
   }
 }
+
+[data-radix-scroll-area-viewport-type="flex"]
+  [data-radix-scroll-area-viewport]
+  > div {
+  display: flex !important;
+  flex-direction: column;
+}
