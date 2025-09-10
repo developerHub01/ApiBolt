@@ -26,7 +26,7 @@ const RequestListItemLine = memo(
         <span
           className="inline-block absolute w-5 h-0.5 bg-input -left-1 top-1/2 -translate-x-full -translate-y-1/2"
           style={{
-            width: leftSpace,
+            width: leftSpace - 2,
           }}
         />
         {Array.from({
@@ -35,7 +35,7 @@ const RequestListItemLine = memo(
           <span
             className={cn("inline-block absolute w-0.5 h-full bg-input top-0")}
             style={{
-              left: -(leftSpace + leftSpace * 2 * index + 4 + 2),
+              left: -(leftSpace + leftSpace * 2 * index + 4),
             }}
           />
         ))}
