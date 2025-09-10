@@ -32,6 +32,7 @@ export const loadRequestList = createAsyncThunk<
   { dispatch: AppDispatch; state: RootState }
 >("request-response/loadRequestList", async (_, { getState, dispatch }) => {
   const state = getState() as RootState;
+  console.log("=====================");
 
   if (state.requestResponse.isRequestListLoaded) return;
   try {

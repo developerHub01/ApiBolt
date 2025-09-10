@@ -19,6 +19,7 @@ import {
   createCollectionBySelectedTab,
   createRestApiBasicBySelectedTab,
   createSingleRequestBySelectedTab,
+  loadRequestList,
 } from "@/context/redux/request-response/thunks/request-list";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { handleChangeDeleteFolderOrRequestId } from "@/context/redux/request-response/request-response-slice";
@@ -51,7 +52,7 @@ const buttonList: Array<ButtonInterface> = [
   },
   {
     id: "add-rest-api-basic-folder",
-    label: "Add Rest Api Basic Folder",
+    label: "Add REST API Basic Folder",
     Icon: RestApiBasicAddIcon,
   },
   {
@@ -84,6 +85,8 @@ const ListBottomAction = memo(() => {
           return dispatch(createCollectionBySelectedTab());
         case "add-rest-api-basic-folder":
           return dispatch(createRestApiBasicBySelectedTab());
+        case "refresh":
+          return dispatch(loadRequestList());
         case "collapse":
           return dispatch(collapseAllRequestOrFolder());
       }
