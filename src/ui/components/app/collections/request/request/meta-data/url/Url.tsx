@@ -12,15 +12,13 @@ const Url = () => {
 
   return (
     <UrlWrapper>
-      <div className="w-full flex flex-wrap gap-2 pt-1 pb-5 px-1">
-        <ProtocolToken />
-        <HostPortToken />
-        <AddUrlPart id="port" />
-        {urlTokens.slice(3).map((token) => (
-          <ReorderableToken key={token.id} token={token} />
-        ))}
-        <QueryParamToken />
-      </div>
+      <ProtocolToken />
+      <HostPortToken />
+      <AddUrlPart id="port" />
+      {urlTokens.slice(3).map((token) => (
+        <ReorderableToken key={token.id} token={token} />
+      ))}
+      <QueryParamToken />
     </UrlWrapper>
   );
 };
