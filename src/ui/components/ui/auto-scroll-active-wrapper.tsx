@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -7,35 +7,33 @@ interface Props {
   children: React.ReactNode;
 }
 
-const AutoScrollActiveWrapper = ({
-  className = "",
-  block = "center",
-  children,
-}: Props) => {
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
+const AutoScrollActiveWrapper = memo(
+  ({ className = "", block = "center", children }: Props) => {
+    const scrollAreaRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    requestAnimationFrame(() => {
-      const activeTab = scrollAreaRef.current?.querySelector(
-        '[data-active="true"]'
-      );
-      if (!activeTab) return;
+    useEffect(() => {
+      requestAnimationFrame(() => {
+        const activeTab = scrollAreaRef.current?.querySelector(
+          '[data-active="true"]'
+        );
+        if (!activeTab) return;
 
-      activeTab.scrollIntoView({
-        behavior: "smooth",
-        block,
+        activeTab.scrollIntoView({
+          behavior: "smooth",
+          block,
+        });
       });
-    });
-  }, [block]);
+    }, [block]);
 
-  return (
-    <div
-      className={cn("w-full flex flex-col", className)}
-      ref={scrollAreaRef}
-    >
-      {children}
-    </div>
-  );
-};
+    return (
+      <div
+        className={cn("w-full flex flex-col", className)}
+        ref={scrollAreaRef}
+      >
+        {children}
+      </div>
+    );
+  }
+);
 
 export default AutoScrollActiveWrapper;

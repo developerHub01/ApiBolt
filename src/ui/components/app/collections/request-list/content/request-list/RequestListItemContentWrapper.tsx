@@ -1,4 +1,4 @@
-import React, { useCallback, useState, type DragEvent } from "react";
+import React, { memo, useCallback, useState, type DragEvent } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { selectSelectedTab } from "@/context/redux/request-response/request-response-selector";
 import { cn } from "@/lib/utils";
@@ -21,114 +21,116 @@ interface RequestListItemContentWrapperProps
   children: React.ReactNode;
 }
 
-const RequestListItemContentWrapper = ({
-  id,
-  setIsHovering,
-  lavel = 0,
-  method,
-  parentId,
-  isExpended,
-  childrenRequest,
-  children,
-}: RequestListItemContentWrapperProps) => {
-  const dispatch = useAppDispatch();
-  const selectedTab = useAppSelector(selectSelectedTab);
-  const { isRenameActive, handleToggleContextMenu } = useRequestList();
-  const [isDragging, setIsDragging] = useState<boolean>(false);
+const RequestListItemContentWrapper = memo(
+  ({
+    id,
+    setIsHovering,
+    lavel = 0,
+    method,
+    parentId,
+    isExpended,
+    childrenRequest,
+    children,
+  }: RequestListItemContentWrapperProps) => {
+    const dispatch = useAppDispatch();
+    const selectedTab = useAppSelector(selectSelectedTab);
+    const { isRenameActive, handleToggleContextMenu } = useRequestList();
+    const [isDragging, setIsDragging] = useState<boolean>(false);
 
-  const handleDragStart = useCallback(
-    (e: DragEvent<HTMLDivElement>) => {
-      e.dataTransfer.setData("text/plain", id);
-      e.dataTransfer.effectAllowed = "move";
-    },
-    [id]
-  );
+    const handleDragStart = useCallback(
+      (e: DragEvent<HTMLDivElement>) => {
+        e.dataTransfer.setData("text/plain", id);
+        e.dataTransfer.effectAllowed = "move";
+      },
+      [id]
+    );
 
-  const handleDragOver = useCallback((e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = "move";
-
-    setIsDragging(true);
-  }, []);
-
-  const handleDrop = useCallback(
-    (e: DragEvent<HTMLDivElement>) => {
+    const handleDragOver = useCallback((e: DragEvent<HTMLDivElement>) => {
       e.preventDefault();
-      const draggedId = e.dataTransfer.getData("text/plain");
+      e.dataTransfer.dropEffect = "move";
 
-      setIsDragging(false);
-      if (draggedId === id) return;
+      setIsDragging(true);
+    }, []);
 
-      dispatch(
-        moveRequestOrFolder({
-          requestId: draggedId,
-          parentId: children ? id : parentId,
-        })
-      );
-    },
-    [children, dispatch, id, parentId]
-  );
+    const handleDrop = useCallback(
+      (e: DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        const draggedId = e.dataTransfer.getData("text/plain");
 
-  const handleDragLeave = useCallback(() => setIsDragging(false), []);
+        setIsDragging(false);
+        if (draggedId === id) return;
 
-  const handleRequestClick = useCallback(
-    () => dispatch(handleChangeSelectedTab(id)),
-    [dispatch, id]
-  );
+        dispatch(
+          moveRequestOrFolder({
+            requestId: draggedId,
+            parentId: children ? id : parentId,
+          })
+        );
+      },
+      [children, dispatch, id, parentId]
+    );
 
-  const leftSpace = REQUEST_ITEM_SPACE_SIZE * lavel;
+    const handleDragLeave = useCallback(() => setIsDragging(false), []);
 
-  return (
-    <>
-      <RequestListItemContentWrapperParent
-        className={cn({
-          /* active tab style */
-          "bg-accent": selectedTab === id,
+    const handleRequestClick = useCallback(
+      () => dispatch(handleChangeSelectedTab(id)),
+      [dispatch, id]
+    );
 
-          /* active tab border color */
-          "bg-transparent hover:bg-accent/50": selectedTab !== id,
-          "border-green-500": selectedTab === id && method === "get",
-          "border-blue-500": selectedTab === id && method === "post",
-          "border-yellow-500": selectedTab === id && method === "put",
-          "border-orange-500": selectedTab === id && method === "patch",
-          "border-red-500": selectedTab === id && method === "delete",
-          "border-primary": selectedTab === id && !method,
-        })}
-        onContextMenu={() => handleToggleContextMenu(true)}
-        onClick={handleRequestClick}
-        data-active={selectedTab === id}
-      >
-        <div
-          className={cn(
-            "pr-0.5 flex gap-1 w-full h-full items-center justify-between select-none group ring-2 rounded-md",
-            {
-              "ring-primary/50": isDragging,
-              "ring-transparent": !isDragging,
-            }
-          )}
-          onMouseEnter={() => setIsHovering(true)}
-          onMouseLeave={() => setIsHovering(false)}
-          draggable={!isRenameActive}
-          onDragStart={handleDragStart}
-          onDragOver={handleDragOver}
-          onDrop={handleDrop}
-          onDragLeave={handleDragLeave}
-          style={{
-            paddingLeft: leftSpace,
-          }}
+    const leftSpace = REQUEST_ITEM_SPACE_SIZE * lavel;
+
+    return (
+      <>
+        <RequestListItemContentWrapperParent
+          className={cn({
+            /* active tab style */
+            "bg-accent": selectedTab === id,
+
+            /* active tab border color */
+            "bg-transparent hover:bg-accent/50": selectedTab !== id,
+            "border-green-500": selectedTab === id && method === "get",
+            "border-blue-500": selectedTab === id && method === "post",
+            "border-yellow-500": selectedTab === id && method === "put",
+            "border-orange-500": selectedTab === id && method === "patch",
+            "border-red-500": selectedTab === id && method === "delete",
+            "border-primary": selectedTab === id && !method,
+          })}
+          onContextMenu={() => handleToggleContextMenu(true)}
+          onClick={handleRequestClick}
+          data-active={selectedTab === id}
         >
-          {children}
-        </div>
-      </RequestListItemContentWrapperParent>
-      {isExpended && (
-        <RequestListItemExpendedContent
-          id={id}
-          children={childrenRequest}
-          lavel={lavel}
-        />
-      )}
-    </>
-  );
-};
+          <div
+            className={cn(
+              "pr-0.5 flex gap-1 w-full h-full items-center justify-between select-none group ring-2 rounded-md",
+              {
+                "ring-primary/50": isDragging,
+                "ring-transparent": !isDragging,
+              }
+            )}
+            onMouseEnter={() => setIsHovering(true)}
+            onMouseLeave={() => setIsHovering(false)}
+            draggable={!isRenameActive}
+            onDragStart={handleDragStart}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+            onDragLeave={handleDragLeave}
+            style={{
+              paddingLeft: leftSpace,
+            }}
+          >
+            {children}
+          </div>
+        </RequestListItemContentWrapperParent>
+        {isExpended && (
+          <RequestListItemExpendedContent
+            id={id}
+            children={childrenRequest}
+            lavel={lavel}
+          />
+        )}
+      </>
+    );
+  }
+);
 
 export default RequestListItemContentWrapper;
