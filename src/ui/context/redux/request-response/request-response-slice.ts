@@ -453,10 +453,28 @@ export const requestResponseSlice = createSlice({
         {} as Record<string, RequestListItemInterface>
       );
 
-      state.requestList = {
-        ...state.requestList,
-        ...payload,
-      };
+      Object.assign(state.requestList, payload);
+
+      /* update if parent exist then that's children list */
+
+      /* though not necessary but checking if first requestOrFolder is not folder then return */
+      if (
+        !action.payload[0].children ||
+        !action.payload[0].parentId ||
+        state.requestList[action.payload[0].parentId].method
+      )
+        return;
+
+      /* if children not exist in parent then update with payload folder id as children  */
+      /* if children exist in parent then add the payload folder id in children list  */
+      if (!state.requestList[action.payload[0].parentId].children)
+        state.requestList[action.payload[0].parentId].children = [
+          action.payload[0].id,
+        ];
+      else
+        state.requestList[action.payload[0].parentId].children?.push(
+          action.payload[0].id
+        );
     },
     handleUpdateRequestOrFolder: (
       state,

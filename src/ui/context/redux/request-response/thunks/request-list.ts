@@ -253,6 +253,7 @@ export const createRestApiBasicBySelectedTab = createAsyncThunk<
       ];
 
       dispatch(handleCreateRestApiBasic(requestList));
+
       await window.electronAPIRequestOrFolderMetaDB.createRequestOrFolderMeta(
         requestList
       );
