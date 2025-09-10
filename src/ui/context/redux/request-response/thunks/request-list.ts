@@ -18,6 +18,7 @@ import { v4 as uuidv4 } from "uuid";
 import {
   duplicateRequestOrFolderNode,
   getNestedIds,
+  getRequestType,
 } from "@/utils/request-response.utils";
 import { loadTabsData } from "@/context/redux/request-response/thunks/tab-list";
 
@@ -93,7 +94,7 @@ export const createCollection = createAsyncThunk<
 export const createRestApiBasic = createAsyncThunk<
   void,
   void,
-  { dispatch: AppDispatch }
+  { dispatch: AppDispatch; state: RootState }
 >("request-response/createSingleRequest", async (_, { dispatch }) => {
   try {
     const parentFolder: RequestListItemInterface = {
@@ -130,6 +131,137 @@ export const createRestApiBasic = createAsyncThunk<
     console.log(error);
   }
 });
+
+/* action by selected tab start =============== */
+export const createSingleRequestBySelectedTab = createAsyncThunk<
+  void,
+  void,
+  { dispatch: AppDispatch; state: RootState }
+>(
+  "request-response/createSingleRequestBySelectedTab",
+  async (_, { dispatch, getState }) => {
+    try {
+      const state = getState() as RootState;
+      const selectedTab = state.requestResponse.selectedTab;
+
+      let parentId = selectedTab ?? undefined;
+      /* if selected tab exist then check is it a request or not. if then take it's parent else take that */
+      if (selectedTab) {
+        const selectedDetails = state.requestResponse.requestList[selectedTab];
+        if (selectedDetails && getRequestType(selectedDetails) === "request")
+          parentId = selectedDetails.parentId;
+      }
+
+      const payload: RequestListItemInterface = {
+        id: uuidv4(),
+        name: "Request",
+        method: "get",
+        ...(parentId ? { parentId } : {}),
+      };
+
+      dispatch(handleCreateSingleRequest(payload));
+      await window.electronAPIRequestOrFolderMetaDB.createRequestOrFolderMeta(
+        payload
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const createCollectionBySelectedTab = createAsyncThunk<
+  void,
+  void,
+  { dispatch: AppDispatch; state: RootState }
+>(
+  "request-response/createCollectionBySelectedTab",
+  async (_, { dispatch, getState }) => {
+    try {
+      const state = getState() as RootState;
+      const selectedTab = state.requestResponse.selectedTab;
+
+      let parentId = selectedTab ?? undefined;
+      /* if selected tab exist then check is it a request or not. if then take it's parent else take that */
+      if (selectedTab) {
+        const selectedDetails = state.requestResponse.requestList[selectedTab];
+        if (selectedDetails && getRequestType(selectedDetails) === "request")
+          parentId = selectedDetails.parentId;
+      }
+
+      const payload = {
+        id: uuidv4(),
+        name: parentId ? "Folder" : "Collection",
+        ...(parentId ? { parentId } : {}),
+      };
+
+      dispatch(handleCreateSingleRequest(payload));
+
+      await window.electronAPIRequestOrFolderMetaDB.createRequestOrFolderMeta({
+        ...payload,
+        children: [],
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const createRestApiBasicBySelectedTab = createAsyncThunk<
+  void,
+  void,
+  { dispatch: AppDispatch; state: RootState }
+>(
+  "request-response/createRestApiBasicBySelectedTab",
+  async (_, { dispatch, getState }) => {
+    try {
+      const state = getState() as RootState;
+      const selectedTab = state.requestResponse.selectedTab;
+
+      let parentId = selectedTab ?? undefined;
+      /* if selected tab exist then check is it a request or not. if then take it's parent else take that */
+      if (selectedTab) {
+        const selectedDetails = state.requestResponse.requestList[selectedTab];
+        if (selectedDetails && getRequestType(selectedDetails) === "request")
+          parentId = selectedDetails.parentId;
+      }
+
+      const newParentFolder: RequestListItemInterface = {
+        id: uuidv4(),
+        name: "REST API basics: CRUD, test & variable",
+        children: [],
+        createdAt: Date.now(),
+        parentId,
+      };
+
+      const payload: Array<RequestListItemInterface> = (
+        ["get", "post", "put", "patch", "delete"] as Array<THTTPMethods>
+      ).map((method) => ({
+        id: uuidv4(),
+        name: `${method[0].toUpperCase()}${method.substring(1)} data`,
+        method: method as THTTPMethods,
+        createdAt: Date.now(),
+      }));
+
+      newParentFolder.children = payload.map((item) => item.id);
+
+      const requestList = [
+        newParentFolder,
+        ...payload.map((item) => ({
+          ...item,
+          parentId: newParentFolder.id,
+        })),
+      ];
+
+      dispatch(handleCreateRestApiBasic(requestList));
+      await window.electronAPIRequestOrFolderMetaDB.createRequestOrFolderMeta(
+        requestList
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+/* action by selected tab end =============== */
 
 export const updateRequestOrFolder = createAsyncThunk<
   void,

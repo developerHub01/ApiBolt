@@ -2,6 +2,7 @@ import { urlPureVariableRegex } from "@/constant/request-url.constant";
 import type {
   ParamInterface,
   RequestListInterface,
+  RequestListItemInterface,
   TParamContentType,
 } from "@/types/request-response.types";
 import { v4 as uuidv4 } from "uuid";
@@ -132,3 +133,21 @@ export const detectAndCleanVariable = (
     [type === "keyType" ? "key" : "value"]: str,
   };
 };
+
+export const getFolderChildren = (
+  payload: RequestListItemInterface
+): Array<string> | null => payload.children ?? (!payload["method"] ? [] : null);
+
+/**
+ *
+ * @param payload request or folder details
+ * @returns "folder" | "request"
+ *
+ * first check do it have children
+ *    if then folder
+ *    else check is there not exist method
+ *      if method not exist that means it is must a folder so add empty children list else undefined because it is a request.
+ */
+export const getRequestType = (
+  payload: RequestListItemInterface
+): "folder" | "request" => (getFolderChildren(payload) ? "folder" : "request");

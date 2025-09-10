@@ -2,6 +2,10 @@ import { memo } from "react";
 import { useAppSelector } from "@/context/redux/hooks";
 import RequestListProvider from "@/context/collections/request-list/RequestListProvider";
 import RequestListItemContent from "@/components/app/collections/request-list/content/request-list/RequestListItemContent";
+import {
+  getFolderChildren,
+  getRequestType,
+} from "@/utils/request-response.utils";
 
 interface Props {
   id: string;
@@ -17,16 +21,15 @@ const RequestListItem = memo(({ id, lavel = 0, isLastChild }: Props) => {
   if (!requestDetails) return null;
 
   /* if have children then as usual but if not and not have method means folder so add and empty children else children will be undefined means acutally it is a request*/
-  const children =
-    requestDetails.children ??
-    (!requestDetails["method"] && !requestDetails["children"] ? [] : undefined);
+  const children = getFolderChildren(requestDetails);
+  const type = getRequestType(requestDetails);
 
   return (
     <RequestListProvider>
       <RequestListItemContent
         {...requestDetails}
-        children={children}
-        type={children ? "folder" : "request"}
+        children={children ?? undefined}
+        type={type}
         lavel={lavel}
         isLastChild={isLastChild}
       />
