@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { selectSelectedTab } from "@/context/redux/request-response/request-response-selector";
 import { cn } from "@/lib/utils";
 import RequestListItemExpendedContent from "@/components/app/collections/request-list/content/request-list/RequestListItemExpendedContent";
+import RequestListItemContentWrapperParent from "@/components/app/collections/request-list/content/request-list/RequestListItemContentWrapperParent";
 import { useRequestList } from "@/context/collections/request-list/RequestListProvider";
 import type { RequestListItemInterface } from "@/types/request-response.types";
 import { moveRequestOrFolder } from "@/context/redux/request-response/thunks/request-list";
@@ -79,23 +80,20 @@ const RequestListItemContentWrapper = ({
 
   return (
     <>
-      <div
-        className={cn(
-          "w-full cursor-pointer hover:bg-accent/50 focus-within:bg-accent/50 duration-100 transition-all px-1 border-x-2 h-9 border-transparent",
-          {
-            /* active tab style */
-            "bg-accent": selectedTab === id,
+      <RequestListItemContentWrapperParent
+        className={cn({
+          /* active tab style */
+          "bg-accent": selectedTab === id,
 
-            /* active tab border color */
-            "bg-transparent hover:bg-accent/50": selectedTab !== id,
-            "border-green-500": selectedTab === id && method === "get",
-            "border-blue-500": selectedTab === id && method === "post",
-            "border-yellow-500": selectedTab === id && method === "put",
-            "border-orange-500": selectedTab === id && method === "patch",
-            "border-red-500": selectedTab === id && method === "delete",
-            "border-primary": selectedTab === id && !method,
-          }
-        )}
+          /* active tab border color */
+          "bg-transparent hover:bg-accent/50": selectedTab !== id,
+          "border-green-500": selectedTab === id && method === "get",
+          "border-blue-500": selectedTab === id && method === "post",
+          "border-yellow-500": selectedTab === id && method === "put",
+          "border-orange-500": selectedTab === id && method === "patch",
+          "border-red-500": selectedTab === id && method === "delete",
+          "border-primary": selectedTab === id && !method,
+        })}
         onContextMenu={() => handleToggleContextMenu(true)}
         onClick={handleRequestClick}
         data-active={selectedTab === id}
@@ -121,7 +119,7 @@ const RequestListItemContentWrapper = ({
         >
           {children}
         </div>
-      </div>
+      </RequestListItemContentWrapperParent>
       {isExpended && (
         <RequestListItemExpendedContent
           id={id}
