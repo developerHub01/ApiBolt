@@ -9,20 +9,28 @@ import { useRequestList } from "@/context/collections/request-list/RequestListPr
 import { updateRequestOrFolder } from "@/context/redux/request-response/thunks/request-list";
 import RequestListItemName from "@/components/app/collections/request-list/content/request-list/RequestListItemName";
 import RequestListItemContentWrapper from "@/components/app/collections/request-list/content/request-list/RequestListItemContentWrapper";
-import RequestListItemWrapperLine from "@/components/app/collections/request-list/content/request-list/RequestListItemWrapperLine";
+import RequestListItemLine from "@/components/app/collections/request-list/content/request-list/RequestListItemLine";
 
 interface RequestListItemProps extends RequestListItemInterface {
   type: "folder" | "request";
   lavel: number;
+  isLastChild?: boolean;
 }
 
 const RequestListItemContent = memo(
-  ({ id, type, children, parentId, lavel, ...props }: RequestListItemProps) => {
+  ({
+    id,
+    type,
+    children,
+    parentId,
+    lavel = 0,
+    isLastChild = false,
+    ...props
+  }: RequestListItemProps) => {
     const dispatch = useAppDispatch();
     const method = useAppSelector(
       (state) => state.requestResponse.requestList[id].method ?? props.method
     );
-
     const isExpended = useAppSelector(
       (state) =>
         state.requestResponse.requestList[id].isExpended ?? props.isExpended
@@ -52,33 +60,30 @@ const RequestListItemContent = memo(
         childrenRequest={children}
         setIsHovering={setIsHovering}
       >
-        <RequestListItemWrapperLine lavel={lavel} childrenRequest={children}>
-          <div className="h-7 flex items-center">
+        <RequestListItemLine lavel={lavel} isLastChild={isLastChild}>
+          <div className="h-full w-6.5 flex items-center">
             {type === "folder" ? (
               <RequestListItemFolderButton
                 isExpended={isExpended ?? false}
                 onClick={handleFolderButtonClick}
               />
             ) : (
-              <div className="w-10 flex justify-end items-center">
-                <RequestMethodTag
-                  method={method ?? "get"}
-                  shortCut={true}
-                  className="w-full"
-                />
-              </div>
+              <RequestMethodTag
+                method={method ?? "get"}
+                shortCut={true}
+                shortCutSizeForAll={3}
+                className="w-full px-0.5"
+              />
             )}
           </div>
-        </RequestListItemWrapperLine>
-        <div className="w-full flex flex-col gap-0.5">
-          <div className="w-full text-sm h-7 flex justify-between items-center gap-1">
-            <RequestListItemName id={id} name={props.name} />
-            <AnimatePresence>
-              {(isHovering || isContextMenuOpen) && (
-                <ItemCTA type={type} id={id} />
-              )}
-            </AnimatePresence>
-          </div>
+        </RequestListItemLine>
+        <div className="w-full text-sm flex justify-between items-center gap-1">
+          <RequestListItemName id={id} name={props.name} />
+          <AnimatePresence>
+            {(isHovering || isContextMenuOpen) && (
+              <ItemCTA type={type} id={id} />
+            )}
+          </AnimatePresence>
         </div>
       </RequestListItemContentWrapper>
     );

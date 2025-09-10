@@ -17,10 +17,10 @@ const RequestListItemFolderButton = memo(({ isExpended, onClick }: Props) => {
 
   return (
     <button
-      className="p-0.5 h-full aspect-square cursor-pointer"
+      className="w-full p-0.5 h-full aspect-square cursor-pointer"
       onClick={handleClick}
     >
-      {isExpended ? <FolderOpenIcon size={20} /> : <FolderIcon size={20} />}
+      {isExpended ? <FolderOpenIcon size={23} /> : <FolderIcon size={23} />}
     </button>
   );
 });

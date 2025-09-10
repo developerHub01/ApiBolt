@@ -7,6 +7,7 @@ import { useRequestList } from "@/context/collections/request-list/RequestListPr
 import type { RequestListItemInterface } from "@/types/request-response.types";
 import { moveRequestOrFolder } from "@/context/redux/request-response/thunks/request-list";
 import { handleChangeSelectedTab } from "@/context/redux/request-response/request-response-slice";
+import { REQUEST_ITEM_SPACE_SIZE } from "@/constant/request-response.constant";
 
 interface RequestListItemContentWrapperProps
   extends Pick<
@@ -22,7 +23,7 @@ interface RequestListItemContentWrapperProps
 const RequestListItemContentWrapper = ({
   id,
   setIsHovering,
-  lavel,
+  lavel = 0,
   method,
   parentId,
   isExpended,
@@ -74,13 +75,13 @@ const RequestListItemContentWrapper = ({
     [dispatch, id]
   );
 
-  const leftSpace = lavel * 16 + 8 + (lavel ? 4 : 0);
+  const leftSpace = REQUEST_ITEM_SPACE_SIZE * lavel;
 
   return (
     <>
       <div
         className={cn(
-          "cursor-pointer hover:bg-accent/50 focus-within:bg-accent/50 duration-100 transition-all px-1 border-x-2 border-transparent",
+          "w-full cursor-pointer hover:bg-accent/50 focus-within:bg-accent/50 duration-100 transition-all px-1 border-x-2 h-9 border-transparent",
           {
             /* active tab style */
             "bg-accent": selectedTab === id,
@@ -101,7 +102,7 @@ const RequestListItemContentWrapper = ({
       >
         <div
           className={cn(
-            "pr-0.5 flex gap-1 items-start justify-between select-none group ring-2 rounded-md",
+            "pr-0.5 flex gap-1 w-full h-full items-center justify-between select-none group ring-2 rounded-md",
             {
               "ring-primary/50": isDragging,
               "ring-transparent": !isDragging,
@@ -125,7 +126,7 @@ const RequestListItemContentWrapper = ({
         <RequestListItemExpendedContent
           id={id}
           children={childrenRequest}
-          lavel={lavel + 1}
+          lavel={lavel}
         />
       )}
     </>

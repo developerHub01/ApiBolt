@@ -6,9 +6,10 @@ import RequestListItemContent from "@/components/app/collections/request-list/co
 interface Props {
   id: string;
   lavel: number;
+  isLastChild?: boolean;
 }
 
-const RequestListItem = memo(({ id, lavel = 0 }: Props) => {
+const RequestListItem = memo(({ id, lavel = 0, isLastChild }: Props) => {
   const requestDetails = useAppSelector(
     (state) => state.requestResponse.requestList[id]
   );
@@ -27,6 +28,7 @@ const RequestListItem = memo(({ id, lavel = 0 }: Props) => {
         children={children}
         type={children ? "folder" : "request"}
         lavel={lavel}
+        isLastChild={isLastChild}
       />
     </RequestListProvider>
   );

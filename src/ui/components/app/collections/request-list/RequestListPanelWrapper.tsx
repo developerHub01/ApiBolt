@@ -39,11 +39,6 @@ const RequestListPanelWrapper = memo(() => {
     [dispath]
   );
 
-  const handleResize = useCallback((size: number) => {
-    return;
-    console.log({ size });
-  }, []);
-
   if (isSmallDevice)
     return (
       <SmallDeviceListWrapper
@@ -58,14 +53,14 @@ const RequestListPanelWrapper = memo(() => {
       defaultSize={30}
       minSize={15}
       maxSize={40}
+      order={1}
       className={cn("backdrop-blur-xs w-full bg-background/30", {
         "border-r-4": layoutTypes === "ltr",
         "border-l-4": layoutTypes === "rtl",
       })}
       style={{
-        maxWidth: "40vw",
+        maxWidth: 440,
       }}
-      onResize={handleResize}
       ref={resizablePanelRef}
     >
       <RequestListPanel />
@@ -100,7 +95,7 @@ const SmallDeviceListWrapper = memo(
           })}
           onClick={(e) => e.stopPropagation()}
           style={{
-            maxWidth: "40vw",
+            maxWidth: "60vw",
           }}
           initial={{
             opacity: 0,

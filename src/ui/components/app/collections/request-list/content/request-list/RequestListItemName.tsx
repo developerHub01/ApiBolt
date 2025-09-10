@@ -11,7 +11,6 @@ import {
 } from "react";
 import { useRequestList } from "@/context/collections/request-list/RequestListProvider";
 import { useAppSelector } from "@/context/redux/hooks";
-import { cn } from "@/lib/utils";
 
 interface Props {
   id: string;
@@ -34,9 +33,7 @@ const RequestListItemName = memo(({ id, ...props }: Props) => {
   }, [name]);
 
   useEffect(() => {
-    if (isRenameActive) {
-      inputRef.current?.focus();
-    }
+    if (isRenameActive) inputRef.current?.focus();
   }, [isRenameActive]);
 
   const handleNameDoubleClick = useCallback(
@@ -85,13 +82,7 @@ const RequestListItemName = memo(({ id, ...props }: Props) => {
           onDragStart={(e) => e.stopPropagation()}
           id={`request_list_item_input_${id}`}
           ref={inputRef}
-          className={cn(
-            "w-full h-full outline-0 focus:bg-background/20 px-1 rounded-md text-sm ring-1 ring-primary/80",
-            {
-              "bg-background cursor-text": isRenameActive,
-              "bg-transparent cursor-pointer": !isRenameActive,
-            }
-          )}
+          className="w-full h-full outline-0 focus:bg-background/20 py-1 text-sm border-b border-foreground/80 cursor-text"
         />
       ) : (
         <input
@@ -99,7 +90,7 @@ const RequestListItemName = memo(({ id, ...props }: Props) => {
           value={name}
           readOnly
           onDoubleClick={handleNameDoubleClick}
-          className="w-full h-full outline-0 px-1 rounded-md text-sm p-1 whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer select-none"
+          className="w-full h-full outline-0 text-sm py-1 whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer select-none border-b border-transparent"
         />
       )}
     </>

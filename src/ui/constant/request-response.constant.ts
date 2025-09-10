@@ -7,6 +7,8 @@ import type {
 } from "@/types/request-response.types";
 import { v4 as uuidv4 } from "uuid";
 
+export const REQUEST_ITEM_SPACE_SIZE = 32;
+
 export const generateNewMetaDataItem = (type?: TMetaTableType) => ({
   id: uuidv4(),
   key: "",
