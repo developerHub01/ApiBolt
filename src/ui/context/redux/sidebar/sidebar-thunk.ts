@@ -9,7 +9,10 @@ import type { TSidebarTab } from "@/types/sidebar.types";
 export const changeActiveTab = createAsyncThunk<
   void,
   TSidebarTab,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("sidebar/changeActiveTab", async (tabId, { dispatch, getState }) => {
   dispatch(handleChangeActiveTab(tabId));
 

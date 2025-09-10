@@ -8,7 +8,10 @@ import { handleLoadBodyBinary } from "@/context/redux/request-response/request-r
 export const loadRequestBodyBinary = createAsyncThunk<
   void,
   void | { requestId?: string | null | undefined; once?: boolean },
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-response/loadRequestBodyBinary",
   async (payload, { dispatch, getState }) => {
@@ -33,7 +36,10 @@ export const loadRequestBodyBinary = createAsyncThunk<
 export const updateRequestBodyBinary = createAsyncThunk<
   void,
   void,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("request-response/updateRequestBodyBinary", async (_, { dispatch }) => {
   const response = await window.electronAPIBodyBinaryDB.updateBodyBinary();
 
@@ -44,7 +50,10 @@ export const updateRequestBodyBinary = createAsyncThunk<
 export const deleteRequestBodyBinary = createAsyncThunk<
   void,
   void,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("request-response/deleteRequestBodyBinary", async (_, { dispatch }) => {
   const response = await window.electronAPIBodyBinaryDB.deleteBodyBinary();
 

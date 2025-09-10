@@ -10,7 +10,10 @@ import { areSamePayload } from "@/utils/helper";
 export const loadAuthorization = createAsyncThunk<
   AuthorizationPayloadInterface,
   void,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("request-response/loadAuthorization", async (_, { dispatch }) => {
   const authorizationData = await window.electronAPIAuthorizationDB.getAuth();
 
@@ -21,7 +24,10 @@ export const loadAuthorization = createAsyncThunk<
 export const updateAuthorization = createAsyncThunk<
   boolean,
   Partial<Omit<AuthorizationPayloadInterface, "id">>,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-response/updateAuthorization",
   async (payload, { dispatch, getState }) => {

@@ -12,7 +12,10 @@ import {
 export const loadRequestMetaTab = createAsyncThunk<
   void,
   void | { requestId?: string | null | undefined; once?: boolean },
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-response/loadRequestMetaTab",
   async (payload, { dispatch, getState }) => {
@@ -42,7 +45,10 @@ export const loadRequestMetaTab = createAsyncThunk<
 export const updateRequestMetaTab = createAsyncThunk<
   void,
   Partial<RequestTabInterface>,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("request-response/updateRequestMetaTab", async (payload, { dispatch }) => {
   const response =
     await window.electronAPIRequestMetaTabDB.updateRequestMetaTab(payload);

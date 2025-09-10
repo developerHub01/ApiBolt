@@ -9,7 +9,10 @@ import { handleLoadBodyXWWWFormUrlencoded } from "@/context/redux/request-respon
 export const loadBodyXWWWFormUrlencoded = createAsyncThunk<
   void,
   void | { requestId?: string | null | undefined; once?: boolean },
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-response/loadBodyXWWWFormUrlencoded",
   async (payload, { getState, dispatch }) => {
@@ -39,7 +42,10 @@ export const loadBodyXWWWFormUrlencoded = createAsyncThunk<
 export const addBodyXWWWFormUrlencoded = createAsyncThunk<
   boolean,
   Partial<ParamHeaderBuildPayloadInterface> | undefined,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-response/addBodyXWWWFormUrlencoded",
   async (payload, { getState, dispatch }) => {
@@ -63,7 +69,10 @@ export const addBodyXWWWFormUrlencoded = createAsyncThunk<
 export const deleteBodyXWWWFormUrlencoded = createAsyncThunk<
   boolean,
   string,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-response/deleteBodyXWWWFormUrlencoded",
   async (id, { getState, dispatch }) => {
@@ -85,7 +94,10 @@ export const deleteBodyXWWWFormUrlencoded = createAsyncThunk<
 export const deleteBodyXWWWFormUrlencodedByRequestMetaId = createAsyncThunk<
   boolean,
   string | undefined | null,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-response/deleteBodyXWWWFormUrlencodedByRequestMetaId",
   async (id, { getState, dispatch }) => {
@@ -110,7 +122,10 @@ export const updateBodyXWWWFormUrlencoded = createAsyncThunk<
     paramId: string;
     payload: Partial<ParamHeaderBuildPayloadInterface>;
   },
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-response/updateBodyXWWWFormUrlencoded",
   async ({ paramId, payload }, { dispatch }) => {
@@ -128,7 +143,10 @@ export const updateBodyXWWWFormUrlencoded = createAsyncThunk<
 export const checkAllBodyXWWWFormUrlencodedByRequestMetaId = createAsyncThunk<
   boolean,
   string | undefined,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-response/checkAllBodyXWWWFormUrlencodedByRequestMetaId",
   async (requestOrFolderMetaId, { dispatch }) => {

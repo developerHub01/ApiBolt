@@ -16,7 +16,10 @@ export const loadProjectList = createAsyncThunk<
     projectList: Array<ProjectInterface>;
   },
   void,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("request-response/loadProjectList", async (_, { dispatch }) => {
   const list = await window.electronAPIProjectsDB.getProjects();
   const activeProject = await window.electronAPIProjectsDB.getActiveProject();
@@ -33,7 +36,10 @@ export const loadProjectList = createAsyncThunk<
 export const changeActiveProject = createAsyncThunk<
   boolean,
   string,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("request-response/changeActiveProject", async (id, { dispatch }) => {
   dispatch(handleChangeActiveProject(id));
   const response = await window.electronAPIProjectsDB.changeActiveProject(id);
@@ -46,7 +52,10 @@ export const changeActiveProject = createAsyncThunk<
 export const createProject = createAsyncThunk<
   boolean,
   string,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("request-response/changeActiveProject", async (name, { dispatch }) => {
   const response = await window.electronAPIProjectsDB.createProjects({
     name,
@@ -60,7 +69,10 @@ export const createProject = createAsyncThunk<
 export const deleteProject = createAsyncThunk<
   boolean,
   string,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("request-response/deleteProject", async (id, { dispatch }) => {
   const response = await window.electronAPIProjectsDB.deleteProjects(id);
 
@@ -80,7 +92,10 @@ export const updateProject = createAsyncThunk<
     id: string;
     name: string;
   },
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("request-response/updateProject", async ({ id, name }, { dispatch }) => {
   const response = await window.electronAPIProjectsDB.updateProjects(id, {
     name,

@@ -29,13 +29,15 @@ import { loadTabsData } from "@/context/redux/request-response/thunks/tab-list";
 export const loadRequestList = createAsyncThunk<
   void,
   void,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("request-response/loadRequestList", async (_, { getState, dispatch }) => {
-  const state = getState() as RootState;
-  console.log("=====================");
-
-  if (state.requestResponse.isRequestListLoaded) return;
   try {
+    const state = getState() as RootState;
+    if (state.requestResponse.isRequestListLoaded) return;
+
     const list =
       await window.electronAPIRequestOrFolderMetaDB.getRequestOrFolderMeta();
 
@@ -51,6 +53,7 @@ export const createSingleRequest = createAsyncThunk<
   string | undefined,
   {
     dispatch: AppDispatch;
+    state: RootState;
   }
 >("request-response/createSingleRequest", async (parentId, { dispatch }) => {
   try {
@@ -73,7 +76,10 @@ export const createSingleRequest = createAsyncThunk<
 export const createCollection = createAsyncThunk<
   void,
   string | undefined,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("request-response/createCollection", async (parentId, { dispatch }) => {
   try {
     const payload = {
@@ -96,7 +102,10 @@ export const createCollection = createAsyncThunk<
 export const createRestApiBasic = createAsyncThunk<
   void,
   void,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("request-response/createSingleRequest", async (_, { dispatch }) => {
   try {
     const parentFolder: RequestListItemInterface = {
@@ -138,7 +147,10 @@ export const createRestApiBasic = createAsyncThunk<
 export const createSingleRequestBySelectedTab = createAsyncThunk<
   void,
   void,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-response/createSingleRequestBySelectedTab",
   async (_, { dispatch, getState }) => {
@@ -174,7 +186,10 @@ export const createSingleRequestBySelectedTab = createAsyncThunk<
 export const createCollectionBySelectedTab = createAsyncThunk<
   void,
   void,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-response/createCollectionBySelectedTab",
   async (_, { dispatch, getState }) => {
@@ -211,7 +226,10 @@ export const createCollectionBySelectedTab = createAsyncThunk<
 export const createRestApiBasicBySelectedTab = createAsyncThunk<
   void,
   void,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-response/createRestApiBasicBySelectedTab",
   async (_, { dispatch, getState }) => {
@@ -269,7 +287,10 @@ export const createRestApiBasicBySelectedTab = createAsyncThunk<
 export const updateRequestOrFolder = createAsyncThunk<
   void,
   RequestListItemUpdatePayloadInterface,
-  { dispatch: AppDispatch }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("request-response/updateRequestOrFolder", async (payload, { dispatch }) => {
   try {
     dispatch(handleUpdateRequestOrFolder(payload));
@@ -284,7 +305,10 @@ export const updateRequestOrFolder = createAsyncThunk<
 export const moveRequestOrFolder = createAsyncThunk<
   void,
   { requestId: string; parentId: string | undefined },
-  { dispatch: AppDispatch }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-response/moveRequestOrFolder",
   async ({ requestId, parentId }, { dispatch }) => {
@@ -303,7 +327,10 @@ export const moveRequestOrFolder = createAsyncThunk<
 export const deleteAllRequestOrFolder = createAsyncThunk<
   void,
   string | undefined,
-  { dispatch: AppDispatch }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("request-response/deleteAllRequestOrFolder", async (id, { dispatch }) => {
   try {
     dispatch(handleDeleteAllRequestOrFolder());
@@ -318,7 +345,10 @@ export const deleteAllRequestOrFolder = createAsyncThunk<
 export const deleteRequestOrFolder = createAsyncThunk<
   void,
   boolean | string,
-  { state: RootState; dispatch: AppDispatch }
+  {
+    state: RootState;
+    dispatch: AppDispatch;
+  }
 >(
   "request-response/deleteRequestOrFolder",
   async (payload, { getState, dispatch }) => {
@@ -361,7 +391,10 @@ export const deleteRequestOrFolder = createAsyncThunk<
 export const duplicateRequestOrFolder = createAsyncThunk<
   void,
   string,
-  { state: RootState; dispatch: AppDispatch }
+  {
+    state: RootState;
+    dispatch: AppDispatch;
+  }
 >(
   "request-response/duplicateRequestOrFolder",
   async (id: string, { dispatch, getState }) => {
@@ -399,7 +432,10 @@ export const duplicateRequestOrFolder = createAsyncThunk<
 export const collapseAllRequestOrFolder = createAsyncThunk<
   void,
   void,
-  { state: RootState; dispatch: AppDispatch }
+  {
+    state: RootState;
+    dispatch: AppDispatch;
+  }
 >("request-response/collapseAllRequestOrFolder", async (_, { dispatch }) => {
   try {
     const response =

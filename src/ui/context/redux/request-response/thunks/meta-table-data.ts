@@ -21,7 +21,10 @@ type LoaderThunk =
 export const replaceMetaTableData = createAsyncThunk<
   boolean,
   Array<Partial<ParamHeaderBuildPayloadInterface>>,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-response/replaceMetaTableData",
   async (payload, { dispatch, getState }) => {

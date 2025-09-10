@@ -24,7 +24,10 @@ import { paramsTableToString } from "@/utils/request-response.utils";
 export const loadApiUrl = createAsyncThunk<
   void,
   void | { requestId?: string | null | undefined; once?: boolean },
-  { dispatch: AppDispatch }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("request-url/loadApiUrl", async (payload, { dispatch, getState }) => {
   try {
     if (!payload) payload = {};
@@ -57,7 +60,10 @@ export const loadApiUrl = createAsyncThunk<
 export const changeRequestApiUrl = createAsyncThunk<
   boolean,
   { url: string },
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-url/changeRequestApiUrl",
   async ({ url }, { dispatch, getState }) => {
@@ -112,7 +118,10 @@ export const changeRequestApiUrl = createAsyncThunk<
 export const changeRequestApiUrlWithBackend = createAsyncThunk<
   boolean,
   { url: string },
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-url/changeRequestApiUrlWithBackend",
   async ({ url }, { dispatch, getState }) => {
@@ -173,7 +182,10 @@ export const requestUrlAddToken = createAsyncThunk<
     type: TAPIUrlTokenType;
     preTokenId: string;
   },
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("request-url/requestUrlAddToken", async (payload, { dispatch, getState }) => {
   try {
     const state = getState() as RootState;
@@ -212,7 +224,10 @@ export const requestUrlAddToken = createAsyncThunk<
 export const requestUrlUpdateToken = createAsyncThunk<
   void,
   Partial<UrlTokenInterface> & Pick<UrlTokenInterface, "id">,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-url/requestUrlUpdateToken",
   async (payload, { dispatch, getState }) => {
@@ -257,7 +272,10 @@ export const requestUrlUpdateOriginToken = createAsyncThunk<
     id: TAPIUrlOriginTokenType;
     value: string;
   },
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-url/requestUrlUpdateToken",
   async ({ id, value }, { dispatch, getState }) => {
@@ -301,7 +319,10 @@ export const requestUrlUpdateOriginToken = createAsyncThunk<
 export const requestUrlDeleteToken = createAsyncThunk<
   void,
   string,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("request-url/requestUrlDeleteToken", async (id, { dispatch, getState }) => {
   try {
     const state = getState() as RootState;

@@ -24,7 +24,10 @@ import { checkApplyingZoomable } from "@/utils/settings.utils";
 export const loadSettings = createAsyncThunk<
   SettingsTotalInterface,
   void,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("request-response/loadSettings", async (_, { dispatch }) => {
   const response = await window.electronAPISettingsDB.getSettings();
 
@@ -35,7 +38,10 @@ export const loadSettings = createAsyncThunk<
 export const updateSettings = createAsyncThunk<
   boolean,
   Partial<SettingsInterface | ProjectSettingsInterface>,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("request-response/updateSettings", async (payload, { dispatch }) => {
   const response = await window.electronAPISettingsDB.updateSettings(payload);
 
@@ -51,7 +57,10 @@ export const updateSettings = createAsyncThunk<
 export const updateSettingsZoomByKeyboard = createAsyncThunk<
   boolean,
   TKeyboardShortcutKey,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-response/updateSettingsZoomByKeyboard",
   async (type, { dispatch, getState }) => {
@@ -109,7 +118,10 @@ export const updateSettingsBackgroundImages = createAsyncThunk<
   Pick<UpdateBackgroundImagePayloadInterface, "method"> & {
     type: "project" | "global";
   },
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-response/updateSettingsBackgroundImages",
   async ({ type, method }, { dispatch, getState }) => {
@@ -128,8 +140,3 @@ export const updateSettingsBackgroundImages = createAsyncThunk<
     return response;
   }
 );
-
-/* 
-
-      updateupdateBackgroundImage(payload: UpdateBackgroundImagePayloadInterface): Promise<void>;
-*/

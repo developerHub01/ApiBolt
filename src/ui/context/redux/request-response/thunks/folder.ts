@@ -13,7 +13,10 @@ import { areSamePayload } from "@/utils/helper";
 export const loadFolder = createAsyncThunk<
   void,
   void | { requestId?: string | null | undefined; once?: boolean },
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("request-response/loadFolder", async (payload, { getState, dispatch }) => {
   if (!payload) payload = {};
 
@@ -46,7 +49,10 @@ export const updateFolder = createAsyncThunk<
   Partial<ResponseFolderDataInterface> & {
     requestOrFolderMetaId?: string;
   },
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("request-response/updateFolder", async (payload, { dispatch, getState }) => {
   let selectedTab = payload.requestOrFolderMetaId;
 

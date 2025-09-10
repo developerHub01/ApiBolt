@@ -9,7 +9,10 @@ import { handleLoadBodyRaw } from "@/context/redux/request-response/request-resp
 export const loadRequestBodyRaw = createAsyncThunk<
   void,
   void | { requestId?: string | null | undefined; once?: boolean },
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-response/loadRequestBodyRaw",
   async (payload, { dispatch, getState }) => {
@@ -36,7 +39,10 @@ export const loadRequestBodyRaw = createAsyncThunk<
 export const updateRequestBodyRaw = createAsyncThunk<
   void,
   Omit<Partial<BodyRawInterface>, "requestOrFolderMetaId">,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-response/updateRequestBodyRaw",
   async (payload, { dispatch, getState }) => {

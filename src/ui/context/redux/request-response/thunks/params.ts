@@ -15,7 +15,10 @@ import { detectAndCleanVariable } from "@/utils/request-response.utils";
 export const loadParams = createAsyncThunk<
   void,
   void | { requestId?: string | null | undefined; once?: boolean },
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("request-response/loadParams", async (payload, { getState, dispatch }) => {
   try {
     if (!payload) payload = {};
@@ -40,7 +43,10 @@ export const loadParams = createAsyncThunk<
 export const addParams = createAsyncThunk<
   boolean,
   Partial<ParamHeaderBuildPayloadInterface> | undefined,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("request-response/addParams", async (payload, { getState, dispatch }) => {
   try {
     const state = getState() as RootState;
@@ -63,7 +69,10 @@ export const addParams = createAsyncThunk<
 export const deleteParams = createAsyncThunk<
   boolean,
   string,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("request-response/deleteParams", async (id, { getState, dispatch }) => {
   try {
     const state = getState() as RootState;
@@ -84,7 +93,10 @@ export const deleteParams = createAsyncThunk<
 export const deleteParamsByRequestMetaId = createAsyncThunk<
   boolean,
   string | undefined | null,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-response/deleteParamsByRequestMetaId",
   async (id, { getState, dispatch }) => {
@@ -112,7 +124,10 @@ export const updateParams = createAsyncThunk<
     paramId: string;
     payload: Partial<ParamHeaderBuildPayloadInterface>;
   },
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-response/updateParams",
   async ({ paramId, payload }, { dispatch, getState }) => {
@@ -160,7 +175,10 @@ export const updateParams = createAsyncThunk<
 export const checkAllParamsByRequestMetaId = createAsyncThunk<
   boolean,
   string | undefined,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-response/checkAllParamsByRequestMetaId",
   async (requestOrFolderMetaId, { dispatch }) => {
@@ -185,7 +203,10 @@ export const updateParamsFromSearchParams = createAsyncThunk<
     url: string;
     saveBackend?: boolean;
   },
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-response/updateParamsFromSearchParams",
   async ({ url: api, saveBackend = true }, { dispatch, getState }) => {

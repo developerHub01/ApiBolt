@@ -15,7 +15,10 @@ import {
 export const loadHeaders = createAsyncThunk<
   void,
   void | { requestId?: string | null | undefined; once?: boolean },
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("request-response/loadHeaders", async (payload, { getState, dispatch }) => {
   if (!payload) payload = {};
 
@@ -36,7 +39,10 @@ export const loadHeaders = createAsyncThunk<
 export const addHeaders = createAsyncThunk<
   boolean,
   Partial<ParamHeaderBuildPayloadInterface> | undefined,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("request-response/addHeaders", async (payload, { getState, dispatch }) => {
   const state = getState() as RootState;
 
@@ -54,7 +60,10 @@ export const addHeaders = createAsyncThunk<
 export const deleteHeaders = createAsyncThunk<
   boolean,
   string,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("request-response/deleteHeaders", async (id, { getState, dispatch }) => {
   const state = getState() as RootState;
 
@@ -70,7 +79,10 @@ export const deleteHeaders = createAsyncThunk<
 export const deleteHeadersByRequestMetaId = createAsyncThunk<
   boolean,
   string | undefined | null,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-response/deleteHeadersByRequestMetaId",
   async (id, { getState, dispatch }) => {
@@ -93,7 +105,10 @@ export const updateHeaders = createAsyncThunk<
     paramId: string;
     payload: Partial<ParamHeaderBuildPayloadInterface>;
   },
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-response/updateHeaders",
   async ({ paramId, payload }, { dispatch }) => {
@@ -110,7 +125,10 @@ export const updateHeaders = createAsyncThunk<
 export const checkAllHeadersByRequestMetaId = createAsyncThunk<
   boolean,
   string | undefined,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-response/checkAllHeadersByRequestMetaId",
   async (requestOrFolderMetaId, { dispatch }) => {
@@ -129,7 +147,10 @@ export const updateHiddenHeaders = createAsyncThunk<
   {
     keyName: keyof HiddenHeadersCheckInterface;
   },
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-response/updateHiddenHeaders",
   async ({ keyName }, { dispatch, getState }) => {

@@ -17,7 +17,10 @@ import { getNodeParentsIdList } from "@/utils/request-response.utils";
 export const loadTabsData = createAsyncThunk<
   void,
   void,
-  { dispatch: AppDispatch }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("request-response/loadTabsData", async (_, { dispatch }) => {
   try {
     const tabsListData = await window.electronAPITabsDB.getTabList();
@@ -32,7 +35,9 @@ export const loadTabsData = createAsyncThunk<
 export const changeTabsData = createAsyncThunk<
   void,
   void,
-  { state: RootState }
+  {
+    state: RootState;
+  }
 >("request-response/changeTabsData", async (_, { getState }) => {
   const state = getState() as RootState;
   try {
@@ -48,7 +53,10 @@ export const changeTabsData = createAsyncThunk<
 export const addNewTabsData = createAsyncThunk<
   void,
   void,
-  { state: RootState; dispatch: AppDispatch }
+  {
+    state: RootState;
+    dispatch: AppDispatch;
+  }
 >("request-response/addNewTabsData", async (_, { dispatch }) => {
   try {
     const newTabId = uuidv4();
@@ -73,7 +81,10 @@ export const addNewTabsData = createAsyncThunk<
 export const expendParentsOnSelectedChangeTabsData = createAsyncThunk<
   void,
   string,
-  { state: RootState; dispatch: AppDispatch }
+  {
+    state: RootState;
+    dispatch: AppDispatch;
+  }
 >(
   "request-response/expendParentsOnSelectedChangeTabsData",
   async (id, { dispatch, getState }) => {

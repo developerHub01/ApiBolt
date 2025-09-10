@@ -9,7 +9,10 @@ import { handleLoadMetaShowColumn } from "@/context/redux/request-response/reque
 export const loadMetaShowColumn = createAsyncThunk<
   void,
   void | { requestId?: string | null | undefined; once?: boolean },
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >(
   "request-response/loadMetaShowColumn",
   async (payload, { getState, dispatch }) => {
@@ -29,7 +32,7 @@ export const loadMetaShowColumn = createAsyncThunk<
 
     const response =
       await window.electronAPIMetaShowColumnDB.getMetaShowColumn(selectedTab);
-      
+
     dispatch(handleLoadMetaShowColumn(response));
   }
 );
@@ -37,7 +40,10 @@ export const loadMetaShowColumn = createAsyncThunk<
 export const updateMetaShowColumn = createAsyncThunk<
   boolean,
   Partial<ParamHeaderBuildPayloadInterface>,
-  { dispatch: AppDispatch; state: RootState }
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
 >("request-response/updateMetaShowColumn", async (payload, { dispatch }) => {
   const response =
     await window.electronAPIMetaShowColumnDB.updateMetaShowColumn(payload);
