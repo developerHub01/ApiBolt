@@ -1,6 +1,5 @@
 import { memo, useMemo } from "react";
 import RequestListItem from "@/components/app/collections/request-list/content/request-list/RequestListItem";
-import RequestListDeleteAlertDialog from "@/components/app/collections/request-list/content/request-list/RequestListDeleteAlertDialog";
 import { useAppSelector } from "@/context/redux/hooks";
 import Empty from "@/components/ui/empty";
 import AutoScrollActiveWrapper from "@/components/ui/auto-scroll-active-wrapper";
@@ -23,7 +22,6 @@ const RequestList = memo(() => {
         ))}
       </AutoScrollActiveWrapper>
       {Boolean(rootList?.length) || <EmptyBox />}
-      <RequestListDeleteAlertDialog />
     </div>
   );
 });
