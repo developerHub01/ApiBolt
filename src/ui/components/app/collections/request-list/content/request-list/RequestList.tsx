@@ -16,8 +16,8 @@ const RequestList = memo(() => {
   }, [requestList]);
 
   return (
-    <div className="flex flex-col w-full py-1 gap-0.5">
-      <AutoScrollActiveWrapper className="py-1">
+    <div className="flex flex-col w-full gap-0.5">
+      <AutoScrollActiveWrapper>
         {rootList.map(({ id }) => (
           <RequestListItem key={id} id={id} lavel={0} />
         ))}
