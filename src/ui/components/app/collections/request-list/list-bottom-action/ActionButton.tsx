@@ -1,0 +1,34 @@
+import { memo } from "react";
+import type {
+  BottomActionButtonInterface,
+  ListBottomActionType,
+} from "@/types/request-list";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+interface ActionButtonProps extends BottomActionButtonInterface {
+  onClick?: (id: ListBottomActionType) => void;
+}
+
+const ActionButton = memo(({ id, label, Icon, onClick }: ActionButtonProps) => {
+  return (
+    <Tooltip key={id}>
+      <TooltipTrigger asChild>
+        <button
+          onClick={() => onClick && onClick(id)}
+          className="cursor-pointer p-1 rounded-md aspect-square bg-accent/5 hover:bg-accent transition-all duration-100"
+        >
+          <Icon size={16} />
+        </button>
+      </TooltipTrigger>
+      <TooltipContent className="p-1">
+        <p>{label}</p>
+      </TooltipContent>
+    </Tooltip>
+  );
+});
+
+export default ActionButton;
