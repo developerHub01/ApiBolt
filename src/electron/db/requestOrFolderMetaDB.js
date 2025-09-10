@@ -1,6 +1,6 @@
 import { eq, inArray } from "drizzle-orm";
 import { db } from "./index.js";
-import { requestOrFolderMetaTable, tabsTable } from "./schema.js";
+import { requestOrFolderMetaTable } from "./schema.js";
 import { getActiveProject } from "./projectsDB.js";
 import { updateTablistBasedRequestOrFolderMetaDeletion } from "./tabsDB.js";
 
@@ -78,6 +78,23 @@ export const updateRequestOrFolderMeta = async (payload) => {
       .where(eq(requestOrFolderMetaTable.id, id));
 
     return updated?.changes > 0;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const collapseAllRequestOrFolderMeta = async (projectId) => {
+  try {
+    if (!projectId) projectId = await getActiveProject();
+
+    const result = await db
+      .update(requestOrFolderMetaTable)
+      .set({
+        isExpended: 0,
+      })
+      .where(eq(requestOrFolderMetaTable.projectId, projectId));
+
+    return result.changes > 0;
   } catch (error) {
     console.log(error);
   }

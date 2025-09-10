@@ -10,9 +10,12 @@ import {
   FolderPlus as FolderAddIcon,
   FolderDot as RestApiBasicAddIcon,
   Trash2 as DeleteIcon,
+  RefreshCw as RefreshIcon,
+  ChevronsDownUp as CollapseIcon,
   type LucideIcon,
 } from "lucide-react";
 import {
+  collapseAllRequestOrFolder,
   createCollectionBySelectedTab,
   createRestApiBasicBySelectedTab,
   createSingleRequestBySelectedTab,
@@ -25,6 +28,8 @@ type ButtonType =
   | "add-request"
   | "add-folder"
   | "add-rest-api-basic-folder"
+  | "refresh"
+  | "collapse"
   | "delete";
 
 interface ButtonInterface {
@@ -49,6 +54,16 @@ const buttonList: Array<ButtonInterface> = [
     label: "Add Rest Api Basic Folder",
     Icon: RestApiBasicAddIcon,
   },
+  {
+    id: "refresh",
+    label: "Refresh List",
+    Icon: RefreshIcon,
+  },
+  {
+    id: "collapse",
+    label: "Collapse All Folders",
+    Icon: CollapseIcon,
+  },
 ];
 
 const deleteButton: ButtonInterface = {
@@ -69,6 +84,8 @@ const ListBottomAction = memo(() => {
           return dispatch(createCollectionBySelectedTab());
         case "add-rest-api-basic-folder":
           return dispatch(createRestApiBasicBySelectedTab());
+        case "collapse":
+          return dispatch(collapseAllRequestOrFolder());
       }
     },
     [dispatch]

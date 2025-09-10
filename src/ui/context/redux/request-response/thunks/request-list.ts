@@ -6,6 +6,7 @@ import {
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import {
+  handleChangeCollapseAllRequestOrFolder,
   handleChangeDeleteFolderOrRequestId,
   handleChangeIsRequestListLoaded,
   handleCreateRestApiBasic,
@@ -393,6 +394,21 @@ export const duplicateRequestOrFolder = createAsyncThunk<
     }
   }
 );
+
+export const collapseAllRequestOrFolder = createAsyncThunk<
+  void,
+  void,
+  { state: RootState; dispatch: AppDispatch }
+>("request-response/collapseAllRequestOrFolder", async (_, { dispatch }) => {
+  try {
+    const response =
+      await window.electronAPIRequestOrFolderMetaDB.collapseAllRequestOrFolderMeta();
+
+    if (response) dispatch(handleChangeCollapseAllRequestOrFolder());
+  } catch (error) {
+    console.log(error);
+  }
+});
 /* ==============================
 ======= RequestList end =========
 ================================= */

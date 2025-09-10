@@ -498,6 +498,11 @@ export const requestResponseSlice = createSlice({
     ) => {
       state.deleteFolderOrRequestId = action.payload;
     },
+    handleChangeCollapseAllRequestOrFolder: (state) => {
+      Object.keys(state.requestList).forEach((id) => {
+        state.requestList[id].isExpended = false;
+      });
+    },
     /* ================ Requestlist end =================== */
 
     /* ================ TabList start =================== */
@@ -1196,6 +1201,7 @@ export const {
   handleUpdateRequestOrFolder,
   handleDeleteAllRequestOrFolder,
   handleChangeDeleteFolderOrRequestId,
+  handleChangeCollapseAllRequestOrFolder,
   handleCreateSingleRequest,
   handleCreateRestApiBasic,
 

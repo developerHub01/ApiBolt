@@ -9,6 +9,7 @@ import {
   updateRequestOrFolderMeta,
   duplicateRequestOrFolderMeta,
   expendOrCollapseRequestOrFolderMetaAll,
+  collapseAllRequestOrFolderMeta,
 } from "../db/requestOrFolderMetaDB.js";
 
 export const requestOrFolderMetaHandler = () => {
@@ -23,6 +24,10 @@ export const requestOrFolderMetaHandler = () => {
   ipcMain.handle(
     "updateRequestOrFolderMeta",
     async (_, ...rest) => await updateRequestOrFolderMeta(...rest)
+  );
+  ipcMain.handle(
+    "collapseAllRequestOrFolderMeta",
+    async (_, ...rest) => await collapseAllRequestOrFolderMeta(...rest)
   );
   ipcMain.handle(
     "moveRequestOrFolderMeta",

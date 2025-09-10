@@ -13,6 +13,15 @@ export const projectTable = sqliteTable("projects_table", {
   name: text().notNull(),
 });
 
+export const activeProjectTable = sqliteTable("active_project_table", {
+  id: text().primaryKey().default(ACTIVE_PROJECT_ID),
+  activeProjectId: text("active_project_id")
+    .unique()
+    .references(() => projectTable.id, {
+      onDelete: "cascade",
+    }),
+});
+
 export const environmentTable = sqliteTable("environments_table", {
   id: text("id")
     .primaryKey()
@@ -29,15 +38,6 @@ export const environmentTable = sqliteTable("environments_table", {
   createdAt: text()
     .notNull()
     .default(sql`(current_timestamp)`),
-});
-
-export const activeProjectTable = sqliteTable("active_project_table", {
-  id: text().primaryKey().default(ACTIVE_PROJECT_ID),
-  activeProjectId: text("active_project_id")
-    .unique()
-    .references(() => projectTable.id, {
-      onDelete: "cascade",
-    }),
 });
 
 export const authorizationTable = sqliteTable("authorization_table", {

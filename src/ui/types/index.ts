@@ -117,6 +117,7 @@ declare global {
       updateRequestOrFolderMeta(
         payload: RequestListItemUpdatePayloadInterface
       ): Promise<boolean>;
+      collapseAllRequestOrFolderMeta(projectId?: string): Promise<boolean>;
       moveRequestOrFolderMeta(id: string, parentId?: string): Promise<boolean>;
       deleteRequestOrFolderMetaById(
         id?: string | Array<string>
