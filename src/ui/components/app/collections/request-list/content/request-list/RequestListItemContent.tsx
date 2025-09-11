@@ -89,7 +89,7 @@ const RequestListItemContent = memo(
           <RequestListItemName id={id} name={props.name} />
           <AnimatePresence>
             {(isHovering || isContextMenuOpen) && (
-              <ItemCTA type={type} id={id} />
+              <ItemCTA type={type} id={id} lavel={lavel} />
             )}
           </AnimatePresence>
         </div>

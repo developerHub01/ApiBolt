@@ -27,6 +27,7 @@ import {
   defaultBasicAuth,
   defaultJWTBearerAuth,
 } from "@/constant/request-response.constant";
+import { getRequestNodeLevel } from "@/utils/request-response.utils";
 
 export const selectIsRequestListCollapsed = createSelector(
   [(state: RootState) => state.requestResponse.requestListCollapsed],
@@ -106,6 +107,16 @@ export const selectRequestOrFolderById = (id: string) =>
   createSelector(
     [(state: RootState) => state.requestResponse.requestList[id]],
     (request): RequestListItemInterface => request
+  );
+
+export const selectRequestOrFolderLavelById = (id: string) =>
+  createSelector(
+    [(state: RootState) => state.requestResponse.requestList],
+    (requestList): number =>
+      getRequestNodeLevel({
+        source: requestList,
+        id,
+      })
   );
 
 export const selectTabList = createSelector(

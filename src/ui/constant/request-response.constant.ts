@@ -8,6 +8,7 @@ import type {
 import { v4 as uuidv4 } from "uuid";
 
 export const REQUEST_ITEM_SPACE_SIZE = 32;
+export const MAX_REQUEST_LIST_NESTED_FOLDER_COUNT = 5;
 
 export const generateNewMetaDataItem = (type?: TMetaTableType) => ({
   id: uuidv4(),

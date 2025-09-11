@@ -1,3 +1,4 @@
+import { MAX_REQUEST_LIST_NESTED_FOLDER_COUNT } from "@/constant/request-response.constant";
 import { urlPureVariableRegex } from "@/constant/request-url.constant";
 import type {
   ParamInterface,
@@ -6,6 +7,24 @@ import type {
   TParamContentType,
 } from "@/types/request-response.types";
 import { v4 as uuidv4 } from "uuid";
+
+export const getFolderChildren = (
+  payload: RequestListItemInterface
+): Array<string> | null => payload.children ?? (!payload["method"] ? [] : null);
+
+/**
+ *
+ * @param payload request or folder details
+ * @returns "folder" | "request"
+ *
+ * first check do it have children
+ *    if then folder
+ *    else check is there not exist method
+ *      if method not exist that means it is must a folder so add empty children list else undefined because it is a request.
+ */
+export const getRequestType = (
+  payload: RequestListItemInterface
+): "folder" | "request" => (getFolderChildren(payload) ? "folder" : "request");
 
 export const getNestedIds = ({
   source,
@@ -45,6 +64,23 @@ export const getNodeParentsIdList = ({
   ids.push(data.parentId);
 
   return getNodeParentsIdList({ source, id: data.parentId, ids });
+};
+
+export const getRequestNodeLevel = ({
+  source,
+  id,
+  lavel = 0,
+}: {
+  source: RequestListInterface;
+  id: string;
+  lavel?: number;
+}): number => {
+  const data = source[id];
+  if (!data || !data.parentId) return lavel;
+
+  lavel++;
+
+  return getRequestNodeLevel({ source, id: data.parentId, lavel });
 };
 
 export const duplicateRequestOrFolderNode = ({
@@ -91,6 +127,9 @@ export const duplicateRequestOrFolderNode = ({
   return result;
 };
 
+export const checkPermissionToAddFolderAsChildren = (lavel: number = 0) =>
+  lavel + 1 <= MAX_REQUEST_LIST_NESTED_FOLDER_COUNT;
+
 export const paramsTableToString = (
   params: Array<ParamInterface> = []
 ): string => {
@@ -133,21 +172,3 @@ export const detectAndCleanVariable = (
     [type === "keyType" ? "key" : "value"]: str,
   };
 };
-
-export const getFolderChildren = (
-  payload: RequestListItemInterface
-): Array<string> | null => payload.children ?? (!payload["method"] ? [] : null);
-
-/**
- *
- * @param payload request or folder details
- * @returns "folder" | "request"
- *
- * first check do it have children
- *    if then folder
- *    else check is there not exist method
- *      if method not exist that means it is must a folder so add empty children list else undefined because it is a request.
- */
-export const getRequestType = (
-  payload: RequestListItemInterface
-): "folder" | "request" => (getFolderChildren(payload) ? "folder" : "request");

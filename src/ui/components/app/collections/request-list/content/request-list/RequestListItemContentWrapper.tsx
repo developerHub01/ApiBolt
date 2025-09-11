@@ -9,6 +9,7 @@ import type { RequestListItemInterface } from "@/types/request-response.types";
 import { moveRequestOrFolder } from "@/context/redux/request-response/thunks/request-list";
 import { handleChangeSelectedTab } from "@/context/redux/request-response/request-response-slice";
 import { REQUEST_ITEM_SPACE_SIZE } from "@/constant/request-response.constant";
+import useRequestItemDetails from "@/hooks/request-response/request-list/use-request-item-details";
 
 interface RequestListItemContentWrapperProps
   extends Pick<
@@ -38,6 +39,7 @@ const RequestListItemContentWrapper = memo(
     const selectedTab = useAppSelector(selectSelectedTab);
     const { isRenameActive, handleToggleContextMenu } = useRequestList();
     const [isDragging, setIsDragging] = useState<boolean>(false);
+    const { checkIsRequestDropable } = useRequestItemDetails();
 
     const handleDragStart = useCallback(
       (e: DragEvent<HTMLDivElement>) => {
@@ -58,9 +60,14 @@ const RequestListItemContentWrapper = memo(
       (e: DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         const draggedId = e.dataTransfer.getData("text/plain");
+        const isDropAble = checkIsRequestDropable({
+          dragRequestId: draggedId,
+          dropRequestId: id,
+          lavel,
+        });
 
         setIsDragging(false);
-        if (draggedId === id) return;
+        if (!isDropAble || draggedId === id) return;
 
         dispatch(
           moveRequestOrFolder({
@@ -69,7 +76,7 @@ const RequestListItemContentWrapper = memo(
           })
         );
       },
-      [children, dispatch, id, parentId]
+      [checkIsRequestDropable, children, dispatch, id, lavel, parentId]
     );
 
     const handleDragLeave = useCallback(() => setIsDragging(false), []);

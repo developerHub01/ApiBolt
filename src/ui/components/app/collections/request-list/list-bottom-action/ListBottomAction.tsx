@@ -1,4 +1,4 @@
-import { memo, useCallback } from "react";
+import { memo, useCallback, useMemo } from "react";
 import {
   FilePlus as FileAddIcon,
   FolderPlus as FolderAddIcon,
@@ -20,6 +20,7 @@ import type {
 } from "@/types/request-list";
 import ActionButton from "@/components/app/collections/request-list/list-bottom-action/ActionButton";
 import DeleteButton from "@/components/app/collections/request-list/list-bottom-action/DeleteButton";
+import useRequestItemDetails from "@/hooks/request-response/request-list/use-request-item-details";
 
 const buttonList: Array<BottomActionButtonInterface> = [
   {
@@ -49,8 +50,11 @@ const buttonList: Array<BottomActionButtonInterface> = [
   },
 ];
 
+const folderTypeIdList = ["add-folder", "add-rest-api-basic-folder"];
+
 const ListBottomAction = memo(() => {
   const dispatch = useAppDispatch();
+  const { checkIsFolderAddable } = useRequestItemDetails();
 
   const handleClick = useCallback(
     (type: ListBottomActionType) => {
@@ -70,9 +74,16 @@ const ListBottomAction = memo(() => {
     [dispatch]
   );
 
+  const list = useMemo(() => {
+    const showFolderButton = checkIsFolderAddable();
+    if (showFolderButton) return buttonList;
+
+    return buttonList.filter((item) => !folderTypeIdList.includes(item.id));
+  }, [checkIsFolderAddable]);
+
   return (
     <div className="flex items-center justify-end gap-1.5 px-2 py-1.5 border-t-2">
-      {buttonList.map((item) => (
+      {list.map((item) => (
         <ActionButton key={item.id} {...item} onClick={handleClick} />
       ))}
       <DeleteButton />
