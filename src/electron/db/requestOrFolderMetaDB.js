@@ -113,7 +113,7 @@ export const collapseAllRequestOrFolderMeta = async (projectId) => {
   }
 };
 
-export const moveRequestOrFolderMeta = async ({ id, parentId } = {}) => {
+export const moveRequestOrFolderMeta = async ({ id, parentId = null } = {}) => {
   try {
     const updated = await db
       .update(requestOrFolderMetaTable)

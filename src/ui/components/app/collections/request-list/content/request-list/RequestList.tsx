@@ -1,9 +1,10 @@
-import { memo, useMemo } from "react";
+import { memo, useCallback, useMemo, type DragEvent } from "react";
 import RequestListItem from "@/components/app/collections/request-list/content/request-list/RequestListItem";
-import { useAppSelector } from "@/context/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import Empty from "@/components/ui/empty";
 import AutoScrollActiveWrapper from "@/components/ui/auto-scroll-active-wrapper";
 import { selectRequestOrFolderList } from "@/context/redux/request-response/request-response-selector";
+import { moveRequestOrFolder } from "@/context/redux/request-response/thunks/request-list";
 
 const RequestList = memo(() => {
   const requestList = useAppSelector(selectRequestOrFolderList);
@@ -15,14 +16,14 @@ const RequestList = memo(() => {
   }, [requestList]);
 
   return (
-    <div className="flex flex-col w-full gap-0.5">
+    <Wrapper>
       <AutoScrollActiveWrapper>
         {rootList.map(({ id }) => (
           <RequestListItem key={id} id={id} lavel={0} />
         ))}
       </AutoScrollActiveWrapper>
       {Boolean(rootList?.length) || <EmptyBox />}
-    </div>
+    </Wrapper>
   );
 });
 
@@ -35,5 +36,35 @@ const EmptyBox = memo(() => (
     />
   </div>
 ));
+
+interface WrapperProps {
+  children: React.ReactNode;
+}
+
+const Wrapper = ({ children }: WrapperProps) => {
+  const dispatch = useAppDispatch();
+  const handleDrop = useCallback(
+    (e: DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      const draggedId = e.dataTransfer.getData("text/plain");
+      dispatch(
+        moveRequestOrFolder({
+          requestId: draggedId,
+        })
+      );
+    },
+    [dispatch]
+  );
+
+  return (
+    <div
+      className="h-full flex flex-col w-full gap-0.5"
+      onDrop={handleDrop}
+      onDragOver={(e) => e.preventDefault()}
+    >
+      {children}
+    </div>
+  );
+};
 
 export default RequestList;

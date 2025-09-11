@@ -29,8 +29,6 @@ const TabSidebar = () => {
     (e: DragEvent<HTMLDivElement>) => {
       e.preventDefault();
       const draggedId = e.dataTransfer.getData("text/plain");
-
-      console.log({ draggedId });
       if (!draggedId) return;
 
       dispatch(
