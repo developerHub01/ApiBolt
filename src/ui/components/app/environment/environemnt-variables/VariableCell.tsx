@@ -81,6 +81,32 @@ const VariableCell = memo(
       [onChange]
     );
 
+    const handleVariableKeyDown = useCallback(
+      (e: React.KeyboardEvent<HTMLInputElement>) => {
+        // only letters, numbers, underscore
+        const allowedPattern = /^[a-zA-Z0-9_-]$/;
+        const key = e.key;
+
+        // Allow navigation/control keys (Backspace, Delete, Tab, etc.)
+        if (
+          key === "Backspace" ||
+          key === "Delete" ||
+          key === "ArrowLeft" ||
+          key === "ArrowRight" ||
+          key === "Tab"
+        ) {
+          return;
+        }
+
+        // Block if not allowed
+        if (!allowedPattern.test(key)) e.preventDefault();
+
+        // Prevent first char from being number
+        if (inputValue.length === 0 && /^[0-9]$/.test(key)) e.preventDefault();
+      },
+      [inputValue]
+    );
+
     const isSecretView =
       type === "input" && keyName === "value" && !visibilityType;
 
@@ -100,6 +126,9 @@ const VariableCell = memo(
               value={inputValue}
               onChange={handleInputChange}
               onBlur={handleBlur}
+              onKeyDown={
+                keyName === "variable" ? handleVariableKeyDown : undefined
+              }
               placeholder={placeholder}
             />
           )}
