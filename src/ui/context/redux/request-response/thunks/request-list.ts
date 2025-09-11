@@ -65,9 +65,11 @@ export const createSingleRequest = createAsyncThunk<
     };
 
     dispatch(handleCreateSingleRequest(payload));
-    await window.electronAPIRequestOrFolderMetaDB.createRequestOrFolderMeta(
-      payload
-    );
+    const response =
+      await window.electronAPIRequestOrFolderMetaDB.createRequestOrFolderMeta(
+        payload
+      );
+    if (response) await dispatch(expendRequestOrFolder(parentId));
   } catch (error) {
     console.log(error);
   }
@@ -90,10 +92,12 @@ export const createCollection = createAsyncThunk<
 
     dispatch(handleCreateSingleRequest(payload));
 
-    await window.electronAPIRequestOrFolderMetaDB.createRequestOrFolderMeta({
-      ...payload,
-      children: [],
-    });
+    const response =
+      await window.electronAPIRequestOrFolderMetaDB.createRequestOrFolderMeta({
+        ...payload,
+        children: [],
+      });
+    if (response) await dispatch(expendRequestOrFolder(parentId));
   } catch (error) {
     console.log(error);
   }
@@ -174,9 +178,11 @@ export const createSingleRequestBySelectedTab = createAsyncThunk<
       };
 
       dispatch(handleCreateSingleRequest(payload));
-      await window.electronAPIRequestOrFolderMetaDB.createRequestOrFolderMeta(
-        payload
-      );
+      const response =
+        await window.electronAPIRequestOrFolderMetaDB.createRequestOrFolderMeta(
+          payload
+        );
+      if (response) await dispatch(expendRequestOrFolder(parentId));
     } catch (error) {
       console.log(error);
     }
@@ -213,10 +219,14 @@ export const createCollectionBySelectedTab = createAsyncThunk<
 
       dispatch(handleCreateSingleRequest(payload));
 
-      await window.electronAPIRequestOrFolderMetaDB.createRequestOrFolderMeta({
-        ...payload,
-        children: [],
-      });
+      const response =
+        await window.electronAPIRequestOrFolderMetaDB.createRequestOrFolderMeta(
+          {
+            ...payload,
+            children: [],
+          }
+        );
+      if (response) await dispatch(expendRequestOrFolder(parentId));
     } catch (error) {
       console.log(error);
     }
@@ -274,9 +284,12 @@ export const createRestApiBasicBySelectedTab = createAsyncThunk<
 
       dispatch(handleCreateRestApiBasic(requestList));
 
-      await window.electronAPIRequestOrFolderMetaDB.createRequestOrFolderMeta(
-        requestList
-      );
+      const response =
+        await window.electronAPIRequestOrFolderMetaDB.createRequestOrFolderMeta(
+          requestList
+        );
+
+      if (response) await dispatch(expendRequestOrFolder(parentId));
     } catch (error) {
       console.log(error);
     }
@@ -301,6 +314,38 @@ export const updateRequestOrFolder = createAsyncThunk<
     console.log(error);
   }
 });
+
+export const expendRequestOrFolder = createAsyncThunk<
+  void,
+  string | undefined,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>(
+  "request-response/expendRequestOrFolder",
+  async (id, { dispatch, getState }) => {
+    try {
+      const state = getState() as RootState;
+
+      if (
+        !id ||
+        !state.requestResponse.requestList[id] ||
+        getRequestType(state.requestResponse.requestList[id]) !== "folder"
+      )
+        return;
+
+      await dispatch(
+        updateRequestOrFolder({
+          id,
+          isExpended: true,
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 
 export const moveRequestOrFolder = createAsyncThunk<
   void,
