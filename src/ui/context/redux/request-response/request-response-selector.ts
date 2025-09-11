@@ -273,7 +273,10 @@ export const selectEnvironmentsVariableListUnique = createSelector(
 
     Object.values(environmentsList).forEach((env) => {
       const existing = map.get(env.variable);
-      if (!existing || new Date(env.createdAt) > new Date(existing.createdAt))
+      if (
+        env.variable &&
+        (!existing || new Date(env.createdAt) > new Date(existing.createdAt))
+      )
         map.set(env.variable, env);
     });
 
