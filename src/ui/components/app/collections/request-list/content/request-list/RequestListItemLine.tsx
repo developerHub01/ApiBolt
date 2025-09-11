@@ -7,6 +7,7 @@ const leftSpace = REQUEST_ITEM_SPACE_SIZE / 2;
 
 interface Props {
   lavel: number;
+  isExpended?: boolean;
   isLastChild?: boolean;
   className?: string;
   children: React.ReactNode;
@@ -15,7 +16,8 @@ interface Props {
 const RequestListItemLine = memo(
   ({
     lavel,
-    // isLastChild = false,
+    isExpended = false,
+    isLastChild = false,
     className,
     children,
   }: Props) => {
@@ -26,14 +28,19 @@ const RequestListItemLine = memo(
         <span
           className="inline-block absolute w-5 h-0.5 bg-input -left-1 top-1/2 -translate-x-full -translate-y-1/2"
           style={{
-            width: leftSpace - 2,
+            /* -2 because of avoiding overlap of two line */
+            /* this is when vertical line is half, so to remove a smal space between horizontal and vertical line */
+            width: leftSpace - (isLastChild && !isExpended ? 0 : 2),
           }}
         />
         {Array.from({
           length: lavel,
         }).map((_, index) => (
           <span
-            className={cn("inline-block absolute w-0.5 h-full bg-input top-0")}
+            key={index}
+            className={cn("inline-block absolute w-0.5 h-full bg-input top-0", {
+              "h-1/2": isLastChild && !isExpended && !index,
+            })}
             style={{
               left: -(leftSpace + leftSpace * 2 * index + 4),
             }}

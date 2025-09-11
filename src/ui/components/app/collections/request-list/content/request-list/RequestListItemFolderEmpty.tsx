@@ -31,6 +31,8 @@ const RequestListItemFolderEmpty = memo(({ id, lavel }: Props) => {
         <RequestListItemLine
           lavel={lavel}
           className="select-none leading-relaxed py-1.5"
+          isLastChild={true}
+          isExpended={false}
         >
           This folder is empty.
           <br />

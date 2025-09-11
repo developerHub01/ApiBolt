@@ -60,7 +60,7 @@ const RequestListItemContent = memo(
         childrenRequest={children}
         setIsHovering={setIsHovering}
       >
-        <RequestListItemLine lavel={lavel} isLastChild={isLastChild}>
+        <RequestListItemLine lavel={lavel} isExpended={isExpended} isLastChild={isLastChild}>
           <div className="h-full w-6.5 flex items-center">
             {type === "folder" ? (
               <RequestListItemFolderButton
