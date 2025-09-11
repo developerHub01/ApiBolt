@@ -9,46 +9,50 @@ import { createSingleRequest } from "@/context/redux/request-response/thunks/req
 interface Props {
   id: string;
   lavel: number;
+  isRootLastChild?: boolean;
 }
 
-const RequestListItemFolderEmpty = memo(({ id, lavel }: Props) => {
-  const dispatch = useAppDispatch();
-  const handleAddRequest = useCallback(
-    async () => await dispatch(createSingleRequest(id)),
-    [dispatch, id]
-  );
+const RequestListItemFolderEmpty = memo(
+  ({ id, lavel, isRootLastChild = false }: Props) => {
+    const dispatch = useAppDispatch();
+    const handleAddRequest = useCallback(
+      async () => await dispatch(createSingleRequest(id)),
+      [dispatch, id]
+    );
 
-  const emptyLeftSpace = REQUEST_ITEM_SPACE_SIZE * lavel;
+    const emptyLeftSpace = REQUEST_ITEM_SPACE_SIZE * lavel;
 
-  return (
-    <RequestListItemContentWrapperParent className="h-auto cursor-auto">
-      <div
-        className="text-xs text-muted-foreground"
-        style={{
-          paddingLeft: emptyLeftSpace,
-        }}
-      >
-        <RequestListItemLine
-          lavel={lavel}
-          className="select-none leading-relaxed py-1.5"
-          isLastChild={true}
-          isExpended={false}
+    return (
+      <RequestListItemContentWrapperParent className="h-auto cursor-auto">
+        <div
+          className="text-xs text-muted-foreground"
+          style={{
+            paddingLeft: emptyLeftSpace,
+          }}
         >
-          This folder is empty.
-          <br />
-          <Button
-            variant={"link"}
-            size={"sm"}
-            className="px-0 text-xs! h-auto"
-            onClick={handleAddRequest}
+          <RequestListItemLine
+            lavel={lavel}
+            className="select-none leading-relaxed py-1.5"
+            isLastChild={true}
+            isExpended={false}
+            isRootLastChild={isRootLastChild}
           >
-            Add a request
-          </Button>{" "}
-          to start working.
-        </RequestListItemLine>
-      </div>
-    </RequestListItemContentWrapperParent>
-  );
-});
+            This folder is empty.
+            <br />
+            <Button
+              variant={"link"}
+              size={"sm"}
+              className="px-0 text-xs! h-auto"
+              onClick={handleAddRequest}
+            >
+              Add a request
+            </Button>{" "}
+            to start working.
+          </RequestListItemLine>
+        </div>
+      </RequestListItemContentWrapperParent>
+    );
+  }
+);
 
 export default RequestListItemFolderEmpty;

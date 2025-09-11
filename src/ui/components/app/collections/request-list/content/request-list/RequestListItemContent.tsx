@@ -15,6 +15,7 @@ interface RequestListItemProps extends RequestListItemInterface {
   type: "folder" | "request";
   lavel: number;
   isLastChild?: boolean;
+  isRootLastChild?: boolean;
 }
 
 const RequestListItemContent = memo(
@@ -25,6 +26,7 @@ const RequestListItemContent = memo(
     parentId,
     lavel = 0,
     isLastChild = false,
+    isRootLastChild = false,
     ...props
   }: RequestListItemProps) => {
     const dispatch = useAppDispatch();
@@ -57,10 +59,16 @@ const RequestListItemContent = memo(
         method={method}
         parentId={parentId}
         isExpended={isExpended}
+        isRootLastChild={isRootLastChild}
         childrenRequest={children}
         setIsHovering={setIsHovering}
       >
-        <RequestListItemLine lavel={lavel} isExpended={isExpended} isLastChild={isLastChild}>
+        <RequestListItemLine
+          lavel={lavel}
+          isExpended={isExpended}
+          isLastChild={isLastChild}
+          isRootLastChild={isRootLastChild}
+        >
           <div className="h-full w-6.5 flex items-center">
             {type === "folder" ? (
               <RequestListItemFolderButton

@@ -16,6 +16,7 @@ interface RequestListItemContentWrapperProps
     "id" | "method" | "parentId" | "isExpended"
   > {
   lavel: number;
+  isRootLastChild?: boolean;
   setIsHovering: React.Dispatch<React.SetStateAction<boolean>>;
   childrenRequest: RequestListItemInterface["children"];
   children: React.ReactNode;
@@ -29,6 +30,7 @@ const RequestListItemContentWrapper = memo(
     method,
     parentId,
     isExpended,
+    isRootLastChild,
     childrenRequest,
     children,
   }: RequestListItemContentWrapperProps) => {
@@ -126,6 +128,7 @@ const RequestListItemContentWrapper = memo(
             id={id}
             children={childrenRequest}
             lavel={lavel}
+            isRootLastChild={isRootLastChild}
           />
         )}
       </>
