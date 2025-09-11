@@ -326,7 +326,7 @@ export const moveRequestOrFolder = createAsyncThunk<
         id: requestId,
         parentId,
       });
-      
+
       dispatch(handleChangeIsRequestListLoaded(false));
     } catch (error) {
       console.log(error);
@@ -419,8 +419,12 @@ export const duplicateRequestOrFolder = createAsyncThunk<
           parentId: requestList[id]?.parentId,
         });
 
-      if (duplicatedNodes?.[newParentId]?.name)
+      if (duplicatedNodes?.[newParentId]?.name) {
         duplicatedNodes[newParentId].name += " copy";
+
+        if (getRequestType(duplicatedNodes[newParentId]) === "folder")
+          duplicatedNodes[newParentId].isExpended = false;
+      }
 
       const duplicatedData = Object.values(duplicatedNodes).map(
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
