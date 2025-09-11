@@ -16,14 +16,16 @@ const RequestList = memo(() => {
   }, [requestList]);
 
   return (
-    <Wrapper>
+    <div className="h-full flex flex-col w-full gap-0.5">
       <AutoScrollActiveWrapper>
         {rootList.map(({ id }) => (
           <RequestListItem key={id} id={id} lavel={0} />
         ))}
       </AutoScrollActiveWrapper>
+      <div className="h-full w-full bg-amber-500"></div>
+      <RestArea />
       {Boolean(rootList?.length) || <EmptyBox />}
-    </Wrapper>
+    </div>
   );
 });
 
@@ -37,11 +39,7 @@ const EmptyBox = memo(() => (
   </div>
 ));
 
-interface WrapperProps {
-  children: React.ReactNode;
-}
-
-const Wrapper = ({ children }: WrapperProps) => {
+const RestArea = memo(() => {
   const dispatch = useAppDispatch();
   const handleDrop = useCallback(
     (e: DragEvent<HTMLDivElement>) => {
@@ -58,13 +56,11 @@ const Wrapper = ({ children }: WrapperProps) => {
 
   return (
     <div
-      className="h-full flex flex-col w-full gap-0.5"
+      className="h-full bg-amber-500 flex flex-col w-full gap-0.5"
       onDrop={handleDrop}
       onDragOver={(e) => e.preventDefault()}
-    >
-      {children}
-    </div>
+    />
   );
-};
+});
 
 export default RequestList;
