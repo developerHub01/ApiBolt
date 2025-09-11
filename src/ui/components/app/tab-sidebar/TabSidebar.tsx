@@ -29,6 +29,8 @@ const TabSidebar = () => {
     (e: DragEvent<HTMLDivElement>) => {
       e.preventDefault();
       const draggedId = e.dataTransfer.getData("text/plain");
+
+      console.log({ draggedId });
       if (!draggedId) return;
 
       dispatch(
@@ -72,7 +74,7 @@ const TabSidebar = () => {
           onMouseLeave={() => handleTabListHovering(false)}
         >
           <ScrollArea
-            className="w-full h-full min-h-0 flex-1 pb-0 [&>div>div]:w-full"
+            className="w-full h-full min-h-0 flex-1 pb-0 [&>div>div]:w-full [&>div>div]:h-full"
             onDrop={handleDrop}
             onDragOver={(e) => e.preventDefault()}
           >

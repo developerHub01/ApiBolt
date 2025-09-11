@@ -563,7 +563,7 @@ export const requestResponseSlice = createSlice({
         index?: number;
       }>
     ) => {
-      const { id, index = 0 } = action.payload;
+      const { id, index } = action.payload;
 
       let tabList = state.tabList;
 
