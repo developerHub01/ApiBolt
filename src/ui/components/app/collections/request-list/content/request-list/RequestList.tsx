@@ -22,7 +22,6 @@ const RequestList = memo(() => {
           <RequestListItem key={id} id={id} lavel={0} />
         ))}
       </AutoScrollActiveWrapper>
-      <div className="h-full w-full bg-amber-500"></div>
       <RestArea />
       {Boolean(rootList?.length) || <EmptyBox />}
     </div>
@@ -56,7 +55,7 @@ const RestArea = memo(() => {
 
   return (
     <div
-      className="h-full bg-amber-500 flex flex-col w-full gap-0.5"
+      className="h-full flex flex-col w-full gap-0.5"
       onDrop={handleDrop}
       onDragOver={(e) => e.preventDefault()}
     />

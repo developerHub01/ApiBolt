@@ -363,6 +363,17 @@ export const moveRequestOrFolder = createAsyncThunk<
       const parentDetails = state.requestResponse.requestList[parentId ?? ""];
       const requestDetails = state.requestResponse.requestList[requestId];
 
+      /**
+       * Here first finding the list of children of requested item
+       * then checking that is user targetd parent is requested item's child?
+       * if child then we are not going further
+       */
+      const requestAllChildrenList = getNestedIds({
+        source: state.requestResponse.requestList,
+        id: requestId,
+      });
+      if (parentId && requestAllChildrenList.includes(parentId)) return;
+
       if (parentDetails && getRequestType(parentDetails) === "request")
         parentId = parentDetails.parentId;
       if (parentId === requestDetails.parentId) return;
@@ -372,9 +383,7 @@ export const moveRequestOrFolder = createAsyncThunk<
           id: requestId,
           parentId,
         });
-
-      console.log({ response, id: requestId, parentId });
-
+      if (response) await dispatch(expendRequestOrFolder(parentId));
       dispatch(handleChangeIsRequestListLoaded(false));
     } catch (error) {
       console.log(error);
