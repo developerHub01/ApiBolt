@@ -76,6 +76,12 @@ export type RequestListItemUpdatePayloadInterface = Required<
 > &
   Partial<Omit<RequestListItemInterface, "id" | "createdAt" | "children">>;
 
+export type RequestListItemMovePayloadInterface = Pick<
+  RequestListItemInterface,
+  "id"
+> &
+  Partial<Pick<RequestListItemInterface, "parentId">>;
+
 export interface RequestListInterface {
   [key: string]: RequestListItemInterface;
 }

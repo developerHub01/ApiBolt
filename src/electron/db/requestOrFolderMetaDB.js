@@ -34,6 +34,19 @@ export const getRequestOrFolderMeta = async () => {
   }
 };
 
+export const getRequestOrFolderMetaById = async (id) => {
+  try {
+    return (
+      await db
+        .select()
+        .from(requestOrFolderMetaTable)
+        .where(eq(requestOrFolderMetaTable.id, id))
+    )?.[0];
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const createRequestOrFolderMeta = async (payload) => {
   try {
     if (!payload || typeof payload !== "object") return;
@@ -100,7 +113,7 @@ export const collapseAllRequestOrFolderMeta = async (projectId) => {
   }
 };
 
-export const moveRequestOrFolderMeta = async (id, parentId) => {
+export const moveRequestOrFolderMeta = async ({ id, parentId } = {}) => {
   try {
     const updated = await db
       .update(requestOrFolderMetaTable)

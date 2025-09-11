@@ -13,6 +13,7 @@ import type {
   ParamHeaderPayloadInterface,
   ProjectInterface,
   RequestListItemInterface,
+  RequestListItemMovePayloadInterface,
   RequestListItemUpdatePayloadInterface,
   RequestTabInterface,
   ResponseFolderDataInterface,
@@ -118,7 +119,9 @@ declare global {
         payload: RequestListItemUpdatePayloadInterface
       ): Promise<boolean>;
       collapseAllRequestOrFolderMeta(projectId?: string): Promise<boolean>;
-      moveRequestOrFolderMeta(id: string, parentId?: string): Promise<boolean>;
+      moveRequestOrFolderMeta(
+        payload: RequestListItemMovePayloadInterface
+      ): Promise<boolean>;
       deleteRequestOrFolderMetaById(
         id?: string | Array<string>
       ): Promise<boolean>;

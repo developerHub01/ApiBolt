@@ -311,12 +311,22 @@ export const moveRequestOrFolder = createAsyncThunk<
   }
 >(
   "request-response/moveRequestOrFolder",
-  async ({ requestId, parentId }, { dispatch }) => {
+  async ({ requestId, parentId }, { dispatch, getState }) => {
     try {
-      await window.electronAPIRequestOrFolderMetaDB.moveRequestOrFolderMeta(
-        requestId,
-        parentId
-      );
+      const state = getState() as RootState;
+
+      const parentDetails = state.requestResponse.requestList[parentId ?? ""];
+      const requestDetails = state.requestResponse.requestList[requestId];
+
+      if (parentDetails && getRequestType(parentDetails) === "request")
+        parentId = parentDetails.parentId;
+      if (parentId === requestDetails.parentId) return;
+
+      await window.electronAPIRequestOrFolderMetaDB.moveRequestOrFolderMeta({
+        id: requestId,
+        parentId,
+      });
+      
       dispatch(handleChangeIsRequestListLoaded(false));
     } catch (error) {
       console.log(error);
