@@ -14,11 +14,17 @@ import { handleChangeDeleteFolderOrRequestId } from "@/context/redux/request-res
 import { useRequestList } from "@/context/collections/request-list/RequestListProvider";
 import useCheckApplyingLayout from "@/hooks/setting/use-check-applying-layout";
 import type { TLayoutSetting } from "@/types/setting.types";
-import { createCollection, createSingleRequest, duplicateRequestOrFolder } from "@/context/redux/request-response/thunks/request-list";
+import {
+  createCollection,
+  createRestApiBasic,
+  createSingleRequest,
+  duplicateRequestOrFolder,
+} from "@/context/redux/request-response/thunks/request-list";
 
 type TActionType =
   | "add_request"
   | "add_folder"
+  | "add_rest_api_basics"
   | "rename"
   | "duplicate"
   | "delete";
@@ -34,6 +40,10 @@ const folderCTAList: Array<{
   {
     id: "add_folder",
     label: "Add Folder",
+  },
+  {
+    id: "add_rest_api_basics",
+    label: "Add REST API Basics",
   },
   {
     id: "rename",
@@ -86,6 +96,10 @@ const ItemCTA = memo(({ type, id }: ItemCTAProps) => {
       }
       case "add_folder": {
         dispatch(createCollection(id));
+        break;
+      }
+      case "add_rest_api_basics": {
+        dispatch(createRestApiBasic(id));
         break;
       }
       case "add_request": {

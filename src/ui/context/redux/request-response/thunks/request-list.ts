@@ -105,12 +105,12 @@ export const createCollection = createAsyncThunk<
 
 export const createRestApiBasic = createAsyncThunk<
   void,
-  void,
+  string | undefined,
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->("request-response/createSingleRequest", async (_, { dispatch }) => {
+>("request-response/createRestApiBasic", async (parentId, { dispatch }) => {
   try {
     const parentFolder: RequestListItemInterface = {
       id: uuidv4(),
@@ -118,6 +118,8 @@ export const createRestApiBasic = createAsyncThunk<
       children: [],
       createdAt: Date.now(),
     };
+
+    if (parentId) parentFolder["parentId"] = parentId;
 
     const payload: Array<RequestListItemInterface> = (
       ["get", "post", "put", "patch", "delete"] as Array<THTTPMethods>
