@@ -8,6 +8,7 @@ import { useAppSelector } from "@/context/redux/hooks";
 import { selectActiveMetaTab } from "@/context/redux/request-response/request-response-selector";
 import RequestMetaDataProvider from "@/context/collections/request/RequestMetaDataProvider";
 import TabMotionWrapper from "@/components/app/collections/request/request/meta-data/TabMotionWrapper";
+import RequestAuthorization from "@/components/app/collections/request/request/authorization/RequestAuthorization";
 
 const MetaDataContent = memo(() => {
   const activeMetaTab = useAppSelector(selectActiveMetaTab) ?? "url";
@@ -23,6 +24,11 @@ const MetaDataContent = memo(() => {
         {activeMetaTab === "params" && (
           <TabMotionWrapper key="params">
             <Params />
+          </TabMotionWrapper>
+        )}
+        {activeMetaTab === "authorization" && (
+          <TabMotionWrapper key="authorization">
+            <RequestAuthorization />
           </TabMotionWrapper>
         )}
         {activeMetaTab === "headers" && (

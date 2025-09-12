@@ -27,6 +27,10 @@ const tabList: Array<{
     label: "Params",
   },
   {
+    id: "authorization",
+    label: "Authorization",
+  },
+  {
     id: "headers",
     label: "Headers",
   },

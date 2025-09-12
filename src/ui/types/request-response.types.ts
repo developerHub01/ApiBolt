@@ -8,7 +8,12 @@ export type TAuthType =
   | "jwt-bearer"
   | "api-key";
 
-export type TActiveTabType = "url" | "params" | "headers" | "body";
+export type TActiveTabType =
+  | "url"
+  | "params"
+  | "authorization"
+  | "headers"
+  | "body";
 
 export type TAuthAddTo = "header" | "query";
 

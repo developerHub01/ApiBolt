@@ -6,7 +6,7 @@ const RequestPanel = () => {
     <ResizablePanel
       id="request-panel"
       defaultSize={100}
-      className="p-2.5 pt-1"
+      className="p-3 pt-1"
     >
       <MetaDataContent />
     </ResizablePanel>
