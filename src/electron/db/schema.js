@@ -48,11 +48,16 @@ export const authorizationTable = sqliteTable("authorization_table", {
     .notNull()
     .default(
       "no-auth"
-    ) /* "no-auth" | "basic-auth" | "bearer-token" | "jwt-bearer" | "api-key"; */,
+    ) /* "no-auth" | "inherit-parent" | "basic-auth" | "bearer-token" | "jwt-bearer" | "api-key"; */,
   projectId: text()
     .notNull()
     .unique()
     .references(() => projectTable.id, {
+      onDelete: "cascade",
+    }),
+  requestOrFolderMetaId: text()
+    .unique()
+    .references(() => requestOrFolderMetaTable.id, {
       onDelete: "cascade",
     }),
   /* API Key Auth =========== */

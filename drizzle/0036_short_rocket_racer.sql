@@ -1,0 +1,2 @@
+ALTER TABLE `authorization_table` ADD `requestOrFolderMetaId` text REFERENCES request_or_folder_meta_table(id);--> statement-breakpoint
+CREATE UNIQUE INDEX `authorization_table_requestOrFolderMetaId_unique` ON `authorization_table` (`requestOrFolderMetaId`);
