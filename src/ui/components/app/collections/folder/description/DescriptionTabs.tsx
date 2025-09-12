@@ -8,6 +8,7 @@ import {
   SquareSplitHorizontal as SplitLayoutIcon,
   Code as MarkdownIcon,
   GalleryThumbnails as PreviewIcon,
+  KeyRound as AuthorizationIcon,
   type LucideIcon,
 } from "lucide-react";
 
@@ -31,6 +32,11 @@ const buttonList: Array<{
     label: "Split",
     Icon: SplitLayoutIcon,
   },
+  {
+    id: "authorization",
+    label: "Authorization",
+    Icon: AuthorizationIcon,
+  },
 ];
 
 const DescriptionTabs = memo(() => {
@@ -49,20 +55,22 @@ const DescriptionTabs = memo(() => {
 
   return (
     <div className="flex">
-      <div className="flex items-center gap-1.5 border-b">
-        {buttonList.map(({ id, label, Icon }) => (
+      <div className="w-full flex items-center border-b">
+        {buttonList.map(({ id, label, Icon }, index) => (
           <button
             key={id}
             className={cn(
-              "border-b-2 px-3 py-1 cursor-pointer hover:bg-accent rounded-t-md w-32 flex items-center justify-center gap-1.5",
+              "flex-1 border-b-2 px-3 py-1 cursor-pointer hover:bg-accent w-full flex items-center justify-center gap-2",
               {
-                "border-b-primary": id === activeTab,
+                "border-b-primary bg-accent": id === activeTab,
                 "border-b-transparent": id !== activeTab,
+                "rounded-tl-md": !index,
+                "rounded-tr-md": index === buttonList.length - 1,
               }
             )}
             onClick={() => handleChangeTab(id)}
           >
-            {Icon && <Icon size={20} />}
+            {Icon && <Icon size={18} />}
             {label}
           </button>
         ))}

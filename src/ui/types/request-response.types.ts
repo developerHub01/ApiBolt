@@ -1,4 +1,8 @@
-export type TRequestFolderDescriptionTab = "markdown" | "preview" | "split";
+export type TRequestFolderDescriptionTab =
+  | "markdown"
+  | "preview"
+  | "split"
+  | "authorization";
 
 export type TContentType = "text" | "html" | "xml" | "json" | "javascript";
 export type TAuthType =

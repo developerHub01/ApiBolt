@@ -5,6 +5,7 @@ import DescriptionPreview from "@/components/app/collections/folder/description/
 import DescriptionWrapper from "@/components/app/collections/folder/description/DescriptionWrapper";
 import SplitLayout from "@/components/app/collections/folder/description/SplitLayout";
 import DescriptionTabs from "@/components/app/collections/folder/description/DescriptionTabs";
+import FolderAuthorization from "@/components/app/collections/folder/description/FolderAuthorization";
 import { selectRequestFolderDescriptionActiveTab } from "@/context/redux/request-response/request-response-selector";
 
 const FolderDescription = memo(() => {
@@ -20,6 +21,10 @@ const FolderDescription = memo(() => {
       ) : activeTab === "preview" ? (
         <DescriptionWrapper>
           <DescriptionPreview />
+        </DescriptionWrapper>
+      ) : activeTab === "authorization" ? (
+        <DescriptionWrapper>
+          <FolderAuthorization />
         </DescriptionWrapper>
       ) : (
         <SplitLayout />
