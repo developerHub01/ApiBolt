@@ -22,21 +22,10 @@ const RequestList = memo(() => {
           <RequestListItem key={id} id={id} lavel={0} isRootLastChild={true} />
         ))}
       </AutoScrollActiveWrapper>
-      <RestArea />
-      {Boolean(rootList?.length) || <EmptyBox />}
+      {rootList?.length ? <RestArea /> : <EmptyBox />}
     </div>
   );
 });
-
-const EmptyBox = memo(() => (
-  <div className="w-full p-2">
-    <Empty
-      label="No request available. Create one."
-      description="Your currently request list is empty. You can start by clicking on the '+' add button or from right side tab list."
-      showFallback
-    />
-  </div>
-));
 
 const RestArea = memo(() => {
   const dispatch = useAppDispatch();
@@ -61,5 +50,15 @@ const RestArea = memo(() => {
     />
   );
 });
+
+const EmptyBox = memo(() => (
+  <div className="w-full h-full p-2">
+    <Empty
+      label="No request available. Create one."
+      description="Your currently request list is empty. You can start by clicking on the '+' add button or from right side tab list."
+      showFallback
+    />
+  </div>
+));
 
 export default RequestList;
