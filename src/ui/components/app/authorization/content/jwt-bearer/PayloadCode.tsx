@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import Code from "@/components/ui/code";
 import { formatCode } from "@/utils/prettierUtils";
 import { toast } from "sonner";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
 
 const codeFormatter = async (
   code: string,
@@ -32,19 +34,29 @@ const PayloadCode = ({ code = "", onBlur, ...props }: PayloadCodeProps) => {
   const handleFormat = () => codeFormatter(codeState, setCodeState);
 
   return (
-    <Code
-      className="max-w-80 h-52 rounded-lg overflow-hidden border"
-      contentType="json"
-      code={code}
-      onChange={handleChange}
-      onBlur={handleBlur}
-      editable={true}
-      copy={true}
-      lineWrap={true}
-      zoomable={true}
-      handleFormat={handleFormat}
-      {...props}
-    />
+    <>
+      <ScrollArea
+        className={cn(
+          "w-full max-w-80 h-52 rounded-lg overflow-hidden border [&>div>div]:h-full relative",
+          "backdrop-blur-xs"
+        )}
+      >
+        <Code
+          className="h-full w-full"
+          contentType="json"
+          placeholder="Payload...."
+          code={code}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          editable={true}
+          copy={true}
+          lineWrap={true}
+          zoomable={true}
+          handleFormat={handleFormat}
+          {...props}
+        />
+      </ScrollArea>
+    </>
   );
 };
 
