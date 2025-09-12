@@ -73,6 +73,7 @@ const JWTBearer = () => {
           type="password"
           value={authData.secret}
           onBlur={(value) => handleBlur("jwtSecret", value)}
+          placeholder="Secret"
         />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
@@ -94,6 +95,7 @@ const JWTBearer = () => {
           className="max-w-80"
           value={authData.headerPrefix}
           onBlur={(value) => handleBlur("jwtHeaderPrefix", value)}
+            placeholder="Prefix"
         />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>

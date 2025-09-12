@@ -17,7 +17,9 @@ const AuthContent = memo(({ className = "" }: Props) => {
   const authType = useAppSelector(selectAuthType);
 
   return (
-    <ScrollArea className={cn("w-full h-full min-h-0 py-2", className)}>
+    <ScrollArea
+      className={cn("w-full h-full min-h-0 py-2 [&>div>div]:h-full", className)}
+    >
       {authType === "no-auth" && <NoAuth />}
       {authType === "basic-auth" && <BasicAuth />}
       {authType === "bearer-token" && <BearerToken />}
