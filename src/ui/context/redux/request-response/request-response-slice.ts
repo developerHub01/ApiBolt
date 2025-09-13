@@ -1112,11 +1112,17 @@ export const requestResponseSlice = createSlice({
       /**
        * If payload have that value then good else check if already loaded data or not if not then assign default value
        * **/
-      if (state.folderTitle[id] !== payload?.title)
+      if (
+        state.folderTitle[id] === undefined ||
+        state.folderTitle[id] !== payload?.title
+      )
         state.folderTitle[id] =
           payload?.title ?? state.folderTitle[id] ?? defaultFolderTitle;
 
-      if (state.folderDescription[id] !== payload?.description)
+      if (
+        state.folderDescription[id] === undefined ||
+        state.folderDescription[id] !== payload?.description
+      )
         state.folderDescription[id] =
           payload?.description ??
           state.folderDescription[id] ??
