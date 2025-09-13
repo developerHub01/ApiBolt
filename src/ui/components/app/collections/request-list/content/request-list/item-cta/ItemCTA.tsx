@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { handleChangeDeleteFolderOrRequestId } from "@/context/redux/request-response/request-response-slice";
-import { useRequestList } from "@/context/collections/request-list/RequestListProvider";
+import { useRequestListItem } from "@/context/collections/request-list/RequestListItemProvider";
 import useCheckApplyingLayout from "@/hooks/setting/use-check-applying-layout";
 import type { TLayoutSetting } from "@/types/setting.types";
 import {
@@ -83,16 +83,16 @@ const requestCTAList: Array<{
   },
 ];
 
-interface ItemCTAProps {
-  type: "request" | "folder";
-  id: string;
-  lavel?: number;
-}
-
-const ItemCTA = memo(({ type, id, lavel = 0 }: ItemCTAProps) => {
+const ItemCTA = memo(() => {
   const dispatch = useAppDispatch();
-  const { isContextMenuOpen, handleToggleContextMenu, handleRenameAction } =
-    useRequestList();
+  const {
+    id,
+    lavel,
+    type,
+    isContextMenuOpen,
+    handleToggleContextMenu,
+    handleRenameAction,
+  } = useRequestListItem();
   const layoutTypes: TLayoutSetting = useCheckApplyingLayout();
 
   const handleCTAAction = useCallback(

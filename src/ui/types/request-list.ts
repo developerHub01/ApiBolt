@@ -8,6 +8,8 @@ export type ListBottomActionType =
   | "collapse"
   | "delete";
 
+export type TRequestListItemType = "request" | "folder";
+
 export interface BottomActionButtonInterface {
   id: ListBottomActionType;
   label: string;

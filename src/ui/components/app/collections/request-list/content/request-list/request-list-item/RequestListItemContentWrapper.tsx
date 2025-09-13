@@ -4,40 +4,30 @@ import { selectSelectedTab } from "@/context/redux/request-response/request-resp
 import { cn } from "@/lib/utils";
 import RequestListItemExpendedContent from "@/components/app/collections/request-list/content/request-list/request-list-item/RequestListItemExpendedContent";
 import RequestListItemContentWrapperParent from "@/components/app/collections/request-list/content/request-list/request-list-item/RequestListItemContentWrapperParent";
-import { useRequestList } from "@/context/collections/request-list/RequestListProvider";
-import type { RequestListItemInterface } from "@/types/request-response.types";
+import { useRequestListItem } from "@/context/collections/request-list/RequestListItemProvider";
 import { moveRequestOrFolder } from "@/context/redux/request-response/thunks/request-list";
 import { handleChangeSelectedTab } from "@/context/redux/request-response/request-response-slice";
 import { REQUEST_ITEM_SPACE_SIZE } from "@/constant/request-response.constant";
 import useRequestItemDetails from "@/hooks/request-response/request-list/use-request-item-details";
 
-interface RequestListItemContentWrapperProps
-  extends Pick<
-    RequestListItemInterface,
-    "id" | "method" | "parentId" | "isExpended"
-  > {
-  lavel: number;
-  isRootLastChild?: boolean;
+interface RequestListItemContentWrapperProps {
   setIsHovering: React.Dispatch<React.SetStateAction<boolean>>;
-  childrenRequest: RequestListItemInterface["children"];
   children: React.ReactNode;
 }
 
 const RequestListItemContentWrapper = memo(
-  ({
-    id,
-    setIsHovering,
-    lavel = 0,
-    method,
-    parentId,
-    isExpended,
-    isRootLastChild,
-    childrenRequest,
-    children,
-  }: RequestListItemContentWrapperProps) => {
+  ({ setIsHovering, children }: RequestListItemContentWrapperProps) => {
     const dispatch = useAppDispatch();
+    const {
+      id,
+      parentId,
+      method,
+      isExpended,
+      lavel,
+      isRenameActive,
+      handleToggleContextMenu,
+    } = useRequestListItem();
     const selectedTab = useAppSelector(selectSelectedTab);
-    const { isRenameActive, handleToggleContextMenu } = useRequestList();
     const [isDragging, setIsDragging] = useState<boolean>(false);
     const { checkIsRequestDropable } = useRequestItemDetails();
 
@@ -130,14 +120,7 @@ const RequestListItemContentWrapper = memo(
             {children}
           </div>
         </RequestListItemContentWrapperParent>
-        {isExpended && (
-          <RequestListItemExpendedContent
-            id={id}
-            children={childrenRequest}
-            lavel={lavel}
-            isRootLastChild={isRootLastChild}
-          />
-        )}
+        {isExpended && <RequestListItemExpendedContent />}
       </>
     );
   }

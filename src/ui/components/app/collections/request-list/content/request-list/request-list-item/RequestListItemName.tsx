@@ -9,20 +9,11 @@ import {
   type KeyboardEvent,
   type MouseEvent,
 } from "react";
-import { useRequestList } from "@/context/collections/request-list/RequestListProvider";
-import { useAppSelector } from "@/context/redux/hooks";
+import { useRequestListItem } from "@/context/collections/request-list/RequestListItemProvider";
 
-interface Props {
-  id: string;
-  name: string;
-}
-
-const RequestListItemName = memo(({ id, ...props }: Props) => {
-  const { isRenameActive, handleChangeName, handleRenameAction } =
-    useRequestList();
-  const name = useAppSelector(
-    (state) => state.requestResponse.requestList[id].name ?? props.name
-  );
+const RequestListItemName = memo(() => {
+  const { id, name, isRenameActive, handleChangeName, handleRenameAction } =
+    useRequestListItem();
   const [nameState, setNameState] = useState<string>(name ?? "");
   const inputRef = useRef<HTMLInputElement>(null);
 
