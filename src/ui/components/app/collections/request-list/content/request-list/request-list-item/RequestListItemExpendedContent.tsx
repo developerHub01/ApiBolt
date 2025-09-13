@@ -1,7 +1,7 @@
 import { memo } from "react";
-import RequestListItem from "@/components/app/collections/request-list/content/request-list/RequestListItem";
+import RequestListItem from "@/components/app/collections/request-list/content/request-list/request-list-item/RequestListItem";
 import type { RequestListItemInterface } from "@/types/request-response.types";
-import RequestListItemFolderEmpty from "@/components/app/collections/request-list/content/request-list/RequestListItemFolderEmpty";
+import RequestListItemFolderEmpty from "@/components/app/collections/request-list/content/request-list/request-list-item/RequestListItemFolderEmpty";
 
 interface Props extends Pick<RequestListItemInterface, "children"> {
   id: string;

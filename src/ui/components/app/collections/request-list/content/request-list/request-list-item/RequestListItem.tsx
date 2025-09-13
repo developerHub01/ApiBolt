@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { useAppSelector } from "@/context/redux/hooks";
 import RequestListProvider from "@/context/collections/request-list/RequestListProvider";
-import RequestListItemContent from "@/components/app/collections/request-list/content/request-list/RequestListItemContent";
+import RequestListItemContent from "@/components/app/collections/request-list/content/request-list/request-list-item/RequestListItemContent";
 import {
   getFolderChildren,
   getRequestType,

@@ -1,7 +1,7 @@
 import { memo, useCallback } from "react";
 import { REQUEST_ITEM_SPACE_SIZE } from "@/constant/request-response.constant";
-import RequestListItemLine from "@/components/app/collections/request-list/content/request-list/RequestListItemLine";
-import RequestListItemContentWrapperParent from "@/components/app/collections/request-list/content/request-list/RequestListItemContentWrapperParent";
+import RequestListItemLine from "@/components/app/collections/request-list/content/request-list/request-list-item/RequestListItemLine";
+import RequestListItemContentWrapperParent from "@/components/app/collections/request-list/content/request-list/request-list-item/RequestListItemContentWrapperParent";
 import { Button } from "@/components/ui/button";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { createSingleRequest } from "@/context/redux/request-response/thunks/request-list";

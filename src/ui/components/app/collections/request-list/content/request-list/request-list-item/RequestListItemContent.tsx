@@ -1,15 +1,15 @@
 import { memo, useCallback, useState } from "react";
 import ItemCTA from "@/components/app/collections/request-list/content/request-list/item-cta/ItemCTA";
 import RequestMethodTag from "@/components/app/RequestMethodTag";
-import RequestListItemFolderButton from "@/components/app/collections/request-list/content/request-list/RequestListItemFolderButton";
+import RequestListItemFolderButton from "@/components/app/collections/request-list/content/request-list/request-list-item/RequestListItemFolderButton";
 import { AnimatePresence } from "motion/react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import type { RequestListItemInterface } from "@/types/request-response.types";
 import { useRequestList } from "@/context/collections/request-list/RequestListProvider";
 import { updateRequestOrFolder } from "@/context/redux/request-response/thunks/request-list";
-import RequestListItemName from "@/components/app/collections/request-list/content/request-list/RequestListItemName";
-import RequestListItemContentWrapper from "@/components/app/collections/request-list/content/request-list/RequestListItemContentWrapper";
-import RequestListItemLine from "@/components/app/collections/request-list/content/request-list/RequestListItemLine";
+import RequestListItemName from "@/components/app/collections/request-list/content/request-list/request-list-item/RequestListItemName";
+import RequestListItemContentWrapper from "@/components/app/collections/request-list/content/request-list/request-list-item/RequestListItemContentWrapper";
+import RequestListItemLine from "@/components/app/collections/request-list/content/request-list/request-list-item/RequestListItemLine";
 
 interface RequestListItemProps extends RequestListItemInterface {
   type: "folder" | "request";
