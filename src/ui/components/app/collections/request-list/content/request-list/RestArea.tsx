@@ -1,10 +1,14 @@
-import { memo, useCallback, type DragEvent } from "react";
+import React, { memo, useCallback, type DragEvent } from "react";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { moveRequestOrFolder } from "@/context/redux/request-response/thunks/request-list";
 
-const RestArea = memo(() => {
+interface Props {
+  children: React.ReactNode;
+}
+
+const RestArea = memo(({ children }: Props) => {
   const dispatch = useAppDispatch();
-  
+
   const handleDrop = useCallback(
     (e: DragEvent<HTMLDivElement>) => {
       e.preventDefault();
@@ -20,10 +24,12 @@ const RestArea = memo(() => {
 
   return (
     <div
-      className="h-full flex flex-col w-full gap-0.5"
+      className="h-full flex flex-col w-full gap-0.5 p-0"
       onDrop={handleDrop}
       onDragOver={(e) => e.preventDefault()}
-    />
+    >
+      {children ? children : <div className="h-10" />}
+    </div>
   );
 });
 
