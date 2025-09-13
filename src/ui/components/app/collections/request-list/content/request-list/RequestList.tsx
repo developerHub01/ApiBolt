@@ -9,11 +9,16 @@ import RestArea from "@/components/app/collections/request-list/content/request-
 const RequestList = memo(() => {
   const requestList = useAppSelector(selectRequestOrFolderList);
 
-  const rootList = useMemo(() => {
-    return Object.values(requestList)
-      .filter((item) => !item.parentId)
-      .sort((a, b) => b.createdAt! - a.createdAt!);
-  }, [requestList]);
+  const rootList = useMemo(
+    () =>
+      Object.values(requestList)
+        .filter((item) => !item.parentId)
+        .sort(
+          (a, b) =>
+            new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime()
+        ),
+    [requestList]
+  );
 
   return (
     <div className="h-full flex flex-col w-full gap-0.5">
@@ -22,7 +27,7 @@ const RequestList = memo(() => {
           <RequestListItem key={id} id={id} lavel={0} isRootLastChild={true} />
         ))}
       </AutoScrollActiveWrapper>
-      {rootList?.length ? <RestArea /> : <EmptyBox />}
+      <RestArea>{!rootList?.length && <EmptyBox />}</RestArea>
     </div>
   );
 });
