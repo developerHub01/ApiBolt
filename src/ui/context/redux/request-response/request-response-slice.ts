@@ -33,7 +33,14 @@ import type {
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 import { loadFolder } from "@/context/redux/request-response/thunks/folder";
-import type { APIKeyInterface, AuthorizationPayloadInterface, BasicAuthInterface, JWTBearerAuthInterface, TAuthType, TBearerToken } from "@/types/authorization.types";
+import type {
+  APIKeyInterface,
+  AuthorizationPayloadInterface,
+  BasicAuthInterface,
+  JWTBearerAuthInterface,
+  TAuthType,
+  TBearerToken,
+} from "@/types/authorization.types";
 import type { ProjectInterface } from "@/types/project.types";
 import type { EnvironmentInterface } from "@/types/environment.types";
 
@@ -383,13 +390,16 @@ export const requestResponseSlice = createSlice({
 
       /* auth type start =========== */
       const updatedType =
-        id === defaultAuthorizationId ? "no-auth" : "inherit-parent";
+        id === defaultAuthorizationId || !id ? "no-auth" : "inherit-parent";
       if (!state.authType[id]) state.authType[id] = updatedType;
       if (type && state.authType[id] !== type) state.authType[id] = type;
       /* auth type end =========== */
 
       /* api key start =========== */
-      if (!state.apiKeyAuth[id]) state.apiKeyAuth[id] = defaultApiKey;
+      if (!state.apiKeyAuth[id])
+        state.apiKeyAuth[id] = {
+          ...defaultApiKey,
+        };
 
       if (apiKeyKey !== undefined && state.apiKeyAuth[id].key !== apiKeyKey)
         state.apiKeyAuth[id].key = apiKeyKey;
@@ -420,7 +430,9 @@ export const requestResponseSlice = createSlice({
 
       /* basic auth start =========== */
       if (state.basicAuth[id] === undefined || state.basicAuth[id] === null)
-        state.basicAuth[id] = defaultBasicAuth;
+        state.basicAuth[id] = {
+          ...defaultBasicAuth,
+        };
       if (
         basicAuthUsername !== undefined &&
         state.basicAuth[id].username !== basicAuthUsername
@@ -438,7 +450,9 @@ export const requestResponseSlice = createSlice({
         state.jwtBearerAuth[id] === undefined ||
         state.jwtBearerAuth[id] === null
       )
-        state.jwtBearerAuth[id] = defaultJWTBearerAuth;
+        state.jwtBearerAuth[id] = {
+          ...defaultJWTBearerAuth,
+        };
 
       if (jwtAlgo !== undefined && state.jwtBearerAuth[id].algo !== jwtAlgo)
         state.jwtBearerAuth[id].algo = jwtAlgo;
