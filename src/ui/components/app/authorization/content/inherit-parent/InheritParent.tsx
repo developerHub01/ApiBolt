@@ -1,34 +1,15 @@
-import { memo, useEffect, useState } from "react";
-import { useAppDispatch } from "@/context/redux/hooks";
-import { loadInheritParentAuthorization } from "@/context/redux/request-response/thunks/auth";
+import { memo } from "react";
 import InheritParentContent from "@/components/app/authorization/content/inherit-parent/InheritParentContent";
 import { Skeleton } from "@/components/ui/skeleton";
-import { defaultAuthorizationId } from "@/constant/authorization.constant";
 import { motion, AnimatePresence } from "framer-motion";
+import { useCollection } from "@/context/collections/CollectionProvider";
 
-interface Props {
-  id: string;
-}
-
-const InheritParent = memo(({ id }: Props) => {
-  const dispatch = useAppDispatch();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [inheritId, setInheritId] = useState<string | null>(null);
-
-  useEffect(() => {
-    (async () => {
-      setIsLoading(true);
-      const targetId =
-        (await dispatch(loadInheritParentAuthorization(id)).unwrap()) ??
-        defaultAuthorizationId;
-      setInheritId(targetId);
-      setIsLoading(false);
-    })();
-  }, [dispatch, id]);
+const InheritParent = memo(() => {
+  const { isLoading, inheritAuthId } = useCollection();
 
   return (
     <AnimatePresence>
-      {isLoading || !inheritId ? (
+      {isLoading || !inheritAuthId ? (
         <motion.div
           key="inherit-parent-skeleton"
           layout="position"
@@ -74,7 +55,7 @@ const InheritParent = memo(({ id }: Props) => {
             duration: 0.3,
           }}
         >
-          <InheritParentContent id={inheritId} />
+          <InheritParentContent id={inheritAuthId} />
         </motion.div>
       )}
     </AnimatePresence>

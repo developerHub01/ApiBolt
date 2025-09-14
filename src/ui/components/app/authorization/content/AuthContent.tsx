@@ -22,7 +22,7 @@ const AuthContent = memo(({ id, className = "" }: Props) => {
     <ScrollArea
       className={cn("w-full h-full min-h-0 py-2 [&>div>div]:h-full", className)}
     >
-      {authType === "inherit-parent" && <InheritParent id={id} />}
+      {authType === "inherit-parent" && <InheritParent />}
       {authType === "no-auth" && <NoAuth />}
       {authType === "basic-auth" && <BasicAuth id={id} />}
       {authType === "bearer-token" && <BearerToken id={id} />}
