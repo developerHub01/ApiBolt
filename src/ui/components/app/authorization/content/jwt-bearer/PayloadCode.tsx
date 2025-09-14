@@ -23,9 +23,7 @@ interface PayloadCodeProps {
 }
 
 const PayloadCode = memo(
-  ({ code = "", 
-    disabled = false, 
-    onBlur, ...props }: PayloadCodeProps) => {
+  ({ code = "", disabled = false, onBlur, ...props }: PayloadCodeProps) => {
     const [codeState, setCodeState] = useState<string>(code);
 
     useEffect(() => {
@@ -42,7 +40,10 @@ const PayloadCode = memo(
         <ScrollArea
           className={cn(
             "w-full max-w-80 h-52 rounded-lg overflow-hidden border [&>div>div]:h-full relative",
-            "backdrop-blur-xs"
+            "backdrop-blur-xs",
+            {
+              "cursor-not-allowed": disabled,
+            }
           )}
         >
           <Code
