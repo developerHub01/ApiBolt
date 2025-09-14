@@ -7,7 +7,6 @@ import TabSidebar from "@/components/app/tab-sidebar/TabSidebar";
 import { ResizablePanel } from "@/components/ui/resizable";
 import LayoutMainPanel from "@/components/app/collections/request/LayoutMainPanel";
 import type { TLayoutSetting } from "@/types/setting.types";
-import { cn } from "@/lib/utils";
 
 const CollectionsLayout = () => {
   const { id: requestId } = useParams<{ id?: string }>();
@@ -15,24 +14,25 @@ const CollectionsLayout = () => {
 
   return (
     <AppMainContentLayoutWrapper>
-      {layoutTypes === "ltr" && (
+      {layoutTypes === "ltr" ? (
         <>
           <RequestListPanelWrapper />
           <ResizableHandle />
-        </>
-      )}
-      <ResizablePanel defaultSize={70}>
-        <section
-          className={cn("flex w-full h-full flex-row", {
-            "flex-row-reverse": layoutTypes === "rtl",
-          })}
-        >
-          {requestId ? <LayoutMainPanel /> : <Outlet />}
+          <ResizablePanel defaultSize={70} minSize={30}>
+            <section className="flex w-full h-full flex-row">
+              {requestId ? <LayoutMainPanel /> : <Outlet />}
+            </section>
+          </ResizablePanel>
           <TabSidebar />
-        </section>
-      </ResizablePanel>
-      {layoutTypes === "rtl" && (
+        </>
+      ) : (
         <>
+          <TabSidebar />
+          <ResizablePanel defaultSize={70} minSize={30}>
+            <section className="flex w-full h-full flex-row">
+              {requestId ? <LayoutMainPanel /> : <Outlet />}
+            </section>
+          </ResizablePanel>
           <ResizableHandle />
           <RequestListPanelWrapper />
         </>
