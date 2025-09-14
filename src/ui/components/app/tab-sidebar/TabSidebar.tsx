@@ -17,11 +17,13 @@ import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 import NoTabOpenEmptyBox from "@/components/app/tab-sidebar/empty/NoTabOpenEmptyBox";
 import NoTabSearchResultEmptyBox from "@/components/app/tab-sidebar/empty/NoTabSearchResultEmptyBox";
 
-const TAB_LONG_HOVER_TIME = 350;
+const TAB_ENTER_LONG_HOVER_TIME = 350;
+const TAB_LEAVE_LONG_HOVER_TIME = 500;
 
 const TabSidebar = memo(() => {
   const dispatch = useAppDispatch();
-  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const hoverEnterTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const hoverLeaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const layoutTypes: TLayoutSetting = useCheckApplyingLayout();
   const isTabListHovering = useAppSelector(
     (state) => state.requestResponse.isTabListHovering
@@ -30,9 +32,22 @@ const TabSidebar = memo(() => {
 
   useEffect(() => {
     return () => {
-      if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+      if (hoverEnterTimeoutRef.current)
+        clearTimeout(hoverEnterTimeoutRef.current);
+      if (hoverLeaveTimeoutRef.current)
+        clearTimeout(hoverLeaveTimeoutRef.current);
     };
   }, []);
+
+  const handleDragOver = useCallback(
+    (e: DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      if (!isTabListHovering) {
+        dispatch(handleChangeIsTabListHovering(true));
+      }
+    },
+    [dispatch, isTabListHovering]
+  );
 
   const handleDrop = useCallback(
     (e: DragEvent<HTMLDivElement>) => {
@@ -51,19 +66,26 @@ const TabSidebar = memo(() => {
 
   const handleMouseEnter = useCallback(() => {
     /* Start a timer when user hovers | AKA long hover */
-    hoverTimeoutRef.current = setTimeout(() => {
+    hoverEnterTimeoutRef.current = setTimeout(() => {
       dispatch(handleChangeIsTabListHovering(true));
-    }, TAB_LONG_HOVER_TIME);
+    }, TAB_ENTER_LONG_HOVER_TIME);
   }, [dispatch]);
 
   const handleMouseLeave = useCallback(() => {
     // If they leave early, cancel expansion
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current);
-      hoverTimeoutRef.current = null;
+    if (hoverEnterTimeoutRef.current) {
+      clearTimeout(hoverEnterTimeoutRef.current);
+      hoverEnterTimeoutRef.current = null;
     }
+    if (hoverLeaveTimeoutRef.current) {
+      clearTimeout(hoverLeaveTimeoutRef.current);
+      hoverLeaveTimeoutRef.current = null;
+    }
+
     // Also collapse if it was already expanded
-    dispatch(handleChangeIsTabListHovering(false));
+    hoverLeaveTimeoutRef.current = setTimeout(() => {
+      dispatch(handleChangeIsTabListHovering(false));
+    }, TAB_LEAVE_LONG_HOVER_TIME);
   }, [dispatch]);
 
   return (
@@ -81,7 +103,7 @@ const TabSidebar = memo(() => {
           className={cn(
             "h-full flex flex-col absolute right-0 top-0 z-40 gap-0.5 shadow-2xl border-l border-muted-foreground/20",
             "bg-background/30",
-            "backdrop-blur-xs hover:backdrop-blur-md transition-all duration-150",
+            "backdrop-blur-lg transition-all duration-150",
             {
               "right-0 border-l": layoutTypes === "ltr",
               "left-0 border-r": layoutTypes === "rtl",
@@ -93,7 +115,7 @@ const TabSidebar = memo(() => {
           <ScrollArea
             className="w-full h-full min-h-0 flex-1 pb-0 [&>div>div]:w-full [&>div>div]:h-full"
             onDrop={handleDrop}
-            onDragOver={(e) => e.preventDefault()}
+            onDragOver={handleDragOver}
           >
             <AutoScrollActiveWrapper className="py-1">
               {!totalTabsOpen ? (

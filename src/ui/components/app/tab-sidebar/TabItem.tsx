@@ -92,7 +92,7 @@ const TabItem = memo(({ id, index }: { id: string; index: number }) => {
       key={id}
       data-active={selectedTab === id}
       className={cn(
-        "w-full h-8 cursor-pointer px-1 border-x-2 border-transparent",
+        "w-full h-9 cursor-pointer px-1 border-x-2 border-transparent",
         {
           /* active tab style */
           "bg-accent hover:bg-accent/80": selectedTab === id,

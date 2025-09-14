@@ -18,8 +18,7 @@ const RequestListItem = memo(
         isLastChild={isLastChild}
         isRootLastChild={isRootLastChild}
       >
-        <RequestListItemContent
-        />
+        <RequestListItemContent />
       </RequestListProvider>
     );
   }
