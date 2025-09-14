@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { memo, useCallback, useMemo } from "react";
 import {
   Select,
   SelectContent,
@@ -53,7 +53,7 @@ interface Props {
   className?: string;
 }
 
-const AuthTypeTab = ({ id, className = "" }: Props) => {
+const AuthTypeTab = memo(({ id, className = "" }: Props) => {
   const dispatch = useAppDispatch();
   const authType = useAppSelector(selectAuthTypeById(id));
 
@@ -65,19 +65,25 @@ const AuthTypeTab = ({ id, className = "" }: Props) => {
     [id]
   );
 
+  const handleChange = useCallback(
+    (type: string) => {
+      dispatch(
+        updateAuthorization({
+          requestOrFolderId: id,
+          payload: {
+            type: type as TAuthType,
+          },
+        })
+      );
+    },
+    [dispatch, id]
+  );
+
   return (
     <Select
       value={authType ?? list[0].id}
       defaultValue={list[0].id}
-      onValueChange={(type: TAuthType) =>
-        dispatch(
-          updateAuthorization({
-            payload: {
-              type,
-            },
-          })
-        )
-      }
+      onValueChange={handleChange}
     >
       <SelectTrigger className={cn("capitalize", className)} size="sm">
         <SelectValue placeholder="Select auth" />
@@ -93,6 +99,6 @@ const AuthTypeTab = ({ id, className = "" }: Props) => {
       </SelectContent>
     </Select>
   );
-};
+});
 
 export default AuthTypeTab;

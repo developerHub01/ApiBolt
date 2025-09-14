@@ -487,7 +487,7 @@ export const selectAuthTypeById = (id: string) =>
   createSelector(
     [(state: RootState) => state.requestResponse.authType[id]],
     (authType): TAuthType =>
-      (authType ?? id === defaultAuthorizationId) ? "no-auth" : "inherit-parent"
+      authType ?? (id === defaultAuthorizationId ? "no-auth" : "inherit-parent")
   );
 
 export const selectAuthApiKey = (id: string) =>
