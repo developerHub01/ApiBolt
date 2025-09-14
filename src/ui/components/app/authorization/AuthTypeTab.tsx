@@ -10,9 +10,9 @@ import {
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { selectAuthTypeById } from "@/context/redux/request-response/request-response-selector";
 import { updateAuthorization } from "@/context/redux/request-response/thunks/auth";
-import useAuthContextType from "@/hooks/authorization/use-auth-context-type";
 import { cn } from "@/lib/utils";
 import type { TAuthType } from "@/types/authorization.types";
+import { defaultAuthorizationId } from "@/constant/authorization.constant";
 
 const authTypeList: Array<{
   id: TAuthType;
@@ -56,13 +56,14 @@ interface Props {
 const AuthTypeTab = ({ id, className = "" }: Props) => {
   const dispatch = useAppDispatch();
   const authType = useAppSelector(selectAuthTypeById(id));
-  const authContextType = useAuthContextType();
 
-  const list = useMemo(() => {
-    if (authContextType === "global") return authTypeList;
-
-    return [inheritTypeAuth, ...authTypeList];
-  }, [authContextType]);
+  const list = useMemo(
+    () =>
+      id === defaultAuthorizationId
+        ? authTypeList
+        : [inheritTypeAuth, ...authTypeList],
+    [id]
+  );
 
   return (
     <Select
