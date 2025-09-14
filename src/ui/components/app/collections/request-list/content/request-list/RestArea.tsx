@@ -28,7 +28,7 @@ const RestArea = memo(({ children }: Props) => {
       onDrop={handleDrop}
       onDragOver={(e) => e.preventDefault()}
     >
-      {children ? children : <div className="h-10" />}
+      {children ? children : <div className="h-8" />}
     </div>
   );
 });

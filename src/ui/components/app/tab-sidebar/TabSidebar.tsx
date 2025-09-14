@@ -17,6 +17,8 @@ import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 import NoTabOpenEmptyBox from "@/components/app/tab-sidebar/empty/NoTabOpenEmptyBox";
 import NoTabSearchResultEmptyBox from "@/components/app/tab-sidebar/empty/NoTabSearchResultEmptyBox";
 
+const TAB_LONG_HOVER_TIME = 350;
+
 const TabSidebar = memo(() => {
   const dispatch = useAppDispatch();
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -51,7 +53,7 @@ const TabSidebar = memo(() => {
     /* Start a timer when user hovers | AKA long hover */
     hoverTimeoutRef.current = setTimeout(() => {
       dispatch(handleChangeIsTabListHovering(true));
-    }, 500);
+    }, TAB_LONG_HOVER_TIME);
   }, [dispatch]);
 
   const handleMouseLeave = useCallback(() => {
