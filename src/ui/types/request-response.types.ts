@@ -1,3 +1,11 @@
+import type {
+  APIKeyInterface,
+  BasicAuthInterface,
+  JWTBearerAuthInterface,
+  TAuthType,
+  TBearerToken,
+} from "@/types/authorization.types";
+
 export type TRequestFolderDescriptionTab =
   | "markdown"
   | "preview"
@@ -5,13 +13,6 @@ export type TRequestFolderDescriptionTab =
   | "authorization";
 
 export type TContentType = "text" | "html" | "xml" | "json" | "javascript";
-export type TAuthType =
-  | "inherit-parent"
-  | "no-auth"
-  | "basic-auth"
-  | "bearer-token"
-  | "jwt-bearer"
-  | "api-key";
 
 export type TActiveTabType =
   | "url"
@@ -19,13 +20,6 @@ export type TActiveTabType =
   | "authorization"
   | "headers"
   | "body";
-
-export type TAuthAddTo = "header" | "query";
-
-export interface ProjectInterface {
-  id: string;
-  name: string;
-}
 
 export type TMetaTableType =
   | "params"
@@ -35,42 +29,6 @@ export type TMetaTableType =
   | "form-data"
   | "x-www-form-urlencoded"
   | "environments";
-
-export interface EnvironmentInterface {
-  id: string;
-  variable: string;
-  type: "default" | "secret";
-  value: string;
-  isCheck: boolean;
-  projectId: string;
-  createdAt: string;
-}
-
-export type EnvironmentPayloadInterface = Omit<
-  EnvironmentInterface,
-  "createdAt"
->;
-
-export interface AuthorizationPayloadInterface {
-  id: string;
-  type: TAuthType;
-  projectId: string;
-  requestOrFolderMetaId?: string;
-  apiKeyKey: string;
-  apiKeyValue: string;
-  apiKeyAddTo: TAuthAddTo;
-  /* Bearer Token Auth ============ */
-  bearerToken: string;
-  /* Basic Auth =========== */
-  basicAuthUsername: string;
-  basicAuthPassword: string;
-  /* JWT Bearer Auth ============ */
-  jwtAlgo: string;
-  jwtSecret: string;
-  jwtPayload: string;
-  jwtHeaderPrefix: string;
-  jwtAddTo: TAuthAddTo;
-}
 
 export interface RequestListItemInterface {
   id: string;
@@ -260,24 +218,6 @@ export interface StatusDataInterface {
     reason: string;
     description: string;
   };
-}
-
-export interface APIKeyInterface {
-  key: string;
-  value: string;
-  addTo: TAuthAddTo;
-}
-export type TBearerToken = string;
-export interface BasicAuthInterface {
-  username: string;
-  password: string;
-}
-export interface JWTBearerAuthInterface {
-  algo: string;
-  secret: string;
-  payload: string;
-  headerPrefix: string;
-  addTo: TAuthAddTo;
 }
 
 export type BodyRawInterface = {

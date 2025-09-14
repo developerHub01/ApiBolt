@@ -12,7 +12,7 @@ import { selectAuthType } from "@/context/redux/request-response/request-respons
 import { updateAuthorization } from "@/context/redux/request-response/thunks/auth";
 import useAuthContextType from "@/hooks/authorization/use-auth-context-type";
 import { cn } from "@/lib/utils";
-import type { TAuthType } from "@/types/request-response.types";
+import type { TAuthType } from "@/types/authorization.types";
 
 const authTypeList: Array<{
   id: TAuthType;

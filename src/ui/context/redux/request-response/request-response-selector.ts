@@ -1,21 +1,14 @@
 import { createSelector } from "@reduxjs/toolkit";
 import type { RootState } from "@/context/redux/store";
 import type {
-  APIKeyInterface,
-  BasicAuthInterface,
-  EnvironmentInterface,
   FormDataInterface,
-  JWTBearerAuthInterface,
   MetaShowColumnInterface,
   ParamInterface,
-  ProjectInterface,
   RequestListInterface,
   RequestListItemInterface,
   RequestResponseSizeInterface,
   ResponseInterface,
   TActiveTabType,
-  TAuthType,
-  TBearerToken,
   TContentType,
   THTTPMethods,
   TMetaTableType,
@@ -29,6 +22,15 @@ import {
   defaultBasicAuth,
   defaultJWTBearerAuth,
 } from "@/constant/authorization.constant";
+import type {
+  APIKeyInterface,
+  BasicAuthInterface,
+  JWTBearerAuthInterface,
+  TAuthType,
+  TBearerToken,
+} from "@/types/authorization.types";
+import type { ProjectInterface } from "@/types/project.types";
+import type { EnvironmentInterface } from "@/types/environment.types";
 
 export const selectIsRequestListCollapsed = createSelector(
   [(state: RootState) => state.requestResponse.requestListCollapsed],

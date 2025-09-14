@@ -1,11 +1,11 @@
-import {
-  type EnvironmentInterface,
-  type EnvironmentPayloadInterface,
-} from "@/types/request-response.types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import { v4 as uuidv4 } from "uuid";
 import { handleLoadEnvironmentsList } from "@/context/redux/request-response/request-response-slice";
+import type {
+  EnvironmentInterface,
+  EnvironmentPayloadInterface,
+} from "@/types/environment.types";
 
 /* ==============================
 ===== Environment start =========

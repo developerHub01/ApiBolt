@@ -2,7 +2,7 @@ import type {
   APIKeyInterface,
   BasicAuthInterface,
   JWTBearerAuthInterface,
-} from "@/types/request-response.types";
+} from "@/types/authorization.types";
 
 export const defaultAuthorizationId = "local";
 

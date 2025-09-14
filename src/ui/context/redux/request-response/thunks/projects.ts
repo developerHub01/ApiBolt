@@ -5,8 +5,8 @@ import {
   handleChangeIsRequestListLoaded,
   handleLoadProjectsList,
 } from "@/context/redux/request-response/request-response-slice";
-import type { ProjectInterface } from "@/types/request-response.types";
 import { loadTabsData } from "@/context/redux/request-response/thunks/tab-list";
+import type { ProjectInterface } from "@/types/project.types";
 
 /* ==============================
 ========== Projects start =========

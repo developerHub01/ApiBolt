@@ -12,15 +12,9 @@ import {
   ResponsePanelMinLimit,
 } from "@/constant/request-response.constant";
 import type {
-  APIKeyInterface,
-  AuthorizationPayloadInterface,
-  BasicAuthInterface,
-  EnvironmentInterface,
   FormDataInterface,
-  JWTBearerAuthInterface,
   ParamInterface,
   ParamHeaderPayloadInterface,
-  ProjectInterface,
   RequestListInterface,
   RequestListItemInterface,
   RequestListItemUpdatePayloadInterface,
@@ -28,8 +22,6 @@ import type {
   ResponseFolderDataInterface,
   ResponseInterface,
   TActiveTabType,
-  TAuthType,
-  TBearerToken,
   TContentType,
   TRequestBodyType,
   BodyRawInterface,
@@ -41,6 +33,9 @@ import type {
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 import { loadFolder } from "@/context/redux/request-response/thunks/folder";
+import type { APIKeyInterface, AuthorizationPayloadInterface, BasicAuthInterface, JWTBearerAuthInterface, TAuthType, TBearerToken } from "@/types/authorization.types";
+import type { ProjectInterface } from "@/types/project.types";
+import type { EnvironmentInterface } from "@/types/environment.types";
 
 // export const fetchApiUniformError = (error: unknown): ResponseInterface => {
 //   // console.log("error", error);

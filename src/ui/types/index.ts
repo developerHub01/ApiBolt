@@ -1,17 +1,12 @@
 import type {
   APIPayloadBody,
-  AuthorizationPayloadInterface,
   BodyBinaryInterface,
   BodyRawInterface,
-  EnvironmentInterface,
-  EnvironmentPayloadInterface,
   FormDataPayloadInterface,
   HiddenHeadersCheckInterface,
-  JWTBearerAuthInterface,
   MetaShowColumnInterface,
   ParamHeaderBuildPayloadInterface,
   ParamHeaderPayloadInterface,
-  ProjectInterface,
   RequestListItemInterface,
   RequestListItemMovePayloadInterface,
   RequestListItemUpdatePayloadInterface,
@@ -26,6 +21,15 @@ import type {
   UpdateBackgroundImagePayloadInterface,
 } from "@/types/setting.types";
 import type { ApiUrlPayload } from "@/types/request-url.types";
+import type {
+  AuthorizationPayloadInterface,
+  JWTBearerAuthInterface,
+} from "@/types/authorization.types";
+import type { ProjectInterface } from "@/types/project.types";
+import type {
+  EnvironmentInterface,
+  EnvironmentPayloadInterface,
+} from "./environment.types";
 
 declare global {
   interface Window {

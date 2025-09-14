@@ -1,4 +1,3 @@
-import { type AuthorizationPayloadInterface } from "@/types/request-response.types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import { handleAuthorizations } from "@/context/redux/request-response/request-response-slice";
@@ -9,6 +8,7 @@ import {
   defaultBasicAuth,
   defaultJWTBearerAuth,
 } from "@/constant/authorization.constant";
+import type { AuthorizationPayloadInterface } from "@/types/authorization.types";
 
 /* ==============================
 ===== Auth start =========

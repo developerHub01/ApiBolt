@@ -1,7 +1,5 @@
-import type {
-  EnvironmentInterface,
-  TMetaTableType,
-} from "@/types/request-response.types";
+import type { EnvironmentInterface } from "@/types/environment.types";
+import type { TMetaTableType } from "@/types/request-response.types";
 import { v4 as uuidv4 } from "uuid";
 
 export const REQUEST_ITEM_SPACE_SIZE = 32;

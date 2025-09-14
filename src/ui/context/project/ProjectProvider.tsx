@@ -10,7 +10,7 @@ import {
   changeActiveProject,
   deleteProject,
 } from "@/context/redux/request-response/thunks/projects";
-import type { ProjectInterface } from "@/types/request-response.types";
+import type { ProjectInterface } from "@/types/project.types";
 
 interface ProjectContext {
   projectList: Array<ProjectInterface>;

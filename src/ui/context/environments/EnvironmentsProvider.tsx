@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import { useAppSelector } from "@/context/redux/hooks";
-import type { EnvironmentInterface } from "@/types/request-response.types";
+import type { EnvironmentInterface } from "@/types/environment.types";
 
 interface EnvironmentsContext {
   environmentsListState: Record<string, EnvironmentInterface>;

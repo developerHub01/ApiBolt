@@ -2,8 +2,8 @@ import { memo } from "react";
 import { TableRow } from "@/components/ui/table";
 import VariableCell from "@/components/app/environment/environemnt-variables/VariableCell";
 import CheckCell from "@/components/app/environment/environemnt-variables/CheckCell";
-import type { EnvironmentInterface } from "@/types/request-response.types";
 import { cn } from "@/lib/utils";
+import type { EnvironmentInterface } from "@/types/environment.types";
 
 interface VariableRowProps extends EnvironmentInterface {
   warning?: boolean;
