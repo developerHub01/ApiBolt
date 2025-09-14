@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import {
   Select,
   SelectContent,
@@ -9,6 +10,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { selectAuthType } from "@/context/redux/request-response/request-response-selector";
 import { updateAuthorization } from "@/context/redux/request-response/thunks/auth";
+import useAuthContextType from "@/hooks/authorization/use-auth-context-type";
 import { cn } from "@/lib/utils";
 import type { TAuthType } from "@/types/request-response.types";
 
@@ -38,6 +40,14 @@ const authTypeList: Array<{
   },
 ];
 
+const inheritTypeAuth: {
+  id: TAuthType;
+  label: string;
+} = {
+  id: "inherit-parent",
+  label: "Inherit auth from parent",
+};
+
 interface Props {
   className?: string;
 }
@@ -46,13 +56,24 @@ const AuthTypeTab = ({ className = "" }: Props) => {
   const dispatch = useAppDispatch();
   const authType = useAppSelector(selectAuthType);
 
+  const authContextType = useAuthContextType();
+
+  const list = useMemo(() => {
+    if (authContextType === "global") return authTypeList;
+
+    return [inheritTypeAuth, ...authTypeList];
+  }, [authContextType]);
+
   return (
     <Select
-      value={authType ?? authTypeList[0].id}
+      value={authType ?? list[0].id}
+      defaultValue={list[0].id}
       onValueChange={(type: TAuthType) =>
         dispatch(
           updateAuthorization({
-            type,
+            payload: {
+              type,
+            },
           })
         )
       }
@@ -62,7 +83,7 @@ const AuthTypeTab = ({ className = "" }: Props) => {
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          {authTypeList.map(({ id, label }) => (
+          {list.map(({ id, label }) => (
             <SelectItem key={id} value={id} className="capitalize">
               {label}
             </SelectItem>

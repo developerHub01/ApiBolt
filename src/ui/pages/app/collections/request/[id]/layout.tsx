@@ -11,6 +11,7 @@ import { loadBodyXWWWFormUrlencoded } from "@/context/redux/request-response/thu
 import { loadBodyFormData } from "@/context/redux/request-response/thunks/body-form-data";
 import { loadMetaShowColumn } from "@/context/redux/request-response/thunks/meta-show-column";
 import { loadApiUrl } from "@/context/redux/request-url/request-url-thunk";
+import { loadAuthorization } from "@/context/redux/request-response/thunks/auth";
 
 const RequestLayout = () => {
   const dispatch = useAppDispatch();
@@ -19,6 +20,7 @@ const RequestLayout = () => {
   useEffect(() => {
     const payload = { once: true };
     [
+      loadAuthorization,
       loadParams,
       loadHeaders,
       loadRequestMetaTab,
@@ -27,7 +29,7 @@ const RequestLayout = () => {
       loadBodyXWWWFormUrlencoded,
       loadRequestBodyRaw,
       loadRequestBodyBinary,
-      loadApiUrl
+      loadApiUrl,
     ].forEach((action) => dispatch(action(payload)));
   }, [dispatch, requestId]);
 

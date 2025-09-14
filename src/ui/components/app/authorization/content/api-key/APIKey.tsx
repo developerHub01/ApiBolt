@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { memo, useCallback } from "react";
 import ContentWrapper from "@/components/app/authorization/content/ContentWrapper";
 import AuthKeyValueWrapper from "@/components/app/authorization/content/AuthKeyValueWrapper";
 import AuthContentInput from "@/components/app/authorization/content/AuthContentInput";
@@ -19,15 +19,22 @@ const addToList = [
   },
 ];
 
-const APIKey = () => {
+interface Props {
+  id: string;
+  disabled?: boolean;
+}
+
+const APIKey = memo(({ id, disabled = false }: Props) => {
   const dispatch = useAppDispatch();
-  const authData = useAppSelector(selectAuthApiKey);
+  const authData = useAppSelector(selectAuthApiKey(id));
 
   const handleBlur = useCallback(
     (key: "apiKeyKey" | "apiKeyValue" | "apiKeyAddTo", value: string) => {
       dispatch(
         updateAuthorization({
-          [key]: value,
+          payload: {
+            [key]: value,
+          },
         })
       );
     },
@@ -43,6 +50,7 @@ const APIKey = () => {
           placeholder="Key"
           value={authData.key}
           onBlur={(value) => handleBlur("apiKeyKey", value)}
+          disabled={disabled}
         />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
@@ -53,6 +61,7 @@ const APIKey = () => {
           type="password"
           value={authData.value}
           onBlur={(value) => handleBlur("apiKeyValue", value)}
+          disabled={disabled}
         />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
@@ -64,11 +73,13 @@ const APIKey = () => {
           className="w-full"
           items={addToList}
           value={authData.addTo}
+          defaultValue={addToList[0].id}
           onChange={(value) => handleBlur("apiKeyAddTo", value)}
+          disabled={disabled}
         />
       </AuthKeyValueWrapper>
     </ContentWrapper>
   );
-};
+});
 
 export default APIKey;

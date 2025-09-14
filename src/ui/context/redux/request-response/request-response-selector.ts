@@ -22,12 +22,13 @@ import type {
   TRequestBodyType,
   TRequestFolderDescriptionTab,
 } from "@/types/request-response.types";
+import { getRequestNodeLevel } from "@/utils/request-response.utils";
 import {
   defaultApiKey,
+  defaultAuthorizationId,
   defaultBasicAuth,
   defaultJWTBearerAuth,
-} from "@/constant/request-response.constant";
-import { getRequestNodeLevel } from "@/utils/request-response.utils";
+} from "@/constant/authorization.constant";
 
 export const selectIsRequestListCollapsed = createSelector(
   [(state: RootState) => state.requestResponse.requestListCollapsed],
@@ -464,33 +465,51 @@ export const selectRequestMetaShowColumn = createSelector(
   }
 );
 
+export const selectAuthId = createSelector(
+  (state: RootState) => state.sidebar.activeTab,
+  (state: RootState) => state.requestResponse.selectedTab,
+  (activeTab, selectedTab) =>
+    activeTab === "collections" && selectedTab
+      ? selectedTab
+      : defaultAuthorizationId
+);
+
 export const selectAuthType = createSelector(
-  [(state: RootState) => state.requestResponse.authType ?? "no-auth"],
-  (authType): TAuthType => authType
+  [selectAuthId, (state: RootState) => state.requestResponse.authType],
+  (id, authType): TAuthType =>
+    authType[id] ??
+    (id === defaultAuthorizationId ? "no-auth" : "inherit-parent")
 );
 
-export const selectAuthApiKey = createSelector(
-  [(state: RootState) => state.requestResponse.apiKeyAuth ?? defaultApiKey],
-  (authData): APIKeyInterface => authData
-);
+export const selectAuthTypeById = (id: string) =>
+  createSelector(
+    [(state: RootState) => state.requestResponse.authType[id]],
+    (authType): TAuthType => authType ?? "no-auth"
+  );
 
-export const selectAuthBasicAuth = createSelector(
-  [(state: RootState) => state.requestResponse.basicAuth ?? defaultBasicAuth],
-  (authData): BasicAuthInterface => authData
-);
+export const selectAuthApiKey = (id: string) =>
+  createSelector(
+    [(state: RootState) => state.requestResponse.apiKeyAuth[id]],
+    (authData): APIKeyInterface => authData ?? defaultApiKey
+  );
 
-export const selectAuthBearerTokenAuth = createSelector(
-  [(state: RootState) => state.requestResponse.bearerTokenAuth ?? ""],
-  (authData): TBearerToken => authData
-);
+export const selectAuthBasicAuth = (id: string) =>
+  createSelector(
+    [(state: RootState) => state.requestResponse.basicAuth[id]],
+    (authData): BasicAuthInterface => authData ?? defaultBasicAuth
+  );
 
-export const selectAuthJWTBearerAuth = createSelector(
-  [
-    (state: RootState) =>
-      state.requestResponse.jwtBearerAuth ?? defaultJWTBearerAuth,
-  ],
-  (authData): JWTBearerAuthInterface => authData
-);
+export const selectAuthBearerTokenAuth = (id: string) =>
+  createSelector(
+    [(state: RootState) => state.requestResponse.bearerTokenAuth[id]],
+    (authData): TBearerToken => authData ?? ""
+  );
+
+export const selectAuthJWTBearerAuth = (id: string) =>
+  createSelector(
+    [(state: RootState) => state.requestResponse.jwtBearerAuth[id]],
+    (authData): JWTBearerAuthInterface => authData ?? defaultJWTBearerAuth
+  );
 
 export const selectCodeLineWrap = createSelector(
   [

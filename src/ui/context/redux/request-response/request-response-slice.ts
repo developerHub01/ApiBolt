@@ -1,9 +1,12 @@
 import {
   defaultApiKey,
+  defaultAuthorizationId,
   defaultBasicAuth,
+  defaultJWTBearerAuth,
+} from "@/constant/authorization.constant";
+import {
   defaultFolderDescription,
   defaultFolderTitle,
-  defaultJWTBearerAuth,
   initialHiddenCookie,
   initialHiddenHeaderData,
   ResponsePanelMinLimit,
@@ -227,22 +230,22 @@ interface RequestResponseState {
   xWWWFormUrlencodedData: Record<string, Array<ParamInterface>>;
   isDownloadRequestWithBase64: Record<string, boolean>;
   requestIdShouldFetch: string;
-  authType: TAuthType;
-  apiKeyAuth: APIKeyInterface;
+  authType: Record<string, TAuthType>;
+  apiKeyAuth: Record<string, APIKeyInterface>;
   /**
    * convert
    * const token = btoa(`${username}:${password}`);
    * headers["Authorization"] = `Basic ${token}`;
    * when to request the API
    */
-  basicAuth: BasicAuthInterface;
+  basicAuth: Record<string, BasicAuthInterface>;
 
   /**
    * convert
    * Authorization: `Bearer ${bearerToken}`
    * when to request the API
    */
-  bearerTokenAuth: TBearerToken;
+  bearerTokenAuth: Record<string, TBearerToken>;
 
   /**
    * convert
@@ -250,7 +253,7 @@ interface RequestResponseState {
    * based on the data
    * when to request the API
    */
-  jwtBearerAuth: JWTBearerAuthInterface;
+  jwtBearerAuth: Record<string, JWTBearerAuthInterface>;
 
   folderTitle: Record<string, string>;
   folderDescription: Record<string, string>;
@@ -307,11 +310,11 @@ const initialState: RequestResponseState = {
   isDownloadRequestWithBase64: {},
   requestIdShouldFetch: "",
 
-  authType: "no-auth",
-  apiKeyAuth: defaultApiKey,
-  basicAuth: defaultBasicAuth,
-  bearerTokenAuth: "",
-  jwtBearerAuth: defaultJWTBearerAuth,
+  authType: {},
+  apiKeyAuth: {},
+  basicAuth: {},
+  bearerTokenAuth: {},
+  jwtBearerAuth: {},
 
   folderTitle: {},
   folderDescription: {},
@@ -357,9 +360,13 @@ export const requestResponseSlice = createSlice({
     /* =============== Authorization reducers start ============= */
     handleAuthorizations: (
       state,
-      action: PayloadAction<AuthorizationPayloadInterface>
+      action: PayloadAction<{
+        id?: string;
+        payload: Partial<AuthorizationPayloadInterface>;
+      }>
     ) => {
       if (!state.activeProjectId) return;
+      const { id = defaultAuthorizationId, payload } = action.payload;
 
       const {
         type,
@@ -377,27 +384,91 @@ export const requestResponseSlice = createSlice({
         jwtPayload,
         jwtHeaderPrefix,
         jwtAddTo,
-      } = action.payload;
+      } = payload;
 
-      state.authType = type;
+      /* auth type start =========== */
+      const updatedType =
+        id === defaultAuthorizationId ? "no-auth" : "inherit-parent";
+      if (!state.authType[id]) state.authType[id] = updatedType;
+      if (type && state.authType[id] !== type) state.authType[id] = type;
+      /* auth type end =========== */
 
-      state.apiKeyAuth = {
-        key: apiKeyKey ?? "",
-        value: apiKeyValue ?? "",
-        addTo: apiKeyAddTo ?? "header",
-      };
-      state.bearerTokenAuth = bearerToken ?? "";
-      state.basicAuth = {
-        username: basicAuthUsername ?? "",
-        password: basicAuthPassword ?? "",
-      };
-      state.jwtBearerAuth = {
-        algo: jwtAlgo ?? "",
-        secret: jwtSecret ?? "",
-        payload: jwtPayload ?? "",
-        headerPrefix: jwtHeaderPrefix ?? "Bearer",
-        addTo: jwtAddTo ?? "header",
-      };
+      /* api key start =========== */
+      if (!state.apiKeyAuth[id]) state.apiKeyAuth[id] = defaultApiKey;
+
+      if (apiKeyKey !== undefined && state.apiKeyAuth[id].key !== apiKeyKey)
+        state.apiKeyAuth[id].key = apiKeyKey;
+      if (
+        apiKeyValue !== undefined &&
+        state.apiKeyAuth[id].value !== apiKeyValue
+      )
+        state.apiKeyAuth[id].value = apiKeyValue;
+      if (
+        apiKeyAddTo !== undefined &&
+        state.apiKeyAuth[id].addTo !== apiKeyAddTo
+      )
+        state.apiKeyAuth[id].addTo = apiKeyAddTo;
+      /* api key end =========== */
+
+      /* bearer token start =========== */
+      if (
+        state.bearerTokenAuth[id] === undefined ||
+        state.bearerTokenAuth[id] === null
+      )
+        state.bearerTokenAuth[id] = "";
+      if (
+        bearerToken !== undefined &&
+        state.bearerTokenAuth[id] !== bearerToken
+      )
+        state.bearerTokenAuth[id] = bearerToken;
+      /* bearer token end =========== */
+
+      /* basic auth start =========== */
+      if (state.basicAuth[id] === undefined || state.basicAuth[id] === null)
+        state.basicAuth[id] = defaultBasicAuth;
+      if (
+        basicAuthUsername !== undefined &&
+        state.basicAuth[id].username !== basicAuthUsername
+      )
+        state.basicAuth[id].username = basicAuthUsername;
+      if (
+        basicAuthPassword !== undefined &&
+        state.basicAuth[id].password !== basicAuthPassword
+      )
+        state.basicAuth[id].password = basicAuthPassword;
+      /* basic auth end =========== */
+
+      /* jwt auth start =========== */
+      if (
+        state.jwtBearerAuth[id] === undefined ||
+        state.jwtBearerAuth[id] === null
+      )
+        state.jwtBearerAuth[id] = defaultJWTBearerAuth;
+
+      if (jwtAlgo !== undefined && state.jwtBearerAuth[id].algo !== jwtAlgo)
+        state.jwtBearerAuth[id].algo = jwtAlgo;
+
+      if (
+        jwtSecret !== undefined &&
+        state.jwtBearerAuth[id].secret !== jwtSecret
+      )
+        state.jwtBearerAuth[id].secret = jwtSecret;
+
+      if (
+        jwtPayload !== undefined &&
+        state.jwtBearerAuth[id].payload !== jwtPayload
+      )
+        state.jwtBearerAuth[id].payload = jwtPayload;
+
+      if (
+        jwtHeaderPrefix !== undefined &&
+        state.jwtBearerAuth[id].headerPrefix !== jwtHeaderPrefix
+      )
+        state.jwtBearerAuth[id].headerPrefix = jwtHeaderPrefix;
+
+      if (jwtAddTo !== undefined && state.jwtBearerAuth[id].addTo !== jwtAddTo)
+        state.jwtBearerAuth[id].addTo = jwtAddTo;
+      /* jwt auth end =========== */
     },
     /* =============== Authorization reducers end ============= */
 
@@ -1044,12 +1115,13 @@ export const requestResponseSlice = createSlice({
     handleChangeAuthType: (
       state,
       action: PayloadAction<{
+        id?: string;
         type: TAuthType;
       }>
     ) => {
-      const { type } = action.payload;
+      const { id = defaultAuthorizationId, type } = action.payload;
 
-      state.authType = type;
+      state.authType[id] = type;
     },
 
     handleIsDownloadRequestWithBase64: (

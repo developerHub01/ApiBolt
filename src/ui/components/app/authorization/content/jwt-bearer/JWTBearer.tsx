@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { memo, useCallback } from "react";
 import ContentWrapper from "@/components/app/authorization/content/ContentWrapper";
 import AuthKeyValueWrapper from "@/components/app/authorization/content/AuthKeyValueWrapper";
 import AuthContentInput from "@/components/app/authorization/content/AuthContentInput";
@@ -26,10 +26,15 @@ const addToList = [
   },
 ];
 
-const JWTBearer = () => {
-  const dispatch = useAppDispatch();
-  const authData = useAppSelector(selectAuthJWTBearerAuth);
+interface Props {
+  id: string;
+  disabled?: boolean;
+}
 
+const JWTBearer = memo(({ id, disabled = false }: Props) => {
+  const dispatch = useAppDispatch();
+  const authData = useAppSelector(selectAuthJWTBearerAuth(id));
+  
   const handleBlur = useCallback(
     (
       key:
@@ -42,7 +47,9 @@ const JWTBearer = () => {
     ) => {
       dispatch(
         updateAuthorization({
-          [key]: value,
+          payload: {
+            [key]: value,
+          },
         })
       );
     },
@@ -61,6 +68,7 @@ const JWTBearer = () => {
           items={algoList}
           value={authData.algo || algoList[0].id}
           onChange={(value) => handleBlur("jwtAlgo", value)}
+          disabled={disabled}
         />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
@@ -74,6 +82,7 @@ const JWTBearer = () => {
           value={authData.secret}
           onBlur={(value) => handleBlur("jwtSecret", value)}
           placeholder="Secret"
+          disabled={disabled}
         />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
@@ -84,6 +93,7 @@ const JWTBearer = () => {
           id="api-key-payload"
           code={authData.payload}
           onBlur={(code: string) => handleBlur("jwtPayload", code)}
+          disabled={disabled}
         />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
@@ -95,7 +105,8 @@ const JWTBearer = () => {
           className="max-w-80"
           value={authData.headerPrefix}
           onBlur={(value) => handleBlur("jwtHeaderPrefix", value)}
-            placeholder="Prefix"
+          placeholder="Prefix"
+          disabled={disabled}
         />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
@@ -107,11 +118,13 @@ const JWTBearer = () => {
           className="w-full"
           items={addToList}
           value={authData.addTo ?? addToList[0].id}
+          defaultValue={addToList[0].id}
           onChange={(value) => handleBlur("jwtAddTo", value)}
+          disabled={disabled}
         />
       </AuthKeyValueWrapper>
     </ContentWrapper>
   );
-};
+});
 
 export default JWTBearer;

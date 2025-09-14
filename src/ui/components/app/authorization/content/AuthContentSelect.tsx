@@ -15,6 +15,8 @@ interface AuthContentSelectProps {
     label: string;
   }>;
   value: string;
+  defaultValue?: string;
+  disabled?: boolean;
   onChange: (value: string) => void;
   placeholder?: string;
   className?: string;
@@ -25,13 +27,20 @@ const AuthContentSelect = memo(
   ({
     items,
     value,
+    disabled = false,
+    defaultValue,
     onChange,
     placeholder,
     className = "",
     ...props
   }: AuthContentSelectProps) => {
     return (
-      <Select value={value} onValueChange={onChange}>
+      <Select
+        value={value}
+        disabled={disabled}
+        defaultValue={defaultValue}
+        onValueChange={onChange}
+      >
         <SelectTrigger className={cn("w-full max-w-80", className)} {...props}>
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>

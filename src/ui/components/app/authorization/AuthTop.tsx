@@ -2,8 +2,13 @@ import React, { memo } from "react";
 import AuthTypeTab from "@/components/app/authorization/AuthTypeTab";
 import AuthDetails from "@/components/app/authorization/AuthDetails";
 import { cn } from "@/lib/utils";
+import type { TAuthContextType } from "@/types/authorization.types";
 
-const AuthTop = memo(({ className }: React.ComponentProps<"div">) => {
+interface Props {
+  contextType?: TAuthContextType;
+}
+
+const AuthTop = memo(({ className }: Props & React.ComponentProps<"div">) => {
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
       <div className="flex items-center gap-4">

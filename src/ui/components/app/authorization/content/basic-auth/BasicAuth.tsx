@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { memo, useCallback } from "react";
 import ContentWrapper from "@/components/app/authorization/content/ContentWrapper";
 import AuthKeyValueWrapper from "@/components/app/authorization/content/AuthKeyValueWrapper";
 import AuthContentInput from "@/components/app/authorization/content/AuthContentInput";
@@ -7,15 +7,22 @@ import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { updateAuthorization } from "@/context/redux/request-response/thunks/auth";
 import { selectAuthBasicAuth } from "@/context/redux/request-response/request-response-selector";
 
-const BasicAuth = () => {
+interface Props {
+  id: string;
+  disabled?: boolean;
+}
+
+const BasicAuth = memo(({ id, disabled = false }: Props) => {
   const dispatch = useAppDispatch();
-  const authData = useAppSelector(selectAuthBasicAuth);
+  const authData = useAppSelector(selectAuthBasicAuth(id));
 
   const handleBlur = useCallback(
     (key: "basicAuthUsername" | "basicAuthPassword", value: string) => {
       dispatch(
         updateAuthorization({
-          [key]: value,
+          payload: {
+            [key]: value,
+          },
         })
       );
     },
@@ -34,6 +41,7 @@ const BasicAuth = () => {
           value={authData.username}
           onBlur={(value) => handleBlur("basicAuthUsername", value)}
           className="w-full"
+          disabled={disabled}
         />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
@@ -47,10 +55,11 @@ const BasicAuth = () => {
           value={authData.password}
           onBlur={(value) => handleBlur("basicAuthPassword", value)}
           className="w-full"
+          disabled={disabled}
         />
       </AuthKeyValueWrapper>
     </ContentWrapper>
   );
-};
+});
 
 export default BasicAuth;

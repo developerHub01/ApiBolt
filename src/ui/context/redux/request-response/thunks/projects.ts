@@ -6,6 +6,7 @@ import {
   handleLoadProjectsList,
 } from "@/context/redux/request-response/request-response-slice";
 import type { ProjectInterface } from "@/types/request-response.types";
+import { loadTabsData } from "@/context/redux/request-response/thunks/tab-list";
 
 /* ==============================
 ========== Projects start =========
@@ -14,23 +15,27 @@ export const loadProjectList = createAsyncThunk<
   {
     activeProject: string | null;
     projectList: Array<ProjectInterface>;
-  },
+  } | void,
   void,
   {
     dispatch: AppDispatch;
     state: RootState;
   }
 >("request-response/loadProjectList", async (_, { dispatch }) => {
-  const list = await window.electronAPIProjectsDB.getProjects();
-  const activeProject = await window.electronAPIProjectsDB.getActiveProject();
+  try {
+    const list = await window.electronAPIProjectsDB.getProjects();
+    const activeProject = await window.electronAPIProjectsDB.getActiveProject();
 
-  dispatch(handleLoadProjectsList(list));
-  dispatch(handleChangeActiveProject(activeProject));
+    dispatch(handleLoadProjectsList(list));
+    dispatch(handleChangeActiveProject(activeProject));
 
-  return {
-    activeProject,
-    projectList: list,
-  };
+    return {
+      activeProject,
+      projectList: list,
+    };
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 export const changeActiveProject = createAsyncThunk<
@@ -41,12 +46,17 @@ export const changeActiveProject = createAsyncThunk<
     state: RootState;
   }
 >("request-response/changeActiveProject", async (id, { dispatch }) => {
-  dispatch(handleChangeActiveProject(id));
-  const response = await window.electronAPIProjectsDB.changeActiveProject(id);
+  try {
+    dispatch(handleChangeActiveProject(id));
+    const response = await window.electronAPIProjectsDB.changeActiveProject(id);
 
-  if (response) dispatch(handleChangeIsRequestListLoaded(false));
+    if (response) dispatch(handleChangeIsRequestListLoaded(false));
 
-  return response;
+    return response;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 });
 
 export const createProject = createAsyncThunk<
@@ -57,13 +67,17 @@ export const createProject = createAsyncThunk<
     state: RootState;
   }
 >("request-response/changeActiveProject", async (name, { dispatch }) => {
-  const response = await window.electronAPIProjectsDB.createProjects({
-    name,
-  });
+  try {
+    const response = await window.electronAPIProjectsDB.createProjects({
+      name,
+    });
 
-  if (response) dispatch(loadProjectList());
-
-  return response;
+    if (response) dispatch(loadProjectList());
+    return response;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 });
 
 export const deleteProject = createAsyncThunk<
@@ -74,16 +88,21 @@ export const deleteProject = createAsyncThunk<
     state: RootState;
   }
 >("request-response/deleteProject", async (id, { dispatch }) => {
-  const response = await window.electronAPIProjectsDB.deleteProjects(id);
+  try {
+    const response = await window.electronAPIProjectsDB.deleteProjects(id);
 
-  // update the project list after deletion
-  if (response) {
-    dispatch(loadProjectList());
-    dispatch(handleChangeActiveProject(null));
-    dispatch(handleChangeIsRequestListLoaded(false));
+    // update the project list after deletion
+    if (response) {
+      dispatch(loadProjectList());
+      dispatch(handleChangeActiveProject(null));
+      dispatch(handleChangeIsRequestListLoaded(false));
+      dispatch(loadTabsData());
+    }
+    return response;
+  } catch (error) {
+    console.log(error);
+    return false;
   }
-
-  return response;
 });
 
 export const updateProject = createAsyncThunk<
@@ -97,16 +116,19 @@ export const updateProject = createAsyncThunk<
     state: RootState;
   }
 >("request-response/updateProject", async ({ id, name }, { dispatch }) => {
-  const response = await window.electronAPIProjectsDB.updateProjects(id, {
-    name,
-  });
+  try {
+    const response = await window.electronAPIProjectsDB.updateProjects(id, {
+      name,
+    });
 
-  // update the project list after deletion
-  if (response) {
-    dispatch(loadProjectList());
+    // update the project list after deletion
+    if (response) dispatch(loadProjectList());
+
+    return response;
+  } catch (error) {
+    console.log(error);
+    return false;
   }
-
-  return response;
 });
 /* ==============================
 ========== Projects end =========

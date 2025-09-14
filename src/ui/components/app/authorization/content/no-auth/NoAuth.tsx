@@ -9,6 +9,7 @@ const NoAuth = memo(() => {
       animationSrc="./lottie/nodata.lottie"
       showFallback
       innerClassName="w-56"
+      className="h-full"
       key="no-auth"
     />
   );

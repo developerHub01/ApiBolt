@@ -44,14 +44,9 @@ export const authorizationTable = sqliteTable("authorization_table", {
   id: text()
     .primaryKey()
     .$defaultFn(() => uuidv4()),
-  type: text()
-    .notNull()
-    .default(
-      "no-auth"
-    ) /* "no-auth" | "inherit-parent" | "basic-auth" | "bearer-token" | "jwt-bearer" | "api-key"; */,
+  type: text().notNull() /* "no-auth" | "inherit-parent" | "basic-auth" | "bearer-token" | "jwt-bearer" | "api-key"; */,
   projectId: text()
     .notNull()
-    .unique()
     .references(() => projectTable.id, {
       onDelete: "cascade",
     }),
@@ -61,20 +56,20 @@ export const authorizationTable = sqliteTable("authorization_table", {
       onDelete: "cascade",
     }),
   /* API Key Auth =========== */
-  apiKeyKey: text(),
-  apiKeyValue: text(),
-  apiKeyAddTo: text() /* "header" | "query" */,
+  apiKeyKey: text().default(""),
+  apiKeyValue: text().default(""),
+  apiKeyAddTo: text().default("header") /* "header" | "query" */,
   /* Bearer Token Auth ============ */
-  bearerToken: text(),
+  bearerToken: text().default(""),
   /* Basic Auth =========== */
-  basicAuthUsername: text(),
-  basicAuthPassword: text(),
+  basicAuthUsername: text().default(""),
+  basicAuthPassword: text().default(""),
   /* JWT Bearer Auth ============ */
-  jwtAlgo: text(),
-  jwtSecret: text(),
-  jwtPayload: text(),
-  jwtHeaderPrefix: text(),
-  jwtAddTo: text() /* "header" | "query" */,
+  jwtAlgo: text().default("HS256"),
+  jwtSecret: text().default(""),
+  jwtPayload: text().default(""),
+  jwtHeaderPrefix: text().default("Bearer"),
+  jwtAddTo: text().default("header") /* "header" | "query" */,
 });
 
 export const requestOrFolderMetaTable = sqliteTable(

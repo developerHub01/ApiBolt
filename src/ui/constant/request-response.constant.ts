@@ -1,8 +1,5 @@
 import type {
-  APIKeyInterface,
-  BasicAuthInterface,
   EnvironmentInterface,
-  JWTBearerAuthInterface,
   TMetaTableType,
 } from "@/types/request-response.types";
 import { v4 as uuidv4 } from "uuid";
@@ -55,24 +52,6 @@ export const defaultEnvironment = (
   isCheck: true,
   projectId,
 });
-
-export const defaultApiKey: APIKeyInterface = {
-  key: "",
-  value: "",
-  addTo: "header",
-};
-
-export const defaultBasicAuth: BasicAuthInterface = {
-  username: "",
-  password: "",
-};
-export const defaultJWTBearerAuth: JWTBearerAuthInterface = {
-  algo: "HS256",
-  secret: "",
-  payload: JSON.stringify({}),
-  headerPrefix: "Bearer",
-  addTo: "header",
-};
 
 export const defaultFolderTitle: string = "New Folder";
 export const defaultFolderDescription: string = `# Heading one`;

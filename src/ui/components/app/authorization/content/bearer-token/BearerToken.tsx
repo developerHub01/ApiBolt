@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { memo, useCallback } from "react";
 import ContentWrapper from "@/components/app/authorization/content/ContentWrapper";
 import AuthKeyValueWrapper from "@/components/app/authorization/content/AuthKeyValueWrapper";
 import AuthContentInput from "@/components/app/authorization/content/AuthContentInput";
@@ -7,15 +7,22 @@ import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { updateAuthorization } from "@/context/redux/request-response/thunks/auth";
 import { selectAuthBearerTokenAuth } from "@/context/redux/request-response/request-response-selector";
 
-const BearerToken = () => {
+interface Props {
+  id: string;
+  disabled?: boolean;
+}
+
+const BearerToken = memo(({ id, disabled = false }: Props) => {
   const dispatch = useAppDispatch();
-  const authData = useAppSelector(selectAuthBearerTokenAuth);
+  const authData = useAppSelector(selectAuthBearerTokenAuth(id));
 
   const handleBlur = useCallback(
     (value: string) => {
       dispatch(
         updateAuthorization({
-          bearerToken: value,
+          payload: {
+            bearerToken: value,
+          },
         })
       );
     },
@@ -35,10 +42,11 @@ const BearerToken = () => {
           value={authData}
           onBlur={handleBlur}
           className="w-full"
+          disabled={disabled}
         />
       </AuthKeyValueWrapper>
     </ContentWrapper>
   );
-};
+});
 
 export default BearerToken;

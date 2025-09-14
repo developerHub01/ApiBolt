@@ -76,7 +76,7 @@ const DeleteProjectDialog = memo(() => {
         <AnimatedDialogTop className="flex flex-col gap-3 px-4 py-3">
           <h3 className="text-lg leading-none font-semibold">Delete Project</h3>
           <p className="text-muted-foreground text-sm">
-            To delete project type{" "}
+            <span className="pr-1.5">To delete project type </span>
             <Badge variant={"outline"} className="select-text">
               {projectName}
             </Badge>

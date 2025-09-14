@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import Code from "@/components/ui/code";
 import { formatCode } from "@/utils/prettierUtils";
 import { toast } from "sonner";
@@ -17,47 +17,52 @@ const codeFormatter = async (
 
 interface PayloadCodeProps {
   code: string;
+  disabled?: boolean;
   onBlur: (code: string) => void;
   [key: string]: unknown;
 }
 
-const PayloadCode = ({ code = "", onBlur, ...props }: PayloadCodeProps) => {
-  const [codeState, setCodeState] = useState<string>(code);
+const PayloadCode = memo(
+  ({ code = "", 
+    disabled = false, 
+    onBlur, ...props }: PayloadCodeProps) => {
+    const [codeState, setCodeState] = useState<string>(code);
 
-  useEffect(() => {
-    setCodeState(code);
-  }, [code]);
+    useEffect(() => {
+      setCodeState(code);
+    }, [code]);
 
-  const handleChange = (code: string) => setCodeState(code);
-  const handleBlur = () => onBlur(codeState);
+    const handleChange = (code: string) => setCodeState(code);
+    const handleBlur = () => onBlur(codeState);
 
-  const handleFormat = () => codeFormatter(codeState, setCodeState);
+    const handleFormat = () => codeFormatter(codeState, setCodeState);
 
-  return (
-    <>
-      <ScrollArea
-        className={cn(
-          "w-full max-w-80 h-52 rounded-lg overflow-hidden border [&>div>div]:h-full relative",
-          "backdrop-blur-xs"
-        )}
-      >
-        <Code
-          className="h-full w-full"
-          contentType="json"
-          placeholder="Payload...."
-          code={code}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          editable={true}
-          copy={true}
-          lineWrap={true}
-          zoomable={true}
-          handleFormat={handleFormat}
-          {...props}
-        />
-      </ScrollArea>
-    </>
-  );
-};
+    return (
+      <>
+        <ScrollArea
+          className={cn(
+            "w-full max-w-80 h-52 rounded-lg overflow-hidden border [&>div>div]:h-full relative",
+            "backdrop-blur-xs"
+          )}
+        >
+          <Code
+            className="h-full w-full"
+            contentType="json"
+            placeholder="Payload...."
+            code={code}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            editable={!disabled}
+            copy={true}
+            lineWrap={true}
+            zoomable={true}
+            handleFormat={handleFormat}
+            {...props}
+          />
+        </ScrollArea>
+      </>
+    );
+  }
+);
 
 export default PayloadCode;

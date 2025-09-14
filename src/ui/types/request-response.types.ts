@@ -6,6 +6,7 @@ export type TRequestFolderDescriptionTab =
 
 export type TContentType = "text" | "html" | "xml" | "json" | "javascript";
 export type TAuthType =
+  | "inherit-parent"
   | "no-auth"
   | "basic-auth"
   | "bearer-token"
@@ -54,6 +55,7 @@ export interface AuthorizationPayloadInterface {
   id: string;
   type: TAuthType;
   projectId: string;
+  requestOrFolderMetaId?: string;
   apiKeyKey: string;
   apiKeyValue: string;
   apiKeyAddTo: TAuthAddTo;

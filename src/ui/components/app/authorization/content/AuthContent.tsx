@@ -8,23 +8,26 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectAuthType } from "@/context/redux/request-response/request-response-selector";
 import { cn } from "@/lib/utils";
+import InheritParent from "@/components/app/authorization/content/inherit-parent/InheritParent";
 
 interface Props {
+  id: string;
   className?: string;
 }
 
-const AuthContent = memo(({ className = "" }: Props) => {
+const AuthContent = memo(({ id, className = "" }: Props) => {
   const authType = useAppSelector(selectAuthType);
 
   return (
     <ScrollArea
       className={cn("w-full h-full min-h-0 py-2 [&>div>div]:h-full", className)}
     >
+      {authType === "inherit-parent" && <InheritParent id={id} />}
       {authType === "no-auth" && <NoAuth />}
-      {authType === "basic-auth" && <BasicAuth />}
-      {authType === "bearer-token" && <BearerToken />}
-      {authType === "jwt-bearer" && <JWTBearer />}
-      {authType === "api-key" && <APIKey />}
+      {authType === "basic-auth" && <BasicAuth id={id} />}
+      {authType === "bearer-token" && <BearerToken id={id} />}
+      {authType === "jwt-bearer" && <JWTBearer id={id} />}
+      {authType === "api-key" && <APIKey id={id} />}
     </ScrollArea>
   );
 });

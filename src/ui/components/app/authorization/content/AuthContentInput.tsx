@@ -7,16 +7,19 @@ import {
 } from "react";
 import { cn } from "@/lib/utils";
 import { Eye as ShowIcon, EyeOff as HideIcon } from "lucide-react";
+import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 
 const AuthContentInput = memo(
   ({
     value,
     type = "text",
     className = "",
+    disabled = false,
     onBlur,
     ...props
   }: Omit<React.ComponentProps<"input">, "onBlur"> & {
     value: string;
+    disabled?: boolean;
     onBlur: (value: string) => void;
   }) => {
     const [valueState, setValueState] = useState<string>(value ?? "");
@@ -37,7 +40,11 @@ const AuthContentInput = memo(
       setHidePassword((prev) => (value === undefined ? !prev : value));
 
     return (
-      <div className="border-2 border-accent rounded-lg text-sm w-full max-w-80 flex items-center gap-1">
+      <ButtonLikeDiv
+        variant={"secondary"}
+        className="border-2 border-accent rounded-lg text-sm w-full max-w-80 flex items-center gap-1"
+        disabled={disabled}
+      >
         <input
           value={valueState}
           onChange={handleChange}
@@ -45,7 +52,7 @@ const AuthContentInput = memo(
           type={
             type === "password" ? (hidePassword ? "password" : "text") : type
           }
-          className={cn("px-1.5 py-1 outline-none w-full", className)}
+          className={cn("outline-none w-full", className)}
           {...props}
         />
         {type === "password" && (
@@ -59,7 +66,7 @@ const AuthContentInput = memo(
             {hidePassword ? <ShowIcon /> : <HideIcon />}
           </button>
         )}
-      </div>
+      </ButtonLikeDiv>
     );
   }
 );

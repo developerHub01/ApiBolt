@@ -2,6 +2,7 @@ import PageHeader from "@/components/ui/page-header";
 import { Separator } from "@/components/ui/separator";
 import AuthContent from "@/components/app/authorization/content/AuthContent";
 import AuthTop from "@/components/app/authorization/AuthTop";
+import { defaultAuthorizationId } from "@/constant/authorization.constant";
 
 const AuthorizationPage = () => {
   return (
@@ -11,7 +12,7 @@ const AuthorizationPage = () => {
         <AuthTop />
       </div>
       <Separator className="w-full" />
-      <AuthContent />
+      <AuthContent id={defaultAuthorizationId} />
     </div>
   );
 };

@@ -3,7 +3,6 @@ import { selectAuthType } from "@/context/redux/request-response/request-respons
 
 const AuthDetails = () => {
   const authType = useAppSelector(selectAuthType);
-  
   if (authType === "no-auth") return null;
 
   return (

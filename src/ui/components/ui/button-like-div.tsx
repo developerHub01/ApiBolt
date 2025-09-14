@@ -42,17 +42,26 @@ function ButtonLikeDiv({
   variant,
   size,
   asChild = false,
+  disabled = false,
   ...props
 }: React.ComponentProps<"div"> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean;
+    disabled?: boolean;
   }) {
   const Comp = asChild ? Slot : "div";
 
   return (
     <Comp
       data-slot="button-like-div"
-      className={cn(buttonVariants({ variant, size, className }))}
+      data-disabled={disabled ? "true" : undefined}
+      tabIndex={disabled ? -1 : 0}
+      aria-disabled={disabled}
+      className={cn(
+        buttonVariants({ variant, size }),
+        disabled && "pointer-events-none opacity-50 cursor-not-allowed",
+        className
+      )}
       {...props}
     />
   );

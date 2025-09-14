@@ -100,11 +100,15 @@ declare global {
     };
 
     electronAPIAuthorizationDB: {
-      getAuth(): Promise<AuthorizationPayloadInterface>;
+      getAuth(requestId?: string): Promise<AuthorizationPayloadInterface>;
+      getInheritedAuthFromId(
+        requestId: string
+      ): Promise<AuthorizationPayloadInterface>;
       createAuth(): Promise<boolean>;
-      updateAuth(
-        payload: Partial<Omit<AuthorizationPayloadInterface, "id">>
-      ): Promise<boolean>;
+      updateAuth(updatePayload: {
+        requestOrFolderId?: string;
+        payload: Partial<Omit<AuthorizationPayloadInterface, "id">>;
+      }): Promise<boolean>;
       deleteAuth(id?: string): Promise<boolean>;
     };
 

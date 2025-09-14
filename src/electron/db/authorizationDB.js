@@ -1,19 +1,63 @@
-import { eq } from "drizzle-orm";
+import { and, eq, isNull } from "drizzle-orm";
 import { db } from "./index.js";
-import { authorizationTable } from "./schema.js";
+import { authorizationTable, requestOrFolderMetaTable } from "./schema.js";
 import { getActiveProject } from "./projectsDB.js";
 
 /* id === active project id */
-export const getAuth = async (id) => {
+export const getAuth = async (requestId) => {
   try {
-    const activeProjectId = id ?? (await getActiveProject());
+    const activeProjectId = await getActiveProject();
 
     return (
       await db
         .select()
         .from(authorizationTable)
-        .where(eq(authorizationTable.projectId, activeProjectId))
+        .where(
+          and(
+            eq(authorizationTable.projectId, activeProjectId),
+            requestId
+              ? eq(authorizationTable.requestOrFolderMetaId, requestId)
+              : isNull(authorizationTable.requestOrFolderMetaId)
+          )
+        )
     )?.[0];
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getInheritedAuthFromId = async (requestId) => {
+  try {
+    let currentId = requestId;
+
+    while (currentId) {
+      const auth = (
+        await db
+          .select()
+          .from(authorizationTable)
+          .where(eq(authorizationTable.requestOrFolderMetaId, currentId))
+          .limit(1)
+      )?.[0];
+
+      /* no auth found here */
+      if (!auth) return null;
+
+      /* found auth */
+      if (auth.type !== "inherit-parent") return auth;
+
+      /* If "inherit-parent", fetch its parentId */
+      const [parentMeta] = await db
+        .select({
+          parentId: requestOrFolderMetaTable.parentId,
+        })
+        .from(requestOrFolderMetaTable)
+        .where(eq(requestOrFolderMetaTable.id, currentId))
+        .limit(1);
+
+      currentId = parentMeta?.parentId ?? null;
+    }
+
+    return null;
   } catch (error) {
     console.log(error);
   }
@@ -22,11 +66,30 @@ export const getAuth = async (id) => {
 export const createAuth = async (payload = {}) => {
   try {
     if (!payload.projectId) {
-      const activeProjectId = await getActiveProject();
-      payload.projectId = activeProjectId;
+      payload.projectId = await getActiveProject();
+    }
+    if (!payload.projectId) return false;
+
+    /* checking if requestOrFolderMetaId is null and for that project is there allready a requestOrFolderMetaId with null */
+    if (!payload.requestOrFolderMetaId) {
+      const isExist = (
+        await db
+          .select()
+          .from(authorizationTable)
+          .where(
+            and(
+              eq(authorizationTable.projectId, payload.projectId),
+              isNull(authorizationTable.requestOrFolderMetaId)
+            )
+          )
+      )?.[0];
+
+      if (isExist) return false;
     }
 
-    if (!payload.projectId) return false;
+    payload["type"] = payload.requestOrFolderMetaId
+      ? "inherit-parent"
+      : "no-auth";
 
     const result = await db.insert(authorizationTable).values({
       ...payload,
@@ -38,26 +101,33 @@ export const createAuth = async (payload = {}) => {
   }
 };
 
-export const updateAuth = async (payload = {}) => {
+export const updateAuth = async ({ requestOrFolderId, payload = {} } = {}) => {
   try {
-    let { projectId: activeProjectId } = payload;
+    const activeProjectId = await getActiveProject();
+    if (!activeProjectId) return false;
 
-    if (!activeProjectId) activeProjectId = await getActiveProject();
-
-    const authData = await db
-      .select()
-      .from(authorizationTable)
-      .where(eq(authorizationTable.projectId, activeProjectId));
+    const authData = (
+      await db
+        .select()
+        .from(authorizationTable)
+        .where(
+          and(
+            eq(authorizationTable.projectId, activeProjectId),
+            requestOrFolderId
+              ? eq(authorizationTable.requestOrFolderMetaId, requestOrFolderId)
+              : isNull(authorizationTable.requestOrFolderMetaId)
+          )
+        )
+    )?.[0];
 
     let updatedData = null;
 
-    if (!authData.length) {
-      updatedData = await db.insert(authorizationTable).values({
+    if (!authData) {
+      return await createAuth({
         projectId: activeProjectId,
+        requestOrFolderMetaId: requestOrFolderId,
         ...payload,
       });
-
-      return updatedData.changes > 0;
     }
 
     updatedData = await db
@@ -65,7 +135,14 @@ export const updateAuth = async (payload = {}) => {
       .set({
         ...payload,
       })
-      .where(eq(authorizationTable.projectId, activeProjectId));
+      .where(
+        and(
+          eq(authorizationTable.projectId, activeProjectId),
+          requestOrFolderId
+            ? eq(authorizationTable.requestOrFolderMetaId, requestOrFolderId)
+            : isNull(authorizationTable.requestOrFolderMetaId)
+        )
+      );
 
     return updatedData?.changes > 0;
   } catch (error) {
