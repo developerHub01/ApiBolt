@@ -33,7 +33,8 @@ export const loadAuthorization = createAsyncThunk<
           state.sidebar.activeTab === "collections" && selectedTab
             ? selectedTab
             : requestOrFolderId;
-      }
+      } else if (requestOrFolderId === defaultAuthorizationId)
+        requestOrFolderId = undefined;
 
       /* following condition means that auth data already loaded */
       if (
