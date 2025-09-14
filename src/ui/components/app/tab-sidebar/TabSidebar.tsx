@@ -1,4 +1,4 @@
-import { useCallback, type DragEvent } from "react";
+import { memo, useCallback, useEffect, useRef, type DragEvent } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import TabItem from "@/components/app/tab-sidebar/TabItem";
 import { cn } from "@/lib/utils";
@@ -17,13 +17,20 @@ import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 import NoTabOpenEmptyBox from "@/components/app/tab-sidebar/empty/NoTabOpenEmptyBox";
 import NoTabSearchResultEmptyBox from "@/components/app/tab-sidebar/empty/NoTabSearchResultEmptyBox";
 
-const TabSidebar = () => {
+const TabSidebar = memo(() => {
   const dispatch = useAppDispatch();
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const layoutTypes: TLayoutSetting = useCheckApplyingLayout();
   const isTabListHovering = useAppSelector(
     (state) => state.requestResponse.isTabListHovering
   );
   const { localTabList, totalTabsOpen } = useTabSidebar();
+
+  useEffect(() => {
+    return () => {
+      if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+    };
+  }, []);
 
   const handleDrop = useCallback(
     (e: DragEvent<HTMLDivElement>) => {
@@ -40,12 +47,22 @@ const TabSidebar = () => {
     [dispatch]
   );
 
-  const handleTabListHovering = useCallback(
-    (value: boolean) => {
-      dispatch(handleChangeIsTabListHovering(value));
-    },
-    [dispatch]
-  );
+  const handleMouseEnter = useCallback(() => {
+    /* Start a timer when user hovers | AKA long hover */
+    hoverTimeoutRef.current = setTimeout(() => {
+      dispatch(handleChangeIsTabListHovering(true));
+    }, 500);
+  }, [dispatch]);
+
+  const handleMouseLeave = useCallback(() => {
+    // If they leave early, cancel expansion
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
+    // Also collapse if it was already expanded
+    dispatch(handleChangeIsTabListHovering(false));
+  }, [dispatch]);
 
   return (
     <TabSidebarWrapper>
@@ -68,8 +85,8 @@ const TabSidebar = () => {
               "left-0 border-r": layoutTypes === "rtl",
             }
           )}
-          onMouseEnter={() => handleTabListHovering(true)}
-          onMouseLeave={() => handleTabListHovering(false)}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         >
           <ScrollArea
             className="w-full h-full min-h-0 flex-1 pb-0 [&>div>div]:w-full [&>div>div]:h-full"
@@ -106,6 +123,6 @@ const TabSidebar = () => {
       </div>
     </TabSidebarWrapper>
   );
-};
+});
 
 export default TabSidebar;
