@@ -36,10 +36,10 @@ const PayloadCode = memo(
     const handleFormat = () => codeFormatter(codeState, setCodeState);
 
     return (
-      <>
+      <div className="w-full max-w-80 h-52 rounded-lg overflow-hidden border relative">
         <ScrollArea
           className={cn(
-            "w-full max-w-80 h-52 rounded-lg overflow-hidden border [&>div>div]:h-full relative",
+            "w-full h-full rounded-lg overflow-hidden border [&>div>div]:h-full",
             "backdrop-blur-xs",
             {
               "cursor-not-allowed": disabled,
@@ -47,7 +47,7 @@ const PayloadCode = memo(
           )}
         >
           <Code
-            className="h-full w-full"
+            className="h-full w-full static"
             contentType="json"
             placeholder="Payload...."
             code={code}
@@ -61,7 +61,7 @@ const PayloadCode = memo(
             {...props}
           />
         </ScrollArea>
-      </>
+      </div>
     );
   }
 );
