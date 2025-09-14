@@ -7,6 +7,9 @@ import {
 } from "@/context/redux/request-response/request-response-slice";
 import { loadTabsData } from "@/context/redux/request-response/thunks/tab-list";
 import type { ProjectInterface } from "@/types/project.types";
+import { defaultAuthorizationId } from "@/constant/authorization.constant";
+import { loadEnvironmentsList } from "@/context/redux/request-response/thunks/environment";
+import { loadAuthorization } from "@/context/redux/request-response/thunks/auth";
 
 /* ==============================
 ========== Projects start =========
@@ -50,7 +53,16 @@ export const changeActiveProject = createAsyncThunk<
     dispatch(handleChangeActiveProject(id));
     const response = await window.electronAPIProjectsDB.changeActiveProject(id);
 
-    if (response) dispatch(handleChangeIsRequestListLoaded(false));
+    if (response) {
+      dispatch(handleChangeIsRequestListLoaded(false));
+      dispatch(loadTabsData());
+      dispatch(loadEnvironmentsList());
+      dispatch(
+        loadAuthorization({
+          requestOrFolderId: defaultAuthorizationId,
+        })
+      );
+    }
 
     return response;
   } catch (error) {
@@ -97,6 +109,12 @@ export const deleteProject = createAsyncThunk<
       dispatch(handleChangeActiveProject(null));
       dispatch(handleChangeIsRequestListLoaded(false));
       dispatch(loadTabsData());
+      dispatch(loadEnvironmentsList());
+      dispatch(
+        loadAuthorization({
+          requestOrFolderId: defaultAuthorizationId,
+        })
+      );
     }
     return response;
   } catch (error) {
