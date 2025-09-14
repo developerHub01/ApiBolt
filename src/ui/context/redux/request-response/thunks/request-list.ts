@@ -141,9 +141,12 @@ export const createRestApiBasic = createAsyncThunk<
     ];
 
     dispatch(handleCreateRestApiBasic(requestList));
-    await window.electronAPIRequestOrFolderMetaDB.createRequestOrFolderMeta(
-      requestList
-    );
+    const response =
+      await window.electronAPIRequestOrFolderMetaDB.createRequestOrFolderMeta(
+        requestList
+      );
+
+    if (response) await dispatch(expendRequestOrFolder(parentId));
   } catch (error) {
     console.log(error);
   }
