@@ -3,10 +3,10 @@ import type { AppDispatch, RootState } from "@/context/redux/store";
 import { handleAuthorizations } from "@/context/redux/request-response/request-response-slice";
 import { areSamePayload } from "@/utils/helper";
 import {
-  defaultApiKey,
-  defaultAuthorizationId,
-  defaultBasicAuth,
-  defaultJWTBearerAuth,
+  DEFAULT_API_KEY,
+  DEFAULT_AUTHORIZATION_ID,
+  DEFAULT_BASIC_AUTH,
+  DEFAULT_JWT_BEARER_AUTH,
 } from "@/constant/authorization.constant";
 import type { AuthorizationPayloadInterface } from "@/types/authorization.types";
 
@@ -33,7 +33,7 @@ export const loadAuthorization = createAsyncThunk<
           state.sidebar.activeTab === "collections" && selectedTab
             ? selectedTab
             : requestOrFolderId;
-      } else if (requestOrFolderId === defaultAuthorizationId)
+      } else if (requestOrFolderId === DEFAULT_AUTHORIZATION_ID)
         requestOrFolderId = undefined;
 
       /* following condition means that auth data already loaded */
@@ -122,41 +122,41 @@ export const updateAuthorization = createAsyncThunk<
             : requestOrFolderId;
       }
 
-      const tempId = requestOrFolderId ?? defaultAuthorizationId;
+      const tempId = requestOrFolderId ?? DEFAULT_AUTHORIZATION_ID;
       const existingPayload: Partial<
         Omit<AuthorizationPayloadInterface, "id">
       > = {
         type: state.requestResponse.authType[tempId] ?? "no-auth",
         apiKeyKey:
-          state.requestResponse.apiKeyAuth[tempId]?.key ?? defaultApiKey.key,
+          state.requestResponse.apiKeyAuth[tempId]?.key ?? DEFAULT_API_KEY.key,
         apiKeyValue:
           state.requestResponse.apiKeyAuth[tempId]?.value ??
-          defaultApiKey.value,
+          DEFAULT_API_KEY.value,
         apiKeyAddTo:
           state.requestResponse.apiKeyAuth[tempId]?.addTo ??
-          defaultApiKey.addTo,
+          DEFAULT_API_KEY.addTo,
         bearerToken: state.requestResponse.bearerTokenAuth[tempId],
         basicAuthUsername:
           state.requestResponse.basicAuth[tempId]?.username ??
-          defaultBasicAuth.username,
+          DEFAULT_BASIC_AUTH.username,
         basicAuthPassword:
           state.requestResponse.basicAuth[tempId]?.password ??
-          defaultBasicAuth.password,
+          DEFAULT_BASIC_AUTH.password,
         jwtAlgo:
           state.requestResponse.jwtBearerAuth[tempId]?.algo ??
-          defaultJWTBearerAuth.algo,
+          DEFAULT_JWT_BEARER_AUTH.algo,
         jwtSecret:
           state.requestResponse.jwtBearerAuth[tempId]?.secret ??
-          defaultJWTBearerAuth.secret,
+          DEFAULT_JWT_BEARER_AUTH.secret,
         jwtPayload:
           state.requestResponse.jwtBearerAuth[tempId]?.payload ??
-          defaultJWTBearerAuth.payload,
+          DEFAULT_JWT_BEARER_AUTH.payload,
         jwtHeaderPrefix:
           state.requestResponse.jwtBearerAuth[tempId]?.headerPrefix ??
-          defaultJWTBearerAuth.headerPrefix,
+          DEFAULT_JWT_BEARER_AUTH.headerPrefix,
         jwtAddTo:
           state.requestResponse.jwtBearerAuth[tempId]?.addTo ??
-          defaultJWTBearerAuth.addTo,
+          DEFAULT_JWT_BEARER_AUTH.addTo,
       };
 
       const areSame = areSamePayload(payload, existingPayload);

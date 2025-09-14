@@ -1,5 +1,5 @@
 import { MAX_REQUEST_LIST_NESTED_FOLDER_COUNT } from "@/constant/request-response.constant";
-import { urlPureVariableRegex } from "@/constant/request-url.constant";
+import { URL_PURE_VARIABLE_REGEX } from "@/constant/request-url.constant";
 import type {
   ParamInterface,
   RequestListInterface,
@@ -160,7 +160,7 @@ export const detectAndCleanVariable = (
       [type]: "text",
       [type === "keyType" ? "key" : "value"]: str,
     };
-  const match = str.match(urlPureVariableRegex);
+  const match = str.match(URL_PURE_VARIABLE_REGEX);
   if (match)
     return {
       [type]: "env",

@@ -4,7 +4,7 @@ import type {
   UpdateBackgroundImagePayloadMethodType,
 } from "@/types/setting.types";
 import type { TSettingTab } from "@/context/setting/SettingProvider";
-import { defaultSettings } from "@/constant/settings.constant";
+import { DEFAULT_SETTINGS } from "@/constant/settings.constant";
 import { updateSettingsBackgroundImages } from "@/context/redux/setting/setting-thunk";
 import { useAppDispatch } from "@/context/redux/hooks";
 
@@ -62,7 +62,7 @@ const useGlobalLocalBgImages = ({
 
   const value =
     (activeTab === "project" ? localSetting : globalSetting) ??
-    defaultSettings.backgroundImages;
+    DEFAULT_SETTINGS.backgroundImages;
 
   const handleChange = useCallback(
     (method?: UpdateBackgroundImagePayloadMethodType) => {

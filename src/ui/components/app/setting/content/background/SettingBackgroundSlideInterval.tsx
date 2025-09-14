@@ -1,7 +1,7 @@
 import {
-  defaultSettings,
-  maxBackgroundslideInterval,
-  minBackgroundslideInterval,
+  DEFAULT_SETTINGS,
+  MAX_BACKGROUNDSLIDE_INTERVAL,
+  MIN_BACKGROUNDSLIDE_INTERVAL,
 } from "@/constant/settings.constant";
 import { useAppSelector } from "@/context/redux/hooks";
 import { useSetting } from "@/context/setting/SettingProvider";
@@ -24,14 +24,14 @@ const SettingBackgroundSlideInterval = () => {
     useGlobalLocalSettingv1({
       globalSetting: slideIntervalGlobal,
       localSetting: slideIntervalLocal,
-      defaultSettings: defaultSettings.slideInterval,
+      DEFAULT_SETTINGS: DEFAULT_SETTINGS.slideInterval,
       activeTab,
       activeProjectId,
       key: "slideInterval",
     });
 
   const senitizedValue = Number(
-    senitizeValue(value, defaultSettings.slideInterval)
+    senitizeValue(value, DEFAULT_SETTINGS.slideInterval)
   );
 
   return (
@@ -39,11 +39,11 @@ const SettingBackgroundSlideInterval = () => {
       label="Adjust slide interval"
       settingType={settingType}
       handleChangeSettingType={handleChangeSettingType}
-      defaultValue={defaultSettings.slideInterval!}
+      defaultValue={DEFAULT_SETTINGS.slideInterval!}
       value={senitizedValue}
       onChange={handleChange}
-      min={minBackgroundslideInterval}
-      max={maxBackgroundslideInterval}
+      min={MIN_BACKGROUNDSLIDE_INTERVAL}
+      max={MAX_BACKGROUNDSLIDE_INTERVAL}
       suffixLable="s"
       longSuffixLable=" seconds"
       isLast

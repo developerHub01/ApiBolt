@@ -4,7 +4,7 @@ import type { THostType, UrlTokenInterface } from "@/types/request-url.types";
 import { decodeApiUrl } from "@/utils/request-url.utils";
 import type { ParamInterface } from "@/types/request-response.types";
 import { paramsTableToString } from "@/utils/request-response.utils";
-import { initialUrlTokensValue } from "@/constant/request-url.constant";
+import { INITIAL_URL_TOKENS_VALUE } from "@/constant/request-url.constant";
 
 export const selectRequestUrlTokens = createSelector(
   [
@@ -12,7 +12,7 @@ export const selectRequestUrlTokens = createSelector(
       state.requestUrl.tokens[state.requestResponse.selectedTab ?? ""],
   ],
   (tokens: Array<UrlTokenInterface>): Array<UrlTokenInterface> =>
-    tokens ?? [...initialUrlTokensValue]
+    tokens ?? [...INITIAL_URL_TOKENS_VALUE]
 );
 
 export const selectRequestUrl = createSelector(
@@ -21,7 +21,7 @@ export const selectRequestUrl = createSelector(
   (state: RootState) =>
     state.requestResponse.params[state.requestResponse.selectedTab ?? ""],
   (tokens: Array<UrlTokenInterface>, params: Array<ParamInterface>): string => {
-    tokens = tokens ?? [...initialUrlTokensValue];
+    tokens = tokens ?? [...INITIAL_URL_TOKENS_VALUE];
     const queryParams = paramsTableToString(params);
     try {
       return decodeApiUrl(tokens) + queryParams;
@@ -40,7 +40,7 @@ export const selectRequestUrlTokenProtocol = createSelector(
   (tokens: Array<UrlTokenInterface>): string => {
     return (
       (tokens ?? []).find((token) => token.id === "protocol")?.value ??
-      initialUrlTokensValue[0].value
+      INITIAL_URL_TOKENS_VALUE[0].value
     );
   }
 );
@@ -53,7 +53,7 @@ export const selectRequestUrlTokenHost = createSelector(
   (tokens: Array<UrlTokenInterface>): string => {
     return (
       (tokens ?? []).find((token) => token.id === "host")?.value ??
-      initialUrlTokensValue[1].value
+      INITIAL_URL_TOKENS_VALUE[1].value
     );
   }
 );
@@ -81,7 +81,7 @@ export const selectRequestUrlTokenPort = createSelector(
   (tokens: Array<UrlTokenInterface>): string => {
     return (
       (tokens ?? []).find((token) => token.id === "port")?.value ??
-      initialUrlTokensValue[2].value
+      INITIAL_URL_TOKENS_VALUE[2].value
     );
   }
 );

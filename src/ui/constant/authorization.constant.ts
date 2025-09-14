@@ -5,20 +5,20 @@ import type {
   TAuthContextType,
 } from "@/types/authorization.types";
 
-export const defaultAuthorizationId: TAuthContextType = "global";
+export const DEFAULT_AUTHORIZATION_ID: TAuthContextType = "global";
 
-export const defaultApiKey: APIKeyInterface = {
+export const DEFAULT_API_KEY: APIKeyInterface = {
   key: "",
   value: "",
   addTo: "header",
 };
 
-export const defaultBasicAuth: BasicAuthInterface = {
+export const DEFAULT_BASIC_AUTH: BasicAuthInterface = {
   username: "",
   password: "",
 };
 
-export const defaultJWTBearerAuth: JWTBearerAuthInterface = {
+export const DEFAULT_JWT_BEARER_AUTH: JWTBearerAuthInterface = {
   algo: "HS256",
   secret: "",
   payload: JSON.stringify({}),

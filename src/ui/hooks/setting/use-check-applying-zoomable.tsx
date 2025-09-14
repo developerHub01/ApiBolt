@@ -1,4 +1,4 @@
-import { defaultSettings } from "@/constant/settings.constant";
+import { DEFAULT_SETTINGS } from "@/constant/settings.constant";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectActiveProjectId } from "@/context/redux/request-response/request-response-selector";
 import {
@@ -12,7 +12,7 @@ const useCheckApplyingZoomable = (): boolean => {
   const isZoomableGlobal = useAppSelector(selectIsZoomableGlobal);
   const isZoomableLocal = useAppSelector(selectIsZoomableLocal);
 
-  const defaultZoomable = defaultSettings.isZoomable;
+  const defaultZoomable = DEFAULT_SETTINGS.isZoomable;
 
   return checkApplyingZoomable({
     activeProjectId,

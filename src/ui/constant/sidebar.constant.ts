@@ -7,7 +7,7 @@ import {
   KeyRound as AuthorizationIcon,
 } from "lucide-react";
 
-export const sidebarMenuList: Array<{
+export const SIDEBAR_MENU_LIST: Array<{
   id: TSidebarTab;
   Icon: LucideIcon;
   label: string;
@@ -39,11 +39,12 @@ export const sidebarMenuList: Array<{
   },
 ];
 
-export const hiddenTabsWhenNotProjectSelected: Array<TSidebarTab> = [
+export const HIDDEN_TABS_WHEN_NOT_PROJECT_SELECTED: Array<TSidebarTab> = [
   "collections",
   "environments",
   "authorization",
 ];
 
-export const localStorageSidebarActiveTabKey = "sidebar-active-tab";
-export const localStorageSidebarLastActiveTabKey = "sidebar-last-active-tab";
+export const LOCAL_STORAGE_SIDEBAR_ACTIVE_TAB_KEY = "sidebar-active-tab";
+
+export const LOCAL_STORAGE_SIDEBAR_LAST_ACTIVE_TAB_KEY = "sidebar-last-active-tab";

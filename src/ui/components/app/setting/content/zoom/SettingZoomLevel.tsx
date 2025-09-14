@@ -3,10 +3,10 @@ import { useAppSelector } from "@/context/redux/hooks";
 import { calculateIntoFixedPoint } from "@/utils";
 import useGlobalLocalSettingv1 from "@/hooks/setting/use-global-local-settingv1";
 import {
-  defaultSettings,
-  defaultZoomLevel,
-  maxZoomLevel,
-  minZoomLevel,
+  DEFAULT_SETTINGS,
+  DEFAULT_ZOOM_LEVEL,
+  MAX_ZOOM_LEVEL,
+  MIN_ZOOM_LEVEL,
 } from "@/constant/settings.constant";
 import { senitizeValue } from "@/utils/settings.utils";
 import SettingContextBasedLayout from "@/components/app/setting/content/SettingContextBasedLayout";
@@ -26,14 +26,14 @@ const SettingZoomLevel = () => {
     useGlobalLocalSettingv1({
       globalSetting: zoomLevelGlobal,
       localSetting: zoomLevelLocal,
-      defaultSettings: defaultSettings.zoomLevel,
+      DEFAULT_SETTINGS: DEFAULT_SETTINGS.zoomLevel,
       activeTab,
       activeProjectId,
       key: "zoomLevel",
     });
 
   const senitizedValue = calculateIntoFixedPoint(
-    Number(senitizeValue(value, defaultSettings.zoomLevel)) * 100
+    Number(senitizeValue(value, DEFAULT_SETTINGS.zoomLevel)) * 100
   );
 
   return (
@@ -41,9 +41,9 @@ const SettingZoomLevel = () => {
       settingType={settingType}
       label="Adjust the interface scale to your preference"
       value={senitizedValue}
-      defaultValue={calculateIntoFixedPoint(defaultZoomLevel * 100, 1)}
-      min={calculateIntoFixedPoint(minZoomLevel * 100, 1)}
-      max={calculateIntoFixedPoint(maxZoomLevel * 100, 1)}
+      defaultValue={calculateIntoFixedPoint(DEFAULT_ZOOM_LEVEL * 100, 1)}
+      min={calculateIntoFixedPoint(MIN_ZOOM_LEVEL * 100, 1)}
+      max={calculateIntoFixedPoint(MAX_ZOOM_LEVEL * 100, 1)}
       onChange={(value) =>
         handleChange(calculateIntoFixedPoint(Number(value) / 100, 1))
       }

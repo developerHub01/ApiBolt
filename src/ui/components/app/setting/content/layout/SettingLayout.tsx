@@ -1,5 +1,5 @@
 import SettingItem from "@/components/app/setting/content/SettingItem";
-import { defaultSettings } from "@/constant/settings.constant";
+import { DEFAULT_SETTINGS } from "@/constant/settings.constant";
 import { useAppSelector } from "@/context/redux/hooks";
 import { useSetting } from "@/context/setting/SettingProvider";
 import useGlobalLocalSettingv1 from "@/hooks/setting/use-global-local-settingv1";
@@ -49,13 +49,13 @@ const SettingLayout = () => {
     useGlobalLocalSettingv1({
       globalSetting: layoutTypeGlobal,
       localSetting: layoutTypeLocal,
-      defaultSettings: defaultSettings.layoutType,
+      DEFAULT_SETTINGS: DEFAULT_SETTINGS.layoutType,
       activeTab,
       activeProjectId,
       key: "layoutType",
     });
 
-  const senitizedValue = senitizeValue(value, defaultSettings.layoutType);
+  const senitizedValue = senitizeValue(value, DEFAULT_SETTINGS.layoutType);
 
   return (
     <SettingItem id="layout" title="Layout Settings">

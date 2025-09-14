@@ -7,7 +7,7 @@ import {
 } from "@/context/redux/request-response/request-response-slice";
 import { loadTabsData } from "@/context/redux/request-response/thunks/tab-list";
 import type { ProjectInterface } from "@/types/project.types";
-import { defaultAuthorizationId } from "@/constant/authorization.constant";
+import { DEFAULT_AUTHORIZATION_ID } from "@/constant/authorization.constant";
 import { loadEnvironmentsList } from "@/context/redux/request-response/thunks/environment";
 import { loadAuthorization } from "@/context/redux/request-response/thunks/auth";
 
@@ -59,7 +59,7 @@ export const changeActiveProject = createAsyncThunk<
       dispatch(loadEnvironmentsList());
       dispatch(
         loadAuthorization({
-          requestOrFolderId: defaultAuthorizationId,
+          requestOrFolderId: DEFAULT_AUTHORIZATION_ID,
         })
       );
     }
@@ -112,7 +112,7 @@ export const deleteProject = createAsyncThunk<
       dispatch(loadEnvironmentsList());
       dispatch(
         loadAuthorization({
-          requestOrFolderId: defaultAuthorizationId,
+          requestOrFolderId: DEFAULT_AUTHORIZATION_ID,
         })
       );
     }

@@ -5,7 +5,7 @@ import SettingType from "@/components/app/setting/SettingTypeSelector";
 import useGlobalLocalBgImages, {
   type SettingBackgroundImagesValueType,
 } from "@/hooks/setting/use-global-local-bg-images";
-import { defaultSettings } from "@/constant/settings.constant";
+import { DEFAULT_SETTINGS } from "@/constant/settings.constant";
 import { senitizeValue } from "@/utils/settings.utils";
 import SettingBackgroundImage from "@/components/app/setting/content/background/images/SettingBackgroundImage";
 import { Button } from "@/components/ui/button";
@@ -31,7 +31,7 @@ const SettingBackgroundImages = () => {
 
   const senitizedValue = senitizeValue(
     value,
-    defaultSettings.backgroundImages
+    DEFAULT_SETTINGS.backgroundImages
   ) as SettingBackgroundImagesValueType;
 
   const isHideMoreData =

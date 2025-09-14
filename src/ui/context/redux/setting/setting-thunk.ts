@@ -12,11 +12,11 @@ import {
   handleUpdateSettings,
 } from "@/context/redux/setting/setting-slice";
 import {
-  defaultSettings,
-  defaultZoomLevel,
-  maxZoomLevel,
-  minZoomLevel,
-  stepAmountZoomLevel,
+  DEFAULT_SETTINGS,
+  DEFAULT_ZOOM_LEVEL,
+  MAX_ZOOM_LEVEL,
+  MIN_ZOOM_LEVEL,
+  STEP_AMOUNT_ZOOM_LEVEL,
 } from "@/constant/settings.constant";
 import { calculateIntoFixedPoint } from "@/utils";
 import { checkApplyingZoomable } from "@/utils/settings.utils";
@@ -73,7 +73,7 @@ export const updateSettingsZoomByKeyboard = createAsyncThunk<
       activeProjectId,
       isZoomableLocal: state.setting.settings?.isZoomable,
       isZoomableGlobal: state.setting.globalSetting?.isZoomable,
-      defaultZoomable: defaultSettings.isZoomable,
+      defaultZoomable: DEFAULT_SETTINGS.isZoomable,
     });
 
     if (!isZoomable) return false;
@@ -85,13 +85,13 @@ export const updateSettingsZoomByKeyboard = createAsyncThunk<
     const newZoomLevel = Math.max(
       Math.min(
         type === "+"
-          ? calculateIntoFixedPoint(oldZoomLevel + stepAmountZoomLevel, 1)
+          ? calculateIntoFixedPoint(oldZoomLevel + STEP_AMOUNT_ZOOM_LEVEL, 1)
           : type === "-"
-            ? calculateIntoFixedPoint(oldZoomLevel - stepAmountZoomLevel, 1)
-            : defaultZoomLevel,
-        maxZoomLevel
+            ? calculateIntoFixedPoint(oldZoomLevel - STEP_AMOUNT_ZOOM_LEVEL, 1)
+            : DEFAULT_ZOOM_LEVEL,
+        MAX_ZOOM_LEVEL
       ),
-      minZoomLevel
+      MIN_ZOOM_LEVEL
     );
 
     if (oldZoomLevel === newZoomLevel) return false;

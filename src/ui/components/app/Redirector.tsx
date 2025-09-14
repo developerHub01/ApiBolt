@@ -4,8 +4,8 @@ import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { useNavigate } from "react-router-dom";
 import type { TSidebarTab } from "@/types/sidebar.types";
 import {
-  localStorageSidebarActiveTabKey,
-  sidebarMenuList,
+  LOCAL_STORAGE_SIDEBAR_ACTIVE_TAB_KEY,
+  SIDEBAR_MENU_LIST,
 } from "@/constant/sidebar.constant";
 import { selectSidebarActiveTab } from "@/context/redux/sidebar/sidebar-selector";
 import {
@@ -26,7 +26,7 @@ const Redirector = () => {
     let activeSidebarTab: TSidebarTab = "projects";
 
     if (activeProjectId) {
-      const savedTab = localStorage.getItem(localStorageSidebarActiveTabKey);
+      const savedTab = localStorage.getItem(LOCAL_STORAGE_SIDEBAR_ACTIVE_TAB_KEY);
 
       if (savedTab) activeSidebarTab = savedTab as TSidebarTab;
     }
@@ -35,7 +35,7 @@ const Redirector = () => {
     dispatch(handleChangeActiveTab(activeSidebarTab));
 
     let route =
-      sidebarMenuList.find((item) => item.id === activeSidebarTab)?.path ?? "/";
+      SIDEBAR_MENU_LIST.find((item) => item.id === activeSidebarTab)?.path ?? "/";
 
     /* if route is activeTab is collection so route '/' and have activeRequestOrFolder */
     if (activeSidebarTab === "collections" && activeRequestOrFolder) {

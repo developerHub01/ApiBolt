@@ -1,15 +1,15 @@
 import {
-  defaultApiKey,
-  defaultAuthorizationId,
-  defaultBasicAuth,
-  defaultJWTBearerAuth,
+  DEFAULT_API_KEY,
+  DEFAULT_AUTHORIZATION_ID,
+  DEFAULT_BASIC_AUTH,
+  DEFAULT_JWT_BEARER_AUTH,
 } from "@/constant/authorization.constant";
 import {
-  defaultFolderDescription,
-  defaultFolderTitle,
+  DEFAULT_FOLDER_DESCRIPTION,
+  DEFAULT_FOLDER_TITLE,
   initialHiddenCookie,
   initialHiddenHeaderData,
-  ResponsePanelMinLimit,
+  RESPONSE_PANEL_MIN_LIMIT,
 } from "@/constant/request-response.constant";
 import type {
   FormDataInterface,
@@ -77,9 +77,9 @@ import type { EnvironmentInterface } from "@/types/environment.types";
 // };
 
 // const getRestOfAuthType = (excludes?: string | Array<string>) => {
-//   if (!excludes) return AuthTypeList;
+//   if (!excludes) return AUTH_TYPE_LIST;
 
-//   return AuthTypeList.filter(
+//   return AUTH_TYPE_LIST.filter(
 //     (item) => !(Array.isArray(excludes) ? excludes : [excludes]).includes(item)
 //   );
 // };
@@ -368,7 +368,7 @@ export const requestResponseSlice = createSlice({
       }>
     ) => {
       if (!state.activeProjectId) return;
-      const { id = defaultAuthorizationId, payload } = action.payload;
+      const { id = DEFAULT_AUTHORIZATION_ID, payload } = action.payload;
 
       const {
         type,
@@ -390,7 +390,7 @@ export const requestResponseSlice = createSlice({
 
       /* auth type start =========== */
       const updatedType =
-        id === defaultAuthorizationId || !id ? "no-auth" : "inherit-parent";
+        id === DEFAULT_AUTHORIZATION_ID || !id ? "no-auth" : "inherit-parent";
       if (!state.authType[id]) state.authType[id] = updatedType;
       if (type && state.authType[id] !== type) state.authType[id] = type;
       /* auth type end =========== */
@@ -398,7 +398,7 @@ export const requestResponseSlice = createSlice({
       /* api key start =========== */
       if (!state.apiKeyAuth[id])
         state.apiKeyAuth[id] = {
-          ...defaultApiKey,
+          ...DEFAULT_API_KEY,
         };
 
       if (apiKeyKey !== undefined && state.apiKeyAuth[id].key !== apiKeyKey)
@@ -431,7 +431,7 @@ export const requestResponseSlice = createSlice({
       /* basic auth start =========== */
       if (state.basicAuth[id] === undefined || state.basicAuth[id] === null)
         state.basicAuth[id] = {
-          ...defaultBasicAuth,
+          ...DEFAULT_BASIC_AUTH,
         };
       if (
         basicAuthUsername !== undefined &&
@@ -451,7 +451,7 @@ export const requestResponseSlice = createSlice({
         state.jwtBearerAuth[id] === null
       )
         state.jwtBearerAuth[id] = {
-          ...defaultJWTBearerAuth,
+          ...DEFAULT_JWT_BEARER_AUTH,
         };
 
       if (jwtAlgo !== undefined && state.jwtBearerAuth[id].algo !== jwtAlgo)
@@ -999,8 +999,8 @@ export const requestResponseSlice = createSlice({
 
       if (
         size !== undefined &&
-        ((size > ResponsePanelMinLimit && !isResponseCollapsed) ||
-          (size <= ResponsePanelMinLimit && isResponseCollapsed))
+        ((size > RESPONSE_PANEL_MIN_LIMIT && !isResponseCollapsed) ||
+          (size <= RESPONSE_PANEL_MIN_LIMIT && isResponseCollapsed))
       )
         return;
 
@@ -1128,7 +1128,7 @@ export const requestResponseSlice = createSlice({
         type: TAuthType;
       }>
     ) => {
-      const { id = defaultAuthorizationId, type } = action.payload;
+      const { id = DEFAULT_AUTHORIZATION_ID, type } = action.payload;
 
       state.authType[id] = type;
     },
@@ -1198,7 +1198,7 @@ export const requestResponseSlice = createSlice({
         state.folderTitle[id] !== payload?.title
       )
         state.folderTitle[id] =
-          payload?.title ?? state.folderTitle[id] ?? defaultFolderTitle;
+          payload?.title ?? state.folderTitle[id] ?? DEFAULT_FOLDER_TITLE;
 
       if (
         state.folderDescription[id] === undefined ||
@@ -1207,7 +1207,7 @@ export const requestResponseSlice = createSlice({
         state.folderDescription[id] =
           payload?.description ??
           state.folderDescription[id] ??
-          defaultFolderDescription;
+          DEFAULT_FOLDER_DESCRIPTION;
 
       if (!state.folderDescriptionActiveTab[id])
         state.folderDescriptionActiveTab[id] = "markdown";

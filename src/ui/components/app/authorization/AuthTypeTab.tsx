@@ -12,9 +12,9 @@ import { selectAuthTypeById } from "@/context/redux/request-response/request-res
 import { updateAuthorization } from "@/context/redux/request-response/thunks/auth";
 import { cn } from "@/lib/utils";
 import type { TAuthType } from "@/types/authorization.types";
-import { defaultAuthorizationId } from "@/constant/authorization.constant";
+import { DEFAULT_AUTHORIZATION_ID } from "@/constant/authorization.constant";
 
-const authTypeList: Array<{
+const AUTH_TYPE_LIST: Array<{
   id: TAuthType;
   label: string;
 }> = [
@@ -59,9 +59,9 @@ const AuthTypeTab = memo(({ id, className = "" }: Props) => {
 
   const list = useMemo(
     () =>
-      id === defaultAuthorizationId
-        ? authTypeList
-        : [inheritTypeAuth, ...authTypeList],
+      id === DEFAULT_AUTHORIZATION_ID
+        ? AUTH_TYPE_LIST
+        : [inheritTypeAuth, ...AUTH_TYPE_LIST],
     [id]
   );
 

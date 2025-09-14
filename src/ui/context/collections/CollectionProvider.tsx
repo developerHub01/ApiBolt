@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { defaultAuthorizationId } from "@/constant/authorization.constant";
+import { DEFAULT_AUTHORIZATION_ID } from "@/constant/authorization.constant";
 import { loadInheritParentAuthorization } from "../redux/request-response/thunks/auth";
 import type { TAuthContextType } from "@/types/authorization.types";
 import { selectSelectedTab } from "../redux/request-response/request-response-selector";
@@ -33,7 +33,7 @@ const CollectionProvider = ({ children, type }: CollectionProviderProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [inheritAuthId, setInheritAuthId] = useState<string | null>(null);
   const selectedTab = useAppSelector(selectSelectedTab);
-  const id = type === "global" ? defaultAuthorizationId : selectedTab;
+  const id = type === "global" ? DEFAULT_AUTHORIZATION_ID : selectedTab;
 
   useEffect(() => {
     (async () => {
@@ -41,7 +41,7 @@ const CollectionProvider = ({ children, type }: CollectionProviderProps) => {
       setIsLoading(true);
       const targetId =
         (await dispatch(loadInheritParentAuthorization(id)).unwrap()) ??
-        defaultAuthorizationId;
+        DEFAULT_AUTHORIZATION_ID;
       setInheritAuthId(targetId);
       setIsLoading(false);
     })();

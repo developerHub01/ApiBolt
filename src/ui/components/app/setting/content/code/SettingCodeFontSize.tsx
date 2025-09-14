@@ -1,8 +1,8 @@
 import {
-  defaultCodeFontSize,
-  defaultSettings,
-  maxCodeFontSize,
-  minCodeFontSize,
+  DEFAULT_CODE_FONT_SIZE,
+  DEFAULT_SETTINGS,
+  MAX_CODE_FONT_SIZE,
+  MIN_CODE_FONT_SIZE,
 } from "@/constant/settings.constant";
 import { useAppSelector } from "@/context/redux/hooks";
 import { useSetting } from "@/context/setting/SettingProvider";
@@ -25,14 +25,14 @@ const SettingCodeFontSize = () => {
     useGlobalLocalSettingv1({
       globalSetting: codeFontSizeGlobal,
       localSetting: codeFontSizeLocal,
-      defaultSettings: defaultSettings.codeFontSize,
+      DEFAULT_SETTINGS: DEFAULT_SETTINGS.codeFontSize,
       activeTab,
       activeProjectId,
       key: "codeFontSize",
     });
 
   const senitizedValue = Number(
-    senitizeValue(value, defaultSettings.codeFontSize)
+    senitizeValue(value, DEFAULT_SETTINGS.codeFontSize)
   );
 
   return (
@@ -41,9 +41,9 @@ const SettingCodeFontSize = () => {
       settingType={settingType}
       handleChangeSettingType={handleChangeSettingType}
       value={senitizedValue}
-      defaultValue={defaultCodeFontSize}
-      min={minCodeFontSize}
-      max={maxCodeFontSize}
+      defaultValue={DEFAULT_CODE_FONT_SIZE}
+      min={MIN_CODE_FONT_SIZE}
+      max={MAX_CODE_FONT_SIZE}
       onChange={handleChange}
       suffixLable="px"
     />

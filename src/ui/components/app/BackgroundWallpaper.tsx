@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from "react";
 import useCheckApplyingBackground from "@/hooks/setting/use-check-applying-background";
-import { defaultSettings } from "@/constant/settings.constant";
+import { DEFAULT_SETTINGS } from "@/constant/settings.constant";
 
 const BackgroundWallpaper = () => {
   const backgroundSettings = useCheckApplyingBackground();
@@ -46,7 +46,7 @@ const BackgroundImageSlider = memo(
   ({
     list,
     blur = 0,
-    slideInterval = defaultSettings.slideInterval! * 1000,
+    slideInterval = DEFAULT_SETTINGS.slideInterval! * 1000,
   }: BackgroundImageSliderProps) => {
     const [currentIndex, setCurrentIndex] = useState<number>(0);
 

@@ -1,7 +1,7 @@
 import {
-  defaultSettings,
-  maxBackgroundBlur,
-  minBackgroundBlur,
+  DEFAULT_SETTINGS,
+  MAX_BACKGROUND_BLUR,
+  MIN_BACKGROUND_BLUR,
 } from "@/constant/settings.constant";
 import { useAppSelector } from "@/context/redux/hooks";
 import { useSetting } from "@/context/setting/SettingProvider";
@@ -24,14 +24,14 @@ const SettingBackgroundBlur = () => {
     useGlobalLocalSettingv1({
       globalSetting: blurGlobal,
       localSetting: blurLocal,
-      defaultSettings: defaultSettings.backgroundBlur,
+      DEFAULT_SETTINGS: DEFAULT_SETTINGS.backgroundBlur,
       activeTab,
       activeProjectId,
       key: "backgroundBlur",
     });
 
   const senitizedValue = Number(
-    senitizeValue(value, defaultSettings.backgroundBlur) ?? 0
+    senitizeValue(value, DEFAULT_SETTINGS.backgroundBlur) ?? 0
   );
 
   return (
@@ -39,11 +39,11 @@ const SettingBackgroundBlur = () => {
       label="Adjust background blur"
       settingType={settingType}
       handleChangeSettingType={handleChangeSettingType}
-      defaultValue={defaultSettings.backgroundBlur}
+      defaultValue={DEFAULT_SETTINGS.backgroundBlur}
       value={senitizedValue}
       onChange={handleChange}
-      min={minBackgroundBlur}
-      max={maxBackgroundBlur}
+      min={MIN_BACKGROUND_BLUR}
+      max={MAX_BACKGROUND_BLUR}
       suffixLable="px"
     />
   );

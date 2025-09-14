@@ -1,4 +1,4 @@
-import { defaultSettings } from "@/constant/settings.constant";
+import { DEFAULT_SETTINGS } from "@/constant/settings.constant";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectActiveProjectId } from "@/context/redux/request-response/request-response-selector";
 import { selectSettingBackground } from "@/context/redux/setting/setting-selector";
@@ -16,33 +16,33 @@ const useCheckApplyingBackground = (): {
   const backgroundImages =
     (activeProjectId
       ? (local.backgroundImages ?? global.backgroundImages)
-      : global.backgroundImages) ?? defaultSettings.backgroundImages;
+      : global.backgroundImages) ?? DEFAULT_SETTINGS.backgroundImages;
 
   let backgroundOpacity =
     (activeProjectId
       ? (local.backgroundOpacity ?? global.backgroundOpacity)
-      : global.backgroundOpacity) ?? defaultSettings.backgroundOpacity;
+      : global.backgroundOpacity) ?? DEFAULT_SETTINGS.backgroundOpacity;
   if (backgroundOpacity < 0)
-    backgroundOpacity = defaultSettings.backgroundOpacity;
+    backgroundOpacity = DEFAULT_SETTINGS.backgroundOpacity;
 
   let backgroundBlur =
     (activeProjectId
       ? (local.backgroundBlur ?? global.backgroundBlur)
-      : global.backgroundBlur) ?? defaultSettings.backgroundBlur;
-  if (backgroundBlur < 0) backgroundBlur = defaultSettings.backgroundBlur;
+      : global.backgroundBlur) ?? DEFAULT_SETTINGS.backgroundBlur;
+  if (backgroundBlur < 0) backgroundBlur = DEFAULT_SETTINGS.backgroundBlur;
 
   let maxNumberOfImages =
     (activeProjectId
       ? (local.maxNumberOfImages ?? global.maxNumberOfImages)
-      : global.maxNumberOfImages) ?? defaultSettings.maxNumberOfImages!;
+      : global.maxNumberOfImages) ?? DEFAULT_SETTINGS.maxNumberOfImages!;
   if (maxNumberOfImages < 0)
-    maxNumberOfImages = defaultSettings.maxNumberOfImages!;
+    maxNumberOfImages = DEFAULT_SETTINGS.maxNumberOfImages!;
 
   let slideInterval =
     (activeProjectId
       ? (local.slideInterval ?? global.slideInterval)
-      : global.slideInterval) ?? defaultSettings.slideInterval!;
-  if (slideInterval < 0) slideInterval = defaultSettings.slideInterval!;
+      : global.slideInterval) ?? DEFAULT_SETTINGS.slideInterval!;
+  if (slideInterval < 0) slideInterval = DEFAULT_SETTINGS.slideInterval!;
 
   if (!backgroundImages?.length) return null;
 

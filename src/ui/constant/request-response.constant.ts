@@ -21,7 +21,7 @@ export const getCookiesStringByDomain = async (url: string) => {
   return await window.electronAPI.getCookieStringByDomain(url);
 };
 
-export const AuthTypeList = [
+export const AUTH_TYPE_LIST = [
   "no-auth",
   "basic-auth",
   "bearer-token",
@@ -32,14 +32,14 @@ export const AuthTypeList = [
 export const localStorageRequestActiveTabKey = (requestId: string) =>
   `request-active-tab-${requestId}`;
 
-export const ResponsePanelMinLimit = 15;
+export const RESPONSE_PANEL_MIN_LIMIT = 15;
 
-export const defaultRequestResponseSize = {
+export const DEFAULT_REQUEST_RESPONSE_SIZE = {
   header: 0,
   body: 0,
 };
 
-export const defaultEnvironment = (
+export const DEFAULT_ENVIRONMENT = (
   id: string,
   projectId: string
 ): Omit<EnvironmentInterface, "createdAt"> => ({
@@ -51,8 +51,8 @@ export const defaultEnvironment = (
   projectId,
 });
 
-export const defaultFolderTitle: string = "New Folder";
-export const defaultFolderDescription: string = `# Heading one`;
+export const DEFAULT_FOLDER_TITLE: string = "New Folder";
+export const DEFAULT_FOLDER_DESCRIPTION: string = `# Heading one`;
 
 export const initialHiddenCookie = () => ({
   id: uuidv4(),

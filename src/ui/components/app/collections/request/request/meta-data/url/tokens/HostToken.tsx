@@ -19,7 +19,7 @@ import {
 import { ChevronDown as DownArrowIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { THostType } from "@/types/request-url.types";
-import { apiHostTypeList } from "@/constant/request-url.constant";
+import { API_HOST_TYPE_LIST } from "@/constant/request-url.constant";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { selectRequestUrlTokenHost } from "@/context/redux/request-url/request-url-selector";
 import { requestUrlUpdateOriginToken } from "@/context/redux/request-url/request-url-thunk";
@@ -153,7 +153,7 @@ const Menu = ({ value, onChange }: MenuProps) => {
           value={value}
           onValueChange={(newValue) => onChange(newValue as THostType)}
         >
-          {apiHostTypeList.map((type) => (
+          {API_HOST_TYPE_LIST.map((type) => (
             <DropdownMenuRadioItem value={type} className="capitalize">
               {type}
             </DropdownMenuRadioItem>

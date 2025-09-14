@@ -1,6 +1,6 @@
 import {
-  localStorageSidebarActiveTabKey,
-  localStorageSidebarLastActiveTabKey,
+  LOCAL_STORAGE_SIDEBAR_ACTIVE_TAB_KEY,
+  LOCAL_STORAGE_SIDEBAR_LAST_ACTIVE_TAB_KEY,
 } from "@/constant/sidebar.constant";
 import type { SidebarState, TSidebarTab } from "@/types/sidebar.types";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
@@ -16,11 +16,11 @@ export const handleLocalStorageOnSidebarToggle = (
   lastActiveTab: string | null
 ) => {
   if (currentActiveTab)
-    localStorage.setItem(localStorageSidebarActiveTabKey, currentActiveTab);
-  else localStorage.removeItem(localStorageSidebarActiveTabKey);
+    localStorage.setItem(LOCAL_STORAGE_SIDEBAR_ACTIVE_TAB_KEY, currentActiveTab);
+  else localStorage.removeItem(LOCAL_STORAGE_SIDEBAR_ACTIVE_TAB_KEY);
   if (lastActiveTab)
-    localStorage.setItem(localStorageSidebarLastActiveTabKey, lastActiveTab);
-  else localStorage.removeItem(localStorageSidebarLastActiveTabKey);
+    localStorage.setItem(LOCAL_STORAGE_SIDEBAR_LAST_ACTIVE_TAB_KEY, lastActiveTab);
+  else localStorage.removeItem(LOCAL_STORAGE_SIDEBAR_LAST_ACTIVE_TAB_KEY);
 };
 
 export const sidebarSlice = createSlice({
@@ -30,10 +30,10 @@ export const sidebarSlice = createSlice({
   reducers: {
     handleInitActiveTab: (state) => {
       state.activeTab = localStorage.getItem(
-        localStorageSidebarActiveTabKey
+        LOCAL_STORAGE_SIDEBAR_ACTIVE_TAB_KEY
       ) as TSidebarTab;
       state.lastActiveTab = localStorage.getItem(
-        localStorageSidebarLastActiveTabKey
+        LOCAL_STORAGE_SIDEBAR_LAST_ACTIVE_TAB_KEY
       ) as TSidebarTab;
     },
     handleChangeActiveTab: (

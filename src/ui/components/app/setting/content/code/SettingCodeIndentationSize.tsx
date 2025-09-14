@@ -1,10 +1,10 @@
 import { useAppSelector } from "@/context/redux/hooks";
 import { useSetting } from "@/context/setting/SettingProvider";
 import {
-  defaultIndentationSize,
-  defaultSettings,
-  maxIndentationSize,
-  minIndentationSize,
+  DEFAULT_INDENTATION_SIZE,
+  DEFAULT_SETTINGS,
+  MAX_INDENTATION_SIZE,
+  MIN_INDENTATION_SIZE,
 } from "@/constant/settings.constant";
 import useGlobalLocalSettingv1 from "@/hooks/setting/use-global-local-settingv1";
 import { senitizeValue } from "@/utils/settings.utils";
@@ -25,14 +25,14 @@ const SettingCodeIndentationSize = () => {
     useGlobalLocalSettingv1({
       globalSetting: indentationSizeGlobal,
       localSetting: indentationSizeLocal,
-      defaultSettings: defaultSettings.indentationSize,
+      DEFAULT_SETTINGS: DEFAULT_SETTINGS.indentationSize,
       activeTab,
       activeProjectId,
       key: "indentationSize",
     });
 
   const senitizedValue = Number(
-    senitizeValue(value, defaultSettings.indentationSize)
+    senitizeValue(value, DEFAULT_SETTINGS.indentationSize)
   );
 
   return (
@@ -41,9 +41,9 @@ const SettingCodeIndentationSize = () => {
       settingType={settingType}
       handleChangeSettingType={handleChangeSettingType}
       value={senitizedValue}
-      defaultValue={defaultIndentationSize}
-      min={minIndentationSize}
-      max={maxIndentationSize}
+      defaultValue={DEFAULT_INDENTATION_SIZE}
+      min={MIN_INDENTATION_SIZE}
+      max={MAX_INDENTATION_SIZE}
       onChange={handleChange}
       isLast
     />

@@ -1,4 +1,4 @@
-import { urlVariableRegex } from "@/constant/request-url.constant";
+import { URL_VARIABLE_REGEX } from "@/constant/request-url.constant";
 import type { UrlTokenInterface } from "@/types/request-url.types";
 import { v4 as uuidv4 } from "uuid";
 
@@ -38,7 +38,7 @@ export const encodeApiUrl = (apiUrl: string): Array<UrlTokenInterface> => {
   let lastIndex = 0;
   let match;
 
-  while ((match = urlVariableRegex.exec(requestUri)) !== null) {
+  while ((match = URL_VARIABLE_REGEX.exec(requestUri)) !== null) {
     // text before variable
     if (match.index > lastIndex) {
       tokens.push({

@@ -10,7 +10,7 @@ const checkIsDefaultType = (value: unknown) =>
 interface useGlobalLocalSettingv1Props {
   globalSetting: unknown;
   localSetting: unknown;
-  defaultSettings?: unknown;
+  DEFAULT_SETTINGS?: unknown;
   activeTab: TSettingTab;
   activeProjectId: string | null;
   key: string;
@@ -19,7 +19,7 @@ interface useGlobalLocalSettingv1Props {
 const useGlobalLocalSettingv1 = ({
   globalSetting,
   localSetting,
-  defaultSettings,
+  DEFAULT_SETTINGS,
   activeTab,
   activeProjectId,
   key,
@@ -57,15 +57,15 @@ const useGlobalLocalSettingv1 = ({
   }, []);
 
   const value =
-    (activeTab === "project" ? localSetting : globalSetting) ?? defaultSettings;
+    (activeTab === "project" ? localSetting : globalSetting) ?? DEFAULT_SETTINGS;
 
   const handleChange = useCallback(
     (value?: unknown) => {
-      const isNumberType = !isNaN(Number(value ?? defaultSettings));
+      const isNumberType = !isNaN(Number(value ?? DEFAULT_SETTINGS));
       const defaultValue = isNumberType ? -1 : "default";
       const localValue = isNumberType
-        ? Number(value ?? defaultSettings)
-        : (value ?? defaultSettings);
+        ? Number(value ?? DEFAULT_SETTINGS)
+        : (value ?? DEFAULT_SETTINGS);
 
       const updatedValue =
         settingType === "default"
@@ -81,7 +81,7 @@ const useGlobalLocalSettingv1 = ({
         })
       );
     },
-    [activeProjectId, activeTab, defaultSettings, dispatch, key, settingType]
+    [activeProjectId, activeTab, DEFAULT_SETTINGS, dispatch, key, settingType]
   );
 
   useEffect(() => {

@@ -9,8 +9,8 @@ import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { Link } from "react-router-dom";
 import { changeActiveTab as changeSidebarActiveTab } from "@/context/redux/sidebar/sidebar-thunk";
 import {
-  hiddenTabsWhenNotProjectSelected,
-  sidebarMenuList,
+  HIDDEN_TABS_WHEN_NOT_PROJECT_SELECTED,
+  SIDEBAR_MENU_LIST,
 } from "@/constant/sidebar.constant";
 import type { TSidebarTab } from "@/types/sidebar.types";
 import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
@@ -35,8 +35,8 @@ const SidebarMenu = memo(() => {
 
   return (
     <>
-      {sidebarMenuList.map(({ id, Icon, label, path }) => {
-        if (!activeProjectId && hiddenTabsWhenNotProjectSelected.includes(id))
+      {SIDEBAR_MENU_LIST.map(({ id, Icon, label, path }) => {
+        if (!activeProjectId && HIDDEN_TABS_WHEN_NOT_PROJECT_SELECTED.includes(id))
           return null;
 
         return (

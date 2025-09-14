@@ -17,10 +17,10 @@ import type {
 } from "@/types/request-response.types";
 import { getRequestNodeLevel } from "@/utils/request-response.utils";
 import {
-  defaultApiKey,
-  defaultAuthorizationId,
-  defaultBasicAuth,
-  defaultJWTBearerAuth,
+  DEFAULT_API_KEY,
+  DEFAULT_AUTHORIZATION_ID,
+  DEFAULT_BASIC_AUTH,
+  DEFAULT_JWT_BEARER_AUTH,
 } from "@/constant/authorization.constant";
 import type {
   APIKeyInterface,
@@ -473,33 +473,33 @@ export const selectAuthId = createSelector(
   (activeTab, selectedTab) =>
     activeTab === "collections" && selectedTab
       ? selectedTab
-      : defaultAuthorizationId
+      : DEFAULT_AUTHORIZATION_ID
 );
 
 export const selectAuthType = createSelector(
   [selectAuthId, (state: RootState) => state.requestResponse.authType],
   (id, authType): TAuthType =>
     authType[id] ??
-    (id === defaultAuthorizationId ? "no-auth" : "inherit-parent")
+    (id === DEFAULT_AUTHORIZATION_ID ? "no-auth" : "inherit-parent")
 );
 
 export const selectAuthTypeById = (id: string) =>
   createSelector(
     [(state: RootState) => state.requestResponse.authType[id]],
     (authType): TAuthType =>
-      authType ?? (id === defaultAuthorizationId ? "no-auth" : "inherit-parent")
+      authType ?? (id === DEFAULT_AUTHORIZATION_ID ? "no-auth" : "inherit-parent")
   );
 
 export const selectAuthApiKey = (id: string) =>
   createSelector(
     [(state: RootState) => state.requestResponse.apiKeyAuth[id]],
-    (authData): APIKeyInterface => authData ?? defaultApiKey
+    (authData): APIKeyInterface => authData ?? DEFAULT_API_KEY
   );
 
 export const selectAuthBasicAuth = (id: string) =>
   createSelector(
     [(state: RootState) => state.requestResponse.basicAuth[id]],
-    (authData): BasicAuthInterface => authData ?? defaultBasicAuth
+    (authData): BasicAuthInterface => authData ?? DEFAULT_BASIC_AUTH
   );
 
 export const selectAuthBearerTokenAuth = (id: string) =>
@@ -511,7 +511,7 @@ export const selectAuthBearerTokenAuth = (id: string) =>
 export const selectAuthJWTBearerAuth = (id: string) =>
   createSelector(
     [(state: RootState) => state.requestResponse.jwtBearerAuth[id]],
-    (authData): JWTBearerAuthInterface => authData ?? defaultJWTBearerAuth
+    (authData): JWTBearerAuthInterface => authData ?? DEFAULT_JWT_BEARER_AUTH
   );
 
 export const selectCodeLineWrap = createSelector(

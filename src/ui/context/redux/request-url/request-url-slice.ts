@@ -1,4 +1,4 @@
-import { initialUrlTokensValue } from "@/constant/request-url.constant";
+import { INITIAL_URL_TOKENS_VALUE } from "@/constant/request-url.constant";
 import type {
   TAPIUrlTokenType,
   UrlTokenInterface,
@@ -45,7 +45,7 @@ export const requestUrlSlice = createSlice({
       const newToken = { id: uuidv4(), type, value: newValue };
 
       if (!state.tokens[selectedTab])
-        state.tokens[selectedTab] = [...initialUrlTokensValue];
+        state.tokens[selectedTab] = [...INITIAL_URL_TOKENS_VALUE];
 
       const index =
         (state.tokens[selectedTab].findIndex((t) => t.id === preTokenId) ?? 0) +
@@ -62,7 +62,7 @@ export const requestUrlSlice = createSlice({
       const { selectedTab, id, ...payload } = action.payload;
 
       if (!state.tokens[selectedTab])
-        state.tokens[selectedTab] = [...initialUrlTokensValue];
+        state.tokens[selectedTab] = [...INITIAL_URL_TOKENS_VALUE];
 
       const index = state.tokens[selectedTab].findIndex(
         (token) => token.id === id

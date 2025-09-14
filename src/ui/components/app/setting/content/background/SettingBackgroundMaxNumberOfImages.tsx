@@ -1,7 +1,7 @@
 import {
-  defaultSettings,
-  maxBackgroundMaxNumberOfImages,
-  minBackgroundMaxNumberOfImages,
+  DEFAULT_SETTINGS,
+  MAX_BACKGROUND_MAX_NUMBER_OF_IMAGES,
+  MIN_BACKGROUND_MAX_NUMBER_OF_IMAGES,
 } from "@/constant/settings.constant";
 import { useAppSelector } from "@/context/redux/hooks";
 import { useSetting } from "@/context/setting/SettingProvider";
@@ -24,14 +24,14 @@ const SettingBackgroundMaxNumberOfImages = () => {
     useGlobalLocalSettingv1({
       globalSetting: maxImagesGlobal,
       localSetting: maxImagesLocal,
-      defaultSettings: defaultSettings.maxNumberOfImages,
+      DEFAULT_SETTINGS: DEFAULT_SETTINGS.maxNumberOfImages,
       activeTab,
       activeProjectId,
       key: "maxNumberOfImages",
     });
 
   const senitizedValue = Number(
-    senitizeValue(value, defaultSettings.maxNumberOfImages)
+    senitizeValue(value, DEFAULT_SETTINGS.maxNumberOfImages)
   );
 
   return (
@@ -39,10 +39,10 @@ const SettingBackgroundMaxNumberOfImages = () => {
       label="Allow max number of images"
       settingType={settingType}
       handleChangeSettingType={handleChangeSettingType}
-      defaultValue={defaultSettings.maxNumberOfImages!}
+      defaultValue={DEFAULT_SETTINGS.maxNumberOfImages!}
       value={senitizedValue}
-      min={minBackgroundMaxNumberOfImages}
-      max={maxBackgroundMaxNumberOfImages}
+      min={MIN_BACKGROUND_MAX_NUMBER_OF_IMAGES}
+      max={MAX_BACKGROUND_MAX_NUMBER_OF_IMAGES}
       onChange={handleChange}
     />
   );

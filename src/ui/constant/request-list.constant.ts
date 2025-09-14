@@ -7,7 +7,7 @@ import {
   ChevronsDownUp as CollapseIcon,
 } from "lucide-react";
 
-export const requestListActionButtonList: Array<BottomActionButtonInterface> = [
+export const REQUEST_LIST_ACTION_BUTTON_LIST: Array<BottomActionButtonInterface> = [
   {
     id: "add-request",
     label: "Add Request",
@@ -35,7 +35,7 @@ export const requestListActionButtonList: Array<BottomActionButtonInterface> = [
   },
 ];
 
-export const requestListActionFolderTypeIdList = [
+export const REQUEST_LIST_ACTION_FOLDER_TYPE_ID_LIST = [
   "add-folder",
   "add-rest-api-basic-folder",
 ];

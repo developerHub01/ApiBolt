@@ -10,8 +10,8 @@ import {
 import type { ListBottomActionType } from "@/types/request-list";
 import useRequestItemDetails from "@/hooks/request-response/request-list/use-request-item-details";
 import {
-  requestListActionButtonList,
-  requestListActionFolderTypeIdList,
+  REQUEST_LIST_ACTION_BUTTON_LIST,
+  REQUEST_LIST_ACTION_FOLDER_TYPE_ID_LIST,
 } from "@/constant/request-list.constant";
 
 const useRequestListAction = () => {
@@ -20,10 +20,10 @@ const useRequestListAction = () => {
 
   const list = useMemo(() => {
     const showFolderButton = checkIsFolderAddable();
-    if (showFolderButton) return requestListActionButtonList;
+    if (showFolderButton) return REQUEST_LIST_ACTION_BUTTON_LIST;
 
-    return requestListActionButtonList.filter(
-      (item) => !requestListActionFolderTypeIdList.includes(item.id)
+    return REQUEST_LIST_ACTION_BUTTON_LIST.filter(
+      (item) => !REQUEST_LIST_ACTION_FOLDER_TYPE_ID_LIST.includes(item.id)
     );
   }, [checkIsFolderAddable]);
 

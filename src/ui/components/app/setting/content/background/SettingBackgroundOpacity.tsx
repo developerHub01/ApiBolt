@@ -1,7 +1,7 @@
 import {
-  defaultSettings,
-  maxBackgroundOpacity,
-  minBackgroundOpacity,
+  DEFAULT_SETTINGS,
+  MAX_BACKGROUND_OPACITY,
+  MIN_BACKGROUND_OPACITY,
 } from "@/constant/settings.constant";
 import { useAppSelector } from "@/context/redux/hooks";
 import { useSetting } from "@/context/setting/SettingProvider";
@@ -25,14 +25,14 @@ const SettingBackgroundOpacity = () => {
     useGlobalLocalSettingv1({
       globalSetting: opacityGlobal,
       localSetting: opacityLocal,
-      defaultSettings: defaultSettings.backgroundOpacity,
+      DEFAULT_SETTINGS: DEFAULT_SETTINGS.backgroundOpacity,
       activeTab,
       activeProjectId,
       key: "backgroundOpacity",
     });
 
   const senitizedValue = calculateIntoFixedPoint(
-    Number(senitizeValue(value, defaultSettings.backgroundOpacity)) * 100
+    Number(senitizeValue(value, DEFAULT_SETTINGS.backgroundOpacity)) * 100
   );
 
   return (
@@ -41,11 +41,11 @@ const SettingBackgroundOpacity = () => {
       settingType={settingType}
       handleChangeSettingType={handleChangeSettingType}
       defaultValue={calculateIntoFixedPoint(
-        defaultSettings.backgroundOpacity * 100
+        DEFAULT_SETTINGS.backgroundOpacity * 100
       )}
       value={senitizedValue}
-      min={calculateIntoFixedPoint(minBackgroundOpacity * 100, 1)}
-      max={calculateIntoFixedPoint(maxBackgroundOpacity * 100, 1)}
+      min={calculateIntoFixedPoint(MIN_BACKGROUND_OPACITY * 100, 1)}
+      max={calculateIntoFixedPoint(MAX_BACKGROUND_OPACITY * 100, 1)}
       suffixLable="%"
       onChange={(value) =>
         handleChange(calculateIntoFixedPoint(Number(value) / 100, 1))
