@@ -45,6 +45,8 @@ const RequestListPanelWrapper = memo(() => {
       />
     );
 
+  if (requestListCollapsed) return null;
+
   return (
     <div
       className={cn(

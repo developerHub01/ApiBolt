@@ -10,7 +10,7 @@ const SidbarToggle = memo(() => {
   const dispath = useAppDispatch();
   const activeTab = useAppSelector(selectSidebarActiveTab);
 
-  const handleClick = useCallback(
+  const handleCollapse = useCallback(
     () => dispath(handleToggleRequestList()),
     [dispath]
   );
@@ -35,7 +35,7 @@ const SidbarToggle = memo(() => {
             scale: 0,
           }}
         >
-          <Button size={"icon"} variant={"outline"} onClick={handleClick}>
+          <Button size={"icon"} variant={"outline"} onClick={handleCollapse}>
             <MenuIcon />
           </Button>
         </motion.span>
