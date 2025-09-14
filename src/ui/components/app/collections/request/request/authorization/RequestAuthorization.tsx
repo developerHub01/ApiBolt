@@ -19,9 +19,9 @@ const RequestAuthorization = memo(() => {
           <div className="flex flex-col gap-1.5">
             <div className="flex flex-col gap-4">
               <p className="text-base shrink-0">Auth Type:</p>
-              <AuthTypeTab className="w-full" />
+              <AuthTypeTab id={selectedTab} className="w-full" />
             </div>
-            <AuthDetails />
+            <AuthDetails id={selectedTab} />
           </div>
         </ScrollArea>
         <Separator orientation="vertical" className="h-full" />

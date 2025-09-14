@@ -1,8 +1,12 @@
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectAuthType } from "@/context/redux/request-response/request-response-selector";
+import { selectAuthTypeById } from "@/context/redux/request-response/request-response-selector";
 
-const AuthDetails = () => {
-  const authType = useAppSelector(selectAuthType);
+interface Props {
+  id: string;
+}
+
+const AuthDetails = ({ id }: Props) => {
+  const authType = useAppSelector(selectAuthTypeById(id));
   if (authType === "no-auth") return null;
 
   return (

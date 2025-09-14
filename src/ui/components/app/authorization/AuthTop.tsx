@@ -5,17 +5,18 @@ import { cn } from "@/lib/utils";
 import type { TAuthContextType } from "@/types/authorization.types";
 
 interface Props {
+  id: string;
   contextType?: TAuthContextType;
 }
 
-const AuthTop = memo(({ className }: Props & React.ComponentProps<"div">) => {
+const AuthTop = memo(({ id, className }: Props & React.ComponentProps<"div">) => {
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
       <div className="flex items-center gap-4">
         <p className="text-base shrink-0">Auth Type:</p>
-        <AuthTypeTab className="w-full max-w-52" />
+        <AuthTypeTab className="w-full max-w-52" id={id} />
       </div>
-      <AuthDetails />
+      <AuthDetails id={id} />
     </div>
   );
 });

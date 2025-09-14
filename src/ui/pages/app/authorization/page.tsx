@@ -9,7 +9,7 @@ const AuthorizationPage = () => {
     <div className="flex flex-col gap-5 w-full h-full max-w-2xl mx-auto">
       <div className="flex flex-col gap-1.5">
         <PageHeader>Authorization</PageHeader>
-        <AuthTop />
+        <AuthTop id={defaultAuthorizationId} />
       </div>
       <Separator className="w-full" />
       <AuthContent id={defaultAuthorizationId} />

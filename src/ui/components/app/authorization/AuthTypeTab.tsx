@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { selectAuthType } from "@/context/redux/request-response/request-response-selector";
+import { selectAuthTypeById } from "@/context/redux/request-response/request-response-selector";
 import { updateAuthorization } from "@/context/redux/request-response/thunks/auth";
 import useAuthContextType from "@/hooks/authorization/use-auth-context-type";
 import { cn } from "@/lib/utils";
@@ -49,13 +49,13 @@ const inheritTypeAuth: {
 };
 
 interface Props {
+  id: string;
   className?: string;
 }
 
-const AuthTypeTab = ({ className = "" }: Props) => {
+const AuthTypeTab = ({ id, className = "" }: Props) => {
   const dispatch = useAppDispatch();
-  const authType = useAppSelector(selectAuthType);
-
+  const authType = useAppSelector(selectAuthTypeById(id));
   const authContextType = useAuthContextType();
 
   const list = useMemo(() => {

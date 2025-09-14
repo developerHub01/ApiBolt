@@ -6,20 +6,16 @@ import { useAppSelector } from "@/context/redux/hooks";
 import { selectSelectedTab } from "@/context/redux/request-response/request-response-selector";
 
 const FolderAuthorization = memo(() => {
-  return (
-    <div className="w-full h-full p-3 flex flex-col gap-5">
-      <AuthTop />
-      <Separator className="w-full" />
-      <AuthContentWrapper />
-    </div>
-  );
-});
-
-const AuthContentWrapper = () => {
   const selectedTab = useAppSelector(selectSelectedTab);
   if (!selectedTab) return null;
 
-  return <AuthContent id={selectedTab} />;
-};
+  return (
+    <div className="w-full h-full p-3 flex flex-col gap-5">
+      <AuthTop id={selectedTab} />
+      <Separator className="w-full" />
+      <AuthContent id={selectedTab} />
+    </div>
+  );
+});
 
 export default FolderAuthorization;

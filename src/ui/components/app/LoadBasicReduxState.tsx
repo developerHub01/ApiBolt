@@ -3,6 +3,7 @@ import { useAppDispatch } from "@/context/redux/hooks";
 import { loadEnvironmentsList } from "@/context/redux/request-response/thunks/environment";
 import { loadAuthorization } from "@/context/redux/request-response/thunks/auth";
 import { loadProjectList } from "@/context/redux/request-response/thunks/projects";
+import { defaultAuthorizationId } from "@/constant/authorization.constant";
 
 const LoadBasicReduxState = () => {
   const dispatch = useAppDispatch();
@@ -11,7 +12,9 @@ const LoadBasicReduxState = () => {
     (async () => {
       await dispatch(loadProjectList());
       await dispatch(loadEnvironmentsList());
-      await dispatch(loadAuthorization());
+      await dispatch(
+        loadAuthorization({ requestOrFolderId: defaultAuthorizationId })
+      );
     })();
   }, [dispatch]);
 
