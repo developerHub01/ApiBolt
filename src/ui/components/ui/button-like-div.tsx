@@ -59,7 +59,9 @@ function ButtonLikeDiv({
       aria-disabled={disabled}
       className={cn(
         buttonVariants({ variant, size }),
-        disabled && "pointer-events-none opacity-50 cursor-not-allowed",
+        {
+          "opacity-50 cursor-not-allowed": disabled,
+        },
         className
       )}
       {...props}

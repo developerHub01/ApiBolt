@@ -42,7 +42,8 @@ const AuthContentInput = memo(
     return (
       <ButtonLikeDiv
         variant={"secondary"}
-        className="border-2 border-accent rounded-lg text-sm w-full max-w-80 flex items-center gap-1"
+        className="border-2 border-accent rounded-lg text-sm w-full max-w-80 flex items-center gap-1 flex-1"
+        tabIndex={-1}
         disabled={disabled}
       >
         <input
