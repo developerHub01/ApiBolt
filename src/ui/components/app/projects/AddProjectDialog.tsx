@@ -20,25 +20,28 @@ import {
 } from "@/components/ui/animated-dialog";
 import { useProject } from "@/context/project/ProjectProvider";
 
-const defaultName = "New Project";
+const DEFAULT_NAME = "New Project";
+const MAX_NAME_LENGTH = 50;
 
 const AddProjectDialog = memo(() => {
   const dispatch = useAppDispatch();
   const { isCreateDialogOpen, handleChangeIsCreateDialogOpen } = useProject();
-  const [name, setName] = useState<string>(defaultName);
+  const [name, setName] = useState<string>(DEFAULT_NAME);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleCreate = useCallback(async () => {
     setIsLoading(true);
     const response = await dispatch(createProject(name)).unwrap();
     setIsLoading(false);
-    setName(defaultName);
+    setName(DEFAULT_NAME);
 
     if (response) handleChangeIsCreateDialogOpen();
     toast(response ? "Project Created Successfully!" : "Something went wrong!");
   }, [dispatch, handleChangeIsCreateDialogOpen, name]);
 
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const name = e.target.value;
+    if (name.length > MAX_NAME_LENGTH) return;
     setName(e.target.value);
   }, []);
 
@@ -54,7 +57,7 @@ const AddProjectDialog = memo(() => {
   const handleClose = useCallback(() => {
     handleChangeIsCreateDialogOpen(false);
     setIsLoading(false);
-    setName(defaultName);
+    setName(DEFAULT_NAME);
   }, [handleChangeIsCreateDialogOpen]);
 
   const isDisabled = isLoading || !name;
@@ -71,6 +74,9 @@ const AddProjectDialog = memo(() => {
         <div className="flex-1 flex flex-col gap-3 px-4 py-5">
           <Label htmlFor="name-1" className="font-normal text-sm">
             Project Name
+            <span className="ml-1 text-xs text-accent-foreground/70 tracking-widest">
+              (limit: {name.length}/{MAX_NAME_LENGTH})
+            </span>
           </Label>
           <Input
             id="name-1"
@@ -80,6 +86,7 @@ const AddProjectDialog = memo(() => {
             onChange={handleChange}
             onKeyDown={handleKeyDown}
             disabled={isLoading}
+            maxLength={MAX_NAME_LENGTH}
           />
         </div>
         <AnimatedDialogBottom className="justify-end gap-3 px-4 py-3">
