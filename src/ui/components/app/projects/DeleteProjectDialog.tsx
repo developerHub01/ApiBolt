@@ -19,7 +19,10 @@ import {
 } from "@/components/ui/animated-dialog";
 import { useProject } from "@/context/project/ProjectProvider";
 import { selectProjectById } from "@/context/redux/request-response/request-response-selector";
-import { Badge } from "@/components/ui/badge";
+import PasteButton from "@/components/ui/paste-button";
+import CopyButton from "@/components/ui/copy-button";
+import { ClipboardCopy as ClipboardCopyIcon } from "lucide-react";
+import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 
 const defaultName = "";
 
@@ -56,6 +59,10 @@ const DeleteProjectDialog = memo(() => {
     setName(e.target.value);
   }, []);
 
+  const handleChangeName = useCallback((name: string) => {
+    setName(name);
+  }, []);
+
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLInputElement>) => {
       if (e.key === "Enter") {
@@ -69,6 +76,8 @@ const DeleteProjectDialog = memo(() => {
   if (!projectName) return;
 
   const isDisabled = isLoading || !name.trim() || name.trim() !== projectName;
+  const projectLabel =
+    projectName.slice(0, 10) + (projectName.length > 10 ? "..." : "");
 
   return (
     <AnimatedDialog isOpen={Boolean(deletionCandidate)} onClose={handleClose}>
@@ -77,24 +86,41 @@ const DeleteProjectDialog = memo(() => {
           <h3 className="text-lg leading-none font-semibold">Delete Project</h3>
           <p className="text-muted-foreground text-sm">
             <span className="pr-1.5">To delete project type </span>
-            <Badge variant={"outline"} className="select-text">
-              {projectName}
-            </Badge>
+            <div className="inline-flex items-center gap-1.5">
+              <ButtonLikeDiv
+                variant={"outline"}
+                className="cursor-default px-1 py-0 pointer-events-none h-6"
+              >
+                {projectLabel}
+              </ButtonLikeDiv>
+              <CopyButton value={projectName}>
+                <ButtonLikeDiv
+                  variant={"outline"}
+                  className="h-auto size-6 px-1 py-0 has-[>svg]:px-1"
+                >
+                  <ClipboardCopyIcon />
+                </ButtonLikeDiv>
+              </CopyButton>
+            </div>
           </p>
         </AnimatedDialogTop>
         <div className="flex-1 flex flex-col gap-3 px-4 py-5">
           <Label htmlFor="project-name" className="font-normal text-sm">
             Project Name
           </Label>
-          <Input
-            id="project-name"
-            name="project-name"
-            placeholder={projectName}
-            value={name}
-            onChange={handleChange}
-            onKeyDown={handleKeyDown}
-            disabled={isLoading}
-          />
+          <div className="flex gap-2">
+            <Input
+              id="project-name"
+              name="project-name"
+              className="w-full flex-1"
+              placeholder={projectName}
+              value={name}
+              onChange={handleChange}
+              onKeyDown={handleKeyDown}
+              disabled={isLoading}
+            />
+            <PasteButton handleChange={handleChangeName} />
+          </div>
         </div>
         <AnimatedDialogBottom className="justify-end gap-3 px-4 py-3">
           <Button variant="outline" onClick={handleClose}>
