@@ -5,6 +5,7 @@ import {
   activeProjectTable,
   ACTIVE_PROJECT_ID,
 } from "./schema.js";
+import { createAuth } from "./authorizationDB.js";
 
 export const getProjects = async () => {
   try {
@@ -16,9 +17,20 @@ export const getProjects = async () => {
 
 export const createProjects = async (payload) => {
   try {
-    const result = await db.insert(projectTable).values(payload);
+    const result = (
+      await db.insert(projectTable).values(payload).returning({
+        id: projectTable.id,
+      })
+    )?.[0];
 
-    return result.changes > 0;
+    if (!result || !result.id) return false;
+
+    /* add default auth for globbaly for the project */
+    await createAuth({
+      projectId: result.id,
+    });
+
+    return true;
   } catch (error) {
     console.log(error);
   }
