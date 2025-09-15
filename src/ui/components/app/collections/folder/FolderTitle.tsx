@@ -3,6 +3,7 @@ import {
   useCallback,
   useEffect,
   useState,
+  type ClipboardEvent,
   type FocusEvent,
   type KeyboardEvent,
 } from "react";
@@ -38,6 +39,19 @@ const FolderTitle = memo(() => {
       e.preventDefault();
   }, []);
 
+  const handlePaste = useCallback((e: ClipboardEvent<HTMLHeadingElement>) => {
+    e.preventDefault();
+    const text = e.clipboardData.getData("text/plain");
+    document.execCommand("insertText", false, text);
+  }, []);
+
+  const handleCopy = useCallback((e: ClipboardEvent<HTMLHeadingElement>) => {
+    e.preventDefault();
+    const selection = window.getSelection();
+    const selectedText = selection ? selection.toString() : "";
+    e.clipboardData.setData("text/plain", selectedText);
+  }, []);
+
   const handleInput = useCallback((e: React.FormEvent<HTMLHeadingElement>) => {
     const length = e.currentTarget?.innerText.trim().length ?? 0;
     setTitleLength(length);
@@ -68,6 +82,8 @@ const FolderTitle = memo(() => {
         onKeyDown={handleKeydown}
         onInput={handleInput}
         onBlur={handleBlur}
+        onPaste={handlePaste}
+        onCopy={handleCopy}
         className={cn(
           "relative w-full text-xl md:text-3xl font-semibold  bg-accent/50 focus:bg-accent/50 py-1 px-2 rounded-t-sm border-b outline-none",
           "empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400 empty:before:absolute empty:before:pointer-events-none"
