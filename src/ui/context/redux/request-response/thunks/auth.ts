@@ -178,11 +178,6 @@ export const updateAuthorization = createAsyncThunk<
         })
       );
 
-      console.log({
-        requestOrFolderId,
-        payload,
-      });
-
       const response = await window.electronAPIAuthorizationDB.updateAuth({
         requestOrFolderId:
           requestOrFolderId === DEFAULT_AUTHORIZATION_ID
@@ -191,13 +186,25 @@ export const updateAuthorization = createAsyncThunk<
         payload,
       });
 
+      /* if update successfully and updating type and in change from inheri-parent type */
+      if (
+        response &&
+        requestOrFolderId &&
+        payload.type &&
+        (state.requestResponse.authType[requestOrFolderId] !==
+          "inherit-parent" ||
+          payload.type === "inherit-parent")
+      )
+        await dispatch(loadInheritParentAuthorization(requestOrFolderId));
+
       /* if not success then load again to retrive the changes by calling handleAuthorizations reducer */
-      if (!response)
+      if (!response) {
         await dispatch(
           loadAuthorization({
             requestOrFolderId,
           })
         );
+      }
 
       return response;
     } catch (error) {
