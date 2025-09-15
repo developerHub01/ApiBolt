@@ -1,6 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
-import { handleAuthorizations } from "@/context/redux/request-response/request-response-slice";
+import {
+  handleAuthorizations,
+  handleAuthorizationsInheritedId,
+} from "@/context/redux/request-response/request-response-slice";
 import { areSamePayload } from "@/utils/helper";
 import {
   DEFAULT_API_KEY,
@@ -79,8 +82,9 @@ export const loadInheritParentAuthorization = createAsyncThunk<
       const authorizationData =
         await window.electronAPIAuthorizationDB.getInheritedAuthFromId(id);
 
-      if (!authorizationData || !authorizationData.requestOrFolderMetaId)
-        return null;
+      if (!authorizationData) return null;
+      if (!authorizationData.requestOrFolderMetaId)
+        authorizationData.requestOrFolderMetaId = DEFAULT_AUTHORIZATION_ID;
 
       dispatch(
         handleAuthorizations({
@@ -88,7 +92,12 @@ export const loadInheritParentAuthorization = createAsyncThunk<
           payload: authorizationData,
         })
       );
-
+      dispatch(
+        handleAuthorizationsInheritedId({
+          requestId: selectedTab,
+          inheritedId: authorizationData.requestOrFolderMetaId,
+        })
+      );
       return authorizationData.requestOrFolderMetaId;
     } catch (error) {
       console.log(error);
@@ -169,8 +178,16 @@ export const updateAuthorization = createAsyncThunk<
         })
       );
 
-      const response = await window.electronAPIAuthorizationDB.updateAuth({
+      console.log({
         requestOrFolderId,
+        payload,
+      });
+
+      const response = await window.electronAPIAuthorizationDB.updateAuth({
+        requestOrFolderId:
+          requestOrFolderId === DEFAULT_AUTHORIZATION_ID
+            ? undefined
+            : requestOrFolderId,
         payload,
       });
 

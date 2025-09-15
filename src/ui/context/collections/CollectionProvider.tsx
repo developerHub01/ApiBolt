@@ -7,7 +7,6 @@ import { selectSelectedTab } from "../redux/request-response/request-response-se
 
 interface CollectionContext {
   isLoading: boolean;
-  inheritAuthId: string | null;
 }
 
 const CollectionContext = createContext<CollectionContext | null>(null);
@@ -31,7 +30,6 @@ interface CollectionProviderProps {
 const CollectionProvider = ({ children, type }: CollectionProviderProps) => {
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [inheritAuthId, setInheritAuthId] = useState<string | null>(null);
   const selectedTab = useAppSelector(selectSelectedTab);
   const id = type === "global" ? DEFAULT_AUTHORIZATION_ID : selectedTab;
 
@@ -39,10 +37,7 @@ const CollectionProvider = ({ children, type }: CollectionProviderProps) => {
     (async () => {
       if (!id) return;
       setIsLoading(true);
-      const targetId =
-        (await dispatch(loadInheritParentAuthorization(id)).unwrap()) ??
-        DEFAULT_AUTHORIZATION_ID;
-      setInheritAuthId(targetId);
+      await dispatch(loadInheritParentAuthorization(id));
       setIsLoading(false);
     })();
   }, [dispatch, id]);
@@ -53,7 +48,6 @@ const CollectionProvider = ({ children, type }: CollectionProviderProps) => {
     <CollectionContext.Provider
       value={{
         isLoading,
-        inheritAuthId,
       }}
     >
       {children}

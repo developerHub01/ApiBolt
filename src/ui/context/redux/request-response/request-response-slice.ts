@@ -232,7 +232,9 @@ interface RequestResponseState {
   xWWWFormUrlencodedData: Record<string, Array<ParamInterface>>;
   isDownloadRequestWithBase64: Record<string, boolean>;
   requestIdShouldFetch: string;
+
   authType: Record<string, TAuthType>;
+  authInheritedId: Record<string, string | null>;
   apiKeyAuth: Record<string, APIKeyInterface>;
   /**
    * convert
@@ -313,6 +315,7 @@ const initialState: RequestResponseState = {
   requestIdShouldFetch: "",
 
   authType: {},
+  authInheritedId: {},
   apiKeyAuth: {},
   basicAuth: {},
   bearerTokenAuth: {},
@@ -360,6 +363,20 @@ export const requestResponseSlice = createSlice({
     /* =============== Environment reducers end ============= */
 
     /* =============== Authorization reducers start ============= */
+    handleAuthorizationsInheritedId: (
+      state,
+      action: PayloadAction<{
+        requestId: string;
+        inheritedId: string;
+      }>
+    ) => {
+      if (!state.activeProjectId) return;
+      const { requestId, inheritedId = DEFAULT_AUTHORIZATION_ID } =
+        action.payload;
+        
+      if (state.authInheritedId[requestId] === inheritedId) return;
+      state.authInheritedId[requestId] = inheritedId;
+    },
     handleAuthorizations: (
       state,
       action: PayloadAction<{
@@ -1280,6 +1297,7 @@ export const {
 
   handleLoadEnvironmentsList,
 
+  handleAuthorizationsInheritedId,
   handleAuthorizations,
 
   handleLoadRequestList,

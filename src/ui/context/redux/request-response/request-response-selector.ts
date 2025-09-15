@@ -487,7 +487,19 @@ export const selectAuthTypeById = (id: string) =>
   createSelector(
     [(state: RootState) => state.requestResponse.authType[id]],
     (authType): TAuthType =>
-      authType ?? (id === DEFAULT_AUTHORIZATION_ID ? "no-auth" : "inherit-parent")
+      authType ??
+      (id === DEFAULT_AUTHORIZATION_ID ? "no-auth" : "inherit-parent")
+  );
+
+export const selectAuthInheritedId = createSelector(
+  [selectAuthId, (state: RootState) => state.requestResponse.authInheritedId],
+  (id, inheritedIds): string | null => inheritedIds[id]
+);
+
+export const selectAuthInheritedIdById = (id: string) =>
+  createSelector(
+    [(state: RootState) => state.requestResponse.authInheritedId[id]],
+    (inheritedId): string | null => inheritedId
   );
 
 export const selectAuthApiKey = (id: string) =>

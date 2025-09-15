@@ -48,7 +48,6 @@ const PasteButton = memo(
     const handleClick = async () => {
       try {
         const value = await window.navigator.clipboard.readText();
-        console.log({ value });
         handleChange(value);
       } catch (error) {
         console.log(error);

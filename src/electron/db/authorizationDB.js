@@ -31,6 +31,15 @@ export const getInheritedAuthFromId = async (requestId) => {
     let currentId = requestId;
 
     while (currentId) {
+      const requestData = (
+        await db
+          .select()
+          .from(requestOrFolderMetaTable)
+          .where(eq(requestOrFolderMetaTable.id, currentId))
+          .limit(1)
+      )?.[0];
+      if (!requestData) return;
+
       const auth = (
         await db
           .select()
@@ -40,21 +49,13 @@ export const getInheritedAuthFromId = async (requestId) => {
       )?.[0];
 
       /* no auth found here */
-      if (!auth) return null;
+      const type = auth?.type ?? "inherit-parent";
 
       /* found auth */
-      if (auth.type !== "inherit-parent") return auth;
+      if (type !== "inherit-parent") return auth;
 
-      /* If "inherit-parent", fetch its parentId */
-      const [parentMeta] = await db
-        .select({
-          parentId: requestOrFolderMetaTable.parentId,
-        })
-        .from(requestOrFolderMetaTable)
-        .where(eq(requestOrFolderMetaTable.id, currentId))
-        .limit(1);
-
-      currentId = parentMeta?.parentId ?? null;
+      currentId = requestData?.parentId ?? null;
+      if (!currentId) return await getAuth();
     }
 
     return null;
@@ -65,9 +66,8 @@ export const getInheritedAuthFromId = async (requestId) => {
 
 export const createAuth = async (payload = {}) => {
   try {
-    if (!payload.projectId) {
-      payload.projectId = await getActiveProject();
-    }
+    if (!payload.projectId) payload.projectId = await getActiveProject();
+
     if (!payload.projectId) return false;
 
     /* checking if requestOrFolderMetaId is null and for that project is there allready a requestOrFolderMetaId with null */
