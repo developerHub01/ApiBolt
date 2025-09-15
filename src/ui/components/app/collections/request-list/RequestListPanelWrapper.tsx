@@ -7,8 +7,8 @@ import { cn } from "@/lib/utils";
 import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
 import useCheckApplyingLayout from "@/hooks/setting/use-check-applying-layout";
 import type { TLayoutSetting } from "@/types/setting.types";
-import { selectIsRequestListCollapsed } from "@/context/redux/request-response/request-response-selector";
 import SmallDeviceListWrapper from "@/components/app/collections/request-list/SmallDeviceListWrapper";
+import { selectIsRequestListCollapsed } from "@/context/redux/request-response/selectors/request-list";
 
 const RequestListPanelWrapper = memo(() => {
   const dispath = useAppDispatch();

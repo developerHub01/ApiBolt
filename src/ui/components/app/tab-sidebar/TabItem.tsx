@@ -18,11 +18,11 @@ import {
 } from "@/context/redux/request-response/request-response-slice";
 import type { THTTPMethods } from "@/types/request-response.types";
 import { expendParentsOnSelectedChangeTabsData } from "@/context/redux/request-response/thunks/tab-list";
+import { selectRequestOrFolderById } from "@/context/redux/request-response/selectors/request-list";
 import {
   selectIsTabListHovering,
-  selectRequestOrFolderById,
   selectSelectedTab,
-} from "@/context/redux/request-response/request-response-selector";
+} from "@/context/redux/request-response/selectors/tab-list";
 
 const TabItem = memo(({ id, index }: { id: string; index: number }) => {
   const dispatch = useAppDispatch();

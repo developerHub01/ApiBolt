@@ -19,21 +19,22 @@ import {
   AnimatedDialogTop,
 } from "@/components/ui/animated-dialog";
 import { useProject } from "@/context/project/ProjectProvider";
-
-const DEFAULT_NAME = "New Project";
-const MAX_NAME_LENGTH = 50;
+import {
+  DEFAULT_PROJECT_NAME,
+  MAX_PROJECT_NAME_LENGTH,
+} from "@/constant/project.constant";
 
 const AddProjectDialog = memo(() => {
   const dispatch = useAppDispatch();
   const { isCreateDialogOpen, handleChangeIsCreateDialogOpen } = useProject();
-  const [name, setName] = useState<string>(DEFAULT_NAME);
+  const [name, setName] = useState<string>(DEFAULT_PROJECT_NAME);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleCreate = useCallback(async () => {
     setIsLoading(true);
     const response = await dispatch(createProject(name)).unwrap();
     setIsLoading(false);
-    setName(DEFAULT_NAME);
+    setName(DEFAULT_PROJECT_NAME);
 
     if (response) handleChangeIsCreateDialogOpen();
     toast(response ? "Project Created Successfully!" : "Something went wrong!");
@@ -41,7 +42,7 @@ const AddProjectDialog = memo(() => {
 
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value;
-    if (name.length > MAX_NAME_LENGTH) return;
+    if (name.length > MAX_PROJECT_NAME_LENGTH) return;
     setName(e.target.value);
   }, []);
 
@@ -57,7 +58,7 @@ const AddProjectDialog = memo(() => {
   const handleClose = useCallback(() => {
     handleChangeIsCreateDialogOpen(false);
     setIsLoading(false);
-    setName(DEFAULT_NAME);
+    setName(DEFAULT_PROJECT_NAME);
   }, [handleChangeIsCreateDialogOpen]);
 
   const isDisabled = isLoading || !name;
@@ -75,7 +76,7 @@ const AddProjectDialog = memo(() => {
           <Label htmlFor="name-1" className="font-normal text-sm">
             Project Name
             <span className="ml-1 text-xs text-accent-foreground/70 tracking-widest">
-              (limit: {name.length}/{MAX_NAME_LENGTH})
+              (limit: {name.length}/{DEFAULT_PROJECT_NAME})
             </span>
           </Label>
           <Input
@@ -86,7 +87,7 @@ const AddProjectDialog = memo(() => {
             onChange={handleChange}
             onKeyDown={handleKeyDown}
             disabled={isLoading}
-            maxLength={MAX_NAME_LENGTH}
+            maxLength={MAX_PROJECT_NAME_LENGTH}
           />
         </div>
         <AnimatedDialogBottom className="justify-end gap-3 px-4 py-3">

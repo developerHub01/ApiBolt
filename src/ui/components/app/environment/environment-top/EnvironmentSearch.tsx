@@ -4,7 +4,7 @@ import { useEnvironments } from "@/context/environments/EnvironmentsProvider";
 import { Button } from "@/components/ui/button";
 import { AnimatePresence, motion } from "motion/react";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectEnvironmentsList } from "@/context/redux/request-response/request-response-selector";
+import { selectEnvironmentsList } from "@/context/redux/request-response/selectors/environment";
 
 const EnvironmentSearch = memo(() => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {

@@ -1,8 +1,8 @@
 import { memo } from "react";
 import { useRequestHeader } from "@/context/collections/request/RequestHeaderProvider";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectMetaData } from "@/context/redux/request-response/request-response-selector";
 import { Eye as ShowIcon, EyeOff as HideIcon } from "lucide-react";
+import { selectMetaData } from "@/context/redux/request-response/selectors/meta-request";
 
 const LabelPrefix = memo(() => {
   const { showHiddenHeader, handleChangeShowHiddenHeader } = useRequestHeader();

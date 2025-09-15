@@ -5,7 +5,7 @@ import AuthContentInput from "@/components/app/authorization/content/AuthContent
 import AuthContentInoutLabel from "@/components/app/authorization/content/AuthContentInoutLabel";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { updateAuthorization } from "@/context/redux/request-response/thunks/auth";
-import { selectAuthBearerTokenAuth } from "@/context/redux/request-response/request-response-selector";
+import { selectAuthBearerTokenAuth } from "@/context/redux/request-response/selectors/auth";
 
 interface Props {
   id: string;

@@ -1,9 +1,9 @@
 import React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectMetaBulkEditOpen } from "@/context/redux/request-response/request-response-selector";
 import BulkEditor from "@/components/app/collections/request/request/meta-data/meta-table/BulkEditor";
 import BulkEditButton from "@/components/app/collections/request/request/meta-data/meta-table/BulkEditButton";
+import { selectMetaBulkEditOpen } from "@/context/redux/request-response/selectors/meta-request";
 
 interface MetaDataWrapperProps {
   label?: string;

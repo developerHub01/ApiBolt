@@ -1,12 +1,6 @@
 import { useCallback, useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
-  selectActiveMetaTab,
-  selectMetaData,
-  selectRequestBodyType,
-  selectRequestMetaShowColumn,
-} from "@/context/redux/request-response/request-response-selector";
-import {
   addBodyFormData,
   updateBodyFormData,
   deleteBodyFormData,
@@ -44,6 +38,12 @@ import type {
   TMetaTableType,
 } from "@/types/request-response.types";
 import { handleCheckToggleMetaData } from "@/context/redux/request-response/request-response-slice";
+import {
+  selectActiveMetaTab,
+  selectMetaData,
+  selectRequestMetaShowColumn,
+} from "@/context/redux/request-response/selectors/meta-request";
+import { selectRequestBodyType } from "@/context/redux/request-response/selectors/body-raw";
 
 export const useGetTableData = () => {
   const dispatch = useAppDispatch();

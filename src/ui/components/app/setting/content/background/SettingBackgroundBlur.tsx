@@ -8,11 +8,11 @@ import { useSetting } from "@/context/setting/SettingProvider";
 import useGlobalLocalSettingv1 from "@/hooks/setting/use-global-local-settingv1";
 import { senitizeValue } from "@/utils/settings.utils";
 import SettingContextBasedLayout from "@/components/app/setting/content/SettingContextBasedLayout";
-import { selectActiveProjectId } from "@/context/redux/request-response/request-response-selector";
 import {
   selectBlurGlobal,
   selectBlurLocal,
 } from "@/context/redux/setting/setting-selector";
+import { selectActiveProjectId } from "@/context/redux/request-response/selectors/project";
 
 const SettingBackgroundBlur = () => {
   const { activeTab } = useSetting();

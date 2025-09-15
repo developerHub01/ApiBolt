@@ -12,7 +12,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import type { TRequestBodyType } from "@/types/request-response.types";
 import { updateRequestMetaTab } from "@/context/redux/request-response/thunks/request-meta-tab";
-import { selectRequestBodyType } from "@/context/redux/request-response/request-response-selector";
+import { selectRequestBodyType } from "@/context/redux/request-response/selectors/body-raw";
 
 const bodyList: Array<{
   id: TRequestBodyType;

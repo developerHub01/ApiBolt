@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { X as CloseIcon } from "lucide-react";
 import { useAppSelector } from "@/context/redux/hooks";
 import { useProject } from "@/context/project/ProjectProvider";
-import { selectProjectList } from "@/context/redux/request-response/request-response-selector";
+import { selectProjectList } from "@/context/redux/request-response/selectors/project";
 
 const ProjectSearch = () => {
   const [searchTerm, setSearchTerm] = useState("");

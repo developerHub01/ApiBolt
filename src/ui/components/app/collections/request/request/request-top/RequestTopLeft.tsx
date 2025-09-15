@@ -10,10 +10,8 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { updateRequestOrFolder } from "@/context/redux/request-response/thunks/request-list";
-import {
-  selectRequestName,
-  selectSelectedTab,
-} from "@/context/redux/request-response/request-response-selector";
+import { selectRequestName } from "@/context/redux/request-response/selectors/request-list";
+import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
 
 const RequestTopLeft = () => {
   const dispatch = useAppDispatch();

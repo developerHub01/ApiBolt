@@ -3,7 +3,7 @@ import MetaDataTab from "@/components/app/collections/request/response/meta-data
 import ResponsCollapseButton from "@/components/app/collections/request/response/ResponsCollapseButton";
 import ResponseInfo from "@/components/app/collections/request/response/meta-data/response-info/ResponseInfo";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectResponse } from "@/context/redux/request-response/request-response-selector";
+import { selectResponse } from "@/context/redux/request-response/selectors/response";
 
 const ResponseMetaData = memo(() => {
   const response = useAppSelector(selectResponse);

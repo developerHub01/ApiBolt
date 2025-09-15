@@ -8,7 +8,7 @@ import {
 import { Copy as CopyIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectResponse } from "@/context/redux/request-response/request-response-selector";
+import { selectResponse } from "@/context/redux/request-response/selectors/response";
 
 const BodyTopCopy = () => {
   const response = useAppSelector(selectResponse);

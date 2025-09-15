@@ -6,9 +6,9 @@ import JWTBearer from "@/components/app/authorization/content/jwt-bearer/JWTBear
 import APIKey from "@/components/app/authorization/content/api-key/APIKey";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectAuthType } from "@/context/redux/request-response/request-response-selector";
 import { cn } from "@/lib/utils";
 import InheritParent from "@/components/app/authorization/content/inherit-parent/InheritParent";
+import { selectAuthType } from "@/context/redux/request-response/selectors/auth";
 
 interface Props {
   id: string;

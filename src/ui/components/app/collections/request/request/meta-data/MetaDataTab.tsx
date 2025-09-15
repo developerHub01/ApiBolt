@@ -2,15 +2,17 @@ import { memo, useCallback, useMemo } from "react";
 import TabV1 from "@/components/tab-v1";
 import SelectV1 from "@/components/select-v1";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import type { TActiveTabType } from "@/types/request-response.types";
+import { updateRequestMetaTab } from "@/context/redux/request-response/thunks/request-meta-tab";
 import {
   selectActiveMetaTab,
   selectActiveMetaTabList,
+} from "@/context/redux/request-response/selectors/meta-request";
+import { selectParams } from "@/context/redux/request-response/selectors/params";
+import {
   selectHeaders,
   selectHiddenHeaders,
-  selectParams,
-} from "@/context/redux/request-response/request-response-selector";
-import type { TActiveTabType } from "@/types/request-response.types";
-import { updateRequestMetaTab } from "@/context/redux/request-response/thunks/request-meta-tab";
+} from "@/context/redux/request-response/selectors/headers";
 
 const tabList: Array<{
   id: TActiveTabType;

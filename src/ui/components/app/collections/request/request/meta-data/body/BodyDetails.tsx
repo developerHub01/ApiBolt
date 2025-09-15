@@ -5,7 +5,7 @@ import XWWWFormUrlencoded from "@/components/app/collections/request/request/met
 import BodyCode from "@/components/app/collections/request/request/meta-data/body/raw/BodyCode";
 import BodyBinary from "@/components/app/collections/request/request/meta-data/body/binary/BodyBinary";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectRequestBodyType } from "@/context/redux/request-response/request-response-selector";
+import { selectRequestBodyType } from "@/context/redux/request-response/selectors/body-raw";
 
 const BodyDetails = memo(() => {
   const requestBodyType = useAppSelector(selectRequestBodyType);

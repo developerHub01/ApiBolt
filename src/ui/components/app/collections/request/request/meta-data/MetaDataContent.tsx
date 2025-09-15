@@ -5,10 +5,10 @@ import Params from "@/components/app/collections/request/request/meta-data/param
 import Headers from "@/components/app/collections/request/request/meta-data/headers/Headers";
 import Body from "@/components/app/collections/request/request/meta-data/body/Body";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectActiveMetaTab } from "@/context/redux/request-response/request-response-selector";
 import RequestMetaDataProvider from "@/context/collections/request/RequestMetaDataProvider";
 import TabMotionWrapper from "@/components/app/collections/request/request/meta-data/TabMotionWrapper";
 import RequestAuthorization from "@/components/app/collections/request/request/authorization/RequestAuthorization";
+import { selectActiveMetaTab } from "@/context/redux/request-response/selectors/meta-request";
 
 const MetaDataContent = memo(() => {
   const activeMetaTab = useAppSelector(selectActiveMetaTab) ?? "url";

@@ -8,13 +8,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { selectAuthTypeById } from "@/context/redux/request-response/request-response-selector";
 import { updateAuthorization } from "@/context/redux/request-response/thunks/auth";
 import { cn } from "@/lib/utils";
 import type { TAuthType } from "@/types/authorization.types";
 import { DEFAULT_AUTHORIZATION_ID } from "@/constant/authorization.constant";
+import { selectAuthTypeById } from "@/context/redux/request-response/selectors/auth";
 
-const AUTH_TYPE_LIST: Array<{
+const authTypeList: Array<{
   id: TAuthType;
   label: string;
 }> = [
@@ -60,8 +60,8 @@ const AuthTypeTab = memo(({ id, className = "" }: Props) => {
   const list = useMemo(
     () =>
       id === DEFAULT_AUTHORIZATION_ID
-        ? AUTH_TYPE_LIST
-        : [inheritTypeAuth, ...AUTH_TYPE_LIST],
+        ? authTypeList
+        : [inheritTypeAuth, ...authTypeList],
     [id]
   );
 

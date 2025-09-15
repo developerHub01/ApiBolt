@@ -7,8 +7,8 @@ import React, {
 } from "react";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { selectRequestFolderDescription } from "@/context/redux/request-response/request-response-selector";
 import { updateFolder } from "@/context/redux/request-response/thunks/folder";
+import { selectRequestFolderDescription } from "@/context/redux/request-response/selectors/folder";
 
 interface RequestFolderContext {
   folderDescription: string;

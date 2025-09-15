@@ -1,6 +1,5 @@
 import { memo, useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { selectRequestFolderDescriptionActiveTab } from "@/context/redux/request-response/request-response-selector";
 import { handleChangeFolderDescriptionActiveTab } from "@/context/redux/request-response/request-response-slice";
 import { cn } from "@/lib/utils";
 import type { TRequestFolderDescriptionTab } from "@/types/request-response.types";
@@ -11,6 +10,7 @@ import {
   KeyRound as AuthorizationIcon,
   type LucideIcon,
 } from "lucide-react";
+import { selectRequestFolderDescriptionActiveTab } from "@/context/redux/request-response/selectors/folder";
 
 const buttonList: Array<{
   id: TRequestFolderDescriptionTab;

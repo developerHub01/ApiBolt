@@ -14,11 +14,11 @@ import { motion } from "motion/react";
 import SettingItemHorizontalLayout from "@/components/app/setting/content/SettingItemHorizontalLayout";
 import SettingType from "@/components/app/setting/SettingTypeSelector";
 import { senitizeValue } from "@/utils/settings.utils";
-import { selectActiveProjectId } from "@/context/redux/request-response/request-response-selector";
 import {
   selectLayoutTypeGlobal,
   selectLayoutTypeLocal,
 } from "@/context/redux/setting/setting-selector";
+import { selectActiveProjectId } from "@/context/redux/request-response/selectors/project";
 
 const layoutList: Array<{
   id: TLayoutSetting;

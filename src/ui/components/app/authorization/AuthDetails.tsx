@@ -1,5 +1,5 @@
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectAuthTypeById } from "@/context/redux/request-response/request-response-selector";
+import { selectAuthTypeById } from "@/context/redux/request-response/selectors/auth";
 
 interface Props {
   id: string;

@@ -3,13 +3,13 @@ import InheritParentContent from "@/components/app/authorization/content/inherit
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCollection } from "@/context/collections/CollectionProvider";
-import { selectAuthInheritedId } from "@/context/redux/request-response/request-response-selector";
 import { useAppSelector } from "@/context/redux/hooks";
+import { selectAuthInheritedId } from "@/context/redux/request-response/selectors/auth";
 
 const InheritParent = memo(() => {
   const { isLoading } = useCollection();
   const inheritAuthId = useAppSelector(selectAuthInheritedId);
-  
+
   return (
     <AnimatePresence>
       {isLoading || !inheritAuthId ? (

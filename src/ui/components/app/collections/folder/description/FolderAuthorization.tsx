@@ -3,7 +3,7 @@ import AuthTop from "@/components/app/authorization/AuthTop";
 import AuthContent from "@/components/app/authorization/content/AuthContent";
 import { Separator } from "@/components/ui/separator";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectSelectedTab } from "@/context/redux/request-response/request-response-selector";
+import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
 
 const FolderAuthorization = memo(() => {
   const selectedTab = useAppSelector(selectSelectedTab);

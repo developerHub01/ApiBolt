@@ -6,7 +6,7 @@ import { useResponse } from "@/context/collections/request/ResponseProvider";
 import Code from "@/components/ui/code";
 import { useAppSelector } from "@/context/redux/hooks";
 import type { TContentType } from "@/types/request-response.types";
-import { selectResponse } from "@/context/redux/request-response/request-response-selector";
+import { selectResponse } from "@/context/redux/request-response/selectors/response";
 
 const BodyResponse = memo(() => {
   const response = useAppSelector(selectResponse);

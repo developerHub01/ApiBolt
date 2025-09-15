@@ -18,11 +18,11 @@ import {
   AnimatedDialogTop,
 } from "@/components/ui/animated-dialog";
 import { useProject } from "@/context/project/ProjectProvider";
-import { selectProjectById } from "@/context/redux/request-response/request-response-selector";
 import PasteButton from "@/components/ui/paste-button";
 import CopyButton from "@/components/ui/copy-button";
 import { ClipboardCopy as ClipboardCopyIcon } from "lucide-react";
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
+import { selectProjectById } from "@/context/redux/request-response/selectors/project";
 
 const defaultName = "";
 

@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import TabBottomCTA from "@/components/app/tab-sidebar/TabBottomCTA";
 import { Trash2 as ClearIcon } from "lucide-react";
 import { handleClearTabList } from "@/context/redux/request-response/request-response-slice";
-import { selectIsTabListHovering } from "@/context/redux/request-response/request-response-selector";
+import { selectIsTabListHovering } from "@/context/redux/request-response/selectors/tab-list";
 
 const ClearAllTabs = () => {
   const dispatch = useAppDispatch();

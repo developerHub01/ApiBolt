@@ -18,13 +18,12 @@ import {
   selectRequestSize,
   selectResponse,
   selectResponseSize,
-} from "@/context/redux/request-response/request-response-selector";
+} from "@/context/redux/request-response/selectors/response";
 
 const RequestResponseSize = memo(() => {
   const response = useAppSelector(selectResponse);
   const requestSize = useAppSelector(selectRequestSize);
   const responseSize = useAppSelector(selectResponseSize);
-
   if (!response) return null;
 
   return (

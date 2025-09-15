@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { DEFAULT_AUTHORIZATION_ID } from "@/constant/authorization.constant";
 import { loadInheritParentAuthorization } from "../redux/request-response/thunks/auth";
 import type { TAuthContextType } from "@/types/authorization.types";
-import { selectSelectedTab } from "../redux/request-response/request-response-selector";
+import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
 
 interface CollectionContext {
   isLoading: boolean;

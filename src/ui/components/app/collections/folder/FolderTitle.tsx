@@ -8,9 +8,9 @@ import {
   type KeyboardEvent,
 } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { selectRequestFolderTitle } from "@/context/redux/request-response/request-response-selector";
 import { updateFolder } from "@/context/redux/request-response/thunks/folder";
 import { cn } from "@/lib/utils";
+import { selectRequestFolderTitle } from "@/context/redux/request-response/selectors/folder";
 
 const MAX_TITLE_LENGTH = 50;
 

@@ -5,7 +5,7 @@ import AuthContent from "@/components/app/authorization/content/AuthContent";
 import AuthTypeTab from "@/components/app/authorization/AuthTypeTab";
 import AuthDetails from "@/components/app/authorization/AuthDetails";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectSelectedTab } from "@/context/redux/request-response/request-response-selector";
+import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
 
 const RequestAuthorization = memo(() => {
   const selectedTab = useAppSelector(selectSelectedTab);

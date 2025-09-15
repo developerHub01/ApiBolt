@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import {
   selectRawData,
   selectRawRequestBodyType,
-} from "@/context/redux/request-response/request-response-selector";
+} from "@/context/redux/request-response/selectors/body-raw";
 
 const codeFormatter = async (
   rawRequestBodyType: TContentType,

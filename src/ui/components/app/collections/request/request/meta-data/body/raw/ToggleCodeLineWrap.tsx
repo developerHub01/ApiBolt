@@ -2,7 +2,7 @@ import { memo } from "react";
 import { Button } from "@/components/ui/button";
 import { useRequestBody } from "@/context/collections/request/RequestBodyProvider";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectRequestBodyType } from "@/context/redux/request-response/request-response-selector";
+import { selectRequestBodyType } from "@/context/redux/request-response/selectors/body-raw";
 
 const ToggleCodeLineWrap = memo(() => {
   const { codeLineWrap, handleToggleCodeLineWrap } = useRequestBody();

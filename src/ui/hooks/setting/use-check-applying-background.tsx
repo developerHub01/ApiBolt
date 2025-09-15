@@ -1,6 +1,6 @@
 import { DEFAULT_SETTINGS } from "@/constant/settings.constant";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectActiveProjectId } from "@/context/redux/request-response/request-response-selector";
+import { selectActiveProjectId } from "@/context/redux/request-response/selectors/project";
 import { selectSettingBackground } from "@/context/redux/setting/setting-selector";
 
 const useCheckApplyingBackground = (): {

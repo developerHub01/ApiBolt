@@ -1,8 +1,8 @@
 import { memo } from "react";
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectCheckedParams } from "@/context/redux/request-response/request-response-selector";
 import { ChevronsRight as ArrowRightIcon } from "lucide-react";
+import { selectCheckedParams } from "@/context/redux/request-response/selectors/params";
 
 const QueryParamToken = memo(() => {
   const params = useAppSelector(selectCheckedParams);

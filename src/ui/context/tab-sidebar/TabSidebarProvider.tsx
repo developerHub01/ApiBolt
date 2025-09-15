@@ -12,10 +12,10 @@ import {
 } from "@/context/redux/request-response/thunks/tab-list";
 import { normalizeText } from "@/utils";
 import {
-  selectRequestOrFolderList,
   selectSelectedTab,
   selectTabList,
-} from "@/context/redux/request-response/request-response-selector";
+} from "@/context/redux/request-response/selectors/tab-list";
+import { selectRequestOrFolderList } from "@/context/redux/request-response/selectors/request-list";
 
 interface TabSidebarContext {
   tabList: Array<string>;

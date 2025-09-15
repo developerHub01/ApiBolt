@@ -1,7 +1,7 @@
 import FolderDescription from "@/components/app/collections/folder/description/FolderDescription";
 import FolderTitle from "@/components/app/collections/folder/FolderTitle";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectIsFolderLoading } from "@/context/redux/request-response/request-response-selector";
+import { selectIsFolderLoading } from "@/context/redux/request-response/selectors/folder";
 
 const FolderPage = () => {
   const isLoading = useAppSelector(selectIsFolderLoading);

@@ -1,14 +1,12 @@
 import { useCallback } from "react";
 import { useAppSelector } from "@/context/redux/hooks";
 import {
-  selectRequestOrFolderList,
-  selectSelectedTab,
-} from "@/context/redux/request-response/request-response-selector";
-import {
   checkPermissionToAddFolderAsChildren,
   getRequestNodeLevel,
   getRequestType,
 } from "@/utils/request-response.utils";
+import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
+import { selectRequestOrFolderList } from "@/context/redux/request-response/selectors/request-list";
 
 const useRequestItemDetails = () => {
   const selectedTab = useAppSelector(selectSelectedTab);

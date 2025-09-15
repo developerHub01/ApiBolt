@@ -1,6 +1,6 @@
 import LoaderV1 from "@/components/LoaderV1";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectIsResponseLoading } from "@/context/redux/request-response/request-response-selector";
+import { selectIsResponseLoading } from "@/context/redux/request-response/selectors/response";
 
 const ResponseLoader = () => {
   const isLoading = useAppSelector(selectIsResponseLoading);

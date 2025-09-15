@@ -3,7 +3,7 @@ import TabV1 from "@/components/tab-v1";
 import SelectV1 from "@/components/select-v1";
 import { useResponse } from "@/context/collections/request/ResponseProvider";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectResponse } from "@/context/redux/request-response/request-response-selector";
+import { selectResponse } from "@/context/redux/request-response/selectors/response";
 
 const tabList: Array<{
   id: string;

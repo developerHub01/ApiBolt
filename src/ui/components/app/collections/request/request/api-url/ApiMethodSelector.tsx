@@ -7,10 +7,8 @@ import {
   ApiMethodSelectContent,
   ApiMethodSelectTrigger,
 } from "@/components/ui/api-method-select";
-import {
-  selectIsHttpMethodType,
-  selectSelectedTab,
-} from "@/context/redux/request-response/request-response-selector";
+import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
+import { selectIsHttpMethodType } from "@/context/redux/request-response/selectors/request-list";
 
 const ApiMethodSelector = memo(() => {
   const dispatch = useAppDispatch();
@@ -44,7 +42,8 @@ const ApiMethodSelector = memo(() => {
         value={methodType}
       >
         <ApiMethodSelectTrigger methodType={methodType} className="w-full" />
-        <ApiMethodSelectContent sideOffset={10}
+        <ApiMethodSelectContent
+          sideOffset={10}
           activeValue={methodType}
           style={{
             width: "120px",

@@ -2,9 +2,9 @@ import { memo, useMemo } from "react";
 import RequestListItem from "@/components/app/collections/request-list/content/request-list/request-list-item/RequestListItem";
 import { useAppSelector } from "@/context/redux/hooks";
 import AutoScrollActiveWrapper from "@/components/ui/auto-scroll-active-wrapper";
-import { selectRequestOrFolderList } from "@/context/redux/request-response/request-response-selector";
 import EmptyBox from "@/components/app/collections/request-list/content/request-list/EmptyBox";
 import RestArea from "@/components/app/collections/request-list/content/request-list/RestArea";
+import { selectRequestOrFolderList } from "@/context/redux/request-response/selectors/request-list";
 
 const RequestList = memo(() => {
   const requestList = useAppSelector(selectRequestOrFolderList);

@@ -6,7 +6,7 @@ import AuthContentInoutLabel from "@/components/app/authorization/content/AuthCo
 import AuthContentSelect from "@/components/app/authorization/content/AuthContentSelect";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { updateAuthorization } from "@/context/redux/request-response/thunks/auth";
-import { selectAuthApiKey } from "@/context/redux/request-response/request-response-selector";
+import { selectAuthApiKey } from "@/context/redux/request-response/selectors/auth";
 
 const addToList = [
   {

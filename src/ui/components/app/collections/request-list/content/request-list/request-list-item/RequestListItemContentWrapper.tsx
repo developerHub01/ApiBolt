@@ -1,6 +1,5 @@
 import React, { memo, useCallback, useState, type DragEvent } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { selectSelectedTab } from "@/context/redux/request-response/request-response-selector";
 import { cn } from "@/lib/utils";
 import RequestListItemExpendedContent from "@/components/app/collections/request-list/content/request-list/request-list-item/RequestListItemExpendedContent";
 import RequestListItemContentWrapperParent from "@/components/app/collections/request-list/content/request-list/request-list-item/RequestListItemContentWrapperParent";
@@ -9,6 +8,7 @@ import { moveRequestOrFolder } from "@/context/redux/request-response/thunks/req
 import { handleChangeSelectedTab } from "@/context/redux/request-response/request-response-slice";
 import { REQUEST_ITEM_SPACE_SIZE } from "@/constant/request-response.constant";
 import useRequestItemDetails from "@/hooks/request-response/request-list/use-request-item-details";
+import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
 
 interface RequestListItemContentWrapperProps {
   setIsHovering: React.Dispatch<React.SetStateAction<boolean>>;

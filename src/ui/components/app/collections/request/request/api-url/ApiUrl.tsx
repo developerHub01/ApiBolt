@@ -4,13 +4,13 @@ import ApiInput from "@/components/app/collections/request/request/api-url/ApiIn
 import ApiCta from "@/components/app/collections/request/request/api-url/ApiCta";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { handleRequestSend } from "@/context/redux/request-response/request-response-slice";
-import { selectRequestUrl } from "@/context/redux/request-url/request-url-selector";
 import {
   changeRequestApiUrl,
   changeRequestApiUrlWithBackend,
 } from "@/context/redux/request-url/request-url-thunk";
 import { isValidApiUrl } from "@/utils/request-url.utils";
 import { cn } from "@/lib/utils";
+import { selectRequestUrl } from "@/context/redux/request-url/selectors/url";
 
 const ApiUrl = memo(() => {
   const dispatch = useAppDispatch();

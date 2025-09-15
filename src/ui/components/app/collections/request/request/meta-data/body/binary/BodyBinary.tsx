@@ -7,7 +7,7 @@ import {
   deleteRequestBodyBinary,
   updateRequestBodyBinary,
 } from "@/context/redux/request-response/thunks/body-binary";
-import { selectBinaryData } from "@/context/redux/request-response/request-response-selector";
+import { selectBinaryData } from "@/context/redux/request-response/selectors/body-binary";
 
 const BodyBinary = memo(() => {
   const dispatch = useAppDispatch();

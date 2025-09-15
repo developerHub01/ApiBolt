@@ -2,7 +2,6 @@ import { memo, useCallback, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { selectEnvironmentsVariableList } from "@/context/redux/request-response/request-response-selector";
 import { Trash2 as DeleteIcon } from "lucide-react";
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 import TokenDragHandler from "@/components/app/collections/request/request/meta-data/url/TokenDragHandler";
@@ -12,6 +11,7 @@ import {
   requestUrlUpdateToken,
 } from "@/context/redux/request-url/request-url-thunk";
 import EnvVariableSelector from "@/components/app/collections/request/request/EnvVariableSelector";
+import { selectEnvironmentsVariableList } from "@/context/redux/request-response/selectors/environment";
 
 interface VariableTokenProps {
   id: string;

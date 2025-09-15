@@ -5,7 +5,7 @@ import BasicAuth from "@/components/app/authorization/content/basic-auth/BasicAu
 import BearerToken from "@/components/app/authorization/content/bearer-token/BearerToken";
 import JWTBearer from "@/components/app/authorization/content/jwt-bearer/JWTBearer";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectAuthTypeById } from "@/context/redux/request-response/request-response-selector";
+import { selectAuthTypeById } from "@/context/redux/request-response/selectors/auth";
 
 interface Props {
   id: string;

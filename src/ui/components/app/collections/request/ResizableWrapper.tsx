@@ -3,7 +3,7 @@ import { ResizablePanelGroup } from "@/components/ui/resizable";
 import { type ImperativePanelGroupHandle } from "react-resizable-panels";
 import { useAppSelector } from "@/context/redux/hooks";
 import { useRequestResponse } from "@/context/collections/request/RequestResponseProvider";
-import { selectIsResponseCollapsed } from "@/context/redux/request-response/request-response-selector";
+import { selectIsResponseCollapsed } from "@/context/redux/request-response/selectors/response";
 
 interface ResizableWrapperProps {
   children: React.ReactNode;

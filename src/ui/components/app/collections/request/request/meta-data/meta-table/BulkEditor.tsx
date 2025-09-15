@@ -3,8 +3,8 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import Code from "@/components/ui/code";
 import { cn } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { selectMetaBulkData } from "@/context/redux/request-response/request-response-selector";
 import { replaceMetaTableData } from "@/context/redux/request-response/thunks/meta-table-data";
+import { selectMetaBulkData } from "@/context/redux/request-response/selectors/meta-request";
 
 interface MetaDataInterface {
   key: string;

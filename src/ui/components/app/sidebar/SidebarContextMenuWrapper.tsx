@@ -9,8 +9,8 @@ import useCheckApplyingLayout from "@/hooks/setting/use-check-applying-layout";
 import type { TLayoutSetting } from "@/types/setting.types";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { updateSettings } from "@/context/redux/setting/setting-thunk";
-import { selectIsRequestListCollapsed } from "@/context/redux/request-response/request-response-selector";
 import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
+import { selectIsRequestListCollapsed } from "@/context/redux/request-response/selectors/request-list";
 
 interface SidebarContextMenuWrapperProps {
   children: React.ReactNode;

@@ -8,7 +8,7 @@ import { JWT_ALGO_LIST } from "@/constant";
 import PayloadCode from "@/components/app/authorization/content/jwt-bearer/PayloadCode";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { updateAuthorization } from "@/context/redux/request-response/thunks/auth";
-import { selectAuthJWTBearerAuth } from "@/context/redux/request-response/request-response-selector";
+import { selectAuthJWTBearerAuth } from "@/context/redux/request-response/selectors/auth";
 
 const algoList = JWT_ALGO_LIST.map((algo) => ({
   id: algo,
@@ -34,7 +34,7 @@ interface Props {
 const JWTBearer = memo(({ id, disabled = false }: Props) => {
   const dispatch = useAppDispatch();
   const authData = useAppSelector(selectAuthJWTBearerAuth(id));
-  
+
   const handleBlur = useCallback(
     (
       key:

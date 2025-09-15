@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/hover-card";
 import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectResponse } from "@/context/redux/request-response/request-response-selector";
+import { selectResponse } from "@/context/redux/request-response/selectors/response";
 
 const ResponseStatus = memo(() => {
   const response = useAppSelector(selectResponse);

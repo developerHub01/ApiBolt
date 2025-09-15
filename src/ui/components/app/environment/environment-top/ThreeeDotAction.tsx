@@ -14,7 +14,7 @@ import {
   Trash2 as DeleteIcon,
   type LucideIcon,
 } from "lucide-react";
-import { selectEnvironmentsList } from "@/context/redux/request-response/request-response-selector";
+import { selectEnvironmentsList } from "@/context/redux/request-response/selectors/environment";
 
 const listItemToHide = ["export", "delete"];
 

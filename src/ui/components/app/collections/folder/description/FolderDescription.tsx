@@ -6,7 +6,7 @@ import DescriptionWrapper from "@/components/app/collections/folder/description/
 import SplitLayout from "@/components/app/collections/folder/description/SplitLayout";
 import DescriptionTabs from "@/components/app/collections/folder/description/DescriptionTabs";
 import FolderAuthorization from "@/components/app/collections/folder/description/FolderAuthorization";
-import { selectRequestFolderDescriptionActiveTab } from "@/context/redux/request-response/request-response-selector";
+import { selectRequestFolderDescriptionActiveTab } from "@/context/redux/request-response/selectors/folder";
 
 const FolderDescription = memo(() => {
   const activeTab = useAppSelector(selectRequestFolderDescriptionActiveTab);

@@ -15,7 +15,7 @@ import {
 import type { TSidebarTab } from "@/types/sidebar.types";
 import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
 import { selectSidebarActiveTab } from "@/context/redux/sidebar/sidebar-selector";
-import { selectActiveProjectId } from "@/context/redux/request-response/request-response-selector";
+import { selectActiveProjectId } from "@/context/redux/request-response/selectors/project";
 
 const SidebarMenu = memo(() => {
   const dispatch = useAppDispatch();
@@ -36,7 +36,10 @@ const SidebarMenu = memo(() => {
   return (
     <>
       {SIDEBAR_MENU_LIST.map(({ id, Icon, label, path }) => {
-        if (!activeProjectId && HIDDEN_TABS_WHEN_NOT_PROJECT_SELECTED.includes(id))
+        if (
+          !activeProjectId &&
+          HIDDEN_TABS_WHEN_NOT_PROJECT_SELECTED.includes(id)
+        )
           return null;
 
         return (

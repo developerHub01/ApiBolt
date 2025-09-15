@@ -3,7 +3,7 @@ import { Play as PreviewIcon } from "lucide-react";
 import { getResponseType } from "@/utils";
 import { useResponse } from "@/context/collections/request/ResponseProvider";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectResponse } from "@/context/redux/request-response/request-response-selector";
+import { selectResponse } from "@/context/redux/request-response/selectors/response";
 
 const BodyTopLeft = () => {
   const { responseTab, handleChangeActiveResponseTab } = useResponse();

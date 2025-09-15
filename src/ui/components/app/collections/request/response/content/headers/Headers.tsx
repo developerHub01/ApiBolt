@@ -2,7 +2,7 @@ import Empty from "@/components/ui/empty";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import HeaderContent from "@/components/app/collections/request/response/content/headers/HeaderContent";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectResponse } from "@/context/redux/request-response/request-response-selector";
+import { selectResponse } from "@/context/redux/request-response/selectors/response";
 
 const Headers = () => {
   const response = useAppSelector(selectResponse);

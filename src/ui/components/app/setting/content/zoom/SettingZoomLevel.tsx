@@ -10,11 +10,11 @@ import {
 } from "@/constant/settings.constant";
 import { senitizeValue } from "@/utils/settings.utils";
 import SettingContextBasedLayout from "@/components/app/setting/content/SettingContextBasedLayout";
-import { selectActiveProjectId } from "@/context/redux/request-response/request-response-selector";
 import {
   selectZoomLevelGlobal,
   selectZoomLevelLocal,
 } from "@/context/redux/setting/setting-selector";
+import { selectActiveProjectId } from "@/context/redux/request-response/selectors/project";
 
 const SettingZoomLevel = () => {
   const { activeTab } = useSetting();

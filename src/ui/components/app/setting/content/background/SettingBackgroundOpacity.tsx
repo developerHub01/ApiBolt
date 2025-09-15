@@ -9,11 +9,11 @@ import useGlobalLocalSettingv1 from "@/hooks/setting/use-global-local-settingv1"
 import { senitizeValue } from "@/utils/settings.utils";
 import { calculateIntoFixedPoint } from "@/utils";
 import SettingContextBasedLayout from "@/components/app/setting/content/SettingContextBasedLayout";
-import { selectActiveProjectId } from "@/context/redux/request-response/request-response-selector";
 import {
   selectOpacityGlobal,
   selectOpacityLocal,
 } from "@/context/redux/setting/setting-selector";
+import { selectActiveProjectId } from "@/context/redux/request-response/selectors/project";
 
 const SettingBackgroundOpacity = () => {
   const { activeTab } = useSetting();

@@ -3,12 +3,12 @@ import MetaTableHeader from "@/components/app/collections/request/request/meta-d
 import MetaTableWrapper from "@/components/app/collections/request/request/meta-data/meta-table/MetaTableWrapper";
 import MetaTableRow from "@/components/app/collections/request/request/meta-data/meta-table/MetaTableRow";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectMetaData } from "@/context/redux/request-response/request-response-selector";
 import type {
   FormDataInterface,
   ParamInterface,
 } from "@/types/request-response.types";
 import { useRequestMetaData } from "@/context/collections/request/RequestMetaDataProvider";
+import { selectMetaData } from "@/context/redux/request-response/selectors/meta-request";
 
 const headersToPreventCheckList = ["Cookie", "Authorization"];
 

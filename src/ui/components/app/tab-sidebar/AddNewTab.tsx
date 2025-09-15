@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import TabBottomCTA from "@/components/app/tab-sidebar/TabBottomCTA";
 import { Plus as AddIcon } from "lucide-react";
 import { addNewTabsData } from "@/context/redux/request-response/thunks/tab-list";
-import { selectIsTabListHovering } from "@/context/redux/request-response/request-response-selector";
+import { selectIsTabListHovering } from "@/context/redux/request-response/selectors/tab-list";
 
 const AddNewTab = memo(() => {
   const dispatch = useAppDispatch();

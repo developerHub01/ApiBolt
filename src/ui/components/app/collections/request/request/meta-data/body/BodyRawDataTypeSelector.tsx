@@ -13,7 +13,7 @@ import { updateRequestBodyRaw } from "@/context/redux/request-response/thunks/bo
 import {
   selectRawRequestBodyType,
   selectRequestBodyType,
-} from "@/context/redux/request-response/request-response-selector";
+} from "@/context/redux/request-response/selectors/body-raw";
 
 const rawDataTypeList: Array<{
   id: TContentType;

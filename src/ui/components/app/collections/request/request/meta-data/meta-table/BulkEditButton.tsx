@@ -2,7 +2,7 @@ import { memo, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { handleToggleMetaBulkEditOpen } from "@/context/redux/request-response/request-response-slice";
-import { selectMetaBulkEditOpen } from "@/context/redux/request-response/request-response-selector";
+import { selectMetaBulkEditOpen } from "@/context/redux/request-response/selectors/meta-request";
 
 const BulkEditButton = memo(() => {
   const dispatch = useAppDispatch();

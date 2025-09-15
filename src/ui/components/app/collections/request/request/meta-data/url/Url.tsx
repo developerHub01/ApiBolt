@@ -1,13 +1,14 @@
+import { memo } from "react";
 import AddUrlPart from "@/components/app/collections/request/request/meta-data/url/AddUrlPart";
 import ProtocolToken from "@/components/app/collections/request/request/meta-data/url/tokens/ProtocolToken";
 import HostPortToken from "@/components/app/collections/request/request/meta-data/url/tokens/HostPortToken";
 import UrlWrapper from "@/components/app/collections/request/request/meta-data/url/UrlWrapper";
 import ReorderableToken from "@/components/app/collections/request/request/meta-data/url/ReorderableToken";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectRequestUrlTokens } from "@/context/redux/request-url/request-url-selector";
 import QueryParamToken from "@/components/app/collections/request/request/meta-data/url/tokens/QueryParamToken";
+import { selectRequestUrlTokens } from "@/context/redux/request-url/selectors/tokens";
 
-const Url = () => {
+const Url = memo(() => {
   const urlTokens = useAppSelector(selectRequestUrlTokens);
 
   return (
@@ -21,6 +22,6 @@ const Url = () => {
       <QueryParamToken />
     </UrlWrapper>
   );
-};
+});
 
 export default Url;
