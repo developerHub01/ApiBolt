@@ -87,9 +87,10 @@ export const createAuth = async (payload = {}) => {
       if (isExist) return false;
     }
 
-    payload["type"] = payload.requestOrFolderMetaId
-      ? "inherit-parent"
-      : "no-auth";
+    if (!payload["type"])
+      payload["type"] = payload.requestOrFolderMetaId
+        ? "inherit-parent"
+        : "no-auth";
 
     const result = await db.insert(authorizationTable).values({
       ...payload,
