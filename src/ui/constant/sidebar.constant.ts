@@ -5,6 +5,7 @@ import {
   type LucideIcon,
   Layers as ProjectsIcon,
   KeyRound as AuthorizationIcon,
+  Palette as ThemeIcon,
 } from "lucide-react";
 
 export const SIDEBAR_MENU_LIST: Array<{
@@ -37,6 +38,12 @@ export const SIDEBAR_MENU_LIST: Array<{
     label: "Authorization",
     path: "/authorization",
   },
+  {
+    id: "theme-builder",
+    Icon: ThemeIcon,
+    label: "Theme Builder",
+    path: "/theme-builder",
+  },
 ];
 
 export const HIDDEN_TABS_WHEN_NOT_PROJECT_SELECTED: Array<TSidebarTab> = [
@@ -47,4 +54,5 @@ export const HIDDEN_TABS_WHEN_NOT_PROJECT_SELECTED: Array<TSidebarTab> = [
 
 export const LOCAL_STORAGE_SIDEBAR_ACTIVE_TAB_KEY = "sidebar-active-tab";
 
-export const LOCAL_STORAGE_SIDEBAR_LAST_ACTIVE_TAB_KEY = "sidebar-last-active-tab";
+export const LOCAL_STORAGE_SIDEBAR_LAST_ACTIVE_TAB_KEY =
+  "sidebar-last-active-tab";

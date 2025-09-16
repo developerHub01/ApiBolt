@@ -7,7 +7,7 @@ import StoreProvider from "@/context/redux/store-provider";
 const App = () => {
   return (
     <StoreProvider>
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <ThemeProvider defaultTheme="dracula" storageKey="vite-ui-theme">
         <Router />
         <PreventDefaultActions />
         <Toaster />

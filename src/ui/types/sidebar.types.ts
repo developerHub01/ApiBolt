@@ -3,6 +3,7 @@ export type TSidebarTab =
   | "collections"
   | "environments"
   | "authorization"
+  | "theme-builder"
   | null;
 
 export interface SidebarState {

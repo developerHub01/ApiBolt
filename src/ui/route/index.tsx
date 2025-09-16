@@ -18,6 +18,8 @@ import AuthorizationLayout from "@/pages/app/authorization/layout";
 import AuthorizationPage from "@/pages/app/authorization/page";
 import CollectionsLayout from "@/pages/app/collections/layout";
 import CollectionPage from "@/pages/app/collections/page";
+import ThemeBuilderLayout from "@/pages/app/theme-builder/layout";
+import ThemeBuilderPage from "@/pages/app/theme-builder/page";
 
 const routes = [
   {
@@ -85,6 +87,16 @@ const routes = [
               {
                 index: true,
                 element: <AuthorizationPage />,
+              },
+            ],
+          },
+          {
+            path: "theme-builder",
+            element: <ThemeBuilderLayout />,
+            children: [
+              {
+                index: true,
+                element: <ThemeBuilderPage />,
               },
             ],
           },
