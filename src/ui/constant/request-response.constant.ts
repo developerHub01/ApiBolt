@@ -1,4 +1,3 @@
-import type { EnvironmentInterface } from "@/types/environment.types";
 import type { TMetaTableType } from "@/types/request-response.types";
 import { v4 as uuidv4 } from "uuid";
 
@@ -21,14 +20,6 @@ export const getCookiesStringByDomain = async (url: string) => {
   return await window.electronAPI.getCookieStringByDomain(url);
 };
 
-export const AUTH_TYPE_LIST = [
-  "no-auth",
-  "basic-auth",
-  "bearer-token",
-  "jwt-bearer",
-  "api-key",
-];
-
 export const localStorageRequestActiveTabKey = (requestId: string) =>
   `request-active-tab-${requestId}`;
 
@@ -38,21 +29,6 @@ export const DEFAULT_REQUEST_RESPONSE_SIZE = {
   header: 0,
   body: 0,
 };
-
-export const DEFAULT_ENVIRONMENT = (
-  id: string,
-  projectId: string
-): Omit<EnvironmentInterface, "createdAt"> => ({
-  id,
-  type: "default",
-  variable: "",
-  value: "",
-  isCheck: true,
-  projectId,
-});
-
-export const DEFAULT_FOLDER_TITLE: string = "New Folder";
-export const DEFAULT_FOLDER_DESCRIPTION: string = `# Heading one`;
 
 export const initialHiddenCookie = () => ({
   id: uuidv4(),

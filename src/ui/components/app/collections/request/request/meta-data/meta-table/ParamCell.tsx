@@ -30,11 +30,12 @@ interface ParamCellProps {
   value: string;
   children?: React.ReactNode;
   type: TParamContentType;
+  prevent?: boolean;
   cellType: string;
 }
 
 const ParamCell = memo(
-  ({ id, children, type, cellType, value }: ParamCellProps) => {
+  ({ id, children, type, prevent = true, cellType, value }: ParamCellProps) => {
     const dispatch = useAppDispatch();
 
     const handleChangeType = useCallback(
@@ -72,7 +73,7 @@ const ParamCell = memo(
         ) : (
           children
         )}
-        <TypeMenu value={type} onChange={handleChangeType} />
+        {prevent || <TypeMenu value={type} onChange={handleChangeType} />}
       </>
     );
   }

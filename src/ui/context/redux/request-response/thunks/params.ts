@@ -261,33 +261,37 @@ export const updateParamsFromSearchParams = createAsyncThunk<
         });
       } else {
         let index = 0;
-        updatedParams = state.requestResponse.params[selectedTab]?.reduce(
-          (acc, curr) => {
-            if (!curr.isCheck) return [...acc, curr];
-            if (!urlParams[index]) return acc;
+        try {
+          updatedParams = state.requestResponse.params[selectedTab]?.reduce(
+            (acc, curr) => {
+              if (!curr.isCheck) return [...acc, curr];
+              if (!urlParams[index]) return acc;
 
-            const payload = {
-              ...curr,
-              ...urlParams[index++],
-            };
+              const payload = {
+                ...curr,
+                ...urlParams[index++],
+              };
 
-            const keyDetails = detectAndCleanVariable(payload.key, "keyType");
-            const valueDetails = detectAndCleanVariable(
-              payload.value,
-              "valueType"
-            );
+              const keyDetails = detectAndCleanVariable(payload.key, "keyType");
+              const valueDetails = detectAndCleanVariable(
+                payload.value,
+                "valueType"
+              );
 
-            return [
-              ...acc,
-              {
-                ...payload,
-                ...keyDetails,
-                ...valueDetails,
-              },
-            ];
-          },
-          [] as Array<ParamInterface>
-        );
+              return [
+                ...acc,
+                {
+                  ...payload,
+                  ...keyDetails,
+                  ...valueDetails,
+                },
+              ];
+            },
+            [] as Array<ParamInterface>
+          );
+        } catch (error) {
+          console.log(error);
+        }
       }
 
       dispatch(handleLoadParams(updatedParams));

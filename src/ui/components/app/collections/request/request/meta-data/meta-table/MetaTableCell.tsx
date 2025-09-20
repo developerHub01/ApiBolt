@@ -67,6 +67,7 @@ const MetaTableCell = memo(
                   id={id}
                   type={cellContentType!}
                   cellType={cellType}
+                  prevent={prevent}
                   value={Array.isArray(value) ? "" : value}
                 >
                   <MetaItemInput

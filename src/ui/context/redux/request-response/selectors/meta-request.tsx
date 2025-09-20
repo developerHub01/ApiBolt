@@ -37,7 +37,7 @@ export const selectMetaData = (type: TMetaTableType | null) =>
         case "params":
           return params[selectedTab] ?? [];
         case "hiddenParams":
-          return hiddenParams[selectedTab] ?? [];
+          return hiddenParams[selectedTab] ? [hiddenParams[selectedTab]] : [];
         case "headers":
           return headers[selectedTab] ?? [];
         case "hiddenHeaders":

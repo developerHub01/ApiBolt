@@ -1,5 +1,7 @@
 import jwt from "jsonwebtoken";
 
+export const hasValue = (value) => value !== null && value !== undefined;
+
 export const getRawContentType = (subtype) => {
   switch (subtype) {
     case "json":
@@ -17,8 +19,7 @@ export const getRawContentType = (subtype) => {
   }
 };
 
-export const generateJWT = ({ payload, secret, algorithm }) => {
-  return jwt.sign(payload, secret, {
+export const generateJWT = ({ payload, secret, algorithm }) =>
+  jwt.sign(payload, secret, {
     algorithm,
   });
-};

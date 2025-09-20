@@ -29,7 +29,14 @@ export interface AuthorizationPayloadInterface {
   jwtPayload: string;
   jwtHeaderPrefix: string;
   jwtAddTo: TAuthAddTo;
+  basicAuthToken: string;
+  jwtAuthToken: string;
 }
+
+export type AuthorizationUpdatedPayloadInterface = Pick<
+  AuthorizationPayloadInterface,
+  "basicAuthToken" | "jwtAuthToken"
+>;
 
 export interface APIKeyInterface {
   key: string;

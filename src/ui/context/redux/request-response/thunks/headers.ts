@@ -6,7 +6,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import {
   handleLoadHeaders,
-  handleUpdateHiddenHeaders,
+  handleUpdateHiddenHeadersIsCheck,
 } from "@/context/redux/request-response/request-response-slice";
 
 /* ==============================
@@ -171,7 +171,7 @@ export const updateHiddenHeaders = createAsyncThunk<
 
     if (response)
       dispatch(
-        handleUpdateHiddenHeaders({
+        handleUpdateHiddenHeadersIsCheck({
           keyName,
         })
       );

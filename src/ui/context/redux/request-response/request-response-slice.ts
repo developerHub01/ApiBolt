@@ -1,12 +1,12 @@
 import {
+  AUTHORIZATION_AUTH_HEADER_KEY,
   DEFAULT_API_KEY,
   DEFAULT_AUTHORIZATION_ID,
   DEFAULT_BASIC_AUTH,
   DEFAULT_JWT_BEARER_AUTH,
+  INITIAL_HIDDEN_HEADER_AUTHORIZATION_DATA,
 } from "@/constant/authorization.constant";
 import {
-  DEFAULT_FOLDER_DESCRIPTION,
-  DEFAULT_FOLDER_TITLE,
   initialHiddenCookie,
   initialHiddenHeaderData,
   RESPONSE_PANEL_MIN_LIMIT,
@@ -43,6 +43,10 @@ import type {
 } from "@/types/authorization.types";
 import type { ProjectInterface } from "@/types/project.types";
 import type { EnvironmentInterface } from "@/types/environment.types";
+import {
+  DEFAULT_FOLDER_DESCRIPTION,
+  DEFAULT_FOLDER_TITLE,
+} from "@/constant/folder.constant";
 
 // export const fetchApiUniformError = (error: unknown): ResponseInterface => {
 //   // console.log("error", error);
@@ -223,7 +227,7 @@ interface RequestResponseState {
   requestBodyType: Record<string, TRequestBodyType>;
   rawRequestBodyType: Record<string, TContentType>;
   params: Record<string, Array<ParamInterface>>;
-  hiddenParams: Record<string, Array<ParamInterface>>;
+  hiddenParams: Record<string, ParamInterface>;
   headers: Record<string, Array<ParamInterface>>;
   hiddenCookie: ParamInterface;
   hiddenHeaders: Record<string, Array<ParamInterface>>;
@@ -373,7 +377,7 @@ export const requestResponseSlice = createSlice({
       if (!state.activeProjectId) return;
       const { requestId, inheritedId = DEFAULT_AUTHORIZATION_ID } =
         action.payload;
-        
+
       if (state.authInheritedId[requestId] === inheritedId) return;
       state.authInheritedId[requestId] = inheritedId;
     },
@@ -731,30 +735,6 @@ export const requestResponseSlice = createSlice({
     },
     /* ================ MetaTable bulk end =================== */
 
-    /* ================ Params start =================== */
-    handleLoadParams: (
-      state,
-      action: PayloadAction<Array<ParamHeaderPayloadInterface | ParamInterface>>
-    ) => {
-      if (!state.selectedTab) return;
-
-      state.params[state.selectedTab] = action.payload;
-    },
-    handleSetParams: (
-      state,
-      action: PayloadAction<{
-        id?: string;
-        params: Array<ParamInterface>;
-      }>
-    ) => {
-      const { params } = action.payload;
-      const id = action.payload.id ?? state.selectedTab;
-      if (!id) return;
-
-      state.params[id] = params;
-    },
-    /* ================ Params end =================== */
-
     /* ================ MetaShowColumn start =================== */
     handleLoadMetaShowColumn: (
       state,
@@ -782,6 +762,62 @@ export const requestResponseSlice = createSlice({
     },
     /* ================ MetaShowColumn end =================== */
 
+    /* ================ Params start =================== */
+    handleLoadParams: (
+      state,
+      action: PayloadAction<Array<ParamHeaderPayloadInterface | ParamInterface>>
+    ) => {
+      if (!state.selectedTab) return;
+
+      state.params[state.selectedTab] = action.payload;
+    },
+    handleSetParams: (
+      state,
+      action: PayloadAction<{
+        id?: string;
+        params: Array<ParamInterface>;
+      }>
+    ) => {
+      const { params } = action.payload;
+      const id = action.payload.id ?? state.selectedTab;
+      if (!id) return;
+
+      state.params[id] = params;
+    },
+    handleSetHiddenParams: (
+      state,
+      action: PayloadAction<{
+        id?: string;
+        param: Pick<ParamInterface, "key" | "value"> | undefined;
+      }>
+    ) => {
+      const { param } = action.payload;
+      const id = action.payload.id ?? state.selectedTab;
+      if (!id) return;
+
+      if (!param) {
+        delete state.hiddenParams[id];
+        return;
+      }
+
+      if (
+        state.hiddenParams[id]?.key === param.key &&
+        state.hiddenParams[id]?.value === param.value
+      )
+        return;
+
+      state.hiddenParams[id] = {
+        ...INITIAL_HIDDEN_HEADER_AUTHORIZATION_DATA,
+        ...param,
+      };
+    },
+    handleClearHiddenParams: (state, action: PayloadAction<string>) => {
+      const id = action.payload ?? state.selectedTab;
+      if (!id || !state.hiddenParams[id]) return;
+      delete state.hiddenParams[id];
+    },
+    /* ================ Params end =================== */
+
     /* ================ Headers start =================== */
     handleLoadHeaders: (
       state,
@@ -808,7 +844,56 @@ export const requestResponseSlice = createSlice({
 
       state.headers[id] = headers;
     },
-    handleUpdateHiddenHeaders: (
+    handleUpdateHiddenAuthorizationHeaders: (
+      state,
+      action: PayloadAction<{
+        id?: string;
+        key?: string;
+        value: string;
+      }>
+    ) => {
+      const selectedTab = action.payload.id ?? state.selectedTab;
+      if (!selectedTab || !state.hiddenHeaders[selectedTab]) return;
+
+      const value = action.payload.value;
+      const key = action.payload.key ?? AUTHORIZATION_AUTH_HEADER_KEY;
+      const existingHiddenHeaderAuthorization = state.hiddenHeaders[
+        selectedTab
+      ].find((header) => header.id === "authorization");
+      if (value === existingHiddenHeaderAuthorization?.value) return;
+
+      /* because we are fixing if auth have then it will be always in zero'th index (0) */
+      if (existingHiddenHeaderAuthorization && !value) {
+        state.hiddenHeaders[selectedTab].shift();
+        return;
+      } else if (!value) return;
+
+      if (!existingHiddenHeaderAuthorization)
+        state.hiddenHeaders[selectedTab].unshift({
+          ...INITIAL_HIDDEN_HEADER_AUTHORIZATION_DATA,
+          key,
+          value,
+        });
+      else state.hiddenHeaders[selectedTab][0].value = value;
+    },
+    handleClearHiddenAuthorizationHeaders: (
+      state,
+      action: PayloadAction<string>
+    ) => {
+      const selectedTab = action.payload ?? state.selectedTab;
+      if (!selectedTab || !state.hiddenHeaders[selectedTab]) return;
+
+      const existingHiddenHeaderAuthorization = state.hiddenHeaders[
+        selectedTab
+      ].find((header) => header.id === "authorization");
+
+      if (!existingHiddenHeaderAuthorization) return;
+
+      /* because we are fixing if auth have then it will be always in zero'th index (0) */
+
+      state.hiddenHeaders[selectedTab].shift();
+    },
+    handleUpdateHiddenHeadersIsCheck: (
       state,
       action: PayloadAction<{
         keyName: string;
@@ -1339,8 +1424,12 @@ export const {
   handleUpdateRequestResponseSelectedTab,
   handleChangeActiveMetaTab,
   handleSetParams,
+  handleSetHiddenParams,
+  handleClearHiddenParams,
   handleSetHeaders,
-  handleUpdateHiddenHeaders,
+  handleUpdateHiddenAuthorizationHeaders,
+  handleClearHiddenAuthorizationHeaders,
+  handleUpdateHiddenHeadersIsCheck,
 
   handleCheckToggleMetaData,
 

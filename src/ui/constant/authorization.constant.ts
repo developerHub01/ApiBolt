@@ -25,3 +25,23 @@ export const DEFAULT_JWT_BEARER_AUTH: JWTBearerAuthInterface = {
   headerPrefix: "Bearer",
   addTo: "header",
 };
+
+export const AUTH_DEFAULT_HEADER_PREFIX = "Bearer";
+
+export const AUTH_TYPE_LIST = [
+  "no-auth",
+  "basic-auth",
+  "bearer-token",
+  "jwt-bearer",
+  "api-key",
+];
+
+export const AUTHORIZATION_AUTH_HEADER_KEY = "Authorization";
+
+export const INITIAL_HIDDEN_HEADER_AUTHORIZATION_DATA = {
+  id: "authorization",
+  key: "",
+  value: "",
+  prevent: true,
+  isCheck: true,
+};

@@ -2,6 +2,7 @@ import { and, eq, isNull } from "drizzle-orm";
 import { db } from "./index.js";
 import { authorizationTable, requestOrFolderMetaTable } from "./schema.js";
 import { getActiveProject } from "./projectsDB.js";
+import { generateJWT, hasValue } from "../utils/utils.js";
 
 /* id === active project id */
 export const getAuth = async (requestId) => {
@@ -123,13 +124,48 @@ export const updateAuth = async ({ requestOrFolderId, payload = {} } = {}) => {
 
     let updatedData = null;
 
-    if (!authData) {
-      return await createAuth({
+    if (!authData)
+      await createAuth({
         projectId: activeProjectId,
         requestOrFolderMetaId: requestOrFolderId,
-        ...payload,
       });
+
+    let basicAuthToken = null;
+    let jwtAuthToken = null;
+    const previousAuthType = authData?.type;
+    const currentAuthType = payload.type;
+    const previousAuthToken = authData?.jwtAuthToken;
+
+    /* if previous and current auth type not diff and previous was jwt-bearer type */
+    if (previousAuthType !== currentAuthType) {
+      if (previousAuthType === "jwt-bearer") jwtAuthToken = "";
+      else if (previousAuthType === "basic-auth") basicAuthToken = "";
     }
+
+    const authType = payload.type ?? authData?.type;
+
+    try {
+      if (authType === "basic-auth") {
+        const username =
+          authData?.basicAuthUsername ?? payload.basicAuthUsername ?? "";
+        const password =
+          authData?.basicAuthPassword ?? payload.basicAuthPassword ?? "";
+        basicAuthToken = btoa(`${username}:${password}`);
+      } else if (authType === "jwt-bearer") {
+        jwtAuthToken =
+          generateJWT({
+            algorithm: authData?.jwtAlgo ?? payload?.jwtAlgo ?? "HS256",
+            secret: authData?.jwtSecret ?? payload?.jwtSecret ?? "",
+            payload: authData?.jwtPayload ?? payload?.jwtPayload ?? "",
+          }) ?? "";
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    if (!hasValue(payload.basicAuthToken))
+      payload.basicAuthToken = basicAuthToken;
+    if (!hasValue(payload.jwtAuthToken)) payload.jwtAuthToken = jwtAuthToken;
 
     updatedData = await db
       .update(authorizationTable)
@@ -143,9 +179,13 @@ export const updateAuth = async ({ requestOrFolderId, payload = {} } = {}) => {
             ? eq(authorizationTable.requestOrFolderMetaId, requestOrFolderId)
             : isNull(authorizationTable.requestOrFolderMetaId)
         )
-      );
+      )
+      .returning({
+        basicAuthToken: authorizationTable.basicAuthToken,
+        jwtAuthToken: authorizationTable.jwtAuthToken,
+      });
 
-    return updatedData?.changes > 0;
+    return updatedData?.[0];
   } catch (error) {
     console.log(error);
   }

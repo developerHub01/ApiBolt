@@ -3,9 +3,14 @@ import type { AppDispatch, RootState } from "@/context/redux/store";
 import {
   handleAuthorizations,
   handleAuthorizationsInheritedId,
+  handleClearHiddenAuthorizationHeaders,
+  handleClearHiddenParams,
+  handleSetHiddenParams,
+  handleUpdateHiddenAuthorizationHeaders,
 } from "@/context/redux/request-response/request-response-slice";
 import { areSamePayload } from "@/utils/helper";
 import {
+  AUTH_DEFAULT_HEADER_PREFIX,
   DEFAULT_API_KEY,
   DEFAULT_AUTHORIZATION_ID,
   DEFAULT_BASIC_AUTH,
@@ -58,6 +63,13 @@ export const loadAuthorization = createAsyncThunk<
           payload: authorizationData,
         })
       );
+
+      dispatch(
+        updateHiddenAuthorization({
+          requestOrFolderId: requestOrFolderId,
+          payload: authorizationData,
+        })
+      );
     } catch (error) {
       console.log(error);
     }
@@ -98,10 +110,132 @@ export const loadInheritParentAuthorization = createAsyncThunk<
           inheritedId: authorizationData.requestOrFolderMetaId,
         })
       );
+
+      dispatch(
+        updateHiddenAuthorization({
+          requestOrFolderId: selectedTab,
+          payload: authorizationData,
+        })
+      );
+
       return authorizationData.requestOrFolderMetaId;
     } catch (error) {
       console.log(error);
       return null;
+    }
+  }
+);
+
+export const updateHiddenAuthorization = createAsyncThunk<
+  void,
+  {
+    requestOrFolderId?: string;
+    payload: AuthorizationPayloadInterface;
+  },
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>(
+  "request-response/updateHiddenAuthorization",
+  async (
+    {
+      requestOrFolderId = DEFAULT_AUTHORIZATION_ID,
+      payload: authorizationData,
+    },
+    { dispatch }
+  ) => {
+    try {
+      let shouldClearHiddenAuthParams = false;
+      let shouldClearHiddenAuthHeaders = false;
+
+      /* if no-auth then clearn auth related both params and header */
+      if (authorizationData.type === "no-auth") {
+        shouldClearHiddenAuthParams = true;
+        shouldClearHiddenAuthHeaders = true;
+        /* if "basic-auth", "bearer-token" type then clearn auth related params and update only authorization header */
+      } else if (authorizationData.type === "basic-auth") {
+        shouldClearHiddenAuthParams = true;
+        dispatch(
+          handleUpdateHiddenAuthorizationHeaders({
+            id: requestOrFolderId,
+            value: `Basic ${authorizationData.basicAuthToken}`,
+          })
+        );
+      } else if (authorizationData.type === "bearer-token") {
+        shouldClearHiddenAuthParams = true;
+        let value = authorizationData.bearerToken;
+
+        if (
+          !authorizationData.bearerToken.trim().toLowerCase().includes("bearer")
+        )
+          value = `${AUTH_DEFAULT_HEADER_PREFIX} ${authorizationData.bearerToken}`;
+
+        dispatch(
+          handleUpdateHiddenAuthorizationHeaders({
+            id: requestOrFolderId,
+            value,
+          })
+        );
+        /* if "basic-auth", "bearer-token" type then clearn auth related params and update only authorization header */
+      } else if (authorizationData.type === "jwt-bearer") {
+        if (authorizationData.jwtAddTo === "header") {
+          shouldClearHiddenAuthParams = true;
+          const prefix = authorizationData.jwtHeaderPrefix
+            ? (authorizationData.jwtHeaderPrefix ??
+                AUTH_DEFAULT_HEADER_PREFIX) + " "
+            : "";
+          dispatch(
+            handleUpdateHiddenAuthorizationHeaders({
+              id: requestOrFolderId,
+              value: `${prefix}${authorizationData.jwtAuthToken}`,
+            })
+          );
+        } else {
+          shouldClearHiddenAuthHeaders = true;
+          dispatch(
+            handleSetHiddenParams({
+              id: requestOrFolderId,
+              param: {
+                key: authorizationData.jwtHeaderPrefix ?? "token",
+                value: authorizationData.jwtAuthToken ?? "",
+              },
+            })
+          );
+        }
+      } else if (
+        authorizationData.type === "api-key" &&
+        (authorizationData.apiKeyKey || authorizationData.apiKeyValue)
+      ) {
+        if (authorizationData.apiKeyAddTo === "header") {
+          shouldClearHiddenAuthParams = true;
+          dispatch(
+            handleUpdateHiddenAuthorizationHeaders({
+              id: requestOrFolderId,
+              key: authorizationData.apiKeyKey ?? "",
+              value: authorizationData.apiKeyValue ?? "",
+            })
+          );
+        } else {
+          dispatch(
+            handleSetHiddenParams({
+              id: requestOrFolderId,
+              param: {
+                key: authorizationData.apiKeyKey ?? "",
+                value: authorizationData.apiKeyValue ?? "",
+              },
+            })
+          );
+        }
+      }
+
+      /* clear other auth params or header other then updating one */
+      if (shouldClearHiddenAuthParams)
+        dispatch(handleClearHiddenParams(requestOrFolderId));
+      if (shouldClearHiddenAuthHeaders)
+        dispatch(handleClearHiddenAuthorizationHeaders(requestOrFolderId));
+    } catch (error) {
+      console.log(error);
     }
   }
 );
@@ -194,8 +328,47 @@ export const updateAuthorization = createAsyncThunk<
         (state.requestResponse.authType[requestOrFolderId] !==
           "inherit-parent" ||
           payload.type === "inherit-parent")
-      )
+      ) {
         await dispatch(loadInheritParentAuthorization(requestOrFolderId));
+      } else if (requestOrFolderId) {
+        const updatedState = getState() as RootState;
+        const authorizationData = {
+          type: updatedState.requestResponse.authType[requestOrFolderId],
+          basicAuthUsername:
+            updatedState.requestResponse.basicAuth[requestOrFolderId].username,
+          basicAuthPassword:
+            updatedState.requestResponse.basicAuth[requestOrFolderId].password,
+          bearerToken:
+            updatedState.requestResponse.bearerTokenAuth[requestOrFolderId],
+          jwtAlgo:
+            updatedState.requestResponse.jwtBearerAuth[requestOrFolderId].algo,
+          jwtSecret:
+            updatedState.requestResponse.jwtBearerAuth[requestOrFolderId]
+              .secret,
+          jwtPayload:
+            updatedState.requestResponse.jwtBearerAuth[requestOrFolderId]
+              .payload,
+          jwtHeaderPrefix:
+            updatedState.requestResponse.jwtBearerAuth[requestOrFolderId]
+              .headerPrefix,
+          jwtAddTo:
+            updatedState.requestResponse.jwtBearerAuth[requestOrFolderId].addTo,
+          apiKeyKey:
+            updatedState.requestResponse.apiKeyAuth[requestOrFolderId].key,
+          apiKeyValue:
+            updatedState.requestResponse.apiKeyAuth[requestOrFolderId].value,
+          apiKeyAddTo:
+            updatedState.requestResponse.apiKeyAuth[requestOrFolderId].addTo,
+        };
+
+        dispatch(
+          updateHiddenAuthorization({
+            requestOrFolderId: requestOrFolderId,
+            /* as AuthorizationPayloadInterface because other properties not need */
+            payload: authorizationData as AuthorizationPayloadInterface,
+          })
+        );
+      }
 
       /* if not success then load again to retrive the changes by calling handleAuthorizations reducer */
       if (!response) {
@@ -206,7 +379,7 @@ export const updateAuthorization = createAsyncThunk<
         );
       }
 
-      return response;
+      return Boolean(response);
     } catch (error) {
       console.log(error);
       return false;
