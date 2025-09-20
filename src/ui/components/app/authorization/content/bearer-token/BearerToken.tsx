@@ -21,7 +21,7 @@ const BearerToken = memo(({ id, disabled = false }: Props) => {
       dispatch(
         updateAuthorization({
           payload: {
-            bearerToken: value,
+            bearerToken: value.trim(),
           },
         })
       );

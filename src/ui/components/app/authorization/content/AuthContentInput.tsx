@@ -50,19 +50,24 @@ const AuthContentInput = memo(
           value={valueState}
           onChange={handleChange}
           onBlur={handleBlur}
+          disabled={disabled}
           type={
             type === "password" ? (hidePassword ? "password" : "text") : type
           }
-          className={cn("outline-none w-full", className)}
+          className={cn(
+            "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 outline-none w-full",
+            className
+          )}
           {...props}
         />
         {type === "password" && (
           <button
             onClick={() => handleHidePassword()}
             className={cn(
-              "select-none shrink-0 size-6 grid place-items-center items-center gap-1 [&>svg]:size-4 text-xs rounded-full cursor-pointer aspect-square",
+              "select-none shrink-0 size-6 grid place-items-center items-center gap-1 [&>svg]:size-4 text-xs rounded-full cursor-pointer aspect-square disabled:pointer-events-none disabled:opacity-50",
               "hover:bg-accent duration-100 transition-all"
             )}
+            disabled={disabled}
           >
             {hidePassword ? <ShowIcon /> : <HideIcon />}
           </button>

@@ -48,7 +48,7 @@ const JWTBearer = memo(({ id, disabled = false }: Props) => {
       dispatch(
         updateAuthorization({
           payload: {
-            [key]: value,
+            [key]: value.trim(),
           },
         })
       );
