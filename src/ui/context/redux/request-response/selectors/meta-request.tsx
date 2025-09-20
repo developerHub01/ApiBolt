@@ -7,9 +7,15 @@ import type {
   TActiveTabType,
   TMetaTableType,
 } from "@/types/request-response.types";
-import { selectSelectedTab } from "./tab-list";
+import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
 
-export const selectMetaData = (type: TMetaTableType | null) =>
+export const selectMetaData = ({
+  id,
+  type,
+}: {
+  id?: string;
+  type: TMetaTableType | null;
+}) =>
   createSelector(
     [
       (state: RootState) => state.requestResponse.selectedTab,
@@ -31,23 +37,54 @@ export const selectMetaData = (type: TMetaTableType | null) =>
       formData,
       xWWWFormUrlencodedData
     ): Array<ParamInterface | FormDataInterface> | null => {
-      if (!selectedTab) return null;
+      const metaId = id ?? selectedTab;
+      if (!metaId) return null;
 
       switch (type) {
         case "params":
-          return params[selectedTab] ?? [];
+          return params[metaId] ?? [];
         case "hiddenParams":
-          return hiddenParams[selectedTab] ? [hiddenParams[selectedTab]] : [];
+          return hiddenParams[metaId] ? [hiddenParams[metaId]] : [];
         case "headers":
-          return headers[selectedTab] ?? [];
+          return headers[metaId] ?? [];
         case "hiddenHeaders":
-          return [hiddenCookie, ...(hiddenHeaders[selectedTab] ?? [])];
+          return [hiddenCookie, ...(hiddenHeaders[metaId] ?? [])];
         case "form-data":
-          return formData[selectedTab] ?? [];
+          return formData[metaId] ?? [];
         case "x-www-form-urlencoded":
-          return xWWWFormUrlencodedData[selectedTab] ?? [];
+          return xWWWFormUrlencodedData[metaId] ?? [];
       }
       return [];
+    }
+  );
+
+export const selectMetaDataByCheckingInheritance = ({
+  id,
+  type,
+}: {
+  id?: string;
+  type: TMetaTableType | null;
+}) =>
+  createSelector(
+    [
+      (state: RootState) => state.requestResponse.selectedTab,
+      (state: RootState) => state.requestResponse.authInheritedId,
+      (state: RootState) => state,
+    ],
+    (
+      selectedTab,
+      authInheritedId,
+      state
+    ): Array<ParamInterface | FormDataInterface> | null => {
+      const metaId = id ?? selectedTab;
+      if (!metaId || !authInheritedId[metaId]) return null;
+
+      const innerSelector = selectMetaData({
+        id: authInheritedId[metaId],
+        type,
+      });
+
+      return innerSelector(state);
     }
   );
 

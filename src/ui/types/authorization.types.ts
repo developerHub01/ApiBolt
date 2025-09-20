@@ -33,11 +33,6 @@ export interface AuthorizationPayloadInterface {
   jwtAuthToken: string;
 }
 
-export type AuthorizationUpdatedPayloadInterface = Pick<
-  AuthorizationPayloadInterface,
-  "basicAuthToken" | "jwtAuthToken"
->;
-
 export interface APIKeyInterface {
   key: string;
   value: string;

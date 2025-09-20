@@ -13,7 +13,9 @@ const LoadBasicReduxState = () => {
       await dispatch(loadProjectList());
       await dispatch(loadEnvironmentsList());
       await dispatch(
-        loadAuthorization({ requestOrFolderId: DEFAULT_AUTHORIZATION_ID })
+        loadAuthorization({
+          requestOrFolderId: DEFAULT_AUTHORIZATION_ID,
+        })
       );
     })();
   }, [dispatch]);

@@ -23,7 +23,6 @@ import type {
 import type { ApiUrlPayload } from "@/types/request-url.types";
 import type {
   AuthorizationPayloadInterface,
-  AuthorizationUpdatedPayloadInterface,
   JWTBearerAuthInterface,
 } from "@/types/authorization.types";
 import type { ProjectInterface } from "@/types/project.types";
@@ -113,7 +112,7 @@ declare global {
       updateAuth(updatePayload: {
         requestOrFolderId?: string;
         payload: Partial<Omit<AuthorizationPayloadInterface, "id">>;
-      }): Promise<AuthorizationUpdatedPayloadInterface>;
+      }): Promise<AuthorizationPayloadInterface>;
       deleteAuth(id?: string): Promise<boolean>;
     };
 

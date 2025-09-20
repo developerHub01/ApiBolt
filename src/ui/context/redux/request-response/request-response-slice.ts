@@ -853,7 +853,10 @@ export const requestResponseSlice = createSlice({
       }>
     ) => {
       const selectedTab = action.payload.id ?? state.selectedTab;
-      if (!selectedTab || !state.hiddenHeaders[selectedTab]) return;
+      if (!selectedTab) return;
+
+      if (!state.hiddenHeaders[selectedTab])
+        state.hiddenHeaders[selectedTab] = [];
 
       const value = action.payload.value;
       const key = action.payload.key ?? AUTHORIZATION_AUTH_HEADER_KEY;

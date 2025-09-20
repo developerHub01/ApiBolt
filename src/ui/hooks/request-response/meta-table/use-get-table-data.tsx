@@ -64,7 +64,12 @@ export const useGetTableData = () => {
     return "params";
   }, [activeMetaTab, requestBodyType]);
 
-  const data = useAppSelector(selectMetaData(type)) ?? [];
+  const data =
+    useAppSelector(
+      selectMetaData({
+        type,
+      })
+    ) ?? [];
 
   const showColumn = useMemo(
     () =>

@@ -180,10 +180,7 @@ export const updateAuth = async ({ requestOrFolderId, payload = {} } = {}) => {
             : isNull(authorizationTable.requestOrFolderMetaId)
         )
       )
-      .returning({
-        basicAuthToken: authorizationTable.basicAuthToken,
-        jwtAuthToken: authorizationTable.jwtAuthToken,
-      });
+      .returning();
 
     return updatedData?.[0];
   } catch (error) {

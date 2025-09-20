@@ -2,11 +2,16 @@ import { memo } from "react";
 import { useRequestHeader } from "@/context/collections/request/RequestHeaderProvider";
 import { useAppSelector } from "@/context/redux/hooks";
 import { Eye as ShowIcon, EyeOff as HideIcon } from "lucide-react";
-import { selectMetaData } from "@/context/redux/request-response/selectors/meta-request";
+import { selectMetaDataByCheckingInheritance } from "@/context/redux/request-response/selectors/meta-request";
 
 const LabelPrefix = memo(() => {
   const { showHiddenHeader, handleChangeShowHiddenHeader } = useRequestHeader();
-  const hiddenHeader = useAppSelector(selectMetaData("hiddenHeaders")) ?? [];
+  const hiddenHeader =
+    useAppSelector(
+      selectMetaDataByCheckingInheritance({
+        type: "hiddenHeaders",
+      })
+    ) ?? [];
 
   if (!hiddenHeader.length) return;
 

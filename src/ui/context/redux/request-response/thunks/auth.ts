@@ -111,13 +111,6 @@ export const loadInheritParentAuthorization = createAsyncThunk<
         })
       );
 
-      dispatch(
-        updateHiddenAuthorization({
-          requestOrFolderId: selectedTab,
-          payload: authorizationData,
-        })
-      );
-
       return authorizationData.requestOrFolderMetaId;
     } catch (error) {
       console.log(error);
@@ -217,6 +210,7 @@ export const updateHiddenAuthorization = createAsyncThunk<
             })
           );
         } else {
+          shouldClearHiddenAuthHeaders = true;
           dispatch(
             handleSetHiddenParams({
               id: requestOrFolderId,
@@ -260,9 +254,9 @@ export const updateAuthorization = createAsyncThunk<
       if (!requestOrFolderId) {
         /* if not id passed then check is selected tab is collection if then is there any selected tab, if then use that selectedTab as id else passed id */
         requestOrFolderId =
-          state.sidebar.activeTab === "collections" && selectedTab
+          (state.sidebar.activeTab === "collections" && selectedTab
             ? selectedTab
-            : requestOrFolderId;
+            : requestOrFolderId) ?? DEFAULT_AUTHORIZATION_ID;
       }
 
       const tempId = requestOrFolderId ?? DEFAULT_AUTHORIZATION_ID;
@@ -319,53 +313,57 @@ export const updateAuthorization = createAsyncThunk<
             : requestOrFolderId,
         payload,
       });
-
+      
       /* if update successfully and updating type and in change from inheri-parent type */
       if (
         response &&
-        requestOrFolderId &&
+        requestOrFolderId !== DEFAULT_AUTHORIZATION_ID &&
         payload.type &&
         (state.requestResponse.authType[requestOrFolderId] !==
           "inherit-parent" ||
           payload.type === "inherit-parent")
       ) {
         await dispatch(loadInheritParentAuthorization(requestOrFolderId));
-      } else if (requestOrFolderId) {
-        const updatedState = getState() as RootState;
-        const authorizationData = {
-          type: updatedState.requestResponse.authType[requestOrFolderId],
-          basicAuthUsername:
-            updatedState.requestResponse.basicAuth[requestOrFolderId].username,
-          basicAuthPassword:
-            updatedState.requestResponse.basicAuth[requestOrFolderId].password,
-          bearerToken:
-            updatedState.requestResponse.bearerTokenAuth[requestOrFolderId],
-          jwtAlgo:
-            updatedState.requestResponse.jwtBearerAuth[requestOrFolderId].algo,
-          jwtSecret:
-            updatedState.requestResponse.jwtBearerAuth[requestOrFolderId]
-              .secret,
-          jwtPayload:
-            updatedState.requestResponse.jwtBearerAuth[requestOrFolderId]
-              .payload,
-          jwtHeaderPrefix:
-            updatedState.requestResponse.jwtBearerAuth[requestOrFolderId]
-              .headerPrefix,
-          jwtAddTo:
-            updatedState.requestResponse.jwtBearerAuth[requestOrFolderId].addTo,
-          apiKeyKey:
-            updatedState.requestResponse.apiKeyAuth[requestOrFolderId].key,
-          apiKeyValue:
-            updatedState.requestResponse.apiKeyAuth[requestOrFolderId].value,
-          apiKeyAddTo:
-            updatedState.requestResponse.apiKeyAuth[requestOrFolderId].addTo,
-        };
+      }
+      /* update hidden auth data */
+      if (response && requestOrFolderId) {
+        // const updatedState = getState() as RootState;
+        // const authorizationData = {
+        //   type: updatedState.requestResponse.authType[requestOrFolderId],
+        //   basicAuthUsername:
+        //     updatedState.requestResponse.basicAuth[requestOrFolderId].username,
+        //   basicAuthPassword:
+        //     updatedState.requestResponse.basicAuth[requestOrFolderId].password,
+        //   bearerToken:
+        //     updatedState.requestResponse.bearerTokenAuth[requestOrFolderId],
+        //   jwtAlgo:
+        //     updatedState.requestResponse.jwtBearerAuth[requestOrFolderId].algo,
+        //   jwtSecret:
+        //     updatedState.requestResponse.jwtBearerAuth[requestOrFolderId]
+        //       .secret,
+        //   jwtPayload:
+        //     updatedState.requestResponse.jwtBearerAuth[requestOrFolderId]
+        //       .payload,
+        //   jwtHeaderPrefix:
+        //     updatedState.requestResponse.jwtBearerAuth[requestOrFolderId]
+        //       .headerPrefix,
+        //   jwtAddTo:
+        //     updatedState.requestResponse.jwtBearerAuth[requestOrFolderId].addTo,
+        //   apiKeyKey:
+        //     updatedState.requestResponse.apiKeyAuth[requestOrFolderId].key,
+        //   apiKeyValue:
+        //     updatedState.requestResponse.apiKeyAuth[requestOrFolderId].value,
+        //   apiKeyAddTo:
+        //     updatedState.requestResponse.apiKeyAuth[requestOrFolderId].addTo,
+        //   bearerTokenAuth: response.basicAuthToken ?? "",
+        //   jwtAuthToken: response.jwtAuthToken ?? "",
+        // };
 
         dispatch(
           updateHiddenAuthorization({
             requestOrFolderId: requestOrFolderId,
             /* as AuthorizationPayloadInterface because other properties not need */
-            payload: authorizationData as AuthorizationPayloadInterface,
+            payload: response,
           })
         );
       }
