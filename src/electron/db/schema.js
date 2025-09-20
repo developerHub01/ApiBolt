@@ -70,6 +70,8 @@ export const authorizationTable = sqliteTable("authorization_table", {
   jwtPayload: text().default(""),
   jwtHeaderPrefix: text().default("Bearer"),
   jwtAddTo: text().default("header") /* "header" | "query" */,
+  basicAuthToken: text().default(""),
+  jwtAuthToken: text().default(""),
 });
 
 export const requestOrFolderMetaTable = sqliteTable(
