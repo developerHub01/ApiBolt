@@ -1,3 +1,5 @@
+import jwt from "jsonwebtoken";
+
 export const getRawContentType = (subtype) => {
   switch (subtype) {
     case "json":
@@ -13,4 +15,10 @@ export const getRawContentType = (subtype) => {
     default:
       return "text/plain";
   }
+};
+
+export const generateJWT = ({ payload, secret, algorithm }) => {
+  return jwt.sign(payload, secret, {
+    algorithm,
+  });
 };
