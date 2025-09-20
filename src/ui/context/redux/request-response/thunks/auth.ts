@@ -135,41 +135,41 @@ export const updateAuthorization = createAsyncThunk<
       const existingPayload: Partial<
         Omit<AuthorizationPayloadInterface, "id">
       > = {
-        type: state.requestResponse.authType[tempId] ?? "no-auth",
+        type: state.requestResponse.authType[tempId],
         apiKeyKey:
-          state.requestResponse.apiKeyAuth[tempId]?.key ?? DEFAULT_API_KEY.key,
+          state.requestResponse.apiKeyAuth[tempId]?.key?.trim() ??
+          DEFAULT_API_KEY.key,
         apiKeyValue:
-          state.requestResponse.apiKeyAuth[tempId]?.value ??
+          state.requestResponse.apiKeyAuth[tempId]?.value?.trim() ??
           DEFAULT_API_KEY.value,
         apiKeyAddTo:
           state.requestResponse.apiKeyAuth[tempId]?.addTo ??
           DEFAULT_API_KEY.addTo,
-        bearerToken: state.requestResponse.bearerTokenAuth[tempId],
+        bearerToken: state.requestResponse.bearerTokenAuth[tempId]?.trim(),
         basicAuthUsername:
-          state.requestResponse.basicAuth[tempId]?.username ??
+          state.requestResponse.basicAuth[tempId]?.username?.trim() ??
           DEFAULT_BASIC_AUTH.username,
         basicAuthPassword:
-          state.requestResponse.basicAuth[tempId]?.password ??
+          state.requestResponse.basicAuth[tempId]?.password?.trim() ??
           DEFAULT_BASIC_AUTH.password,
         jwtAlgo:
-          state.requestResponse.jwtBearerAuth[tempId]?.algo ??
+          state.requestResponse.jwtBearerAuth[tempId]?.algo?.trim() ??
           DEFAULT_JWT_BEARER_AUTH.algo,
         jwtSecret:
-          state.requestResponse.jwtBearerAuth[tempId]?.secret ??
+          state.requestResponse.jwtBearerAuth[tempId]?.secret?.trim() ??
           DEFAULT_JWT_BEARER_AUTH.secret,
         jwtPayload:
-          state.requestResponse.jwtBearerAuth[tempId]?.payload ??
+          state.requestResponse.jwtBearerAuth[tempId]?.payload?.trim() ??
           DEFAULT_JWT_BEARER_AUTH.payload,
         jwtHeaderPrefix:
-          state.requestResponse.jwtBearerAuth[tempId]?.headerPrefix ??
+          state.requestResponse.jwtBearerAuth[tempId]?.headerPrefix?.trim() ??
           DEFAULT_JWT_BEARER_AUTH.headerPrefix,
         jwtAddTo:
           state.requestResponse.jwtBearerAuth[tempId]?.addTo ??
           DEFAULT_JWT_BEARER_AUTH.addTo,
       };
 
-      const areSame = areSamePayload(payload, existingPayload);
-      if (areSame) return true;
+      if (areSamePayload(payload, existingPayload)) return true;
 
       dispatch(
         handleAuthorizations({
