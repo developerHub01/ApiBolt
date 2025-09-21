@@ -7,12 +7,8 @@ import { updateRequestMetaTab } from "@/context/redux/request-response/thunks/re
 import {
   selectActiveMetaTab,
   selectActiveMetaTabList,
+  selectMetaDataByCheckingInheritance,
 } from "@/context/redux/request-response/selectors/meta-request";
-import { selectParams } from "@/context/redux/request-response/selectors/params";
-import {
-  selectHeaders,
-  selectHiddenHeaders,
-} from "@/context/redux/request-response/selectors/headers";
 
 const tabList: Array<{
   id: TActiveTabType;
@@ -46,34 +42,57 @@ const MetaDataTab = memo(() => {
   const dispatch = useAppDispatch();
   const activeTabList = useAppSelector(selectActiveMetaTabList);
   const activeMetaTab = useAppSelector(selectActiveMetaTab);
-  const params = useAppSelector(selectParams);
-  const hiddenHeaders = useAppSelector(selectHiddenHeaders);
-  const headers = useAppSelector(selectHeaders);
-
-  const tabListWithActivity = useMemo(
-    () =>
-      tabList
-        .map((item) => ({
-          ...item,
-          isActive: Boolean(activeTabList[item.id]),
-        }))
-        .map((item) => {
-          if (item.id === "params") {
-            if (item.count && !params?.length) delete item.count;
-            else if (item.count !== params?.length)
-              item.count = params.filter((param) => param.isCheck)?.length;
-          } else if (item.id === "headers") {
-            const totalHeaders =
-              headers?.filter((header) => header.isCheck)?.length +
-              hiddenHeaders?.length;
-            if (item.count && !totalHeaders) delete item.count;
-            else if (item.count !== totalHeaders) item.count = totalHeaders;
-          }
-
-          return item;
-        }),
-    [activeTabList, params, headers, hiddenHeaders]
+  const params = useAppSelector(
+    selectMetaDataByCheckingInheritance({
+      type: "params",
+    })
   );
+  const hiddenParams = useAppSelector(
+    selectMetaDataByCheckingInheritance({
+      type: "hiddenParams",
+    })
+  );
+  const headers = useAppSelector(
+    selectMetaDataByCheckingInheritance({
+      type: "headers",
+    })
+  );
+  const hiddenHeaders = useAppSelector(
+    selectMetaDataByCheckingInheritance({
+      type: "hiddenHeaders",
+    })
+  );
+
+  const tabListWithActivity = useMemo(() => {
+    const hiddenParamsCount = hiddenParams?.length ?? 0;
+    const paramsCount = params?.filter((param) => param.isCheck)?.length ?? 0;
+
+    const headersCount =
+      headers?.filter((header) => header.isCheck)?.length ?? 0;
+    const hiddenHeadersCount = hiddenHeaders?.length ?? 0;
+
+    return tabList
+      .map((item) => ({
+        ...item,
+        isActive: Boolean(activeTabList[item.id]),
+      }))
+      .map((item) => {
+        if (item.id === "params") {
+          if (item.count && !params?.length) delete item.count;
+          else if (item.count !== paramsCount) {
+            const totalParams = paramsCount + hiddenParamsCount;
+            if (item.count && !totalParams) delete item.count;
+            else if (item.count !== totalParams) item.count = totalParams;
+          }
+        } else if (item.id === "headers") {
+          const totalHeaders = headersCount + hiddenHeadersCount;
+          if (item.count && !totalHeaders) delete item.count;
+          else if (item.count !== totalHeaders) item.count = totalHeaders;
+        }
+
+        return item;
+      });
+  }, [hiddenParams?.length, params, hiddenHeaders?.length, activeTabList]);
 
   const handleChange = useCallback(
     (tab: TActiveTabType) =>
