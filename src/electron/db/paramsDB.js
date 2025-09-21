@@ -68,6 +68,9 @@ export const createParams = async (payload = {}) => {
     if (!payload.requestOrFolderMetaId) return false;
     if ("isCheck" in payload) payload["isCheck"] = Number(payload["isCheck"]);
 
+    if (typeof payload === "object" && !Object.keys(payload).length)
+      return true;
+
     const result = await db.insert(paramsTable).values(payload);
     return result.changes > 0;
   } catch (error) {
@@ -92,6 +95,9 @@ export const updateParams = async (paramId, payload) => {
       await createParams({
         id: paramId,
       });
+
+    if (typeof payload === "object" && !Object.keys(payload).length)
+      return true;
 
     const updated = await db
       .update(paramsTable)
@@ -119,6 +125,9 @@ export const replaceParams = async (requestOrFolderMetaId, payload) => {
     await db
       .delete(paramsTable)
       .where(eq(paramsTable.requestOrFolderMetaId, requestOrFolderMetaId));
+
+    if (typeof payload === "object" && !Object.keys(payload).length)
+      return true;
 
     if (!payload.length) return true;
     const created = await db.insert(paramsTable).values(payload);

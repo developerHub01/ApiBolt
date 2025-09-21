@@ -62,6 +62,9 @@ export const createHeaders = async (payload = {}) => {
     if (!payload.requestOrFolderMetaId) return false;
     if ("isCheck" in payload) payload["isCheck"] = Number(payload["isCheck"]);
 
+    if (typeof payload === "object" && !Object.keys(payload).length)
+      return true;
+
     const result = await db.insert(headersTable).values(payload);
 
     if (result?.changes) {
@@ -99,6 +102,9 @@ export const updateHeaders = async (headerId, payload) => {
         id: headerId,
       });
 
+    if (typeof payload === "object" && !Object.keys(payload).length)
+      return true;
+
     const updated = await db
       .update(headersTable)
       .set({
@@ -126,6 +132,9 @@ export const replaceHeaders = async (requestOrFolderMetaId, payload) => {
     await db
       .delete(headersTable)
       .where(eq(headersTable.requestOrFolderMetaId, requestOrFolderMetaId));
+
+    if (typeof payload === "object" && !Object.keys(payload).length)
+      return true;
 
     const created = await db.insert(headersTable).values(payload);
 
