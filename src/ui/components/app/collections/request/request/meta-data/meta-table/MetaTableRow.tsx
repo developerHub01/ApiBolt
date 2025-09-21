@@ -98,7 +98,7 @@ const MetaTableRow = memo(
               className="cursor-pointer"
               id={`${type}-check-${id}`}
               checked={isCheck || preventCheck}
-              disabled={preventCheck}
+              disabled={preventCheck || id === "authorization"}
               onCheckedChange={handleCheckChange}
             />
           </div>

@@ -10,7 +10,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Eye as ShowIcon, EyeOff as HideIcon } from "lucide-react";
 
-const hiddenDummyText = "••••••••••••••••••••";
+const hiddenDummyText = "•••••••••••••••••••••••••";
 
 interface MetaItemInputProps
   extends Omit<
@@ -82,7 +82,8 @@ const MetaItemInput = memo(
             "w-full p-0.5 outline-none",
             "border-b border-transparent focus:border-primary",
             "placeholder:capitalize placeholder:opacity-50",
-            "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+            "disabled:opacity-50 md:text-sm",
+            "selection:bg-primary selection:text-primary-foreground",
             className
           )}
           placeholder={cellType}
