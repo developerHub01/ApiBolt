@@ -1,12 +1,13 @@
 import { memo } from "react";
 import MetaDataWrapper from "@/components/app/collections/request/request/meta-data/meta-table/MetaDataWrapper";
 import MetaTable from "@/components/app/collections/request/request/meta-data/meta-table/MetaTable";
-import { useRequestHeader } from "@/context/collections/request/RequestHeaderProvider";
 import AddNewMetaData from "@/components/app/collections/request/request/meta-data/AddNewMetaData";
 import LabelPrefix from "@/components/app/collections/request/request/meta-data/headers/LabelPrefix";
+import { useAppSelector } from "@/context/redux/hooks";
+import { selectShowHiddenHeader } from "@/context/redux/request-response/selectors/headers";
 
 const Headers = memo(() => {
-  const { showHiddenHeader } = useRequestHeader();
+  const showHiddenHeader = useAppSelector(selectShowHiddenHeader);
 
   return (
     <MetaDataWrapper label="Headers" labelPrefix={<LabelPrefix />}>
@@ -15,6 +16,7 @@ const Headers = memo(() => {
     </MetaDataWrapper>
   );
 });
+
 Headers.displayName = "Headers";
 
 export default Headers;

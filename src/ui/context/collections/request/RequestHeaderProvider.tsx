@@ -1,12 +1,10 @@
-import React, { createContext, useCallback, useContext, useState } from "react";
+import React, { createContext, useContext } from "react";
 import { useParams } from "react-router-dom";
 
-interface RequestHeaderContext {
-  showHiddenHeader: boolean;
-  handleChangeShowHiddenHeader: (value?: boolean) => void;
-}
+// interface RequestHeaderContext {
+// }
 
-const RequestHeaderContext = createContext<RequestHeaderContext | null>(null);
+const RequestHeaderContext = createContext<undefined | null>(null);
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useRequestHeader = () => {
@@ -27,23 +25,10 @@ interface RequestHeaderProviderProps {
 
 const RequestHeaderProvider = ({ children }: RequestHeaderProviderProps) => {
   const { id } = useParams();
-  const [showHiddenHeader, setShowHiddenHeader] = useState<boolean>(false);
-
-  const handleChangeShowHiddenHeader = useCallback((value?: boolean) => {
-    if (value === undefined) return setShowHiddenHeader((prev) => !prev);
-
-    setShowHiddenHeader(value);
-  }, []);
-
   if (!id) return;
 
   return (
-    <RequestHeaderContext.Provider
-      value={{
-        showHiddenHeader,
-        handleChangeShowHiddenHeader,
-      }}
-    >
+    <RequestHeaderContext.Provider value={undefined}>
       {children}
     </RequestHeaderContext.Provider>
   );

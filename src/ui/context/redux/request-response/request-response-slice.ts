@@ -231,6 +231,7 @@ interface RequestResponseState {
   headers: Record<string, Array<ParamInterface>>;
   hiddenCookie: ParamInterface;
   hiddenHeaders: Record<string, Array<ParamInterface>>;
+  showHiddenHeader: Record<string, boolean>;
   binaryData: Record<string, string | null>;
   formData: Record<string, Array<FormDataInterface>>;
   xWWWFormUrlencodedData: Record<string, Array<ParamInterface>>;
@@ -312,6 +313,7 @@ const initialState: RequestResponseState = {
   headers: {},
   hiddenCookie: initialHiddenCookie(),
   hiddenHeaders: {},
+  showHiddenHeader: {},
   binaryData: {},
   formData: {},
   xWWWFormUrlencodedData: {},
@@ -843,6 +845,22 @@ export const requestResponseSlice = createSlice({
       if (!id) return;
 
       state.headers[id] = headers;
+    },
+    handleToggleShowHiddenHeaderHeaders: (
+      state,
+      action: PayloadAction<
+        | {
+            id?: string;
+            value?: boolean;
+          }
+        | undefined
+      >
+    ) => {
+      const payload = action.payload ?? {};
+      const id = payload.id ?? state.selectedTab;
+      if (!id) return;
+
+      state.showHiddenHeader[id] = payload.value ?? !state.showHiddenHeader[id];
     },
     handleUpdateHiddenAuthorizationHeaders: (
       state,
@@ -1430,6 +1448,7 @@ export const {
   handleSetHiddenParams,
   handleClearHiddenParams,
   handleSetHeaders,
+  handleToggleShowHiddenHeaderHeaders,
   handleUpdateHiddenAuthorizationHeaders,
   handleClearHiddenAuthorizationHeaders,
   handleUpdateHiddenHeadersIsCheck,

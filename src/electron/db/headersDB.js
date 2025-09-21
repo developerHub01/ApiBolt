@@ -112,7 +112,7 @@ export const updateHeaders = async (headerId, payload) => {
 };
 
 export const replaceHeaders = async (requestOrFolderMetaId, payload) => {
-  if (!payload) return false;
+  if (!payload || !payload.length) return false;
 
   payload.map((header) => {
     delete header["id"];

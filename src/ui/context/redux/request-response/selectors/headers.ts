@@ -15,6 +15,18 @@ export const selectHiddenHeaders = createSelector(
   }
 );
 
+export const selectShowHiddenHeader = createSelector(
+  [
+    (state: RootState) => state.requestResponse.selectedTab!,
+    (state: RootState) => state.requestResponse.showHiddenHeader,
+  ],
+  (selectedTab, showHiddenHeader): boolean => {
+    if (!selectedTab) return false;
+
+    return showHiddenHeader[selectedTab] ?? false;
+  }
+);
+
 export const selectHeaders = createSelector(
   [
     (state: RootState) => state.requestResponse.selectedTab!,
