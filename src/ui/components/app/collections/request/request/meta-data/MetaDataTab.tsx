@@ -92,7 +92,13 @@ const MetaDataTab = memo(() => {
 
         return item;
       });
-  }, [hiddenParams?.length, params, hiddenHeaders?.length, activeTabList]);
+  }, [
+    hiddenParams?.length,
+    params,
+    headers,
+    hiddenHeaders?.length,
+    activeTabList,
+  ]);
 
   const handleChange = useCallback(
     (tab: TActiveTabType) =>
