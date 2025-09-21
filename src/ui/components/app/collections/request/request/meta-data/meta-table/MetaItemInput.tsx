@@ -38,11 +38,19 @@ const MetaItemInput = memo(
     ...props
   }: MetaItemInputProps) => {
     const [valueState, setValueState] = useState<string>(value);
-    const [hidePassword, setHidePassword] = useState<boolean>(true);
+    const [hidePassword, setHidePassword] = useState<boolean>(
+      type !== "text" || (id === "authorization" && cellType === "value")
+    );
 
     useEffect(() => {
       setValueState(value);
     }, [value]);
+
+    useEffect(() => {
+      setHidePassword(
+        type !== "text" || (id === "authorization" && cellType === "value")
+      );
+    }, [type, id, cellType]);
 
     const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
       setValueState(e.target.value);
@@ -58,17 +66,16 @@ const MetaItemInput = memo(
 
     const handleTogglePasswordView = () => setHidePassword((prev) => !prev);
 
+    const showPasswordButton =
+      type === "password" || (id === "authorization" && cellType === "value");
+
     return (
       <div className="w-full flex gap-1 justify-between items-center group">
         <input
           ref={ref}
           type={"text"}
           data-meta-item-type={cellType}
-          value={
-            type === "text" || !hidePassword || id !== "authorization"
-              ? valueState
-              : hiddenDummyText
-          }
+          value={hidePassword ? hiddenDummyText : valueState}
           onChange={handleChange}
           onBlur={handleBlur}
           className={cn(
@@ -81,7 +88,7 @@ const MetaItemInput = memo(
           placeholder={cellType}
           {...props}
         />
-        {type === "password" && (
+        {showPasswordButton && (
           <button
             onClick={handleTogglePasswordView}
             className={cn(
