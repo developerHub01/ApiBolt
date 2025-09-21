@@ -18,3 +18,15 @@ export const selectCheckedParams = createSelector(
   (params): Array<ParamInterface> =>
     (!params ? [] : params).filter((param) => param.isCheck)
 );
+
+export const selectShowHiddenParams = createSelector(
+  [
+    (state: RootState) => state.requestResponse.selectedTab!,
+    (state: RootState) => state.requestResponse.showHiddenParams,
+  ],
+  (selectedTab, showHiddenParams): boolean => {
+    if (!selectedTab) return false;
+
+    return showHiddenParams[selectedTab] ?? false;
+  }
+);

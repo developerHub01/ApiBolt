@@ -5,7 +5,7 @@ import { getTabList } from "./tabsDB.js";
 import {
   createHiddenHeadersCheck,
   getHiddenHeadersCheck,
-} from "./hiddenHeadersCheckTableDB.js";
+} from "./hiddenHeadersCheckDB.js";
 
 /* id === requestOrFolderMetaId */
 export const getHeaders = async (id) => {

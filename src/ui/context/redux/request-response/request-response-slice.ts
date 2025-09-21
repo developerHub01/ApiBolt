@@ -29,6 +29,7 @@ import type {
   MetaShowColumnInterface,
   TMetaTableType,
   TRequestFolderDescriptionTab,
+  ShowHiddenMetaInterface,
 } from "@/types/request-response.types";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
@@ -228,10 +229,11 @@ interface RequestResponseState {
   rawRequestBodyType: Record<string, TContentType>;
   params: Record<string, Array<ParamInterface>>;
   hiddenParams: Record<string, ParamInterface>;
+  showHiddenParams: Record<string, boolean>;
   headers: Record<string, Array<ParamInterface>>;
   hiddenCookie: ParamInterface;
   hiddenHeaders: Record<string, Array<ParamInterface>>;
-  showHiddenHeader: Record<string, boolean>;
+  showHiddenHeaders: Record<string, boolean>;
   binaryData: Record<string, string | null>;
   formData: Record<string, Array<FormDataInterface>>;
   xWWWFormUrlencodedData: Record<string, Array<ParamInterface>>;
@@ -310,10 +312,11 @@ const initialState: RequestResponseState = {
   rawRequestBodyType: {},
   params: {},
   hiddenParams: {},
+  showHiddenParams: {},
   headers: {},
   hiddenCookie: initialHiddenCookie(),
   hiddenHeaders: {},
-  showHiddenHeader: {},
+  showHiddenHeaders: {},
   binaryData: {},
   formData: {},
   xWWWFormUrlencodedData: {},
@@ -764,6 +767,38 @@ export const requestResponseSlice = createSlice({
     },
     /* ================ MetaShowColumn end =================== */
 
+    /* ================ ShowHiddenMetaData start =================== */
+    handleLoadShowHiddenMetaData: (
+      state,
+      action: PayloadAction<{
+        id?: string;
+        payload: ShowHiddenMetaInterface;
+      }>
+    ) => {
+      const id = action.payload.id ?? state.selectedTab;
+      if (!id) return;
+
+      state.showHiddenParams[id] = action.payload.payload.showHiddenHeaders;
+      state.showHiddenHeaders[id] = action.payload.payload.showHiddenHeaders;
+    },
+    handleSetShowHiddenMetaData: (
+      state,
+      action: PayloadAction<{
+        id?: string;
+        payload: Partial<ShowHiddenMetaInterface>;
+      }>
+    ) => {
+      const id = action.payload.id ?? state.selectedTab;
+      if (!id) return;
+      const { payload } = action.payload;
+
+      if (payload.showHiddenParams !== undefined)
+        state.showHiddenParams[id] = payload.showHiddenParams;
+      if (payload.showHiddenHeaders !== undefined)
+        state.showHiddenHeaders[id] = payload.showHiddenHeaders;
+    },
+    /* ================ ShowHiddenMetaData end =================== */
+
     /* ================ Params start =================== */
     handleLoadParams: (
       state,
@@ -845,22 +880,6 @@ export const requestResponseSlice = createSlice({
       if (!id) return;
 
       state.headers[id] = headers;
-    },
-    handleToggleShowHiddenHeaderHeaders: (
-      state,
-      action: PayloadAction<
-        | {
-            id?: string;
-            value?: boolean;
-          }
-        | undefined
-      >
-    ) => {
-      const payload = action.payload ?? {};
-      const id = payload.id ?? state.selectedTab;
-      if (!id) return;
-
-      state.showHiddenHeader[id] = payload.value ?? !state.showHiddenHeader[id];
     },
     handleUpdateHiddenAuthorizationHeaders: (
       state,
@@ -1429,6 +1448,10 @@ export const {
   handleSetMetaShowColumn,
   /* MetaShowColumn end =========== */
 
+  /* ShowHiddenMetaData start =================== */
+  handleSetShowHiddenMetaData,
+  /* ShowHiddenMetaData end =================== */
+
   /* MetaBulkEdit start =========== */
   handleToggleMetaBulkEditOpen,
   /* MetaBulkEdit end =========== */
@@ -1448,7 +1471,6 @@ export const {
   handleSetHiddenParams,
   handleClearHiddenParams,
   handleSetHeaders,
-  handleToggleShowHiddenHeaderHeaders,
   handleUpdateHiddenAuthorizationHeaders,
   handleClearHiddenAuthorizationHeaders,
   handleUpdateHiddenHeadersIsCheck,

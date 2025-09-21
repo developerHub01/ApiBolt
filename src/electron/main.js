@@ -19,7 +19,7 @@ import { settingsHandlers } from "./ipc/settingsHandlers.js";
 import { getZoomLevel } from "./db/settingsDB.js";
 import { paramsHandlers } from "./ipc/paramsHandlers.js";
 import { headersHandlers } from "./ipc/headersHandlers.js";
-import { hiddenHeadersCheckTableHandler } from "./ipc/hiddenHeadersCheckTableHandler.js";
+import { hiddenHeadersCheckHandler } from "./ipc/hiddenHeadersCheckHandler.js";
 import { bodyRawHandler } from "./ipc/bodyRawHandler.js";
 import { bodyBinaryHandler } from "./ipc/bodyBinaryHandler.js";
 import { requestMetaTabHandler } from "./ipc/requestMetaTabHandler.js";
@@ -27,6 +27,7 @@ import { bodyXWWWFormUrlencodedHandlers } from "./ipc/bodyXWWWFormUrlencodedHand
 import { bodyFormDataHandlers } from "./ipc/bodyFormDataHandlers.js";
 import { metaShowColumnHandlers } from "./ipc/metaShowColumnHandlers.js";
 import { apiUrlHandler } from "./ipc/apiUrlHandler.js";
+import { showHiddenMetaDataHandler } from "./ipc/showHiddenMetaDataHandler.js";
 
 export const userDataDir = app.getPath("userData");
 
@@ -88,7 +89,8 @@ app.whenReady().then(() => {
   folderHandlers();
   paramsHandlers();
   headersHandlers();
-  hiddenHeadersCheckTableHandler();
+  hiddenHeadersCheckHandler();
+  showHiddenMetaDataHandler();
   bodyRawHandler();
   bodyBinaryHandler();
   requestMetaTabHandler();

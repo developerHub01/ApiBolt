@@ -8,7 +8,6 @@ import { loadParams } from "@/context/redux/request-response/thunks/params";
 import { loadHeaders } from "@/context/redux/request-response/thunks/headers";
 import { loadBodyFormData } from "@/context/redux/request-response/thunks/body-form-data";
 import { loadBodyXWWWFormUrlencoded } from "@/context/redux/request-response/thunks/body-x-www-form-urlencoded";
-
 type LoaderThunk =
   | typeof loadParams
   | typeof loadHeaders

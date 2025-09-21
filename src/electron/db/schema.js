@@ -229,6 +229,23 @@ export const hiddenHeadersCheckTable = sqliteTable(
   }
 );
 
+export const showHiddenMetaDataTable = sqliteTable(
+  "show_hidden_meta_data_table",
+  {
+    id: text()
+      .primaryKey()
+      .$defaultFn(() => uuidv4()),
+    requestOrFolderMetaId: text()
+      .notNull()
+      .unique()
+      .references(() => requestOrFolderMetaTable.id, {
+        onDelete: "cascade",
+      }),
+    showHiddenParams: int({ mode: boolean }).default(0),
+    showHiddenHeaders: int({ mode: boolean }).default(0),
+  }
+);
+
 export const requestMetaTabTable = sqliteTable("request_meta_tab_table", {
   id: text()
     .primaryKey()

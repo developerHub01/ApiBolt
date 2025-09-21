@@ -175,13 +175,22 @@ contextBridge.exposeInMainWorld("electronAPIHeadersDB", {
     await ipcRenderer.invoke("checkAllHeadersByRequestMetaId", ...payload),
 });
 
-contextBridge.exposeInMainWorld("electronAPIHiddenHeadersCheckTableDB", {
+contextBridge.exposeInMainWorld("electronAPIHiddenHeadersCheckDB", {
   getHiddenHeadersCheck: async (...payload) =>
     await ipcRenderer.invoke("getHiddenHeadersCheck", ...payload),
   createHiddenHeadersCheck: async (...payload) =>
     await ipcRenderer.invoke("createHiddenHeadersCheck", ...payload),
   updateHiddenHeadersCheck: async (...payload) =>
     await ipcRenderer.invoke("updateHiddenHeadersCheck", ...payload),
+});
+
+contextBridge.exposeInMainWorld("electronAPIShowHiddenMetaDataDB", {
+  getShowHiddenMetaData: async (...payload) =>
+    await ipcRenderer.invoke("getShowHiddenMetaData", ...payload),
+  createShowHiddenMetaData: async (...payload) =>
+    await ipcRenderer.invoke("createShowHiddenMetaData", ...payload),
+  updateShowHiddenMetaData: async (...payload) =>
+    await ipcRenderer.invoke("updateShowHiddenMetaData", ...payload),
 });
 
 contextBridge.exposeInMainWorld("electronAPIBodyRawDB", {

@@ -12,6 +12,7 @@ import { loadBodyFormData } from "@/context/redux/request-response/thunks/body-f
 import { loadMetaShowColumn } from "@/context/redux/request-response/thunks/meta-show-column";
 import { loadApiUrl } from "@/context/redux/request-url/request-url-thunk";
 import { loadAuthorization } from "@/context/redux/request-response/thunks/auth";
+import { loadShowHiddenMetaData } from "@/context/redux/request-response/thunks/show-hidden-meta-data";
 
 const RequestLayout = () => {
   const dispatch = useAppDispatch();
@@ -25,6 +26,7 @@ const RequestLayout = () => {
       loadHeaders,
       loadRequestMetaTab,
       loadMetaShowColumn,
+      loadShowHiddenMetaData,
       loadBodyFormData,
       loadBodyXWWWFormUrlencoded,
       loadRequestBodyRaw,

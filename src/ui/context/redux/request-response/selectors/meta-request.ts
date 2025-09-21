@@ -240,3 +240,21 @@ export const selectRequestMetaShowColumn = createSelector(
     return metaShowColumn[selectedTab];
   }
 );
+
+export const selectShowHiddenMetaData = (type: "header" | "param") =>
+  createSelector(
+    [
+      (state: RootState) => state.requestResponse.selectedTab!,
+      (state: RootState) => state.requestResponse.showHiddenParams,
+      (state: RootState) => state.requestResponse.showHiddenHeaders,
+    ],
+    (selectedTab, showHiddenParams, showHiddenHeaders): boolean => {
+      if (!selectedTab) return false;
+
+      return (
+        (type === "header"
+          ? showHiddenHeaders[selectedTab]
+          : showHiddenParams[selectedTab]) ?? false
+      );
+    }
+  );

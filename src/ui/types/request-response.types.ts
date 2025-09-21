@@ -106,6 +106,11 @@ export interface HiddenHeadersCheckInterface {
   connection: boolean;
 }
 
+export interface ShowHiddenMetaInterface {
+  showHiddenParams: boolean;
+  showHiddenHeaders: boolean;
+}
+
 export interface FormDataInterface
   extends ParamInterface<string | Array<string>> {
   contentType?: string;

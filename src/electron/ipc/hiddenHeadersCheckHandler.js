@@ -3,9 +3,9 @@ import {
   createHiddenHeadersCheck,
   getHiddenHeadersCheck,
   updateHiddenHeadersCheck,
-} from "../db/hiddenHeadersCheckTableDB.js";
+} from "../db/hiddenHeadersCheckDB.js";
 
-export const hiddenHeadersCheckTableHandler = () => {
+export const hiddenHeadersCheckHandler = () => {
   ipcMain.handle(
     "getHiddenHeadersCheck",
     async (_, ...rest) => await getHiddenHeadersCheck(...rest)

@@ -288,6 +288,13 @@
       "when": 1758372440532,
       "tag": "0040_regular_microbe",
       "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "6",
+      "when": 1758463211664,
+      "tag": "0041_first_silver_sable",
+      "breakpoints": true
     }
   ]
 }

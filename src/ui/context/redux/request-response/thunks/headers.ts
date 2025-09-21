@@ -163,7 +163,7 @@ export const updateHiddenHeaders = createAsyncThunk<
     ]?.find((header) => header.isCheck);
 
     const response =
-      await window.electronAPIHiddenHeadersCheckTableDB.updateHiddenHeadersCheck(
+      await window.electronAPIHiddenHeadersCheckDB.updateHiddenHeadersCheck(
         {
           [keyName]: newValue,
         }

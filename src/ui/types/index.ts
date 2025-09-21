@@ -13,6 +13,7 @@ import type {
   RequestTabInterface,
   ResponseFolderDataInterface,
   ResponseInterface,
+  ShowHiddenMetaInterface,
 } from "@/types/request-response.types";
 import type {
   ProjectSettingsInterface,
@@ -213,7 +214,7 @@ declare global {
       ): Promise<boolean>;
     };
 
-    electronAPIHiddenHeadersCheckTableDB: {
+    electronAPIHiddenHeadersCheckDB: {
       getHiddenHeadersCheck(id?: string): Promise<HiddenHeadersCheckInterface>;
       createHiddenHeadersCheck(
         paramId: string
@@ -221,6 +222,20 @@ declare global {
       updateHiddenHeadersCheck(
         payload: Partial<HiddenHeadersCheckInterface>
       ): Promise<Partial<HiddenHeadersCheckInterface>>;
+    };
+
+    electronAPIShowHiddenMetaDataDB: {
+      getShowHiddenMetaData(id?: string): Promise<ShowHiddenMetaInterface>;
+      createShowHiddenMetaData(
+        paramId: string
+      ): Promise<Partial<ShowHiddenMetaInterface>>;
+      updateShowHiddenMetaData(
+        payload: Partial<
+          ShowHiddenMetaInterface & {
+            requestOrFolderMetaId: string;
+          }
+        >
+      ): Promise<Partial<ShowHiddenMetaInterface>>;
     };
 
     electronAPIBodyRawDB: {
