@@ -16,26 +16,30 @@ export const loadBodyXWWWFormUrlencoded = createAsyncThunk<
 >(
   "request-response/loadBodyXWWWFormUrlencoded",
   async (payload, { getState, dispatch }) => {
-    if (!payload) payload = {};
+    try {
+      if (!payload) payload = {};
 
-    let selectedTab = payload.requestId;
-    const once = payload.once ?? false;
+      let selectedTab = payload.requestId;
+      const once = payload.once ?? false;
 
-    const state = getState() as RootState;
+      const state = getState() as RootState;
 
-    if (!selectedTab) selectedTab = state.requestResponse.selectedTab;
-    if (
-      !selectedTab ||
-      (state.requestResponse.xWWWFormUrlencodedData[selectedTab] && once)
-    )
-      return;
+      if (!selectedTab) selectedTab = state.requestResponse.selectedTab;
+      if (
+        !selectedTab ||
+        (state.requestResponse.xWWWFormUrlencodedData[selectedTab] && once)
+      )
+        return;
 
-    const response =
-      await window.electronAPIBodyXWWWFormUrlencodedDB.getBodyXWWWFormUrlencoded(
-        selectedTab
-      );
+      const response =
+        await window.electronAPIBodyXWWWFormUrlencodedDB.getBodyXWWWFormUrlencoded(
+          selectedTab
+        );
 
-    dispatch(handleLoadBodyXWWWFormUrlencoded(response));
+      dispatch(handleLoadBodyXWWWFormUrlencoded(response));
+    } catch (error) {
+      console.log(error);
+    }
   }
 );
 
@@ -49,20 +53,24 @@ export const addBodyXWWWFormUrlencoded = createAsyncThunk<
 >(
   "request-response/addBodyXWWWFormUrlencoded",
   async (payload, { getState, dispatch }) => {
-    const state = getState() as RootState;
+    try {
+      const state = getState() as RootState;
 
-    const selectedTab = state.requestResponse.selectedTab;
-    if (!selectedTab) return false;
+      const selectedTab = state.requestResponse.selectedTab;
+      if (!selectedTab) return false;
 
-    if (!payload) payload = {};
-    const response =
-      await window.electronAPIBodyXWWWFormUrlencodedDB.createBodyXWWWFormUrlencoded(
-        payload
-      );
+      if (!payload) payload = {};
+      const response =
+        await window.electronAPIBodyXWWWFormUrlencodedDB.createBodyXWWWFormUrlencoded(
+          payload
+        );
 
-    if (response) dispatch(loadBodyXWWWFormUrlencoded());
-
-    return response;
+      if (response) dispatch(loadBodyXWWWFormUrlencoded());
+      return response;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   }
 );
 
@@ -76,18 +84,23 @@ export const deleteBodyXWWWFormUrlencoded = createAsyncThunk<
 >(
   "request-response/deleteBodyXWWWFormUrlencoded",
   async (id, { getState, dispatch }) => {
-    const state = getState() as RootState;
+    try {
+      const state = getState() as RootState;
 
-    const selectedTab = state.requestResponse.selectedTab;
-    if (!selectedTab) return false;
+      const selectedTab = state.requestResponse.selectedTab;
+      if (!selectedTab) return false;
 
-    const response =
-      await window.electronAPIBodyXWWWFormUrlencodedDB.deleteBodyXWWWFormUrlencoded(
-        id
-      );
+      const response =
+        await window.electronAPIBodyXWWWFormUrlencodedDB.deleteBodyXWWWFormUrlencoded(
+          id
+        );
 
-    if (response) dispatch(loadBodyXWWWFormUrlencoded());
-    return response;
+      if (response) dispatch(loadBodyXWWWFormUrlencoded());
+      return response;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   }
 );
 
@@ -101,18 +114,23 @@ export const deleteBodyXWWWFormUrlencodedByRequestMetaId = createAsyncThunk<
 >(
   "request-response/deleteBodyXWWWFormUrlencodedByRequestMetaId",
   async (id, { getState, dispatch }) => {
-    const state = getState() as RootState;
-    if (!id) id = state.requestResponse.selectedTab;
+    try {
+      const state = getState() as RootState;
+      if (!id) id = state.requestResponse.selectedTab;
 
-    if (!id) return false;
+      if (!id) return false;
 
-    const response =
-      await window.electronAPIBodyXWWWFormUrlencodedDB.deleteBodyXWWWFormUrlencodedByRequestMetaId(
-        id
-      );
+      const response =
+        await window.electronAPIBodyXWWWFormUrlencodedDB.deleteBodyXWWWFormUrlencodedByRequestMetaId(
+          id
+        );
 
-    if (response) dispatch(handleLoadBodyXWWWFormUrlencoded([]));
-    return response;
+      if (response) dispatch(handleLoadBodyXWWWFormUrlencoded([]));
+      return response;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   }
 );
 
@@ -129,14 +147,19 @@ export const updateBodyXWWWFormUrlencoded = createAsyncThunk<
 >(
   "request-response/updateBodyXWWWFormUrlencoded",
   async ({ paramId, payload }, { dispatch }) => {
-    const response =
-      await window.electronAPIBodyXWWWFormUrlencodedDB.updateBodyXWWWFormUrlencoded(
-        paramId,
-        payload
-      );
+    try {
+      const response =
+        await window.electronAPIBodyXWWWFormUrlencodedDB.updateBodyXWWWFormUrlencoded(
+          paramId,
+          payload
+        );
 
-    if (response) dispatch(loadBodyXWWWFormUrlencoded());
-    return response;
+      if (response) dispatch(loadBodyXWWWFormUrlencoded());
+      return response;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   }
 );
 
@@ -150,15 +173,20 @@ export const checkAllBodyXWWWFormUrlencodedByRequestMetaId = createAsyncThunk<
 >(
   "request-response/checkAllBodyXWWWFormUrlencodedByRequestMetaId",
   async (requestOrFolderMetaId, { dispatch }) => {
-    const response =
-      await window.electronAPIBodyXWWWFormUrlencodedDB.checkAllBodyXWWWFormUrlencodedByRequestMetaId(
-        requestOrFolderMetaId
-      );
+    try {
+      const response =
+        await window.electronAPIBodyXWWWFormUrlencodedDB.checkAllBodyXWWWFormUrlencodedByRequestMetaId(
+          requestOrFolderMetaId
+        );
 
-    if (response) dispatch(loadBodyXWWWFormUrlencoded());
-    return response;
+      if (response) dispatch(loadBodyXWWWFormUrlencoded());
+      return response;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   }
 );
 /* ==============================
-======== BodyXWWWFormUrlencoded end =============
+  ======== BodyXWWWFormUrlencoded end =============
 ================================= */

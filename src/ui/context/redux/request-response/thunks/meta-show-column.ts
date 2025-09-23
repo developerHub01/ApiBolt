@@ -16,24 +16,28 @@ export const loadMetaShowColumn = createAsyncThunk<
 >(
   "request-response/loadMetaShowColumn",
   async (payload, { getState, dispatch }) => {
-    if (!payload) payload = {};
+    try {
+      if (!payload) payload = {};
 
-    let selectedTab = payload.requestId;
-    const once = payload.once ?? false;
+      let selectedTab = payload.requestId;
+      const once = payload.once ?? false;
 
-    const state = getState() as RootState;
+      const state = getState() as RootState;
 
-    if (!selectedTab) selectedTab = state.requestResponse.selectedTab;
-    if (
-      !selectedTab ||
-      (state.requestResponse.metaShowColumn[selectedTab] && once)
-    )
-      return;
+      if (!selectedTab) selectedTab = state.requestResponse.selectedTab;
+      if (
+        !selectedTab ||
+        (state.requestResponse.metaShowColumn[selectedTab] && once)
+      )
+        return;
 
-    const response =
-      await window.electronAPIMetaShowColumnDB.getMetaShowColumn(selectedTab);
+      const response =
+        await window.electronAPIMetaShowColumnDB.getMetaShowColumn(selectedTab);
 
-    dispatch(handleLoadMetaShowColumn(response));
+      dispatch(handleLoadMetaShowColumn(response));
+    } catch (error) {
+      console.log(error);
+    }
   }
 );
 
@@ -45,12 +49,17 @@ export const updateMetaShowColumn = createAsyncThunk<
     state: RootState;
   }
 >("request-response/updateMetaShowColumn", async (payload, { dispatch }) => {
-  const response =
-    await window.electronAPIMetaShowColumnDB.updateMetaShowColumn(payload);
+  try {
+    const response =
+      await window.electronAPIMetaShowColumnDB.updateMetaShowColumn(payload);
 
-  if (response) dispatch(loadMetaShowColumn());
-  return response;
+    if (response) dispatch(loadMetaShowColumn());
+    return response;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 });
 /* ==============================
-======== MetaShowColumn end =============
-================================= */
+  ======== MetaShowColumn end =============
+  ================================= */

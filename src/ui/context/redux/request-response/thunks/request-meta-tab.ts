@@ -19,26 +19,30 @@ export const loadRequestMetaTab = createAsyncThunk<
 >(
   "request-response/loadRequestMetaTab",
   async (payload, { dispatch, getState }) => {
-    if (!payload) payload = {};
+    try {
+      if (!payload) payload = {};
 
-    const once = payload.once ?? false;
-    const state = getState() as RootState;
+      const once = payload.once ?? false;
+      const state = getState() as RootState;
 
-    const selectedTab = state.requestResponse.selectedTab;
-    if (
-      !selectedTab ||
-      ([
-        state.requestResponse.activeMetaTab[selectedTab],
-        state.requestResponse.requestBodyType[selectedTab],
-      ].every((data) => typeof data !== "undefined") &&
-        once)
-    )
-      return;
+      const selectedTab = state.requestResponse.selectedTab;
+      if (
+        !selectedTab ||
+        ([
+          state.requestResponse.activeMetaTab[selectedTab],
+          state.requestResponse.requestBodyType[selectedTab],
+        ].every((data) => typeof data !== "undefined") &&
+          once)
+      )
+        return;
 
-    const response =
-      await window.electronAPIRequestMetaTabDB.getRequestMetaTab();
+      const response =
+        await window.electronAPIRequestMetaTabDB.getRequestMetaTab();
 
-    dispatch(handleLoadReqestMetaTab(response));
+      dispatch(handleLoadReqestMetaTab(response));
+    } catch (error) {
+      console.log(error);
+    }
   }
 );
 
@@ -50,16 +54,20 @@ export const updateRequestMetaTab = createAsyncThunk<
     state: RootState;
   }
 >("request-response/updateRequestMetaTab", async (payload, { dispatch }) => {
-  const response =
-    await window.electronAPIRequestMetaTabDB.updateRequestMetaTab(payload);
+  try {
+    const response =
+      await window.electronAPIRequestMetaTabDB.updateRequestMetaTab(payload);
 
-  if (response)
-    dispatch(
-      handleUpdateReqestMetaTab({
-        ...payload,
-      })
-    );
-  return;
+    if (response)
+      dispatch(
+        handleUpdateReqestMetaTab({
+          ...payload,
+        })
+      );
+    return;
+  } catch (error) {
+    console.log(error);
+  }
 });
 /* ==============================
 ======== ReqestMetaTab end =============

@@ -16,21 +16,24 @@ export const loadBodyFormData = createAsyncThunk<
 >(
   "request-response/loadBodyFormData",
   async (payload, { getState, dispatch }) => {
-    if (!payload) payload = {};
+    try {
+      if (!payload) payload = {};
 
-    let selectedTab = payload.requestId;
-    const once = payload.once ?? false;
+      let selectedTab = payload.requestId;
+      const once = payload.once ?? false;
 
-    const state = getState() as RootState;
+      const state = getState() as RootState;
 
-    if (!selectedTab) selectedTab = state.requestResponse.selectedTab;
-    if (!selectedTab || (state.requestResponse.formData[selectedTab] && once))
-      return;
+      if (!selectedTab) selectedTab = state.requestResponse.selectedTab;
+      if (!selectedTab || (state.requestResponse.formData[selectedTab] && once))
+        return;
 
-    const response =
-      await window.electronAPIBodyFormDataDB.getBodyFormData(selectedTab);
-
-    dispatch(handleLoadBodyFormData(response));
+      const response =
+        await window.electronAPIBodyFormDataDB.getBodyFormData(selectedTab);
+      dispatch(handleLoadBodyFormData(response));
+    } catch (error) {
+      console.log(error);
+    }
   }
 );
 
@@ -44,18 +47,22 @@ export const addBodyFormData = createAsyncThunk<
 >(
   "request-response/addBodyFormData",
   async (payload, { getState, dispatch }) => {
-    const state = getState() as RootState;
+    try {
+      const state = getState() as RootState;
 
-    const selectedTab = state.requestResponse.selectedTab;
-    if (!selectedTab) return false;
+      const selectedTab = state.requestResponse.selectedTab;
+      if (!selectedTab) return false;
 
-    if (!payload) payload = {};
-    const response =
-      await window.electronAPIBodyFormDataDB.createBodyFormData(payload);
+      if (!payload) payload = {};
+      const response =
+        await window.electronAPIBodyFormDataDB.createBodyFormData(payload);
 
-    if (response) dispatch(loadBodyFormData());
-
-    return response;
+      if (response) dispatch(loadBodyFormData());
+      return response;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   }
 );
 
@@ -67,16 +74,21 @@ export const deleteBodyFormData = createAsyncThunk<
     state: RootState;
   }
 >("request-response/deleteBodyFormData", async (id, { getState, dispatch }) => {
-  const state = getState() as RootState;
+  try {
+    const state = getState() as RootState;
 
-  const selectedTab = state.requestResponse.selectedTab;
-  if (!selectedTab) return false;
+    const selectedTab = state.requestResponse.selectedTab;
+    if (!selectedTab) return false;
 
-  const response =
-    await window.electronAPIBodyFormDataDB.deleteBodyFormData(id);
+    const response =
+      await window.electronAPIBodyFormDataDB.deleteBodyFormData(id);
 
-  if (response) dispatch(loadBodyFormData());
-  return response;
+    if (response) dispatch(loadBodyFormData());
+    return response;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 });
 
 export const deleteBodyFormDataByRequestMetaId = createAsyncThunk<
@@ -89,18 +101,23 @@ export const deleteBodyFormDataByRequestMetaId = createAsyncThunk<
 >(
   "request-response/deleteBodyFormDataByRequestMetaId",
   async (id, { getState, dispatch }) => {
-    const state = getState() as RootState;
-    if (!id) id = state.requestResponse.selectedTab;
+    try {
+      const state = getState() as RootState;
+      if (!id) id = state.requestResponse.selectedTab;
 
-    if (!id) return false;
+      if (!id) return false;
 
-    const response =
-      await window.electronAPIBodyFormDataDB.deleteBodyFormDataByRequestMetaId(
-        id
-      );
+      const response =
+        await window.electronAPIBodyFormDataDB.deleteBodyFormDataByRequestMetaId(
+          id
+        );
 
-    if (response) dispatch(handleLoadBodyFormData([]));
-    return response;
+      if (response) dispatch(handleLoadBodyFormData([]));
+      return response;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   }
 );
 
@@ -117,11 +134,19 @@ export const deleteBodyFormDataFile = createAsyncThunk<
 >(
   "request-response/deleteBodyFormDataFile",
   async ({ id, index }, { dispatch }) => {
-    const response =
-      await window.electronAPIBodyFormDataDB.deleteBodyFormDataFile(id, index);
+    try {
+      const response =
+        await window.electronAPIBodyFormDataDB.deleteBodyFormDataFile(
+          id,
+          index
+        );
 
-    if (response) dispatch(loadBodyFormData());
-    return response;
+      if (response) dispatch(loadBodyFormData());
+      return response;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   }
 );
 
@@ -138,13 +163,19 @@ export const updateBodyFormData = createAsyncThunk<
 >(
   "request-response/updateBodyFormData",
   async ({ paramId, payload }, { dispatch }) => {
-    const response = await window.electronAPIBodyFormDataDB.updateBodyFormData(
-      paramId,
-      payload
-    );
+    try {
+      const response =
+        await window.electronAPIBodyFormDataDB.updateBodyFormData(
+          paramId,
+          payload
+        );
 
-    if (response) dispatch(loadBodyFormData());
-    return response;
+      if (response) dispatch(loadBodyFormData());
+      return response;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   }
 );
 
@@ -156,11 +187,16 @@ export const updateBodyFormDataFile = createAsyncThunk<
     state: RootState;
   }
 >("request-response/updateBodyFormDataFile", async (paramId, { dispatch }) => {
-  const response =
-    await window.electronAPIBodyFormDataDB.updateBodyFormDataFile(paramId);
+  try {
+    const response =
+      await window.electronAPIBodyFormDataDB.updateBodyFormDataFile(paramId);
 
-  if (response) dispatch(loadBodyFormData());
-  return response;
+    if (response) dispatch(loadBodyFormData());
+    return response;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 });
 
 export const checkAllBodyFormDataByRequestMetaId = createAsyncThunk<
@@ -173,13 +209,18 @@ export const checkAllBodyFormDataByRequestMetaId = createAsyncThunk<
 >(
   "request-response/checkAllBodyFormDataByRequestMetaId",
   async (requestOrFolderMetaId, { dispatch }) => {
-    const response =
-      await window.electronAPIBodyFormDataDB.checkAllBodyFormDataByRequestMetaId(
-        requestOrFolderMetaId
-      );
+    try {
+      const response =
+        await window.electronAPIBodyFormDataDB.checkAllBodyFormDataByRequestMetaId(
+          requestOrFolderMetaId
+        );
 
-    if (response) dispatch(loadBodyFormData());
-    return response;
+      if (response) dispatch(loadBodyFormData());
+      return response;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   }
 );
 /* ==============================

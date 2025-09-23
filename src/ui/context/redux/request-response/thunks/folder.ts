@@ -18,30 +18,34 @@ export const loadFolder = createAsyncThunk<
     state: RootState;
   }
 >("request-response/loadFolder", async (payload, { getState, dispatch }) => {
-  if (!payload) payload = {};
+  try {
+    if (!payload) payload = {};
 
-  let selectedTab = payload.requestId;
-  const once = payload.once ?? false;
+    let selectedTab = payload.requestId;
+    const once = payload.once ?? false;
 
-  const state = getState() as RootState;
+    const state = getState() as RootState;
 
-  if (!selectedTab) selectedTab = state.requestResponse.selectedTab;
-  if (
-    !selectedTab ||
-    /* if that requestOrFolder have a method means that is a request so no need to call folder details */
-    state.requestResponse.requestList[selectedTab]?.method ||
-    (state.requestResponse.loadedRequestList[selectedTab] && once)
-  )
-    return;
+    if (!selectedTab) selectedTab = state.requestResponse.selectedTab;
+    if (
+      !selectedTab ||
+      /* if that requestOrFolder have a method means that is a request so no need to call folder details */
+      state.requestResponse.requestList[selectedTab]?.method ||
+      (state.requestResponse.loadedRequestList[selectedTab] && once)
+    )
+      return;
 
-  const response = await window.electronAPIFolderDB.getFolder(selectedTab);
+    const response = await window.electronAPIFolderDB.getFolder(selectedTab);
 
-  dispatch(
-    handleLoadFolder({
-      id: selectedTab,
-      payload: response,
-    })
-  );
+    dispatch(
+      handleLoadFolder({
+        id: selectedTab,
+        payload: response,
+      })
+    );
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 export const updateFolder = createAsyncThunk<
@@ -54,34 +58,38 @@ export const updateFolder = createAsyncThunk<
     state: RootState;
   }
 >("request-response/updateFolder", async (payload, { dispatch, getState }) => {
-  let selectedTab = payload.requestOrFolderMetaId;
+  try {
+    let selectedTab = payload.requestOrFolderMetaId;
 
-  const state = getState() as RootState;
+    const state = getState() as RootState;
 
-  selectedTab = selectedTab ?? state.requestResponse.selectedTab ?? undefined;
-  if (!selectedTab) return false;
+    selectedTab = selectedTab ?? state.requestResponse.selectedTab ?? undefined;
+    if (!selectedTab) return false;
 
-  const existingData = {
-    title: state.requestResponse.folderTitle[selectedTab],
-    description: state.requestResponse.folderDescription[selectedTab],
-  };
-  const areSame = areSamePayload(payload, existingData);
-  if (areSame) return true;
+    const existingData = {
+      title: state.requestResponse.folderTitle[selectedTab],
+      description: state.requestResponse.folderDescription[selectedTab],
+    };
+    const areSame = areSamePayload(payload, existingData);
+    if (areSame) return true;
 
-  const response = await window.electronAPIFolderDB.updateFolder(payload);
+    const response = await window.electronAPIFolderDB.updateFolder(payload);
 
-  delete payload["requestOrFolderMetaId"];
+    delete payload["requestOrFolderMetaId"];
 
-  if (response) {
-    dispatch(
-      handleUpdateFolder({
-        id: selectedTab,
-        payload,
-      })
-    );
+    if (response) {
+      dispatch(
+        handleUpdateFolder({
+          id: selectedTab,
+          payload,
+        })
+      );
+    }
+    return response;
+  } catch (error) {
+    console.log(error);
+    return false;
   }
-
-  return response;
 });
 
 /* ==============================

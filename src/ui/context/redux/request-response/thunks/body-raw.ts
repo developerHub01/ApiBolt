@@ -16,24 +16,28 @@ export const loadRequestBodyRaw = createAsyncThunk<
 >(
   "request-response/loadRequestBodyRaw",
   async (payload, { dispatch, getState }) => {
-    if (!payload) payload = {};
+    try {
+      if (!payload) payload = {};
 
-    const once = payload.once ?? false;
+      const once = payload.once ?? false;
 
-    const state = getState() as RootState;
+      const state = getState() as RootState;
 
-    const selectedTab = state.requestResponse.selectedTab;
-    if (
-      !selectedTab ||
-      (typeof state.requestResponse.rawData[selectedTab] !== "undefined" &&
-        once)
-    )
+      const selectedTab = state.requestResponse.selectedTab;
+      if (
+        !selectedTab ||
+        (typeof state.requestResponse.rawData[selectedTab] !== "undefined" &&
+          once)
+      )
+        return;
+
+      const response = await window.electronAPIBodyRawDB.getBodyRaw();
+
+      if (response) dispatch(handleLoadBodyRaw(response));
       return;
-
-    const response = await window.electronAPIBodyRawDB.getBodyRaw();
-
-    if (response) dispatch(handleLoadBodyRaw(response));
-    return;
+    } catch (error) {
+      console.log(error);
+    }
   }
 );
 export const updateRequestBodyRaw = createAsyncThunk<
@@ -46,23 +50,27 @@ export const updateRequestBodyRaw = createAsyncThunk<
 >(
   "request-response/updateRequestBodyRaw",
   async (payload, { dispatch, getState }) => {
-    if (!payload) payload = {};
+    try {
+      if (!payload) payload = {};
 
-    const state = getState() as RootState;
+      const state = getState() as RootState;
 
-    const selectedTab = state.requestResponse.selectedTab;
+      const selectedTab = state.requestResponse.selectedTab;
 
-    const response = await window.electronAPIBodyRawDB.updateBodyRaw({
-      ...payload,
-      ...(selectedTab
-        ? {
-            requestOrFolderMetaId: selectedTab,
-          }
-        : {}),
-    });
+      const response = await window.electronAPIBodyRawDB.updateBodyRaw({
+        ...payload,
+        ...(selectedTab
+          ? {
+              requestOrFolderMetaId: selectedTab,
+            }
+          : {}),
+      });
 
-    if (response) dispatch(loadRequestBodyRaw());
-    return;
+      if (response) dispatch(loadRequestBodyRaw());
+      return;
+    } catch (error) {
+      console.log(error);
+    }
   }
 );
 /* ==============================

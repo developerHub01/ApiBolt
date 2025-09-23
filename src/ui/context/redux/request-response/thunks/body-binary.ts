@@ -15,21 +15,25 @@ export const loadRequestBodyBinary = createAsyncThunk<
 >(
   "request-response/loadRequestBodyBinary",
   async (payload, { dispatch, getState }) => {
-    if (!payload) payload = {};
+    try {
+      if (!payload) payload = {};
 
-    const once = payload.once ?? false;
-    const state = getState() as RootState;
+      const once = payload.once ?? false;
+      const state = getState() as RootState;
 
-    const selectedTab = state.requestResponse.selectedTab;
-    if (
-      !selectedTab ||
-      (typeof state.requestResponse.rawData[selectedTab] !== "undefined" &&
-        once)
-    )
-      return;
+      const selectedTab = state.requestResponse.selectedTab;
+      if (
+        !selectedTab ||
+        (typeof state.requestResponse.rawData[selectedTab] !== "undefined" &&
+          once)
+      )
+        return;
 
-    const response = await window.electronAPIBodyBinaryDB.getBodyBinary();
-    dispatch(handleLoadBodyBinary(response?.file));
+      const response = await window.electronAPIBodyBinaryDB.getBodyBinary();
+      dispatch(handleLoadBodyBinary(response?.file));
+    } catch (error) {
+      console.log(error);
+    }
   }
 );
 
@@ -41,10 +45,14 @@ export const updateRequestBodyBinary = createAsyncThunk<
     state: RootState;
   }
 >("request-response/updateRequestBodyBinary", async (_, { dispatch }) => {
-  const response = await window.electronAPIBodyBinaryDB.updateBodyBinary();
+  try {
+    const response = await window.electronAPIBodyBinaryDB.updateBodyBinary();
 
-  if (response) dispatch(loadRequestBodyBinary());
-  return;
+    if (response) dispatch(loadRequestBodyBinary());
+    return;
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 export const deleteRequestBodyBinary = createAsyncThunk<
@@ -55,10 +63,14 @@ export const deleteRequestBodyBinary = createAsyncThunk<
     state: RootState;
   }
 >("request-response/deleteRequestBodyBinary", async (_, { dispatch }) => {
-  const response = await window.electronAPIBodyBinaryDB.deleteBodyBinary();
+  try {
+    const response = await window.electronAPIBodyBinaryDB.deleteBodyBinary();
 
-  if (response) dispatch(loadRequestBodyBinary());
-  return;
+    if (response) dispatch(loadRequestBodyBinary());
+    return;
+  } catch (error) {
+    console.log(error);
+  }
 });
 /* ==============================
 ======== Body binary end =============

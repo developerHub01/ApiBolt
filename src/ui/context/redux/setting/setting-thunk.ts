@@ -1,7 +1,6 @@
 import type {
   ProjectSettingsInterface,
   SettingsInterface,
-  SettingsTotalInterface,
   TKeyboardShortcutKey,
   UpdateBackgroundImagePayloadInterface,
 } from "@/types/setting.types";
@@ -22,18 +21,20 @@ import { calculateIntoFixedPoint } from "@/utils";
 import { checkApplyingZoomable } from "@/utils/settings.utils";
 
 export const loadSettings = createAsyncThunk<
-  SettingsTotalInterface,
+  void,
   void,
   {
     dispatch: AppDispatch;
     state: RootState;
   }
 >("request-response/loadSettings", async (_, { dispatch }) => {
-  const response = await window.electronAPISettingsDB.getSettings();
+  try {
+    const response = await window.electronAPISettingsDB.getSettings();
 
-  dispatch(handleLoadSettings(response));
-
-  return response;
+    dispatch(handleLoadSettings(response));
+  } catch (error) {
+    console.log(error);
+  }
 });
 export const updateSettings = createAsyncThunk<
   boolean,
@@ -43,16 +44,21 @@ export const updateSettings = createAsyncThunk<
     state: RootState;
   }
 >("request-response/updateSettings", async (payload, { dispatch }) => {
-  const response = await window.electronAPISettingsDB.updateSettings(payload);
+  try {
+    const response = await window.electronAPISettingsDB.updateSettings(payload);
 
-  dispatch(
-    handleUpdateSettings({
-      type: payload.projectId ? "project" : "global",
-      payload,
-    })
-  );
+    dispatch(
+      handleUpdateSettings({
+        type: payload.projectId ? "project" : "global",
+        payload,
+      })
+    );
 
-  return response;
+    return response;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 });
 export const updateSettingsZoomByKeyboard = createAsyncThunk<
   boolean,
@@ -64,53 +70,61 @@ export const updateSettingsZoomByKeyboard = createAsyncThunk<
 >(
   "request-response/updateSettingsZoomByKeyboard",
   async (type, { dispatch, getState }) => {
-    const state = getState() as RootState;
+    try {
+      const state = getState() as RootState;
 
-    const activeProjectId = state.requestResponse.activeProjectId ?? null;
+      const activeProjectId = state.requestResponse.activeProjectId ?? null;
 
-    /* first checking do we can zoom? based on the local(project based), global, default */
-    const isZoomable = checkApplyingZoomable({
-      activeProjectId,
-      isZoomableLocal: state.setting.settings?.isZoomable,
-      isZoomableGlobal: state.setting.globalSetting?.isZoomable,
-      defaultZoomable: DEFAULT_SETTINGS.isZoomable,
-    });
+      /* first checking do we can zoom? based on the local(project based), global, default */
+      const isZoomable = checkApplyingZoomable({
+        activeProjectId,
+        isZoomableLocal: state.setting.settings?.isZoomable,
+        isZoomableGlobal: state.setting.globalSetting?.isZoomable,
+        defaultZoomable: DEFAULT_SETTINGS.isZoomable,
+      });
 
-    if (!isZoomable) return false;
+      if (!isZoomable) return false;
 
-    const oldZoomLevel =
-      (state.setting.settings || state.setting.globalSetting).zoomLevel ?? 1;
+      const oldZoomLevel =
+        (state.setting.settings || state.setting.globalSetting).zoomLevel ?? 1;
 
-    /* first updating level basded on keybord key then normalizing between min and max elvel */
-    const newZoomLevel = Math.max(
-      Math.min(
-        type === "+"
-          ? calculateIntoFixedPoint(oldZoomLevel + STEP_AMOUNT_ZOOM_LEVEL, 1)
-          : type === "-"
-            ? calculateIntoFixedPoint(oldZoomLevel - STEP_AMOUNT_ZOOM_LEVEL, 1)
-            : DEFAULT_ZOOM_LEVEL,
-        MAX_ZOOM_LEVEL
-      ),
-      MIN_ZOOM_LEVEL
-    );
+      /* first updating level basded on keybord key then normalizing between min and max elvel */
+      const newZoomLevel = Math.max(
+        Math.min(
+          type === "+"
+            ? calculateIntoFixedPoint(oldZoomLevel + STEP_AMOUNT_ZOOM_LEVEL, 1)
+            : type === "-"
+              ? calculateIntoFixedPoint(
+                  oldZoomLevel - STEP_AMOUNT_ZOOM_LEVEL,
+                  1
+                )
+              : DEFAULT_ZOOM_LEVEL,
+          MAX_ZOOM_LEVEL
+        ),
+        MIN_ZOOM_LEVEL
+      );
 
-    if (oldZoomLevel === newZoomLevel) return false;
+      if (oldZoomLevel === newZoomLevel) return false;
 
-    const response = await window.electronAPISettingsDB.updateSettings({
-      zoomLevel: newZoomLevel,
-      projectId: activeProjectId,
-    });
+      const response = await window.electronAPISettingsDB.updateSettings({
+        zoomLevel: newZoomLevel,
+        projectId: activeProjectId,
+      });
 
-    dispatch(
-      handleUpdateSettings({
-        type: activeProjectId ? "project" : "global",
-        payload: {
-          zoomLevel: newZoomLevel,
-        },
-      })
-    );
+      dispatch(
+        handleUpdateSettings({
+          type: activeProjectId ? "project" : "global",
+          payload: {
+            zoomLevel: newZoomLevel,
+          },
+        })
+      );
 
-    return response;
+      return response;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   }
 );
 export const updateSettingsBackgroundImages = createAsyncThunk<
@@ -125,18 +139,23 @@ export const updateSettingsBackgroundImages = createAsyncThunk<
 >(
   "request-response/updateSettingsBackgroundImages",
   async ({ type, method }, { dispatch, getState }) => {
-    const state = getState() as RootState;
+    try {
+      const state = getState() as RootState;
 
-    const activeProjectId = state.requestResponse.activeProjectId ?? null;
+      const activeProjectId = state.requestResponse.activeProjectId ?? null;
 
-    const response =
-      await window.electronAPISettingsDB.updateSettingsBackgroundImages({
-        projectId: type === "global" ? null : activeProjectId,
-        method,
-      });
+      const response =
+        await window.electronAPISettingsDB.updateSettingsBackgroundImages({
+          projectId: type === "global" ? null : activeProjectId,
+          method,
+        });
 
-    if (response) await dispatch(loadSettings());
+      if (response) await dispatch(loadSettings());
 
-    return response;
+      return response;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   }
 );

@@ -20,20 +20,24 @@ export const loadHeaders = createAsyncThunk<
     state: RootState;
   }
 >("request-response/loadHeaders", async (payload, { getState, dispatch }) => {
-  if (!payload) payload = {};
+  try {
+    if (!payload) payload = {};
 
-  let selectedTab = payload.requestId;
-  const once = payload.once ?? false;
+    let selectedTab = payload.requestId;
+    const once = payload.once ?? false;
 
-  const state = getState() as RootState;
+    const state = getState() as RootState;
 
-  if (!selectedTab) selectedTab = state.requestResponse.selectedTab;
-  if (!selectedTab || (state.requestResponse.headers[selectedTab] && once))
-    return;
+    if (!selectedTab) selectedTab = state.requestResponse.selectedTab;
+    if (!selectedTab || (state.requestResponse.headers[selectedTab] && once))
+      return;
 
-  const response = await window.electronAPIHeadersDB.getHeaders(selectedTab);
+    const response = await window.electronAPIHeadersDB.getHeaders(selectedTab);
 
-  dispatch(handleLoadHeaders(response));
+    dispatch(handleLoadHeaders(response));
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 export const addHeaders = createAsyncThunk<
@@ -44,17 +48,22 @@ export const addHeaders = createAsyncThunk<
     state: RootState;
   }
 >("request-response/addHeaders", async (payload, { getState, dispatch }) => {
-  const state = getState() as RootState;
+  try {
+    const state = getState() as RootState;
 
-  const selectedTab = state.requestResponse.selectedTab;
-  if (!selectedTab) return false;
+    const selectedTab = state.requestResponse.selectedTab;
+    if (!selectedTab) return false;
 
-  if (!payload) payload = {};
-  const response = await window.electronAPIHeadersDB.createHeaders(payload);
+    if (!payload) payload = {};
+    const response = await window.electronAPIHeadersDB.createHeaders(payload);
 
-  if (response) dispatch(loadHeaders());
+    if (response) dispatch(loadHeaders());
 
-  return response;
+    return response;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 });
 
 export const deleteHeaders = createAsyncThunk<
@@ -65,15 +74,20 @@ export const deleteHeaders = createAsyncThunk<
     state: RootState;
   }
 >("request-response/deleteHeaders", async (id, { getState, dispatch }) => {
-  const state = getState() as RootState;
+  try {
+    const state = getState() as RootState;
 
-  const selectedTab = state.requestResponse.selectedTab;
-  if (!selectedTab) return false;
+    const selectedTab = state.requestResponse.selectedTab;
+    if (!selectedTab) return false;
 
-  const response = await window.electronAPIHeadersDB.deleteHeaders(id);
+    const response = await window.electronAPIHeadersDB.deleteHeaders(id);
 
-  if (response) dispatch(loadHeaders());
-  return response;
+    if (response) dispatch(loadHeaders());
+    return response;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 });
 
 export const deleteHeadersByRequestMetaId = createAsyncThunk<
@@ -86,16 +100,21 @@ export const deleteHeadersByRequestMetaId = createAsyncThunk<
 >(
   "request-response/deleteHeadersByRequestMetaId",
   async (id, { getState, dispatch }) => {
-    const state = getState() as RootState;
-    if (!id) id = state.requestResponse.selectedTab;
+    try {
+      const state = getState() as RootState;
+      if (!id) id = state.requestResponse.selectedTab;
 
-    if (!id) return false;
+      if (!id) return false;
 
-    const response =
-      await window.electronAPIHeadersDB.deleteHeadersByRequestMetaId(id);
+      const response =
+        await window.electronAPIHeadersDB.deleteHeadersByRequestMetaId(id);
 
-    if (response) dispatch(handleLoadHeaders([]));
-    return response;
+      if (response) dispatch(handleLoadHeaders([]));
+      return response;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   }
 );
 
@@ -112,13 +131,18 @@ export const updateHeaders = createAsyncThunk<
 >(
   "request-response/updateHeaders",
   async ({ paramId, payload }, { dispatch }) => {
-    const response = await window.electronAPIHeadersDB.updateHeaders(
-      paramId,
-      payload
-    );
+    try {
+      const response = await window.electronAPIHeadersDB.updateHeaders(
+        paramId,
+        payload
+      );
 
-    if (response) dispatch(loadHeaders());
-    return response;
+      if (response) dispatch(loadHeaders());
+      return response;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   }
 );
 
@@ -132,13 +156,18 @@ export const checkAllHeadersByRequestMetaId = createAsyncThunk<
 >(
   "request-response/checkAllHeadersByRequestMetaId",
   async (requestOrFolderMetaId, { dispatch }) => {
-    const response =
-      await window.electronAPIHeadersDB.checkAllHeadersByRequestMetaId(
-        requestOrFolderMetaId
-      );
+    try {
+      const response =
+        await window.electronAPIHeadersDB.checkAllHeadersByRequestMetaId(
+          requestOrFolderMetaId
+        );
 
-    if (response) dispatch(loadHeaders());
-    return response;
+      if (response) dispatch(loadHeaders());
+      return response;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   }
 );
 
@@ -154,28 +183,30 @@ export const updateHiddenHeaders = createAsyncThunk<
 >(
   "request-response/updateHiddenHeaders",
   async ({ keyName }, { dispatch, getState }) => {
-    const state = getState() as RootState;
+    try {
+      const state = getState() as RootState;
 
-    if (!state.requestResponse.selectedTab) return;
+      if (!state.requestResponse.selectedTab) return;
 
-    const newValue = !state.requestResponse.hiddenHeaders?.[
-      state.requestResponse.selectedTab!
-    ]?.find((header) => header.isCheck);
+      const newValue = !state.requestResponse.hiddenHeaders?.[
+        state.requestResponse.selectedTab!
+      ]?.find((header) => header.isCheck);
 
-    const response =
-      await window.electronAPIHiddenHeadersCheckDB.updateHiddenHeadersCheck(
-        {
+      const response =
+        await window.electronAPIHiddenHeadersCheckDB.updateHiddenHeadersCheck({
           [keyName]: newValue,
-        }
-      );
+        });
 
-    if (response)
-      dispatch(
-        handleUpdateHiddenHeadersIsCheck({
-          keyName,
-        })
-      );
-    return;
+      if (response)
+        dispatch(
+          handleUpdateHiddenHeadersIsCheck({
+            keyName,
+          })
+        );
+      return;
+    } catch (error) {
+      console.log(error);
+    }
   }
 );
 

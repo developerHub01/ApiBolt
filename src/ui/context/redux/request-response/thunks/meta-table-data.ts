@@ -27,48 +27,54 @@ export const replaceMetaTableData = createAsyncThunk<
 >(
   "request-response/replaceMetaTableData",
   async (payload, { dispatch, getState }) => {
-    const state = getState() as RootState;
+    try {
+      const state = getState() as RootState;
 
-    const selectedTab = state.requestResponse.selectedTab;
-    if (!selectedTab) return false;
-    const activeMetaTab = state.requestResponse.activeMetaTab[selectedTab];
-    const requestBodyType = state.requestResponse.requestBodyType[selectedTab];
+      const selectedTab = state.requestResponse.selectedTab;
+      if (!selectedTab) return false;
+      const activeMetaTab = state.requestResponse.activeMetaTab[selectedTab];
+      const requestBodyType =
+        state.requestResponse.requestBodyType[selectedTab];
 
-    let response = false;
+      let response = false;
 
-    let handler:
-      | ((
-          requestOrFolderMetaId: string,
-          payload: Array<Partial<FormDataPayloadInterface>>
-        ) => Promise<boolean>)
-      | null = null;
+      let handler:
+        | ((
+            requestOrFolderMetaId: string,
+            payload: Array<Partial<FormDataPayloadInterface>>
+          ) => Promise<boolean>)
+        | null = null;
 
-    let loader: LoaderThunk | null = null;
+      let loader: LoaderThunk | null = null;
 
-    if (activeMetaTab === "params") {
-      handler = window.electronAPIParamsDB.replaceParams;
-      loader = loadParams;
-    } else if (activeMetaTab === "headers") {
-      handler = window.electronAPIHeadersDB.replaceHeaders;
-      loader = loadHeaders;
-    } else if (activeMetaTab === "body" && requestBodyType === "form-data") {
-      handler = window.electronAPIBodyFormDataDB.replaceBodyFormData;
-      loader = loadBodyFormData;
-    } else if (
-      activeMetaTab === "body" &&
-      requestBodyType === "x-www-form-urlencoded"
-    ) {
-      handler =
-        window.electronAPIBodyXWWWFormUrlencodedDB
-          .replaceBodyXWWWFormUrlencoded;
-      loader = loadBodyXWWWFormUrlencoded;
+      if (activeMetaTab === "params") {
+        handler = window.electronAPIParamsDB.replaceParams;
+        loader = loadParams;
+      } else if (activeMetaTab === "headers") {
+        handler = window.electronAPIHeadersDB.replaceHeaders;
+        loader = loadHeaders;
+      } else if (activeMetaTab === "body" && requestBodyType === "form-data") {
+        handler = window.electronAPIBodyFormDataDB.replaceBodyFormData;
+        loader = loadBodyFormData;
+      } else if (
+        activeMetaTab === "body" &&
+        requestBodyType === "x-www-form-urlencoded"
+      ) {
+        handler =
+          window.electronAPIBodyXWWWFormUrlencodedDB
+            .replaceBodyXWWWFormUrlencoded;
+        loader = loadBodyXWWWFormUrlencoded;
+      }
+
+      if (handler) response = await handler(selectedTab, payload);
+
+      if (response && loader) dispatch(loader());
+
+      return response;
+    } catch (error) {
+      console.log(error);
+      return false;
     }
-
-    if (handler) response = await handler(selectedTab, payload);
-
-    if (response && loader) dispatch(loader());
-
-    return response;
   }
 );
 /* ==============================

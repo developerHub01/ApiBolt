@@ -14,9 +14,13 @@ export const changeActiveTab = createAsyncThunk<
     state: RootState;
   }
 >("sidebar/changeActiveTab", async (tabId, { dispatch, getState }) => {
-  dispatch(handleChangeActiveTab(tabId));
+  try {
+    dispatch(handleChangeActiveTab(tabId));
 
-  const { activeTab, lastActiveTab } = getState().sidebar;
+    const { activeTab, lastActiveTab } = getState().sidebar;
 
-  handleLocalStorageOnSidebarToggle(activeTab, lastActiveTab);
+    handleLocalStorageOnSidebarToggle(activeTab, lastActiveTab);
+  } catch (error) {
+    console.log(error);
+  }
 });

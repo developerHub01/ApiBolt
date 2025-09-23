@@ -33,7 +33,6 @@ export const loadEnvironmentsList = createAsyncThunk<
     );
 
     dispatch(handleLoadEnvironmentsList(list));
-
     return list;
   } catch {
     return {};
@@ -57,7 +56,6 @@ export const createEnvironments = createAsyncThunk<
     });
 
     if (response) dispatch(loadEnvironmentsList());
-
     return response;
   } catch (error) {
     console.error("Error creating environment:", error);
@@ -78,14 +76,19 @@ export const updateEnvironments = createAsyncThunk<
 >(
   "request-response/updateEnvironments",
   async ({ id, payload }, { dispatch }) => {
-    const response = await window.electronAPIEnvironmentsDB.updateEnvironments({
-      id,
-      ...payload,
-    });
+    try {
+      const response =
+        await window.electronAPIEnvironmentsDB.updateEnvironments({
+          id,
+          ...payload,
+        });
 
-    if (response) dispatch(loadEnvironmentsList());
-
-    return response;
+      if (response) dispatch(loadEnvironmentsList());
+      return response;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   }
 );
 
@@ -97,13 +100,17 @@ export const deleteAllEnvironments = createAsyncThunk<
     state: RootState;
   }
 >("request-response/deleteAllEnvironments", async (_, { dispatch }) => {
-  const response =
-    await window.electronAPIEnvironmentsDB.deleteAllEnvironments();
+  try {
+    const response =
+      await window.electronAPIEnvironmentsDB.deleteAllEnvironments();
 
-  // update the environment list after deletion
-  if (response) dispatch(loadEnvironmentsList());
-
-  return response;
+    // update the environment list after deletion
+    if (response) dispatch(loadEnvironmentsList());
+    return response;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 });
 
 export const deleteEnvironments = createAsyncThunk<
@@ -114,13 +121,17 @@ export const deleteEnvironments = createAsyncThunk<
     state: RootState;
   }
 >("request-response/deleteEnvironments", async (id, { dispatch }) => {
-  const response =
-    await window.electronAPIEnvironmentsDB.deleteEnvironments(id);
+  try {
+    const response =
+      await window.electronAPIEnvironmentsDB.deleteEnvironments(id);
 
-  // update the environment list after deletion
-  if (response) dispatch(loadEnvironmentsList());
-
-  return response;
+    // update the environment list after deletion
+    if (response) dispatch(loadEnvironmentsList());
+    return response;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 });
 /* ==============================
 ===== Environment end =========
