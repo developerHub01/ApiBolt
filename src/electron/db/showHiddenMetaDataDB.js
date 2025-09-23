@@ -9,7 +9,6 @@ export const getShowHiddenMetaData = async (id) => {
   try {
     if (!id) id = (await getTabList())?.selectedTab;
     if (!id) return null;
-
     if (!(await getRequestOrFolderMetaById(id))) return null;
 
     const result = (
@@ -40,9 +39,18 @@ export const createShowHiddenMetaData = async (payload = {}) => {
     if (typeof payload === "object" && !Object.keys(payload).length)
       return null;
 
-    const existingData = await getShowHiddenMetaData(
-      payload.requestOrFolderMetaId
-    );
+    const existingData = (
+      await db
+        .select()
+        .from(showHiddenMetaDataTable)
+        .where(
+          eq(
+            showHiddenMetaDataTable.requestOrFolderMetaId,
+            payload.requestOrFolderMetaId
+          )
+        )
+    )?.[0];
+
     if (existingData) return await updateShowHiddenMetaData(payload);
 
     const result = await db
