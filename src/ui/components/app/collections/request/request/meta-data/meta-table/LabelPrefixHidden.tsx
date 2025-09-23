@@ -28,7 +28,6 @@ const LabelPrefixHidden = memo(({ type }: Props) => {
       })
     );
 
-  console.log({ hiddenData });
   if (!hiddenData.length) return;
 
   return (
