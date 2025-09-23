@@ -170,7 +170,7 @@ const ItemCTA = memo(() => {
         </DropdownMenuTrigger>
         <DropdownMenuContent
           className="w-40 [&>div]:cursor-pointer"
-          align={layoutTypes === "rtl" ? "end" : "start"}
+          align={layoutTypes === "rtl" ? "start" : "end"}
           onClick={handlePreventPropagation}
         >
           <CTAList list={menuList} onClick={handleCTAAction} />
