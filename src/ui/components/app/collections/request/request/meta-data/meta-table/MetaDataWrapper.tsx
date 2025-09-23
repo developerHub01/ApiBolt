@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAppSelector } from "@/context/redux/hooks";
 import BulkEditor from "@/components/app/collections/request/request/meta-data/meta-table/BulkEditor";
@@ -11,30 +11,28 @@ interface MetaDataWrapperProps {
   children: React.ReactNode;
 }
 
-const MetaDataWrapper = ({
-  label,
-  labelPrefix = "",
-  children,
-}: MetaDataWrapperProps) => {
-  return (
-    <>
-      <div className="w-full flex items-center gap-3">
-        {label && (
-          <p className="text-foreground text-sm select-none">{label}</p>
-        )}
-        {labelPrefix}
-        <BulkEditButton />
-      </div>
-      <Metadata>{children}</Metadata>
-    </>
-  );
-};
+const MetaDataWrapper = memo(
+  ({ label, labelPrefix = "", children }: MetaDataWrapperProps) => {
+    return (
+      <>
+        <div className="w-full flex items-center gap-3">
+          {label && (
+            <p className="text-foreground text-sm select-none">{label}</p>
+          )}
+          {labelPrefix}
+          <BulkEditButton />
+        </div>
+        <Metadata>{children}</Metadata>
+      </>
+    );
+  }
+);
 
 interface MetaDataProps {
   children: React.ReactNode;
 }
 
-const Metadata = ({ children }: MetaDataProps) => {
+const Metadata = memo(({ children }: MetaDataProps) => {
   const isBulkEditorOpen = useAppSelector(selectMetaBulkEditOpen);
 
   if (isBulkEditorOpen) return <BulkEditor />;
@@ -46,6 +44,6 @@ const Metadata = ({ children }: MetaDataProps) => {
       </div>
     </ScrollArea>
   );
-};
+});
 
 export default MetaDataWrapper;

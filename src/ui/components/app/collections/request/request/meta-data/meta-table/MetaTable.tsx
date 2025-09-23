@@ -48,9 +48,12 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
   const { type, handleDelete, handleUpdate, handleCheckToggle } = tableData;
   let data = tableData?.data;
 
-  if (type === "headers" && showHiddenData)
-    data = [...hiddenHeader, ...data].map(checkInputType);
-  if (type === "params") data = [...hiddenParams, ...data].map(checkInputType);
+  if (showHiddenData) {
+    if (type === "headers")
+      data = [...hiddenHeader, ...data].map(checkInputType);
+    else if (type === "params")
+      data = [...hiddenParams, ...data].map(checkInputType);
+  }
 
   return (
     <MetaTableWrapper header={<MetaTableHeader type={type} />}>

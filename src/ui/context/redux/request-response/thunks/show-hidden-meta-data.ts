@@ -21,7 +21,6 @@ export const loadShowHiddenMetaData = createAsyncThunk<
 
       let selectedTab = payload.requestId;
       const once = payload.once ?? false;
-
       const state = getState() as RootState;
 
       if (!selectedTab) selectedTab = state.requestResponse.selectedTab;
@@ -35,7 +34,6 @@ export const loadShowHiddenMetaData = createAsyncThunk<
         await window.electronAPIShowHiddenMetaDataDB.getShowHiddenMetaData(
           selectedTab
         );
-      console.log({ response });
 
       if (response)
         dispatch(

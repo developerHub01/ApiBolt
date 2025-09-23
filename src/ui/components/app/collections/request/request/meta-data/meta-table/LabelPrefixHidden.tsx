@@ -17,7 +17,7 @@ const LabelPrefixHidden = memo(({ type }: Props) => {
   const hiddenData =
     useAppSelector(
       selectMetaDataByCheckingInheritance({
-        type: type === "header" ? "hiddenHeaders" : "params",
+        type: type === "header" ? "hiddenHeaders" : "hiddenParams",
       })
     ) ?? [];
 
@@ -28,6 +28,7 @@ const LabelPrefixHidden = memo(({ type }: Props) => {
       })
     );
 
+  console.log({ hiddenData });
   if (!hiddenData.length) return;
 
   return (
