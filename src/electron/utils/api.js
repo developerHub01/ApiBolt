@@ -5,14 +5,16 @@ import { jar } from "../main.js";
 import { getCookiesByDomain, saveCookiesToFile } from "./cookieManager.js";
 import { getBodyBinary } from "../db/bodyBinaryDB.js";
 import path from "path";
-import fs from "fs";
-import { Blob } from "buffer";
-import { readFile, access } from "fs/promises";
+import fs, { constants } from "fs";
+import { access } from "fs/promises";
+import FormData from "form-data";
+import mime from "mime-types";
 import { getBodyFormDataByFormId } from "../db/bodyFormDataDB.js";
 
 export const fetchApi = async (_, payload) => {
   payload = await apiPayloadHandler(payload);
-  
+  console.log(payload);
+
   try {
     const normalizedUrl = new URL(payload.url).origin;
     const res = await axios(payload);
@@ -60,19 +62,13 @@ export const fetchApi = async (_, payload) => {
 };
 
 const apiPayloadHandler = async (payload) => {
-  const {
-    bodyType,
-    formData,
-    xWWWformDataUrlencoded,
-    rawData,
-    binaryData,
-    rawSubType,
-  } = payload;
+  const { bodyType, formData, xWWWformDataUrlencoded, rawData, rawSubType } =
+    payload;
 
   const updatedPayload = {
     withCredentials: true,
     url: payload.url,
-    method: payload.method,
+    method: payload.method ?? "get",
     headers: payload.headers,
   };
 
@@ -122,6 +118,13 @@ const apiPayloadHandler = async (payload) => {
     }
   }
 
+  if (["get", "head"].includes(updatedPayload.method?.toLowerCase())) {
+    delete updatedPayload.data;
+    delete updatedPayload.headers["Content-Type"];
+    delete updatedPayload.headers["Content-Length"];
+  }
+  if (!updatedPayload.data) delete updatedPayload.headers["Content-Type"];
+
   return updatedPayload;
 };
 
@@ -144,13 +147,14 @@ export const getBodyFormData = async (formData) => {
         if (!filePath?.trim()) continue;
         try {
           /* checking existance and permission both */
-          await access(filePath);
-
-          const fileBuffer = await readFile(filePath);
+          await access(filePath, constants.R_OK);
           const filename = path.basename(filePath);
+          const mimeType = mime.lookup(filePath) || "application/octet-stream";
 
-          const blob = new Blob([fileBuffer]);
-          formPayload.append(key, blob, filename);
+          formPayload.append(key, fs.createReadStream(filePath), {
+            filename,
+            contentType: mimeType,
+          });
         } catch (err) {
           console.warn(`File not found or not readable: ${filePath}`, err);
         }
