@@ -76,7 +76,7 @@ const AddProjectDialog = memo(() => {
           <Label htmlFor="name-1" className="font-normal text-sm">
             Project Name
             <span className="ml-1 text-xs text-accent-foreground/70 tracking-widest">
-              (limit: {name.length}/{DEFAULT_PROJECT_NAME})
+              (limit: {name.length}/{MAX_PROJECT_NAME_LENGTH})
             </span>
           </Label>
           <Input
