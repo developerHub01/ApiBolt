@@ -1,9 +1,4 @@
-import axios from "axios";
-import { isElectron } from "@/utils/electron";
-import type {
-  APIPayloadBody,
-  TRequestBodyType,
-} from "@/types/request-response.types";
+import type { TRequestBodyType } from "@/types/request-response.types";
 
 export const calculateIntoFixedPoint = (result: number, point: number = 1) =>
   Number(result.toFixed(point));
@@ -76,88 +71,88 @@ export const getRawContentType = (
   }
 };
 
-export const sendRequest = async ({
-  method,
-  url,
-  headers,
-  hiddenHeaders,
-  bodyType,
-  formData,
-  xWWWformDataUrlencoded,
-  rawData,
-  binaryData,
-  rawSubType,
-}: APIPayloadBody) => {
-  let data = null;
-  url = ensureAbsoluteUrl(url);
-  headers = {
-    ...headers,
-    ...hiddenHeaders,
-  };
+// export const sendRequest = async ({
+//   method,
+//   url,
+//   headers,
+//   hiddenHeaders,
+//   bodyType,
+//   formData,
+//   xWWWformDataUrlencoded,
+//   rawData,
+//   binaryData,
+//   rawSubType,
+// }: APIPayloadBody) => {
+//   let data = null;
+//   url = ensureAbsoluteUrl(url);
+//   headers = {
+//     ...headers,
+//     ...hiddenHeaders,
+//   };
 
-  switch (bodyType) {
-    case "none": {
-      data = null;
-      break;
-    }
+//   switch (bodyType) {
+//     case "none": {
+//       data = null;
+//       break;
+//     }
 
-    case "raw": {
-      headers["Content-Type"] = getRawContentType(rawSubType ?? "text");
-      data = rawData;
-      break;
-    }
+//     case "raw": {
+//       headers["Content-Type"] = getRawContentType(rawSubType ?? "text");
+//       data = rawData;
+//       break;
+//     }
 
-    case "form-data": {
-      if (!formData) break;
-      const formPayload = new FormData();
-      for (const { key, value } of formData) {
-        if (value instanceof File) {
-          // Single file
-          formPayload.append(key, value);
-        } else if (Array.isArray(value) && value[0] instanceof File) {
-          // Multiple files
-          value.forEach((file) => formPayload.append(key, file));
-        } else if (typeof value === "string") {
-          // Plain string or number
-          formPayload.append(key, value);
-        }
-      }
-      data = formPayload;
-      delete headers["Content-Type"];
-      break;
-    }
+//     case "form-data": {
+//       if (!formData) break;
+//       const formPayload = new FormData();
+//       for (const { key, value } of formData) {
+//         if (value instanceof File) {
+//           // Single file
+//           formPayload.append(key, value);
+//         } else if (Array.isArray(value) && value[0] instanceof File) {
+//           // Multiple files
+//           value.forEach((file) => formPayload.append(key, file));
+//         } else if (typeof value === "string") {
+//           // Plain string or number
+//           formPayload.append(key, value);
+//         }
+//       }
+//       data = formPayload;
+//       delete headers["Content-Type"];
+//       break;
+//     }
 
-    case "x-www-form-urlencoded": {
-      if (!xWWWformDataUrlencoded) break;
+//     case "x-www-form-urlencoded": {
+//       if (!xWWWformDataUrlencoded) break;
 
-      const urlSearchParams = new URLSearchParams();
-      xWWWformDataUrlencoded.forEach(({ key, value }) => {
-        urlSearchParams.append(key, value);
-      });
-      data = urlSearchParams;
-      headers["Content-Type"] = "application/x-www-form-urlencoded";
-      break;
-    }
+//       const urlSearchParams = new URLSearchParams();
+//       xWWWformDataUrlencoded.forEach(({ key, value }) => {
+//         urlSearchParams.append(key, value);
+//       });
+//       data = urlSearchParams;
+//       headers["Content-Type"] = "application/x-www-form-urlencoded";
+//       break;
+//     }
 
-    case "binary": {
-      headers["Content-Type"] = "application/octet-stream";
-      data = binaryData;
-      break;
-    }
+//     case "binary": {
+//       headers["Content-Type"] = "application/octet-stream";
+//       data = binaryData;
+//       break;
+//     }
 
-    default:
-      throw new Error("Unsupported body type");
-  }
+//     default:
+//       throw new Error("Unsupported body type");
+//   }
 
-  return axios({
-    method,
-    url,
-    headers,
-    data,
-    withCredentials: isElectron(),
-    maxRedirects: 5,
-  });
-};
+//   return axios({
+//     method,
+//     url,
+//     headers,
+//     data,
+//     withCredentials: isElectron(),
+//     maxRedirects: 5,
+//   });
+// };
 
 export const requestDataSize = ({
   bodyType,

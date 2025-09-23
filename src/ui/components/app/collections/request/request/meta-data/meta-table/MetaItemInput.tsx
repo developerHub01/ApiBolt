@@ -59,7 +59,9 @@ const MetaItemInput = memo(
     const handleBlur = useCallback(
       (e: FocusEvent<HTMLInputElement>) => {
         if (!e.target.dataset.metaItemType) return;
-        onBlur(id, e.target.dataset.metaItemType, e.target.value);
+        const value = e.target.value.trim();
+        setValueState(value);
+        onBlur(id, e.target.dataset.metaItemType, value);
       },
       [onBlur, id]
     );

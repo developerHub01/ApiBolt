@@ -238,7 +238,6 @@ interface RequestResponseState {
   formData: Record<string, Array<FormDataInterface>>;
   xWWWFormUrlencodedData: Record<string, Array<ParamInterface>>;
   isDownloadRequestWithBase64: Record<string, boolean>;
-  requestIdShouldFetch: string;
 
   authType: Record<string, TAuthType>;
   authInheritedId: Record<string, string | null>;
@@ -321,7 +320,6 @@ const initialState: RequestResponseState = {
   formData: {},
   xWWWFormUrlencodedData: {},
   isDownloadRequestWithBase64: {},
-  requestIdShouldFetch: "",
 
   authType: {},
   authInheritedId: {},
@@ -1244,10 +1242,6 @@ export const requestResponseSlice = createSlice({
 
       state.rawRequestBodyType[id] = type;
     },
-    handleRequestSend: (state) => {
-      if (!state.selectedTab) return;
-      state.requestIdShouldFetch = state.selectedTab;
-    },
     handleChangeRequestResponseSize: (
       state,
       action: PayloadAction<{
@@ -1494,7 +1488,6 @@ export const {
   handleChangeRawData,
   handleChangeRequestBodyType,
   handleChangeRawRequestBodyType,
-  handleRequestSend,
   handleChangeRequestResponseSize,
   handleChangeAuthType,
   handleIsDownloadRequestWithBase64,

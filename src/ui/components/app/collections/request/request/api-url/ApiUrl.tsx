@@ -3,7 +3,6 @@ import ApiMethodSelector from "@/components/app/collections/request/request/api-
 import ApiInput from "@/components/app/collections/request/request/api-url/ApiInput";
 import ApiCta from "@/components/app/collections/request/request/api-url/ApiCta";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { handleRequestSend } from "@/context/redux/request-response/request-response-slice";
 import {
   changeRequestApiUrl,
   changeRequestApiUrlWithBackend,
@@ -11,6 +10,7 @@ import {
 import { isValidApiUrl } from "@/utils/request-url.utils";
 import { cn } from "@/lib/utils";
 import { selectRequestUrl } from "@/context/redux/request-url/selectors/url";
+import { fetchApi } from "@/context/redux/request-response/thunks/rest-api";
 
 const ApiUrl = memo(() => {
   const dispatch = useAppDispatch();
@@ -25,7 +25,7 @@ const ApiUrl = memo(() => {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.code === "Enter") dispatch(handleRequestSend());
+      if (e.ctrlKey && e.code === "Enter") dispatch(fetchApi());
     };
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
@@ -50,7 +50,7 @@ const ApiUrl = memo(() => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(handleRequestSend());
+    dispatch(fetchApi());
   };
 
   const handleChange = () => {

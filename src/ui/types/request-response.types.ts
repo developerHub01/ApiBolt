@@ -96,6 +96,7 @@ export interface ParamInterface<ValueT = string> {
   keyType?: "text" | "env";
   valueType?: "text" | "env";
   calculateDynamicly?: boolean;
+  createdAt?: string;
 }
 
 export interface HiddenHeadersCheckInterface {
@@ -203,18 +204,19 @@ export interface APIPayloadBody {
   method: THTTPMethods;
   url: string;
   headers: Record<string, string>;
-  hiddenHeaders: Record<string, string>;
   bodyType: TRequestBodyType;
   formData?: Array<{
+    id: string;
     key: string;
-    value: string | Array<File>;
+    value?: string;
   }>;
   xWWWformDataUrlencoded?: Array<{
+    id: string;
     key: string;
     value: string;
   }>;
   rawData?: string;
-  binaryData?: File;
+  binaryData?: string;
   rawSubType?: TContentType;
 }
 

@@ -1,4 +1,8 @@
-import type { ResponseFileDataInterface } from "@/types/request-response.types";
+import type {
+  FormDataInterface,
+  ParamInterface,
+  ResponseFileDataInterface,
+} from "@/types/request-response.types";
 
 export const handleCheckImportedRequestFileValidator = (
   data: ResponseFileDataInterface
@@ -89,4 +93,35 @@ export const handleCheckImportedRequestFileValidator = (
 
   // Everything passed
   return true;
+};
+
+export const filterAndUniqueMetaData = (
+  data: Array<ParamInterface | FormDataInterface>
+) => {
+  const matchedKeys = new Set<string>([]);
+
+  const result: Array<{
+    id: string;
+    key: string;
+    value?: string;
+  }> = [];
+
+  data
+    .filter((item) => item.key?.trim() && item.isCheck)
+    /* ordering from newer to older so that I can get latest only for duplicated data */
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime()
+    )
+    .map(({ id, key, value }) => {
+      if (matchedKeys.has(key)) return;
+      matchedKeys.add(key);
+      result.push({
+        id,
+        key,
+        value: Array.isArray(value) ? undefined : value,
+      });
+    });
+
+  return result;
 };

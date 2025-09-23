@@ -3,13 +3,18 @@ import { getRawContentType } from "./utils.js";
 import { parseSetCookie } from "./cookies.js";
 import { jar } from "../main.js";
 import { getCookiesByDomain, saveCookiesToFile } from "./cookieManager.js";
+import { getBodyBinary } from "../db/bodyBinaryDB.js";
+import path from "path";
+import fs from "fs";
+import { Blob } from "buffer";
+import { readFile, access } from "fs/promises";
+import { getBodyFormDataByFormId } from "../db/bodyFormDataDB.js";
 
 export const fetchApi = async (_, payload) => {
-  payload = apiPayloadHandler(payload);
-
+  payload = await apiPayloadHandler(payload);
+  
   try {
     const normalizedUrl = new URL(payload.url).origin;
-
     const res = await axios(payload);
 
     const setCookies = res.headers["set-cookie"] || [];
@@ -54,11 +59,8 @@ export const fetchApi = async (_, payload) => {
   }
 };
 
-const apiPayloadHandler = (payload) => {
+const apiPayloadHandler = async (payload) => {
   const {
-    method,
-    url,
-    hiddenHeaders,
     bodyType,
     formData,
     xWWWformDataUrlencoded,
@@ -67,59 +69,116 @@ const apiPayloadHandler = (payload) => {
     rawSubType,
   } = payload;
 
-  let { headers } = payload;
-
-  let data = null;
-  headers = {
-    ...headers,
-    ...hiddenHeaders,
+  const updatedPayload = {
+    withCredentials: true,
+    url: payload.url,
+    method: payload.method,
+    headers: payload.headers,
   };
 
+  updatedPayload.data = undefined;
+
   switch (bodyType) {
-    case "none":
-      data = null;
+    case "none": {
+      delete updatedPayload.data;
       break;
-    case "raw":
-      headers["Content-Type"] = getRawContentType(rawSubType ?? "text");
-      data = rawData;
+    }
+    case "raw": {
+      updatedPayload.headers["Content-Type"] = getRawContentType(
+        rawSubType ?? "text"
+      );
+      updatedPayload.data = rawData;
       break;
-    case "form-data":
+    }
+    case "form-data": {
       if (!formData) break;
-      const formPayload = new FormData();
-      for (const { key, value } of formData) {
-        if (value instanceof File) {
-          formPayload.append(key, value);
-        } else if (Array.isArray(value) && value[0] instanceof File) {
-          value.forEach((file) => formPayload.append(key, file));
-        } else if (typeof value === "string") {
-          formPayload.append(key, value);
-        }
-      }
-      data = formPayload;
-      delete headers["Content-Type"];
+      updatedPayload.data = await getBodyFormData(formData);
+      delete updatedPayload.headers["Content-Type"];
       break;
-    case "x-www-form-urlencoded":
+    }
+    case "x-www-form-urlencoded": {
       if (!xWWWformDataUrlencoded) break;
       const urlSearchParams = new URLSearchParams();
       xWWWformDataUrlencoded.forEach(({ key, value }) => {
         urlSearchParams.append(key, value);
       });
-      data = urlSearchParams;
-      headers["Content-Type"] = "application/x-www-form-urlencoded";
+      updatedPayload.data = urlSearchParams;
+      updatedPayload.headers["Content-Type"] =
+        "application/x-www-form-urlencoded";
       break;
-    case "binary":
-      headers["Content-Type"] = "application/octet-stream";
-      data = binaryData;
+    }
+    case "binary": {
+      const { contentType, data } = await getBodyBinaryData();
+
+      updatedPayload.headers["Content-Type"] = contentType;
+
+      if (!data) delete updatedPayload.data;
+      else updatedPayload.data = data;
+
       break;
-    default:
-      throw new Error("Unsupported body type");
+    }
+    default: {
+      delete updatedPayload.data;
+    }
+  }
+
+  return updatedPayload;
+};
+
+export const getBodyFormData = async (formData) => {
+  const formPayload = new FormData();
+
+  for (const { id, key, value } of formData) {
+    if (!key?.trim()) continue;
+
+    // Fetch external data if value is undefined (your custom logic)
+    const currentValue =
+      typeof value === "undefined"
+        ? (await getBodyFormDataByFormId(id))?.value
+        : value;
+
+    if (!currentValue) continue;
+
+    if (Array.isArray(currentValue)) {
+      for (const filePath of currentValue) {
+        if (!filePath?.trim()) continue;
+        try {
+          /* checking existance and permission both */
+          await access(filePath);
+
+          const fileBuffer = await readFile(filePath);
+          const filename = path.basename(filePath);
+
+          const blob = new Blob([fileBuffer]);
+          formPayload.append(key, blob, filename);
+        } catch (err) {
+          console.warn(`File not found or not readable: ${filePath}`, err);
+        }
+      }
+    } else if (typeof currentValue === "string") {
+      formPayload.append(key, currentValue);
+    }
+  }
+
+  return formPayload;
+};
+
+const getBodyBinaryData = async () => {
+  const contentType = "application/octet-stream";
+  let data;
+  const binaryData = await getBodyBinary();
+  if (binaryData?.path) {
+    try {
+      await access(binaryData.path, constants.R_OK);
+      /* non-blocking read */
+      data = fs.createReadStream(binaryData.path);
+    } catch {
+      console.warn(`File not found or unreadable: ${binaryData.path}`);
+    }
   }
 
   return {
-    method,
-    url,
-    headers,
+    contentType,
     data,
-    withCredentials: true,
   };
 };
