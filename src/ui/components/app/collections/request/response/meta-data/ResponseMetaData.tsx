@@ -1,7 +1,7 @@
 import { memo } from "react";
 import MetaDataTab from "@/components/app/collections/request/response/meta-data/MetaDataTab";
 import ResponsCollapseButton from "@/components/app/collections/request/response/ResponsCollapseButton";
-import ResponseInfo from "@/components/app/collections/request/response/meta-data/response-info/ResponseInfo";
+// import ResponseInfo from "@/components/app/collections/request/response/meta-data/response-info/ResponseInfo";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectResponse } from "@/context/redux/request-response/selectors/response";
 
@@ -15,7 +15,7 @@ const ResponseMetaData = memo(() => {
       ) : (
         <p className="select-none text-secondary-foreground">Response</p>
       )}
-      <ResponseInfo />
+      {/* <ResponseInfo /> */}
       <ResponsCollapseButton />
     </div>
   );

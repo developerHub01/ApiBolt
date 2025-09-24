@@ -3,7 +3,7 @@ import BodyContent from "@/components/app/collections/request/response/content/b
 
 const Body = () => {
   return (
-    <div className="h-full flex flex-col gap-3">
+    <div className="h-full w-full flex flex-col gap-3">
       <BodyTop />
       <BodyContent />
     </div>

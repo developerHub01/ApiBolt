@@ -12,7 +12,7 @@ const Cookies = () => {
   const cookies = response?.cookies as Array<CookieInterface>;
 
   return (
-    <ScrollArea className="flex-1 min-h-0 h-full overflow-hidden">
+    <ScrollArea className="flex-1 min-h-0 h-full [&>div>div]:h-full overflow-hidden">
       <div className="w-full h-full pb-3">
         {!cookies || !cookies.length ? (
           <Empty label="No cookies found" />

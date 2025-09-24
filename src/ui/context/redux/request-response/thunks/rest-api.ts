@@ -10,6 +10,7 @@ import {
 } from "@/context/redux/request-response/selectors/body-raw";
 import type { APIPayloadBody } from "@/types/request-response.types";
 import { filterAndUniqueMetaData } from "@/context/redux/request-response/utils";
+import { handleSetResponse } from "@/context/redux/request-response/request-response-slice";
 
 export const fetchApi = createAsyncThunk<
   void,
@@ -18,7 +19,7 @@ export const fetchApi = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->("request-response/fetchApi", async (_, { getState }) => {
+>("request-response/fetchApi", async (_, { getState, dispatch }) => {
   try {
     const state = getState() as RootState;
     const requestId = state.requestResponse.selectedTab;
@@ -78,8 +79,15 @@ export const fetchApi = createAsyncThunk<
       }
     }
 
-    const response = await window.electronAPI.fetchApi(payload);
+    const response = (await window.electronAPI.fetchApi(payload)) ?? null;
     console.log(response);
+
+    dispatch(
+      handleSetResponse({
+        id: requestId,
+        response,
+      })
+    );
   } catch (error) {
     console.log(error);
   }
