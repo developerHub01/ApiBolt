@@ -14,12 +14,16 @@ const BodyTopCopy = () => {
   const response = useAppSelector(selectResponse);
 
   const handleCopy = useCallback(async () => {
-    const responseData = response?.data ? JSON.stringify(response?.data) : "";
+    const data = response?.data ?? "";
+    const cleanData =
+      typeof data === "object"
+        ? JSON.stringify(response?.data)
+        : String(data).trim();
 
-    await navigator.clipboard.writeText(responseData);
+    await navigator.clipboard.writeText(cleanData);
 
     toast("Copied to clipboard!!");
-  }, [response]);
+  }, [response?.data]);
 
   return (
     <Tooltip>

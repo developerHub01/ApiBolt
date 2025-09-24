@@ -101,7 +101,7 @@ interface CodeProps {
 const Code = ({
   contentType,
   fontSize = 16,
-  code,
+  code = "",
   onChange,
   onBlur,
   transparentBg = true,
@@ -179,9 +179,10 @@ const Code = ({
 
   const handleCopy = useCallback(async () => {
     try {
-      await navigator.clipboard.writeText(
-        typeof code === "string" ? code : JSON.stringify(code)
-      );
+      const cleanCode =
+        typeof code === "object" ? JSON.stringify(code) : String(code).trim();
+      await navigator.clipboard.writeText(cleanCode);
+
       toast("Code copied", {
         description: "Successfully copied code into your clipboard",
       });
