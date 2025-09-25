@@ -8,7 +8,6 @@ import { selectRequestOrFolderList } from "@/context/redux/request-response/sele
 
 const RequestList = memo(() => {
   const requestList = useAppSelector(selectRequestOrFolderList);
-
   const rootList = useMemo(
     () =>
       Object.values(requestList)

@@ -7,14 +7,17 @@ import { loadAuthorization } from "@/context/redux/request-response/thunks/auth"
 
 const FolderLayout = () => {
   const dispatch = useAppDispatch();
-  const { id: requestId } = useParams();
+  const { id: requestOrFolderId } = useParams();
 
   useEffect(() => {
-    const payload = { once: true };
+    const payload = {
+      requestOrFolderId,
+      once: true,
+    };
     [loadFolder, loadAuthorization].forEach((action) =>
       dispatch(action(payload))
     );
-  }, [dispatch, requestId]);
+  }, [dispatch, requestOrFolderId]);
 
   return (
     <RequestFolderProvider>

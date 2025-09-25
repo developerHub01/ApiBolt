@@ -11,7 +11,7 @@ import {
 ================================= */
 export const loadRequestMetaTab = createAsyncThunk<
   void,
-  void | { requestId?: string | null | undefined; once?: boolean },
+  void | { requestOrFolderId?: string | null | undefined; once?: boolean },
   {
     dispatch: AppDispatch;
     state: RootState;
@@ -22,10 +22,11 @@ export const loadRequestMetaTab = createAsyncThunk<
     try {
       if (!payload) payload = {};
 
-      const once = payload.once ?? false;
       const state = getState() as RootState;
+      const once = payload.once ?? false;
+      const selectedTab =
+        payload.requestOrFolderId ?? state.requestResponse.selectedTab;
 
-      const selectedTab = state.requestResponse.selectedTab;
       if (
         !selectedTab ||
         ([
@@ -37,7 +38,7 @@ export const loadRequestMetaTab = createAsyncThunk<
         return;
 
       const response =
-        await window.electronAPIRequestMetaTabDB.getRequestMetaTab();
+        await window.electronAPIRequestMetaTabDB.getRequestMetaTab(selectedTab);
 
       dispatch(handleLoadReqestMetaTab(response));
     } catch (error) {

@@ -16,10 +16,13 @@ import { loadShowHiddenMetaData } from "@/context/redux/request-response/thunks/
 
 const RequestLayout = () => {
   const dispatch = useAppDispatch();
-  const { id: requestId } = useParams();
+  const { id: requestOrFolderId } = useParams();
 
   useEffect(() => {
-    const payload = { once: true };
+    const payload = {
+      requestOrFolderId: requestOrFolderId,
+      once: true,
+    };
     [
       loadAuthorization,
       loadParams,
@@ -33,7 +36,7 @@ const RequestLayout = () => {
       loadRequestBodyBinary,
       loadApiUrl,
     ].forEach((action) => dispatch(action(payload)));
-  }, [dispatch, requestId]);
+  }, [dispatch, requestOrFolderId]);
 
   return (
     <RequestResponseProvider>

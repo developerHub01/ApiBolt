@@ -8,7 +8,7 @@ import { handleSetShowHiddenMetaData } from "@/context/redux/request-response/re
 ================================= */
 export const loadShowHiddenMetaData = createAsyncThunk<
   void,
-  void | { requestId?: string | null | undefined; once?: boolean },
+  void | { requestOrFolderId?: string | null | undefined; once?: boolean },
   {
     dispatch: AppDispatch;
     state: RootState;
@@ -19,11 +19,12 @@ export const loadShowHiddenMetaData = createAsyncThunk<
     try {
       if (!payload) payload = {};
 
-      let selectedTab = payload.requestId;
-      const once = payload.once ?? false;
       const state = getState() as RootState;
 
-      if (!selectedTab) selectedTab = state.requestResponse.selectedTab;
+      const selectedTab =
+        payload.requestOrFolderId ?? state.requestResponse.selectedTab;
+      const once = payload.once ?? false;
+
       if (
         !selectedTab ||
         (state.requestResponse.metaShowColumn[selectedTab] && once)

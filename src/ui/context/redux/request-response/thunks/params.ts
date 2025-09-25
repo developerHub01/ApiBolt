@@ -14,7 +14,7 @@ import { detectAndCleanVariable } from "@/utils/request-response.utils";
 ================================= */
 export const loadParams = createAsyncThunk<
   void,
-  void | { requestId?: string | null | undefined; once?: boolean },
+  void | { requestOrFolderId?: string | null | undefined; once?: boolean },
   {
     dispatch: AppDispatch;
     state: RootState;
@@ -23,12 +23,12 @@ export const loadParams = createAsyncThunk<
   try {
     if (!payload) payload = {};
 
-    let selectedTab = payload.requestId;
-    const once = payload.once ?? false;
-
     const state = getState() as RootState;
 
-    if (!selectedTab) selectedTab = state.requestResponse.selectedTab;
+    const selectedTab =
+      payload.requestOrFolderId ?? state.requestResponse.selectedTab;
+    const once = payload.once ?? false;
+
     if (!selectedTab || (state.requestResponse.params[selectedTab] && once))
       return;
 

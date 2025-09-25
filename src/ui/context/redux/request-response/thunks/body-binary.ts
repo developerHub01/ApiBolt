@@ -7,7 +7,7 @@ import { handleLoadBodyBinary } from "@/context/redux/request-response/request-r
 ================================= */
 export const loadRequestBodyBinary = createAsyncThunk<
   void,
-  void | { requestId?: string | null | undefined; once?: boolean },
+  void | { requestOrFolderId?: string | null | undefined; once?: boolean },
   {
     dispatch: AppDispatch;
     state: RootState;
@@ -18,10 +18,11 @@ export const loadRequestBodyBinary = createAsyncThunk<
     try {
       if (!payload) payload = {};
 
-      const once = payload.once ?? false;
       const state = getState() as RootState;
-
-      const selectedTab = state.requestResponse.selectedTab;
+      
+      const once = payload.once ?? false;
+      const selectedTab =
+        payload.requestOrFolderId ?? state.requestResponse.selectedTab;
       if (
         !selectedTab ||
         (typeof state.requestResponse.rawData[selectedTab] !== "undefined" &&
@@ -29,7 +30,8 @@ export const loadRequestBodyBinary = createAsyncThunk<
       )
         return;
 
-      const response = await window.electronAPIBodyBinaryDB.getBodyBinary();
+      const response =
+        await window.electronAPIBodyBinaryDB.getBodyBinary(selectedTab);
       dispatch(handleLoadBodyBinary(response?.file));
     } catch (error) {
       console.log(error);

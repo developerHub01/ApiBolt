@@ -8,7 +8,7 @@ import { handleLoadBodyRaw } from "@/context/redux/request-response/request-resp
 ================================= */
 export const loadRequestBodyRaw = createAsyncThunk<
   void,
-  void | { requestId?: string | null | undefined; once?: boolean },
+  void | { requestOrFolderId?: string | null | undefined; once?: boolean },
   {
     dispatch: AppDispatch;
     state: RootState;
@@ -19,11 +19,12 @@ export const loadRequestBodyRaw = createAsyncThunk<
     try {
       if (!payload) payload = {};
 
-      const once = payload.once ?? false;
-
       const state = getState() as RootState;
 
-      const selectedTab = state.requestResponse.selectedTab;
+      const once = payload.once ?? false;
+      const selectedTab =
+        payload.requestOrFolderId ?? state.requestResponse.selectedTab;
+
       if (
         !selectedTab ||
         (typeof state.requestResponse.rawData[selectedTab] !== "undefined" &&
@@ -31,7 +32,8 @@ export const loadRequestBodyRaw = createAsyncThunk<
       )
         return;
 
-      const response = await window.electronAPIBodyRawDB.getBodyRaw();
+      const response =
+        await window.electronAPIBodyRawDB.getBodyRaw(selectedTab);
 
       if (response) dispatch(handleLoadBodyRaw(response));
       return;

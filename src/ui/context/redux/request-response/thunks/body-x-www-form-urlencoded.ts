@@ -8,7 +8,7 @@ import { handleLoadBodyXWWWFormUrlencoded } from "@/context/redux/request-respon
 ================================= */
 export const loadBodyXWWWFormUrlencoded = createAsyncThunk<
   void,
-  void | { requestId?: string | null | undefined; once?: boolean },
+  void | { requestOrFolderId?: string | null | undefined; once?: boolean },
   {
     dispatch: AppDispatch;
     state: RootState;
@@ -19,12 +19,12 @@ export const loadBodyXWWWFormUrlencoded = createAsyncThunk<
     try {
       if (!payload) payload = {};
 
-      let selectedTab = payload.requestId;
-      const once = payload.once ?? false;
-
       const state = getState() as RootState;
 
-      if (!selectedTab) selectedTab = state.requestResponse.selectedTab;
+      const selectedTab =
+        payload.requestOrFolderId ?? state.requestResponse.selectedTab;
+      const once = payload.once ?? false;
+
       if (
         !selectedTab ||
         (state.requestResponse.xWWWFormUrlencodedData[selectedTab] && once)

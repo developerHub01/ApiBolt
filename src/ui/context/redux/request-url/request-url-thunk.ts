@@ -23,7 +23,7 @@ import { paramsTableToString } from "@/utils/request-response.utils";
 
 export const loadApiUrl = createAsyncThunk<
   void,
-  void | { requestId?: string | null | undefined; once?: boolean },
+  void | { requestOrFolderId?: string | null | undefined; once?: boolean },
   {
     dispatch: AppDispatch;
     state: RootState;
@@ -35,16 +35,21 @@ export const loadApiUrl = createAsyncThunk<
     const once = payload.once ?? false;
     const state = getState() as RootState;
 
-    const selectedTab = state.requestResponse.selectedTab;
+    const selectedTab =
+      payload.requestOrFolderId ?? state.requestResponse.selectedTab;
     if (
       !selectedTab ||
       (typeof state.requestUrl.tokens[selectedTab] !== "undefined" && once)
     )
       return;
 
-    const response = await window.electronAPIApiUrl.getApiUrlDB();
+    const response = await window.electronAPIApiUrl.getApiUrlDB(selectedTab);
     if (!response) return;
 
+    console.log({
+      url: response.url,
+      filteredUrl: filterUrl(response.url),
+    });
     const tokens = encodeApiUrl(filterUrl(response.url));
     dispatch(
       handleRequestUrlReplaceTokens({

@@ -12,7 +12,7 @@ import { areSamePayload } from "@/utils/helper";
 ================================= */
 export const loadFolder = createAsyncThunk<
   void,
-  void | { requestId?: string | null | undefined; once?: boolean },
+  void | { requestOrFolderId?: string | null | undefined; once?: boolean },
   {
     dispatch: AppDispatch;
     state: RootState;
@@ -21,12 +21,12 @@ export const loadFolder = createAsyncThunk<
   try {
     if (!payload) payload = {};
 
-    let selectedTab = payload.requestId;
-    const once = payload.once ?? false;
-
     const state = getState() as RootState;
 
-    if (!selectedTab) selectedTab = state.requestResponse.selectedTab;
+    const selectedTab =
+      payload.requestOrFolderId ?? state.requestResponse.selectedTab;
+    const once = payload.once ?? false;
+
     if (
       !selectedTab ||
       /* if that requestOrFolder have a method means that is a request so no need to call folder details */
