@@ -58,7 +58,7 @@ const VariableCell = memo(
     visibilityType = true,
     showActionOption = false,
   }: VariableCellProps) => {
-    const [inputValue, setInputValue] = useState(value);
+    const [inputValue, setInputValue] = useState(value ?? "");
 
     const handleInputChange = useCallback(
       (e: ChangeEvent<HTMLInputElement>) => {

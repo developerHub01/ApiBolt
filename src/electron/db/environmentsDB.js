@@ -14,18 +14,11 @@ export const getAllEnvironments = async () => {
 /* id === active project id */
 export const getEnvironments = async (id) => {
   try {
-    if (id) {
-      return await db
-        .select()
-        .from(environmentTable)
-        .where(eq(environmentTable.projectId, id));
-    } else {
-      const activeProjectId = await getActiveProject();
-      return await db
-        .select()
-        .from(environmentTable)
-        .where(eq(environmentTable.projectId, activeProjectId));
-    }
+    if (!id) id = await getActiveProject();
+    return await db
+      .select()
+      .from(environmentTable)
+      .where(eq(environmentTable.projectId, id));
   } catch (error) {
     console.log(error);
   }
