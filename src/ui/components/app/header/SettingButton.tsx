@@ -1,7 +1,4 @@
-import type { CSSProperties } from "react";
 import { Settings as SettingIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { isElectron } from "@/utils/electron";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { handleChangeIsSettingOpen } from "@/context/redux/setting/setting-slice";
 import {
@@ -9,29 +6,18 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import ActionButton from "@/components/app/header/ActionButton";
 
 const SettingButton = () => {
   const dispatch = useAppDispatch();
-
   const handleToggle = () => dispatch(handleChangeIsSettingOpen());
 
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Button
-          size={"iconSm"}
-          variant={"ghost"}
-          style={{
-            ...(isElectron()
-              ? ({
-                  appRegion: "no-drag",
-                } as CSSProperties)
-              : {}),
-          }}
-          onClick={handleToggle}
-        >
+        <ActionButton id="settings" onClick={handleToggle}>
           <SettingIcon />
-        </Button>
+        </ActionButton>
       </TooltipTrigger>
       <TooltipContent>
         <p>Setting (Ctrl+,)</p>
@@ -40,4 +26,4 @@ const SettingButton = () => {
   );
 };
 
-export default SettingButton
+export default SettingButton;

@@ -13,7 +13,10 @@ const Header = () => {
       <div className="w-full flex-[2] flex justify-center items-center">
         <HeaderSearch />
       </div>
-      <div className="justify-end flex-1 flex gap-2.5 items-center h-full">
+      <div
+        className="justify-end flex-1 flex items-center h-full"
+        style={isElectron() ? ({ appRegion: "no-drag" } as CSSProperties) : {}}
+      >
         <SettingButton />
         {isElectron() && <WindowControls />}
       </div>

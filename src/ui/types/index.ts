@@ -348,4 +348,9 @@ declare global {
   }
 }
 
-export type TWindowControl = "minimize" | "maximize" | "unmaximize" | "close";
+export type TWindowControl =
+  | "minimize"
+  | "maximize"
+  | "unmaximize"
+  | "close"
+  | "settings";

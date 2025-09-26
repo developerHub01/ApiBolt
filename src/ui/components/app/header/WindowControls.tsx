@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useState } from "react";
 import { isElectron } from "@/utils/electron";
 import {
   Minus as MinimizeIcon,
@@ -6,9 +6,8 @@ import {
   X as CloseIcon,
   SquareSquare as UnMaximizeIcon,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import type { TWindowControl } from "@/types";
+import ActionButton from "@/components/app/header/ActionButton";
 
 const WindowControls = () => {
   const [isMaximized, setIsMaximized] = useState(false);
@@ -44,10 +43,7 @@ const WindowControls = () => {
   };
 
   return (
-    <div
-      style={isElectron() ? ({ appRegion: "no-drag" } as CSSProperties) : {}}
-      className="flex h-full"
-    >
+    <>
       <ActionButton id="minimize" onClick={handleWindowAction}>
         <MinimizeIcon size={18} />
       </ActionButton>
@@ -70,35 +66,7 @@ const WindowControls = () => {
       >
         <CloseIcon size={18} />
       </ActionButton>
-    </div>
-  );
-};
-
-interface ActionButtonProps {
-  id: TWindowControl;
-  children: React.ReactNode;
-  className?: string;
-  onClick: (action: TWindowControl) => void;
-}
-
-const ActionButton = ({
-  children,
-  id,
-  onClick,
-  className,
-}: ActionButtonProps) => {
-  return (
-    <Button
-      variant="secondary"
-      className={cn(
-        "rounded-none h-full aspect-square bg-transparent",
-        "hover:bg-foreground/10",
-        className
-      )}
-      onClick={() => onClick(id)}
-    >
-      {children}
-    </Button>
+    </>
   );
 };
 
