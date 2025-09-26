@@ -5,7 +5,7 @@ import { httpStatusTable } from "../db/schema.js";
 export const generateHttpStatusSeed = async () => {
   try {
     const payload = Object.keys(httpStatus).map((code) => ({
-      code: Number(code),
+      code: code,
       reason: httpStatus[code].reason,
       description: httpStatus[code].description,
     }));
