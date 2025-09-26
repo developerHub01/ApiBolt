@@ -1,6 +1,9 @@
 import { memo, useState, useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { selectHttpStatusCodeList } from "@/context/redux/http-status/selectors/http-status";
+import {
+  selectHttpStatusCodeList,
+  selectSelectedSettingHttpStatusCode,
+} from "@/context/redux/http-status/selectors/http-status";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -21,17 +24,17 @@ import { handleUpdateSelectedSettingHttpStatusCode } from "@/context/redux/http-
 
 const SettingHttpStatusSelector = memo(() => {
   const list = useAppSelector(selectHttpStatusCodeList);
-  const disptch = useAppDispatch()
+  const selectedCode = useAppSelector(selectSelectedSettingHttpStatusCode);
+  const disptch = useAppDispatch();
   const [open, setOpen] = useState<boolean>(false);
 
   const handleChange = useCallback(
     (value: string) => {
-      disptch(handleUpdateSelectedSettingHttpStatusCode(value))
-           setOpen(false);
+      disptch(handleUpdateSelectedSettingHttpStatusCode(value));
+      setOpen(false);
     },
-    [],
-  )
-  
+    [disptch]
+  );
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -42,7 +45,9 @@ const SettingHttpStatusSelector = memo(() => {
           aria-expanded={open}
           className="w-[200px] justify-between"
         >
-          {value ? list.find((code) => code === value) : "Select framework..."}
+          {selectedCode
+            ? list.find((code) => code === selectedCode)
+            : "Select framework..."}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -53,16 +58,12 @@ const SettingHttpStatusSelector = memo(() => {
             <CommandEmpty>No Code matched.</CommandEmpty>
             <CommandGroup>
               {list.map((code) => (
-                <CommandItem
-                  key={code}
-                  value={code}
-                  onSelect={handleChange}
-                >
+                <CommandItem key={code} value={code} onSelect={handleChange}>
                   {code}
                   <Check
                     className={cn(
                       "ml-auto",
-                      value === code ? "opacity-100" : "opacity-0"
+                      selectedCode === code ? "opacity-100" : "opacity-0"
                     )}
                   />
                 </CommandItem>
