@@ -3,6 +3,7 @@ import requestResponseReducer from "@/context/redux/request-response/request-res
 import sidebarReducer from "@/context/redux/sidebar/sidebar-slice";
 import settingReducer from "@/context/redux/setting/setting-slice";
 import requestUrlReducer from "@/context/redux/request-url/request-url-slice";
+import httpStatusReducer from "@/context/redux/http-status/http-status-slice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     sidebar: sidebarReducer,
     setting: settingReducer,
     requestUrl: requestUrlReducer,
+    httpStatus: httpStatusReducer,
   },
 });
 

@@ -49,6 +49,12 @@ contextBridge.exposeInMainWorld("electronAPIZoom", {
   getZoom: () => webFrame.getZoomFactor(),
 });
 
+contextBridge.exposeInMainWorld("electronAPIHttpStatusDB", {
+  getHttpStatus: async () => await ipcRenderer.invoke("getHttpStatus"),
+  updateHttpStatus: async (payload) =>
+    await ipcRenderer.invoke("updateHttpStatus", payload),
+});
+
 contextBridge.exposeInMainWorld("electronAPIProjectsDB", {
   getProjects: async () => await ipcRenderer.invoke("getProjects"),
   createProjects: async (payload) =>

@@ -46,10 +46,6 @@ export const loadApiUrl = createAsyncThunk<
     const response = await window.electronAPIApiUrl.getApiUrlDB(selectedTab);
     if (!response) return;
 
-    console.log({
-      url: response.url,
-      filteredUrl: filterUrl(response.url),
-    });
     const tokens = encodeApiUrl(filterUrl(response.url));
     dispatch(
       handleRequestUrlReplaceTokens({

@@ -30,7 +30,11 @@ import type { ProjectInterface } from "@/types/project.types";
 import type {
   EnvironmentInterface,
   EnvironmentPayloadInterface,
-} from "./environment.types";
+} from "@/types/environment.types";
+import type {
+  HttpStatusListInterface,
+  HttpStatusUpdatePayloadInterface,
+} from "@/types/http-status.type";
 
 declare global {
   interface Window {
@@ -65,6 +69,13 @@ declare global {
     electronAPIZoom: {
       setZoom: (factor: number) => Promise<void>;
       getZoom: () => Promise<number>;
+    };
+
+    electronAPIHttpStatusDB: {
+      getHttpStatus(): Promise<HttpStatusListInterface>;
+      updateHttpStatus(
+        payload: HttpStatusUpdatePayloadInterface
+      ): Promise<Required<HttpStatusUpdatePayloadInterface> | null>;
     };
 
     electronAPIProjectsDB: {

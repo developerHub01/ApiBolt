@@ -17,7 +17,7 @@ const TabBottomCTA = memo(
       <Button
         variant={"secondary"}
         size={"sm"}
-        className={cn("w-full gap-0", {
+        className={cn("w-full gap-0 overflow-hidden", {
           "justify-start": isHovering,
           "justify-center": !isHovering,
         })}

@@ -7,6 +7,7 @@ import SettingZoom from "@/components/app/setting/content/zoom/SettingZoom";
 import SettingLayout from "@/components/app/setting/content/layout/SettingLayout";
 import SettingCode from "@/components/app/setting/content/code/SettingCode";
 import SettingBackground from "@/components/app/setting/content/background/SettingBackground";
+import SettingHttpStatus from "@/components/app/setting/content/http-status/SettingHttpStatus";
 
 const SettingContent = memo(() => {
   const { activeTab } = useSetting();
@@ -38,6 +39,7 @@ const SettingContent = memo(() => {
           <SettingZoom />
           <SettingLayout />
           <SettingCode />
+          <SettingHttpStatus />
         </Accordion>
       </motion.section>
     </AnimatedDialogContent>

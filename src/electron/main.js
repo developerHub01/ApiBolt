@@ -28,6 +28,8 @@ import { bodyFormDataHandlers } from "./ipc/bodyFormDataHandlers.js";
 import { metaShowColumnHandlers } from "./ipc/metaShowColumnHandlers.js";
 import { apiUrlHandler } from "./ipc/apiUrlHandler.js";
 import { showHiddenMetaDataHandler } from "./ipc/showHiddenMetaDataHandler.js";
+import { generateHttpStatusSeed } from "./seeders/httpStatusSeed.js";
+import { httpStatusHandler } from "./ipc/httpStatusHandler.js";
 
 export const userDataDir = app.getPath("userData");
 
@@ -44,7 +46,7 @@ if (electronSquirrelStartup) {
 let splashWindow = null;
 let mainWindow = null;
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   splashWindow = createSplashWindow();
   mainWindow = createMainWindow();
 
@@ -77,6 +79,7 @@ app.whenReady().then(() => {
       mainWindow = createMainWindow();
   });
 
+  httpStatusHandler();
   registerCookieHandlers();
   windowHandler(mainWindow);
   jsonWebTokenHandlers();
@@ -98,6 +101,7 @@ app.whenReady().then(() => {
   bodyFormDataHandlers();
   metaShowColumnHandlers();
   apiUrlHandler();
+  await generateHttpStatusSeed();
 });
 
 app.on("window-all-closed", () => {

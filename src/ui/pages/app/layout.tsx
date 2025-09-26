@@ -51,7 +51,7 @@ interface CustomizedBgWrapperProps {
 
 const CustomizedBgWrapper = memo(({ children }: CustomizedBgWrapperProps) => {
   return (
-    <section className="h-dvh overflow-hidden relative">
+    <section className="h-dvh w-dvw overflow-hidden relative">
       <section className="h-full relative z-[2] flex flex-col">
         {children}
       </section>

@@ -295,6 +295,41 @@
       "when": 1758463211664,
       "tag": "0041_first_silver_sable",
       "breakpoints": true
+    },
+    {
+      "idx": 42,
+      "version": "6",
+      "when": 1758807928439,
+      "tag": "0042_big_shatterstar",
+      "breakpoints": true
+    },
+    {
+      "idx": 43,
+      "version": "6",
+      "when": 1758813698021,
+      "tag": "0043_common_shiva",
+      "breakpoints": true
+    },
+    {
+      "idx": 44,
+      "version": "6",
+      "when": 1758813987065,
+      "tag": "0044_lean_rictor",
+      "breakpoints": true
+    },
+    {
+      "idx": 45,
+      "version": "6",
+      "when": 1758826024896,
+      "tag": "0045_overjoyed_sleepwalker",
+      "breakpoints": true
+    },
+    {
+      "idx": 46,
+      "version": "6",
+      "when": 1758835602025,
+      "tag": "0046_rapid_typhoid_mary",
+      "breakpoints": true
     }
   ]
 }

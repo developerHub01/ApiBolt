@@ -22,6 +22,14 @@ export const activeProjectTable = sqliteTable("active_project_table", {
     }),
 });
 
+export const httpStatusTable = sqliteTable("http_status_table", {
+  code: text().notNull().primaryKey(),
+  reason: text().default(""),
+  description: text().default(""),
+  editedReason: text(),
+  editedDescription: text(),
+});
+
 export const environmentTable = sqliteTable("environments_table", {
   id: text("id")
     .primaryKey()
