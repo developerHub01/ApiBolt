@@ -21,3 +21,15 @@ export const selectHttpStatusCodeDetails = (code: string) =>
     (state: RootState) => state.httpStatus.httpStatus[code],
     (httpStatusDetails) => httpStatusDetails
   );
+
+export const selectHttpStatusCodeDetailsPartial = (code: string) =>
+  createSelector(
+    (state: RootState) => state.httpStatus.httpStatus,
+    (httpStatusList) =>
+      Object.keys(httpStatusList)
+        .filter((httpCode) => httpCode.startsWith(code))
+        .map((statusCode) => ({
+          code: statusCode,
+          ...httpStatusList[statusCode],
+        }))
+  );
