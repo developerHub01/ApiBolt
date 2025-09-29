@@ -1,10 +1,18 @@
 import { ipcMain } from "electron";
-import { getHttpStatus, updateHttpStatus } from "../db/httpStatusDB.js";
+import {
+  getHttpStatus,
+  getHttpStatusByCode,
+  updateHttpStatus,
+} from "../db/httpStatusDB.js";
 
 export const httpStatusHandler = () => {
   ipcMain.handle(
     "getHttpStatus",
     async (_, ...rest) => await getHttpStatus(...rest)
+  );
+  ipcMain.handle(
+    "getHttpStatusByCode",
+    async (_, ...rest) => await getHttpStatusByCode(...rest)
   );
   ipcMain.handle(
     "updateHttpStatus",

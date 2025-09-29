@@ -51,6 +51,8 @@ contextBridge.exposeInMainWorld("electronAPIZoom", {
 
 contextBridge.exposeInMainWorld("electronAPIHttpStatusDB", {
   getHttpStatus: async () => await ipcRenderer.invoke("getHttpStatus"),
+  getHttpStatusByCode: async () =>
+    await ipcRenderer.invoke("getHttpStatusByCode"),
   updateHttpStatus: async (payload) =>
     await ipcRenderer.invoke("updateHttpStatus", payload),
 });

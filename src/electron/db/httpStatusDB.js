@@ -20,10 +20,23 @@ export const getHttpStatus = async () => {
   }
 };
 
+export const getHttpStatusByCode = async (code) => {
+  try {
+    return (
+      await db
+        .select()
+        .from(httpStatusTable)
+        .where(eq(httpStatusTable.code, code))
+    )?.[0];
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const updateHttpStatus = async (payload = {}) => {
   try {
     if (!payload.code || isNaN(Number(payload.code))) return false;
-    
+
     const code = payload.code;
 
     delete payload.code;
