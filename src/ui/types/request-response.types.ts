@@ -135,6 +135,8 @@ export interface ResponseInterface {
   status: number;
   statusText: string;
   statusDescription?: string;
+  requestSize: RequestResponseSizeInterface;
+  responseSize: RequestResponseSizeInterface;
 }
 
 export interface RequestResponseSizeInterface {

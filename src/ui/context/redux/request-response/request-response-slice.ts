@@ -18,7 +18,6 @@ import type {
   RequestListInterface,
   RequestListItemInterface,
   RequestListItemUpdatePayloadInterface,
-  RequestResponseSizeInterface,
   ResponseFolderDataInterface,
   ResponseInterface,
   TActiveTabType,
@@ -222,8 +221,6 @@ interface RequestResponseState {
   rawData: Record<string, string>;
   rawDataLineWrap: Record<string, boolean>;
   response: Record<string, ResponseInterface | null>;
-  requestSize: Record<string, RequestResponseSizeInterface>;
-  responseSize: Record<string, RequestResponseSizeInterface>;
   isResposneError: Record<string, boolean>;
   requestBodyType: Record<string, TRequestBodyType>;
   rawRequestBodyType: Record<string, TContentType>;
@@ -304,8 +301,6 @@ const initialState: RequestResponseState = {
   rawData: {},
   rawDataLineWrap: {},
   response: {},
-  requestSize: {},
-  responseSize: {},
   isResposneError: {},
   requestBodyType: {},
   rawRequestBodyType: {},
@@ -1258,21 +1253,6 @@ export const requestResponseSlice = createSlice({
 
       state.rawRequestBodyType[id] = type;
     },
-    handleChangeRequestResponseSize: (
-      state,
-      action: PayloadAction<{
-        id?: string;
-        payload: RequestResponseSizeInterface;
-        type: "request" | "response";
-      }>
-    ) => {
-      const id = action.payload.id ?? state.selectedTab;
-      if (!id) return;
-
-      const { payload, type } = action.payload;
-      if (type === "request") state.requestSize[id] = payload;
-      else state.responseSize[id] = payload;
-    },
     handleChangeAuthType: (
       state,
       action: PayloadAction<{
@@ -1506,7 +1486,6 @@ export const {
   handleChangeRawData,
   handleChangeRequestBodyType,
   handleChangeRawRequestBodyType,
-  handleChangeRequestResponseSize,
   handleChangeAuthType,
   handleIsDownloadRequestWithBase64,
   handleClearRequestResponse,

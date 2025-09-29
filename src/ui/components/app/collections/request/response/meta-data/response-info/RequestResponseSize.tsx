@@ -20,10 +20,15 @@ import {
   selectResponseSize,
 } from "@/context/redux/request-response/selectors/response";
 
+const defaultSizeObj = {
+  header: 0,
+  body: 0,
+};
+
 const RequestResponseSize = memo(() => {
   const response = useAppSelector(selectResponse);
-  const requestSize = useAppSelector(selectRequestSize);
-  const responseSize = useAppSelector(selectResponseSize);
+  const requestSize = useAppSelector(selectRequestSize) ?? defaultSizeObj;
+  const responseSize = useAppSelector(selectResponseSize) ?? defaultSizeObj;
   if (!response) return null;
 
   return (
@@ -50,11 +55,11 @@ RequestResponseSize.displayName = "Request response size";
 
 interface SizeDetailsProps {
   type: "request" | "response";
-  header: number;
-  body: number;
+  header?: number;
+  body?: number;
 }
 
-const SizeDetails = memo(({ type, header, body }: SizeDetailsProps) => {
+const SizeDetails = memo(({ type, header = 0, body = 0 }: SizeDetailsProps) => {
   return (
     <div className="w-full flex gap-2">
       <span

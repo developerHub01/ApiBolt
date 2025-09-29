@@ -33,6 +33,13 @@ export const selectRawData = createSelector(
   (rawData): string => rawData ?? ""
 );
 
+export const selectRequestAllBodyType = createSelector(
+  [(state: RootState) => state.requestResponse.requestBodyType],
+  (requestBodyType) => {
+    return requestBodyType;
+  }
+);
+
 export const selectRequestBodyType = createSelector(
   [
     (state: RootState) => state.requestResponse.selectedTab!,
@@ -41,6 +48,6 @@ export const selectRequestBodyType = createSelector(
   (selectedTab, requestBodyType): TRequestBodyType => {
     if (!selectedTab) return "none";
 
-    return requestBodyType[selectedTab];
+    return requestBodyType[selectedTab] ?? "none";
   }
 );

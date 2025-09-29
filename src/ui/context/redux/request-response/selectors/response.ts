@@ -1,9 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit";
 import type { RootState } from "@/context/redux/store";
-import type {
-  RequestResponseSizeInterface,
-  ResponseInterface,
-} from "@/types/request-response.types";
+import type { ResponseInterface } from "@/types/request-response.types";
 
 /*
  * ===============================================
@@ -37,16 +34,18 @@ export const selectResponse = createSelector(
 export const selectRequestSize = createSelector(
   [
     (state: RootState) =>
-      state.requestResponse.requestSize[state.requestResponse.selectedTab!],
+      state.requestResponse.response[state.requestResponse.selectedTab!]
+        ?.requestSize,
   ],
-  (requestSize): RequestResponseSizeInterface => requestSize
+  (requestSize) => requestSize
 );
 export const selectResponseSize = createSelector(
   [
     (state: RootState) =>
-      state.requestResponse.responseSize[state.requestResponse.selectedTab!],
+      state.requestResponse.response[state.requestResponse.selectedTab!]
+        ?.responseSize,
   ],
-  (responseSize): RequestResponseSizeInterface => responseSize
+  (responseSize) => responseSize
 );
 /*
  * ===============================================

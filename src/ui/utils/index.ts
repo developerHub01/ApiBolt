@@ -1,5 +1,3 @@
-import type { TRequestBodyType } from "@/types/request-response.types";
-
 export const calculateIntoFixedPoint = (result: number, point: number = 1) =>
   Number(result.toFixed(point));
 
@@ -26,16 +24,6 @@ export const getResponseType = (contentType: string) => {
     return "XML";
   } else {
     return "TEXT";
-  }
-};
-
-export const getPayloadSize = (data: unknown): number => {
-  try {
-    const str = typeof data === "string" ? data : JSON.stringify(data);
-    return new TextEncoder().encode(str).length;
-  } catch (err) {
-    console.error("getPayloadSize error:", err);
-    return 0;
   }
 };
 
@@ -153,39 +141,6 @@ export const getRawContentType = (
 //     maxRedirects: 5,
 //   });
 // };
-
-export const requestDataSize = ({
-  bodyType,
-  formData,
-  xWWWformDataUrlencoded,
-  rawData,
-  binaryData,
-}: {
-  bodyType: TRequestBodyType;
-  formData?: Array<{
-    key: string;
-    value: string | Array<File>;
-  }>;
-  xWWWformDataUrlencoded?: Array<{
-    key: string;
-    value: string;
-  }>;
-  rawData?: string;
-  binaryData?: File;
-}) => {
-  switch (bodyType) {
-    case "binary":
-      return getPayloadSize(binaryData);
-    case "raw":
-      return getPayloadSize(rawData);
-    case "form-data":
-      return getPayloadSize(formData);
-    case "x-www-form-urlencoded":
-      return getPayloadSize(xWWWformDataUrlencoded);
-    default:
-      return 0;
-  }
-};
 
 export const fileToBase64 = (file: File): Promise<string> =>
   new Promise((resolve, reject) => {

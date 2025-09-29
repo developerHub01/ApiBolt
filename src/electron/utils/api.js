@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getRawContentType } from "./utils.js";
+import { getPayloadSize, getRawContentType, requestDataSize } from "./utils.js";
 import { parseSetCookie } from "./cookies.js";
 import { jar } from "../main.js";
 import { getCookiesByDomain, saveCookiesToFile } from "./cookieManager.js";
@@ -12,8 +12,9 @@ import mime from "mime-types";
 import { getBodyFormDataByFormId } from "../db/bodyFormDataDB.js";
 import { getHttpStatusByCode } from "../db/httpStatusDB.js";
 
-export const fetchApi = async (_, payload) => {
-  payload = await apiPayloadHandler(payload);
+export const fetchApi = async (_, rawPayload) => {
+  const payload = await apiPayloadHandler(rawPayload);
+  let responsePayload = {};
 
   try {
     const normalizedUrl = new URL(payload.url).origin;
@@ -33,7 +34,7 @@ export const fetchApi = async (_, payload) => {
 
     const statusDetails = await getHttpStatusByCode(String(res.status));
 
-    return {
+    responsePayload = {
       headers: res.headers,
       status: res.status,
       statusText:
@@ -43,6 +44,10 @@ export const fetchApi = async (_, payload) => {
         (statusDetails.editedDescription || statusDetails.description),
       data: res.data,
       cookies,
+      responseSize: {
+        header: getPayloadSize(res.headers) ?? 0,
+        body: getPayloadSize(res.data) ?? 0,
+      },
     };
   } catch (error) {
     const statusDetails = await getHttpStatusByCode(
@@ -50,7 +55,7 @@ export const fetchApi = async (_, payload) => {
     );
 
     if (axios.isAxiosError(error) && error.response) {
-      return {
+      responsePayload = {
         data: error.response.data,
         headers: error.response.headers,
         status: error.response.status,
@@ -60,17 +65,47 @@ export const fetchApi = async (_, payload) => {
         statusDescription:
           error.response.statusDescription ??
           (statusDetails.editedDescription || statusDetails.description),
+        responseSize: {
+          header: getPayloadSize(error.response.headers) ?? 0,
+          body: getPayloadSize(error.response.data) ?? 0,
+        },
       };
     } else {
-      return {
+      responsePayload = {
         data: null,
         headers: {},
         status: 0,
         statusText: "Network Error",
         statusDescription:
           "Could not connect to the server. Check your internet or API URL.",
+        responseSize: {
+          header: 0,
+          body: 0,
+        },
       };
     }
+  } finally {
+    if (!["get", "option"].includes(payload.method)) {
+      responsePayload.requestSize = {
+        header: getPayloadSize(payload.headers) ?? 0,
+        body: requestDataSize({
+          bodyType: rawPayload.bodyType,
+          rawData: rawPayload.rawData,
+          binaryData: payload.data,
+          formData: rawPayload.formData?.map((item) => ({
+            key: item.key,
+            value: item.value,
+          })),
+          xWWWformDataUrlencoded: rawPayload.xWWWformDataUrlencoded?.map(
+            (item) => ({
+              key: item.key,
+              value: item.value,
+            })
+          ),
+        }),
+      };
+    }
+    return responsePayload;
   }
 };
 
