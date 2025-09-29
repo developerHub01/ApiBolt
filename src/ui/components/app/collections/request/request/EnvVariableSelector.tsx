@@ -62,7 +62,7 @@ const EnvVariableSelector = memo(
             <input
               className="w-full h-full flex-1 truncate text-left 
              bg-transparent border-none outline-none 
-             pointer-events-none select-none"
+             pointer-events-none select-none font-medium"
               readOnly
               tabIndex={-1}
               value={
