@@ -5,6 +5,10 @@ export interface HttpStatusInterface {
   editedDescription: string;
 }
 
+export interface HttpStatusSingleInterface extends HttpStatusInterface {
+  code: string;
+}
+
 export interface HttpStatusListInterface {
   [code: string]: HttpStatusInterface;
 }

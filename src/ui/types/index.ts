@@ -33,6 +33,7 @@ import type {
 } from "@/types/environment.types";
 import type {
   HttpStatusListInterface,
+  HttpStatusSingleInterface,
   HttpStatusUpdatePayloadInterface,
 } from "@/types/http-status.type";
 
@@ -73,6 +74,7 @@ declare global {
 
     electronAPIHttpStatusDB: {
       getHttpStatus(): Promise<HttpStatusListInterface>;
+      getHttpStatusByCode(code: string): Promise<HttpStatusSingleInterface>;
       updateHttpStatus(
         payload: HttpStatusUpdatePayloadInterface
       ): Promise<Required<HttpStatusUpdatePayloadInterface> | null>;

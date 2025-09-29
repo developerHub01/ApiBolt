@@ -1,5 +1,6 @@
 import type {
   HttpStatusListInterface,
+  HttpStatusSingleInterface,
   HttpStatusUpdatePayloadInterface,
 } from "@/types/http-status.type";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
@@ -26,6 +27,13 @@ export const httpStatusSlice = createSlice({
     ) => {
       state.httpStatus = action.payload;
     },
+    handleLoadSingleHttpStatus: (
+      state,
+      action: PayloadAction<HttpStatusSingleInterface>
+    ) => {
+      const { code, ...payload } = action.payload;
+      state.httpStatus[code] = payload;
+    },
     handleUpdateHttpStatus: (
       state,
       action: PayloadAction<HttpStatusUpdatePayloadInterface>
@@ -47,6 +55,7 @@ export const httpStatusSlice = createSlice({
 
 export const {
   handleLoadHttpStatus,
+  handleLoadSingleHttpStatus,
   handleUpdateHttpStatus,
   handleUpdateSelectedSettingHttpStatusCode,
 } = httpStatusSlice.actions;

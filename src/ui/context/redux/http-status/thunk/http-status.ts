@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import {
   handleLoadHttpStatus,
+  handleLoadSingleHttpStatus,
   handleUpdateHttpStatus,
 } from "@/context/redux/http-status/http-status-slice";
 import type { HttpStatusUpdatePayloadInterface } from "@/types/http-status.type";
@@ -25,6 +26,26 @@ export const loadHttpStatus = createAsyncThunk<
     if (!response) return;
 
     dispatch(handleLoadHttpStatus(response));
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+export const loadHttpStatusByCode = createAsyncThunk<
+  void,
+  string,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("request-url/loadHttpStatusByCode", async (code, { dispatch }) => {
+  try {
+    const response =
+      await window.electronAPIHttpStatusDB.getHttpStatusByCode(code);
+
+    if (!response) return;
+
+    dispatch(handleLoadSingleHttpStatus(response));
   } catch (error) {
     console.log(error);
   }
