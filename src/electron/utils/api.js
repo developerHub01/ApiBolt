@@ -10,10 +10,10 @@ import { access } from "fs/promises";
 import FormData from "form-data";
 import mime from "mime-types";
 import { getBodyFormDataByFormId } from "../db/bodyFormDataDB.js";
+import { getHttpStatusByCode } from "../db/httpStatusDB.js";
 
 export const fetchApi = async (_, payload) => {
   payload = await apiPayloadHandler(payload);
-  console.log(payload);
 
   try {
     const normalizedUrl = new URL(payload.url).origin;
@@ -31,22 +31,35 @@ export const fetchApi = async (_, payload) => {
       Array.from(await getCookiesByDomain(normalizedUrl))
     );
 
+    const statusDetails = await getHttpStatusByCode(String(res.status));
+
     return {
       headers: res.headers,
       status: res.status,
-      statusText: res.statusText,
+      statusText:
+        res.statusText ?? (statusDetails.editedReason || statusDetails.reason),
+      statusDescription:
+        res.statusDescription ??
+        (statusDetails.editedDescription || statusDetails.description),
       data: res.data,
       cookies,
     };
   } catch (error) {
-    console.log(error);
+    const statusDetails = await getHttpStatusByCode(
+      String(error.response.status)
+    );
+
     if (axios.isAxiosError(error) && error.response) {
       return {
         data: error.response.data,
         headers: error.response.headers,
         status: error.response.status,
-        statusText: error.response.statusText,
-        statusDescription: "",
+        statusText:
+          error.response.statusText ??
+          (statusDetails.editedReason || statusDetails.reason),
+        statusDescription:
+          error.response.statusDescription ??
+          (statusDetails.editedDescription || statusDetails.description),
       };
     } else {
       return {
