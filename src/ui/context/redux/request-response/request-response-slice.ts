@@ -1165,6 +1165,21 @@ export const requestResponseSlice = createSlice({
 
       state.activeMetaTab[id] = type;
     },
+
+    handleChangeIsLoading: (
+      state,
+      action: PayloadAction<{
+        id?: string;
+        value: boolean;
+      }>
+    ) => {
+      const { value } = action.payload;
+      const id = action.payload.id ?? state.selectedTab;
+      if (!id) return;
+
+      state.isLoading[id] = value;
+    },
+
     handleSetResponse: (
       state,
       action: PayloadAction<{
@@ -1178,6 +1193,7 @@ export const requestResponseSlice = createSlice({
 
       state.response[id] = response;
     },
+
     handleSetFormData: (
       state,
       action: PayloadAction<{
@@ -1482,7 +1498,9 @@ export const {
   handleLoadReqestMetaTab,
   handleUpdateReqestMetaTab,
 
+  handleChangeIsLoading,
   handleSetResponse,
+
   handleSetFormData,
   handleSetXWWWFormUrlencodedData,
   handleChangeRawData,

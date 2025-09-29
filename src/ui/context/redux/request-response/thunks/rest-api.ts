@@ -10,7 +10,10 @@ import {
 } from "@/context/redux/request-response/selectors/body-raw";
 import type { APIPayloadBody } from "@/types/request-response.types";
 import { filterAndUniqueMetaData } from "@/context/redux/request-response/utils";
-import { handleSetResponse } from "@/context/redux/request-response/request-response-slice";
+import {
+  handleChangeIsLoading,
+  handleSetResponse,
+} from "@/context/redux/request-response/request-response-slice";
 
 export const fetchApi = createAsyncThunk<
   void,
@@ -79,8 +82,19 @@ export const fetchApi = createAsyncThunk<
       }
     }
 
+    dispatch(
+      handleChangeIsLoading({
+        id: requestId,
+        value: true,
+      })
+    );
     const response = (await window.electronAPI.fetchApi(payload)) ?? null;
-    console.log(response);
+    dispatch(
+      handleChangeIsLoading({
+        id: requestId,
+        value: false,
+      })
+    );
 
     dispatch(
       handleSetResponse({
