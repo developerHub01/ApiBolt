@@ -30,6 +30,7 @@ import { apiUrlHandler } from "./ipc/apiUrlHandler.js";
 import { showHiddenMetaDataHandler } from "./ipc/showHiddenMetaDataHandler.js";
 import { generateHttpStatusSeed } from "./seeders/httpStatusSeed.js";
 import { httpStatusHandler } from "./ipc/httpStatusHandler.js";
+import { requestHandler } from "./ipc/requestHandler.js";
 
 export const userDataDir = app.getPath("userData");
 
@@ -101,6 +102,7 @@ app.whenReady().then(async () => {
   bodyFormDataHandlers();
   metaShowColumnHandlers();
   apiUrlHandler();
+  requestHandler();
   await generateHttpStatusSeed();
 });
 

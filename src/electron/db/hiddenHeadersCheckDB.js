@@ -47,11 +47,12 @@ export const createHiddenHeadersCheck = async (payload = {}) => {
 export const updateHiddenHeadersCheck = async (payload) => {
   if (!payload) return false;
 
+  const selectedTab =
+    payload.requestOrFolderMetaId ?? (await getTabList()).selectedTab;
+  if (!selectedTab) return false;
+
   delete payload["id"];
   delete payload["requestOrFolderMetaId"];
-
-  const selectedTab = (await getTabList()).selectedTab;
-  if (!selectedTab) return false;
 
   for (const key in payload)
     if (typeof payload[key] === "boolean") payload[key] = Number(payload[key]);

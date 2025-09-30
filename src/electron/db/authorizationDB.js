@@ -190,13 +190,13 @@ export const updateAuth = async ({ requestOrFolderId, payload = {} } = {}) => {
 
 export const deleteAuth = async (id) => {
   try {
+    if (!id) id = (await getTabList())?.selectedTab;
     let deleted = null;
 
     if (id) {
       deleted = await db
         .delete(authorizationTable)
         .where(eq(authorizationTable.id, id));
-
       return deleted.changes > 0;
     }
 
@@ -205,10 +205,10 @@ export const deleteAuth = async (id) => {
     deleted = await db
       .delete(authorizationTable)
       .where(eq(authorizationTable.projectId, activeProjectId));
-
     return deleted.changes > 0;
   } catch (error) {
     console.log(error);
+    return false;
   }
 };
 
@@ -221,5 +221,23 @@ export const deleteAuthByProjectId = async (id) => {
     return deleted.changes > 0;
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const deleteAuthByRequestMetaId = async (requestOrFolderMetaId) => {
+  try {
+    if (!requestOrFolderMetaId)
+      requestOrFolderMetaId = (await getTabList())?.selectedTab;
+    if (!requestOrFolderMetaId) return false;
+
+    const deleted = await db
+      .delete(authorizationTable)
+      .where(
+        eq(authorizationTable.requestOrFolderMetaId, requestOrFolderMetaId)
+      );
+    return deleted.changes > 0;
+  } catch (error) {
+    console.log(error);
+    return false;
   }
 };

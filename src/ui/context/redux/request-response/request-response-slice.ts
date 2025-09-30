@@ -498,6 +498,36 @@ export const requestResponseSlice = createSlice({
         state.jwtBearerAuth[id].addTo = jwtAddTo;
       /* jwt auth end =========== */
     },
+    handleAuthorizationsDefault: (state, action: PayloadAction<string>) => {
+      const id = action.payload;
+      if (!state.activeProjectId) return;
+      /* auth type start =========== */
+      state.authType[id] = "inherit-parent";
+      /* auth type end =========== */
+
+      /* api key start =========== */
+      state.apiKeyAuth[id] = {
+        ...DEFAULT_API_KEY,
+      };
+      /* api key end =========== */
+
+      /* bearer token start =========== */
+      state.bearerTokenAuth[id] = "";
+      /* bearer token end =========== */
+
+      /* basic auth start =========== */
+      state.basicAuth[id] = {
+        ...DEFAULT_BASIC_AUTH,
+      };
+      /* basic auth end =========== */
+
+      /* jwt auth start =========== */
+
+      state.jwtBearerAuth[id] = {
+        ...DEFAULT_JWT_BEARER_AUTH,
+      };
+      /* jwt auth end =========== */
+    },
     /* =============== Authorization reducers end ============= */
 
     /* ================ Requestlist start =================== */
@@ -506,6 +536,19 @@ export const requestResponseSlice = createSlice({
       action: PayloadAction<RequestListInterface>
     ) => {
       state.requestList = action.payload;
+    },
+    handleUpdateRequestOrFolderMeta: (
+      state,
+      action: PayloadAction<
+        Partial<RequestListItemInterface> & Pick<RequestListItemInterface, "id">
+      >
+    ) => {
+      const id = action.payload.id;
+
+      state.requestList[id] = {
+        ...(state.requestList[id] ?? {}),
+        ...action.payload,
+      };
     },
     handleChangeIsRequestListLoaded: (
       state,
@@ -1066,6 +1109,12 @@ export const requestResponseSlice = createSlice({
       state.rawRequestBodyType[selectedTab] = payload.type ?? "json";
       state.rawDataLineWrap[selectedTab] = payload.lineWrap ?? true;
     },
+    handleClearBodyRaw: (state, action: PayloadAction<string | undefined>) => {
+      const selectedTab = action.payload ?? state.selectedTab;
+      if (!selectedTab) return;
+
+      delete state.rawData[selectedTab];
+    },
     /* ================ BodyRaw end =================== */
 
     /* ================ BodyBinary start =================== */
@@ -1079,6 +1128,14 @@ export const requestResponseSlice = createSlice({
       if (!selectedTab) return;
 
       state.binaryData[selectedTab] = payload ?? null;
+    },
+    handleClearBodyBinary: (
+      state,
+      action: PayloadAction<string | undefined>
+    ) => {
+      const selectedTab = action.payload ?? state.selectedTab;
+      if (!selectedTab) return;
+      delete state.binaryData[selectedTab];
     },
     /* ================ BodyBinary end =================== */
 
@@ -1098,6 +1155,15 @@ export const requestResponseSlice = createSlice({
 
       if (state.requestBodyType[selectedTab] !== requestBodyType)
         state.requestBodyType[selectedTab] = requestBodyType;
+    },
+    handleClearReqestMetaTab: (
+      state,
+      action: PayloadAction<string | undefined>
+    ) => {
+      const selectedTab = action.payload ?? state.selectedTab;
+      if (!selectedTab) return;
+      delete state.activeMetaTab[selectedTab];
+      delete state.requestBodyType[selectedTab];
     },
     handleUpdateReqestMetaTab: (
       state,
@@ -1414,8 +1480,10 @@ export const {
 
   handleAuthorizationsInheritedId,
   handleAuthorizations,
+  handleAuthorizationsDefault,
 
   handleLoadRequestList,
+  handleUpdateRequestOrFolderMeta,
   handleChangeIsRequestListLoaded,
   handleToggleRequestList,
   handleUpdateRequestOrFolder,
@@ -1474,8 +1542,11 @@ export const {
   handleSetBodyXWWWFormUrlencoded,
 
   handleLoadBodyRaw,
+  handleClearBodyRaw,
   handleLoadBodyBinary,
+  handleClearBodyBinary,
   handleLoadReqestMetaTab,
+  handleClearReqestMetaTab,
   handleUpdateReqestMetaTab,
 
   handleChangeIsLoading,

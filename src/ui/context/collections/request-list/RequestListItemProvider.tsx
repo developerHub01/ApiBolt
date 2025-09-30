@@ -100,6 +100,11 @@ const RequestListItemProvider = ({
         lavel,
         children: childrenElements,
         ...requestDetails,
+        ...(!requestDetails.name
+          ? {
+              name: requestDetails.method ? "Request" : "Folder",
+            }
+          : {}),
         handleToggleContextMenu,
         handleRenameAction,
         handleChangeName,

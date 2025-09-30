@@ -86,3 +86,20 @@ export const updateBodyRaw = async (payload = {}) => {
     console.log(error);
   }
 };
+
+export const deleteBodyRawByRequestMetaId = async (requestOrFolderMetaId) => {
+  try {
+    if (!requestOrFolderMetaId)
+      requestOrFolderMetaId = (await getTabList())?.selectedTab;
+    if (!requestOrFolderMetaId) return false;
+
+    const deleted = await db
+      .delete(bodyRawTable)
+      .where(eq(bodyRawTable.requestOrFolderMetaId, requestOrFolderMetaId));
+
+    return deleted?.changes > 0;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};

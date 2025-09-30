@@ -73,5 +73,22 @@ export const updateApiUrl = async (payload) => {
     return updated?.changes > 0;
   } catch (error) {
     console.log(error);
+    return false;
+  }
+};
+
+export const deleteApiUrlByRequestMetaId = async (requestOrFolderMetaId) => {
+  try {
+    if (!requestOrFolderMetaId)
+      requestOrFolderMetaId = (await getTabList())?.selectedTab;
+    if (!requestOrFolderMetaId) return false;
+
+    const deleted = await db
+      .delete(apiUrlTable)
+      .where(eq(apiUrlTable.requestOrFolderMetaId, requestOrFolderMetaId));
+    return deleted?.changes > 0;
+  } catch (error) {
+    console.log(error);
+    return false;
   }
 };

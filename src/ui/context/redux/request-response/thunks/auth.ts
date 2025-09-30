@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import {
   handleAuthorizations,
+  handleAuthorizationsDefault,
   handleAuthorizationsInheritedId,
   handleClearHiddenAuthorizationHeaders,
   handleClearHiddenParams,
@@ -55,7 +56,12 @@ export const loadAuthorization = createAsyncThunk<
 
       const authorizationData =
         await window.electronAPIAuthorizationDB.getAuth(requestOrFolderId);
-      if (!authorizationData) return;
+
+      if (!authorizationData) {
+        if (requestOrFolderId)
+          dispatch(handleAuthorizationsDefault(requestOrFolderId));
+        return;
+      }
 
       dispatch(
         handleAuthorizations({

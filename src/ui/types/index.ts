@@ -347,6 +347,10 @@ declare global {
       createApiUrl(payload: Partial<ApiUrlPayload>): Promise<boolean>;
       updateApiUrl(payload: Partial<ApiUrlPayload>): Promise<boolean>;
     };
+
+    electronAPIRequest: {
+      clearRequestDB(requestOrFolderMetaId?: string): Promise<boolean>;
+    };
   }
 }
 

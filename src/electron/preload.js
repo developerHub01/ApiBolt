@@ -295,3 +295,8 @@ contextBridge.exposeInMainWorld("electronAPIApiUrl", {
   updateApiUrl: async (...payload) =>
     await ipcRenderer.invoke("updateApiUrl", ...payload),
 });
+
+contextBridge.exposeInMainWorld("electronAPIRequest", {
+  clearRequestDB: async (...payload) =>
+    await ipcRenderer.invoke("clearRequestDB", ...payload),
+});

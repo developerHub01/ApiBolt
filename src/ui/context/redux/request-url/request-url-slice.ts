@@ -31,6 +31,10 @@ export const requestUrlSlice = createSlice({
 
       state.tokens[selectedTab] = tokens;
     },
+    handleRequestUrlClearTokens: (state, action: PayloadAction<string>) => {
+      const selectedTab = action.payload;
+      delete state.tokens[selectedTab];
+    },
     handleRequestUrlAddToken: (
       state,
       action: PayloadAction<{
@@ -114,6 +118,7 @@ export const requestUrlSlice = createSlice({
 
 export const {
   handleRequestUrlReplaceTokens,
+  handleRequestUrlClearTokens,
   handleRequestUrlAddToken,
   handleRequestUrlUpdateToken,
   handleRequestUrlDeleteToken,
