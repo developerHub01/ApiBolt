@@ -8,6 +8,7 @@ import {
   handleSetBodyXWWWFormUrlencoded,
   handleSetHeaders,
   handleSetParams,
+  handleSetResponse,
   handleUpdateRequestOrFolderMeta,
 } from "@/context/redux/request-response/request-response-slice";
 import { handleRequestUrlClearTokens } from "@/context/redux/request-url/request-url-slice";
@@ -61,9 +62,16 @@ export const clearRequest = createAsyncThunk<
       handleUpdateRequestOrFolderMeta({
         id: requestId,
         name: undefined,
+        method: "get",
       })
     );
     dispatch(handleRequestUrlClearTokens(requestId));
+    dispatch(
+      handleSetResponse({
+        id: requestId,
+        response: null,
+      })
+    );
     await dispatch(
       loadAuthorization({
         requestOrFolderId: requestId,
