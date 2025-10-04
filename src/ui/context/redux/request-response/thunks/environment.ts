@@ -86,7 +86,7 @@ export const updateEnvironments = createAsyncThunk<
       if (response) dispatch(loadEnvironmentsList());
       return response;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return false;
     }
   }
@@ -108,7 +108,7 @@ export const deleteAllEnvironments = createAsyncThunk<
     if (response) dispatch(loadEnvironmentsList());
     return response;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 });
@@ -129,7 +129,7 @@ export const deleteEnvironments = createAsyncThunk<
     if (response) dispatch(loadEnvironmentsList());
     return response;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 });

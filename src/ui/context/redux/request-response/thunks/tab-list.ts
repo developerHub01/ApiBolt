@@ -28,7 +28,7 @@ export const loadTabsData = createAsyncThunk<
     dispatch(handleChangeTabList(tabsListData?.openTabs ?? []));
     dispatch(handleChangeSelectedTab(tabsListData?.selectedTab ?? null));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
@@ -46,7 +46,7 @@ export const changeTabsData = createAsyncThunk<
       selectedTab: state.requestResponse.selectedTab,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
@@ -74,7 +74,7 @@ export const addNewTabsData = createAsyncThunk<
       payload
     );
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
@@ -107,7 +107,7 @@ export const expendParentsOnSelectedChangeTabsData = createAsyncThunk<
 
       if (response) dispatch(handleChangeIsRequestListLoaded(false));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 );

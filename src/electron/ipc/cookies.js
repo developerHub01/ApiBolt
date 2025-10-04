@@ -18,7 +18,7 @@ export const registerCookieHandlers = () => {
       const normalizedUrl = new URL(url).origin;
       return await getCookiesStringByDomain(normalizedUrl);
     } catch (error) {
-      // console.log(error);
+      // console.error(error);
     }
   });
 };

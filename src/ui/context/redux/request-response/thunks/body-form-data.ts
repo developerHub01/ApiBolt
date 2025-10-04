@@ -32,7 +32,7 @@ export const loadBodyFormData = createAsyncThunk<
         await window.electronAPIBodyFormDataDB.getBodyFormData(selectedTab);
       dispatch(handleLoadBodyFormData(response));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 );
@@ -60,7 +60,7 @@ export const addBodyFormData = createAsyncThunk<
       if (response) dispatch(loadBodyFormData());
       return response;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return false;
     }
   }
@@ -86,7 +86,7 @@ export const deleteBodyFormData = createAsyncThunk<
     if (response) dispatch(loadBodyFormData());
     return response;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 });
@@ -115,7 +115,7 @@ export const deleteBodyFormDataByRequestMetaId = createAsyncThunk<
       if (response) dispatch(handleLoadBodyFormData([]));
       return response;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return false;
     }
   }
@@ -144,7 +144,7 @@ export const deleteBodyFormDataFile = createAsyncThunk<
       if (response) dispatch(loadBodyFormData());
       return response;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return false;
     }
   }
@@ -173,7 +173,7 @@ export const updateBodyFormData = createAsyncThunk<
       if (response) dispatch(loadBodyFormData());
       return response;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return false;
     }
   }
@@ -194,7 +194,7 @@ export const updateBodyFormDataFile = createAsyncThunk<
     if (response) dispatch(loadBodyFormData());
     return response;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 });
@@ -218,7 +218,7 @@ export const checkAllBodyFormDataByRequestMetaId = createAsyncThunk<
       if (response) dispatch(loadBodyFormData());
       return response;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return false;
     }
   }

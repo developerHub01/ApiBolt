@@ -44,7 +44,7 @@ export const loadRequestList = createAsyncThunk<
     dispatch(handleLoadRequestList(list));
     dispatch(handleChangeIsRequestListLoaded(true));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
@@ -71,7 +71,7 @@ export const createSingleRequest = createAsyncThunk<
       );
     if (response) await dispatch(expendRequestOrFolder(parentId));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
@@ -99,7 +99,7 @@ export const createCollection = createAsyncThunk<
       });
     if (response) await dispatch(expendRequestOrFolder(parentId));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
@@ -148,7 +148,7 @@ export const createRestApiBasic = createAsyncThunk<
 
     if (response) await dispatch(expendRequestOrFolder(parentId));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
@@ -189,7 +189,7 @@ export const createSingleRequestBySelectedTab = createAsyncThunk<
         );
       if (response) await dispatch(expendRequestOrFolder(parentId));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 );
@@ -233,7 +233,7 @@ export const createCollectionBySelectedTab = createAsyncThunk<
         );
       if (response) await dispatch(expendRequestOrFolder(parentId));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 );
@@ -296,7 +296,7 @@ export const createRestApiBasicBySelectedTab = createAsyncThunk<
 
       if (response) await dispatch(expendRequestOrFolder(parentId));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 );
@@ -316,7 +316,7 @@ export const updateRequestOrFolder = createAsyncThunk<
       payload
     );
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
@@ -347,7 +347,7 @@ export const expendRequestOrFolder = createAsyncThunk<
         })
       );
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 );
@@ -391,7 +391,7 @@ export const moveRequestOrFolder = createAsyncThunk<
       if (response) await dispatch(expendRequestOrFolder(parentId));
       dispatch(handleChangeIsRequestListLoaded(false));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 );
@@ -410,7 +410,7 @@ export const deleteAllRequestOrFolder = createAsyncThunk<
       id
     );
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
@@ -455,7 +455,7 @@ export const deleteRequestOrFolder = createAsyncThunk<
         dispatch(loadTabsData());
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 );
@@ -500,7 +500,7 @@ export const duplicateRequestOrFolder = createAsyncThunk<
 
       if (response) dispatch(handleChangeIsRequestListLoaded(false));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 );
@@ -519,7 +519,7 @@ export const collapseAllRequestOrFolder = createAsyncThunk<
 
     if (response) dispatch(handleChangeCollapseAllRequestOrFolder());
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 /* ==============================

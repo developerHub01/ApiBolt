@@ -21,7 +21,7 @@ export const getRequestMetaTab = async (requestOrFolderMetaId) => {
 
     return result;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -38,7 +38,7 @@ export const createRequestMetaTab = async (payload) => {
 
     return result.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -79,7 +79,7 @@ export const updateRequestMetaTab = async (payload = {}) => {
 
     return updated?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -98,6 +98,6 @@ export const deleteRequestMetaTab = async (requestOrFolderMetaId) => {
 
     return deleted.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };

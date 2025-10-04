@@ -28,7 +28,7 @@ export const getTabList = async () => {
 
     return result;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -54,7 +54,7 @@ export const deleteAllTabList = async () => {
 
     return deleted?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -68,7 +68,7 @@ export const deleteTabListByProjectId = async (id) => {
 
     return deleted?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -91,7 +91,7 @@ export const updateTablistBasedRequestOrFolderMetaDeletion = async (
     const response = await updateTabList(payload);
     return response;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 };

@@ -36,7 +36,7 @@ export const loadParams = createAsyncThunk<
 
     dispatch(handleLoadParams(response));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
@@ -61,7 +61,7 @@ export const addParams = createAsyncThunk<
 
     return response;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 });
@@ -85,7 +85,7 @@ export const deleteParams = createAsyncThunk<
     if (response) dispatch(loadParams());
     return response;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 });
@@ -112,7 +112,7 @@ export const deleteParamsByRequestMetaId = createAsyncThunk<
       if (response) dispatch(handleLoadParams([]));
       return response;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return false;
     }
   }
@@ -166,7 +166,7 @@ export const updateParams = createAsyncThunk<
       if (response) dispatch(loadParams());
       return response;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return false;
     }
   }
@@ -191,7 +191,7 @@ export const checkAllParamsByRequestMetaId = createAsyncThunk<
       if (response) dispatch(loadParams());
       return response;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return false;
     }
   }
@@ -290,7 +290,7 @@ export const updateParamsFromSearchParams = createAsyncThunk<
             [] as Array<ParamInterface>
           );
         } catch (error) {
-          console.log(error);
+          console.error(error);
         }
       }
 
@@ -306,7 +306,7 @@ export const updateParamsFromSearchParams = createAsyncThunk<
       if (!response) await dispatch(loadParams());
       return true;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return false;
     }
   }

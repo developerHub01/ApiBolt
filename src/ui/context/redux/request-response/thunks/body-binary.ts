@@ -19,7 +19,7 @@ export const loadRequestBodyBinary = createAsyncThunk<
       if (!payload) payload = {};
 
       const state = getState() as RootState;
-      
+
       const once = payload.once ?? false;
       const selectedTab =
         payload.requestOrFolderId ?? state.requestResponse.selectedTab;
@@ -34,7 +34,7 @@ export const loadRequestBodyBinary = createAsyncThunk<
         await window.electronAPIBodyBinaryDB.getBodyBinary(selectedTab);
       dispatch(handleLoadBodyBinary(response?.file));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 );
@@ -53,7 +53,7 @@ export const updateRequestBodyBinary = createAsyncThunk<
     if (response) dispatch(loadRequestBodyBinary());
     return;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
@@ -71,7 +71,7 @@ export const deleteRequestBodyBinary = createAsyncThunk<
     if (response) dispatch(loadRequestBodyBinary());
     return;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 /* ==============================

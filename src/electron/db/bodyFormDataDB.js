@@ -20,7 +20,7 @@ export const getBodyFormDataByFormId = async (id) => {
 
     return result;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -52,7 +52,7 @@ export const getBodyFormData = async (requestOrFolderMetaId) => {
 
     return result;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -64,7 +64,7 @@ export const deleteBodyFormData = async (formId) => {
 
     return deleted?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -84,7 +84,7 @@ export const deleteBodyFormDataByRequestMetaId = async (
       );
     return deleted?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -115,7 +115,7 @@ export const deleteBodyFormDataFile = async (formId, index = 0) => {
 
     return updated?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -130,7 +130,7 @@ export const createBodyFormData = async (payload = {}) => {
 
     return result?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -163,7 +163,7 @@ export const updateBodyFormData = async (formId, payload) => {
       .where(eq(bodyFormDataTable.id, formId));
     return updated?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -199,7 +199,7 @@ export const replaceBodyFormData = async (requestOrFolderMetaId, payload) => {
 
     return created?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -231,6 +231,6 @@ export const checkAllBodyFormDataByRequestMetaId = async (
       );
     return updated?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };

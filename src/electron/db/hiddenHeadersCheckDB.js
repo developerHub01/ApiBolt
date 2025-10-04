@@ -18,7 +18,7 @@ export const getHiddenHeadersCheck = async (id) => {
 
     return result;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -40,7 +40,7 @@ export const createHiddenHeadersCheck = async (payload = {}) => {
 
     return result?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -80,6 +80,6 @@ export const updateHiddenHeadersCheck = async (payload) => {
       .where(eq(hiddenHeadersCheckTable.requestOrFolderMetaId, selectedTab));
     return updated?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };

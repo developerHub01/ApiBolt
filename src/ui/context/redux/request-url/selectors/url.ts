@@ -21,7 +21,7 @@ export const selectRequestUrl = createSelector(
     try {
       return decodeApiUrl(tokens) + queryParams;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return queryParams;
     }
   }
@@ -55,7 +55,7 @@ export const selectParsedRequestUrl = createSelector(
     try {
       return decodeApiUrl(tokens) + queryParams;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return queryParams;
     }
   }

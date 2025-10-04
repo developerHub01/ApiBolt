@@ -44,7 +44,7 @@ export const loadFolder = createAsyncThunk<
       })
     );
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
@@ -87,7 +87,7 @@ export const updateFolder = createAsyncThunk<
     }
     return response;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 });

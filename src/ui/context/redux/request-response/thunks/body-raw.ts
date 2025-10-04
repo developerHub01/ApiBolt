@@ -38,7 +38,7 @@ export const loadRequestBodyRaw = createAsyncThunk<
       if (response) dispatch(handleLoadBodyRaw(response));
       return;
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 );
@@ -71,7 +71,7 @@ export const updateRequestBodyRaw = createAsyncThunk<
       if (response) dispatch(loadRequestBodyRaw());
       return;
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 );

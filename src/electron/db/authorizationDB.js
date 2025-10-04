@@ -23,7 +23,7 @@ export const getAuth = async (requestId) => {
         )
     )?.[0];
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -61,7 +61,7 @@ export const getInheritedAuthFromId = async (requestId) => {
 
     return null;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -99,7 +99,7 @@ export const createAuth = async (payload = {}) => {
 
     return result.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -160,7 +160,7 @@ export const updateAuth = async ({ requestOrFolderId, payload = {} } = {}) => {
           }) ?? "";
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
 
     if (!hasValue(payload.basicAuthToken))
@@ -184,7 +184,7 @@ export const updateAuth = async ({ requestOrFolderId, payload = {} } = {}) => {
 
     return updatedData?.[0];
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -207,7 +207,7 @@ export const deleteAuth = async (id) => {
       .where(eq(authorizationTable.projectId, activeProjectId));
     return deleted.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 };
@@ -220,7 +220,7 @@ export const deleteAuthByProjectId = async (id) => {
 
     return deleted.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -237,7 +237,7 @@ export const deleteAuthByRequestMetaId = async (requestOrFolderMetaId) => {
       );
     return deleted.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 };

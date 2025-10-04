@@ -72,7 +72,7 @@ export const replaceMetaTableData = createAsyncThunk<
 
       return response;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return false;
     }
   }

@@ -33,7 +33,7 @@ export const loadSettings = createAsyncThunk<
 
     dispatch(handleLoadSettings(response));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 export const updateSettings = createAsyncThunk<
@@ -56,7 +56,7 @@ export const updateSettings = createAsyncThunk<
 
     return response;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 });
@@ -122,7 +122,7 @@ export const updateSettingsZoomByKeyboard = createAsyncThunk<
 
       return response;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return false;
     }
   }
@@ -154,7 +154,7 @@ export const updateSettingsBackgroundImages = createAsyncThunk<
 
       return response;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return false;
     }
   }

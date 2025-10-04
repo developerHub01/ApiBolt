@@ -19,7 +19,7 @@ export const getBodyBinary = async (requestOrFolderMetaId) => {
 
     return result;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -36,7 +36,7 @@ export const createBodyBinary = async (payload) => {
 
     return result.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -75,7 +75,7 @@ export const updateBodyBinary = async (payload = {}) => {
 
     return updated?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -92,6 +92,6 @@ export const deleteBodyBinary = async (requestOrFolderMetaId) => {
 
     return deleted.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };

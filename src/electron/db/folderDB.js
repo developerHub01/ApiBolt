@@ -25,7 +25,7 @@ export const getFolder = async (requestOrFolderMetaId) => {
       description: result.description,
     };
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 /* 
@@ -70,6 +70,6 @@ export const updateFolder = async (payload) => {
 
     return updated?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };

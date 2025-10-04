@@ -23,7 +23,7 @@ export const getHeaders = async (id) => {
       isCheck: Boolean(item.isCheck),
     }));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -35,7 +35,7 @@ export const deleteHeaders = async (paramId) => {
 
     return deleted?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -51,7 +51,7 @@ export const deleteHeadersByRequestMetaId = async (requestOrFolderMetaId) => {
       .where(eq(headersTable.requestOrFolderMetaId, requestOrFolderMetaId));
     return deleted?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -80,7 +80,7 @@ export const createHeaders = async (payload = {}) => {
 
     return result?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -113,7 +113,7 @@ export const updateHeaders = async (headerId, payload) => {
       .where(eq(headersTable.id, headerId));
     return updated?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -140,7 +140,7 @@ export const replaceHeaders = async (requestOrFolderMetaId, payload) => {
 
     return created?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -168,6 +168,6 @@ export const checkAllHeadersByRequestMetaId = async (requestOrFolderMetaId) => {
       .where(eq(headersTable.requestOrFolderMetaId, requestOrFolderMetaId));
     return updated?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };

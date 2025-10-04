@@ -30,7 +30,7 @@ export const getRequestOrFolderMeta = async () => {
 
     return map;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -43,7 +43,7 @@ export const getRequestOrFolderMetaById = async (id) => {
         .where(eq(requestOrFolderMetaTable.id, id))
     )?.[0];
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -70,7 +70,7 @@ export const createRequestOrFolderMeta = async (payload) => {
 
     return response?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -92,7 +92,7 @@ export const updateRequestOrFolderMeta = async (payload) => {
 
     return updated?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -109,7 +109,7 @@ export const collapseAllRequestOrFolderMeta = async (projectId) => {
 
     return result.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -124,7 +124,7 @@ export const moveRequestOrFolderMeta = async ({ id, parentId = null } = {}) => {
 
     return updated?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -142,7 +142,7 @@ export const deleteRequestOrFolderMetaById = async (id) => {
 
     return deleted?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -154,7 +154,7 @@ export const duplicateRequestOrFolderMeta = async (payload) => {
 
     return result?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -168,7 +168,7 @@ export const deleteRequestOrFolderMetaByProjectId = async (id) => {
 
     return deleted.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -178,7 +178,7 @@ export const deleteRequestOrFolderMetaAll = async () => {
 
     return deleted.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -198,6 +198,6 @@ export const expendOrCollapseRequestOrFolderMetaAll = async (
 
     return updated.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };

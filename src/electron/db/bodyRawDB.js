@@ -21,7 +21,7 @@ export const getBodyRaw = async (requestOrFolderMetaId) => {
 
     return result;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -42,7 +42,7 @@ export const createBodyRaw = async (payload) => {
 
     return result.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -83,7 +83,7 @@ export const updateBodyRaw = async (payload = {}) => {
 
     return updated?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -99,7 +99,7 @@ export const deleteBodyRawByRequestMetaId = async (requestOrFolderMetaId) => {
 
     return deleted?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 };

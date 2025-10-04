@@ -33,7 +33,7 @@ const PasteButton = memo(
         const text = await navigator.clipboard.readText();
         setIsActive(Boolean(text));
       } catch (error) {
-        console.log(error);
+        console.error(error);
         setIsActive(false);
       }
     };
@@ -50,7 +50,7 @@ const PasteButton = memo(
         const value = await window.navigator.clipboard.readText();
         handleChange(value);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
 

@@ -42,7 +42,7 @@ export const loadRequestMetaTab = createAsyncThunk<
 
       dispatch(handleLoadReqestMetaTab(response));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 );
@@ -67,7 +67,7 @@ export const updateRequestMetaTab = createAsyncThunk<
       );
     return;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 /* ==============================

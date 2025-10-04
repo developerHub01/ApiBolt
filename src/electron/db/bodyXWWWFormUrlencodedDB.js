@@ -24,7 +24,7 @@ export const getBodyXWWWFormUrlencoded = async (requestOrFolderMetaId) => {
       isCheck: Boolean(item.isCheck),
     }));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -36,7 +36,7 @@ export const deleteBodyXWWWFormUrlencoded = async (formId) => {
 
     return deleted?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -59,7 +59,7 @@ export const deleteBodyXWWWFormUrlencodedByRequestMetaId = async (
       );
     return deleted?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -74,7 +74,7 @@ export const createBodyXWWWFormUrlencoded = async (payload = {}) => {
 
     return result?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -107,7 +107,7 @@ export const updateBodyXWWWFormUrlencoded = async (formId, payload) => {
       .where(eq(bodyXWWWFormUrlencodedTable.id, formId));
     return updated?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -142,7 +142,7 @@ export const replaceBodyXWWWFormUrlencoded = async (
 
     return created?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -180,6 +180,6 @@ export const checkAllBodyXWWWFormUrlencodedByRequestMetaId = async (
       );
     return updated?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };

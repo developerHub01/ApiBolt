@@ -32,7 +32,7 @@ const CopyButton = memo(
         await window.navigator.clipboard.writeText(value);
         toast("Successfully coppied");
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
 

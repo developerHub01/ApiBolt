@@ -36,7 +36,7 @@ export const loadHeaders = createAsyncThunk<
 
     dispatch(handleLoadHeaders(response));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
@@ -61,7 +61,7 @@ export const addHeaders = createAsyncThunk<
 
     return response;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 });
@@ -85,7 +85,7 @@ export const deleteHeaders = createAsyncThunk<
     if (response) dispatch(loadHeaders());
     return response;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 });
@@ -112,7 +112,7 @@ export const deleteHeadersByRequestMetaId = createAsyncThunk<
       if (response) dispatch(handleLoadHeaders([]));
       return response;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return false;
     }
   }
@@ -140,7 +140,7 @@ export const updateHeaders = createAsyncThunk<
       if (response) dispatch(loadHeaders());
       return response;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return false;
     }
   }
@@ -165,7 +165,7 @@ export const checkAllHeadersByRequestMetaId = createAsyncThunk<
       if (response) dispatch(loadHeaders());
       return response;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return false;
     }
   }
@@ -205,7 +205,7 @@ export const updateHiddenHeaders = createAsyncThunk<
         );
       return;
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 );

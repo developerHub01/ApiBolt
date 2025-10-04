@@ -26,7 +26,7 @@ export const getShowHiddenMetaData = async (id) => {
 
     return result;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -60,7 +60,7 @@ export const createShowHiddenMetaData = async (payload = {}) => {
 
     return result;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -101,6 +101,6 @@ export const updateShowHiddenMetaData = async (payload) => {
       .returning();
     return updated;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };

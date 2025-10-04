@@ -21,6 +21,6 @@ export const changeActiveTab = createAsyncThunk<
 
     handleLocalStorageOnSidebarToggle(activeTab, lastActiveTab);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });

@@ -20,7 +20,7 @@ export const getParams = async (id) => {
       isCheck: Boolean(item.isCheck),
     }));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -32,7 +32,7 @@ export const deleteParams = async (paramId) => {
 
     return deleted?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -41,7 +41,7 @@ export const deleteAllParams = async () => {
     const deleted = await db.delete(paramsTable);
     return deleted?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -57,7 +57,7 @@ export const deleteParamsByRequestMetaId = async (requestOrFolderMetaId) => {
       .where(eq(paramsTable.requestOrFolderMetaId, requestOrFolderMetaId));
     return deleted?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -74,7 +74,7 @@ export const createParams = async (payload = {}) => {
     const result = await db.insert(paramsTable).values(payload);
     return result.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -107,7 +107,7 @@ export const updateParams = async (paramId, payload) => {
       .where(eq(paramsTable.id, paramId));
     return updated?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -134,7 +134,7 @@ export const replaceParams = async (requestOrFolderMetaId, payload) => {
 
     return created?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -163,6 +163,6 @@ export const checkAllParamsByRequestMetaId = async (requestOrFolderMetaId) => {
 
     return updated?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };

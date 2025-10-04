@@ -44,7 +44,7 @@ export const loadShowHiddenMetaData = createAsyncThunk<
           })
         );
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 );
@@ -80,7 +80,7 @@ export const updateShowHiddenMetaData = createAsyncThunk<
 
       return Boolean(response);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return false;
     }
   }
@@ -123,7 +123,7 @@ export const toggleShowHiddenMetaData = createAsyncThunk<
 
       return Boolean(response);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return false;
     }
   }

@@ -37,7 +37,7 @@ export const loadProjectList = createAsyncThunk<
       projectList: list,
     };
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
@@ -66,7 +66,7 @@ export const changeActiveProject = createAsyncThunk<
 
     return response;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 });
@@ -87,7 +87,7 @@ export const createProject = createAsyncThunk<
     if (response) dispatch(loadProjectList());
     return response;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 });
@@ -118,7 +118,7 @@ export const deleteProject = createAsyncThunk<
     }
     return response;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 });
@@ -144,7 +144,7 @@ export const updateProject = createAsyncThunk<
 
     return response;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 });

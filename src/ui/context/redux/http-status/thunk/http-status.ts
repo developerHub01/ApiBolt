@@ -27,7 +27,7 @@ export const loadHttpStatus = createAsyncThunk<
 
     dispatch(handleLoadHttpStatus(response));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
@@ -47,7 +47,7 @@ export const loadHttpStatusByCode = createAsyncThunk<
 
     dispatch(handleLoadSingleHttpStatus(response));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
@@ -66,6 +66,6 @@ export const updateHttpStatus = createAsyncThunk<
 
     dispatch(handleUpdateHttpStatus(response));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });

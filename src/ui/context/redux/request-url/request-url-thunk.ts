@@ -54,7 +54,7 @@ export const loadApiUrl = createAsyncThunk<
       })
     );
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
@@ -110,7 +110,7 @@ export const changeRequestApiUrl = createAsyncThunk<
 
       return true;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return false;
     }
   }
@@ -171,7 +171,7 @@ export const changeRequestApiUrlWithBackend = createAsyncThunk<
 
       return true;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return false;
     }
   }
@@ -218,7 +218,7 @@ export const requestUrlAddToken = createAsyncThunk<
         url: pureApiUrlAfter,
       });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
@@ -262,7 +262,7 @@ export const requestUrlUpdateToken = createAsyncThunk<
           url: pureApiUrlAfter,
         });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 );
@@ -312,7 +312,7 @@ export const requestUrlUpdateOriginToken = createAsyncThunk<
           url: pureApiUrlAfter,
         });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 );
@@ -355,6 +355,6 @@ export const requestUrlDeleteToken = createAsyncThunk<
         url: pureApiUrlAfter,
       });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });

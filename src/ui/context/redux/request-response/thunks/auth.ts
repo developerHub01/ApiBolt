@@ -77,7 +77,7 @@ export const loadAuthorization = createAsyncThunk<
         })
       );
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 );
@@ -119,7 +119,7 @@ export const loadInheritParentAuthorization = createAsyncThunk<
 
       return authorizationData.requestOrFolderMetaId;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return null;
     }
   }
@@ -261,7 +261,7 @@ export const updateHiddenAuthorization = createAsyncThunk<
       if (shouldClearHiddenAuthHeaders)
         dispatch(handleClearHiddenAuthorizationHeaders(requestOrFolderId));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 );
@@ -379,7 +379,7 @@ export const updateAuthorization = createAsyncThunk<
 
       return Boolean(response);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return false;
     }
   }

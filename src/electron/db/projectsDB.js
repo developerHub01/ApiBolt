@@ -11,7 +11,7 @@ export const getProjects = async () => {
   try {
     return await db.select().from(projectTable);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -32,7 +32,7 @@ export const createProjects = async (payload) => {
 
     return true;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -47,7 +47,7 @@ export const updateProjects = async (id, payload = {}) => {
 
     return updated.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -59,7 +59,7 @@ export const deleteProjects = async (id) => {
 
     return deleted.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -90,7 +90,7 @@ export const changeActiveProject = async (id) => {
 
     return result.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -104,6 +104,6 @@ export const getActiveProject = async () => {
 
     return result[0]?.activeProjectId ?? null;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };

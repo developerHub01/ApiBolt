@@ -11,6 +11,6 @@ export const getActiveProject = async () => {
         .where(eq(activeProjectTable.id, ACTIVE_PROJECT_ID))
     )?.[0]?.activeProjectId;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };

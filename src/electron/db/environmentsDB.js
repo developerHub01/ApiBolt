@@ -7,7 +7,7 @@ export const getAllEnvironments = async () => {
   try {
     return await db.select().from(environmentTable);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -20,7 +20,7 @@ export const getEnvironments = async (id) => {
       .from(environmentTable)
       .where(eq(environmentTable.projectId, id));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -41,7 +41,7 @@ export const createEnvironments = async (payload = {}) => {
 
     return result.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -80,7 +80,7 @@ export const updateEnvironments = async (payload = {}) => {
 
     return updated?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -94,7 +94,7 @@ export const deleteAllEnvironments = async () => {
 
     return deleted.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -106,7 +106,7 @@ export const deleteEnvironments = async (id) => {
 
     return deleted.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -118,6 +118,6 @@ export const deleteEnvironmentsByProjectId = async (id) => {
 
     return deleted.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };

@@ -36,7 +36,7 @@ export const loadMetaShowColumn = createAsyncThunk<
 
       dispatch(handleLoadMetaShowColumn(response));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 );
@@ -56,7 +56,7 @@ export const updateMetaShowColumn = createAsyncThunk<
     if (response) dispatch(loadMetaShowColumn());
     return response;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 });

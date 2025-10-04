@@ -38,7 +38,7 @@ export const loadBodyXWWWFormUrlencoded = createAsyncThunk<
 
       dispatch(handleLoadBodyXWWWFormUrlencoded(response));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 );
@@ -68,7 +68,7 @@ export const addBodyXWWWFormUrlencoded = createAsyncThunk<
       if (response) dispatch(loadBodyXWWWFormUrlencoded());
       return response;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return false;
     }
   }
@@ -98,7 +98,7 @@ export const deleteBodyXWWWFormUrlencoded = createAsyncThunk<
       if (response) dispatch(loadBodyXWWWFormUrlencoded());
       return response;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return false;
     }
   }
@@ -128,7 +128,7 @@ export const deleteBodyXWWWFormUrlencodedByRequestMetaId = createAsyncThunk<
       if (response) dispatch(handleLoadBodyXWWWFormUrlencoded([]));
       return response;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return false;
     }
   }
@@ -157,7 +157,7 @@ export const updateBodyXWWWFormUrlencoded = createAsyncThunk<
       if (response) dispatch(loadBodyXWWWFormUrlencoded());
       return response;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return false;
     }
   }
@@ -182,7 +182,7 @@ export const checkAllBodyXWWWFormUrlencodedByRequestMetaId = createAsyncThunk<
       if (response) dispatch(loadBodyXWWWFormUrlencoded());
       return response;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return false;
     }
   }

@@ -18,7 +18,7 @@ export const getApiUrlDB = async (id) => {
       )?.[0] ?? { url: API_URL_DEFAULT_VALUE }
     );
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -31,7 +31,7 @@ export const createApiUrl = async (payload = {}) => {
     const result = await db.insert(apiUrlTable).values(payload);
     return result.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -72,7 +72,7 @@ export const updateApiUrl = async (payload) => {
       .where(eq(apiUrlTable.requestOrFolderMetaId, requestOrFolderMetaId));
     return updated?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 };
@@ -88,7 +88,7 @@ export const deleteApiUrlByRequestMetaId = async (requestOrFolderMetaId) => {
       .where(eq(apiUrlTable.requestOrFolderMetaId, requestOrFolderMetaId));
     return deleted?.changes > 0;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 };

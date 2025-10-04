@@ -16,7 +16,7 @@ export const getHttpStatus = async () => {
       return acc;
     }, {});
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -29,7 +29,7 @@ export const getHttpStatusByCode = async (code) => {
         .where(eq(httpStatusTable.code, code))
     )?.[0];
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -87,7 +87,7 @@ export const updateHttpStatus = async (payload = {}) => {
       editedDescription: updatedData.editedDescription ?? "",
     };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 };

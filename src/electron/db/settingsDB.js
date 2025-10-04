@@ -48,7 +48,7 @@ export const getSettings = async () => {
       globalSetting,
     };
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -72,7 +72,7 @@ export const getZoomLevel = async () => {
 
     return settings?.[0]?.zoomLevel ?? 1;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
