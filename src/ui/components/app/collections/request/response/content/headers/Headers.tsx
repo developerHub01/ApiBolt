@@ -7,11 +7,10 @@ import { selectResponse } from "@/context/redux/request-response/selectors/respo
 const Headers = () => {
   const response = useAppSelector(selectResponse);
   if (!response) return null;
-
   const headers = response?.headers as Record<string, string>;
 
   return (
-    <ScrollArea className="flex-1 min-h-0 h-full overflow-hidden">
+    <ScrollArea className="flex-1 min-h-0 h-full overflow-hidden [&>div>div]:h-full">
       <div className="w-full h-full pb-3">
         {headers ? (
           <HeaderContent headers={headers} />
