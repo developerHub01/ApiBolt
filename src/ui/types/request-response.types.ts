@@ -19,7 +19,8 @@ export type TActiveTabType =
   | "params"
   | "authorization"
   | "headers"
-  | "body";
+  | "body"
+  | "code";
 
 export type TMetaTableType =
   | "params"

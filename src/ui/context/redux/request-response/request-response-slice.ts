@@ -47,6 +47,7 @@ import {
   DEFAULT_FOLDER_DESCRIPTION,
   DEFAULT_FOLDER_TITLE,
 } from "@/constant/folder.constant";
+import type { TRequestCodeType } from "@/types/request-code.type";
 
 interface RequestResponseState {
   projectList: Array<ProjectInterface>;
@@ -118,6 +119,8 @@ interface RequestResponseState {
    */
   jwtBearerAuth: Record<string, JWTBearerAuthInterface>;
 
+  selectedCodeSnippitType: Record<string, TRequestCodeType>;
+
   folderTitle: Record<string, string>;
   folderDescription: Record<string, string>;
   folderDescriptionActiveTab: Record<string, TRequestFolderDescriptionTab>;
@@ -178,6 +181,8 @@ const initialState: RequestResponseState = {
   basicAuth: {},
   bearerTokenAuth: {},
   jwtBearerAuth: {},
+
+  selectedCodeSnippitType: {},
 
   folderTitle: {},
   folderDescription: {},
@@ -1229,6 +1234,23 @@ export const requestResponseSlice = createSlice({
         // state.hiddenHeaders[id] = [];
       },
 
+    /* ============== Request Code Snippit start ============= */
+
+    handleChangeSelectedCodeSnippitType: (
+      state,
+      action: PayloadAction<{
+        id?: string;
+        type: TRequestCodeType;
+      }>
+    ) => {
+      const id = action.payload.id ?? state.selectedTab;
+      if (!id || state.selectedCodeSnippitType[id] === action.payload.type)
+        return;
+
+      state.selectedCodeSnippitType[id] = action.payload.type;
+    },
+    /* ============== Request Code Snippit end ============= */
+
     /* ================ Request Folder start =================== */
     handleLoadFolder: (
       state,
@@ -1416,6 +1438,8 @@ export const {
   handleChangeAuthType,
   handleIsDownloadRequestWithBase64,
   handleClearRequestResponse,
+
+  handleChangeSelectedCodeSnippitType,
 
   handleLoadFolder,
   handleUpdateFolder,

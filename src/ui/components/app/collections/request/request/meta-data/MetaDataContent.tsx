@@ -9,6 +9,7 @@ import RequestMetaDataProvider from "@/context/collections/request/RequestMetaDa
 import TabMotionWrapper from "@/components/app/collections/request/request/meta-data/TabMotionWrapper";
 import RequestAuthorization from "@/components/app/collections/request/request/authorization/RequestAuthorization";
 import { selectActiveMetaTab } from "@/context/redux/request-response/selectors/meta-request";
+import RequestCode from "@/components/app/collections/request/request/meta-data/code/RequestCode";
 
 const MetaDataContent = memo(() => {
   const activeMetaTab = useAppSelector(selectActiveMetaTab) ?? "url";
@@ -39,6 +40,11 @@ const MetaDataContent = memo(() => {
         {activeMetaTab === "body" && (
           <TabMotionWrapper key="body">
             <Body />
+          </TabMotionWrapper>
+        )}
+        {activeMetaTab === "code" && (
+          <TabMotionWrapper key="code">
+            <RequestCode />
           </TabMotionWrapper>
         )}
       </AnimatePresence>

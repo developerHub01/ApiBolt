@@ -36,6 +36,10 @@ const tabList: Array<{
     id: "body",
     label: "Body",
   },
+  {
+    id: "code",
+    label: "Code",
+  },
 ];
 
 const MetaDataTab = memo(() => {
