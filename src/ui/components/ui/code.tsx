@@ -16,7 +16,13 @@ import { Copy as CopyIcon } from "lucide-react";
 import type { TContentType } from "@/types/request-response.types";
 import { toast } from "sonner";
 
-type TLanguageType = TContentType | "markdown";
+type TLanguageType =
+  | TContentType
+  | "markdown"
+  | "java"
+  | "go"
+  | "php"
+  | "python";
 
 const fontSizeLimit = {
   max: 40,
