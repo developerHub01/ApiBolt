@@ -16,6 +16,8 @@ interface CopyButtonProps {
   className?: string;
   label?: string;
   Icon?: LucideIcon;
+  align?: "center" | "end" | "start";
+  side?: "bottom" | "top" | "right" | "left";
   children?: React.ReactNode;
 }
 
@@ -26,6 +28,8 @@ const CopyButton = memo(
     label,
     Icon,
     children,
+    align = "center",
+    side = "bottom",
   }: CopyButtonProps & React.ComponentProps<"button">) => {
     const handleClick = async () => {
       try {
@@ -52,7 +56,7 @@ const CopyButton = memo(
             </Button>
           )}
         </TooltipTrigger>
-        <TooltipContent side="bottom">
+        <TooltipContent side={side} align={align}>
           <p>{label || "Copy text"}</p>
         </TooltipContent>
       </Tooltip>
