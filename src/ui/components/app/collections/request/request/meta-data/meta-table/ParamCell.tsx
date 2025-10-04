@@ -97,7 +97,9 @@ const TypeMenu = memo(({ value, onChange }: TypeMenuProps) => {
         <DropdownMenuRadioGroup
           value={value ?? typeList[0].id}
           defaultValue={typeList[0].id}
-          onValueChange={(value) => onChange(value as TParamContentType)}
+          onValueChange={(value: string) =>
+            onChange(value as TParamContentType)
+          }
         >
           {typeList.map(({ id, label }) => (
             <DropdownMenuRadioItem key={id} value={id}>

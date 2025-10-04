@@ -5,17 +5,22 @@ import { cn } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { replaceMetaTableData } from "@/context/redux/request-response/thunks/meta-table-data";
 import { selectMetaBulkData } from "@/context/redux/request-response/selectors/meta-request";
+import type { TParamContentType } from "@/types/request-response.types";
+import { detectAndCleanVariable } from "@/utils/request-response.utils";
 
 interface MetaDataInterface {
   key: string;
   value: string;
   description: string;
   isCheck: boolean;
+  keyType?: TParamContentType;
+  valueType?: TParamContentType;
 }
 
 const placeholder = `Rows are separated by new lines
 Keys and values are separated by :
-Prepend // to any row you want to add but keep disabled`;
+Prepend // to any row you want to add but keep disabled
+Variable with {{variable}}`;
 
 const textToMetaData = (text: string) =>
   text
@@ -39,25 +44,42 @@ const textToMetaData = (text: string) =>
       let key = line[0].trim();
       if (key.startsWith("//")) key = key.slice(2).trim();
 
-      const value = line[1].trimEnd();
+      let value = line[1].trimEnd();
       const description = line[2]?.trimEnd() ?? "";
       const enabled =
         !line[0].startsWith(
           "//"
         ); /* if start with // then it mean hidden so false */
 
-      return [key, value, description, enabled];
+      let keyType = null;
+      let valueType = null;
+
+      ({ key, keyType } = detectAndCleanVariable(key, "keyType"));
+      ({ value, valueType } = detectAndCleanVariable(value, "valueType"));
+
+      return {
+        key,
+        value,
+        description,
+        enabled,
+        keyType,
+        valueType,
+      };
     });
 
 const metaDataToText = (data: Array<MetaDataInterface> = []) => {
   return data
     .reduce((acc: Array<string>, curr: MetaDataInterface) => {
+      const keyDetails = detectAndCleanVariable(curr.key, "keyType");
+      const valueDetails = detectAndCleanVariable(curr.value, "valueType");
+
       const isCheck = curr.isCheck ?? true;
-      let line = [
-        curr.key ?? "",
-        curr.value ?? "",
-        curr.description ?? "",
-      ].join(":");
+      let key = keyDetails.key;
+      let value = valueDetails.value;
+      if (curr.keyType === "env") key = `{{${keyDetails.key}}}`;
+      if (curr.valueType === "env") value = `{{${valueDetails.value}}}`;
+
+      let line = [key ?? "", value ?? "", curr.description ?? ""].join(":");
       if (!isCheck) line = "//" + line;
 
       return [...acc, line];
@@ -76,11 +98,13 @@ const BulkEditor = memo(() => {
 
   const handleBlur = useCallback(() => {
     const metaArray = textToMetaData(value);
-    const payload = metaArray.map((arr) => ({
-      key: arr[0] as string,
-      value: arr[1] as string,
-      description: arr[2] as string,
-      isCheck: arr[3] as boolean,
+    const payload = metaArray.map((param) => ({
+      key: param.key as string,
+      value: param.value as string,
+      description: param.description as string,
+      isCheck: param.enabled as boolean,
+      keyType: param.keyType as TParamContentType,
+      valueType: param.valueType as TParamContentType,
     }));
     dispatch(replaceMetaTableData(payload));
   }, [dispatch, value]);

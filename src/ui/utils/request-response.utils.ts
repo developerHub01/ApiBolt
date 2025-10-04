@@ -146,20 +146,27 @@ export const paramsTableToString = (
   return searchParams ? `?${searchParams}` : searchParams;
 };
 
-export const detectAndCleanVariable = (
+export function detectAndCleanVariable(
+  str: string,
+  type: "keyType"
+): { key: string; keyType: TParamContentType };
+
+export function detectAndCleanVariable(
+  str: string,
+  type: "valueType"
+): { value: string; valueType: TParamContentType };
+
+// Implementation
+export function detectAndCleanVariable(
   str: string,
   type: "keyType" | "valueType"
-): {
-  key?: string;
-  value?: string;
-  keyType?: TParamContentType;
-  valueType?: TParamContentType;
-} => {
+) {
   if (!str)
     return {
       [type]: "text",
       [type === "keyType" ? "key" : "value"]: str,
     };
+
   const match = str.match(URL_PURE_VARIABLE_REGEX);
   if (match)
     return {
@@ -171,4 +178,4 @@ export const detectAndCleanVariable = (
     [type]: "text",
     [type === "keyType" ? "key" : "value"]: str,
   };
-};
+}
