@@ -1,5 +1,6 @@
 import { MAX_REQUEST_LIST_NESTED_FOLDER_COUNT } from "@/constant/request-response.constant";
 import { URL_PURE_VARIABLE_REGEX } from "@/constant/request-url.constant";
+import type { EnvironmentInterface } from "@/types/environment.types";
 import type {
   ParamInterface,
   RequestListInterface,
@@ -139,6 +140,28 @@ export const paramsTableToString = (
       const key = param.keyType === "env" ? `{{${param.key}}}` : param.key;
       const value =
         param.valueType === "env" ? `{{${param.value}}}` : param.value;
+      return `${key}=${value}`;
+    })
+    .join("&");
+
+  return searchParams ? `?${searchParams}` : searchParams;
+};
+
+export const paramsTableToStringParsedFromEnvs = (
+  params: Array<ParamInterface> = [],
+  envMap: Map<string, EnvironmentInterface> = new Map()
+): string => {
+  const searchParams = params
+    .filter((param) => param.isCheck)
+    .map((param) => {
+      const key =
+        param.keyType === "env"
+          ? envMap.get(param.key)?.value || ""
+          : param.key;
+      const value =
+        param.valueType === "env"
+          ? envMap.get(param.value)?.value || ""
+          : param.value;
       return `${key}=${value}`;
     })
     .join("&");

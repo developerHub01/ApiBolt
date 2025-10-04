@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
-import { selectRequestUrl } from "@/context/redux/request-url/selectors/url";
+import { selectParsedRequestUrl } from "@/context/redux/request-url/selectors/url";
 import { selectIsHttpMethodType } from "@/context/redux/request-response/selectors/request-list";
 import { selectMetaData } from "@/context/redux/request-response/selectors/meta-request";
 import {
@@ -36,7 +36,7 @@ export const fetchApi = createAsyncThunk<
       bodyType: "none",
     };
 
-    payload.url = selectRequestUrl(state);
+    payload.url = selectParsedRequestUrl(state);
     payload.method = selectIsHttpMethodType(state);
     const rawHeaders = filterAndUniqueMetaData(
       selectMetaData({
