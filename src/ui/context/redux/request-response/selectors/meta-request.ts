@@ -8,6 +8,7 @@ import type {
   TMetaTableType,
 } from "@/types/request-response.types";
 import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
+import { filterAndUniqueMetaData } from "@/context/redux/request-response/utils";
 
 export const selectMetaData = ({
   id,
@@ -55,6 +56,65 @@ export const selectMetaData = ({
           return xWWWFormUrlencodedData[metaId] ?? [];
       }
       return [];
+    }
+  );
+
+export const selectFilterAndUniqueMetaData = ({
+  id,
+  type,
+}: {
+  id?: string;
+  type: TMetaTableType | null;
+}) =>
+  createSelector(
+    [
+      (state: RootState) => state.requestResponse.selectedTab,
+      (state: RootState) => state.requestResponse.params,
+      (state: RootState) => state.requestResponse.hiddenParams,
+      (state: RootState) => state.requestResponse.headers,
+      (state: RootState) => state.requestResponse.hiddenCookie,
+      (state: RootState) => state.requestResponse.hiddenHeaders,
+      (state: RootState) => state.requestResponse.formData,
+      (state: RootState) => state.requestResponse.xWWWFormUrlencodedData,
+    ],
+    (
+      selectedTab,
+      params,
+      hiddenParams,
+      headers,
+      hiddenCookie,
+      hiddenHeaders,
+      formData,
+      xWWWFormUrlencodedData
+    ) => {
+      const metaId = id ?? selectedTab;
+      if (!metaId) return null;
+
+      let data: Array<ParamInterface | FormDataInterface> = [];
+
+      switch (type) {
+        case "params":
+          data = params[metaId] ?? [];
+          break;
+        case "hiddenParams":
+          data = hiddenParams[metaId] ? [hiddenParams[metaId]] : [];
+          break;
+        case "headers":
+          data = headers[metaId] ?? [];
+          break;
+        case "hiddenHeaders":
+          data = [hiddenCookie, ...(hiddenHeaders[metaId] ?? [])];
+          break;
+        case "form-data":
+          data = formData[metaId] ?? [];
+          break;
+        case "x-www-form-urlencoded":
+          data = xWWWFormUrlencodedData[metaId] ?? [];
+          break;
+        default:
+          data = [];
+      }
+      return filterAndUniqueMetaData(data ?? []);
     }
   );
 
