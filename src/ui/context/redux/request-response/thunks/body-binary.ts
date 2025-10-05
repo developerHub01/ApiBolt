@@ -32,7 +32,17 @@ export const loadRequestBodyBinary = createAsyncThunk<
 
       const response =
         await window.electronAPIBodyBinaryDB.getBodyBinary(selectedTab);
-      dispatch(handleLoadBodyBinary(response?.file));
+
+      dispatch(
+        handleLoadBodyBinary(
+          response?.file
+            ? {
+                path: response.path,
+                file: response.file,
+              }
+            : null
+        )
+      );
     } catch (error) {
       console.error(error);
     }

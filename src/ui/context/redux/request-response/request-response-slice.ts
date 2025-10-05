@@ -88,7 +88,13 @@ interface RequestResponseState {
   hiddenCookie: ParamInterface;
   hiddenHeaders: Record<string, Array<ParamInterface>>;
   showHiddenHeaders: Record<string, boolean>;
-  binaryData: Record<string, string | null>;
+  binaryData: Record<
+    string,
+    {
+      file: string;
+      path: string;
+    } | null
+  >;
   formData: Record<string, Array<FormDataInterface>>;
   xWWWFormUrlencodedData: Record<string, Array<ParamInterface>>;
   isDownloadRequestWithBase64: Record<string, boolean>;
@@ -981,14 +987,23 @@ export const requestResponseSlice = createSlice({
     /* ================ BodyBinary start =================== */
     handleLoadBodyBinary: (
       state,
-      action: PayloadAction<string | null | undefined>
+      action: PayloadAction<
+        | {
+            path: string;
+            file: string;
+          }
+        | null
+        | undefined
+      >
     ) => {
-      const payload = action.payload;
       const selectedTab = state.selectedTab;
-
       if (!selectedTab) return;
 
-      state.binaryData[selectedTab] = payload ?? null;
+      if (!action.payload) {
+        delete state.binaryData[selectedTab];
+        return;
+      }
+      state.binaryData[selectedTab] = action.payload;
     },
     handleClearBodyBinary: (
       state,

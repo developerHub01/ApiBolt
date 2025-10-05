@@ -12,9 +12,7 @@ export const bodyBinaryHandler = () => {
   ipcMain.handle("getBodyBinary", async (_, ...rest) => {
     try {
       let result = (await getBodyBinary(...rest)) ?? {};
-
-      const { path: filePath, ...other } = result;
-      result = other;
+      const { path: filePath } = result;
 
       let file = null;
       if (filePath && fs.existsSync(filePath)) file = path.basename(filePath);

@@ -240,6 +240,7 @@ export type BodyRawInterface = {
 export type BodyBinaryInterface = {
   requestOrFolderMetaId?: string;
   file: string;
+  path: string;
 };
 
 export type RequestTabInterface = {

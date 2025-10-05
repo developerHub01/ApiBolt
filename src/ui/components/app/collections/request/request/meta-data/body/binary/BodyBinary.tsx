@@ -13,6 +13,8 @@ const BodyBinary = memo(() => {
   const dispatch = useAppDispatch();
   const binaryData = useAppSelector(selectBinaryData);
 
+  console.log({ binaryData });
+
   const handleUpdateBinary = useCallback(
     () => dispatch(updateRequestBodyBinary()),
     [dispatch]
@@ -33,7 +35,7 @@ const BodyBinary = memo(() => {
               className="rounded-r-none w-full max-w-96 cursor-auto"
             >
               <span className="w-full overflow-hidden truncate">
-                {binaryData}
+                {binaryData?.file}
               </span>
             </Button>
             <Separator orientation="vertical" />
