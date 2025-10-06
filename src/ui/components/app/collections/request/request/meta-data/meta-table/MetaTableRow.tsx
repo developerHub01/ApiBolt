@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import MetaTableCell from "@/components/app/collections/request/request/meta-data/meta-table/MetaTableCell";
 import { cn } from "@/lib/utils";
 import type {
+  FileDataInterface,
   FormDataInterface,
   ParamInterface,
   TMetaTableType,
@@ -18,7 +19,7 @@ interface MetaTableRowProps {
   type?: TMetaTableType;
   id: string;
   keyName?: string;
-  value: string | Array<string>;
+  value: string | Array<FileDataInterface>;
   keyType?: TParamContentType;
   valueType?: TParamContentType;
   description?: string;
@@ -59,7 +60,7 @@ const MetaTableRow = memo(
     handleCheckToggle,
     cellList,
   }: MetaTableRowProps) => {
-    const data: Record<string, string | Array<string>> = useMemo(
+    const data: Record<string, string | Array<FileDataInterface>> = useMemo(
       () => ({
         key: keyName,
         value,

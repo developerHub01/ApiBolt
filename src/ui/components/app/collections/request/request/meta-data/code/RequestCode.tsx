@@ -6,11 +6,11 @@ import RequestCodeSnippitProvider from "@/context/collections/request/meta-data/
 const RequestCode = memo(() => {
   return (
     <RequestCodeSnippitProvider>
-      <p className="text-foreground text-sm select-none">Code Snippit</p>
-      <div className="flex-1 w-full h-full flex flex-col gap-2 pt-1 pb-5">
+      <div className="flex justify-between items-center gap-3">
+        <p className="text-foreground text-sm select-none">Code Snippit</p>
         <RequestCodeTypeSelector />
-        <RequestCodeContent />
       </div>
+      <RequestCodeContent />
     </RequestCodeSnippitProvider>
   );
 });

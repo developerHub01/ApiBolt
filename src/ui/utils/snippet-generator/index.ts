@@ -1,3 +1,4 @@
+import type { CodeSnippitDataInterface } from "@/types/code-snippit.types";
 import type { TRequestCodeType } from "@/types/request-code.type";
 import { generateJavaScriptCode } from "@/utils/snippet-generator/javascript.utils";
 // import { generatePythonCode } from "@/utils/snippet-generator/python.utils";
@@ -14,7 +15,10 @@ import { generateJavaScriptCode } from "@/utils/snippet-generator/javascript.uti
 // import { generateCSharpCode } from "@/utils/snippet-generator/csharp.utils";
 // import { generateElixirCode } from "@/utils/snippet-generator/elixir.utils";
 
-const generatorMap: Record<string, (type: TRequestCodeType) => void> = {
+const generatorMap: Record<
+  string,
+  (type: TRequestCodeType, data: CodeSnippitDataInterface) => string
+> = {
   javascript: generateJavaScriptCode,
   // python: generatePythonCode,
   // go: generateGoCode,
@@ -31,11 +35,14 @@ const generatorMap: Record<string, (type: TRequestCodeType) => void> = {
   // elixir: generateElixirCode,
 };
 
-export const generateCode = (type: TRequestCodeType) => {
+export const generateCode = (
+  type: TRequestCodeType,
+  data: CodeSnippitDataInterface
+): string => {
   const lowerType = type.toLowerCase().replace(/\s+/g, "");
 
   const key = (Object.keys(generatorMap).find((k) => lowerType.startsWith(k)) ??
     null) as keyof typeof generatorMap | null;
 
-  return key ? generatorMap[key](type) : undefined;
+  return key ? generatorMap[key](type, data) : "";
 };

@@ -29,6 +29,7 @@ import type {
   TMetaTableType,
   TRequestFolderDescriptionTab,
   ShowHiddenMetaInterface,
+  FormDataPayloadInterface,
 } from "@/types/request-response.types";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
@@ -918,7 +919,7 @@ export const requestResponseSlice = createSlice({
     /* ================ BodyFormData start =================== */
     handleLoadBodyFormData: (
       state,
-      action: PayloadAction<Array<ParamHeaderPayloadInterface>>
+      action: PayloadAction<Array<FormDataPayloadInterface>>
     ) => {
       const selectedTab = state.selectedTab;
       if (!selectedTab) return;

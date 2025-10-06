@@ -13,10 +13,11 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import FileTag from "@/components/app/collections/request/request/meta-data/meta-table/FileTag";
 import { Plus as AddIcon } from "lucide-react";
+import type { FileDataInterface } from "@/types/request-response.types";
 
 interface Props {
   id: string;
-  value: string | Array<string>;
+  value: string | Array<FileDataInterface>;
   triggerRef?: RefObject<HTMLButtonElement | null>;
   open?: boolean;
   setOpen?: (value: boolean) => void;
@@ -66,7 +67,7 @@ const FormDataValuePopover = memo(
                 {value.map((file, index) => (
                   <FileTag
                     key={`${file}-${index}`}
-                    name={file ?? "unknown"}
+                    name={file.file ?? "unknown"}
                     onClose={() => handleDeleteFormFile(id, index)}
                   />
                 ))}

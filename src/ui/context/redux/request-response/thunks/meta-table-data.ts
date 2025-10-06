@@ -19,7 +19,8 @@ type LoaderThunk =
 ================================= */
 export const replaceMetaTableData = createAsyncThunk<
   boolean,
-  Array<Partial<ParamHeaderBuildPayloadInterface>>,
+  | Array<Partial<ParamHeaderBuildPayloadInterface>>
+  | Array<Partial<FormDataPayloadInterface>>,
   {
     dispatch: AppDispatch;
     state: RootState;
@@ -38,35 +39,58 @@ export const replaceMetaTableData = createAsyncThunk<
 
       let response = false;
 
-      let handler:
-        | ((
-            requestOrFolderMetaId: string,
-            payload: Array<Partial<FormDataPayloadInterface>>
-          ) => Promise<boolean>)
-        | null = null;
-
       let loader: LoaderThunk | null = null;
 
-      if (activeMetaTab === "params") {
-        handler = window.electronAPIParamsDB.replaceParams;
-        loader = loadParams;
-      } else if (activeMetaTab === "headers") {
-        handler = window.electronAPIHeadersDB.replaceHeaders;
-        loader = loadHeaders;
-      } else if (activeMetaTab === "body" && requestBodyType === "form-data") {
-        handler = window.electronAPIBodyFormDataDB.replaceBodyFormData;
-        loader = loadBodyFormData;
-      } else if (
-        activeMetaTab === "body" &&
-        requestBodyType === "x-www-form-urlencoded"
-      ) {
-        handler =
-          window.electronAPIBodyXWWWFormUrlencodedDB
-            .replaceBodyXWWWFormUrlencoded;
-        loader = loadBodyXWWWFormUrlencoded;
-      }
+      /* ================ if form-data ================ */
+      if (activeMetaTab === "body") {
+        let handler:
+          | ((
+              requestOrFolderMetaId: string,
+              payload: Array<Partial<FormDataPayloadInterface>>
+            ) => Promise<boolean>)
+          | null = null;
 
-      if (handler) response = await handler(selectedTab, payload);
+        if (activeMetaTab === "body" && requestBodyType === "form-data") {
+          handler = window.electronAPIBodyFormDataDB.replaceBodyFormData;
+          loader = loadBodyFormData;
+        } else if (
+          activeMetaTab === "body" &&
+          requestBodyType === "x-www-form-urlencoded"
+        ) {
+          handler =
+            window.electronAPIBodyXWWWFormUrlencodedDB
+              .replaceBodyXWWWFormUrlencoded;
+          loader = loadBodyXWWWFormUrlencoded;
+        }
+
+        if (handler)
+          response = await handler(
+            selectedTab,
+            payload as Array<Partial<FormDataPayloadInterface>>
+          );
+      } else {
+        /* ================ if params or headers ================ */
+        let handler:
+          | ((
+              requestOrFolderMetaId: string,
+              payload: Array<Partial<ParamHeaderBuildPayloadInterface>>
+            ) => Promise<boolean>)
+          | null = null;
+
+        if (activeMetaTab === "params") {
+          handler = window.electronAPIParamsDB.replaceParams;
+          loader = loadParams;
+        } else if (activeMetaTab === "headers") {
+          handler = window.electronAPIHeadersDB.replaceHeaders;
+          loader = loadHeaders;
+        }
+
+        if (handler)
+          response = await handler(
+            selectedTab,
+            payload as Array<Partial<ParamHeaderBuildPayloadInterface>>
+          );
+      }
 
       if (response && loader) dispatch(loader());
 

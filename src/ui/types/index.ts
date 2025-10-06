@@ -306,7 +306,7 @@ declare global {
     electronAPIBodyFormDataDB: {
       getBodyFormData(
         requestOrFolderMetaId?: string
-      ): Promise<Array<ParamHeaderPayloadInterface>>;
+      ): Promise<Array<FormDataPayloadInterface>>;
       deleteBodyFormData(formId: string): Promise<boolean>;
       deleteBodyFormDataByRequestMetaId(
         requestOrFolderMetaId?: string

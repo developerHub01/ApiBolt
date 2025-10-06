@@ -1,24 +1,20 @@
 import React, { createContext, useContext } from "react";
 import { useAppSelector } from "@/context/redux/hooks";
-// import { generateCode } from "@/utils/snippet-generator";
+import { generateCode } from "@/utils/snippet-generator";
 import { selectFilterAndUniqueMetaData } from "@/context/redux/request-response/selectors/meta-request";
 import { selectIsHttpMethodType } from "@/context/redux/request-response/selectors/request-list";
 import { selectParsedRequestUrl } from "@/context/redux/request-url/selectors/url";
-import type { THTTPMethods } from "@/types/request-response.types";
 import {
   selectRawData,
   selectRawRequestBodyType,
   selectRequestBodyType,
 } from "@/context/redux/request-response/selectors/body-raw";
+import { selectBinaryData } from "@/context/redux/request-response/selectors/body-binary";
+import { selectSelectedCodeSnippit } from "@/context/redux/request-response/selectors/code-snippit";
 
 interface RequestCodeSnippitContext {
-  method: THTTPMethods;
-  url: string;
-  headers: Array<{
-    key: string;
-    value: string | undefined;
-  }>;
-  authorization?: string;
+  code: string;
+  language: string;
 }
 
 const RequestCodeSnippitContext =
@@ -44,11 +40,13 @@ interface RequestCodeSnippitProviderProps {
 const RequestCodeSnippitProvider = ({
   children,
 }: RequestCodeSnippitProviderProps) => {
+  const selectedCodeType = useAppSelector(selectSelectedCodeSnippit);
   const method = useAppSelector(selectIsHttpMethodType);
   const url = useAppSelector(selectParsedRequestUrl);
   const bodyType = useAppSelector(selectRequestBodyType);
   const rawBodyDataType = useAppSelector(selectRawRequestBodyType);
   const rawData = useAppSelector(selectRawData);
+  const binaryData = useAppSelector(selectBinaryData)?.path;
   const xWWWFormUrlencoded =
     useAppSelector(
       selectFilterAndUniqueMetaData({
@@ -82,9 +80,13 @@ const RequestCodeSnippitProvider = ({
     selectFilterAndUniqueMetaData({
       type: "hiddenHeaders",
     })
-  )?.find((header) => header.id === "authorization")?.value;
+  )?.find((header) => header.id === "authorization")?.value as
+    | string
+    | undefined;
 
-  console.log({
+  const code = generateCode("javascript-fetch", {
+    url,
+    method,
     headers,
     authorization,
     bodyType,
@@ -92,18 +94,15 @@ const RequestCodeSnippitProvider = ({
     rawData,
     xWWWFormUrlencoded,
     formData,
+    binaryData,
   });
-
-  // const code = generateCode("javascript-fetch");
-  // console.log(code);
+  const language = selectedCodeType?.split("-")[0];
 
   return (
     <RequestCodeSnippitContext.Provider
       value={{
-        method,
-        url,
-        headers,
-        authorization,
+        code,
+        language,
       }}
     >
       {children}

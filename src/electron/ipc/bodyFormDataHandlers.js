@@ -64,7 +64,10 @@ export const bodyFormDataHandlers = () => {
       try {
         return {
           ...formData,
-          value: formData.value.map((filePath) => path.basename(filePath)),
+          value: formData.value.map((filePath) => ({
+            file: path.basename(filePath),
+            path: filePath,
+          })),
         };
       } catch (error) {
         return formData;

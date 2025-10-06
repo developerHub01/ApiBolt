@@ -5,6 +5,7 @@ import MetaItemInput from "@/components/app/collections/request/request/meta-dat
 import LockTooltip from "@/components/app/collections/request/request/meta-data/meta-table/LockTooltip";
 import FileTag from "@/components/app/collections/request/request/meta-data/meta-table/FileTag";
 import type {
+  FileDataInterface,
   TMetaTableType,
   TParamContentType,
 } from "@/types/request-response.types";
@@ -15,7 +16,7 @@ interface MetaTableCellProps {
   cellType: string;
   type?: TMetaTableType;
   id: string;
-  value: string | Array<string>;
+  value: string | Array<FileDataInterface>;
   cellContentType?: TParamContentType;
   inputType: "text" | "password";
   onBlur: (id: string, key: string, value: string) => void;

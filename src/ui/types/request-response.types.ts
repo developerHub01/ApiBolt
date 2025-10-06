@@ -65,11 +65,11 @@ export type TRequestBodyType =
 
 export type THTTPMethods = "get" | "post" | "put" | "patch" | "delete";
 
-export interface ParamHeaderPayloadInterface {
+export interface ParamHeaderPayloadInterface<T = string> {
   id: string;
   isCheck: boolean;
   key: string;
-  value: string;
+  value: T;
   description: string;
   requestOrFolderMetaId: string;
   createdAt: string;
@@ -113,10 +113,17 @@ export interface ShowHiddenMetaInterface {
   showHiddenHeaders: boolean;
 }
 
+export interface FileDataInterface {
+  file: string;
+  path: string;
+}
+
 export interface FormDataInterface
-  extends ParamInterface<string | Array<string>> {
+  extends ParamInterface<string | Array<FileDataInterface>> {
   contentType?: string;
 }
+
+export type FormDataPayloadInterface = Omit<FormDataInterface, "contentType">;
 
 export interface CookieInterface {
   name: string;
@@ -248,10 +255,6 @@ export type RequestTabInterface = {
   activeMetaTab: TActiveTabType;
   requestBodyType: TRequestBodyType;
 };
-
-export interface FormDataPayloadInterface extends ParamHeaderPayloadInterface {
-  type: "text" | "file";
-}
 
 export type TMetaShowColumnKey = "value" | "description";
 
