@@ -16,7 +16,7 @@ import { Copy as CopyIcon } from "lucide-react";
 import type { TContentType } from "@/types/request-response.types";
 import { toast } from "sonner";
 
-type TLanguageType =
+export type TLanguageType =
   | TContentType
   | "markdown"
   | "java"
@@ -239,6 +239,7 @@ const Code = ({
       <CodeMirror
         className={cn(
           "w-full h-full flex-1",
+          "[&_.cm-scroller]:leading-loose!",
           {
             "[&>div]:bg-background!": !transparentBg,
             "[&>div]:bg-transparent!": transparentBg,
