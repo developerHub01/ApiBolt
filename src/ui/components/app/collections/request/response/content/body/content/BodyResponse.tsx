@@ -1,6 +1,6 @@
 import { memo, useEffect, useMemo, useState } from "react";
 import { getResponseType } from "@/utils";
-import { formatCode, getParser } from "@/utils/prettierUtils";
+import { formatCode, getParser } from "@/utils/prettier.utils";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useResponse } from "@/context/collections/request/ResponseProvider";
 import Code from "@/components/ui/code";
