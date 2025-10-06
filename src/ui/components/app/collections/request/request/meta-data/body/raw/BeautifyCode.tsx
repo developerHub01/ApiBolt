@@ -8,7 +8,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useRequestBody } from "@/context/collections/request/RequestBodyProvider";
-import { formatCode, getParser } from "@/utils/prettierUtils";
+import { formatCode, getParser } from "@/utils/prettier.utils";
 import { useAppSelector } from "@/context/redux/hooks";
 import {
   selectRawData,
