@@ -17,18 +17,26 @@ export const toCapitalize = (str: string) =>
 
 export const isValidJson = (str: string): boolean => {
   try {
-    JSON.parse(str);
+    console.log("====== str =======") ;
+    console.log(str) ;
+    const parsed = JSON.parse(str);
+    console.log({ parsed });
     return true;
-  } catch {
+  } catch (error) {
+    console.error(error);
     return false;
   }
 };
 
 export const isStringIsValidObject = (str: string): boolean => {
   try {
+    console.log("===== str ======");
+    console.log(str);
     const parsed = JSON.parse(str);
+    console.log({ parsed });
     return typeof parsed === "object";
-  } catch {
+  } catch (error) {
+    console.error({ error });
     return false;
   }
 };

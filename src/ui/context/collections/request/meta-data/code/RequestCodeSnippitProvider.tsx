@@ -11,6 +11,7 @@ import {
 } from "@/context/redux/request-response/selectors/body-raw";
 import { selectBinaryData } from "@/context/redux/request-response/selectors/body-binary";
 import { selectSelectedCodeSnippit } from "@/context/redux/request-response/selectors/code-snippit";
+import { isStringIsValidObject, isValidJson } from "@/utils/helper";
 
 interface RequestCodeSnippitContext {
   code: string;
@@ -84,14 +85,17 @@ const RequestCodeSnippitProvider = ({
     | string
     | undefined;
 
-  const code = generateCode("javascript-fetch", {
+  console.log(isValidJson(rawData));
+  console.log(isStringIsValidObject(rawData));
+
+  const code = generateCode(selectedCodeType, {
     url,
     method,
     headers,
     authorization,
     bodyType,
     rawBodyDataType,
-    rawData,
+    rawData: rawData,
     xWWWFormUrlencoded,
     formData,
     binaryData,
