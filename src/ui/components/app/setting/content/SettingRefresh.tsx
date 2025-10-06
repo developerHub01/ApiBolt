@@ -1,0 +1,51 @@
+import { memo } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { RefreshCw as RefreshIcon, type LucideIcon } from "lucide-react";
+import { useAppDispatch } from "@/context/redux/hooks";
+import { loadSettings } from "@/context/redux/setting/setting-thunk";
+
+interface Props {
+  label?: string;
+  className?: string;
+  Icon?: LucideIcon;
+  side?: "bottom" | "top" | "right" | "left";
+  align?: "end" | "center" | "start";
+}
+
+const SettingRefresh = memo(
+  ({
+    label,
+    className = "",
+    Icon = RefreshIcon,
+    side = "bottom",
+    align = "end",
+  }: Props) => {
+    const dispatch = useAppDispatch();
+    const handleRefresh = () => dispatch(loadSettings());
+
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            size={"iconSm"}
+            variant="secondary"
+            onClick={handleRefresh}
+            className={className}
+          >
+            <Icon />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side={side} align={align}>
+          <p>{label ? label : "Refresh Settings"}</p>
+        </TooltipContent>
+      </Tooltip>
+    );
+  }
+);
+
+export default SettingRefresh;

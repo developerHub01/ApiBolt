@@ -68,6 +68,7 @@ const BackgroundImageSlider = memo(
           <img
             key={index}
             src={bg}
+            alt={bg}
             className="absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out"
             style={{
               opacity: index === currentIndex ? 1 : 0,
