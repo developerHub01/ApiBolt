@@ -7,15 +7,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { requestCodesMap } from "@/constant/request-code.constant";
+import {
+  codeSnippitTypes,
+  requestCodeSnippitsMap,
+} from "@/constant/request-code.constant";
 import type { TRequestCodeType } from "@/types/request-code.type";
 import CopyButton from "@/components/ui/copy-button";
 import { Copy as CopyIcon } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { handleChangeSelectedCodeSnippitType } from "@/context/redux/request-response/request-response-slice";
 import { selectSelectedCodeSnippit } from "@/context/redux/request-response/selectors/code-snippit";
-
-const codeTypes = Object.keys(requestCodesMap) as Array<TRequestCodeType>;
 
 const RequestCodeTypeSelector = memo(() => {
   const dispatch = useAppDispatch();
@@ -31,18 +32,18 @@ const RequestCodeTypeSelector = memo(() => {
   return (
     <div className="flex justify-between items-center gap-3">
       <Select
-        defaultValue={selectedType ?? codeTypes[0]}
-        value={selectedType ?? codeTypes[0]}
+        defaultValue={selectedType ?? codeSnippitTypes[0]}
+        value={selectedType ?? codeSnippitTypes[0]}
         onValueChange={handleChange}
       >
-        <SelectTrigger>
+        <SelectTrigger size="sm">
           <SelectValue placeholder="Select a code snippit" />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent side="bottom" align="end">
           <SelectGroup>
-            {codeTypes.map((codeTypes) => (
+            {codeSnippitTypes.map((codeTypes) => (
               <SelectItem value={codeTypes}>
-                {requestCodesMap[codeTypes]}
+                {requestCodeSnippitsMap[codeTypes]}
               </SelectItem>
             ))}
           </SelectGroup>

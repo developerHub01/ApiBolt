@@ -13,8 +13,6 @@ const BodyBinary = memo(() => {
   const dispatch = useAppDispatch();
   const binaryData = useAppSelector(selectBinaryData);
 
-  console.log({ binaryData });
-
   const handleUpdateBinary = useCallback(
     () => dispatch(updateRequestBodyBinary()),
     [dispatch]

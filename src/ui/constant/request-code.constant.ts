@@ -1,6 +1,6 @@
 import type { TRequestCodeType } from "@/types/request-code.type";
 
-export const requestCodesMap: Record<TRequestCodeType, string> = {
+export const requestCodeSnippitsMap: Record<TRequestCodeType, string> = {
   // JavaScript
   "javascript-fetch": "JavaScript - Fetch",
   "javascript-axios": "JavaScript - Axios",
@@ -69,3 +69,5 @@ export const requestCodesMap: Record<TRequestCodeType, string> = {
   "elixir-httpoison": "Elixir - HTTPoison",
   "elixir-tesla": "Elixir - Tesla",
 };
+
+export const codeSnippitTypes = Object.keys(requestCodeSnippitsMap) as Array<TRequestCodeType>;
