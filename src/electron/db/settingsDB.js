@@ -4,14 +4,17 @@ import { db } from "./index.js";
 import { getActiveProject } from "./projectsDB.js";
 
 export const defaultSettings = {
-  backgroundImages: null /* default == "default" | global == null */,
-  backgroundOpacity: 0.9,
-  backgroundBlur: 0,
-  codeFontSize: 16,
-  indentationSize: 4,
-  zoomLevel: 1,
-  isZoomable: 0,
-  layoutType: "ltr",
+  /* default == "default" | global == null */
+  backgroundImages: "default",
+  maxNumberOfImages: -1,
+  backgroundOpacity: -1,
+  slideInterval: -1,
+  backgroundBlur: -1,
+  codeFontSize: -1,
+  indentationSize: -1,
+  zoomLevel: -1,
+  isZoomable: -1,
+  layoutType: "default",
   projectId: null,
 };
 

@@ -66,7 +66,9 @@ const BodyCode = memo(() => {
     const controller = new AbortController();
     const timeout = setTimeout(async () => {
       const parser = getParser(rawRequestBodyType);
-      const { success = false } = await formatCode(code, parser);
+      const codeString = code.trim();
+      if (!codeString) return;
+      const { success = false } = await formatCode(codeString, parser);
       // Only update if different
       setIsError((prev) => (prev !== !success ? !success : prev));
     }, 500); // debounce for 500ms
@@ -95,6 +97,7 @@ const BodyCode = memo(() => {
       )}
     >
       <Code
+        fontSize={16}
         code={code}
         contentType={rawRequestBodyType}
         onChange={handleChange}

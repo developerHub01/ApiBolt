@@ -1,4 +1,4 @@
-import { DEFAULT_SETTINGS } from "@/constant/settings.constant";
+import { DEFAULT_RAW_SETTINGS_VALUES } from "@/constant/settings.constant";
 import type {
   ProjectSettingsInterface,
   SettingsInterface,
@@ -15,7 +15,7 @@ interface SettingStateInterface {
 // Define the initial state using that type
 const initialState: SettingStateInterface = {
   isSettingOpen: false,
-  globalSetting: DEFAULT_SETTINGS,
+  globalSetting: DEFAULT_RAW_SETTINGS_VALUES,
   settings: null,
 };
 

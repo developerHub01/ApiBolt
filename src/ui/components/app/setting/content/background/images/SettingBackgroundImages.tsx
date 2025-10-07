@@ -19,6 +19,7 @@ const SettingBackgroundImages = () => {
     isHideMoreData,
     handleChangeSettingType,
   } = useCheckBackgroundSettingImages();
+
   const { senitizedValue: maxNumberOfImages } =
     useCheckBackgroundSettingMaxNumberOfImages();
 

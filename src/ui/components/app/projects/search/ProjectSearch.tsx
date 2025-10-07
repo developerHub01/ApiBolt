@@ -26,7 +26,7 @@ const ProjectSearch = () => {
   if (!projectListFromStore?.length) return null;
 
   return (
-    <div className="w-full flex items-center gap-2 px-2 py-1 border border-muted rounded-md ring-0 focus-within:ring-1 ring-primary min-h-10 my-1">
+    <div className="w-full flex items-center gap-2 px-2 py-1 border-2 border-muted focus-within:border-primary/50 duration-75 transition-colors rounded-md min-h-10 my-1">
       <input
         placeholder="Search Project"
         className="w-full outline-none border-none"

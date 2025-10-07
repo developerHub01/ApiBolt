@@ -6,7 +6,6 @@ const BackgroundWallpaper = () => {
   const backgroundSettings = useCheckApplyingBackground();
 
   const {
-    backgroundImages = [],
     backgroundOpacity = 1,
     backgroundBlur = 0,
     slideInterval,
@@ -22,7 +21,7 @@ const BackgroundWallpaper = () => {
     <div className="absolute top-0 left-0 w-full h-full z-0 pointer-events-none overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-full bg-background z-0 pointer-events-none transition-opacity duration-1000 ease-in-out overflow-hidden">
         <BackgroundImageSlider
-          list={backgroundImages}
+          list={backgroundSettings.backgroundImages}
           blur={backgroundBlur}
           slideInterval={slideInterval! * 1000}
         />

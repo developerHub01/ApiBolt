@@ -36,6 +36,7 @@ export const loadSettings = createAsyncThunk<
     console.error(error);
   }
 });
+
 export const updateSettings = createAsyncThunk<
   boolean,
   Partial<SettingsInterface | ProjectSettingsInterface>,
@@ -60,6 +61,7 @@ export const updateSettings = createAsyncThunk<
     return false;
   }
 });
+
 export const updateSettingsZoomByKeyboard = createAsyncThunk<
   boolean,
   TKeyboardShortcutKey,
@@ -127,6 +129,7 @@ export const updateSettingsZoomByKeyboard = createAsyncThunk<
     }
   }
 );
+
 export const updateSettingsBackgroundImages = createAsyncThunk<
   boolean,
   Pick<UpdateBackgroundImagePayloadInterface, "method"> & {

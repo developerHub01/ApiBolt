@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useMemo } from "react";
 import type { SettingType } from "@/types/setting.types";
 import { useAppDispatch } from "@/context/redux/hooks";
-import type { TSettingTab } from "@/context/setting/SettingProvider";
 import { updateSettings } from "@/context/redux/setting/setting-thunk";
+import type { TSettingTab } from "@/context/setting/SettingProvider";
 
 const checkIsDefaultType = (value: unknown) =>
   [-1, "default"].includes(value as number | string);
 
-interface useGlobalLocalSettingv1Props {
+interface UseGlobalLocalSettingProps {
   globalSetting: unknown;
   localSetting: unknown;
   DEFAULT_SETTINGS?: unknown;
@@ -16,48 +16,30 @@ interface useGlobalLocalSettingv1Props {
   key: string;
 }
 
-const useGlobalLocalSettingv1 = ({
+const useGlobalLocalSetting = ({
   globalSetting,
   localSetting,
   DEFAULT_SETTINGS,
   activeTab,
   activeProjectId,
   key,
-}: useGlobalLocalSettingv1Props): {
-  value: unknown;
-  handleChange: (value?: unknown) => void;
-  handleChangeSettingType: (value: SettingType) => void;
-  settingType: SettingType;
-} => {
+}: UseGlobalLocalSettingProps) => {
   const dispatch = useAppDispatch();
-  const [settingType, setSettingType] = useState<SettingType>("default");
-  const [isUpdate, setIsUpdate] = useState<boolean>(false);
 
-  useEffect(() => {
-    let type: SettingType = "custom";
-
+  const settingType: SettingType = useMemo(() => {
     if (activeTab === "project") {
-      if (!localSetting) type = "global";
-      else if (
-        localSetting === null ||
-        localSetting === undefined ||
-        checkIsDefaultType(localSetting)
-      )
-        type = "default";
+      if (!localSetting) return "global";
+      if (checkIsDefaultType(localSetting)) return "default";
+      return "custom";
     } else {
-      if (
-        globalSetting === null ||
-        globalSetting === undefined ||
-        checkIsDefaultType(globalSetting)
-      )
-        type = "default";
+      if (checkIsDefaultType(globalSetting)) return "default";
+      return "custom";
     }
-    setSettingType(type);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [activeTab, globalSetting, localSetting]);
 
   const value =
-    (activeTab === "project" ? localSetting : globalSetting) ?? DEFAULT_SETTINGS;
+    (activeTab === "project" ? localSetting : globalSetting) ??
+    DEFAULT_SETTINGS;
 
   const handleChange = useCallback(
     (value?: unknown) => {
@@ -84,25 +66,28 @@ const useGlobalLocalSettingv1 = ({
     [activeProjectId, activeTab, DEFAULT_SETTINGS, dispatch, key, settingType]
   );
 
-  useEffect(() => {
-    if (!isUpdate) return;
-    handleChange();
-    setIsUpdate(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isUpdate]);
+  const handleChangeSettingType = useCallback(
+    (value: SettingType) => {
+      const isNumberType = !isNaN(Number(DEFAULT_SETTINGS));
+      const defaultValue = isNumberType ? -1 : "default";
+      const updatedValue =
+        value === "default"
+          ? defaultValue
+          : value === "global"
+            ? null
+            : DEFAULT_SETTINGS;
 
-  const handleChangeSettingType = useCallback((value: SettingType) => {
-    setSettingType(value);
-    // if (value === "custom") return;
-    setIsUpdate(true);
-  }, []);
+      dispatch(
+        updateSettings({
+          [key]: updatedValue,
+          projectId: activeTab === "project" ? activeProjectId : null,
+        })
+      );
+    },
+    [DEFAULT_SETTINGS, activeProjectId, activeTab, dispatch, key]
+  );
 
-  return {
-    value,
-    handleChange,
-    handleChangeSettingType,
-    settingType,
-  };
+  return { value, handleChange, handleChangeSettingType, settingType };
 };
 
-export default useGlobalLocalSettingv1;
+export default useGlobalLocalSetting;

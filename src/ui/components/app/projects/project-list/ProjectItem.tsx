@@ -33,7 +33,7 @@ const ProjectItem = ({ id, name, activeProjectId }: ProjectItemProps) => {
       onClick={handleChangeActiveProject}
       id={id}
       className={cn(
-        "group w-full flex justify-between p-5 rounded-md bg-accent/50 hover:bg-accent transition-all duration-200 cursor-pointer",
+        "group w-full flex justify-between p-5 rounded-md bg-accent/50 hover:bg-accent/80 transition-all duration-200 cursor-pointer",
         {
           "ring-2 ring-primary/50": activeProjectId === id,
           "ring-0": activeProjectId !== id,

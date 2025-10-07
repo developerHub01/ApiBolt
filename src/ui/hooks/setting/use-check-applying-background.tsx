@@ -4,7 +4,7 @@ import { selectActiveProjectId } from "@/context/redux/request-response/selector
 import { selectSettingBackground } from "@/context/redux/setting/setting-selector";
 
 const useCheckApplyingBackground = (): {
-  backgroundImages: Array<string>;
+  backgroundImages: Array<string> | string;
   backgroundOpacity: number;
   backgroundBlur: number;
   slideInterval: number;
@@ -12,7 +12,7 @@ const useCheckApplyingBackground = (): {
 } | null => {
   const activeProjectId = useAppSelector(selectActiveProjectId);
   const { global, local } = useAppSelector(selectSettingBackground);
-
+  
   const backgroundImages =
     (activeProjectId
       ? (local.backgroundImages ?? global.backgroundImages)

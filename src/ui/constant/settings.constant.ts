@@ -29,8 +29,23 @@ export const DEFAULT_INDENTATION_SIZE = 4;
 export const MIN_INDENTATION_SIZE = 1;
 export const MAX_INDENTATION_SIZE = 16;
 
+/* this is the real values not masked or cover like use -1 or "default" as but in UI show masked preapred value  */
+export const DEFAULT_RAW_SETTINGS_VALUES: SettingsInterface = {
+  backgroundImages: "default",
+  backgroundOpacity: -1,
+  backgroundBlur: -1,
+  slideInterval: -1,
+  maxNumberOfImages: -1,
+  codeFontSize: -1,
+  indentationSize: -1,
+  zoomLevel: -1,
+  isZoomable: -1, // 0: disable, 1: enable, -1: default
+  layoutType: "default",
+  projectId: null,
+};
+
 export const DEFAULT_SETTINGS: SettingsInterface = {
-  backgroundImages: [],
+  backgroundImages: "default",
   backgroundOpacity: DEFAULT_BACKGROUND_OPACITY,
   backgroundBlur: DEFAULT_BACKGROUND_BLUR,
   slideInterval: DEFAULT_BACKGROUNDSLIDE_INTERVAL,

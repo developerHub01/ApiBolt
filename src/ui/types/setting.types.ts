@@ -4,7 +4,7 @@ export type TLayoutSetting = "ltr" | "rtl";
 export type TLayoutSettingNoSenitize = "ltr" | "rtl" | "default";
 
 export interface SettingsInterface {
-  backgroundImages: Array<string>;
+  backgroundImages: Array<string> | "default";
   backgroundOpacity: number;
   backgroundBlur: number;
   slideInterval?: number | null; // in milliseconds
@@ -13,7 +13,7 @@ export interface SettingsInterface {
   isZoomable: number;
   codeFontSize: number;
   indentationSize: number;
-  layoutType: TLayoutSetting;
+  layoutType: TLayoutSetting | "default";
   projectId?: string | null;
 }
 

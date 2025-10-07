@@ -42,19 +42,9 @@ const useGlobalLocalBgImages = ({
 
     if (activeTab === "project") {
       if (!localSetting) type = "global";
-      else if (
-        localSetting === null ||
-        localSetting === undefined ||
-        checkIsDefaultType(localSetting)
-      )
-        type = "default";
+      else if (checkIsDefaultType(localSetting)) type = "default";
     } else {
-      if (
-        globalSetting === null ||
-        globalSetting === undefined ||
-        checkIsDefaultType(globalSetting)
-      )
-        type = "default";
+      if (!globalSetting || checkIsDefaultType(globalSetting)) type = "default";
     }
     setSettingType(type);
     // eslint-disable-next-line react-hooks/exhaustive-deps
