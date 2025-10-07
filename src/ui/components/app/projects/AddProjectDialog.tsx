@@ -32,7 +32,7 @@ const AddProjectDialog = memo(() => {
 
   const handleCreate = useCallback(async () => {
     setIsLoading(true);
-    const response = await dispatch(createProject(name)).unwrap();
+    const response = await dispatch(createProject(name.trim())).unwrap();
     setIsLoading(false);
     setName(DEFAULT_PROJECT_NAME);
 
