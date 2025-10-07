@@ -24,7 +24,7 @@ const SettingHttpStatus = memo(() => {
 
   return (
     <SettingItem id="httpStatus" title="Http Status Settings">
-      <SettingItemContentWrapper>
+      <SettingItemContentWrapper className="gap-2">
         <SettingHttpStatusContent />
       </SettingItemContentWrapper>
     </SettingItem>
