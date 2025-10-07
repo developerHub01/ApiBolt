@@ -2,8 +2,11 @@ import React, {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useState,
 } from "react";
+import { useAppSelector } from "@/context/redux/hooks";
+import { selectActiveProjectId } from "@/context/redux/request-response/selectors/project";
 
 export type TSettingTab = "global" | "project";
 
@@ -31,7 +34,12 @@ interface SettingProviderProps {
 }
 
 const SettingProvider = ({ children }: SettingProviderProps) => {
-  const [activeTab, setActiveTab] = useState<TSettingTab>("project");
+  const projectId = useAppSelector(selectActiveProjectId);
+  const [activeTab, setActiveTab] = useState<TSettingTab>(
+    projectId ? "project" : "global"
+  );
+
+  useEffect(() => setActiveTab(projectId ? "project" : "global"), [projectId]);
 
   const handleChangeActiveTab = useCallback((value?: TSettingTab) => {
     setActiveTab((prev) => value ?? (prev === "global" ? "project" : "global"));
