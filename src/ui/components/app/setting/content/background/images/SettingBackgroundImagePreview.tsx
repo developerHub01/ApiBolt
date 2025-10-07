@@ -19,7 +19,7 @@ const SettingBackgroundImagePreview = memo(
           <motion.div
             key={selectedIndex}
             className={cn(
-              "bg-accent/50 col-span-1 h-90 origin-center overflow-hidden rounded-lg p-3 relative",
+              "bg-accent/50 col-span-1 h-90 origin-center overflow-hidden rounded-lg p-3 relative flex justify-center items-center",
               className
             )}
             initial={{
@@ -50,10 +50,14 @@ const SettingBackgroundImagePreview = memo(
             >
               <CloseIcon />
             </Button>
-            <img
+            <motion.img
               src={backgroundList[selectedIndex]}
               alt="background-preview"
-              className="w-full h-full object-contain rounded-md"
+              className="cursor-pointer max-w-full max-h-full object-contain rounded-md shadow-xl blur-sm"
+              loading="lazy"
+              onLoad={(e) => e.currentTarget.classList.remove("blur-sm")}
+              whileHover={{ scale: 0.95 }}
+              whileTap={{ scale: 0.85 }}
             />
           </motion.div>
         )}
