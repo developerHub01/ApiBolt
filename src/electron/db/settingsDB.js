@@ -76,6 +76,43 @@ export const getZoomLevel = async () => {
   }
 };
 
+export const getApplyingZoomLevel = async () => {
+  try {
+    const activeProjectId = await getActiveProject();
+
+    if (activeProjectId) {
+      let projectZoomLevel = (
+        await db
+          .select({ zoomLevel: settingTable.zoomLevel })
+          .from(settingTable)
+          .where(eq(settingTable.projectId, activeProjectId))
+      )?.[0]?.zoomLevel;
+
+      /* if -1 means default then return default zoomLevel=1 */
+      if (projectZoomLevel === -1) return 1;
+      /* if have valid zoomLevel then return it */
+      if (typeof projectZoomLevel === "number") return projectZoomLevel;
+    }
+
+    const globalZoomLevel = (
+      await db
+        .select({ zoomLevel: settingTable.zoomLevel })
+        .from(settingTable)
+        .where(isNull(settingTable.projectId))
+    )?.[0]?.zoomLevel;
+    /**
+     * If global have level as default(-1)
+     * or if null, thought not going to just for safty
+     * then return default 1
+     * **/
+    if (globalZoomLevel === -1 || globalZoomLevel === null) return 1;
+
+    return globalZoomLevel;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 /* must contain projectId */
 export const updateSettings = async (payload) => {
   const { projectId = null, ...updatePayload } = payload;
@@ -119,7 +156,7 @@ export const updateSettings = async (payload) => {
       );
   }
 
-  return updated?.changes > 0;
+  return updated.changes > 0;
 };
 
 export const deleteSettings = async () => {

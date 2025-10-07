@@ -9,7 +9,9 @@ export const createSplashWindow = () => {
     transparent: true,
     resizable: false,
     titleBarStyle: "hidden",
+    title: "splash",
   });
+  win.isSplash = true;
 
   win.loadFile(path.join(app.getAppPath(), "dist-react", "splash.html"));
 

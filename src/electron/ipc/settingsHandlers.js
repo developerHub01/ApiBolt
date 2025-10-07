@@ -1,8 +1,8 @@
 import { BrowserWindow, dialog, ipcMain } from "electron";
 import {
   defaultSettings,
+  getApplyingZoomLevel,
   getSettings,
-  getZoomLevel,
   updateSettings,
 } from "../db/settingsDB.js";
 import fs from "fs";
@@ -26,6 +26,22 @@ function getImageFilesFromFolder(folderPath) {
   }
 }
 
+export const handleZoomLevel = async () => {
+  /* getting access of focused window */
+  const windows = BrowserWindow.getAllWindows();
+  /* getting zoomLevel comparing both global and project based */
+  let zoomLevel = await getApplyingZoomLevel();
+
+  /* window and zoomlevel found then update zoomLevel */
+  if (windows && typeof zoomLevel === "number") {
+    for (const window of windows) {
+      /* skip splash */
+      if (window.isSplash) continue;
+      window.webContents.setZoomFactor(zoomLevel);
+    }
+  }
+};
+
 export const settingsHandlers = () => {
   ipcMain.handle("getSettings", async (_) => {
     const result = await getSettings();
@@ -46,26 +62,19 @@ export const settingsHandlers = () => {
         result?.settings?.backgroundImages
       );
 
+    await handleZoomLevel();
+
     return result;
   });
   ipcMain.handle("updateSettings", async (_, ...rest) => {
     try {
       const result = await updateSettings(...rest);
+      if (!result) return result;
 
       const payload = rest?.[0] ?? {};
+
       /* checking is there updating zoomLevel */
-      if (result && typeof payload.zoomLevel === "number") {
-        /* getting access of focused window */
-        const window = BrowserWindow.getFocusedWindow();
-        /* getting zoomLevel comparing both global and project based */
-        let zoomLevel = await getZoomLevel();
-
-        if (zoomLevel === -1) zoomLevel = 1;
-        /* window and zoomlevel found then update zoomLevel */
-        if (window && typeof zoomLevel === "number")
-          window.webContents.setZoomFactor(zoomLevel);
-      }
-
+      if (result && "zoomLevel" in payload) await handleZoomLevel();
       return result;
     } catch (error) {
       console.error(error);

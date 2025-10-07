@@ -15,8 +15,7 @@ import { authorizationHandler } from "./ipc/authorizationHandler.js";
 import { requestOrFolderMetaHandler } from "./ipc/requestOrFolderMetaHandler.js";
 import { tabsHandler } from "./ipc/tabsHandler.js";
 import { folderHandlers } from "./ipc/folderHandlers.js";
-import { settingsHandlers } from "./ipc/settingsHandlers.js";
-import { getZoomLevel } from "./db/settingsDB.js";
+import { handleZoomLevel, settingsHandlers } from "./ipc/settingsHandlers.js";
 import { paramsHandlers } from "./ipc/paramsHandlers.js";
 import { headersHandlers } from "./ipc/headersHandlers.js";
 import { hiddenHeadersCheckHandler } from "./ipc/hiddenHeadersCheckHandler.js";
@@ -31,6 +30,7 @@ import { showHiddenMetaDataHandler } from "./ipc/showHiddenMetaDataHandler.js";
 import { generateHttpStatusSeed } from "./seeders/httpStatusSeed.js";
 import { httpStatusHandler } from "./ipc/httpStatusHandler.js";
 import { requestHandler } from "./ipc/requestHandler.js";
+import { getApplyingZoomLevel } from "./db/settingsDB.js";
 
 export const userDataDir = app.getPath("userData");
 
@@ -70,9 +70,7 @@ app.whenReady().then(async () => {
   });
 
   mainWindow.webContents.on("did-finish-load", async () => {
-    /* get zoomlevel to update the windows zomm level */
-    const zoomLevel = await getZoomLevel();
-    mainWindow.webContents.send("set-zoom", zoomLevel);
+    await handleZoomLevel();
   });
 
   app.on("activate", () => {

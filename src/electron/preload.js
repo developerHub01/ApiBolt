@@ -1,11 +1,5 @@
 const { contextBridge, ipcRenderer, webFrame } = require("electron");
 
-/* =================================== */
-ipcRenderer.on("set-zoom", (_, zoomLevel) => {
-  webFrame.setZoomFactor(zoomLevel < 0 ? 1 : zoomLevel);
-});
-/* =================================== */
-
 contextBridge.exposeInMainWorld("electronAPI", {
   getCookiesFromUrl: async (url) => {
     const cookieURL = new URL(url).origin;
