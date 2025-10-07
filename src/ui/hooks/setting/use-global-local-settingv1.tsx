@@ -37,9 +37,15 @@ const useGlobalLocalSetting = ({
     }
   }, [activeTab, globalSetting, localSetting]);
 
-  const value =
-    (activeTab === "project" ? localSetting : globalSetting) ??
-    DEFAULT_SETTINGS;
+  const value = useMemo(() => {
+    if (activeTab === "global" || settingType === "global")
+      return globalSetting ?? DEFAULT_SETTINGS;
+
+    if (settingType === "default")
+      return localSetting ?? globalSetting ?? DEFAULT_SETTINGS;
+
+    return localSetting;
+  }, [DEFAULT_SETTINGS, activeTab, globalSetting, localSetting, settingType]);
 
   const handleChange = useCallback(
     (value?: unknown) => {
