@@ -21,18 +21,24 @@ const SettingBackgroundImage = memo(
     return (
       <motion.div
         className={cn(
-          "w-full h-full overflow-hidden aspect-square border border-accent rounded-lg flex justify-center items-center cursor-pointer bg-accent/20 hover:bg-accent/80 transition-all duration-100 ease-in-out shadow-lg relative",
+          "w-full h-full overflow-hidden aspect-square border-2 border-accent rounded-lg flex justify-center items-center cursor-pointer bg-accent/20 hover:bg-accent/80 transition-all duration-100 ease-in-out shadow-lg relative",
           {
-            "border-accent/50 opacity-50 blur-in-sm before:absolute before:top-1/2 before:left-1/2 before:-translate-1/2 before:w-full before:h-full before:bg-gray-900 before:mix-blend-multiply before:rounded-lg before:scale-105":
+            "border-accent/50 opacity-50 blur-in-sm before:absolute before:top-1/2 before:left-1/2 before:-translate-1/2 before:w-full before:h-full before:bg-gray-900/80 before:mix-blend-multiply before:rounded-lg before:scale-105":
               disabled,
-            "ring-1 ring-primary": isActive,
+            "border-primary": isActive,
           }
         )}
         onClick={() => onClick(index)}
         whileHover={{ scale: 0.95 }}
         whileTap={{ scale: 0.85 }}
       >
-        <img src={src} alt="" className="w-full h-full object-cover" />
+        <img
+          src={src}
+          alt=""
+          loading="lazy"
+          className="w-full h-full object-cover blur-sm "
+          onLoad={(e) => e.currentTarget.classList.remove("blur-sm")}
+        />
       </motion.div>
     );
   }
