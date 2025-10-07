@@ -19,6 +19,7 @@ import {
   selectLayoutTypeLocal,
 } from "@/context/redux/setting/setting-selector";
 import { selectActiveProjectId } from "@/context/redux/request-response/selectors/project";
+import SettingItemContentWrapper from "@/components/app/setting/content/SettingItemContentWrapper";
 
 const layoutList: Array<{
   id: TLayoutSetting;
@@ -59,7 +60,7 @@ const SettingLayout = () => {
 
   return (
     <SettingItem id="layout" title="Layout Settings">
-      <SettingItemHorizontalLayout className="flex-col gap-4">
+      <SettingItemContentWrapper className="flex-col gap-4">
         <SettingItemHorizontalLayout className="items-center gap-2">
           <p className="flex-1">Change Layout</p>
           <SettingType value={settingType} onChange={handleChangeSettingType} />
@@ -70,7 +71,7 @@ const SettingLayout = () => {
             onChange={handleChange}
           />
         )}
-      </SettingItemHorizontalLayout>
+      </SettingItemContentWrapper>
     </SettingItem>
   );
 };

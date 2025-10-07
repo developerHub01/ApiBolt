@@ -23,7 +23,7 @@ const Setting = () => {
   return (
     <SettingProvider>
       <AnimatedDialog isOpen={isSettingOpen} onClose={handleClose}>
-        <AnimatedDialogContentWrapper className="border bg-accent/80">
+        <AnimatedDialogContentWrapper className="border bg-background/60">
           <SettingTop />
           <SettingContent />
           <SettingBottom />

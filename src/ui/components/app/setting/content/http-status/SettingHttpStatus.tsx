@@ -4,6 +4,7 @@ import { useSetting } from "@/context/setting/SettingProvider";
 import SettingHttpStatusContent from "@/components/app/setting/content/http-status/SettingHttpStatusContent";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { loadHttpStatus } from "@/context/redux/http-status/thunk/http-status";
+import SettingItemContentWrapper from "@/components/app/setting/content/SettingItemContentWrapper";
 
 const SettingHttpStatus = memo(() => {
   const { activeTab } = useSetting();
@@ -23,7 +24,9 @@ const SettingHttpStatus = memo(() => {
 
   return (
     <SettingItem id="httpStatus" title="Http Status Settings">
-      <SettingHttpStatusContent />
+      <SettingItemContentWrapper>
+        <SettingHttpStatusContent />
+      </SettingItemContentWrapper>
     </SettingItem>
   );
 });
