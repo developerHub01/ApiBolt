@@ -12,7 +12,7 @@ const CollectionPage = () => {
 
   return (
     <section className="w-full h-full flex flex-col gap-4 justify-center items-center">
-      <h1 className="text-6xl md:text-8xl font-black uppercase text-center text-muted-foreground leading-tight rounded-full p-8 md:p-11 aspect-square bg-muted select-none">
+      <h1 className="text-8xl font-black uppercase text-center text-muted-foreground leading-tight rounded-full p-11 aspect-square bg-muted/75 select-none">
         Api
         <br />
         Bolt
