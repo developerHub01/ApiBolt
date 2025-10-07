@@ -5,11 +5,12 @@ import SettingBackgroundOpacity from "@/components/app/setting/content/backgroun
 import SettingBackgroundOptionWrapper from "@/components/app/setting/content/background/SettingBackgroundOptionWrapper";
 import SettingBackgroundMaxNumberOfImages from "@/components/app/setting/content/background/SettingBackgroundMaxNumberOfImages";
 import SettingBackgroundSlideInterval from "@/components/app/setting/content/background/SettingBackgroundSlideInterval";
+import SettingItemContentWrapper from "@/components/app/setting/content/SettingItemContentWrapper";
 
 const SettingBackground = () => {
   return (
     <SettingItem id="background" title="Background Images">
-      <div className="w-full flex flex-col">
+      <SettingItemContentWrapper>
         <SettingBackgroundImages />
         <SettingBackgroundOptionWrapper>
           <SettingBackgroundOpacity />
@@ -17,7 +18,7 @@ const SettingBackground = () => {
           <SettingBackgroundMaxNumberOfImages />
           <SettingBackgroundSlideInterval />
         </SettingBackgroundOptionWrapper>
-      </div>
+      </SettingItemContentWrapper>
     </SettingItem>
   );
 };

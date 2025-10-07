@@ -2,21 +2,26 @@ import { memo } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { X as CloseIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface Props {
   backgroundList: Array<string>;
   selectedIndex: number | null;
   onClose: (index?: number) => void;
+  className?: string;
 }
 
 const SettingBackgroundImagePreview = memo(
-  ({ backgroundList, selectedIndex, onClose }: Props) => {
+  ({ backgroundList, selectedIndex, onClose, className = "" }: Props) => {
     return (
       <AnimatePresence mode="wait">
         {selectedIndex !== null && (
           <motion.div
             key={selectedIndex}
-            className="bg-background/50 col-span-1 h-90 origin-center overflow-hidden rounded-lg p-3 relative"
+            className={cn(
+              "bg-accent/50 col-span-1 h-90 origin-center overflow-hidden rounded-lg p-3 relative",
+              className
+            )}
             initial={{
               scale: 0.6,
               opacity: 0,

@@ -25,7 +25,7 @@ const SettingBackgroundImage = memo(
           {
             "border-accent/50 opacity-50 blur-in-sm before:absolute before:top-1/2 before:left-1/2 before:-translate-1/2 before:w-full before:h-full before:bg-gray-900 before:mix-blend-multiply before:rounded-lg before:scale-105":
               disabled,
-            "ring-1.5 ring-primary": isActive,
+            "ring-1 ring-primary": isActive,
           }
         )}
         onClick={() => onClick(index)}

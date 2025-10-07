@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type {
   SettingType,
   UpdateBackgroundImagePayloadMethodType,
@@ -34,8 +34,18 @@ const useGlobalLocalBgImages = ({
   settingType: SettingType;
 } => {
   const dispatch = useAppDispatch();
+  /**
+   * ⚠️⚠️⚠️⚠️ HERE STATE IS INTENTIONAL  ⚠️⚠️⚠️⚠️
+   * State so that we can keep track for user that did he just changed setting type or not
+   * Because some times like for custom it will show an interface to upload folder path.
+   * so this is just local temporary state.
+   * Temporary state because there is no guarantee that user will upload.
+   * **/
   const [settingType, setSettingType] = useState<SettingType>("default");
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
+  /**
+   * ⚠️⚠️⚠️⚠️ HERE STATE IS INTENTIONAL  ⚠️⚠️⚠️⚠️
+   * **/
 
   useEffect(() => {
     let type: SettingType = "custom";
@@ -50,9 +60,15 @@ const useGlobalLocalBgImages = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const value =
-    (activeTab === "project" ? localSetting : globalSetting) ??
-    DEFAULT_SETTINGS.backgroundImages;
+  const value = useMemo(() => {
+    if (activeTab === "global" || settingType === "global")
+      return globalSetting ?? DEFAULT_SETTINGS.backgroundImages;
+
+    if (settingType === "default")
+      return localSetting ?? globalSetting ?? DEFAULT_SETTINGS.backgroundImages;
+
+    return localSetting ?? [];
+  }, [activeTab, globalSetting, localSetting, settingType]);
 
   const handleChange = useCallback(
     (method?: UpdateBackgroundImagePayloadMethodType) => {

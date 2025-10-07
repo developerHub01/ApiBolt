@@ -5,13 +5,20 @@ import SettingBackgroundImage from "@/components/app/setting/content/background/
 
 interface Props {
   backgroundList: Array<string>;
+  className?: string;
   selectedIndex: number | null;
   maxNumberOfImages: number;
   onClick: (index: number) => void;
 }
 
 const SettingBackgroundImageGrid = memo(
-  ({ backgroundList, selectedIndex, maxNumberOfImages, onClick }: Props) => {
+  ({
+    backgroundList,
+    selectedIndex,
+    maxNumberOfImages,
+    onClick,
+    className = "",
+  }: Props) => {
     return (
       <ScrollArea
         className={cn(
@@ -19,12 +26,13 @@ const SettingBackgroundImageGrid = memo(
           {
             "col-span-full": selectedIndex === null,
             "col-span-1": selectedIndex !== null,
-          }
+          },
+          className
         )}
       >
         <div
           className={cn(
-            "w-full h-full grid grid-cols-3 gap-2 justify-center items-center",
+            "w-full grid grid-cols-3 gap-2 justify-center items-center",
             {
               "grid-cols-2 md:grid-cols-3": selectedIndex !== null,
               "grid-cols-3 md:grid-cols-4": selectedIndex == null,
