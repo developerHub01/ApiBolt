@@ -1,6 +1,5 @@
 import { memo, useCallback, useEffect, useState } from "react";
 import { formatCode, getParser } from "@/utils/prettier.utils";
-import { toast } from "sonner";
 import { useRequestBody } from "@/context/collections/request/RequestBodyProvider";
 import Code from "@/components/ui/code";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -19,18 +18,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { AnimatePresence, motion } from "motion/react";
-
-const codeFormatter = async (
-  rawRequestBodyType: TContentType,
-  code: string,
-  callback: (code: string) => void
-) => {
-  const parser = getParser(rawRequestBodyType);
-  const { success, data, message } = await formatCode(code, parser);
-  if (!code) return;
-  if (!success || !data) return message && toast(message);
-  callback(data);
-};
+import { codeFormatter } from "@/utils/code";
 
 const bodyTypeLabel = (type: TContentType) =>
   type === "html"
@@ -54,7 +42,13 @@ const BodyCode = memo(() => {
   const [isError, setIsError] = useState<boolean>(false);
 
   const handleFormat = useCallback(
-    () => codeFormatter(rawRequestBodyType, code, setCode),
+    async () =>
+      await codeFormatter({
+        rawRequestBodyType,
+        code,
+        callback: setCode,
+        showErrorToast: true,
+      }),
     [rawRequestBodyType, code]
   );
 
