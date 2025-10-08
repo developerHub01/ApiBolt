@@ -28,6 +28,8 @@ const useCheckBackgroundSettingImages = () => {
     DEFAULT_SETTINGS.backgroundImages
   ) as SettingBackgroundImagesValueType;
 
+  const folderPath = Array.isArray(senitizedValue) ? senitizedValue[0] : null;
+
   const isHideMoreData =
     !Array.isArray(backgroundImages) || !backgroundImages.length;
 
@@ -36,7 +38,8 @@ const useCheckBackgroundSettingImages = () => {
     handleChange,
     handleChangeSettingType,
     settingType,
-    senitizedValue,
+    senitizedValue: senitizedValue?.slice(1),
+    folderPath,
     activeTab,
     isHideMoreData,
     backgroundImagesGlobal,

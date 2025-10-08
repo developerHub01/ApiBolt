@@ -4,14 +4,16 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import useCheckBackgroundSettingImages from "@/hooks/setting/use-check-background-setting-images";
 import SettingRefresh from "@/components/app/setting/content/SettingRefresh";
-import SettingBackgroundImagesContent from "./SettingBackgroundImagesContent";
+import SettingBackgroundImagesContent from "@/components/app/setting/content/background/images/SettingBackgroundImagesContent";
 import { useSetting } from "@/context/setting/SettingProvider";
+import SettingBackgroundImagesFolderPath from "@/components/app/setting/content/background/images/SettingBackgroundImagesFolderPath";
 
 const SettingBackgroundImages = () => {
   const { activeTab } = useSetting();
   const {
     settingType,
     senitizedValue,
+    folderPath,
     handleChange,
     isHideMoreData,
     handleChangeSettingType,
@@ -37,6 +39,7 @@ const SettingBackgroundImages = () => {
       </SettingItemHorizontalLayout>
       {["custom", "global"].includes(settingType) && (
         <SettingItemHorizontalLayout className="flex-col justify-center items-center gap-4">
+          <SettingBackgroundImagesFolderPath path={folderPath} />
           <SettingBackgroundImagesContent
             backgroundList={senitizedValue as Array<string>}
             /* if images showing from project and global then short height */

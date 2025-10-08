@@ -5,26 +5,41 @@ import {
   getSettings,
   updateSettings,
 } from "../db/settingsDB.js";
-import fs from "fs";
+import { access, readdir } from "fs/promises";
+import { constants } from "fs";
 import path from "path";
 
-const imageExtensions = [".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp"];
+const BACKGROUND_IMAGES_NUMBER_LIMIT = 30;
 
-function getImageFilesFromFolder(folderPath) {
+const imageExtensions = new Set([
+  ".png",
+  ".jpg",
+  ".jpeg",
+  ".gif",
+  ".bmp",
+  ".webp",
+]);
+
+const getImageFilesFromFolder = async (folderPath) => {
   try {
-    const allFiles = fs.readdirSync(folderPath)?.slice(0, 30);
+    await access(folderPath, constants.R_OK);
 
-    const imageFiles = allFiles.filter((file) => {
-      const ext = path.extname(file).toLowerCase();
-      return imageExtensions.includes(ext);
-    });
+    const files =
+      (await readdir(folderPath, { withFileTypes: true }))
+        ?.filter((entry) => {
+          if (!entry.isFile()) return false;
+          const ext = path.extname(entry.name).toLowerCase();
+          return imageExtensions.has(ext);
+        })
+        ?.slice(0, BACKGROUND_IMAGES_NUMBER_LIMIT)
+        ?.map((file) => path.join(folderPath, file.name)) ?? [];
 
-    // Return full paths
-    return imageFiles.map((file) => path.join(folderPath, file));
+    return [folderPath, ...files];
   } catch (error) {
+    console.error(error);
     return null;
   }
-}
+};
 
 export const handleZoomLevel = async () => {
   /* getting access of focused window */
@@ -50,7 +65,7 @@ export const settingsHandlers = () => {
       result?.globalSetting?.backgroundImages &&
       result?.globalSetting?.backgroundImages !== "default"
     )
-      result.globalSetting.backgroundImages = getImageFilesFromFolder(
+      result.globalSetting.backgroundImages = await getImageFilesFromFolder(
         result?.globalSetting?.backgroundImages
       );
 
@@ -58,12 +73,12 @@ export const settingsHandlers = () => {
       result?.settings?.backgroundImages &&
       result?.settings?.backgroundImages !== "default"
     )
-      result.settings.backgroundImages = getImageFilesFromFolder(
+      result.settings.backgroundImages = await getImageFilesFromFolder(
         result?.settings?.backgroundImages
       );
 
     await handleZoomLevel();
-
+    
     return result;
   });
   ipcMain.handle("updateSettings", async (_, ...rest) => {

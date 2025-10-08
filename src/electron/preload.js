@@ -38,6 +38,10 @@ contextBridge.exposeInMainWorld("electronAPI", {
   },
 });
 
+contextBridge.exposeInMainWorld("electronFileSystem", {
+  openFolder: async (path) => await ipcRenderer.invoke("openFolder", path),
+});
+
 contextBridge.exposeInMainWorld("electronAPIZoom", {
   setZoom: (factor) => webFrame.setZoomFactor(factor),
   getZoom: () => webFrame.getZoomFactor(),

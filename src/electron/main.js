@@ -30,7 +30,7 @@ import { showHiddenMetaDataHandler } from "./ipc/showHiddenMetaDataHandler.js";
 import { generateHttpStatusSeed } from "./seeders/httpStatusSeed.js";
 import { httpStatusHandler } from "./ipc/httpStatusHandler.js";
 import { requestHandler } from "./ipc/requestHandler.js";
-import { getApplyingZoomLevel } from "./db/settingsDB.js";
+import { fileSystemHandler } from "./ipc/fileSystemHandler.js";
 
 export const userDataDir = app.getPath("userData");
 
@@ -101,6 +101,7 @@ app.whenReady().then(async () => {
   metaShowColumnHandlers();
   apiUrlHandler();
   requestHandler();
+  fileSystemHandler();
   await generateHttpStatusSeed();
 });
 

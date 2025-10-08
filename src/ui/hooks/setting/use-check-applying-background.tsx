@@ -12,7 +12,7 @@ const useCheckApplyingBackground = (): {
 } | null => {
   const activeProjectId = useAppSelector(selectActiveProjectId);
   const { global, local } = useAppSelector(selectSettingBackground);
-  
+
   const backgroundImages =
     (activeProjectId
       ? (local.backgroundImages ?? global.backgroundImages)
@@ -47,7 +47,7 @@ const useCheckApplyingBackground = (): {
   if (!backgroundImages?.length) return null;
 
   return {
-    backgroundImages: backgroundImages.slice(0, maxNumberOfImages),
+    backgroundImages: backgroundImages.slice(1, maxNumberOfImages),
     backgroundOpacity,
     backgroundBlur,
     maxNumberOfImages,

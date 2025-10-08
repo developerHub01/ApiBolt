@@ -67,6 +67,10 @@ declare global {
       ): Promise<string>;
     };
 
+    electronFileSystem: {
+      openFolder: (factor: string) => Promise<boolean>;
+    };
+
     electronAPIZoom: {
       setZoom: (factor: number) => Promise<void>;
       getZoom: () => Promise<number>;
