@@ -53,6 +53,7 @@ const VariableRow = memo(
           value={type}
           onChange={(...rest) => onChange("type", ...rest)}
           type="select"
+          className="w-30"
         />
         <VariableCell
           keyName="value"

@@ -29,6 +29,8 @@ interface VariableCellProps {
     id: string;
     label: string;
   }>;
+  className?: string;
+  innerClassName?: string;
   onChange: (value: string) => void;
   visibilityType?: boolean;
   showActionOption?: boolean;
@@ -57,6 +59,8 @@ const VariableCell = memo(
     onDelete,
     visibilityType = true,
     showActionOption = false,
+    className = "",
+    innerClassName = "",
   }: VariableCellProps) => {
     const [inputValue, setInputValue] = useState(value ?? "");
 
@@ -111,8 +115,8 @@ const VariableCell = memo(
       type === "input" && keyName === "value" && !visibilityType;
 
     return (
-      <TableCell key={id}>
-        <div className="flex gap-2">
+      <TableCell key={id} className={cn(className)}>
+        <div className={cn("flex gap-2", innerClassName)}>
           {type === "input" && (
             <input
               type={isSecretView ? "password" : "text"}
