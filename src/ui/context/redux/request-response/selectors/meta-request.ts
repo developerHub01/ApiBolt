@@ -8,7 +8,10 @@ import type {
   TMetaTableType,
 } from "@/types/request-response.types";
 import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
-import { filterAndUniqueMetaData } from "@/context/redux/request-response/utils";
+import {
+  filterAndUniqueFormData,
+  filterAndUniqueMetaData,
+} from "@/context/redux/request-response/utils";
 
 export const selectMetaData = ({
   id,
@@ -114,7 +117,22 @@ export const selectFilterAndUniqueMetaData = ({
         default:
           data = [];
       }
+      
       return filterAndUniqueMetaData(data ?? []);
+    }
+  );
+
+export const selectFilterAndUniqueFormData = ({ id }: { id?: string } = {}) =>
+  createSelector(
+    [
+      (state: RootState) => state.requestResponse.selectedTab,
+      (state: RootState) => state.requestResponse.formData,
+    ],
+    (selectedTab, formData) => {
+      const metaId = id ?? selectedTab;
+      if (!metaId) return null;
+
+      return filterAndUniqueFormData(formData[metaId] ?? []);
     }
   );
 

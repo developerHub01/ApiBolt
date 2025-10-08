@@ -17,7 +17,7 @@ import { generateJavaScriptCode } from "@/utils/snippet-generator/javascript.uti
 
 const generatorMap: Record<
   string,
-  (type: TRequestCodeType, data: CodeSnippitDataInterface) => string
+  (type: TRequestCodeType, data: CodeSnippitDataInterface) => Promise<string>
 > = {
   javascript: generateJavaScriptCode,
   // python: generatePythonCode,
@@ -35,14 +35,14 @@ const generatorMap: Record<
   // elixir: generateElixirCode,
 };
 
-export const generateCode = (
+export const generateCode = async (
   type: TRequestCodeType,
   data: CodeSnippitDataInterface
-): string => {
+): Promise<string> => {
   const lowerType = type.toLowerCase().replace(/\s+/g, "");
 
   const key = (Object.keys(generatorMap).find((k) => lowerType.startsWith(k)) ??
     null) as keyof typeof generatorMap | null;
 
-  return key ? generatorMap[key](type, data) : "";
+  return key ? await generatorMap[key](type, data) : "";
 };

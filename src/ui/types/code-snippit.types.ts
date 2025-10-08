@@ -21,7 +21,8 @@ export interface CodeSnippitDataInterface {
   }>;
   formData: Array<{
     key: string;
-    value?: string;
+    value: string;
+    type: "file" | "text";
   }>;
   binaryData?: string;
 }

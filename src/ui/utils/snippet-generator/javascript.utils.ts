@@ -1,96 +1,153 @@
 import type { CodeSnippitDataInterface } from "@/types/code-snippit.types";
 import type { TRequestCodeType } from "@/types/request-code.type";
-import { isStringIsValidObject } from "@/utils/helper";
+import { isStringIsValidObject, needsQuotesForKey } from "@/utils/helper";
 import mime from "mime";
+import {
+  getBodyData,
+  getBodyRawData,
+  getFormData,
+  getHeadersData,
+  getHeadersList,
+  getXWWWFormUrlencodedData,
+} from "@/utils/snippet-generator/helper.utils";
 
-// formdata.append(
-//   "",
-//   fileInput.files[0],
-//   "547685045_1488077659050543_866646527741654918_n.jpg"
-// );
-// formdata.append(
-//   "",
-//   fileInput.files[0],
-//   "480865739_1336020140922963_3335755998115065399_n.jpg"
-// );
+export const generateJavascriptFetchCode = async ({
+  url,
+  method,
+  headers,
+  authorization,
+  xWWWFormUrlencoded,
+  rawData,
+  binaryData,
+  rawBodyDataType,
+  bodyType,
+  formData,
+}: CodeSnippitDataInterface) => {
+  const headersString = getHeadersData({
+    headers,
+    bodyType,
+    rawBodyDataType,
+    authorization,
+    binaryData,
+  });
 
-export const generateJavascriptFetchCode = ({
+  const bodyRawData = await getBodyRawData({
+    rawBodyDataType,
+    bodyType,
+    rawData,
+  });
+
+  const options: Array<{
+    key: string;
+    value: unknown;
+  }> = [
+    {
+      key: "method",
+      value: `"${method.toUpperCase()}"`,
+    },
+  ];
+
+  if (headersString)
+    options.push({
+      key: "headers",
+      value: "myHeaders",
+    });
+
+  const dataValue = getBodyData({ bodyType, formData, xWWWFormUrlencoded });
+  if (dataValue)
+    options.push({
+      key: "data",
+      value: dataValue,
+    });
+
+  const formDataString = getFormData({
+    bodyType,
+    formData,
+  });
+
+  const xwwFormUrlEncodedString = getXWWWFormUrlencodedData({
+    bodyType,
+    xWWWFormUrlencoded,
+  });
+
+  const apiFetchString = `fetch("${url}", {
+${options.map(({ key, value }) => `\t${needsQuotesForKey(key) ? JSON.stringify(key) : key}: ${value}`).join(",\n")}
+})
+  .then(response => response.json())
+  .then(result => console.log(result))
+  .catch(error => console.error(error));`;
+
+  return `${headersString}${formDataString}${xwwFormUrlEncodedString}${bodyRawData}${apiFetchString}`;
+};
+
+export const generateJavascriptAxiosCode = ({
   url,
   method,
   headers,
   authorization,
   formData,
   xWWWFormUrlencoded,
-  rawData,
   rawBodyDataType,
   bodyType,
+  binaryData,
 }: CodeSnippitDataInterface) => {
-  const showHeaders = headers.length || authorization;
+  let headersString = "";
 
-  if (authorization)
-    headers.push({
-      key: "Authorization",
-      value: "••••••",
+  const allHeadersList = getHeadersList({
+    headers,
+    bodyType,
+    rawBodyDataType,
+    authorization,
+    binaryData,
+  });
+
+  if (allHeadersList.length) {
+    headersString = `{
+${allHeadersList.map(({ key, value }) => `\t\t${JSON.stringify(key)}: ${JSON.stringify(value)}`).join(",\n")}
+\t}`;
+  }
+
+  const options: Array<{
+    key: string;
+    value: unknown;
+  }> = [
+    {
+      key: "method",
+      value: `"${method.toUpperCase()}"`,
+    },
+    {
+      key: "url",
+      value: `"${url}"`,
+    },
+  ];
+
+  if (headersString)
+    options.push({
+      key: "headers",
+      value: headersString,
     });
 
-  const headersString = showHeaders
-    ? `/* Headers ========== */
-const myHeaders = new Headers();
-${headers
-  .map(
-    ({ key = "", value = "" }) =>
-      `myHeaders.append(${JSON.stringify(key)}, ${JSON.stringify(value)});`
-  )
-  .join("\n")}\n\n`
-    : "";
+  const dataValue = getBodyData({
+    bodyType,
+    formData,
+    xWWWFormUrlencoded,
+  });
+  if (dataValue)
+    options.push({
+      key: "data",
+      value: dataValue,
+    });
 
-  const formDataString =
-    bodyType === "form-data"
-      ? `/* form-data =========== */
-const formData = new FormData();
-${formData.length ? formData.map(({ key = "", value = "" }) => `formData.append(${JSON.stringify(key)}, ${JSON.stringify(value)});`).join("\n") : ""}\n\n`
-      : "";
+  const importString = `import axios from "axios";`;
 
-  const xWWWFormUrlencodedString =
-    bodyType === "x-www-form-urlencoded"
-      ? `/* x-www-form-urlencoded =========== */
-const urlencoded = new URLSearchParams();
-${xWWWFormUrlencoded.length ? xWWWFormUrlencoded.map(({ key = "", value = "" }) => `urlencoded.append(${JSON.stringify(key)}, ${JSON.stringify(value)});`).join("\n") : ""}\n\n`
-      : "";
+  return `${importString}
 
-  console.log(typeof rawData);
-  console.log(rawData);
-  console.log(isStringIsValidObject(rawData));
-
-  const serializedRawData = isStringIsValidObject(rawData)
-    ? rawData
-    : JSON.stringify(rawData);
-  const rawDataString =
-    bodyType === "raw"
-      ? rawBodyDataType === "json" && isStringIsValidObject(rawData)
-        ? `const raw = JSON.stringify(${serializedRawData});\n\n`
-        : `const raw = ${serializedRawData};\n\n`
-      : "";
-
-  const binaryDataString =
-    bodyType === "binary" ? `const file = "<file contents here>";\n\n` : "";
-
-  const options = `/* fetch options =========== */
-const requestOptions = {
-\tmethod: "${method.toUpperCase()}", ${showHeaders ? "\n\theaders: myHeaders," : ""}${bodyType === "none" ? "" : `\n\tbody: ${bodyType === "binary" ? "file" : bodyType === "form-data" ? "formData" : bodyType === "raw" ? "raw" : bodyType === "x-www-form-urlencoded" ? "urlencoded" : ""},`}
-\tredirect: "follow"
-};\n\n`;
-
-  const fetchApi = `/* fetch api =========== */
-fetch("${url}", requestOptions)
-\t.then((response) => response.text())
-\t.then((result) => console.log(result))
-\t.catch((error) => console.error(error));`;
-
-  return `${headersString}${formDataString}${xWWWFormUrlencodedString}${rawDataString}${binaryDataString}${options}${fetchApi}`;
+axios({
+${options.map(({ key, value }) => `\t${JSON.stringify(key)}: ${value}`).join(",\n")}
+})
+  .then(response => console.log(response.data))
+  .catch(error => console.error(error));`;
 };
-
-export const generateJavascriptAxiosCode = () => {};
 
 const jQueryCodeFormDataExtraSettingsMeta = [
   {
@@ -254,15 +311,15 @@ export const generateJavascriptjSuperagentCode = () => {};
 
 export const generateJavascriptjHttpCode = () => {};
 
-export const generateJavaScriptCode = (
+export const generateJavaScriptCode = async (
   type: TRequestCodeType,
   data: CodeSnippitDataInterface
-): string => {
+): Promise<string> => {
   switch (type) {
     case "javascript-fetch":
-      return generateJavascriptFetchCode(data);
-    // case "javascript-axios":
-    //   return generateJavascriptAxiosCode();
+      return await generateJavascriptFetchCode(data);
+    case "javascript-axios":
+      return generateJavascriptAxiosCode(data);
     case "javascript-jquery":
       return generateJavascriptjQueryCode(data);
     // case "javascript-xhr":

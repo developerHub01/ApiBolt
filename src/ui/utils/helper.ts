@@ -6,6 +6,17 @@ export const areSamePayload = (
     return payload[key] === existingPayload[key];
   });
 
+export const isAlphabetOnly = (input: string): boolean =>
+  /^[a-zA-Z]+$/.test(input);
+
+export const needsQuotesForKey = (key: string): boolean => {
+  /* Check if the key is a valid JavaScript identifier */
+  const isValidIdentifier = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(key);
+
+  /* If it doesn't match a valid identifier, it needs quotes */
+  return !isValidIdentifier;
+};
+
 export const toCapitalizeFirst = (str: string) =>
   str[0].toUpperCase() + str.slice(1);
 
@@ -17,26 +28,18 @@ export const toCapitalize = (str: string) =>
 
 export const isValidJson = (str: string): boolean => {
   try {
-    console.log("====== str =======") ;
-    console.log(str) ;
-    const parsed = JSON.parse(str);
-    console.log({ parsed });
+    JSON.parse(str);
     return true;
-  } catch (error) {
-    console.error(error);
+  } catch {
     return false;
   }
 };
 
 export const isStringIsValidObject = (str: string): boolean => {
   try {
-    console.log("===== str ======");
-    console.log(str);
     const parsed = JSON.parse(str);
-    console.log({ parsed });
     return typeof parsed === "object";
-  } catch (error) {
-    console.error({ error });
+  } catch {
     return false;
   }
 };

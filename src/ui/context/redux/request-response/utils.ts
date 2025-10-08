@@ -125,3 +125,28 @@ export const filterAndUniqueMetaData = (
 
   return result;
 };
+
+export const filterAndUniqueFormData = (data: Array<FormDataInterface>) => {
+  const matchedKeys = new Set<string>([]);
+
+  const result: Array<Pick<FormDataInterface, "id" | "key" | "value">> = [];
+  
+  data
+    .filter((item) => item.key?.trim() && item.isCheck)
+    /* ordering from newer to older so that I can get latest only for duplicated data */
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime()
+    )
+    .map(({ id, key, value }) => {
+      if (matchedKeys.has(key)) return;
+      matchedKeys.add(key);
+      result.push({
+        id,
+        key,
+        value: value,
+      });
+    });
+
+  return result;
+};

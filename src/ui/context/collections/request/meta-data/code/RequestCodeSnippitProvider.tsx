@@ -1,7 +1,16 @@
-import React, { createContext, useContext } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useAppSelector } from "@/context/redux/hooks";
 import { generateCode } from "@/utils/snippet-generator";
-import { selectFilterAndUniqueMetaData } from "@/context/redux/request-response/selectors/meta-request";
+import {
+  selectFilterAndUniqueFormData,
+  selectFilterAndUniqueMetaData,
+} from "@/context/redux/request-response/selectors/meta-request";
 import { selectIsHttpMethodType } from "@/context/redux/request-response/selectors/request-list";
 import { selectParsedRequestUrl } from "@/context/redux/request-url/selectors/url";
 import {
@@ -11,7 +20,7 @@ import {
 } from "@/context/redux/request-response/selectors/body-raw";
 import { selectBinaryData } from "@/context/redux/request-response/selectors/body-binary";
 import { selectSelectedCodeSnippit } from "@/context/redux/request-response/selectors/code-snippit";
-import { isStringIsValidObject, isValidJson } from "@/utils/helper";
+import type { CodeSnippitDataInterface } from "@/types/code-snippit.types";
 
 interface RequestCodeSnippitContext {
   code: string;
@@ -41,6 +50,7 @@ interface RequestCodeSnippitProviderProps {
 const RequestCodeSnippitProvider = ({
   children,
 }: RequestCodeSnippitProviderProps) => {
+  const [code, setCode] = useState<string | null>(null);
   const selectedCodeType = useAppSelector(selectSelectedCodeSnippit);
   const method = useAppSelector(selectIsHttpMethodType);
   const url = useAppSelector(selectParsedRequestUrl);
@@ -48,64 +58,101 @@ const RequestCodeSnippitProvider = ({
   const rawBodyDataType = useAppSelector(selectRawRequestBodyType);
   const rawData = useAppSelector(selectRawData);
   const binaryData = useAppSelector(selectBinaryData)?.path;
-  const xWWWFormUrlencoded =
-    useAppSelector(
-      selectFilterAndUniqueMetaData({
-        type: "x-www-form-urlencoded",
-      })
-    )?.map((form) => ({
-      key: form.key,
-      value: form.value,
-    })) ?? [];
-  const formData =
-    useAppSelector(
-      selectFilterAndUniqueMetaData({
-        type: "form-data",
-      })
-    )?.map((form) => ({
-      key: form.key,
-      value: form.value,
-    })) ?? [];
+  const xWWWFormUrlencoded = useAppSelector(
+    selectFilterAndUniqueMetaData({
+      type: "x-www-form-urlencoded",
+    })
+  );
+  const serializedxWWWFormUrlencoded = useMemo(
+    () =>
+      xWWWFormUrlencoded?.map((form) => ({
+        key: form.key,
+        value: form.value,
+      })) ?? [],
+    [xWWWFormUrlencoded]
+  );
+  const formData = useAppSelector(selectFilterAndUniqueFormData());
 
-  const headers =
-    useAppSelector(
-      selectFilterAndUniqueMetaData({
-        type: "headers",
-      })
-    )?.map((header) => ({
-      key: header.key,
-      value: header.value,
-    })) ?? [];
+  const serializedFormData = useMemo(() => {
+    const serialized: CodeSnippitDataInterface["formData"] = [];
+
+    formData?.forEach(({ key, value }) => {
+      if (!Array.isArray(value))
+        serialized.push({
+          key,
+          value,
+          type: "text",
+        });
+      else {
+        value.forEach((entry) =>
+          serialized.push({
+            key,
+            value: entry.file,
+            type: "file",
+          })
+        );
+      }
+    });
+
+    return serialized;
+  }, [formData]);
+
+  const headers = useAppSelector(
+    selectFilterAndUniqueMetaData({
+      type: "headers",
+    })
+  );
+  const serializedHeaders = useMemo(
+    () =>
+      headers?.map((header) => ({
+        key: header.key,
+        value: header.value,
+      })) ?? [],
+    [headers]
+  );
 
   const authorization = useAppSelector(
     selectFilterAndUniqueMetaData({
       type: "hiddenHeaders",
     })
-  )?.find((header) => header.id === "authorization")?.value as
-    | string
-    | undefined;
+  )?.find((header) => header.id === "authorization")?.value;
 
-  console.log(isValidJson(rawData));
-  console.log(isStringIsValidObject(rawData));
-
-  const code = generateCode(selectedCodeType, {
+  useEffect(() => {
+    (async () => {
+      const code = await generateCode(selectedCodeType, {
+        url,
+        method,
+        headers: serializedHeaders,
+        authorization,
+        bodyType,
+        rawBodyDataType,
+        rawData: rawData,
+        xWWWFormUrlencoded: serializedxWWWFormUrlencoded,
+        formData: serializedFormData,
+        binaryData,
+      });
+      setCode(code);
+    })();
+  }, [
+    selectedCodeType,
     url,
     method,
-    headers,
+    serializedHeaders,
     authorization,
     bodyType,
     rawBodyDataType,
-    rawData: rawData,
-    xWWWFormUrlencoded,
-    formData,
+    rawData,
+    serializedxWWWFormUrlencoded,
+    serializedFormData,
     binaryData,
-  });
+  ]);
+
   const language = selectedCodeType?.split("-")[0];
 
   return (
     <RequestCodeSnippitContext.Provider
       value={{
-        code,
+        code: code ?? "",
         language,
       }}
     >
