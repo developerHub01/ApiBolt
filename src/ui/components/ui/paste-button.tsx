@@ -71,7 +71,7 @@ const PasteButton = memo(
           )}
         </TooltipTrigger>
         <TooltipContent side="bottom">
-          <p>{label || "Paste coppied"}</p>
+          <p>{label || "Paste copied"}</p>
         </TooltipContent>
       </Tooltip>
     );
