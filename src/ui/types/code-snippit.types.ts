@@ -11,7 +11,10 @@ export interface CodeSnippitDataInterface {
     key: string;
     value?: string;
   }>;
-  authorization?: string;
+  authorization?: {
+    key: string;
+    value: string;
+  };
   bodyType: TRequestBodyType;
   rawBodyDataType: TContentType;
   rawData: string;

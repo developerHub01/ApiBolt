@@ -8,6 +8,7 @@ import React, {
 import { useAppSelector } from "@/context/redux/hooks";
 import { generateCode } from "@/utils/snippet-generator";
 import {
+  selectAuthorizationHeaderData,
   selectFilterAndUniqueFormData,
   selectFilterAndUniqueMetaData,
 } from "@/context/redux/request-response/selectors/meta-request";
@@ -113,11 +114,16 @@ const RequestCodeSnippitProvider = ({
     [headers]
   );
 
-  const authorization = useAppSelector(
-    selectFilterAndUniqueMetaData({
-      type: "hiddenHeaders",
-    })
-  )?.find((header) => header.id === "authorization")?.value;
+  const authorization = useAppSelector(selectAuthorizationHeaderData());
+
+  const serializedAuthorization = useMemo(() => {
+    if (!authorization || !authorization.value) return;
+
+    return {
+      key: authorization.key,
+      value: authorization.value as string,
+    };
+  }, [authorization]);
 
   useEffect(() => {
     (async () => {
@@ -125,7 +131,7 @@ const RequestCodeSnippitProvider = ({
         url,
         method,
         headers: serializedHeaders,
-        authorization,
+        authorization: serializedAuthorization,
         bodyType,
         rawBodyDataType,
         rawData: rawData,

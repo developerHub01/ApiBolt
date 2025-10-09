@@ -47,7 +47,7 @@ export const getHeadersList = ({
     });
   if (authorization)
     headers.push({
-      key: "Authorization",
+      key: authorization.key,
       value: MASKED_AUTHORIZATION,
     });
 
@@ -202,10 +202,10 @@ export const generateMaskedAndRealCode = ({
   authorization,
 }: {
   code: string;
-  authorization?: string;
+  authorization: CodeSnippitDataInterface["authorization"];
 }) => ({
   maskedCode: code,
   code: authorization
-    ? code.replaceAll(MASKED_AUTHORIZATION, authorization)
+    ? code.replaceAll(MASKED_AUTHORIZATION, authorization.value)
     : code,
 });
