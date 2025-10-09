@@ -8,7 +8,7 @@ import {
 } from "@/constant/authorization.constant";
 import {
   initialHiddenCookie,
-  initialHiddenHeaderData,
+  INITIAL_HIDDEN_HEADERS_DATA,
   RESPONSE_PANEL_MIN_LIMIT,
 } from "@/constant/request-response.constant";
 import type {
@@ -31,7 +31,7 @@ import type {
   ShowHiddenMetaInterface,
   FormDataPayloadInterface,
 } from "@/types/request-response.types";
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, current, type PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 import { loadFolder } from "@/context/redux/request-response/thunks/folder";
 import type {
@@ -770,7 +770,7 @@ export const requestResponseSlice = createSlice({
       state.headers[selectedTab] = action.payload;
 
       if (!state.hiddenHeaders[selectedTab])
-        state.hiddenHeaders[selectedTab] = initialHiddenHeaderData();
+        state.hiddenHeaders[selectedTab] = INITIAL_HIDDEN_HEADERS_DATA;
     },
     handleSetHeaders: (
       state,
@@ -827,15 +827,12 @@ export const requestResponseSlice = createSlice({
       const selectedTab = action.payload ?? state.selectedTab;
       if (!selectedTab || !state.hiddenHeaders[selectedTab]) return;
 
-      const existingHiddenHeaderAuthorization = state.hiddenHeaders[
+      console.log(current(state.hiddenCookie));
+      console.log(current(state.hiddenHeaders[selectedTab]));
+
+      state.hiddenHeaders[selectedTab] = state.hiddenHeaders[
         selectedTab
-      ].find((header) => header.id === "authorization");
-
-      if (!existingHiddenHeaderAuthorization) return;
-
-      /* because we are fixing if auth have then it will be always in zero'th index (0) */
-
-      state.hiddenHeaders[selectedTab].shift();
+      ]?.filter((header) => header.id !== "authorization");
     },
     handleUpdateHiddenHeadersIsCheck: (
       state,

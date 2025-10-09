@@ -117,7 +117,7 @@ export const selectFilterAndUniqueMetaData = ({
         default:
           data = [];
       }
-      
+
       return filterAndUniqueMetaData(data ?? []);
     }
   );
