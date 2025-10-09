@@ -12,6 +12,7 @@ import {
   filterAndUniqueFormData,
   filterAndUniqueMetaData,
 } from "@/context/redux/request-response/utils";
+import { AUTHORIZATION_DATA_ID } from "@/constant/authorization.constant";
 
 export const selectMetaData = ({
   id,
@@ -114,7 +115,7 @@ export const selectAuthorizationHeaderData = ({ id }: { id?: string } = {}) =>
     ],
     (metaData) => {
       if (!metaData) return null;
-      return metaData.find((header) => header.id === "authorization");
+      return metaData.find((header) => header.id === AUTHORIZATION_DATA_ID);
     }
   );
 
@@ -129,7 +130,7 @@ export const selectAuthorizationParamData = ({ id }: { id?: string } = {}) =>
     (metaData) => {
       if (!metaData) return null;
       return metaData.find(
-        (header) => header.id === "authorization"
+        (header) => header.id === AUTHORIZATION_DATA_ID
       ) as ParamInterface<string>;
     }
   );

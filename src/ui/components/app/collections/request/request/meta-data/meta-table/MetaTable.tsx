@@ -9,8 +9,10 @@ import type {
 } from "@/types/request-response.types";
 import { useRequestMetaData } from "@/context/collections/request/RequestMetaDataProvider";
 import { selectMetaData } from "@/context/redux/request-response/selectors/meta-request";
+import { AUTHORIZATION_DATA_ID } from "@/constant/authorization.constant";
+import { COOKIE_DATA_ID } from "@/constant/request-response.constant";
 
-const headersToPreventCheckList = ["Cookie", "Authorization"];
+const headersToPreventCheckList = [COOKIE_DATA_ID, AUTHORIZATION_DATA_ID];
 
 const passwordTypeKeyList = [
   "api-key",
@@ -60,7 +62,7 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
     <MetaTableWrapper header={<MetaTableHeader type={type} />}>
       {data.map(({ key, ...param }) => (
         <MetaTableRow
-          preventCheck={headersToPreventCheckList.includes(key)}
+          preventCheck={headersToPreventCheckList.includes(param.id)}
           type={type}
           key={param.id}
           {...param}

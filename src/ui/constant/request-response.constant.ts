@@ -30,8 +30,9 @@ export const DEFAULT_REQUEST_RESPONSE_SIZE = {
   body: 0,
 };
 
+export const COOKIE_DATA_ID = "cookie";
 export const initialHiddenCookie = () => ({
-  id: "cookie",
+  id: COOKIE_DATA_ID,
   key: "Cookie",
   value: "",
   description: "",

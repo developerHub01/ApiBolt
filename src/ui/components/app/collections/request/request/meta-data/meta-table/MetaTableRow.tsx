@@ -12,6 +12,7 @@ import type {
   TMetaTableType,
   TParamContentType,
 } from "@/types/request-response.types";
+import { AUTHORIZATION_DATA_ID } from "@/constant/authorization.constant";
 
 const calculateDynamicText = "<calculated when request is sent>";
 
@@ -99,7 +100,7 @@ const MetaTableRow = memo(
               className="cursor-pointer"
               id={`${type}-check-${id}`}
               checked={isCheck || preventCheck}
-              disabled={preventCheck || id === "authorization"}
+              disabled={preventCheck || id === AUTHORIZATION_DATA_ID}
               onCheckedChange={handleCheckChange}
             />
           </div>

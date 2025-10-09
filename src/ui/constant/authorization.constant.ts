@@ -36,10 +36,10 @@ export const AUTH_TYPE_LIST = [
   "api-key",
 ];
 
+export const AUTHORIZATION_DATA_ID = "authorization";
 export const AUTHORIZATION_AUTH_HEADER_KEY = "Authorization";
-
 export const INITIAL_HIDDEN_HEADER_AUTHORIZATION_DATA = {
-  id: "authorization",
+  id: AUTHORIZATION_DATA_ID,
   key: "",
   value: "",
   prevent: true,

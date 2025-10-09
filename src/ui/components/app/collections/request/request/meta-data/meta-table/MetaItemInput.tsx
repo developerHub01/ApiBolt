@@ -9,6 +9,7 @@ import {
 } from "react";
 import { cn } from "@/lib/utils";
 import { Eye as ShowIcon, EyeOff as HideIcon } from "lucide-react";
+import { AUTHORIZATION_DATA_ID } from "@/constant/authorization.constant";
 
 const hiddenDummyText = "•••••••••••••••••••••••••";
 
@@ -39,7 +40,7 @@ const MetaItemInput = memo(
   }: MetaItemInputProps) => {
     const [valueState, setValueState] = useState<string>(value);
     const [hidePassword, setHidePassword] = useState<boolean>(
-      type !== "text" || (id === "authorization" && cellType === "value")
+      type !== "text" || (id === AUTHORIZATION_DATA_ID && cellType === "value")
     );
 
     useEffect(() => {
@@ -48,7 +49,8 @@ const MetaItemInput = memo(
 
     useEffect(() => {
       setHidePassword(
-        type !== "text" || (id === "authorization" && cellType === "value")
+        type !== "text" ||
+          (id === AUTHORIZATION_DATA_ID && cellType === "value")
       );
     }, [type, id, cellType]);
 
@@ -69,7 +71,8 @@ const MetaItemInput = memo(
     const handleTogglePasswordView = () => setHidePassword((prev) => !prev);
 
     const showPasswordButton =
-      type === "password" || (id === "authorization" && cellType === "value");
+      type === "password" ||
+      (id === AUTHORIZATION_DATA_ID && cellType === "value");
 
     return (
       <div className="w-full flex gap-1 justify-between items-center group">
