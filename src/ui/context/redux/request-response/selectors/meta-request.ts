@@ -30,6 +30,7 @@ export const selectMetaData = ({
       (state: RootState) => state.requestResponse.hiddenHeaders,
       (state: RootState) => state.requestResponse.formData,
       (state: RootState) => state.requestResponse.xWWWFormUrlencodedData,
+      (state: RootState) => state.requestResponse.authType,
       (state: RootState) => state.requestResponse.authInheritedId,
       (state: RootState) => state.requestResponse.authorizationHeader,
       (state: RootState) => state.requestResponse.authorizationParam,
@@ -43,6 +44,7 @@ export const selectMetaData = ({
       hiddenHeaders,
       formData,
       xWWWFormUrlencodedData,
+      authType,
       authInheritedIds,
       authorizationHeaders,
       authorizationParams
@@ -50,13 +52,16 @@ export const selectMetaData = ({
       const metaId = id ?? selectedTab;
       if (!metaId) return null;
 
-      const authInheritedId = authInheritedIds[metaId];
-      const authorizationHeader = authInheritedId
-        ? authorizationHeaders[authInheritedId]
-        : authorizationHeaders[metaId];
-      const authorizationParam = authInheritedId
-        ? authorizationParams[authInheritedId]
-        : authorizationParams[metaId];
+      const authApplyingMetaId =
+        authType[metaId] === "inherit-parent"
+          ? authInheritedIds[metaId]
+          : metaId;
+      const authorizationHeader = authApplyingMetaId
+        ? authorizationHeaders[authApplyingMetaId]
+        : null;
+      const authorizationParam = authApplyingMetaId
+        ? authorizationParams[authApplyingMetaId]
+        : null;
 
       switch (type) {
         case "params":
