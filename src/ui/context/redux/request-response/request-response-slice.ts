@@ -83,7 +83,6 @@ interface RequestResponseState {
   requestBodyType: Record<string, TRequestBodyType>;
   rawRequestBodyType: Record<string, TContentType>;
   params: Record<string, Array<ParamInterface>>;
-  hiddenParams: Record<string, ParamInterface>;
   showHiddenParams: Record<string, boolean>;
   headers: Record<string, Array<ParamInterface>>;
   hiddenCookie: ParamInterface;
@@ -173,7 +172,6 @@ const initialState: RequestResponseState = {
   requestBodyType: {},
   rawRequestBodyType: {},
   params: {},
-  hiddenParams: {},
   showHiddenParams: {},
   headers: {},
   hiddenCookie: initialHiddenCookie(),

@@ -24,7 +24,6 @@ export const selectMetaData = ({
     [
       (state: RootState) => state.requestResponse.selectedTab,
       (state: RootState) => state.requestResponse.params,
-      (state: RootState) => state.requestResponse.hiddenParams,
       (state: RootState) => state.requestResponse.headers,
       (state: RootState) => state.requestResponse.hiddenCookie,
       (state: RootState) => state.requestResponse.hiddenHeaders,
@@ -38,7 +37,6 @@ export const selectMetaData = ({
     (
       selectedTab,
       params,
-      hiddenParams,
       headers,
       hiddenCookie,
       hiddenHeaders,
@@ -66,12 +64,8 @@ export const selectMetaData = ({
       switch (type) {
         case "params":
           return params[metaId] ?? [];
-        case "hiddenParams": {
-          return [
-            ...(authorizationParam ? [authorizationParam] : []),
-            ...(hiddenParams[metaId] ? [hiddenParams[metaId]] : []),
-          ];
-        }
+        case "hiddenParams":
+          return authorizationParam ? [authorizationParam] : [];
         case "headers":
           return headers[metaId] ?? [];
         case "hiddenHeaders": {
