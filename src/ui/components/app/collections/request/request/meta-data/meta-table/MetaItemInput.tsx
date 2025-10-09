@@ -81,10 +81,10 @@ const MetaItemInput = memo(
           onChange={handleChange}
           onBlur={handleBlur}
           className={cn(
-            "w-full p-0.5 outline-none",
+            "w-full p-0.5 outline-none md:text-sm",
             "border-b border-transparent focus:border-primary",
             "placeholder:capitalize placeholder:opacity-50",
-            "disabled:opacity-50 md:text-sm",
+            "disabled:opacity-95",
             "selection:bg-primary selection:text-primary-foreground",
             className
           )}

@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { DEFAULT_AUTHORIZATION_ID } from "@/constant/authorization.constant";
-import { loadInheritParentAuthorization } from "../redux/request-response/thunks/auth";
+import { loadInheritParentAuthorization } from "@/context/redux/request-response/thunks/auth";
 import type { TAuthContextType } from "@/types/authorization.types";
 import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
 
