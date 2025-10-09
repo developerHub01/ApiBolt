@@ -9,6 +9,7 @@ import {
 } from "@/utils/request-response.utils";
 import { INITIAL_URL_TOKENS_VALUE } from "@/constant/request-url.constant";
 import { removeDuplicateEnvs } from "@/utils/environments.utils";
+import { selectAuthorizationParamData } from "@/context/redux/request-response/selectors/meta-request";
 
 export const selectRequestUrl = createSelector(
   (state: RootState) =>
@@ -28,26 +29,16 @@ export const selectRequestUrl = createSelector(
 );
 
 export const selectParsedRequestUrl = createSelector(
-  (state: RootState) => state.requestResponse.selectedTab,
   (state: RootState) =>
     state.requestUrl.tokens[state.requestResponse.selectedTab ?? ""],
   (state: RootState) =>
     state.requestResponse.params[state.requestResponse.selectedTab ?? ""],
-  (state: RootState) => state.requestResponse.authorizationParam,
-  (state: RootState) =>
-    state.requestResponse.authType[state.requestResponse.selectedTab ?? ""],
-  (state: RootState) =>
-    state.requestResponse.authInheritedId[
-      state.requestResponse.selectedTab ?? ""
-    ],
+  selectAuthorizationParamData(),
   (state: RootState) => state.requestResponse.environmentsList,
   (
-    selectedTab,
     tokens: Array<UrlTokenInterface>,
     params: Array<ParamInterface>,
-    authorizationParams,
-    authType,
-    authInheritedId,
+    authorizationParam,
     environmentsList
   ): string => {
     const paramsCopy = [...(params ?? [])];
@@ -64,12 +55,7 @@ export const selectParsedRequestUrl = createSelector(
       };
     });
 
-    /* here authHiddenParam will appply based on the authType if authType is anything but inherited-parents then use selectedTab hiddenParam else that inerited-parents meta request hiddenParams */
-    const authirizationParam =
-      authType === "inherit-parent"
-        ? authorizationParams[authInheritedId!]
-        : authorizationParams[selectedTab!];
-    if (authirizationParam) paramsCopy.push(authirizationParam);
+    if (authorizationParam) paramsCopy.push(authorizationParam);
 
     const queryParams = paramsTableToStringParsedFromEnvs(paramsCopy, envMap);
     try {

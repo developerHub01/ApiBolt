@@ -118,6 +118,22 @@ export const selectAuthorizationHeaderData = ({ id }: { id?: string } = {}) =>
     }
   );
 
+export const selectAuthorizationParamData = ({ id }: { id?: string } = {}) =>
+  createSelector(
+    [
+      selectMetaData({
+        id,
+        type: "hiddenParams",
+      }),
+    ],
+    (metaData) => {
+      if (!metaData) return null;
+      return metaData.find(
+        (header) => header.id === "authorization"
+      ) as ParamInterface<string>;
+    }
+  );
+
 export const selectFilterAndUniqueFormData = ({ id }: { id?: string } = {}) =>
   createSelector(
     [
