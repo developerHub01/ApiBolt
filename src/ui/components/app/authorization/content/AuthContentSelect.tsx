@@ -41,7 +41,10 @@ const AuthContentSelect = memo(
         defaultValue={defaultValue}
         onValueChange={onChange}
       >
-        <SelectTrigger className={cn("w-full max-w-80", className)} {...props}>
+        <SelectTrigger
+          className={cn("w-full flex-1 max-w-80", className)}
+          {...props}
+        >
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent align="end">

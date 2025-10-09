@@ -20,10 +20,17 @@ interface PayloadCodeProps {
   disabled?: boolean;
   onBlur: (code: string) => void;
   [key: string]: unknown;
+  className?: string;
 }
 
 const PayloadCode = memo(
-  ({ code = "", disabled = false, onBlur, ...props }: PayloadCodeProps) => {
+  ({
+    code = "",
+    disabled = false,
+    onBlur,
+    className = "",
+    ...props
+  }: PayloadCodeProps) => {
     const [codeState, setCodeState] = useState<string>(code);
 
     useEffect(() => {
@@ -36,7 +43,12 @@ const PayloadCode = memo(
     const handleFormat = () => codeFormatter(codeState, setCodeState);
 
     return (
-      <div className="w-full max-w-80 h-52 rounded-lg overflow-hidden border relative">
+      <div
+        className={cn(
+          "w-full max-w-80 h-52 rounded-lg overflow-hidden border relative",
+          className
+        )}
+      >
         <ScrollArea
           className={cn(
             "w-full h-full rounded-lg overflow-hidden border [&>div>div]:h-full",

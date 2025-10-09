@@ -6,7 +6,7 @@ interface ContentWrapperProps {
 
 const ContentWrapper = ({ children }: ContentWrapperProps) => {
   return (
-    <div className="w-full flex flex-col gap-3 pb-3 max-w-2xl mx-auto">
+    <div className="w-full flex flex-col gap-x-3 gap-y-4 pb-3 max-w-2xl mx-auto">
       {children}
     </div>
   );

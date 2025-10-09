@@ -64,7 +64,6 @@ const JWTBearer = memo(({ id, disabled = false }: Props) => {
         </AuthContentInoutLabel>
         <AuthContentSelect
           id="api-key-algo"
-          className="w-full"
           items={algoList}
           value={authData.algo || algoList[0].id}
           onChange={(value) => handleBlur("jwtAlgo", value)}
@@ -77,7 +76,6 @@ const JWTBearer = memo(({ id, disabled = false }: Props) => {
         </AuthContentInoutLabel>
         <AuthContentInput
           id="api-key-secret"
-          className="w-full"
           type="password"
           value={authData.secret}
           onBlur={(value) => handleBlur("jwtSecret", value)}
@@ -94,6 +92,7 @@ const JWTBearer = memo(({ id, disabled = false }: Props) => {
           code={authData.payload}
           onBlur={(code: string) => handleBlur("jwtPayload", code)}
           disabled={disabled}
+          className="flex-1 w-full"
         />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
@@ -102,7 +101,6 @@ const JWTBearer = memo(({ id, disabled = false }: Props) => {
         </AuthContentInoutLabel>
         <AuthContentInput
           id="api-key-prefix"
-          className="max-w-80"
           value={authData.headerPrefix}
           onBlur={(value) => handleBlur("jwtHeaderPrefix", value)}
           placeholder="Prefix"
@@ -115,7 +113,6 @@ const JWTBearer = memo(({ id, disabled = false }: Props) => {
         </AuthContentInoutLabel>
         <AuthContentSelect
           id="api-key-add-to"
-          className="w-full"
           items={addToList}
           value={authData.addTo ?? addToList[0].id}
           defaultValue={addToList[0].id}

@@ -13,7 +13,7 @@ const AuthKeyValueWrapper = ({
   return (
     <div
       className={cn(
-        "w-full flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2",
+        "w-full flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2.5",
         className
       )}
       {...props}

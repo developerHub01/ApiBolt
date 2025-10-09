@@ -32,7 +32,7 @@ const BasicAuth = memo(({ id, disabled = false }: Props) => {
   return (
     <ContentWrapper>
       <AuthKeyValueWrapper>
-        <AuthContentInoutLabel htmlFor="basic-auth-username">
+        <AuthContentInoutLabel htmlFor="basic-auth-username" className="w-17">
           Username
         </AuthContentInoutLabel>
         <AuthContentInput
@@ -45,7 +45,7 @@ const BasicAuth = memo(({ id, disabled = false }: Props) => {
         />
       </AuthKeyValueWrapper>
       <AuthKeyValueWrapper>
-        <AuthContentInoutLabel htmlFor="basic-auth-password">
+        <AuthContentInoutLabel htmlFor="basic-auth-password"  className="w-17">
           Password
         </AuthContentInoutLabel>
         <AuthContentInput
