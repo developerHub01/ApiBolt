@@ -2,7 +2,7 @@ import { memo } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { Eye as ShowIcon, EyeOff as HideIcon } from "lucide-react";
 import {
-  selectMetaDataByCheckingInheritance,
+  selectMetaData,
   selectShowHiddenMetaData,
 } from "@/context/redux/request-response/selectors/meta-request";
 import { toggleShowHiddenMetaData } from "@/context/redux/request-response/thunks/show-hidden-meta-data";
@@ -16,7 +16,7 @@ const LabelPrefixHidden = memo(({ type }: Props) => {
   const showHiddenData = useAppSelector(selectShowHiddenMetaData(type));
   const hiddenData =
     useAppSelector(
-      selectMetaDataByCheckingInheritance({
+      selectMetaData({
         type: type === "header" ? "hiddenHeaders" : "hiddenParams",
       })
     ) ?? [];

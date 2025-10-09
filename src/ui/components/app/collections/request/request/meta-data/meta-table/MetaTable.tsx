@@ -8,7 +8,7 @@ import type {
   ParamInterface,
 } from "@/types/request-response.types";
 import { useRequestMetaData } from "@/context/collections/request/RequestMetaDataProvider";
-import { selectMetaDataByCheckingInheritance } from "@/context/redux/request-response/selectors/meta-request";
+import { selectMetaData } from "@/context/redux/request-response/selectors/meta-request";
 
 const headersToPreventCheckList = ["Cookie", "Authorization"];
 
@@ -32,13 +32,14 @@ const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
   const { cellToShow, ...tableData } = useRequestMetaData();
   const hiddenHeader =
     useAppSelector(
-      selectMetaDataByCheckingInheritance({
+      selectMetaData({
         type: "hiddenHeaders",
       })
     ) ?? [];
+
   const hiddenParams =
     useAppSelector(
-      selectMetaDataByCheckingInheritance({
+      selectMetaData({
         type: "hiddenParams",
       })
     ) ?? [];

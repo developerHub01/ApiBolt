@@ -30,6 +30,9 @@ export const selectMetaData = ({
       (state: RootState) => state.requestResponse.hiddenHeaders,
       (state: RootState) => state.requestResponse.formData,
       (state: RootState) => state.requestResponse.xWWWFormUrlencodedData,
+      (state: RootState) => state.requestResponse.authInheritedId,
+      (state: RootState) => state.requestResponse.authorizationHeader,
+      (state: RootState) => state.requestResponse.authorizationParam,
     ],
     (
       selectedTab,
@@ -39,20 +42,40 @@ export const selectMetaData = ({
       hiddenCookie,
       hiddenHeaders,
       formData,
-      xWWWFormUrlencodedData
+      xWWWFormUrlencodedData,
+      authInheritedIds,
+      authorizationHeaders,
+      authorizationParams
     ): Array<ParamInterface | FormDataInterface> | null => {
       const metaId = id ?? selectedTab;
       if (!metaId) return null;
 
+      const authInheritedId = authInheritedIds[metaId];
+      const authorizationHeader = authInheritedId
+        ? authorizationHeaders[authInheritedId]
+        : authorizationHeaders[metaId];
+      const authorizationParam = authInheritedId
+        ? authorizationParams[authInheritedId]
+        : authorizationParams[metaId];
+
       switch (type) {
         case "params":
           return params[metaId] ?? [];
-        case "hiddenParams":
-          return hiddenParams[metaId] ? [hiddenParams[metaId]] : [];
+        case "hiddenParams": {
+          return [
+            ...(authorizationParam ? [authorizationParam] : []),
+            ...(hiddenParams[metaId] ? [hiddenParams[metaId]] : []),
+          ];
+        }
         case "headers":
           return headers[metaId] ?? [];
-        case "hiddenHeaders":
-          return [hiddenCookie, ...(hiddenHeaders[metaId] ?? [])];
+        case "hiddenHeaders": {
+          return [
+            ...(authorizationHeader ? [authorizationHeader] : []),
+            hiddenCookie,
+            ...(hiddenHeaders[metaId] ?? []),
+          ];
+        }
         case "form-data":
           return formData[metaId] ?? [];
         case "x-www-form-urlencoded":
@@ -133,36 +156,6 @@ export const selectFilterAndUniqueFormData = ({ id }: { id?: string } = {}) =>
       if (!metaId) return null;
 
       return filterAndUniqueFormData(formData[metaId] ?? []);
-    }
-  );
-
-export const selectMetaDataByCheckingInheritance = ({
-  id,
-  type,
-}: {
-  id?: string;
-  type: TMetaTableType | null;
-}) =>
-  createSelector(
-    [
-      (state: RootState) => state.requestResponse.selectedTab,
-      (state: RootState) => state.requestResponse.authInheritedId,
-      (state: RootState) => state,
-    ],
-    (
-      selectedTab,
-      authInheritedId,
-      state
-    ): Array<ParamInterface | FormDataInterface> | null => {
-      const metaId = id ?? selectedTab;
-      if (!metaId || !authInheritedId[metaId]) return null;
-
-      const innerSelector = selectMetaData({
-        id: authInheritedId[metaId],
-        type,
-      });
-
-      return innerSelector(state);
     }
   );
 

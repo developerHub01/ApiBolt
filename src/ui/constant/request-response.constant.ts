@@ -31,7 +31,7 @@ export const DEFAULT_REQUEST_RESPONSE_SIZE = {
 };
 
 export const initialHiddenCookie = () => ({
-  id: uuidv4(),
+  id: "cookie",
   key: "Cookie",
   value: "",
   description: "",
@@ -42,17 +42,17 @@ export const INITIAL_HIDDEN_HEADERS_DATA = [
   {
     id: "userAgent",
     key: "User-Agent",
-    value: "",
+    value: `${import.meta.env.VITE_APP_NAME}/${import.meta.env.VITE_APP_VERSION}`,
     prevent: true,
     isCheck: true,
-    calculateDynamicly: true,
   },
   {
     id: "contentLength",
     key: "Content-Length",
-    value: `${import.meta.env.VITE_APP_NAME}/${import.meta.env.VITE_APP_VERSION}`,
+    value: "",
     prevent: true,
     isCheck: true,
+    calculateDynamicly: true,
   },
   {
     id: "accept",

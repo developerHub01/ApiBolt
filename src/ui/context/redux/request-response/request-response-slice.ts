@@ -31,7 +31,7 @@ import type {
   ShowHiddenMetaInterface,
   FormDataPayloadInterface,
 } from "@/types/request-response.types";
-import { createSlice, current, type PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 import { loadFolder } from "@/context/redux/request-response/thunks/folder";
 import type {
@@ -88,6 +88,8 @@ interface RequestResponseState {
   headers: Record<string, Array<ParamInterface>>;
   hiddenCookie: ParamInterface;
   hiddenHeaders: Record<string, Array<ParamInterface>>;
+  authorizationHeader: Record<string, ParamInterface>;
+  authorizationParam: Record<string, ParamInterface>;
   showHiddenHeaders: Record<string, boolean>;
   binaryData: Record<
     string,
@@ -176,6 +178,8 @@ const initialState: RequestResponseState = {
   headers: {},
   hiddenCookie: initialHiddenCookie(),
   hiddenHeaders: {},
+  authorizationHeader: {},
+  authorizationParam: {},
   showHiddenHeaders: {},
   binaryData: {},
   formData: {},
@@ -725,37 +729,33 @@ export const requestResponseSlice = createSlice({
 
       state.params[id] = params;
     },
-    handleSetHiddenParams: (
+    handleUpdateHiddenAuthorizationParams: (
       state,
       action: PayloadAction<{
         id?: string;
-        param: Pick<ParamInterface, "key" | "value"> | undefined;
+        key?: string;
+        value: string;
       }>
     ) => {
-      const { param } = action.payload;
-      const id = action.payload.id ?? state.selectedTab;
-      if (!id) return;
+      const selectedTab = action.payload.id ?? state.selectedTab;
+      if (!selectedTab) return;
 
-      if (!param) {
-        delete state.hiddenParams[id];
-        return;
-      }
+      const value = action.payload.value;
+      const key = action.payload.key ?? AUTHORIZATION_AUTH_HEADER_KEY;
 
-      if (
-        state.hiddenParams[id]?.key === param.key &&
-        state.hiddenParams[id]?.value === param.value
-      )
-        return;
-
-      state.hiddenParams[id] = {
+      state.authorizationParam[selectedTab] = {
         ...INITIAL_HIDDEN_HEADER_AUTHORIZATION_DATA,
-        ...param,
+        key,
+        value,
       };
     },
-    handleClearHiddenParams: (state, action: PayloadAction<string>) => {
-      const id = action.payload ?? state.selectedTab;
-      if (!id || !state.hiddenParams[id]) return;
-      delete state.hiddenParams[id];
+    handleClearHiddenAuthorizationParams: (
+      state,
+      action: PayloadAction<string>
+    ) => {
+      const selectedTab = action.payload ?? state.selectedTab;
+      if (!selectedTab) return;
+      delete state.authorizationParam[selectedTab];
     },
     /* ================ Params end =================== */
 
@@ -796,43 +796,23 @@ export const requestResponseSlice = createSlice({
       const selectedTab = action.payload.id ?? state.selectedTab;
       if (!selectedTab) return;
 
-      if (!state.hiddenHeaders[selectedTab])
-        state.hiddenHeaders[selectedTab] = [];
-
       const value = action.payload.value;
       const key = action.payload.key ?? AUTHORIZATION_AUTH_HEADER_KEY;
-      const existingHiddenHeaderAuthorization = state.hiddenHeaders[
-        selectedTab
-      ].find((header) => header.id === "authorization");
-      if (value === existingHiddenHeaderAuthorization?.value) return;
 
-      /* because we are fixing if auth have then it will be always in zero'th index (0) */
-      if (existingHiddenHeaderAuthorization && !value) {
-        state.hiddenHeaders[selectedTab].shift();
-        return;
-      } else if (!value) return;
-
-      if (!existingHiddenHeaderAuthorization)
-        state.hiddenHeaders[selectedTab].unshift({
-          ...INITIAL_HIDDEN_HEADER_AUTHORIZATION_DATA,
-          key,
-          value,
-        });
-      else state.hiddenHeaders[selectedTab][0].value = value;
+      state.authorizationHeader[selectedTab] = {
+        ...INITIAL_HIDDEN_HEADER_AUTHORIZATION_DATA,
+        key,
+        value,
+      };
     },
     handleClearHiddenAuthorizationHeaders: (
       state,
       action: PayloadAction<string>
     ) => {
       const selectedTab = action.payload ?? state.selectedTab;
-      if (!selectedTab || !state.hiddenHeaders[selectedTab]) return;
+      if (!selectedTab) return;
 
-      console.log(current(state.hiddenCookie));
-      console.log(current(state.hiddenHeaders[selectedTab]));
-
-      state.hiddenHeaders[selectedTab] = state.hiddenHeaders[
-        selectedTab
-      ]?.filter((header) => header.id !== "authorization");
+      delete state.authorizationHeader[selectedTab];
     },
     handleUpdateHiddenHeadersIsCheck: (
       state,
@@ -1417,8 +1397,8 @@ export const {
   handleUpdateRequestResponseSelectedTab,
   handleChangeActiveMetaTab,
   handleSetParams,
-  handleSetHiddenParams,
-  handleClearHiddenParams,
+  handleUpdateHiddenAuthorizationParams,
+  handleClearHiddenAuthorizationParams,
   handleSetHeaders,
   handleUpdateHiddenAuthorizationHeaders,
   handleClearHiddenAuthorizationHeaders,

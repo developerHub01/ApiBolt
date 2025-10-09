@@ -5,9 +5,9 @@ import {
   handleAuthorizationsDefault,
   handleAuthorizationsInheritedId,
   handleClearHiddenAuthorizationHeaders,
-  handleClearHiddenParams,
-  handleSetHiddenParams,
+  handleClearHiddenAuthorizationParams,
   handleUpdateHiddenAuthorizationHeaders,
+  handleUpdateHiddenAuthorizationParams,
 } from "@/context/redux/request-response/request-response-slice";
 import { areSamePayload } from "@/utils/helper";
 import {
@@ -209,7 +209,7 @@ export const updateHiddenAuthorizationNoAuth = createAsyncThunk<
   async ({ requestOrFolderId = DEFAULT_AUTHORIZATION_ID }, { dispatch }) => {
     try {
       /* if no-auth then clearn auth related both params and header */
-      dispatch(handleClearHiddenParams(requestOrFolderId));
+      dispatch(handleClearHiddenAuthorizationParams(requestOrFolderId));
       dispatch(handleClearHiddenAuthorizationHeaders(requestOrFolderId));
     } catch (error) {
       console.error(error);
@@ -252,7 +252,7 @@ export const updateHiddenAuthorizationBasicAuth = createAsyncThunk<
       } else shouldClearHiddenAuthHeaders = true;
 
       /* clear other auth params or header other then updating one */
-      dispatch(handleClearHiddenParams(requestOrFolderId));
+      dispatch(handleClearHiddenAuthorizationParams(requestOrFolderId));
       if (shouldClearHiddenAuthHeaders)
         dispatch(handleClearHiddenAuthorizationHeaders(requestOrFolderId));
     } catch (error) {
@@ -300,7 +300,7 @@ export const updateHiddenAuthorizationBearerToken = createAsyncThunk<
       } else shouldClearHiddenAuthHeaders = true;
 
       /* clear other auth params or header other then updating one */
-      dispatch(handleClearHiddenParams(requestOrFolderId));
+      dispatch(handleClearHiddenAuthorizationParams(requestOrFolderId));
       if (shouldClearHiddenAuthHeaders)
         dispatch(handleClearHiddenAuthorizationHeaders(requestOrFolderId));
     } catch (error) {
@@ -352,12 +352,10 @@ export const updateHiddenAuthorizationJwtBearer = createAsyncThunk<
         } else {
           shouldClearHiddenAuthHeaders = true;
           dispatch(
-            handleSetHiddenParams({
+            handleUpdateHiddenAuthorizationParams({
               id: requestOrFolderId,
-              param: {
-                key: authorizationData.jwtHeaderPrefix ?? "token",
-                value: authorizationData.jwtAuthToken ?? "",
-              },
+              key: authorizationData.jwtHeaderPrefix ?? "token",
+              value: authorizationData.jwtAuthToken ?? "",
             })
           );
         }
@@ -368,7 +366,7 @@ export const updateHiddenAuthorizationJwtBearer = createAsyncThunk<
 
       /* clear other auth params or header other then updating one */
       if (shouldClearHiddenAuthParams)
-        dispatch(handleClearHiddenParams(requestOrFolderId));
+        dispatch(handleClearHiddenAuthorizationParams(requestOrFolderId));
       if (shouldClearHiddenAuthHeaders)
         dispatch(handleClearHiddenAuthorizationHeaders(requestOrFolderId));
     } catch (error) {
@@ -416,12 +414,10 @@ export const updateHiddenAuthorizationApiKey = createAsyncThunk<
         } else {
           shouldClearHiddenAuthHeaders = true;
           dispatch(
-            handleSetHiddenParams({
+            handleUpdateHiddenAuthorizationParams({
               id: requestOrFolderId,
-              param: {
-                key: authorizationData.apiKeyKey ?? "",
-                value: authorizationData.apiKeyValue ?? "",
-              },
+              key: authorizationData.apiKeyKey ?? "",
+              value: authorizationData.apiKeyValue ?? "",
             })
           );
         }
@@ -432,7 +428,7 @@ export const updateHiddenAuthorizationApiKey = createAsyncThunk<
 
       /* clear other auth params or header other then updating one */
       if (shouldClearHiddenAuthParams)
-        dispatch(handleClearHiddenParams(requestOrFolderId));
+        dispatch(handleClearHiddenAuthorizationParams(requestOrFolderId));
       if (shouldClearHiddenAuthHeaders)
         dispatch(handleClearHiddenAuthorizationHeaders(requestOrFolderId));
     } catch (error) {

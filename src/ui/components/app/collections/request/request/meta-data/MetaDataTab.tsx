@@ -7,7 +7,7 @@ import { updateRequestMetaTab } from "@/context/redux/request-response/thunks/re
 import {
   selectActiveMetaTab,
   selectActiveMetaTabList,
-  selectMetaDataByCheckingInheritance,
+  selectMetaData,
 } from "@/context/redux/request-response/selectors/meta-request";
 
 const tabList: Array<{
@@ -47,22 +47,22 @@ const MetaDataTab = memo(() => {
   const activeTabList = useAppSelector(selectActiveMetaTabList);
   const activeMetaTab = useAppSelector(selectActiveMetaTab);
   const params = useAppSelector(
-    selectMetaDataByCheckingInheritance({
+    selectMetaData({
       type: "params",
     })
   );
   const hiddenParams = useAppSelector(
-    selectMetaDataByCheckingInheritance({
+    selectMetaData({
       type: "hiddenParams",
     })
   );
   const headers = useAppSelector(
-    selectMetaDataByCheckingInheritance({
+    selectMetaData({
       type: "headers",
     })
   );
   const hiddenHeaders = useAppSelector(
-    selectMetaDataByCheckingInheritance({
+    selectMetaData({
       type: "hiddenHeaders",
     })
   );
