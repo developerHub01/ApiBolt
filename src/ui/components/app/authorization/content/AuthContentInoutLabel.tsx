@@ -7,7 +7,7 @@ const AuthContentInoutLabel = ({
 }: React.ComponentProps<"label">) => {
   return (
     <label
-      className={cn("text-sm select-none w-fit md:w-60", className)}
+      className={cn("text-sm select-none", className)}
       {...props}
     >
       {children}

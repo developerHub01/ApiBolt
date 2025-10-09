@@ -20,7 +20,7 @@ const AuthContent = memo(({ id, className = "" }: Props) => {
 
   return (
     <ScrollArea
-      className={cn("w-full h-full min-h-0 py-2 [&>div>div]:h-full", className)}
+      className={cn("w-full min-h-0 py-2 [&>div>div]:h-full", className)}
     >
       {authType === "inherit-parent" && <InheritParent />}
       {authType === "no-auth" && <NoAuth />}

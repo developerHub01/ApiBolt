@@ -14,19 +14,17 @@ const RequestAuthorization = memo(() => {
   return (
     <>
       <p className="text-foreground text-sm select-none">Authorization</p>
-      <div className="w-full flex-1 flex h-full min-h-0 gap-3 border-t">
-        <ScrollArea className="py-3 w-full max-w-52 overflow-visible min-h-0 h-full [&>div>div]:h-full shrink-0">
-          <div className="flex flex-col gap-1.5">
-            <div className="flex flex-col gap-4">
-              <p className="text-base shrink-0">Auth Type:</p>
-              <AuthTypeTab id={selectedTab} className="w-full" />
-            </div>
-            <AuthDetails id={selectedTab} />
+      <ScrollArea className="w-full flex-1 border-t py-3 overflow-visible min-h-0 h-full [&>div>div]:h-full shrink-0 flex flex-col gap-3">
+        <div className="w-full flex flex-col gap-1.5 pb-3">
+          <div className="flex justify-between items-center gap-4">
+            <p className="text-sm shrink-0">Auth Type:</p>
+            <AuthTypeTab id={selectedTab} />
           </div>
-        </ScrollArea>
-        <Separator orientation="vertical" className="h-full" />
+          <AuthDetails id={selectedTab} />
+        </div>
+        <Separator orientation="horizontal" className="w-full" />
         <AuthContent className="py-3" id={selectedTab} />
-      </div>
+      </ScrollArea>
     </>
   );
 });

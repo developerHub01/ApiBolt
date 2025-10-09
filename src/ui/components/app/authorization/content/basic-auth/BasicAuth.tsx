@@ -1,6 +1,5 @@
 import { memo, useCallback } from "react";
 import ContentWrapper from "@/components/app/authorization/content/ContentWrapper";
-import AuthKeyValueWrapper from "@/components/app/authorization/content/AuthKeyValueWrapper";
 import AuthContentInput from "@/components/app/authorization/content/AuthContentInput";
 import AuthContentInoutLabel from "@/components/app/authorization/content/AuthContentInoutLabel";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
@@ -31,33 +30,27 @@ const BasicAuth = memo(({ id, disabled = false }: Props) => {
 
   return (
     <ContentWrapper>
-      <AuthKeyValueWrapper>
-        <AuthContentInoutLabel htmlFor="basic-auth-username" className="w-17">
-          Username
-        </AuthContentInoutLabel>
-        <AuthContentInput
-          id="basic-auth-username"
-          placeholder="Username"
-          value={authData.username}
-          onBlur={(value) => handleBlur("basicAuthUsername", value)}
-          className="w-full"
-          disabled={disabled}
-        />
-      </AuthKeyValueWrapper>
-      <AuthKeyValueWrapper>
-        <AuthContentInoutLabel htmlFor="basic-auth-password"  className="w-17">
-          Password
-        </AuthContentInoutLabel>
-        <AuthContentInput
-          id="basic-auth-password"
-          placeholder="Password"
-          type="password"
-          value={authData.password}
-          onBlur={(value) => handleBlur("basicAuthPassword", value)}
-          className="w-full"
-          disabled={disabled}
-        />
-      </AuthKeyValueWrapper>
+      <AuthContentInoutLabel htmlFor="basic-auth-username" className="w-17">
+        Username
+      </AuthContentInoutLabel>
+      <AuthContentInput
+        id="basic-auth-username"
+        placeholder="Username"
+        value={authData.username}
+        onBlur={(value) => handleBlur("basicAuthUsername", value)}
+        disabled={disabled}
+      />
+      <AuthContentInoutLabel htmlFor="basic-auth-password" className="w-17">
+        Password
+      </AuthContentInoutLabel>
+      <AuthContentInput
+        id="basic-auth-password"
+        placeholder="Password"
+        type="password"
+        value={authData.password}
+        onBlur={(value) => handleBlur("basicAuthPassword", value)}
+        disabled={disabled}
+      />
     </ContentWrapper>
   );
 });

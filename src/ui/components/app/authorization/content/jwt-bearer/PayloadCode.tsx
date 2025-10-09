@@ -45,7 +45,7 @@ const PayloadCode = memo(
     return (
       <div
         className={cn(
-          "w-full max-w-80 h-52 rounded-lg overflow-hidden border relative",
+          "w-full h-52 rounded-lg overflow-hidden border relative",
           className
         )}
       >

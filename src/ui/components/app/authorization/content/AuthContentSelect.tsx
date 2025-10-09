@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 import { cn } from "@/lib/utils";
 
 interface AuthContentSelectProps {
@@ -20,6 +21,7 @@ interface AuthContentSelectProps {
   onChange: (value: string) => void;
   placeholder?: string;
   className?: string;
+  innerClassName?: string;
   [key: string]: unknown;
 }
 
@@ -32,6 +34,7 @@ const AuthContentSelect = memo(
     onChange,
     placeholder,
     className = "",
+    innerClassName = "",
     ...props
   }: AuthContentSelectProps) => {
     return (
@@ -41,12 +44,22 @@ const AuthContentSelect = memo(
         defaultValue={defaultValue}
         onValueChange={onChange}
       >
-        <SelectTrigger
-          className={cn("w-full flex-1 max-w-80", className)}
+        <ButtonLikeDiv
+          variant={"secondary"}
+          className={cn(
+            "border-2 border-accent rounded-lg text-sm w-full flex items-center gap-1 flex-1 px-0",
+            className
+          )}
+          tabIndex={-1}
+          disabled={disabled}
           {...props}
         >
-          <SelectValue placeholder={placeholder} />
-        </SelectTrigger>
+          <SelectTrigger
+            className={cn("w-full focus-visible:ring-0", innerClassName)}
+          >
+            <SelectValue placeholder={placeholder} />
+          </SelectTrigger>
+        </ButtonLikeDiv>
         <SelectContent align="end">
           <SelectGroup>
             {items.map(({ id, label }) => (

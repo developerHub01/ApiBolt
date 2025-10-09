@@ -1,6 +1,5 @@
 import { memo, useCallback } from "react";
 import ContentWrapper from "@/components/app/authorization/content/ContentWrapper";
-import AuthKeyValueWrapper from "@/components/app/authorization/content/AuthKeyValueWrapper";
 import AuthContentInput from "@/components/app/authorization/content/AuthContentInput";
 import AuthContentSelect from "@/components/app/authorization/content/AuthContentSelect";
 import AuthContentInoutLabel from "@/components/app/authorization/content/AuthContentInoutLabel";
@@ -58,68 +57,57 @@ const JWTBearer = memo(({ id, disabled = false }: Props) => {
 
   return (
     <ContentWrapper>
-      <AuthKeyValueWrapper>
-        <AuthContentInoutLabel htmlFor="api-key-algo">
-          Algorithm
-        </AuthContentInoutLabel>
-        <AuthContentSelect
-          id="api-key-algo"
-          items={algoList}
-          value={authData.algo || algoList[0].id}
-          onChange={(value) => handleBlur("jwtAlgo", value)}
-          disabled={disabled}
-        />
-      </AuthKeyValueWrapper>
-      <AuthKeyValueWrapper>
-        <AuthContentInoutLabel htmlFor="api-key-secret">
-          Secret
-        </AuthContentInoutLabel>
-        <AuthContentInput
-          id="api-key-secret"
-          type="password"
-          value={authData.secret}
-          onBlur={(value) => handleBlur("jwtSecret", value)}
-          placeholder="Secret"
-          disabled={disabled}
-        />
-      </AuthKeyValueWrapper>
-      <AuthKeyValueWrapper>
-        <AuthContentInoutLabel htmlFor="api-key-payload">
-          Payload
-        </AuthContentInoutLabel>
-        <PayloadCode
-          id="api-key-payload"
-          code={authData.payload}
-          onBlur={(code: string) => handleBlur("jwtPayload", code)}
-          disabled={disabled}
-          className="flex-1 w-full"
-        />
-      </AuthKeyValueWrapper>
-      <AuthKeyValueWrapper>
-        <AuthContentInoutLabel htmlFor="api-key-prefix">
-          Request header prefix
-        </AuthContentInoutLabel>
-        <AuthContentInput
-          id="api-key-prefix"
-          value={authData.headerPrefix}
-          onBlur={(value) => handleBlur("jwtHeaderPrefix", value)}
-          placeholder="Prefix"
-          disabled={disabled}
-        />
-      </AuthKeyValueWrapper>
-      <AuthKeyValueWrapper>
-        <AuthContentInoutLabel htmlFor="api-key-add-to">
-          Add to
-        </AuthContentInoutLabel>
-        <AuthContentSelect
-          id="api-key-add-to"
-          items={addToList}
-          value={authData.addTo ?? addToList[0].id}
-          defaultValue={addToList[0].id}
-          onChange={(value) => handleBlur("jwtAddTo", value)}
-          disabled={disabled}
-        />
-      </AuthKeyValueWrapper>
+      <AuthContentInoutLabel htmlFor="api-key-algo">
+        Algorithm
+      </AuthContentInoutLabel>
+      <AuthContentSelect
+        id="api-key-algo"
+        items={algoList}
+        value={authData.algo || algoList[0].id}
+        onChange={(value) => handleBlur("jwtAlgo", value)}
+        disabled={disabled}
+      />
+      <AuthContentInoutLabel htmlFor="api-key-secret">
+        Secret
+      </AuthContentInoutLabel>
+      <AuthContentInput
+        id="api-key-secret"
+        type="password"
+        value={authData.secret}
+        onBlur={(value) => handleBlur("jwtSecret", value)}
+        placeholder="Secret"
+        disabled={disabled}
+      />
+      <AuthContentInoutLabel htmlFor="api-key-payload">
+        Payload
+      </AuthContentInoutLabel>
+      <PayloadCode
+        id="api-key-payload"
+        code={authData.payload}
+        onBlur={(code: string) => handleBlur("jwtPayload", code)}
+        disabled={disabled}
+      />
+      <AuthContentInoutLabel htmlFor="api-key-prefix">
+        Request header prefix
+      </AuthContentInoutLabel>
+      <AuthContentInput
+        id="api-key-prefix"
+        value={authData.headerPrefix}
+        onBlur={(value) => handleBlur("jwtHeaderPrefix", value)}
+        placeholder="Prefix"
+        disabled={disabled}
+      />
+      <AuthContentInoutLabel htmlFor="api-key-add-to">
+        Add to
+      </AuthContentInoutLabel>
+      <AuthContentSelect
+        id="api-key-add-to"
+        items={addToList}
+        value={authData.addTo ?? addToList[0].id}
+        defaultValue={addToList[0].id}
+        onChange={(value) => handleBlur("jwtAddTo", value)}
+        disabled={disabled}
+      />
     </ContentWrapper>
   );
 });

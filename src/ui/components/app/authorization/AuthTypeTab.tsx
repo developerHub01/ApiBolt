@@ -1,18 +1,11 @@
 import { memo, useCallback, useMemo } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { updateAuthorization } from "@/context/redux/request-response/thunks/auth";
-import { cn } from "@/lib/utils";
 import type { TAuthType } from "@/types/authorization.types";
 import { DEFAULT_AUTHORIZATION_ID } from "@/constant/authorization.constant";
 import { selectAuthTypeById } from "@/context/redux/request-response/selectors/auth";
+import AuthContentSelect from "@/components/app/authorization/content/AuthContentSelect";
+import { cn } from "@/lib/utils";
 
 const authTypeList: Array<{
   id: TAuthType;
@@ -80,24 +73,14 @@ const AuthTypeTab = memo(({ id, className = "" }: Props) => {
   );
 
   return (
-    <Select
+    <AuthContentSelect
+      items={list}
       value={authType ?? list[0].id}
       defaultValue={list[0].id}
-      onValueChange={handleChange}
-    >
-      <SelectTrigger className={cn("capitalize", className)} size="sm">
-        <SelectValue placeholder="Select auth" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          {list.map(({ id, label }) => (
-            <SelectItem key={id} value={id} className="capitalize">
-              {label}
-            </SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
+      onChange={handleChange}
+      placeholder="Select auth"
+      className={cn("w-fit flex-0", className)}
+    />
   );
 });
 

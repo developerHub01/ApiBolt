@@ -1,6 +1,5 @@
 import { memo, useCallback } from "react";
 import ContentWrapper from "@/components/app/authorization/content/ContentWrapper";
-import AuthKeyValueWrapper from "@/components/app/authorization/content/AuthKeyValueWrapper";
 import AuthContentInput from "@/components/app/authorization/content/AuthContentInput";
 import AuthContentInoutLabel from "@/components/app/authorization/content/AuthContentInoutLabel";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
@@ -31,20 +30,17 @@ const BearerToken = memo(({ id, disabled = false }: Props) => {
 
   return (
     <ContentWrapper>
-      <AuthKeyValueWrapper>
-        <AuthContentInoutLabel htmlFor="bearer-token">
-          Token
-        </AuthContentInoutLabel>
-        <AuthContentInput
-          id="bearer-token"
-          placeholder="Token"
-          type="password"
-          value={authData}
-          onBlur={handleBlur}
-          className="w-full"
-          disabled={disabled}
-        />
-      </AuthKeyValueWrapper>
+      <AuthContentInoutLabel htmlFor="bearer-token">
+        Token
+      </AuthContentInoutLabel>
+      <AuthContentInput
+        id="bearer-token"
+        placeholder="Token"
+        type="password"
+        value={authData}
+        onBlur={handleBlur}
+        disabled={disabled}
+      />
     </ContentWrapper>
   );
 });
