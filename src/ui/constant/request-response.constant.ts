@@ -38,6 +38,7 @@ export const initialHiddenCookie = () => ({
   prevent: true,
   calculateDynamicly: true,
 });
+
 export const INITIAL_HIDDEN_HEADERS_DATA = [
   {
     id: "userAgent",

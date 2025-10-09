@@ -104,6 +104,20 @@ export const selectFilterAndUniqueMetaData = ({
     }
   );
 
+export const selectAuthorizationHeaderData = ({ id }: { id?: string } = {}) =>
+  createSelector(
+    [
+      selectMetaData({
+        id,
+        type: "hiddenHeaders",
+      }),
+    ],
+    (metaData) => {
+      if (!metaData) return null;
+      return metaData.find((header) => header.id === "authorization");
+    }
+  );
+
 export const selectFilterAndUniqueFormData = ({ id }: { id?: string } = {}) =>
   createSelector(
     [
