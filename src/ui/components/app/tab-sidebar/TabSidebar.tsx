@@ -3,11 +3,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import TabItem from "@/components/app/tab-sidebar/TabItem";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
-import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import {
-  handleChangeIsTabListHovering,
-  handleMoveTab,
-} from "@/context/redux/request-response/request-response-slice";
+import { useAppDispatch } from "@/context/redux/hooks";
+import { handleMoveTab } from "@/context/redux/request-response/request-response-slice";
 import TabActionWrapper from "@/components/app/tab-sidebar/TabActionWrapper";
 import TabSidebarWrapper from "@/components/app/tab-sidebar/TabSidebarWrapper";
 import AutoScrollActiveWrapper from "@/components/ui/auto-scroll-active-wrapper";
@@ -25,10 +22,12 @@ const TabSidebar = memo(() => {
   const hoverEnterTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const hoverLeaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const layoutTypes: TLayoutSetting = useCheckApplyingLayout();
-  const isTabListHovering = useAppSelector(
-    (state) => state.requestResponse.isTabListHovering
-  );
-  const { localTabList, totalTabsOpen } = useTabSidebar();
+  const {
+    localTabList,
+    totalTabsOpen,
+    isTabListHovering,
+    handleChangeIsTabListHovering,
+  } = useTabSidebar();
 
   useEffect(() => {
     return () => {
@@ -42,11 +41,9 @@ const TabSidebar = memo(() => {
   const handleDragOver = useCallback(
     (e: DragEvent<HTMLDivElement>) => {
       e.preventDefault();
-      if (!isTabListHovering) {
-        dispatch(handleChangeIsTabListHovering(true));
-      }
+      if (!isTabListHovering) handleChangeIsTabListHovering(true);
     },
-    [dispatch, isTabListHovering]
+    [handleChangeIsTabListHovering, isTabListHovering]
   );
 
   const handleDrop = useCallback(
@@ -66,10 +63,11 @@ const TabSidebar = memo(() => {
 
   const handleMouseEnter = useCallback(() => {
     /* Start a timer when user hovers | AKA long hover */
-    hoverEnterTimeoutRef.current = setTimeout(() => {
-      dispatch(handleChangeIsTabListHovering(true));
-    }, TAB_ENTER_LONG_HOVER_TIME);
-  }, [dispatch]);
+    hoverEnterTimeoutRef.current = setTimeout(
+      () => handleChangeIsTabListHovering(true),
+      TAB_ENTER_LONG_HOVER_TIME
+    );
+  }, [handleChangeIsTabListHovering]);
 
   const handleMouseLeave = useCallback(() => {
     // If they leave early, cancel expansion
@@ -83,10 +81,11 @@ const TabSidebar = memo(() => {
     }
 
     // Also collapse if it was already expanded
-    hoverLeaveTimeoutRef.current = setTimeout(() => {
-      dispatch(handleChangeIsTabListHovering(false));
-    }, TAB_LEAVE_LONG_HOVER_TIME);
-  }, [dispatch]);
+    hoverLeaveTimeoutRef.current = setTimeout(
+      () => handleChangeIsTabListHovering(false),
+      TAB_LEAVE_LONG_HOVER_TIME
+    );
+  }, [handleChangeIsTabListHovering]);
 
   return (
     <TabSidebarWrapper>

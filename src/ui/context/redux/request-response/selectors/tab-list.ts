@@ -6,11 +6,6 @@ export const selectSelectedTab = createSelector(
   (selectedTab): string | null => selectedTab
 );
 
-export const selectIsTabListHovering = createSelector(
-  [(state: RootState) => state.requestResponse.isTabListHovering],
-  (isTabListHovering): boolean => isTabListHovering ?? false
-);
-
 export const selectTabList = createSelector(
   [(state: RootState) => state.requestResponse.tabList],
   (tabList): Array<string> => tabList

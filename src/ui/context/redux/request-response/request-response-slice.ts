@@ -63,7 +63,6 @@ interface RequestResponseState {
   requestListCollapsed: boolean;
 
   tabList: Array<string>;
-  isTabListHovering: boolean;
   selectedTab: string | null /* selectedTabId in tabList */;
 
   isResponseCollapsed: Record<string, boolean>;
@@ -152,7 +151,6 @@ const initialState: RequestResponseState = {
   requestListCollapsed: false,
 
   tabList: [],
-  isTabListHovering: false,
 
   selectedTab: null,
   isResponseCollapsed: {},
@@ -518,14 +516,6 @@ export const requestResponseSlice = createSlice({
     /* ================ Requestlist end =================== */
 
     /* ================ TabList start =================== */
-    handleChangeIsTabListHovering: (
-      state,
-      action: PayloadAction<boolean | undefined>
-    ) => {
-      if (state.isTabListHovering === action.payload) return;
-
-      state.isTabListHovering = action.payload ?? !state.isTabListHovering;
-    },
     handleClearTabList: (state) => {
       state.tabList = [];
       state.selectedTab = null;
@@ -1363,7 +1353,6 @@ export const {
   handleCreateRestApiBasic,
 
   handleChangeTabList,
-  handleChangeIsTabListHovering,
   handleClearTabList,
   handleAddTab,
   handleRemoveTab,

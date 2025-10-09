@@ -19,10 +19,8 @@ import {
 import type { THTTPMethods } from "@/types/request-response.types";
 import { expendParentsOnSelectedChangeTabsData } from "@/context/redux/request-response/thunks/tab-list";
 import { selectRequestOrFolderById } from "@/context/redux/request-response/selectors/request-list";
-import {
-  selectIsTabListHovering,
-  selectSelectedTab,
-} from "@/context/redux/request-response/selectors/tab-list";
+import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
+import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 
 const TabItem = memo(({ id, index }: { id: string; index: number }) => {
   const dispatch = useAppDispatch();
@@ -30,7 +28,7 @@ const TabItem = memo(({ id, index }: { id: string; index: number }) => {
   const [isTabHovering, setIsTabHovering] = useState<boolean>(false);
 
   const tabDetails = useAppSelector(selectRequestOrFolderById(id)) ?? {};
-  const isTabListHovering = useAppSelector(selectIsTabListHovering);
+  const { isTabListHovering } = useTabSidebar();
   const selectedTab = useAppSelector(selectSelectedTab);
 
   const handleDragStart = (e: DragEvent<HTMLDivElement>) => {

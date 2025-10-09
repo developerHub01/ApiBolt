@@ -6,7 +6,6 @@ import {
   type ChangeEvent,
 } from "react";
 import { Button } from "@/components/ui/button";
-import { useAppSelector } from "@/context/redux/hooks";
 import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 import { X as ClearIcon, Search as SearchIcon } from "lucide-react";
 import { motion } from "motion/react";
@@ -15,11 +14,7 @@ import { cn } from "@/lib/utils";
 const DEBOUNCE_DELAY = 300;
 
 const TabSearchBar = memo(() => {
-  const { handleSearch } = useTabSidebar();
-  const isTabListHovering = useAppSelector(
-    (state) => state.requestResponse.isTabListHovering
-  );
-
+  const { handleSearch, isTabListHovering } = useTabSidebar();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [skipEffect, setSkipEffect] = useState<boolean>(false);
 

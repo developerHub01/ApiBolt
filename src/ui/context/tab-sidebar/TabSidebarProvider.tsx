@@ -21,7 +21,9 @@ interface TabSidebarContext {
   tabList: Array<string>;
   totalTabsOpen: number;
   localTabList: Array<string>;
+  isTabListHovering: boolean;
   handleSearch: (searchTerm: string) => void;
+  handleChangeIsTabListHovering: (value?: boolean | undefined) => void;
 }
 
 const TabSidebarContext = createContext<TabSidebarContext | null>(null);
@@ -46,6 +48,7 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
   const tabList = useAppSelector(selectTabList);
   const requestList = useAppSelector(selectRequestOrFolderList);
   const selectedTab = useAppSelector(selectSelectedTab);
+  const [isTabListHovering, setIsTabListHovering] = useState<boolean>(false);
   const [localTabList, setLocalTabList] = useState<Array<string>>(
     tabList ?? []
   );
@@ -102,6 +105,11 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
     [requestList, tabList]
   );
 
+  const handleChangeIsTabListHovering = useCallback(
+    (value?: boolean) => setIsTabListHovering((prev) => value ?? !prev),
+    []
+  );
+
   return (
     <TabSidebarContext.Provider
       value={{
@@ -109,6 +117,8 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
         totalTabsOpen: tabList.length ?? 0,
         localTabList,
         handleSearch,
+        isTabListHovering,
+        handleChangeIsTabListHovering,
       }}
     >
       {children}

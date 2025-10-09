@@ -1,13 +1,13 @@
 import { useCallback } from "react";
-import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import { useAppDispatch } from "@/context/redux/hooks";
 import TabBottomCTA from "@/components/app/tab-sidebar/TabBottomCTA";
 import { Trash2 as ClearIcon } from "lucide-react";
 import { handleClearTabList } from "@/context/redux/request-response/request-response-slice";
-import { selectIsTabListHovering } from "@/context/redux/request-response/selectors/tab-list";
+import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 
 const ClearAllTabs = () => {
   const dispatch = useAppDispatch();
-  const isHovering = useAppSelector(selectIsTabListHovering);
+  const { isTabListHovering: isHovering } = useTabSidebar();
 
   const handleClearAllTabs = useCallback(() => {
     dispatch(handleClearTabList());
