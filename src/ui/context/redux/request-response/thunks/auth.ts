@@ -117,6 +117,13 @@ export const loadInheritParentAuthorization = createAsyncThunk<
         })
       );
 
+      dispatch(
+        updateHiddenAuthorization({
+          requestOrFolderId: authorizationData.requestOrFolderMetaId,
+          payload: authorizationData,
+        })
+      );
+
       return authorizationData.requestOrFolderMetaId;
     } catch (error) {
       console.error(error);
