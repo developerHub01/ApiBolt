@@ -53,3 +53,8 @@ export type TRequestCodeType =
   // Elixir
   | "elixir-httpoison"
   | "elixir-tesla";
+
+export interface RequestCodeSnippitInterface {
+  maskedCode: string;
+  code: string;
+}

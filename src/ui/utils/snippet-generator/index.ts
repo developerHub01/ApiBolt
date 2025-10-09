@@ -1,5 +1,9 @@
+import { requestDefaultCodeSnippit } from "@/constant/request-code.constant";
 import type { CodeSnippitDataInterface } from "@/types/code-snippit.types";
-import type { TRequestCodeType } from "@/types/request-code.type";
+import type {
+  RequestCodeSnippitInterface,
+  TRequestCodeType,
+} from "@/types/request-code.type";
 import { generateJavaScriptCode } from "@/utils/snippet-generator/javascript.utils";
 // import { generatePythonCode } from "@/utils/snippet-generator/python.utils";
 // import { generateGoCode } from "@/utils/snippet-generator/go.utils";
@@ -17,7 +21,10 @@ import { generateJavaScriptCode } from "@/utils/snippet-generator/javascript.uti
 
 const generatorMap: Record<
   string,
-  (type: TRequestCodeType, data: CodeSnippitDataInterface) => Promise<string>
+  (
+    type: TRequestCodeType,
+    data: CodeSnippitDataInterface
+  ) => Promise<RequestCodeSnippitInterface>
 > = {
   javascript: generateJavaScriptCode,
   // python: generatePythonCode,
@@ -38,11 +45,11 @@ const generatorMap: Record<
 export const generateCode = async (
   type: TRequestCodeType,
   data: CodeSnippitDataInterface
-): Promise<string> => {
+): Promise<RequestCodeSnippitInterface> => {
   const lowerType = type.toLowerCase().replace(/\s+/g, "");
 
   const key = (Object.keys(generatorMap).find((k) => lowerType.startsWith(k)) ??
     null) as keyof typeof generatorMap | null;
 
-  return key ? await generatorMap[key](type, data) : "";
+  return key ? await generatorMap[key](type, data) : requestDefaultCodeSnippit;
 };

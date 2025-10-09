@@ -1,7 +1,8 @@
 import mime from "mime";
 import type { CodeSnippitDataInterface } from "@/types/code-snippit.types";
-import { isValidJson } from "@/utils/helper";
+import { isValidJson, needsQuotesForKey } from "@/utils/helper";
 import { codeFormatter } from "@/utils/code";
+import { MASKED_AUTHORIZATION } from "@/constant/request-code.constant";
 
 export const getHeadersList = ({
   headers,
@@ -19,23 +20,25 @@ export const getHeadersList = ({
   const headerContentType =
     bodyType === "x-www-form-urlencoded"
       ? "application/x-www-form-urlencoded"
-      : bodyType === "binary"
-        ? binaryData
-          ? mime.getType(binaryData)
-          : "text/plain"
-        : bodyType === "raw"
-          ? rawBodyDataType === "text"
-            ? "text/plain"
-            : rawBodyDataType === "html"
-              ? "text/html"
-              : rawBodyDataType === "xml"
-                ? "application/xml"
-                : rawBodyDataType === "javascript"
-                  ? "application/javascript"
-                  : rawBodyDataType === "json"
-                    ? "application/json"
-                    : ""
-          : "";
+      : bodyType === "form-data"
+        ? "multipart/form-data"
+        : bodyType === "binary"
+          ? binaryData
+            ? mime.getType(binaryData)
+            : "text/plain"
+          : bodyType === "raw"
+            ? rawBodyDataType === "text"
+              ? "text/plain"
+              : rawBodyDataType === "html"
+                ? "text/html"
+                : rawBodyDataType === "xml"
+                  ? "application/xml"
+                  : rawBodyDataType === "javascript"
+                    ? "application/javascript"
+                    : rawBodyDataType === "json"
+                      ? "application/json"
+                      : ""
+            : "";
 
   if (headerContentType)
     headers.push({
@@ -45,7 +48,7 @@ export const getHeadersList = ({
   if (authorization)
     headers.push({
       key: "Authorization",
-      value: "••••••",
+      value: MASKED_AUTHORIZATION,
     });
 
   return headers.map((header) => ({
@@ -73,8 +76,34 @@ export const getHeadersData = ({
   });
   if (!headersList.length) return "";
 
-  return `const myHeaders = new Headers();
+  return `/* headers ========= */
+const myHeaders = new Headers();
 ${headersList.map(({ key, value }) => `myHeaders.append(${JSON.stringify(key)}, ${value});`).join("\n")}\n\n`;
+};
+
+export const getHeadersDataObject = ({
+  headers,
+  authorization,
+  binaryData,
+  rawBodyDataType,
+  bodyType,
+}: Pick<
+  CodeSnippitDataInterface,
+  "headers" | "authorization" | "binaryData" | "rawBodyDataType" | "bodyType"
+>) => {
+  const headersList = getHeadersList({
+    headers,
+    authorization,
+    binaryData,
+    rawBodyDataType,
+    bodyType,
+  });
+  if (!headersList.length) return "";
+
+  return `/* headers ========= */
+const myHeaders = {
+${headersList.map(({ key, value }) => `\t${needsQuotesForKey(key) ? JSON.stringify(key) : key}: ${value}`).join(",\n")}
+}\n\n`;
 };
 
 export const getBodyData = ({
@@ -157,7 +186,7 @@ export const getFormData = ({
 }: Pick<CodeSnippitDataInterface, "bodyType" | "formData">) => {
   if (bodyType !== "form-data" || !formData.length) return "";
 
-  return `/* x-www-form-urlencoded data ========= */
+  return `/* form-data ========= */
 const formData = new FormData();
 ${formData
   .map(({ key, value, type }) =>
@@ -167,3 +196,16 @@ ${formData
   )
   .join("\n")}\t\n\n`;
 };
+
+export const generateMaskedAndRealCode = ({
+  code,
+  authorization,
+}: {
+  code: string;
+  authorization?: string;
+}) => ({
+  maskedCode: code,
+  code: authorization
+    ? code.replaceAll(MASKED_AUTHORIZATION, authorization)
+    : code,
+});

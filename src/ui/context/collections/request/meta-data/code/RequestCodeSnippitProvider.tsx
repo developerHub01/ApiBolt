@@ -24,6 +24,7 @@ import type { CodeSnippitDataInterface } from "@/types/code-snippit.types";
 
 interface RequestCodeSnippitContext {
   code: string;
+  maskedCode: string;
   language: string;
 }
 
@@ -51,6 +52,7 @@ const RequestCodeSnippitProvider = ({
   children,
 }: RequestCodeSnippitProviderProps) => {
   const [code, setCode] = useState<string | null>(null);
+  const [maskedCode, setMaskedCode] = useState<string | null>(null);
   const selectedCodeType = useAppSelector(selectSelectedCodeSnippit);
   const method = useAppSelector(selectIsHttpMethodType);
   const url = useAppSelector(selectParsedRequestUrl);
@@ -119,7 +121,7 @@ const RequestCodeSnippitProvider = ({
 
   useEffect(() => {
     (async () => {
-      const code = await generateCode(selectedCodeType, {
+      const { code, maskedCode } = await generateCode(selectedCodeType, {
         url,
         method,
         headers: serializedHeaders,
@@ -132,6 +134,7 @@ const RequestCodeSnippitProvider = ({
         binaryData,
       });
       setCode(code);
+      setMaskedCode(maskedCode);
     })();
   }, [
     selectedCodeType,
@@ -153,6 +156,7 @@ const RequestCodeSnippitProvider = ({
     <RequestCodeSnippitContext.Provider
       value={{
         code: code ?? "",
+        maskedCode: maskedCode ?? "",
         language,
       }}
     >

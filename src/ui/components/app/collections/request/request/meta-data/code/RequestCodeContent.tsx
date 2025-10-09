@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { useRequestCodeSnippit } from "@/context/collections/request/meta-data/code/RequestCodeSnippitProvider";
 
 const RequestCodeContent = memo(() => {
-  const { code, language } = useRequestCodeSnippit();
+  const { maskedCode, language } = useRequestCodeSnippit();
 
   return (
     <ScrollArea
@@ -16,7 +16,7 @@ const RequestCodeContent = memo(() => {
       )}
     >
       <Code
-        code={code}
+        code={maskedCode}
         contentType={(language as TLanguageType) ?? "text"}
         editable={false}
         zoomable={true}

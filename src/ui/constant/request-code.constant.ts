@@ -1,4 +1,7 @@
-import type { TRequestCodeType } from "@/types/request-code.type";
+import type {
+  RequestCodeSnippitInterface,
+  TRequestCodeType,
+} from "@/types/request-code.type";
 
 export const requestCodeSnippitsMap: Record<TRequestCodeType, string> = {
   // JavaScript
@@ -70,4 +73,13 @@ export const requestCodeSnippitsMap: Record<TRequestCodeType, string> = {
   "elixir-tesla": "Elixir - Tesla",
 };
 
-export const codeSnippitTypes = Object.keys(requestCodeSnippitsMap) as Array<TRequestCodeType>;
+export const codeSnippitTypes = Object.keys(
+  requestCodeSnippitsMap
+) as Array<TRequestCodeType>;
+
+export const MASKED_AUTHORIZATION = "••••••";
+
+export const requestDefaultCodeSnippit: RequestCodeSnippitInterface = {
+  code: "",
+  maskedCode: "",
+};

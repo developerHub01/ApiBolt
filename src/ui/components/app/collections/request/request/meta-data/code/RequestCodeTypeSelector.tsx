@@ -17,10 +17,12 @@ import { Copy as CopyIcon } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { handleChangeSelectedCodeSnippitType } from "@/context/redux/request-response/request-response-slice";
 import { selectSelectedCodeSnippit } from "@/context/redux/request-response/selectors/code-snippit";
+import { useRequestCodeSnippit } from "@/context/collections/request/meta-data/code/RequestCodeSnippitProvider";
 
 const RequestCodeTypeSelector = memo(() => {
   const dispatch = useAppDispatch();
   const selectedType = useAppSelector(selectSelectedCodeSnippit);
+  const { code } = useRequestCodeSnippit();
 
   const handleChange = (value: TRequestCodeType) =>
     dispatch(
@@ -49,7 +51,7 @@ const RequestCodeTypeSelector = memo(() => {
           </SelectGroup>
         </SelectContent>
       </Select>
-      <CopyButton value={""} align="end">
+      <CopyButton value={code} align="end">
         <CopyIcon size={18} />
       </CopyButton>
     </div>
