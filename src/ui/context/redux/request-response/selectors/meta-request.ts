@@ -94,54 +94,14 @@ export const selectFilterAndUniqueMetaData = ({
 }) =>
   createSelector(
     [
-      (state: RootState) => state.requestResponse.selectedTab,
-      (state: RootState) => state.requestResponse.params,
-      (state: RootState) => state.requestResponse.hiddenParams,
-      (state: RootState) => state.requestResponse.headers,
-      (state: RootState) => state.requestResponse.hiddenCookie,
-      (state: RootState) => state.requestResponse.hiddenHeaders,
-      (state: RootState) => state.requestResponse.formData,
-      (state: RootState) => state.requestResponse.xWWWFormUrlencodedData,
+      selectMetaData({
+        id,
+        type,
+      }),
     ],
-    (
-      selectedTab,
-      params,
-      hiddenParams,
-      headers,
-      hiddenCookie,
-      hiddenHeaders,
-      formData,
-      xWWWFormUrlencodedData
-    ) => {
-      const metaId = id ?? selectedTab;
-      if (!metaId) return null;
-
-      let data: Array<ParamInterface | FormDataInterface> = [];
-
-      switch (type) {
-        case "params":
-          data = params[metaId] ?? [];
-          break;
-        case "hiddenParams":
-          data = hiddenParams[metaId] ? [hiddenParams[metaId]] : [];
-          break;
-        case "headers":
-          data = headers[metaId] ?? [];
-          break;
-        case "hiddenHeaders":
-          data = [hiddenCookie, ...(hiddenHeaders[metaId] ?? [])];
-          break;
-        case "form-data":
-          data = formData[metaId] ?? [];
-          break;
-        case "x-www-form-urlencoded":
-          data = xWWWFormUrlencodedData[metaId] ?? [];
-          break;
-        default:
-          data = [];
-      }
-
-      return filterAndUniqueMetaData(data ?? []);
+    (metaData) => {
+      if (!metaData) return null;
+      return filterAndUniqueMetaData(metaData);
     }
   );
 
