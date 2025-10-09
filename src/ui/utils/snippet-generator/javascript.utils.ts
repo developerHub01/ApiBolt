@@ -228,11 +228,95 @@ ${options
   return generateMaskedAndRealCode({ code, authorization });
 };
 
-export const generateJavascriptjXhrCode = () => {};
+export const generateJavascriptXhrCode = async ({
+  url,
+  method,
+  headers,
+  authorization,
+  formData,
+  xWWWFormUrlencoded,
+  rawData,
+  rawBodyDataType,
+  bodyType,
+  binaryData,
+}: CodeSnippitDataInterface) => {
+  const headersString = getHeadersDataObject({
+    headers,
+    bodyType,
+    rawBodyDataType,
+    authorization,
+    binaryData,
+  });
 
-export const generateJavascriptjSuperagentCode = () => {};
+  const headerLoopString = headersString
+    ? `\nfor (const key in myHeaders) {
+\txhr.setRequestHeader(key, myHeaders[key]);
+}\n`
+    : "";
 
-export const generateJavascriptjHttpCode = () => {};
+  const bodyRawData = await getBodyRawData({
+    rawBodyDataType,
+    bodyType,
+    rawData,
+  });
+
+  const formDataString = getFormData({
+    bodyType,
+    formData,
+  });
+
+  const xwwFormUrlEncodedString = getXWWWFormUrlencodedData({
+    bodyType,
+    xWWWFormUrlencoded,
+  });
+
+  const options: Array<{ key: string; value: unknown }> = [
+    { key: "url", value: `"${url}"` },
+    { key: "method", value: `"${method.toUpperCase()}"` },
+  ];
+
+  if (headersString) options.push({ key: "headers", value: "myHeaders" });
+
+  const dataValue = getBodyData({ bodyType, formData, xWWWFormUrlencoded });
+  if (dataValue) options.push({ key: "data", value: dataValue });
+
+  if (bodyType === "form-data") {
+    options.push({ key: "processData", value: false });
+    options.push({ key: "contentType", value: false });
+  }
+
+  let sendVariableName = "";
+
+  switch (bodyType) {
+    case "form-data":
+      sendVariableName = "formData";
+      break;
+    case "x-www-form-urlencoded":
+      sendVariableName = "params.toString()";
+      break;
+    case "raw":
+      sendVariableName = "raw";
+      break;
+    case "binary":
+      sendVariableName = "file";
+      break;
+  }
+
+  const apiXhrString = `const xhr = new XMLHttpRequest();
+xhr.open("${method.toUpperCase()}", "${url}", true);
+${headerLoopString}
+xhr.onload = () => console.log(xhr.responseText);
+xhr.onerror = () => console.error("Request failed");
+
+xhr.send(${sendVariableName});`;
+
+  const code = `${headersString}${formDataString}${xwwFormUrlEncodedString}${bodyRawData}${apiXhrString}`;
+  return generateMaskedAndRealCode({ code, authorization });
+};
+
+export const generateJavascriptSuperagentCode = () => {};
+
+export const generateJavascriptHttpCode = () => {};
 
 export const generateJavaScriptCode = async (
   type: TRequestCodeType,
@@ -245,10 +329,10 @@ export const generateJavaScriptCode = async (
       return generateJavascriptAxiosCode(data);
     case "javascript-jquery":
       return generateJavascriptjQueryCode(data);
-    // case "javascript-xhr":
-    //   return generateJavascriptjXhrCode();
+    case "javascript-xhr":
+      return generateJavascriptXhrCode(data);
     // case "javascript-superagent":
-    //   return generateJavascriptjSuperagentCode();
+    //   return generateJavascriptSuperagentCode();
   }
   return requestDefaultCodeSnippit;
 };
