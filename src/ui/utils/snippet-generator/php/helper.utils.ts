@@ -28,7 +28,7 @@ ${headersList.map(({ key, value }) => `\t${JSON.stringify(`${key}: ${value}`)}`)
 ];\n\n`;
 };
 
-export const getXWWWFormUrlencodedData = ({
+export const getXWWWFormUrlencodedCurlData = ({
   bodyType,
   xWWWFormUrlencoded,
 }: Pick<CodeSnippitDataInterface, "bodyType" | "xWWWFormUrlencoded">) => {
@@ -37,6 +37,23 @@ export const getXWWWFormUrlencodedData = ({
 
   return `/* x-www-form-urlencoded data ========= */
 $data = http_build_query([
+${xWWWFormUrlencoded
+  .map(
+    ({ key, value }) => `\t${JSON.stringify(key)} => ${JSON.stringify(value)}`
+  )
+  .join(",\n")}
+]);\t\n\n`;
+};
+
+export const getXWWWFormUrlencodedArrData = ({
+  bodyType,
+  xWWWFormUrlencoded,
+}: Pick<CodeSnippitDataInterface, "bodyType" | "xWWWFormUrlencoded">) => {
+  if (bodyType !== "x-www-form-urlencoded" || !xWWWFormUrlencoded.length)
+    return "";
+
+  return `/* x-www-form-urlencoded data ========= */
+$data = [
 ${xWWWFormUrlencoded
   .map(
     ({ key, value }) => `\t${JSON.stringify(key)} => ${JSON.stringify(value)}`
@@ -63,6 +80,68 @@ ${formData
 ];\t\n\n`;
 };
 
+export const getMultipartData = ({
+  bodyType,
+  formData,
+}: Pick<CodeSnippitDataInterface, "bodyType" | "formData">) => {
+  if (bodyType !== "form-data" || !formData.length) return "";
+
+  return `/* form-data ========= */
+$multipart = [
+${formData
+  .map(({ key, value, type }) => {
+    const name = `"name" => ${JSON.stringify(key)}`;
+    const content =
+      type === "text"
+        ? `"contents" => ${JSON.stringify(value)}`
+        : `"contents" => fopen(${JSON.stringify(value)}, "r")`;
+
+    return `\t[
+\t\t${name},
+\t\t${content}
+\t]`;
+  })
+  .join(",\n")}
+];\t\n\n`;
+};
+
+const objectToString = (data: unknown, level: number = 0): string => {
+  const indent = "\t".repeat(level);
+
+  // Primitive values
+  if (data === null) return "null";
+  if (typeof data === "boolean") return data ? "true" : "false";
+  if (typeof data === "number") return data.toString();
+  if (typeof data === "string") return JSON.stringify(data);
+
+  // Arrays
+  if (Array.isArray(data)) {
+    if (data.length === 0) return "[]";
+    const items = data
+      .map((item) => `${indent}\t${objectToString(item, level + 1)}`)
+      .join(",\n");
+    return `[\n${items}\n${indent}]`;
+  }
+
+  // Objects
+  if (typeof data === "object") {
+    const entries = Object.entries(data);
+    if (entries.length === 0) return "[]";
+
+    const items = entries
+      .map(([key, value]) => {
+        const formattedKey = JSON.stringify(key);
+        const formattedValue = objectToString(value, level + 1);
+        return `${indent}\t${formattedKey} => ${formattedValue}`;
+      })
+      .join(",\n");
+
+    return `[\n${items}\n${indent}]`;
+  }
+
+  return JSON.stringify(data);
+};
+
 export const getRawData = ({
   bodyType,
   rawBodyDataType,
@@ -83,26 +162,17 @@ export const getRawData = ({
       data = JSON.stringify(rawData);
       break;
     }
+
     case "json": {
       if (isValidJson(rawData)) {
-        const parsedData = JSON.parse(rawData);
-        if (
-          typeof parsedData === "object" &&
-          !Array.isArray(parsedData) &&
-          parsedData !== null
-        )
-          data = `json_encode([
-${Object.entries(parsedData)
-  .map(([key, value]) => `\t${JSON.stringify(key)} => ${JSON.stringify(value)}`)
-  .join(",\n")}
-])`;
-        else data = `json_encode(${rawData})`;
-      } else data = JSON.stringify(rawData);
+        const parsed = JSON.parse(rawData);
+        data = `json_encode(${objectToString(parsed, 0)})`;
+      } else {
+        data = JSON.stringify(rawData);
+      }
       break;
     }
   }
-
-  console.log({ data });
 
   return `/* raw-data ========= */
 $data = ${data};\n\n`;
