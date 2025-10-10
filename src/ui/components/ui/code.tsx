@@ -6,6 +6,10 @@ import { html } from "@codemirror/lang-html";
 import { javascript } from "@codemirror/lang-javascript";
 import { json } from "@codemirror/lang-json";
 import { xml } from "@codemirror/lang-xml";
+import { php } from "@codemirror/lang-php";
+import { go } from "@codemirror/lang-go";
+import { python } from "@codemirror/lang-python";
+import { java } from "@codemirror/lang-java";
 import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
 import { languages } from "@codemirror/language-data";
 import { useTheme } from "next-themes";
@@ -22,7 +26,8 @@ export type TLanguageType =
   | "java"
   | "go"
   | "php"
-  | "python";
+  | "python"
+  | "java";
 
 const fontSizeLimit = {
   max: 40,
@@ -41,6 +46,14 @@ const selectedLang = (lang: TLanguageType) => {
       return xml();
     case "markdown":
       return markdown({ base: markdownLanguage, codeLanguages: languages });
+    case "python":
+      return python();
+    case "php":
+      return php();
+    case "go":
+      return go();
+    case "java":
+      return java();
     default:
       return [];
   }
