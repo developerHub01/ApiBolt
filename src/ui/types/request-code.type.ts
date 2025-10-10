@@ -22,8 +22,9 @@ export type TRequestCodeType =
   | "csharp-flurl"
   // PHP
   | "php-curl"
-  | "php-file-get-contents"
+  | "php-pecl_http"
   | "php-guzzle"
+  | "php-http_request2"
   // Ruby
   | "ruby-net-http"
   | "ruby-restclient"

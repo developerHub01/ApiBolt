@@ -31,7 +31,8 @@ export const requestCodeSnippitsMap: Record<TRequestCodeType, string> = {
 
   // PHP
   "php-curl": "PHP - cURL",
-  "php-file-get-contents": "PHP - file_get_contents",
+  "php-pecl_http": "PHP - pecl_http",
+  "php-http_request2": "PHP - http_request2",
   "php-guzzle": "PHP - Guzzle",
 
   // Ruby

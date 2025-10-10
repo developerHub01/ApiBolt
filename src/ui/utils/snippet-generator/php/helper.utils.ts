@@ -1,6 +1,7 @@
 import type { CodeSnippitDataInterface } from "@/types/code-snippit.types";
 import { getHeadersList } from "@/utils/snippet-generator/helper.utils";
 import { isValidJson } from "@/utils/helper";
+import mime from "mime";
 
 export const getHeadersData = ({
   headers,
@@ -26,6 +27,58 @@ export const getHeadersData = ({
 $headers = [
 ${headersList.map(({ key, value }) => `\t${JSON.stringify(`${key}: ${value}`)}`).join(",\n")}
 ];\n\n`;
+};
+
+export const getHeadersDataObject = ({
+  headers,
+  authorization,
+  binaryData,
+  rawBodyDataType,
+  bodyType,
+}: Pick<
+  CodeSnippitDataInterface,
+  "headers" | "authorization" | "binaryData" | "rawBodyDataType" | "bodyType"
+>) => {
+  const headersList = getHeadersList({
+    headers,
+    authorization,
+    binaryData,
+    rawBodyDataType,
+    bodyType,
+  });
+
+  if (!headersList.length) return "";
+
+  return `/* headers ========= */
+$headers = [
+${headersList.map(({ key, value }) => `\t${`${JSON.stringify(key)}: ${JSON.stringify(value)}`}`).join(",\n")}
+];\n\n`;
+};
+
+export const getHttpRequest2HeadersData = ({
+  headers,
+  authorization,
+  binaryData,
+  rawBodyDataType,
+  bodyType,
+}: Pick<
+  CodeSnippitDataInterface,
+  "headers" | "authorization" | "binaryData" | "rawBodyDataType" | "bodyType"
+>) => {
+  const headersList = getHeadersList({
+    headers,
+    authorization,
+    binaryData,
+    rawBodyDataType,
+    bodyType,
+  });
+
+  if (!headersList.length) return "";
+
+  return `/* headers ========= */
+$request->setHeader([
+${headersList.map(({ key, value }) => `\t${`${JSON.stringify(key)} => ${JSON.stringify(value)}`}`).join(",\n")}
+]);\n\n`;
 };
 
 export const getXWWWFormUrlencodedCurlData = ({
@@ -59,7 +112,7 @@ ${xWWWFormUrlencoded
     ({ key, value }) => `\t${JSON.stringify(key)} => ${JSON.stringify(value)}`
   )
   .join(",\n")}
-]};\t\n\n`;
+];\t\n\n`;
 };
 
 export const getFormData = ({
@@ -103,6 +156,61 @@ ${formData
   })
   .join(",\n")}
 ];\t\n\n`;
+};
+
+export const getPeclFormData = ({
+  bodyType,
+  formData,
+}: Pick<CodeSnippitDataInterface, "bodyType" | "formData">) => {
+  if (bodyType !== "form-data" || !formData.length) return "";
+
+  return `/* form-data ========= */
+$body = new http\\Message\\Body();
+$body->addForm([
+${formData
+  .map(({ key, value, type }) =>
+    type === "text"
+      ? `\t${JSON.stringify(key)} => ${JSON.stringify(value)}`
+      : `\t${JSON.stringify(key)} => new CURLFile(${JSON.stringify(value)}`
+  )
+  .join(",\n")}
+]);\t\n\n`;
+};
+
+export const getHttpRequest2FormData = ({
+  bodyType,
+  formData,
+}: Pick<CodeSnippitDataInterface, "bodyType" | "formData">) => {
+  if (bodyType !== "form-data" || !formData.length) return "";
+
+  let normalDataString = "";
+  if (formData.some((entry) => entry.type === "text")) {
+    normalDataString = `/* Add normal fields */
+$request->addPostParameter([
+${formData
+  .filter((entry) => entry.type === "text")
+  .map(
+    ({ key, value }) => `\t${JSON.stringify(key)} => ${JSON.stringify(value)}`
+  )
+  .join(",\n")}
+]);`;
+  }
+
+  let filesDataString = "";
+  if (formData.some((entry) => entry.type === "file")) {
+    filesDataString = `/* Add files */
+${formData
+  .filter((entry) => entry.type === "file")
+  .map(
+    ({ key, value }) =>
+      `$request->addUpload(${JSON.stringify(key)}, ${JSON.stringify(value)}, "remoteFileName", ${JSON.stringify(mime.getType(value))});`
+  )
+  .join("\n")}`;
+  }
+
+  if (normalDataString && filesDataString) normalDataString += "\n\n";
+
+  return `${normalDataString}${filesDataString}\n\n`;
 };
 
 const objectToString = (data: unknown, level: number = 0): string => {
