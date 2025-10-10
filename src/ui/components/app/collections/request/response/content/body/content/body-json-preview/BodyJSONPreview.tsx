@@ -1,6 +1,7 @@
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import ArrayBodyPreview from "@/components/app/collections/request/response/content/body/content/body-json-preview/ArrayBodyPreview";
 import ObjectPreview from "@/components/app/collections/request/response/content/body/content/body-json-preview/ObjectPreview";
+import { cn } from "@/lib/utils";
 
 interface BodyJSONPreviewProps {
   data: Record<string, unknown>;
@@ -9,7 +10,12 @@ interface BodyJSONPreviewProps {
 const BodyJSONPreview = ({ data }: BodyJSONPreviewProps) => {
   return (
     <ScrollArea className="flex-1 min-h-0 h-full overflow-hidden">
-      <div className="w-full h-full pb-3 select-text">
+      <div
+        className={cn(
+          "w-full h-full select-text",
+          "selection:bg-primary selection:text-primary-foreground"
+        )}
+      >
         {typeof data === "object" && Array.isArray(data) && (
           <ArrayBodyPreview data={data} lavel={0} />
         )}

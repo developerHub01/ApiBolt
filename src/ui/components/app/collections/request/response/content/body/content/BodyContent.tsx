@@ -6,10 +6,10 @@ const BodyContent = () => {
   const { responseTab } = useResponse();
 
   return (
-    <>
+    <div className="w-full h-full rounded-md overflow-hidden border-t border-b">
       {responseTab === "raw" && <BodyResponse />}
       {responseTab === "preview" && <BodyPreview />}
-    </>
+    </div>
   );
 };
 BodyContent.displayName = "Body content";
