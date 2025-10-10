@@ -2,6 +2,26 @@ import type { CodeSnippitDataInterface } from "@/types/code-snippit.types";
 import { codeFormatter } from "@/utils/code";
 import { MASKED_AUTHORIZATION } from "@/constant/request-code.constant";
 
+export const getBodyType = ({
+  bodyType,
+  rawBodyDataType,
+}: Pick<CodeSnippitDataInterface, "rawBodyDataType" | "bodyType">) =>
+  bodyType === "x-www-form-urlencoded"
+    ? "application/x-www-form-urlencoded"
+    : bodyType === "raw"
+      ? rawBodyDataType === "text"
+        ? "text/plain"
+        : rawBodyDataType === "html"
+          ? "text/html"
+          : rawBodyDataType === "xml"
+            ? "application/xml"
+            : rawBodyDataType === "javascript"
+              ? "application/javascript"
+              : rawBodyDataType === "json"
+                ? "application/json"
+                : ""
+      : "";
+
 export const getHeadersList = ({
   headers,
   authorization,
@@ -14,22 +34,10 @@ export const getHeadersList = ({
   key: string;
   value?: string;
 }> => {
-  const headerContentType =
-    bodyType === "x-www-form-urlencoded"
-      ? "application/x-www-form-urlencoded"
-      : bodyType === "raw"
-        ? rawBodyDataType === "text"
-          ? "text/plain"
-          : rawBodyDataType === "html"
-            ? "text/html"
-            : rawBodyDataType === "xml"
-              ? "application/xml"
-              : rawBodyDataType === "javascript"
-                ? "application/javascript"
-                : rawBodyDataType === "json"
-                  ? "application/json"
-                  : ""
-        : "";
+  const headerContentType = getBodyType({
+    bodyType,
+    rawBodyDataType,
+  });
 
   if (headerContentType)
     headers.push({
