@@ -1,4 +1,9 @@
-import { memo, type ChangeEvent, type FocusEvent } from "react";
+import {
+  memo,
+  type ChangeEvent,
+  type ClipboardEvent,
+  type FocusEvent,
+} from "react";
 import { cn } from "@/lib/utils";
 
 interface ApiInputProps {
@@ -14,6 +19,12 @@ const ApiInput = memo(({ value, isError, onChange, onBlur }: ApiInputProps) => {
   const handleApiUrlBlur = (e: FocusEvent<HTMLInputElement>) =>
     onBlur(e.target.value);
 
+  const handlePaste = (e: ClipboardEvent<HTMLHeadingElement>) => {
+    e.preventDefault();
+    const text = e.clipboardData.getData("text/plain");
+    document.execCommand("insertText", false, text);
+  };
+
   return (
     <div
       className={cn("w-full h-full border-b", {
@@ -27,6 +38,7 @@ const ApiInput = memo(({ value, isError, onChange, onBlur }: ApiInputProps) => {
         value={value}
         onChange={handleApiUrlChange}
         onBlur={handleApiUrlBlur}
+        onPaste={handlePaste}
       />
     </div>
   );
