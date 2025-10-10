@@ -8,12 +8,14 @@ import { needsQuotesForKey } from "@/utils/helper";
 import {
   generateMaskedAndRealCode,
   getBodyData,
+} from "@/utils/snippet-generator/helper.utils";
+import {
   getBodyRawData,
   getFormData,
   getHeadersData,
   getHeadersDataObject,
   getXWWWFormUrlencodedData,
-} from "@/utils/snippet-generator/helper.utils";
+} from "@/utils/snippet-generator/javascript/helper.utils";
 
 export const generateJavascriptFetchCode = async ({
   url,
