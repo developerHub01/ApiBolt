@@ -42,10 +42,7 @@ export const getHeadersList = ({
       value: MASKED_AUTHORIZATION,
     });
 
-  return headers.map((header) => ({
-    ...header,
-    value: JSON.stringify(header.value),
-  }));
+  return headers;
 };
 
 export const getBodyData = ({
@@ -85,7 +82,6 @@ export const jsonFormatter = async (str: string) =>
     code: str,
     rawRequestBodyType: "json",
   });
-
 
 export const generateMaskedAndRealCode = ({
   code,

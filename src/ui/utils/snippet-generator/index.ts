@@ -4,7 +4,8 @@ import type {
   RequestCodeSnippitInterface,
   TRequestCodeType,
 } from "@/types/request-code.type";
-import { generateJavaScriptCode } from "@/utils/snippet-generator/javascript.utils";
+import { generateJavaScriptCode } from "@/utils/snippet-generator/javascript/javascript.utils";
+import { generateNodeCode } from "@/utils/snippet-generator/node.utils";
 // import { generatePythonCode } from "@/utils/snippet-generator/python.utils";
 // import { generateGoCode } from "@/utils/snippet-generator/go.utils";
 // import { generateJavaCode } from "@/utils/snippet-generator/java.utils";
@@ -13,7 +14,7 @@ import { generateJavaScriptCode } from "@/utils/snippet-generator/javascript.uti
 // import { generateSwiftCode } from "@/utils/snippet-generator/swift.utils";
 // import { generateRubyCode } from "@/utils/snippet-generator/ruby.utils";
 // import { generateRCode } from "@/utils/snippet-generator/r.utils";
-// import { generatePHPCode } from "@/utils/snippet-generator/php.utils";
+import { generatePHPCode } from "@/utils/snippet-generator/php/php.utils";
 // import { generateShellCode } from "@/utils/snippet-generator/shell.utils";
 // import { generatePowerShellCode } from "@/utils/snippet-generator/powershell.utils";
 // import { generateCSharpCode } from "@/utils/snippet-generator/csharp.utils";
@@ -27,6 +28,7 @@ const generatorMap: Record<
   ) => Promise<RequestCodeSnippitInterface>
 > = {
   javascript: generateJavaScriptCode,
+  node: generateNodeCode,
   // python: generatePythonCode,
   // go: generateGoCode,
   // java: generateJavaCode,
@@ -35,7 +37,7 @@ const generatorMap: Record<
   // swift: generateSwiftCode,
   // ruby: generateRubyCode,
   // r: generateRCode,
-  // php: generatePHPCode,
+  php: generatePHPCode,
   // shell: generateShellCode,
   // powershell: generatePowerShellCode,
   // csharp: generateCSharpCode,

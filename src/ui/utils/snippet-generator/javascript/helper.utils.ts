@@ -26,7 +26,7 @@ export const getHeadersData = ({
 
   return `/* headers ========= */
 const myHeaders = new Headers();
-${headersList.map(({ key, value }) => `myHeaders.append(${JSON.stringify(key)}, ${value});`).join("\n")}\n\n`;
+${headersList.map(({ key, value }) => `myHeaders.append(${JSON.stringify(key)}, ${JSON.stringify(value)});`).join("\n")}\n\n`;
 };
 
 export const getHeadersDataObject = ({
@@ -50,7 +50,7 @@ export const getHeadersDataObject = ({
 
   return `/* headers ========= */
 const myHeaders = {
-${headersList.map(({ key, value }) => `\t${needsQuotesForKey(key) ? JSON.stringify(key) : key}: ${value}`).join(",\n")}
+${headersList.map(({ key, value }) => `\t${needsQuotesForKey(key) ? JSON.stringify(key) : key}: ${JSON.stringify(value)}`).join(",\n")}
 }\n\n`;
 };
 
@@ -70,7 +70,7 @@ export const getBodyRawData = async ({
     rawDataString = `JSON.stringify(${await jsonFormatter(rawData)})`;
   else rawDataString = JSON.stringify(rawData);
 
-  return `const raw = ${rawDataString}\n\n`;
+  return `const raw = ${rawDataString};\n\n`;
 };
 
 export const getXWWWFormUrlencodedData = ({
