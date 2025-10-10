@@ -254,6 +254,12 @@ export const generateJavascriptXhrCode = async ({
 }\n`
     : "";
 
+  const binaryDataString =
+    bodyType === "binary"
+      ? `/* binary data ========= */
+const file = fileInput.files[0];\n\n`
+      : "";
+
   const bodyRawData = await getBodyRawData({
     rawBodyDataType,
     bodyType,
@@ -310,13 +316,113 @@ xhr.onerror = () => console.error("Request failed");
 
 xhr.send(${sendVariableName});`;
 
-  const code = `${headersString}${formDataString}${xwwFormUrlEncodedString}${bodyRawData}${apiXhrString}`;
+  const code = `${headersString}${formDataString}${xwwFormUrlEncodedString}${binaryDataString}${bodyRawData}${apiXhrString}`;
   return generateMaskedAndRealCode({ code, authorization });
 };
 
-export const generateJavascriptSuperagentCode = () => {};
+export const generateJavascriptSuperagentCode = async ({
+  url,
+  method,
+  headers,
+  authorization,
+  formData,
+  xWWWFormUrlencoded,
+  rawBodyDataType,
+  bodyType,
+  binaryData,
+  rawData,
+}: CodeSnippitDataInterface) => {
+  const importString = `import superagent from "superagent";\n\n`;
 
-export const generateJavascriptHttpCode = () => {};
+  const headersString = getHeadersDataObject({
+    headers,
+    bodyType,
+    rawBodyDataType,
+    authorization,
+    binaryData,
+  });
+
+  const binaryDataString =
+    bodyType === "binary"
+      ? `/* binary data ========= */
+const file = fileInput.files[0];\n\n`
+      : "";
+
+  const bodyRawData = await getBodyRawData({
+    rawBodyDataType,
+    bodyType,
+    rawData,
+  });
+
+  const formDataString = getFormData({
+    bodyType,
+    formData,
+  });
+
+  const xwwFormUrlEncodedString = getXWWWFormUrlencodedData({
+    bodyType,
+    xWWWFormUrlencoded,
+  });
+
+  const options: Array<{
+    key: string;
+    value: unknown;
+  }> = [
+    {
+      key: "method",
+      value: `"${method.toUpperCase()}"`,
+    },
+    {
+      key: "url",
+      value: `"${url}"`,
+    },
+  ];
+
+  if (headersString)
+    options.push({
+      key: "headers",
+      value: "myHeaders",
+    });
+
+  const dataValue = getBodyData({ bodyType, formData, xWWWFormUrlencoded });
+  if (dataValue)
+    options.push({
+      key: "data",
+      value: dataValue,
+    });
+
+  const apiSetMethodString = headersString ? `\t.set(myHeaders)\n` : "";
+  let sendVariableName = "";
+
+  switch (bodyType) {
+    case "form-data":
+      sendVariableName = "formData";
+      break;
+    case "x-www-form-urlencoded":
+      sendVariableName = "params.toString()";
+      break;
+    case "raw":
+      sendVariableName = "raw";
+      break;
+    case "binary":
+      sendVariableName = "file";
+      break;
+  }
+
+  const apiSendMethodString = sendVariableName
+    ? `\t.send(${sendVariableName})\n`
+    : "";
+
+  const errorHandlingString = `\t.then(res => console.log(res.body))
+\t.catch(err => console.error(err));`;
+
+  const apiFetchString = `superagent
+\t.${method}("${url}")
+${apiSetMethodString}${apiSendMethodString}${errorHandlingString}`;
+
+  const code = `${importString}${headersString}${formDataString}${xwwFormUrlEncodedString}${binaryDataString}${bodyRawData}${apiFetchString}`;
+  return generateMaskedAndRealCode({ code, authorization });
+};
 
 export const generateJavaScriptCode = async (
   type: TRequestCodeType,
@@ -331,8 +437,8 @@ export const generateJavaScriptCode = async (
       return generateJavascriptjQueryCode(data);
     case "javascript-xhr":
       return generateJavascriptXhrCode(data);
-    // case "javascript-superagent":
-    //   return generateJavascriptSuperagentCode();
+    case "javascript-superagent":
+      return generateJavascriptSuperagentCode(data);
   }
   return requestDefaultCodeSnippit;
 };

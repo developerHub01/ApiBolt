@@ -1,4 +1,3 @@
-import mime from "mime";
 import type { CodeSnippitDataInterface } from "@/types/code-snippit.types";
 import { isValidJson, needsQuotesForKey } from "@/utils/helper";
 import { codeFormatter } from "@/utils/code";
@@ -7,7 +6,6 @@ import { MASKED_AUTHORIZATION } from "@/constant/request-code.constant";
 export const getHeadersList = ({
   headers,
   authorization,
-  binaryData,
   rawBodyDataType,
   bodyType,
 }: Pick<
@@ -20,25 +18,19 @@ export const getHeadersList = ({
   const headerContentType =
     bodyType === "x-www-form-urlencoded"
       ? "application/x-www-form-urlencoded"
-      : bodyType === "form-data"
-        ? "multipart/form-data"
-        : bodyType === "binary"
-          ? binaryData
-            ? mime.getType(binaryData)
-            : "text/plain"
-          : bodyType === "raw"
-            ? rawBodyDataType === "text"
-              ? "text/plain"
-              : rawBodyDataType === "html"
-                ? "text/html"
-                : rawBodyDataType === "xml"
-                  ? "application/xml"
-                  : rawBodyDataType === "javascript"
-                    ? "application/javascript"
-                    : rawBodyDataType === "json"
-                      ? "application/json"
-                      : ""
-            : "";
+      : bodyType === "raw"
+        ? rawBodyDataType === "text"
+          ? "text/plain"
+          : rawBodyDataType === "html"
+            ? "text/html"
+            : rawBodyDataType === "xml"
+              ? "application/xml"
+              : rawBodyDataType === "javascript"
+                ? "application/javascript"
+                : rawBodyDataType === "json"
+                  ? "application/json"
+                  : ""
+        : "";
 
   if (headerContentType)
     headers.push({
