@@ -51,9 +51,7 @@ const RequestCodeTypeSelector = memo(() => {
           </SelectGroup>
         </SelectContent>
       </Select>
-      <CopyButton value={code} align="end">
-        <CopyIcon size={18} />
-      </CopyButton>
+      <CopyButton value={code} align="end" Icon={CopyIcon} size="sm" />
     </div>
   );
 });

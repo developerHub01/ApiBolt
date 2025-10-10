@@ -10,6 +10,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 interface CopyButtonProps {
   value: string;
@@ -19,6 +20,7 @@ interface CopyButtonProps {
   align?: "center" | "end" | "start";
   side?: "bottom" | "top" | "right" | "left";
   children?: React.ReactNode;
+  size?: "default" | "xs" | "sm" | "lg" | "icon" | "iconSm" | "iconXs";
 }
 
 const CopyButton = memo(
@@ -30,6 +32,7 @@ const CopyButton = memo(
     children,
     align = "center",
     side = "bottom",
+    size = "default",
   }: CopyButtonProps & React.ComponentProps<"button">) => {
     const handleClick = async () => {
       try {
@@ -44,13 +47,19 @@ const CopyButton = memo(
       <Tooltip>
         <TooltipTrigger asChild>
           {children ? (
-            <span onClick={handleClick}>{children}</span>
+            <span
+              onClick={handleClick}
+              className={cn("cursor-pointer", className)}
+            >
+              {children}
+            </span>
           ) : (
             <Button
               variant={"secondary"}
               onClick={handleClick}
               disabled={!value}
               className={className}
+              size={size}
             >
               {Icon ? <Icon /> : <ClipboardCopyIcon />}
             </Button>
