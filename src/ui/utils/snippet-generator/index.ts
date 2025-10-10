@@ -7,7 +7,6 @@ import type {
 import { generateJavaScriptCode } from "@/utils/snippet-generator/javascript/javascript.utils";
 import { generateNodeCode } from "@/utils/snippet-generator/node.utils";
 // import { generatePythonCode } from "@/utils/snippet-generator/python.utils";
-// import { generateGoCode } from "@/utils/snippet-generator/go.utils";
 // import { generateJavaCode } from "@/utils/snippet-generator/java.utils";
 // import { generateDartCode } from "@/utils/snippet-generator/dart.utils";
 // import { generateKotlinCode } from "@/utils/snippet-generator/kotlin.utils";
@@ -15,6 +14,7 @@ import { generateNodeCode } from "@/utils/snippet-generator/node.utils";
 // import { generateRubyCode } from "@/utils/snippet-generator/ruby.utils";
 // import { generateRCode } from "@/utils/snippet-generator/r.utils";
 import { generatePHPCode } from "@/utils/snippet-generator/php/php.utils";
+import { generateGoCode } from "@/utils/snippet-generator/go/go.utils";
 // import { generateShellCode } from "@/utils/snippet-generator/shell.utils";
 // import { generatePowerShellCode } from "@/utils/snippet-generator/powershell.utils";
 // import { generateCSharpCode } from "@/utils/snippet-generator/csharp.utils";
@@ -30,7 +30,7 @@ const generatorMap: Record<
   javascript: generateJavaScriptCode,
   node: generateNodeCode,
   // python: generatePythonCode,
-  // go: generateGoCode,
+  go: generateGoCode,
   // java: generateJavaCode,
   // dart: generateDartCode,
   // kotlin: generateKotlinCode,
