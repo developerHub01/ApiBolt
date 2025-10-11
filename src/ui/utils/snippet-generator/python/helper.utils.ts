@@ -10,16 +10,27 @@ export const generateHeadersString = ({
   authorization,
   rawBodyDataType,
   bodyType,
+  method,
 }: Pick<
   CodeSnippitDataInterface,
-  "headers" | "authorization" | "binaryData" | "rawBodyDataType" | "bodyType"
+  | "headers"
+  | "authorization"
+  | "binaryData"
+  | "rawBodyDataType"
+  | "bodyType"
+  | "method"
 >) => {
-  let headersString = getHeadersList({
+  let headersList = getHeadersList({
     headers,
     authorization,
     rawBodyDataType,
     bodyType,
-  })
+  });
+
+  if (method === "get")
+    headersList = headersList.filter((header) => header.key !== "Content-Type");
+
+  let headersString = headersList
     .map(
       ({ key, value }) => `\t${JSON.stringify(key)}: ${JSON.stringify(value)}`
     )

@@ -7,6 +7,8 @@ import {
   generateRawDataString,
 } from "@/utils/snippet-generator/python/helper.utils";
 
+const defaultBinaryData = "<Your file path should go here>";
+
 export const generatePythonRequestsCode = async ({
   url,
   method,
@@ -28,6 +30,7 @@ export const generatePythonRequestsCode = async ({
     authorization,
     rawBodyDataType,
     bodyType,
+    method,
   });
 
   /* ============== FORM-DATA =================== */
@@ -144,7 +147,8 @@ ${xWWWFormUrlencoded
   /* ============== BINARY-DATA =================== */
   if (method.toLowerCase() !== "get" && bodyType === "binary") {
     const binaryDataString = `
-with open("${binaryData ?? "<Your file path should go here>"}", "rb") as f:
+# ============== BINARY-DATA ===================
+with open("${binaryData ?? `"${defaultBinaryData}"`}", "rb") as f:
 \tresponse = requests.post(url${optionsString})\n\n`;
 
     code = `${importString}${urlString}${headersString}${binaryDataString}${endString}`;
@@ -170,20 +174,165 @@ export const generatePythonHttpClientCode = async ({
   binaryData,
   rawData,
 }: CodeSnippitDataInterface) => {
-  console.log({
-    url,
-    method,
+  const importString = `import http.client
+from urllib.parse import urlparse, urlencode
+import mimetypes
+import json\n\n`;
+
+  const urlString = `url = "${url}"
+parsed = urlparse(url)\n\n`;
+
+  /* ============== HEADERS =================== */
+  const headersString = generateHeadersString({
     headers,
     authorization,
-    formData,
-    xWWWFormUrlencoded,
     rawBodyDataType,
     bodyType,
-    binaryData,
-    rawData,
+    method,
   });
 
-  const code = ``;
+  /* ============== FORM-DATA =================== */
+  let formDataString = "";
+  if (
+    method.toLowerCase() !== "get" &&
+    bodyType === "form-data" &&
+    formData.length
+  ) {
+    let normalFormDataString = "";
+    if (formData.some((entry) => entry.type === "text")) {
+      normalFormDataString = `# text fields
+fields = {
+${formData
+  .filter((entry) => entry.type === "text")
+  .map(({ key, value }) => `\t${JSON.stringify(key)}: ${JSON.stringify(value)}`)
+  .join(",\n")}
+}
+for name, value in fields.items():
+\tbody_lines.extend([
+\t\tf"--{boundary}",
+\t\tf'Content-Disposition: form-data; name="{name}"',
+\t\t"",
+\t\tvalue,
+\t])\n\n`;
+    }
+
+    let fileFormDataString = "";
+    if (formData.some((entry) => entry.type === "file")) {
+      fileFormDataString = `# files
+files = [
+${formData
+  .filter((entry) => entry.type === "file")
+  .map(
+    ({ key, value }) => `\t(${JSON.stringify(key)}, ${JSON.stringify(value)})`
+  )
+  .join(",\n")}
+]
+
+for fieldname, filename in files:
+\tmimetype = mimetypes.guess_type(filename)[0] or "application/octet-stream"
+\twith open(filename, "rb") as f:
+\t\tfile_content = f.read()
+\tbody_lines.extend([
+\t\tf"--{boundary}",
+\t\tf'Content-Disposition: form-data; name="{fieldname}"; filename="{filename}"',
+\t\tf"Content-Type: {mimetype}",
+\t\t"",
+\t\tfile_content.decode("latin1")  # binary-safe
+\t])\n\n`;
+    }
+
+    if (normalFormDataString || fileFormDataString) {
+      formDataString = `#============== FORM-DATA ===================
+boundary = "----WebKitFormBoundary7MA4YWxkTrZu0gW"
+body_lines = []
+${normalFormDataString}${fileFormDataString}
+body_lines.append(f"--{boundary}--")
+body_lines.append("")
+
+body = "\r\n".join(body_lines)
+headers["Content-Type"] = f"multipart/form-data; boundary={boundary}"\n\n`;
+    }
+  }
+
+  /* ============== X-WWW-FORM-URLENCODER-DATA =================== */
+  let xwwwFormUrlencoderString = "";
+  if (
+    method.toLowerCase() !== "get" &&
+    bodyType === "x-www-form-urlencoded" &&
+    xWWWFormUrlencoded.length
+  ) {
+    xwwwFormUrlencoderString = `body = urlencode({
+${xWWWFormUrlencoded
+  .map(({ key, value }) => `\t${JSON.stringify(key)}: ${JSON.stringify(value)}`)
+  .join(",\n")}
+})\n\n`;
+  }
+
+  /* ============== RAW-DATA =================== */
+  let rawDataString = await generateRawDataString({
+    method,
+    rawData,
+    rawBodyDataType,
+    bodyType,
+  });
+  if (method !== "get" && rawBodyDataType === "json")
+    rawDataString += `body = json.dumps(json_data)\n\n`;
+
+  /* ============== BINARY-DATA =================== */
+  let binaryDataString = "";
+  if (method.toLowerCase() !== "get" && bodyType === "binary") {
+    binaryDataString = `# ============== BINARY-DATA ===================
+with open("${binaryData ?? `"${defaultBinaryData}"`}", "rb") as f:
+\tbody = f.read()\n\n`;
+  }
+
+  const optionsArr: Array<{
+    key: string;
+    value: string;
+  }> = [];
+
+  if (headersString)
+    optionsArr.push({
+      key: "headers",
+      value: "headers",
+    });
+
+  if (
+    ["form-data", "x-www-form-urlencoded", "binary"].includes(bodyType) &&
+    method !== "get"
+  ) {
+    optionsArr.push({
+      key: "body",
+      value: "body",
+    });
+  }
+
+  if (bodyType === "raw" && method !== "get") {
+    optionsArr.push({
+      key: "body",
+      value: rawBodyDataType === "json" ? "json.dumps(json_data)" : "data",
+    });
+  }
+
+  if (bodyType === "binary" && method !== "get") {
+    optionsArr.push({
+      key: "body",
+      value: "body",
+    });
+  }
+
+  const optionsString = optionsArr.length
+    ? `, ${optionsArr.map(({ key, value }) => `${key}=${value}`).join(", ")}`
+    : "";
+
+  const requestString = `conn = http.client.HTTPConnection(parsed.hostname, parsed.port or 80)
+conn.request("${method.toUpperCase()}", parsed.path${optionsString})\n\n`;
+
+  const endString = `res = conn.getresponse()
+print(res.read().decode())
+conn.close()`;
+
+  const code = `${importString}${urlString}${headersString}${formDataString}${xwwwFormUrlencoderString}${rawDataString}${binaryDataString}${requestString}${endString}`;
   return generateMaskedAndRealCode({ code, authorization });
 };
 
