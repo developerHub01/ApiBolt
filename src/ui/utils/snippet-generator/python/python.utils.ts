@@ -58,7 +58,7 @@ ${formData
   .filter((entry) => entry.type === "file")
   .map(
     ({ key, value }) =>
-      `\t(${JSON.stringify(key)}: open(${JSON.stringify(value)}, "rb"))`
+      `\t(${JSON.stringify(key)}, open(${JSON.stringify(value)}, "rb"))`
   )
   .join(",\n")}
 ]\n\n`;
