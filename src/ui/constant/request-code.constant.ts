@@ -78,6 +78,20 @@ export const codeSnippitTypes = Object.keys(
   requestCodeSnippitsMap
 ) as Array<TRequestCodeType>;
 
+export const codeSnippitByLanguageName = Object.keys(
+  requestCodeSnippitsMap
+).reduce(
+  (acc, curr) => {
+    const language = curr.split("-")[0];
+    if (!acc[language]) acc[language] = [];
+    acc[language].push(curr as TRequestCodeType);
+    return acc;
+  },
+  {} as Record<string, Array<TRequestCodeType>>
+);
+
+export const codeSnippitLanguageList = Object.keys(codeSnippitByLanguageName);
+
 export const MASKED_AUTHORIZATION = "••••••";
 
 export const requestDefaultCodeSnippit: RequestCodeSnippitInterface = {

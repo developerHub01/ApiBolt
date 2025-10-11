@@ -4,12 +4,15 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import {
   codeSnippitTypes,
   requestCodeSnippitsMap,
+  codeSnippitLanguageList,
+  codeSnippitByLanguageName,
 } from "@/constant/request-code.constant";
 import type { TRequestCodeType } from "@/types/request-code.type";
 import CopyButton from "@/components/ui/copy-button";
@@ -18,6 +21,8 @@ import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { handleChangeSelectedCodeSnippitType } from "@/context/redux/request-response/request-response-slice";
 import { selectSelectedCodeSnippit } from "@/context/redux/request-response/selectors/code-snippit";
 import { useRequestCodeSnippit } from "@/context/collections/request/meta-data/code/RequestCodeSnippitProvider";
+
+console.log(codeSnippitByLanguageName);
 
 const RequestCodeTypeSelector = memo(() => {
   const dispatch = useAppDispatch();
@@ -42,13 +47,16 @@ const RequestCodeTypeSelector = memo(() => {
           <SelectValue placeholder="Select a code snippit" />
         </SelectTrigger>
         <SelectContent side="bottom" align="end">
-          <SelectGroup>
-            {codeSnippitTypes.map((codeTypes) => (
-              <SelectItem value={codeTypes}>
-                {requestCodeSnippitsMap[codeTypes]}
-              </SelectItem>
-            ))}
-          </SelectGroup>
+          {codeSnippitLanguageList.map((lang) => (
+            <SelectGroup>
+              <SelectLabel className="capitalize">{lang}</SelectLabel>
+              {codeSnippitByLanguageName[lang].map((codeTypes) => (
+                <SelectItem value={codeTypes} className="pl-4">
+                  {requestCodeSnippitsMap[codeTypes]}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          ))}
         </SelectContent>
       </Select>
       <CopyButton value={code} align="end" Icon={CopyIcon} size="sm" />
