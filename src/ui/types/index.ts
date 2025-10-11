@@ -36,6 +36,7 @@ import type {
   HttpStatusSingleInterface,
   HttpStatusUpdatePayloadInterface,
 } from "@/types/http-status.type";
+import type { TSidebarTab } from "@/types/sidebar.types";
 
 declare global {
   interface Window {
@@ -82,6 +83,13 @@ declare global {
       updateHttpStatus(
         payload: HttpStatusUpdatePayloadInterface
       ): Promise<Required<HttpStatusUpdatePayloadInterface> | null>;
+    };
+
+    electronAPIActiveSidebarTabDB: {
+      getActiveSidebarTab(): Promise<TSidebarTab>;
+      createActiveSidebarTab(tab: TSidebarTab): Promise<boolean>;
+      updateActiveSidebarTab(tab: TSidebarTab): Promise<boolean>;
+      deleteActiveSidebarTab(): Promise<boolean>;
     };
 
     electronAPIProjectsDB: {

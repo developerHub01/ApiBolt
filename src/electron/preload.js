@@ -55,6 +55,17 @@ contextBridge.exposeInMainWorld("electronAPIHttpStatusDB", {
     await ipcRenderer.invoke("updateHttpStatus", payload),
 });
 
+contextBridge.exposeInMainWorld("electronAPIActiveSidebarTabDB", {
+  getActiveSidebarTab: async () =>
+    await ipcRenderer.invoke("getActiveSidebarTab"),
+  createActiveSidebarTab: async (payload) =>
+    await ipcRenderer.invoke("createActiveSidebarTab", payload),
+  updateActiveSidebarTab: async (payload) =>
+    await ipcRenderer.invoke("updateActiveSidebarTab", payload),
+  deleteActiveSidebarTab: async () =>
+    await ipcRenderer.invoke("deleteActiveSidebarTab"),
+});
+
 contextBridge.exposeInMainWorld("electronAPIProjectsDB", {
   getProjects: async () => await ipcRenderer.invoke("getProjects"),
   createProjects: async (payload) =>

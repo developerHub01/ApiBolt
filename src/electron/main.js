@@ -31,6 +31,7 @@ import { generateHttpStatusSeed } from "./seeders/httpStatusSeed.js";
 import { httpStatusHandler } from "./ipc/httpStatusHandler.js";
 import { requestHandler } from "./ipc/requestHandler.js";
 import { fileSystemHandler } from "./ipc/fileSystemHandler.js";
+import { activeSidebarTabHandler } from "./ipc/activeSidebarTabHandler.js";
 
 export const userDataDir = app.getPath("userData");
 
@@ -82,6 +83,7 @@ app.whenReady().then(async () => {
   registerCookieHandlers();
   windowHandler(mainWindow);
   jsonWebTokenHandlers();
+  activeSidebarTabHandler();
   projectsHandlers();
   enviromentsHandlers();
   authorizationHandler();
