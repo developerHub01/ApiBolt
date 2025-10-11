@@ -1,12 +1,11 @@
 import { requestDefaultCodeSnippit } from "@/constant/request-code.constant";
 import type { CodeSnippitDataInterface } from "@/types/code-snippit.types";
 import type { TRequestCodeType } from "@/types/request-code.type";
+import { generateMaskedAndRealCode } from "@/utils/snippet-generator/helper.utils";
 import {
-  generateMaskedAndRealCode,
-  jsonFormatter,
-} from "@/utils/snippet-generator/helper.utils";
-import { generateHeadersString } from "./helper.utils";
-import { isValidJson } from "@/utils/helper";
+  generateHeadersString,
+  generateRawDataString,
+} from "@/utils/snippet-generator/python/helper.utils";
 
 export const generatePythonRequestsCode = async ({
   url,
@@ -24,15 +23,12 @@ export const generatePythonRequestsCode = async ({
   const urlString = `url = "${url}"\n\n`;
 
   /* ============== HEADERS =================== */
-  let headersString = generateHeadersString({
+  const headersString = generateHeadersString({
     headers,
     authorization,
     rawBodyDataType,
     bodyType,
   });
-  if (headersString) {
-    headersString = `# ============== HEADERS ===================\n${headersString}`;
-  }
 
   /* ============== FORM-DATA =================== */
   let formDataString = "";
@@ -85,12 +81,12 @@ ${xWWWFormUrlencoded
   }
 
   /* ============== RAW-DATA =================== */
-  let rawDataString = "";
-  if (method.toLowerCase() !== "get" && bodyType === "raw") {
-    if (rawBodyDataType === "json" && isValidJson(rawData))
-      rawDataString = `json_data = ${await jsonFormatter(rawData)}\n\n`;
-    else rawDataString = `data = """${rawData}"""\n\n`;
-  }
+  const rawDataString = await generateRawDataString({
+    method,
+    rawData,
+    rawBodyDataType,
+    bodyType,
+  });
 
   const endString = `print(response.text)`;
 
