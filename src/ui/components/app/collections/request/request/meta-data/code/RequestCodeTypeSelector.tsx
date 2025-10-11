@@ -22,8 +22,6 @@ import { handleChangeSelectedCodeSnippitType } from "@/context/redux/request-res
 import { selectSelectedCodeSnippit } from "@/context/redux/request-response/selectors/code-snippit";
 import { useRequestCodeSnippit } from "@/context/collections/request/meta-data/code/RequestCodeSnippitProvider";
 
-console.log(codeSnippitByLanguageName);
-
 const RequestCodeTypeSelector = memo(() => {
   const dispatch = useAppDispatch();
   const selectedType = useAppSelector(selectSelectedCodeSnippit);

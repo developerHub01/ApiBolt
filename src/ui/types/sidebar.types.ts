@@ -7,5 +7,4 @@ export type TSidebarTab =
 
 export interface SidebarState {
   activeTab: TSidebarTab;
-  lastActiveTab: TSidebarTab;
 }

@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/tooltip";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { Link } from "react-router-dom";
-import { changeActiveTab as changeSidebarActiveTab } from "@/context/redux/sidebar/sidebar-thunk";
+import { changeActiveTab } from "@/context/redux/sidebar/sidebar-thunk";
 import {
   HIDDEN_TABS_WHEN_NOT_PROJECT_SELECTED,
   SIDEBAR_MENU_LIST,
@@ -22,12 +22,12 @@ const SidebarMenu = memo(() => {
   const activeTab = useAppSelector(selectSidebarActiveTab);
 
   const handleClick = useCallback(
-    (id: TSidebarTab) => {
+    async (id: TSidebarTab) => {
       if (id === "collections" && activeTab === id) {
         dispatch(handleToggleRequestList());
         return;
       }
-      dispatch(changeSidebarActiveTab(id));
+      await dispatch(changeActiveTab(id));
     },
     [activeTab, dispatch]
   );

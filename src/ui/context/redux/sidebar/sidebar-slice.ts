@@ -1,26 +1,9 @@
-import {
-  LOCAL_STORAGE_SIDEBAR_ACTIVE_TAB_KEY,
-  LOCAL_STORAGE_SIDEBAR_LAST_ACTIVE_TAB_KEY,
-} from "@/constant/sidebar.constant";
 import type { SidebarState, TSidebarTab } from "@/types/sidebar.types";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 // Define the initial state using that type
 const initialState: SidebarState = {
   activeTab: "collections",
-  lastActiveTab: "collections",
-};
-
-export const handleLocalStorageOnSidebarToggle = (
-  currentActiveTab: string | null,
-  lastActiveTab: string | null
-) => {
-  if (currentActiveTab)
-    localStorage.setItem(LOCAL_STORAGE_SIDEBAR_ACTIVE_TAB_KEY, currentActiveTab);
-  else localStorage.removeItem(LOCAL_STORAGE_SIDEBAR_ACTIVE_TAB_KEY);
-  if (lastActiveTab)
-    localStorage.setItem(LOCAL_STORAGE_SIDEBAR_LAST_ACTIVE_TAB_KEY, lastActiveTab);
-  else localStorage.removeItem(LOCAL_STORAGE_SIDEBAR_LAST_ACTIVE_TAB_KEY);
 };
 
 export const sidebarSlice = createSlice({
@@ -28,28 +11,17 @@ export const sidebarSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    handleInitActiveTab: (state) => {
-      state.activeTab = localStorage.getItem(
-        LOCAL_STORAGE_SIDEBAR_ACTIVE_TAB_KEY
-      ) as TSidebarTab;
-      state.lastActiveTab = localStorage.getItem(
-        LOCAL_STORAGE_SIDEBAR_LAST_ACTIVE_TAB_KEY
-      ) as TSidebarTab;
-    },
     handleChangeActiveTab: (
       state,
       action: PayloadAction<TSidebarTab | null>
     ) => {
       const id = action.payload ?? "projects";
-      state.lastActiveTab = state.activeTab ?? "projects";
-
       if (id === state.activeTab) return;
       state.activeTab = id;
     },
   },
 });
 
-export const { handleInitActiveTab, handleChangeActiveTab } =
-  sidebarSlice.actions;
+export const { handleChangeActiveTab } = sidebarSlice.actions;
 
 export default sidebarSlice.reducer;
