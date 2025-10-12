@@ -14,32 +14,22 @@ import {
   codeSnippitLanguageList,
   codeSnippitByLanguageName,
 } from "@/constant/request-code.constant";
-import type { TRequestCodeType } from "@/types/request-code.type";
 import CopyButton from "@/components/ui/copy-button";
 import { Copy as CopyIcon } from "lucide-react";
-import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { handleChangeSelectedCodeSnippitType } from "@/context/redux/request-response/request-response-slice";
+import { useAppSelector } from "@/context/redux/hooks";
 import { selectSelectedCodeSnippit } from "@/context/redux/request-response/selectors/code-snippit";
 import { useRequestCodeSnippit } from "@/context/collections/request/meta-data/code/RequestCodeSnippitProvider";
 
 const RequestCodeTypeSelector = memo(() => {
-  const dispatch = useAppDispatch();
   const selectedType = useAppSelector(selectSelectedCodeSnippit);
-  const { code } = useRequestCodeSnippit();
-
-  const handleChange = (value: TRequestCodeType) =>
-    dispatch(
-      handleChangeSelectedCodeSnippitType({
-        type: value,
-      })
-    );
+  const { code, handleChangeCodeSnippitLanguageType } = useRequestCodeSnippit();
 
   return (
     <div className="flex justify-between items-center gap-3">
       <Select
         defaultValue={selectedType ?? codeSnippitTypes[0]}
         value={selectedType ?? codeSnippitTypes[0]}
-        onValueChange={handleChange}
+        onValueChange={handleChangeCodeSnippitLanguageType}
       >
         <SelectTrigger size="sm">
           <SelectValue placeholder="Select a code snippit" />

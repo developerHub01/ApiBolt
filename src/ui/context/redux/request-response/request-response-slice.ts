@@ -53,6 +53,7 @@ import type { TRequestCodeType } from "@/types/request-code.type";
 interface RequestResponseState {
   projectList: Array<ProjectInterface>;
   activeProjectId: string | null;
+  codeSnippitType: TRequestCodeType | null;
 
   environmentsList: Record<string, EnvironmentInterface>;
 
@@ -126,8 +127,6 @@ interface RequestResponseState {
    */
   jwtBearerAuth: Record<string, JWTBearerAuthInterface>;
 
-  selectedCodeSnippitType: Record<string, TRequestCodeType>;
-
   folderTitle: Record<string, string>;
   folderDescription: Record<string, string>;
   folderDescriptionActiveTab: Record<string, TRequestFolderDescriptionTab>;
@@ -141,6 +140,7 @@ interface RequestResponseState {
 const initialState: RequestResponseState = {
   projectList: [],
   activeProjectId: null,
+  codeSnippitType: null,
 
   environmentsList: {},
 
@@ -189,8 +189,6 @@ const initialState: RequestResponseState = {
   bearerTokenAuth: {},
   jwtBearerAuth: {},
 
-  selectedCodeSnippitType: {},
-
   folderTitle: {},
   folderDescription: {},
   folderDescriptionActiveTab: {},
@@ -220,6 +218,16 @@ export const requestResponseSlice = createSlice({
       state.activeProjectId = action.payload;
     },
     /* =============== Project reducers end ============= */
+
+    /* =============== CodeSnippit reducers start ============= */
+    handleChangeCodeSnippitType: (
+      state,
+      action: PayloadAction<TRequestCodeType | null>
+    ) => {
+      if (state.codeSnippitType === action.payload) return;
+      state.codeSnippitType = action.payload;
+    },
+    /* =============== CodeSnippit reducers end ============= */
 
     /* =============== Environment reducers start ============= */
     handleLoadEnvironmentsList: (
@@ -1215,23 +1223,6 @@ export const requestResponseSlice = createSlice({
         // state.hiddenHeaders[id] = [];
       },
 
-    /* ============== Request Code Snippit start ============= */
-
-    handleChangeSelectedCodeSnippitType: (
-      state,
-      action: PayloadAction<{
-        id?: string;
-        type: TRequestCodeType;
-      }>
-    ) => {
-      const id = action.payload.id ?? state.selectedTab;
-      if (!id || state.selectedCodeSnippitType[id] === action.payload.type)
-        return;
-
-      state.selectedCodeSnippitType[id] = action.payload.type;
-    },
-    /* ============== Request Code Snippit end ============= */
-
     /* ================ Request Folder start =================== */
     handleLoadFolder: (
       state,
@@ -1335,6 +1326,7 @@ export const {
   handleLoadProjectsList,
   handleChangeActiveProject,
 
+  handleChangeCodeSnippitType,
   handleLoadEnvironmentsList,
 
   handleAuthorizationsInheritedId,
@@ -1418,8 +1410,6 @@ export const {
   handleChangeAuthType,
   handleIsDownloadRequestWithBase64,
   handleClearRequestResponse,
-
-  handleChangeSelectedCodeSnippitType,
 
   handleLoadFolder,
   handleUpdateFolder,

@@ -1,11 +1,12 @@
 import React, {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
   useState,
 } from "react";
-import { useAppSelector } from "@/context/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { generateCode } from "@/utils/snippet-generator";
 import {
   selectAuthorizationHeaderData,
@@ -22,11 +23,16 @@ import {
 import { selectBinaryData } from "@/context/redux/request-response/selectors/body-binary";
 import { selectSelectedCodeSnippit } from "@/context/redux/request-response/selectors/code-snippit";
 import type { CodeSnippitDataInterface } from "@/types/code-snippit.types";
+import type { TRequestCodeType } from "@/types/request-code.type";
+import { changeCodeSnippitType } from "@/context/redux/request-response/thunks/code-snippit";
 
 interface RequestCodeSnippitContext {
   code: string;
   maskedCode: string;
   language: string;
+  handleChangeCodeSnippitLanguageType: (
+    value: TRequestCodeType
+  ) => Promise<void>;
 }
 
 const RequestCodeSnippitContext =
@@ -52,6 +58,7 @@ interface RequestCodeSnippitProviderProps {
 const RequestCodeSnippitProvider = ({
   children,
 }: RequestCodeSnippitProviderProps) => {
+  const dispatch = useAppDispatch();
   const [code, setCode] = useState<string | null>(null);
   const [maskedCode, setMaskedCode] = useState<string | null>(null);
   const selectedCodeType = useAppSelector(selectSelectedCodeSnippit);
@@ -159,12 +166,20 @@ const RequestCodeSnippitProvider = ({
 
   const language = selectedCodeType?.split("-")[0];
 
+  const handleChangeCodeSnippitLanguageType = useCallback(
+    async (value: TRequestCodeType) => {
+      await dispatch(changeCodeSnippitType(value));
+    },
+    [dispatch]
+  );
+
   return (
     <RequestCodeSnippitContext.Provider
       value={{
         code: code ?? "",
         maskedCode: maskedCode ?? "",
         language,
+        handleChangeCodeSnippitLanguageType,
       }}
     >
       {children}

@@ -99,7 +99,7 @@ declare global {
         languageId: TRequestCodeType
       ): Promise<boolean>;
       updateActiveCodeSnippitType(
-        languageId: TRequestCodeType
+        languageId: TRequestCodeType | null
       ): Promise<boolean>;
       deleteActiveCodeSnippitType(): Promise<boolean>;
     };
