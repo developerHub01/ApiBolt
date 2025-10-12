@@ -4,7 +4,7 @@ import {
   deleteActiveCodeSnippitType,
   getActiveCodeSnippitType,
   updateActiveCodeSnippitType,
-} from "../db/activeCodeSnippitTypeDB";
+} from "../db/activeCodeSnippitTypeDB.js";
 
 export const activeCodeSnippitTypeHandler = () => {
   ipcMain.handle(

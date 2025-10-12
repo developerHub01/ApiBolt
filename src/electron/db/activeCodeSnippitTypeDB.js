@@ -5,15 +5,23 @@ import {
   activeCodeSnippitTypeTable,
 } from "./schema.js";
 
+export const isExistActiveCodeSnippitType = async () =>
+  (
+    await db
+      .select()
+      .from(activeCodeSnippitTypeTable)
+      .where(eq(activeCodeSnippitTypeTable.id, ACTIVE_CODE_SNIPPIT_TYPE_ID))
+  )?.[0];
+
 export const getActiveCodeSnippitType = async () => {
   try {
-    const languageId = (
+    const result = (
       await db
         .select()
         .from(activeCodeSnippitTypeTable)
         .where(eq(activeCodeSnippitTypeTable.id, ACTIVE_CODE_SNIPPIT_TYPE_ID))
-    )?.[0]?.languageId;
-    if (languageId) return languageId;
+    )?.[0];
+    if (result) return result.languageId;
 
     await createActiveCodeSnippitType();
     return null;
@@ -38,8 +46,7 @@ export const createActiveCodeSnippitType = async (payload = {}) => {
 
 export const updateActiveCodeSnippitType = async (languageId = null) => {
   try {
-    const isExist = await getActiveCodeSnippitType();
-
+    const isExist = await isExistActiveCodeSnippitType();
     if (!isExist) {
       return await createActiveCodeSnippitType({
         languageId,
