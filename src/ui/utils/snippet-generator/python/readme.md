@@ -539,3 +539,173 @@ response = http.request(
 )
 print(response.data.decode())
 ```
+
+## PythonAiohttp
+
+```py
+import aiohttp
+import asyncio
+
+url = "http://localhost:3000"
+headers = {
+    "asfsdfsdf": "addsd",
+    "Authorization": "Bearer sdfsdfsdfds"
+}
+
+async def main():
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url, headers=headers) as resp:
+            print(await resp.text())
+
+asyncio.run(main())
+
+
+
+import aiohttp
+import asyncio
+
+url = "http://localhost:3000"
+headers = {
+    "asfsdfsdf": "addsd",
+    "Authorization": "Bearer sdfsdfsdfds"
+}
+
+data = {
+    "key": "value"
+}
+
+files = {
+    "file1": open("matthew-smith-Rfflri94rs8-unsplash.jpg", "rb"),
+    "file2": open("michael-krahn-eGD69I3ODC4-unsplash.jpg", "rb")
+}
+
+async def main():
+    async with aiohttp.ClientSession() as session:
+        form = aiohttp.FormData()
+        for k, v in data.items():
+            form.add_field(k, v)
+        for k, f in files.items():
+            form.add_field(k, f, filename=f.name)
+        async with session.post(url, headers=headers, data=form) as resp:
+            print(await resp.text())
+
+asyncio.run(main())
+
+
+
+import aiohttp
+import asyncio
+
+url = "http://localhost:3000"
+headers = {
+    "asfsdfsdf": "addsd",
+    "Content-Type": "application/x-www-form-urlencoded",
+    "Authorization": "Bearer sdfsdfsdfds"
+}
+
+data = {
+    "a": "b",
+    "c": "d"
+}
+
+async def main():
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url, headers=headers, data=data) as resp:
+            print(await resp.text())
+
+asyncio.run(main())
+
+
+
+import aiohttp
+import asyncio
+import json
+
+url = "http://localhost:3000"
+headers = {
+    "asfsdfsdf": "addsd",
+    "Content-Type": "application/json",
+    "Authorization": "Bearer sdfsdfsdfds"
+}
+
+json_data = {
+    "forge": {"packagerConfig": {}, "makers": [{"name": "@electron-forge/maker-zip"}]}
+}
+json_body = json.dumps(json_data)
+
+async def main():
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url, headers=headers, data=json_body) as resp:
+            print(await resp.text())
+
+asyncio.run(main())
+
+
+
+import aiohttp
+import asyncio
+
+url = "http://localhost:3000"
+headers = {
+    "asfsdfsdf": "addsd",
+    "Content-Type": "application/javascript",
+    "Authorization": "Bearer sdfsdfsdfds"
+}
+
+text_data = """const x = {
+  forge: { packagerConfig: {}, makers: [{ name: "@electron-forge/maker-zip" }] }
+};"""
+
+async def main():
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url, headers=headers, data=text_data) as resp:
+            print(await resp.text())
+
+asyncio.run(main())
+
+
+
+import aiohttp
+import asyncio
+
+url = "http://localhost:3000"
+headers = {
+    "asfsdfsdf": "addsd",
+    "Authorization": "Bearer sdfsdfsdfds"
+}
+
+with open("/media/Development/api-bolt-backgrounds/pine-watt-2Hzmz15wGik-unsplash.jpg", "rb") as f:
+    bin_data = f.read()
+
+async def main():
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url, headers=headers, data=bin_data) as resp:
+            print(await resp.text())
+
+asyncio.run(main())
+
+
+
+import aiohttp
+import asyncio
+import json
+
+url = "http://localhost:3000"
+headers = {
+    "asfsdfsdf": "addsd",
+    "Content-Type": "application/json",
+    "Authorization": "Bearer sdfsdfsdfds"
+}
+
+json_data = {
+    "forge": {"packagerConfig": {}, "makers": [{"name": "@electron-forge/maker-zip"}]}
+}
+json_body = json.dumps(json_data)
+
+async def main():
+    async with aiohttp.ClientSession() as session:
+        async with session.delete(url, headers=headers, data=json_body) as resp:
+            print(await resp.text())
+
+asyncio.run(main())
+```

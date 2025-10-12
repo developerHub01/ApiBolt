@@ -106,7 +106,7 @@ ${xWWWFormUrlencoded
       value: "headers",
     });
 
-  if (bodyType === "form-data" && method !== "get") {
+  if (bodyType === "form-data" && method !== "get" && formData.length) {
     if (formData.some((entry) => entry.type === "text"))
       optionsArr.push({
         key: "data",
@@ -119,7 +119,11 @@ ${xWWWFormUrlencoded
       });
   }
 
-  if (["x-www-form-urlencoded", "raw"].includes(bodyType) && method !== "get") {
+  if (
+    (bodyType === "raw" ||
+      (bodyType === "x-www-form-urlencoded" && xWWWFormUrlencoded.length)) &&
+    method !== "get"
+  ) {
     optionsArr.push({
       key: "data",
       value: "data",
@@ -295,11 +299,16 @@ with open("${binaryData ?? `${defaultBinaryData}`}", "rb") as f:
       value: "headers",
     });
 
+  if (["binary", "raw"].includes(bodyType) && method !== "get")
+    optionsArr.push({
+      key: "body",
+      value: "body",
+    });
   if (
-    ["form-data", "x-www-form-urlencoded", "binary", "raw"].includes(
-      bodyType
-    ) &&
-    method !== "get"
+    (bodyType === "form-data" && formData.length) ||
+    (bodyType === "x-www-form-urlencoded" &&
+      xWWWFormUrlencoded.length &&
+      method !== "get")
   )
     optionsArr.push({
       key: "body",
@@ -406,10 +415,15 @@ with open("${binaryData ?? `${defaultBinaryData}`}", "rb") as f:
       value: "headers",
     });
 
+  if (["binary", "raw"].includes(bodyType) && method !== "get")
+    optionsArr.push({
+      key: "body",
+      value: "body",
+    });
+
   if (
-    ["form-data", "x-www-form-urlencoded", "binary", "raw"].includes(
-      bodyType
-    ) &&
+    ((bodyType === "form-data" && formData.length) ||
+      (bodyType === "x-www-form-urlencoded" && xWWWFormUrlencoded.length)) &&
     method !== "get"
   )
     optionsArr.push({
@@ -444,20 +458,153 @@ export const generatePythonAiohttpCode = async ({
   binaryData,
   rawData,
 }: CodeSnippitDataInterface) => {
-  console.log({
-    url,
-    method,
+  const startString = `import aiohttp
+import asyncio
+import json
+
+url = "${url}"\n\n`;
+
+  /* ============== HEADERS =================== */
+  const headersString = generateHeadersString({
     headers,
     authorization,
-    formData,
-    xWWWFormUrlencoded,
     rawBodyDataType,
     bodyType,
-    binaryData,
-    rawData,
+    method,
   });
 
-  const code = ``;
+  /* ============== FORM-DATA =================== */
+  let formDataString = "";
+  if (
+    method.toLowerCase() !== "get" &&
+    bodyType === "form-data" &&
+    formData.length
+  ) {
+    let normalFormDataString = "";
+    if (formData.some((entry) => entry.type === "text")) {
+      normalFormDataString = `data = {
+${formData
+  .filter((entry) => entry.type === "text")
+  .map(({ key, value }) => `\t${JSON.stringify(key)}: ${JSON.stringify(value)}`)
+  .join(",\n")}
+}\n\n`;
+    }
+
+    let fileFormDataString = "";
+    if (formData.some((entry) => entry.type === "file")) {
+      fileFormDataString = `files = [
+${formData
+  .filter((entry) => entry.type === "file")
+  .map(
+    ({ key, value }) =>
+      `\t(${JSON.stringify(key)}, open(${JSON.stringify(value)}, "rb"))`
+  )
+  .join(",\n")}
+]\n\n`;
+    }
+
+    if (normalFormDataString || fileFormDataString) {
+      formDataString = `#============== FORM-DATA ===================
+${normalFormDataString}${fileFormDataString}`;
+    }
+  }
+
+  let formDataImplementationString = "";
+  if (
+    method.toLowerCase() !== "get" &&
+    bodyType === "form-data" &&
+    formDataString
+  ) {
+    let textFormString = "";
+    let fileFormString = "";
+    if (formData.some((entry) => entry.type === "text"))
+      textFormString = `\t\tfor k, v in data.items():
+\t\t\tform.add_field(k, v)\n`;
+    if (formData.some((entry) => entry.type === "file"))
+      fileFormString = `\t\tfor k, f in files.items():
+\t\t\tform.add_field(k, f, filename=f.name)\n`;
+
+    if (textFormString || fileFormString)
+      formDataImplementationString = `\t\tform = aiohttp.FormData()\n${textFormString}${fileFormString}`;
+  }
+
+  /* ============== X-WWW-FORM-URLENCODER-DATA =================== */
+  let xwwwFormUrlencoderString = "";
+  if (
+    method.toLowerCase() !== "get" &&
+    bodyType === "x-www-form-urlencoded" &&
+    xWWWFormUrlencoded.length
+  ) {
+    xwwwFormUrlencoderString = `body = {
+${xWWWFormUrlencoded
+  .map(({ key, value }) => `\t${JSON.stringify(key)}: ${JSON.stringify(value)}`)
+  .join(",\n")}
+}\n\n`;
+  }
+
+  /* ============== RAW-DATA =================== */
+  let rawDataString = await generateRawDataString({
+    method,
+    rawData,
+    rawBodyDataType,
+    bodyType,
+  });
+  if (method !== "get" && bodyType === "raw" && rawBodyDataType === "json")
+    rawDataString += `body = json.dumps(json_data)\n\n`;
+
+  /* ============== BINARY-DATA =================== */
+  let binaryDataString = "";
+  if (method.toLowerCase() !== "get" && bodyType === "binary") {
+    binaryDataString = `# ============== BINARY-DATA ===================
+with open("${binaryData ?? `${defaultBinaryData}`}", "rb") as f:
+\tbody = f.read()\n\n`;
+  }
+
+  const optionsArr: Array<{
+    key: string;
+    value: string;
+  }> = [];
+
+  if (headersString)
+    optionsArr.push({
+      key: "headers",
+      value: "headers",
+    });
+
+  if (["binary", "raw"].includes(bodyType) && method !== "get")
+    optionsArr.push({
+      key: "body",
+      value: "body",
+    });
+
+  if (bodyType === "form-data" && method !== "get" && formData.length)
+    optionsArr.push({
+      key: "body",
+      value: "form",
+    });
+
+  if (
+    bodyType === "x-www-form-urlencoded" &&
+    method !== "get" &&
+    xWWWFormUrlencoded.length
+  )
+    optionsArr.push({
+      key: "body",
+      value: "body",
+    });
+
+  const optionsString = optionsArr.length
+    ? `, ${optionsArr.map(({ key, value }) => `${key}=${value}`).join(", ")}`
+    : "";
+
+  const httpRequestCallString = `async def main():
+\tasync with aiohttp.ClientSession() as session:
+${formDataImplementationString}\t\tasync with session.${method.toLowerCase()}(url${optionsString}) as resp:
+\t\t\tprint(await resp.text())\n\n`;
+
+  const endString = `asyncio.run(main())`;
+
+  const code = `${startString}${headersString}${formDataString}${xwwwFormUrlencoderString}${rawDataString}${binaryDataString}${httpRequestCallString}${endString}`;
   return generateMaskedAndRealCode({ code, authorization });
 };
 
