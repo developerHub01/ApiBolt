@@ -368,3 +368,174 @@ conn.close()
 
 
 ```
+
+## urllib3
+
+```py
+import urllib3
+from urllib.parse import urlparse
+
+url = "http://localhost:3000"
+parsed = urlparse(url)
+http = urllib3.PoolManager()
+
+# ============== HEADERS ===================
+headers = {
+    "asfsdfsdf": "addsd",
+    "Authorization": "Bearer sdfsdfsdfds"
+}
+
+response = http.request("DELETE", parsed.geturl(), headers=headers)
+print(response.data.decode())
+
+
+
+
+import urllib3
+from urllib.parse import urlparse
+import mimetypes
+
+url = "http://localhost:3000"
+parsed = urlparse(url)
+http = urllib3.PoolManager()
+
+# ============== HEADERS ===================
+headers = {
+    "Authorization": "Bearer sdfsdfsdfds"
+}
+
+# ============== FORM-DATA ===================
+fields = {
+    "key": "value",
+    "sdfsdfsf": ("michael-krahn-eGD69I3ODC4-unsplash.jpg", open("michael-krahn-eGD69I3ODC4-unsplash.jpg", "rb")),
+    "sdfsdfsf2": ("sergei-a--heLWtuAN3c-unsplash.jpg", open("sergei-a--heLWtuAN3c-unsplash.jpg", "rb"))
+}
+
+response = http.request(
+    "DELETE",
+    parsed.geturl(),
+    fields=fields,
+    headers=headers,
+)
+print(response.data.decode())
+
+
+import urllib3
+from urllib.parse import urlparse, urlencode
+
+url = "http://localhost:3000"
+parsed = urlparse(url)
+http = urllib3.PoolManager()
+
+# ============== HEADERS ===================
+headers = {
+    "asfsdfsdf": "addsd",
+    "Content-Type": "application/x-www-form-urlencoded",
+    "Authorization": "Bearer sdfsdfsdfds"
+}
+
+data = urlencode({
+    "asdsddd": "sdfsafdsd"
+})
+
+response = http.request(
+    "DELETE",
+    parsed.geturl(),
+    body=data.encode(),
+    headers=headers,
+)
+print(response.data.decode())
+
+
+
+
+import urllib3
+from urllib.parse import urlparse
+
+url = "http://localhost:3000"
+parsed = urlparse(url)
+http = urllib3.PoolManager()
+
+# ============== HEADERS ===================
+headers = {
+    "Authorization": "Bearer sdfsdfsdfds"
+}
+
+# ============== BINARY-DATA ===================
+with open("/media/Development/api-bolt-backgrounds/pine-watt-2Hzmz15wGik-unsplash.jpg", "rb") as f:
+    body = f.read()
+
+response = http.request(
+    "DELETE",
+    parsed.geturl(),
+    body=body,
+    headers=headers,
+)
+print(response.data.decode())
+
+
+
+
+import urllib3
+from urllib.parse import urlparse
+
+url = "http://localhost:3000"
+parsed = urlparse(url)
+http = urllib3.PoolManager()
+
+# ============== HEADERS ===================
+headers = {
+    "Content-Type": "application/javascript",
+    "Authorization": "Bearer sdfsdfsdfds"
+}
+
+data = """const x = {
+  forge: {
+    packagerConfig: {},
+    makers: [
+      { name: "@electron-forge/maker-zip" }
+    ]
+  }
+};"""
+
+response = http.request(
+    "DELETE",
+    parsed.geturl(),
+    body=data.encode(),
+    headers=headers,
+)
+print(response.data.decode())
+
+
+
+import urllib3
+from urllib.parse import urlparse
+import json
+
+url = "http://localhost:3000"
+parsed = urlparse(url)
+http = urllib3.PoolManager()
+
+# ============== HEADERS ===================
+headers = {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer sdfsdfsdfds"
+}
+
+json_data = {
+    "forge": {
+        "packagerConfig": {},
+        "makers": [
+            {"name": "@electron-forge/maker-zip"}
+        ]
+    }
+}
+
+response = http.request(
+    "DELETE",
+    parsed.geturl(),
+    body=json.dumps(json_data).encode(),
+    headers=headers,
+)
+print(response.data.decode())
+```
