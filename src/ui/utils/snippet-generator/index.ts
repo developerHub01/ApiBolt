@@ -5,7 +5,7 @@ import type {
   TRequestCodeType,
 } from "@/types/code-snippit.types";
 import { generateJavaScriptCode } from "@/utils/snippet-generator/javascript/javascript.utils";
-import { generateNodeCode } from "@/utils/snippet-generator/node.utils";
+import { generateNodeCode } from "@/utils/snippet-generator/node/node.utils";
 // import { generateJavaCode } from "@/utils/snippet-generator/java.utils";
 // import { generateDartCode } from "@/utils/snippet-generator/dart.utils";
 // import { generateKotlinCode } from "@/utils/snippet-generator/kotlin.utils";
