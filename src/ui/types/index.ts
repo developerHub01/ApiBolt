@@ -37,7 +37,7 @@ import type {
   HttpStatusUpdatePayloadInterface,
 } from "@/types/http-status.type";
 import type { TSidebarTab } from "@/types/sidebar.types";
-import type { TRequestCodeType } from "@/types/request-code.type";
+import type { TRequestCodeType } from "@/types/code-snippit.types";
 
 declare global {
   interface Window {

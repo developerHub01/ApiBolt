@@ -48,7 +48,7 @@ import {
   DEFAULT_FOLDER_DESCRIPTION,
   DEFAULT_FOLDER_TITLE,
 } from "@/constant/folder.constant";
-import type { TRequestCodeType } from "@/types/request-code.type";
+import type { TRequestCodeType } from "@/types/code-snippit.types";
 
 interface RequestResponseState {
   projectList: Array<ProjectInterface>;

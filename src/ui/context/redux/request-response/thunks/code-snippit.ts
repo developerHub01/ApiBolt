@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import { handleChangeCodeSnippitType } from "@/context/redux/request-response/request-response-slice";
-import type { TRequestCodeType } from "@/types/request-code.type";
+import type { TRequestCodeType } from "@/types/code-snippit.types";
 
 export const loadCodeSnippitType = createAsyncThunk<
   void,
@@ -30,7 +30,6 @@ export const changeCodeSnippitType = createAsyncThunk<
   }
 >("sidebar/changeCodeSnippitType", async (languageId, { dispatch }) => {
   try {
-    console.log({ languageId });
     dispatch(handleChangeCodeSnippitType(languageId));
     const response =
       await window.electronAPIActiveCodeSnippitTypeDB.updateActiveCodeSnippitType(

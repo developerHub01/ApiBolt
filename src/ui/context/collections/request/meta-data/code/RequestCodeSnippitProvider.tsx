@@ -22,8 +22,10 @@ import {
 } from "@/context/redux/request-response/selectors/body-raw";
 import { selectBinaryData } from "@/context/redux/request-response/selectors/body-binary";
 import { selectSelectedCodeSnippit } from "@/context/redux/request-response/selectors/code-snippit";
-import type { CodeSnippitDataInterface } from "@/types/code-snippit.types";
-import type { TRequestCodeType } from "@/types/request-code.type";
+import type {
+  CodeSnippitDataInterface,
+  TRequestCodeType,
+} from "@/types/code-snippit.types";
 import { changeCodeSnippitType } from "@/context/redux/request-response/thunks/code-snippit";
 
 interface RequestCodeSnippitContext {

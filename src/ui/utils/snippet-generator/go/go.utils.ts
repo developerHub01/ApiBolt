@@ -1,13 +1,13 @@
-import type {
-  RequestCodeSnippitInterface,
-  TRequestCodeType,
-} from "@/types/request-code.type";
 import {
   generateMaskedAndRealCode,
   getBodyType,
   jsonFormatter,
 } from "@/utils/snippet-generator/helper.utils";
-import type { CodeSnippitDataInterface } from "@/types/code-snippit.types";
+import type {
+  CodeSnippitDataInterface,
+  RequestCodeSnippitInterface,
+  TRequestCodeType,
+} from "@/types/code-snippit.types";
 import {
   MASKED_AUTHORIZATION,
   requestDefaultCodeSnippit,

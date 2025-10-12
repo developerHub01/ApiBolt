@@ -1,6 +1,8 @@
 import { requestDefaultCodeSnippit } from "@/constant/request-code.constant";
-import type { CodeSnippitDataInterface } from "@/types/code-snippit.types";
-import type { TRequestCodeType } from "@/types/request-code.type";
+import type {
+  CodeSnippitDataInterface,
+  TRequestCodeType,
+} from "@/types/code-snippit.types";
 import { generateMaskedAndRealCode } from "@/utils/snippet-generator/helper.utils";
 import {
   generateHeadersString,

@@ -1,4 +1,4 @@
-import type { TRequestCodeType } from "@/types/request-code.type";
+import type { TRequestCodeType } from "@/types/code-snippit.types";
 
 export const generateSwiftURLSessionCode = () => {};
 

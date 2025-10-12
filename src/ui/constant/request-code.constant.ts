@@ -1,7 +1,7 @@
 import type {
   RequestCodeSnippitInterface,
   TRequestCodeType,
-} from "@/types/request-code.type";
+} from "@/types/code-snippit.types";
 
 export const requestCodeSnippitsMap: Record<TRequestCodeType, string> = {
   // JavaScript

@@ -1,9 +1,9 @@
 import { requestDefaultCodeSnippit } from "@/constant/request-code.constant";
-import type { CodeSnippitDataInterface } from "@/types/code-snippit.types";
 import type {
+  CodeSnippitDataInterface,
   RequestCodeSnippitInterface,
   TRequestCodeType,
-} from "@/types/request-code.type";
+} from "@/types/code-snippit.types";
 import { needsQuotesForKey } from "@/utils/helper";
 import {
   generateMaskedAndRealCode,

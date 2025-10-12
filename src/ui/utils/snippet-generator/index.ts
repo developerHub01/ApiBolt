@@ -1,9 +1,9 @@
 import { requestDefaultCodeSnippit } from "@/constant/request-code.constant";
-import type { CodeSnippitDataInterface } from "@/types/code-snippit.types";
 import type {
+  CodeSnippitDataInterface,
   RequestCodeSnippitInterface,
   TRequestCodeType,
-} from "@/types/request-code.type";
+} from "@/types/code-snippit.types";
 import { generateJavaScriptCode } from "@/utils/snippet-generator/javascript/javascript.utils";
 import { generateNodeCode } from "@/utils/snippet-generator/node.utils";
 // import { generateJavaCode } from "@/utils/snippet-generator/java.utils";
