@@ -122,10 +122,6 @@ export const generateJavaOkhttpCode = async ({
   return generateMaskedAndRealCode({ code, authorization });
 };
 
-export const generateJavaApacheHttpClientCode = () => {};
-
-export const generateJavaHttpURLConnectionCode = () => {};
-
 export const generateJavaUnirestCode = async ({
   url,
   method,
@@ -204,6 +200,10 @@ public class Main {
   return generateMaskedAndRealCode({ code, authorization });
 };
 
+export const generateJavaHttpURLConnectionCode = () => {};
+
+export const generateJavaApacheHttpClientCode = () => {};
+
 export const generateJavaCode = async (
   type: TRequestCodeType,
   data: CodeSnippitDataInterface
@@ -211,12 +211,12 @@ export const generateJavaCode = async (
   switch (type) {
     case "java-okhttp":
       return await generateJavaOkhttpCode(data);
-    // case "java-apache-httpclient":
-    //   return generateJavaApacheHttpClientCode();
-    // case "java-httpurlconnection":
-    //   return generateJavaHttpURLConnectionCode();
     case "java-unirest":
       return generateJavaUnirestCode(data);
+    // case "java-httpurlconnection":
+    //   return generateJavaHttpURLConnectionCode();
+    // case "java-apache-httpclient":
+    //   return generateJavaApacheHttpClientCode();
   }
 
   return requestDefaultCodeSnippit;
