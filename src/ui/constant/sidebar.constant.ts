@@ -16,25 +16,25 @@ export const SIDEBAR_MENU_LIST: Array<{
   {
     id: "projects",
     Icon: ProjectsIcon,
-    label: "Projects",
+    label: "Projects (Ctrl+Shift+P)",
     path: "/projects",
   },
   {
     id: "collections",
     Icon: CollectionsIcon,
-    label: "Collections",
+    label: "Collections (Ctrl+Shift+C)",
     path: "/",
   },
   {
     id: "environments",
     Icon: EnvironmentsIcon,
-    label: "Environments",
+    label: "Environments (Ctrl+Shift+E)",
     path: "/environments",
   },
   {
     id: "authorization",
     Icon: AuthorizationIcon,
-    label: "Authorization",
+    label: "Authorization (Ctrl+Shift+A)",
     path: "/authorization",
   },
 ];

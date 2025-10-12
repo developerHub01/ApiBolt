@@ -5,6 +5,11 @@ import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
 import { selectSidebarActiveTab } from "@/context/redux/sidebar/sidebar-selector";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const SidbarToggle = memo(() => {
   const dispath = useAppDispatch();
@@ -35,9 +40,20 @@ const SidbarToggle = memo(() => {
             scale: 0,
           }}
         >
-          <Button size={"icon"} variant={"outline"} onClick={handleCollapse}>
-            <MenuIcon />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size={"icon"}
+                variant={"outline"}
+                onClick={handleCollapse}
+              >
+                <MenuIcon />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="right">
+              <p>Toggle Sidebar (Ctrl+B)</p>
+            </TooltipContent>
+          </Tooltip>
         </motion.span>
       )}
     </AnimatePresence>

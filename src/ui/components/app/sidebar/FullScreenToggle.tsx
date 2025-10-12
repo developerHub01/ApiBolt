@@ -29,7 +29,9 @@ const FullScreenToggle = () => {
         </Button>
       </TooltipTrigger>
       <TooltipContent side="right">
-        <p>{isFullscreen ? "Exit Full Screen" : "Enter Full Screen"}</p>
+        <p>
+          {isFullscreen ? "Exit Full Screen (F11)" : "Enter Full Screen (F11)"}
+        </p>
       </TooltipContent>
     </Tooltip>
   );
