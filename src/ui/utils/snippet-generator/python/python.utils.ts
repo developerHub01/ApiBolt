@@ -3,13 +3,14 @@ import type {
   CodeSnippitDataInterface,
   TRequestCodeType,
 } from "@/types/code-snippit.types";
-import { generateMaskedAndRealCode } from "@/utils/snippet-generator/helper.utils";
+import {
+  defaultBinaryData,
+  generateMaskedAndRealCode,
+} from "@/utils/snippet-generator/helper.utils";
 import {
   generateHeadersString,
   generateRawDataString,
 } from "@/utils/snippet-generator/python/helper.utils";
-
-const defaultBinaryData = "<Your file path should go here>";
 
 export const generatePythonRequestsCode = async ({
   url,

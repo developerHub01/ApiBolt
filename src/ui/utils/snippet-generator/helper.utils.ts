@@ -2,6 +2,8 @@ import type { CodeSnippitDataInterface } from "@/types/code-snippit.types";
 import { codeFormatter } from "@/utils/code";
 import { MASKED_AUTHORIZATION } from "@/constant/code-snippit.constant";
 
+export const defaultBinaryData = "<Your file path should go here>";
+
 export const getBodyType = ({
   bodyType,
   rawBodyDataType,
