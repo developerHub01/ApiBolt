@@ -6,7 +6,6 @@ import type {
 } from "@/types/code-snippit.types";
 import { generateJavaScriptCode } from "@/utils/snippet-generator/javascript/javascript.utils";
 import { generateNodeCode } from "@/utils/snippet-generator/node/node.utils";
-// import { generateJavaCode } from "@/utils/snippet-generator/java.utils";
 // import { generateDartCode } from "@/utils/snippet-generator/dart.utils";
 // import { generateKotlinCode } from "@/utils/snippet-generator/kotlin.utils";
 // import { generateSwiftCode } from "@/utils/snippet-generator/swift.utils";
@@ -15,6 +14,7 @@ import { generateNodeCode } from "@/utils/snippet-generator/node/node.utils";
 import { generatePHPCode } from "@/utils/snippet-generator/php/php.utils";
 import { generateGoCode } from "@/utils/snippet-generator/go/go.utils";
 import { generatePythonCode } from "@/utils/snippet-generator/python/python.utils";
+import { generateJavaCode } from "@/utils/snippet-generator/java/java.utils";
 // import { generateShellCode } from "@/utils/snippet-generator/shell.utils";
 // import { generatePowerShellCode } from "@/utils/snippet-generator/powershell.utils";
 // import { generateCSharpCode } from "@/utils/snippet-generator/csharp.utils";
@@ -31,7 +31,7 @@ const generatorMap: Record<
   node: generateNodeCode,
   python: generatePythonCode,
   go: generateGoCode,
-  // java: generateJavaCode,
+  java: generateJavaCode,
   // dart: generateDartCode,
   // kotlin: generateKotlinCode,
   // swift: generateSwiftCode,
