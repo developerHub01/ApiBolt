@@ -154,6 +154,7 @@ const RequestCodeSnippitProvider = ({
     serializedxWWWFormUrlencoded,
     serializedFormData,
     binaryData,
+    serializedAuthorization,
   ]);
 
   const language = selectedCodeType?.split("-")[0];

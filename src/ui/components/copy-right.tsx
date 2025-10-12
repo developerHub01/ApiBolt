@@ -53,6 +53,7 @@ const CopyRight = memo(() => {
         </Link>
       </p>
       <button
+        title="Close Copyright"
         onClick={handleClick}
         className="absolute top-1/2 right-1.5 -translate-y-1/2 p-0.5 cursor-pointer aspect-square rounded-full hover:bg-accent-foreground/20 transition-all duration-100"
       >
