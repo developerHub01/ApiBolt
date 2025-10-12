@@ -1,4 +1,4 @@
-import { requestDefaultCodeSnippit } from "@/constant/request-code.constant";
+import { requestDefaultCodeSnippit } from "@/constant/code-snippit.constant";
 import type {
   CodeSnippitDataInterface,
   TRequestCodeType,

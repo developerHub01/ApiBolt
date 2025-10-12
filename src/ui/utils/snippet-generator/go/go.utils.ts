@@ -11,7 +11,7 @@ import type {
 import {
   MASKED_AUTHORIZATION,
   requestDefaultCodeSnippit,
-} from "@/constant/request-code.constant";
+} from "@/constant/code-snippit.constant";
 import { isStringIsValidObject } from "@/utils/helper";
 
 export const generateGoNetHttpCode = async ({

@@ -1,6 +1,6 @@
 import type { CodeSnippitDataInterface } from "@/types/code-snippit.types";
 import { codeFormatter } from "@/utils/code";
-import { MASKED_AUTHORIZATION } from "@/constant/request-code.constant";
+import { MASKED_AUTHORIZATION } from "@/constant/code-snippit.constant";
 
 export const getBodyType = ({
   bodyType,

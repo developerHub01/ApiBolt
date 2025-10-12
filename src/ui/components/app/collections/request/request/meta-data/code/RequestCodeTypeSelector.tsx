@@ -13,7 +13,7 @@ import {
   requestCodeSnippitsMap,
   codeSnippitLanguageList,
   codeSnippitByLanguageName,
-} from "@/constant/request-code.constant";
+} from "@/constant/code-snippit.constant";
 import CopyButton from "@/components/ui/copy-button";
 import { Copy as CopyIcon } from "lucide-react";
 import { useAppSelector } from "@/context/redux/hooks";
