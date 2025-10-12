@@ -216,3 +216,161 @@ public class Main {
     }
 }
 ```
+
+
+## Unirest
+
+```java
+import kong.unirest.*;
+
+public class Main {
+    public static void main(String[] args) {
+        String url = "http://localhost:3000";
+
+        HttpResponse<String> response = Unirest.get(url)
+            .header("Authorization", "Bearer sdfsdfsdfds")
+            .asString();
+
+        System.out.println(response.getBody());
+    }
+}
+
+
+import kong.unirest.*;
+
+public class Main {
+    public static void main(String[] args) {
+        String url = "http://localhost:3000";
+
+        HttpResponse<String> response = Unirest.post(url)
+            .header("Authorization", "Bearer sdfsdfsdfds")
+            .header("Content-Type", "application/x-www-form-urlencoded")
+            .body("b=e&c=f&a=d&asdsddd=sdfsafdsd")
+            .asString();
+
+        System.out.println(response.getBody());
+    }
+}
+
+
+import kong.unirest.*;
+
+public class Main {
+    public static void main(String[] args) {
+        String url = "http://localhost:3000";
+        String json = "{ \"name\": \"Shakil\", \"age\": 21 }";
+
+        HttpResponse<String> response = Unirest.post(url)
+            .header("Authorization", "Bearer sdfsdfsdfds")
+            .header("Content-Type", "application/json")
+            .body(json)
+            .asString();
+
+        System.out.println(response.getBody());
+    }
+}
+
+
+import kong.unirest.*;
+
+public class Main {
+    public static void main(String[] args) {
+        String url = "http://localhost:3000";
+
+        HttpResponse<String> response = Unirest.post(url)
+            .header("Authorization", "Bearer sdfsdfsdfds")
+            .field("key", "value")
+            .field("file1", new java.io.File("file1.jpg"))
+            .field("file2", new java.io.File("file2.jpg"))
+            .field("file3", new java.io.File("file3.jpg"))
+            .asString();
+
+        System.out.println(response.getBody());
+    }
+}
+
+
+import kong.unirest.*;
+import java.nio.file.*;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        String url = "http://localhost:3000";
+        byte[] bytes = Files.readAllBytes(Paths.get("file1.jpg"));
+
+        HttpResponse<String> response = Unirest.post(url)
+            .header("Authorization", "Bearer sdfsdfsdfds")
+            .header("Content-Type", "application/octet-stream")
+            .body(bytes)
+            .asString();
+
+        System.out.println(response.getBody());
+    }
+}
+
+
+import kong.unirest.*;
+
+public class Main {
+    public static void main(String[] args) {
+        String url = "http://localhost:3000";
+        String raw = "let x = { \"forge\": { \"packagerConfig\": {}, \"makers\": [{\"name\": \"@electron-forge/maker-zip\"}] } }";
+
+        HttpResponse<String> response = Unirest.post(url)
+            .header("Authorization", "Bearer sdfsdfsdfds")
+            .header("Content-Type", "application/javascript")
+            .body(raw)
+            .asString();
+
+        System.out.println(response.getBody());
+    }
+}
+
+
+import kong.unirest.*;
+
+public class Main {
+    public static void main(String[] args) {
+        String url = "http://localhost:3000";
+        String json = "{ \"name\": \"Shakil\", \"age\": 21 }";
+
+        HttpResponse<String> response = Unirest.put(url)
+            .header("Authorization", "Bearer sdfsdfsdfds")
+            .header("Content-Type", "application/json")
+            .body(json)
+            .asString();
+
+        System.out.println(response.getBody());
+    }
+}
+import kong.unirest.*;
+
+public class Main {
+    public static void main(String[] args) {
+        String url = "http://localhost:3000";
+        String json = "{ \"age\": 22 }";
+
+        HttpResponse<String> response = Unirest.patch(url)
+            .header("Authorization", "Bearer sdfsdfsdfds")
+            .header("Content-Type", "application/json")
+            .body(json)
+            .asString();
+
+        System.out.println(response.getBody());
+    }
+}
+
+import kong.unirest.*;
+
+public class Main {
+    public static void main(String[] args) {
+        String url = "http://localhost:3000";
+
+        HttpResponse<String> response = Unirest.delete(url)
+            .header("Authorization", "Bearer sdfsdfsdfds")
+            .asString();
+
+        System.out.println(response.getBody());
+    }
+}
+```

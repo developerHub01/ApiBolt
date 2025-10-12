@@ -126,7 +126,83 @@ export const generateJavaApacheHttpClientCode = () => {};
 
 export const generateJavaHttpURLConnectionCode = () => {};
 
-export const generateJavaUnirestCode = () => {};
+export const generateJavaUnirestCode = async ({
+  url,
+  method,
+  headers = [],
+  authorization,
+  formData,
+  xWWWFormUrlencoded,
+  rawBodyDataType,
+  bodyType,
+  binaryData,
+  rawData,
+}: CodeSnippitDataInterface) => {
+  const startString = `import kong.unirest.*;
+import java.nio.file.*;
+
+public class Main {
+\tpublic static void main(String[] args) {
+\t\tString url = "${url}";\n\n`;
+
+  const headersList = getHeadersList({
+    headers,
+    authorization,
+    rawBodyDataType,
+    bodyType,
+  });
+
+  /* if binary type and not get method and not have content type then add content type manually */
+  if (
+    bodyType === "binary" &&
+    method.toLowerCase() !== "get" &&
+    !headersList.some((header) => header.key === "Content-Type")
+  ) {
+    headersList.push({
+      key: "Content-Type",
+      value: "application/octet-stream",
+    });
+  }
+
+  let headersString = "";
+  if (headersList.length)
+    headersString = `${headersList.map(({ key, value }) => `\t\t\theader(${JSON.stringify(key)}, ${JSON.stringify(value)})`).join("\n")}\n`;
+
+  let bodyDataString = "";
+
+  let formDataString = "";
+  if (
+    bodyType === "form-data" &&
+    formData.length &&
+    method.toLowerCase() !== "get"
+  )
+    formDataString = `${formData.map(({ key, value, type }) => `\t\t\t.field(${JSON.stringify(key)}, ${type === "text" ? JSON.stringify(value) : `new java.io.File(${JSON.stringify(value)})`})`).join("\n")}\n`;
+
+  if (bodyType === "x-www-form-urlencoded" && method !== "get")
+    bodyDataString = `\t\t\t.body(${JSON.stringify(xWWWFormUrlencoded.map(({ key, value }) => `${key}=${value}`).join("&"))})\n`;
+
+  let rawDataString = "";
+  if (bodyType === "raw" && method.toLowerCase() !== "get") {
+    rawDataString = `\t\tString data = ${JSON.stringify(rawData)};\n\n`;
+    bodyDataString = `\t\t\t.body(data)\n`;
+  }
+
+  let binaryDataString = "";
+  if (bodyType === "binary" && method.toLowerCase() !== "get") {
+    binaryDataString = `\t\tbyte[] bytes = Files.readAllBytes(Paths.get(${JSON.stringify(binaryData) ?? `"${defaultBinaryData}"`}));\n\n`;
+    bodyDataString = `\t\t\t.body(bytes)\n`;
+  }
+
+  const requestString = `\t\tHttpResponse<String> response = Unirest.${method}(url)\n${headersString}${formDataString}${bodyDataString}\t\t\t.asString();\n\n`;
+
+  const endString = `\t\tSystem.out.println(response.getBody());
+\t}
+}`;
+
+  const code = `${startString}${binaryDataString}${rawDataString}${requestString}${endString}`;
+
+  return generateMaskedAndRealCode({ code, authorization });
+};
 
 export const generateJavaCode = async (
   type: TRequestCodeType,
@@ -139,8 +215,8 @@ export const generateJavaCode = async (
     //   return generateJavaApacheHttpClientCode();
     // case "java-httpurlconnection":
     //   return generateJavaHttpURLConnectionCode();
-    // case "java-unirest":
-    //   return generateJavaUnirestCode();
+    case "java-unirest":
+      return generateJavaUnirestCode(data);
   }
 
   return requestDefaultCodeSnippit;
