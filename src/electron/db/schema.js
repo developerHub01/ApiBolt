@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export const ACTIVE_PROJECT_ID = "singleton";
 export const ACTIVE_SIDEBAR_TAB_ID = "singleton";
+export const ACTIVE_CODE_SNIPPIT_TYPE_ID = "singleton";
 export const API_URL_DEFAULT_VALUE = "http://localhost:3000";
 
 export const projectTable = sqliteTable("projects_table", {
@@ -28,6 +29,14 @@ export const activeSidebarTabTable = sqliteTable(
   {
     id: text().primaryKey().default(ACTIVE_SIDEBAR_TAB_ID),
     tab: text().default("project"),
+  }
+);
+
+export const activeCodeSnippitTypeTable = sqliteTable(
+  "active_code_snippit_type_table",
+  {
+    id: text().primaryKey().default(ACTIVE_CODE_SNIPPIT_TYPE_ID),
+    languageId: text(),
   }
 );
 

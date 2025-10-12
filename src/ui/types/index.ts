@@ -37,6 +37,7 @@ import type {
   HttpStatusUpdatePayloadInterface,
 } from "@/types/http-status.type";
 import type { TSidebarTab } from "@/types/sidebar.types";
+import type { TRequestCodeType } from "@/types/request-code.type";
 
 declare global {
   interface Window {
@@ -90,6 +91,17 @@ declare global {
       createActiveSidebarTab(tab: TSidebarTab): Promise<boolean>;
       updateActiveSidebarTab(tab: TSidebarTab): Promise<boolean>;
       deleteActiveSidebarTab(): Promise<boolean>;
+    };
+
+    electronAPIActiveCodeSnippitTypeDB: {
+      getActiveCodeSnippitType(): Promise<TRequestCodeType>;
+      createActiveCodeSnippitType(
+        languageId: TRequestCodeType
+      ): Promise<boolean>;
+      updateActiveCodeSnippitType(
+        languageId: TRequestCodeType
+      ): Promise<boolean>;
+      deleteActiveCodeSnippitType(): Promise<boolean>;
     };
 
     electronAPIProjectsDB: {

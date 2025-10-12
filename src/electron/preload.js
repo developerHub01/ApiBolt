@@ -66,6 +66,17 @@ contextBridge.exposeInMainWorld("electronAPIActiveSidebarTabDB", {
     await ipcRenderer.invoke("deleteActiveSidebarTab"),
 });
 
+contextBridge.exposeInMainWorld("electronAPIActiveCodeSnippitTypeDB", {
+  getActiveCodeSnippitType: async () =>
+    await ipcRenderer.invoke("getActiveCodeSnippitType"),
+  createActiveCodeSnippitType: async (payload) =>
+    await ipcRenderer.invoke("createActiveCodeSnippitType", payload),
+  updateActiveCodeSnippitType: async (payload) =>
+    await ipcRenderer.invoke("updateActiveCodeSnippitType", payload),
+  deleteActiveCodeSnippitType: async () =>
+    await ipcRenderer.invoke("deleteActiveCodeSnippitType"),
+});
+
 contextBridge.exposeInMainWorld("electronAPIProjectsDB", {
   getProjects: async () => await ipcRenderer.invoke("getProjects"),
   createProjects: async (payload) =>
