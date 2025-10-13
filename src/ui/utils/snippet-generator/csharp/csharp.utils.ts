@@ -118,20 +118,84 @@ export const generateCSharpRestSharpCode = async ({
   bodyType,
   formData,
 }: CodeSnippitDataInterface) => {
-  console.log({
-    url,
-    method,
+  const startString = `class Program
+{
+\tstatic async Task Main()
+\t{
+\t\tstring url = "${url}";
+
+\t\tvar client = new RestClient(url);
+\t\tvar request = new RestRequest(Method.${method[0].toUpperCase() + method.slice(1).toLowerCase()});\n\n`;
+
+  const endString = `\t\tvar response = await client.ExecuteAsync(request);
+\t\tConsole.WriteLine(response.Content);
+\t}
+}`;
+
+  const headersList = getHeadersList({
     headers,
     authorization,
-    xWWWFormUrlencoded,
-    rawData,
-    binaryData,
     rawBodyDataType,
     bodyType,
-    formData,
+  });
+  const bodyTypeString = getBodyType({
+    bodyType,
+    rawBodyDataType,
   });
 
-  const code = ``;
+  /* only if not exist in headersList and if body is x-www-form then have to have content else if any other bodytype then add */
+  if (
+    bodyTypeString &&
+    !headersList.some((entry) => entry.key === "Content-Type") &&
+    method.toLowerCase() !== "get" &&
+    (bodyType !== "x-www-form-urlencoded" ||
+      (bodyType === "x-www-form-urlencoded" && xWWWFormUrlencoded.length))
+  ) {
+    headersList.push({
+      key: "Content-Type",
+      value: bodyTypeString,
+    });
+  }
+
+  const headersString = !headersList.length
+    ? ""
+    : `${headersList.map(({ key, value }) => `\t\trequest.AddHeader(${JSON.stringify(key)}, ${JSON.stringify(value)});`).join("\n")}\n\n`;
+
+  let formDataStrnig = "";
+  if (
+    bodyType === "form-data" &&
+    method.toLowerCase() !== "get" &&
+    formData.length
+  ) {
+    formDataStrnig = `\t\t// ===== POST Multipart/Form-Data =====
+${formData.map(({ key, value, type }) => (type === "text" ? `\t\trequest.AddParameter(${JSON.stringify(key)}, ${JSON.stringify(value)});` : `\t\trequest.AddFile(${JSON.stringify(key)}, ${JSON.stringify(value)});`)).join("\n")}\n\n`;
+  }
+
+  let xWWWFormUrlencodedString = "";
+  if (
+    bodyType === "x-www-form-urlencoded" &&
+    method.toLowerCase() !== "get" &&
+    xWWWFormUrlencoded.length
+  ) {
+    xWWWFormUrlencodedString = `\t\t// ===== POST x-www-form-urlencoded =====
+${xWWWFormUrlencoded.map(({ key, value }) => `\t\trequest.AddParameter(${JSON.stringify(key)}, ${JSON.stringify(value)});`).join("\n")}\n\n`;
+  }
+
+  let rawDataString = "";
+  if (bodyType === "raw" && method.toLowerCase() !== "get") {
+    rawDataString = `\t\t// ===== POST Raw JSON =====
+\t\tstring rawData = ${JSON.stringify(rawData)};
+\t\trequest.AddStringBody(rawData, ${rawBodyDataType === "json" ? "DataFormat.Json" : JSON.stringify(bodyTypeString)});\n\n`;
+  }
+
+  let binaryDataString = "";
+  if (bodyType === "binary" && method.toLowerCase() !== "get") {
+    binaryDataString = `\t\t// ===== POST Binary File =====
+\t\tbyte[] fileBytes = await File.ReadAllBytesAsync(${JSON.stringify(binaryData ?? defaultBinaryData)});
+\t\trequest.AddParameter("application/octet-stream", fileBytes, ParameterType.RequestBody);\n\n`;
+  }
+
+  const code = `${startString}${headersString}${formDataStrnig}${xWWWFormUrlencodedString}${binaryDataString}${rawDataString}${endString}`;
   return generateMaskedAndRealCode({ code, authorization });
 };
 
