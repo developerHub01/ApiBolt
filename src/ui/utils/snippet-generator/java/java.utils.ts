@@ -339,7 +339,91 @@ ${filedString}${fileString}
   return generateMaskedAndRealCode({ code, authorization });
 };
 
-export const generateJavaApacheHttpClientCode = () => {};
+export const generateJavaApacheHttpClientCode = async ({
+  url,
+  method,
+  headers = [],
+  authorization,
+  formData,
+  xWWWFormUrlencoded,
+  rawBodyDataType,
+  bodyType,
+  binaryData,
+  rawData,
+}: CodeSnippitDataInterface) => {
+  const startString = `public class Main {
+\tpublic static void main(String[] args) throws Exception {
+\t\tString url = "${url}";
+
+\t\tCloseableHttpClient client = HttpClients.createDefault();
+\t\tHttp${method[0].toUpperCase() + method.slice(1).toLowerCase()} request = new Http${method[0].toUpperCase() + method.slice(1).toLowerCase()}(url);\n\n`;
+
+  const endString = `\t\tHttpResponse response = client.execute(request);
+\t\tString result = EntityUtils.toString(response.getEntity());
+\t\tSystem.out.println(result);
+
+\t\tclient.close();
+\t}
+}`;
+
+  const headersList = getHeadersList({
+    headers,
+    authorization,
+    rawBodyDataType,
+    bodyType,
+  });
+
+  /* if binary type and not get method and not have content type then add content type manually */
+  if (
+    bodyType === "binary" &&
+    method.toLowerCase() !== "get" &&
+    !headersList.some((header) => header.key === "Content-Type")
+  ) {
+    headersList.push({
+      key: "Content-Type",
+      value: "application/octet-stream",
+    });
+  }
+
+  let headersString = "";
+  if (headersList.length)
+    headersString = `${headersList.map(({ key, value }) => `\t\trequest.setHeader(${JSON.stringify(key)}, ${JSON.stringify(value)});`).join("\n")}\n\n`;
+
+  let formDataString = "";
+  if (
+    bodyType === "form-data" &&
+    formData.length &&
+    method.toLowerCase() !== "get"
+  )
+    formDataString = `\t\tMultipartEntityBuilder builder = MultipartEntityBuilder.create();\n${formData.map(({ key, value, type }) => `\t\tbuilder.addPart(${JSON.stringify(key)}, ${type === "text" ? `new StringBody(${JSON.stringify(value)})` : `new FileBody(new File(${JSON.stringify(value)}))`});`).join("\n")}
+\t\trequest.setEntity(builder.build());\n\n`;
+
+  let xWWWFormUrlencodedString = "";
+  if (
+    bodyType === "x-www-form-urlencoded" &&
+    xWWWFormUrlencoded.length &&
+    method.toLowerCase() !== "get"
+  )
+    xWWWFormUrlencodedString = `\t\tList<BasicNameValuePair> params = new ArrayList<>();\n${xWWWFormUrlencoded.map(({ key, value }) => `\t\tparams.add(new BasicNameValuePair(${JSON.stringify(key)}, ${JSON.stringify(value)}));`).join("\n")}
+\t\trequest.setEntity(new UrlEncodedFormEntity(params));\n\n`;
+
+  let binaryDataString = "";
+  if (bodyType === "binary" && method.toLowerCase() !== "get")
+    binaryDataString = `\t\tbyte[] fileBytes = Files.readAllBytes(Paths.get(${JSON.stringify(binaryData) ?? defaultBinaryData}));
+\t\trequest.setEntity(new ByteArrayEntity(fileBytes));\n\n`;
+
+  let rawDataString = "";
+  if (bodyType === "raw" && method.toLowerCase() !== "get") {
+    rawDataString = `\t\t/* ========= Raw-data ========= */
+\t\tString data = ${JSON.stringify(rawData)};
+\t\trequest.setEntity(new StringEntity(data));\n\n`;
+  }
+
+  const requestString = ``;
+
+  const code = `${startString}${headersString}${formDataString}${xWWWFormUrlencodedString}${binaryDataString}${rawDataString}${requestString}${endString}`;
+  return generateMaskedAndRealCode({ code, authorization });
+};
 
 export const generateJavaCode = async (
   type: TRequestCodeType,
@@ -352,8 +436,8 @@ export const generateJavaCode = async (
       return await generateJavaUnirestCode(data);
     case "java-httpurlconnection":
       return await generateJavaHttpURLConnectionCode(data);
-    // case "java-apache-httpclient":
-    //   return generateJavaApacheHttpClientCode();
+    case "java-apache-httpclient":
+      return await generateJavaApacheHttpClientCode(data);
   }
 
   return requestDefaultCodeSnippit;

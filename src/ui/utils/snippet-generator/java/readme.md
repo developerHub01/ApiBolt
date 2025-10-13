@@ -556,3 +556,147 @@ public class Main {
     }
 }
 ```
+
+
+## JavaApacheHttpClient
+
+```java
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+
+public class Main {
+	public static void main(String[] args) throws Exception {
+		String url = "http://localhost:3000";
+
+		CloseableHttpClient client = HttpClients.createDefault();
+		HttpGet request = new HttpGet(url);
+		request.setHeader("Authorization", "Bearer sdfsdfsdfds");
+
+		HttpResponse response = client.execute(request);
+		String result = EntityUtils.toString(response.getEntity());
+		System.out.println(result);
+
+		client.close();
+	}
+}
+
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+
+public class Main {
+	public static void main(String[] args) throws Exception {
+		String url = "http://localhost:3000";
+		String json = "{ \"name\": \"Shakil\", \"age\": 21 }";
+
+		CloseableHttpClient client = HttpClients.createDefault();
+		HttpPost request = new HttpPost(url);
+		request.setHeader("Content-Type", "application/json");
+		request.setEntity(new StringEntity(json));
+
+		HttpResponse response = client.execute(request);
+		String result = EntityUtils.toString(response.getEntity());
+		System.out.println(result);
+
+		client.close();
+	}
+}
+
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+import java.io.File;
+
+public class Main {
+	public static void main(String[] args) throws Exception {
+		String url = "http://localhost:3000";
+
+		CloseableHttpClient client = HttpClients.createDefault();
+		HttpPost request = new HttpPost(url);
+
+		MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+		builder.addPart("name", new StringBody("Shakil"));
+		builder.addPart("profile", new FileBody(new File("photo.jpg")));
+		request.setEntity(builder.build());
+
+		HttpResponse response = client.execute(request);
+		String result = EntityUtils.toString(response.getEntity());
+		System.out.println(result);
+
+		client.close();
+	}
+}
+
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import java.util.*;
+
+public class Main {
+	public static void main(String[] args) throws Exception {
+		String url = "http://localhost:3000";
+
+		CloseableHttpClient client = HttpClients.createDefault();
+		HttpPost request = new HttpPost(url);
+
+		List<BasicNameValuePair> params = new ArrayList<>();
+		params.add(new BasicNameValuePair("b", "e"));
+		params.add(new BasicNameValuePair("c", "f"));
+		params.add(new BasicNameValuePair("a", "d"));
+		request.setEntity(new UrlEncodedFormEntity(params));
+
+		HttpResponse response = client.execute(request);
+		String result = EntityUtils.toString(response.getEntity());
+		System.out.println(result);
+
+		client.close();
+	}
+}
+
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+public class Main {
+	public static void main(String[] args) throws Exception {
+		String url = "http://localhost:3000";
+
+		byte[] fileBytes = Files.readAllBytes(Paths.get("photo.jpg"));
+
+		CloseableHttpClient client = HttpClients.createDefault();
+		HttpPost request = new HttpPost(url);
+		request.setHeader("Content-Type", "application/octet-stream");
+		request.setEntity(new ByteArrayEntity(fileBytes));
+
+		HttpResponse response = client.execute(request);
+		String result = EntityUtils.toString(response.getEntity());
+		System.out.println(result);
+
+		client.close();
+	}
+}
+```
