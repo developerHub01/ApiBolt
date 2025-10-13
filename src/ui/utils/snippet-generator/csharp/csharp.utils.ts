@@ -56,7 +56,7 @@ ${headers.map(({ key, value }) => `\t\tclient.DefaultRequestHeaders.Add(${JSON.s
     method.toLowerCase() !== "get" &&
     formData.length
   ) {
-    formDataStrnig = `\t\t// ===== POST Multipart/Form-Data =====
+    formDataStrnig = `\t\t// ===== Multipart/Form-Data =====
 \t\tusing var multipartContent = new MultipartFormDataContent();
 ${formData.map(({ key, value, type }) => `\t\tmultipartContent.Add(new StringContent(${type === "text" ? `new StringContent(${JSON.stringify(value)})` : `new ByteArrayContent(File.ReadAllBytes(${JSON.stringify(value)}))`}), ${JSON.stringify(key)});`).join("\n")}\n\n`;
     bodyVariableName = "multipartContent";
@@ -68,7 +68,7 @@ ${formData.map(({ key, value, type }) => `\t\tmultipartContent.Add(new StringCon
     method.toLowerCase() !== "get" &&
     xWWWFormUrlencoded.length
   ) {
-    xWWWFormUrlencodedString = `\t\t// ===== POST x-www-form-urlencoded =====
+    xWWWFormUrlencodedString = `\t\t// ===== x-www-form-urlencoded =====
 \t\tvar formData = new FormUrlEncodedContent(new[]
 \t\t{
 ${xWWWFormUrlencoded.map(({ key, value }) => `\t\t\tnew KeyValuePair<string, string>(${JSON.stringify(key)}, ${JSON.stringify(value)})`).join(",\n")}
@@ -78,7 +78,7 @@ ${xWWWFormUrlencoded.map(({ key, value }) => `\t\t\tnew KeyValuePair<string, str
 
   let rawDataString = "";
   if (bodyType === "raw" && method.toLowerCase() !== "get") {
-    rawDataString = `\t\t// ===== POST Raw JSON =====
+    rawDataString = `\t\t// ===== Raw JSON =====
 \t\tstring raw = ${JSON.stringify(rawData)};
 \t\tvar data = new StringContent(raw, Encoding.UTF8, ${JSON.stringify(bodyTypeString)});\n\n`;
     bodyVariableName = "data";
@@ -86,7 +86,7 @@ ${xWWWFormUrlencoded.map(({ key, value }) => `\t\t\tnew KeyValuePair<string, str
 
   let binaryDataString = "";
   if (bodyType === "binary" && method.toLowerCase() !== "get") {
-    binaryDataString = `\t\t// ===== POST Binary File =====
+    binaryDataString = `\t\t// ===== Binary File =====
 \t\tbyte[] fileBytes = File.ReadAllBytes(${JSON.stringify(binaryData ?? defaultBinaryData)});
 \t\tvar byteContent = new ByteArrayContent(fileBytes);
 \t\tbyteContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");\n\n`;
@@ -167,7 +167,7 @@ export const generateCSharpRestSharpCode = async ({
     method.toLowerCase() !== "get" &&
     formData.length
   ) {
-    formDataStrnig = `\t\t// ===== POST Multipart/Form-Data =====
+    formDataStrnig = `\t\t// ===== Multipart/Form-Data =====
 ${formData.map(({ key, value, type }) => (type === "text" ? `\t\trequest.AddParameter(${JSON.stringify(key)}, ${JSON.stringify(value)});` : `\t\trequest.AddFile(${JSON.stringify(key)}, ${JSON.stringify(value)});`)).join("\n")}\n\n`;
   }
 
@@ -177,20 +177,20 @@ ${formData.map(({ key, value, type }) => (type === "text" ? `\t\trequest.AddPara
     method.toLowerCase() !== "get" &&
     xWWWFormUrlencoded.length
   ) {
-    xWWWFormUrlencodedString = `\t\t// ===== POST x-www-form-urlencoded =====
+    xWWWFormUrlencodedString = `\t\t// ===== x-www-form-urlencoded =====
 ${xWWWFormUrlencoded.map(({ key, value }) => `\t\trequest.AddParameter(${JSON.stringify(key)}, ${JSON.stringify(value)});`).join("\n")}\n\n`;
   }
 
   let rawDataString = "";
   if (bodyType === "raw" && method.toLowerCase() !== "get") {
-    rawDataString = `\t\t// ===== POST Raw JSON =====
+    rawDataString = `\t\t// ===== Raw JSON =====
 \t\tstring rawData = ${JSON.stringify(rawData)};
 \t\trequest.AddStringBody(rawData, ${rawBodyDataType === "json" ? "DataFormat.Json" : JSON.stringify(bodyTypeString)});\n\n`;
   }
 
   let binaryDataString = "";
   if (bodyType === "binary" && method.toLowerCase() !== "get") {
-    binaryDataString = `\t\t// ===== POST Binary File =====
+    binaryDataString = `\t\t// ===== Binary File =====
 \t\tbyte[] fileBytes = await File.ReadAllBytesAsync(${JSON.stringify(binaryData ?? defaultBinaryData)});
 \t\trequest.AddParameter("application/octet-stream", fileBytes, ParameterType.RequestBody);\n\n`;
   }
@@ -211,20 +211,99 @@ export const generateCSharpFlurlCode = async ({
   bodyType,
   formData,
 }: CodeSnippitDataInterface) => {
-  console.log({
-    url,
-    method,
+  const startString = `class Program
+{
+\tstatic async Task Main()
+\t{
+\t\tstring url = "${url}";\n\n`;
+
+  const headersList = getHeadersList({
     headers,
     authorization,
-    xWWWFormUrlencoded,
-    rawData,
-    binaryData,
     rawBodyDataType,
     bodyType,
-    formData,
   });
+  if (
+    bodyType === "binary" &&
+    method.toLowerCase() !== "get" &&
+    !headersList.some((entry) => entry.key === "Content-Type")
+  ) {
+    headersList.push({
+      key: "Content-Type",
+      value: "application/octet-stream",
+    });
+  }
 
-  const code = ``;
+  const headersString = !headersList.length
+    ? ""
+    : headersList
+        .map(
+          ({ key, value }) =>
+            `\t\t\t.WithHeader(${JSON.stringify(key)}, ${JSON.stringify(value)})`
+        )
+        .join("\n") + "\n";
+
+  const endString = `\t\tConsole.WriteLine(await response.Content.ReadAsStringAsync());
+\t}
+}`;
+
+  let sendBody: string | null = null;
+
+  let formDataStrnig: null | string = null;
+  if (
+    bodyType === "form-data" &&
+    method.toLowerCase() !== "get" &&
+    formData.length
+  ) {
+    formDataStrnig = `${formData.map(({ key, value, type }) => (type === "text" ? `\t\t\t\t.AddString(${JSON.stringify(key)}, ${JSON.stringify(value)})` : `\t\t\t\t.AddFile(${JSON.stringify(key)}, ${JSON.stringify(value)})`)).join("\n")}\n`;
+
+    sendBody = `mp => mp\n${formDataStrnig}`;
+  }
+
+  let xWWWFormUrlencodedString = "";
+  if (
+    bodyType === "x-www-form-urlencoded" &&
+    xWWWFormUrlencoded.length &&
+    method.toLowerCase() !== "get"
+  ) {
+    xWWWFormUrlencodedString = `\t\t// ===== x-www-form-urlencoded =====
+\t\tvar formUrlData = new[]
+\t\t{
+${xWWWFormUrlencoded.map(({ key, value }) => `\t\t\tnew KeyValuePair<string, string>(${JSON.stringify(key)}, ${JSON.stringify(value)})`).join(",\n")}
+\t\t};\n\n`;
+
+    sendBody = `new FormUrlEncodedContent(formUrlEncodedData)`;
+  }
+
+  let rawDataString = "";
+  if (bodyType === "raw" && method.toLowerCase() !== "get") {
+    rawDataString = `\t\t// ===== Raw JSON =====
+\t\tstring rawData = ${JSON.stringify(rawData)};\n\n`;
+
+    sendBody = `rawData`;
+  }
+
+  let binaryDataString = "";
+  if (bodyType === "binary" && method.toLowerCase() !== "get") {
+    binaryDataString = `\t\t// ===== Binary File =====
+\t\tbyte[] fileBytes = await File.ReadAllBytesAsync(${JSON.stringify(binaryData ?? defaultBinaryData)});\n\n`;
+
+    sendBody = `fileBytes`;
+  }
+
+  const requestString = `\t\tvar response = await url\n`;
+
+  const extraSpacesClosingSendStringBracket =
+    bodyType === "form-data" &&
+    formData.length &&
+    method.toLowerCase() !== "get"
+      ? "\t\t\t"
+      : "";
+
+  const sendString = `\t\t\t.SendAsync(HttpMethod.${method[0].toUpperCase() + method.slice(1).toLowerCase()}, ${sendBody}${extraSpacesClosingSendStringBracket});\n\n`;
+
+  const code = `${startString}${xWWWFormUrlencodedString}${rawDataString}${binaryDataString}${requestString}${headersString}${sendString}${endString}`;
+
   return generateMaskedAndRealCode({ code, authorization });
 };
 

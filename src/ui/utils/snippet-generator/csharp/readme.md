@@ -324,3 +324,103 @@ class Program
     }
 }
 ```
+
+## Flurl
+
+```cs
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Flurl.Http;
+using System.IO;
+
+class Program
+{
+    static async Task Main()
+    {
+        string url = "http://localhost:3000?asdfsdf=sdfsdadfsf";
+
+        // ===== GET Request =====
+        var responseGet = await url
+            .WithHeader("asfsdfsdf", "addsd")
+            .WithHeader("Authorization", "***************")
+            .SendAsync(HttpMethod.Get, null);
+
+        Console.WriteLine(await responseGet.Content.ReadAsStringAsync());
+
+
+        // ===== PUT Request =====
+        var responsePut = await url
+            .WithHeader("asfsdfsdf", "addsd")
+            .WithHeader("Authorization", "***************")
+            .SendAsync(HttpMethod.Put, null);
+
+        Console.WriteLine(await responsePut.Content.ReadAsStringAsync());
+
+
+        // ===== POST Multipart/Form-Data =====
+        var responseFormData = await url
+            .WithHeader("asfsdfsdf", "addsd")
+            .WithHeader("Authorization", "***************")
+            .SendAsync(HttpMethod.Post, mp => mp
+                .AddString("asdfsd", "asdfsdf")
+                .AddFile("sdfsdfsf", "michael-krahn-eGD69I3ODC4-unsplash.jpg")
+                .AddFile("sdfsdfsf", "sergei-a--heLWtuAN3c-unsplash.jpg")
+                .AddString("key", "value")
+            );
+
+        Console.WriteLine(await responseFormData.Content.ReadAsStringAsync());
+
+
+        // ===== x-www-form-urlencoded =====
+        var formUrlData = new[]
+        {
+            new KeyValuePair<string, string>("b", "e"),
+            new KeyValuePair<string, string>("c", "f"),
+            new KeyValuePair<string, string>("a", "d"),
+            new KeyValuePair<string, string>("asdsddd", "sdfsafdsd")
+        };
+
+        // ===== POST x-www-form-urlencoded =====
+        var responseFormUrl = await url
+            .WithHeader("asfsdfsdf", "addsd")
+            .WithHeader("Authorization", "***************")
+            .WithHeader("Content-Type", "application/x-www-form-urlencoded")
+            .SendAsync(HttpMethod.Post, new FormUrlEncodedContent(formUrlEncodedData));
+
+        Console.WriteLine(await responseFormUrl.Content.ReadAsStringAsync());
+
+
+        // ===== POST Binary File =====
+        byte[] fileBytes = await File.ReadAllBytesAsync("/media/Development/api-bolt-backgrounds/pine-watt-2Hzmz15wGik-unsplash.jpg");
+        var responseBinary = await url
+            .WithHeader("asfsdfsdf", "addsd")
+            .WithHeader("Authorization", "***************")
+            .WithHeader("Content-Type", "application/octet-stream")
+            .SendBytesAsync(HttpMethod.Post, fileBytes);
+
+        Console.WriteLine(await responseBinary.Content.ReadAsStringAsync());
+
+
+        // ===== POST Raw JSON =====
+        string rawJson = "{\n  \"name\": \"John\",\n  \"age\": 30,\n  \"car\": null\n}";
+        var responseJson = await url
+            .WithHeader("asfsdfsdf", "addsd")
+            .WithHeader("Authorization", "***************")
+            .SendStringAsync(HttpMethod.Post, rawJson);
+
+        Console.WriteLine(await responseJson.Content.ReadAsStringAsync());
+
+
+        // ===== POST Raw Text / XML / JS / HTML =====
+        string rawText = "<note><body>Hello World</body></note>";
+        var responseText = await url
+            .WithHeader("asfsdfsdf", "addsd")
+            .WithHeader("Authorization", "***************")
+            .WithHeader("Content-Type", "text/xml")
+            .SendStringAsync(HttpMethod.Post, rawText);
+
+        Console.WriteLine(await responseText.Content.ReadAsStringAsync());
+    }
+}
+```
