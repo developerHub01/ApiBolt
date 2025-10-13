@@ -90,7 +90,7 @@ export const generateJavaOkhttpCode = async ({
 
   let binaryString = "";
   if (method.toLowerCase() !== "get" && bodyType === "binary") {
-    binaryString = `\t\tbyte[] fileBytes = Files.readAllBytes(new File(${JSON.stringify(binaryData) ?? `"${defaultBinaryData}"`}).toPath());\n\n`;
+    binaryString = `\t\tbyte[] fileBytes = Files.readAllBytes(new File(${JSON.stringify(binaryData ?? defaultBinaryData)}).toPath());\n\n`;
     requestOptionString = `RequestBody.create(fileBytes, MediaType.parse("application/octet-stream"))`;
   }
 
@@ -185,7 +185,7 @@ public class Main {
 
   let binaryDataString = "";
   if (bodyType === "binary" && method.toLowerCase() !== "get") {
-    binaryDataString = `\t\tbyte[] bytes = Files.readAllBytes(Paths.get(${JSON.stringify(binaryData) ?? `"${defaultBinaryData}"`}));\n\n`;
+    binaryDataString = `\t\tbyte[] bytes = Files.readAllBytes(Paths.get(${JSON.stringify(binaryData ?? defaultBinaryData)}));\n\n`;
     bodyDataString = `\t\t\t.body(bytes)\n`;
   }
 
@@ -316,7 +316,7 @@ ${filedString}${fileString}
   let binaryDataString = "";
   if (bodyType === "binary" && method.toLowerCase() !== "get") {
     binaryDataString = `\t\t/* ========= Binary-data ========= */
-\t\tbyte[] fileBytes = Files.readAllBytes(new File(${JSON.stringify(binaryData) ?? `"${defaultBinaryData}"`}).toPath());
+\t\tbyte[] fileBytes = Files.readAllBytes(new File(${JSON.stringify(binaryData ?? defaultBinaryData)}).toPath());
 
 \t\ttry (OutputStream os = con.getOutputStream()) {
 \t\t\tos.write(fileBytes);
@@ -409,7 +409,7 @@ export const generateJavaApacheHttpClientCode = async ({
 
   let binaryDataString = "";
   if (bodyType === "binary" && method.toLowerCase() !== "get")
-    binaryDataString = `\t\tbyte[] fileBytes = Files.readAllBytes(Paths.get(${JSON.stringify(binaryData) ?? defaultBinaryData}));
+    binaryDataString = `\t\tbyte[] fileBytes = Files.readAllBytes(Paths.get(${JSON.stringify(binaryData ?? defaultBinaryData)}));
 \t\trequest.setEntity(new ByteArrayEntity(fileBytes));\n\n`;
 
   let rawDataString = "";

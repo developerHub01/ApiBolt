@@ -149,7 +149,7 @@ ${xWWWFormUrlencoded
   /* ============== BINARY-DATA =================== */
   if (method.toLowerCase() !== "get" && bodyType === "binary") {
     const binaryDataString = `# ============== BINARY-DATA ===================
-with open("${binaryData ?? `${defaultBinaryData}`}", "rb") as f:
+with open(${JSON.stringify(binaryData ?? defaultBinaryData)}, "rb") as f:
 \tresponse = requests.post(
 \t\turl${optionsString}
 \t)\n\n`;
@@ -287,7 +287,7 @@ ${xWWWFormUrlencoded
   let binaryDataString = "";
   if (method.toLowerCase() !== "get" && bodyType === "binary") {
     binaryDataString = `# ============== BINARY-DATA ===================
-with open("${binaryData ?? `${defaultBinaryData}`}", "rb") as f:
+with open(${JSON.stringify(binaryData ?? defaultBinaryData)}, "rb") as f:
 \tbody = f.read()\n\n`;
   }
 
@@ -403,7 +403,7 @@ ${xWWWFormUrlencoded
   let binaryDataString = "";
   if (method.toLowerCase() !== "get" && bodyType === "binary") {
     binaryDataString = `# ============== BINARY-DATA ===================
-with open("${binaryData ?? `${defaultBinaryData}`}", "rb") as f:
+with open(${JSON.stringify(binaryData ?? defaultBinaryData)}, "rb") as f:
 \tbody = f.read()\n\n`;
   }
 
@@ -559,7 +559,7 @@ ${xWWWFormUrlencoded
   let binaryDataString = "";
   if (method.toLowerCase() !== "get" && bodyType === "binary") {
     binaryDataString = `# ============== BINARY-DATA ===================
-with open("${binaryData ?? `${defaultBinaryData}`}", "rb") as f:
+with open(${JSON.stringify(binaryData ?? defaultBinaryData)}, "rb") as f:
 \tbody = f.read()\n\n`;
   }
 

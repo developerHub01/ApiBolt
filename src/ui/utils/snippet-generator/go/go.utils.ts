@@ -88,7 +88,7 @@ ${xWWWFormUrlencoded.map(({ key, value }) => `\tdata.Set(${JSON.stringify(key)},
   let binaryDataString = "";
   if (bodyType === "binary" && method.toLowerCase() !== "get") {
     binaryDataString = `\t// ================= BINARY DATA =================
-\tbinData, _ := os.ReadFile(${binaryData ? JSON.stringify(binaryData) : `"${defaultBinaryData}"`})\n\n`;
+\tbinData, _ := os.ReadFile(${JSON.stringify(binaryData ?? defaultBinaryData)})\n\n`;
   }
 
   let rawDataString = "";
@@ -273,7 +273,7 @@ ${formDataReadingString}
   let binaryDataString = "";
   if (bodyType === "binary" && method.toLowerCase() !== "get") {
     binaryDataString = `\t// ================= binary =================
-\tbinData, _ := os.ReadFile(${binaryData ? JSON.stringify(binaryData) : `"${defaultBinaryData}"`})\n\n`;
+\tbinData, _ := os.ReadFile(${JSON.stringify(binaryData ?? defaultBinaryData)})\n\n`;
 
     setBodyValueString = "binData";
   }
