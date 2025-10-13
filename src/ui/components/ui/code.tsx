@@ -2,16 +2,6 @@ import { useCallback, useEffect, useRef, useState, type JSX } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import type { Extension } from "@uiw/react-codemirror";
 import { EditorView } from "@codemirror/view";
-import { html } from "@codemirror/lang-html";
-import { javascript } from "@codemirror/lang-javascript";
-import { json } from "@codemirror/lang-json";
-import { xml } from "@codemirror/lang-xml";
-import { php } from "@codemirror/lang-php";
-import { go } from "@codemirror/lang-go";
-import { python } from "@codemirror/lang-python";
-import { java } from "@codemirror/lang-java";
-import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
-import { languages } from "@codemirror/language-data";
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 import useMounted from "@/hooks/use-mounted";
@@ -19,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Copy as CopyIcon } from "lucide-react";
 import type { TContentType } from "@/types/request-response.types";
 import { toast } from "sonner";
+import { langs } from "@uiw/codemirror-extensions-langs";
+import { langMap } from "@/constant/code.constant";
 
 export type TLanguageType =
   | TContentType
@@ -32,31 +24,6 @@ export type TLanguageType =
 const fontSizeLimit = {
   max: 40,
   min: 5,
-};
-
-const selectedLang = (lang: TLanguageType) => {
-  switch (lang) {
-    case "javascript":
-      return javascript();
-    case "json":
-      return json();
-    case "html":
-      return html();
-    case "xml":
-      return xml();
-    case "markdown":
-      return markdown({ base: markdownLanguage, codeLanguages: languages });
-    case "python":
-      return python();
-    case "php":
-      return php();
-    case "go":
-      return go();
-    case "java":
-      return java();
-    default:
-      return [];
-  }
 };
 
 const getEditableOptions = ({
@@ -144,7 +111,9 @@ const Code = ({
   const wrapperRef = useRef<HTMLDivElement>(null);
   const isMounted = useMounted();
 
-  const extensions: Array<Extension> = [selectedLang(contentType)];
+  const extensions: Array<Extension> = [
+    langs[langMap?.[contentType] ?? "text"](),
+  ];
   if (lineWrap) extensions.push(EditorView.lineWrapping);
 
   useEffect(() => {

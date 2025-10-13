@@ -9,6 +9,7 @@ const codeFormatter = async (
   code: string,
   callback: (code: string) => void
 ) => {
+  code = code.trim();
   const { success, data, message } = await formatCode(code, "json");
   if (!code) return;
   if (!success || !data) return message && toast(message);
