@@ -217,7 +217,6 @@ public class Main {
 }
 ```
 
-
 ## Unirest
 
 ```java
@@ -371,6 +370,189 @@ public class Main {
             .asString();
 
         System.out.println(response.getBody());
+    }
+}
+```
+
+## HttpURLConnection
+
+```java
+import java.io.*;
+import java.net.*;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        String url = "http://localhost:3000";
+        URL obj = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+        // Set method and headers
+        con.setRequestMethod("POST");
+        con.setRequestProperty("Authorization", "Bearer sdfsdfsdfds");
+
+        // Get response
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        StringBuilder response = new StringBuilder();
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+        System.out.println(response.toString());
+    }
+}
+
+
+
+import java.io.*;
+import java.net.*;
+import java.nio.file.Files;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        String url = "http://localhost:3000";
+        String boundary = "===" + System.currentTimeMillis() + "===";
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("POST");
+        con.setDoOutput(true);
+        con.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+
+        try (OutputStream os = con.getOutputStream()) {
+
+            // ===== Text Field 1 =====
+            String key1 = "username";
+            String value1 = "shakil";
+            os.write(("--" + boundary + "\r\n").getBytes());
+            os.write(("Content-Disposition: form-data; name=\"" + key1 + "\"\r\n\r\n").getBytes());
+            os.write((value1 + "\r\n").getBytes());
+
+            // ===== Text Field 2 =====
+            String key2 = "email";
+            String value2 = "shakil@example.com";
+            os.write(("--" + boundary + "\r\n").getBytes());
+            os.write(("Content-Disposition: form-data; name=\"" + key2 + "\"\r\n\r\n").getBytes());
+            os.write((value2 + "\r\n").getBytes());
+
+            // ===== File 1 =====
+            File file1 = new File("file1.jpg");
+            os.write(("--" + boundary + "\r\n").getBytes());
+            os.write(("Content-Disposition: form-data; name=\"avatar\"; filename=\"" + file1.getName() + "\"\r\n").getBytes());
+            os.write(("Content-Type: " + Files.probeContentType(file1.toPath()) + "\r\n\r\n").getBytes());
+            Files.copy(file1.toPath(), os);
+            os.write("\r\n".getBytes());
+
+            // ===== File 2 =====
+            File file2 = new File("file2.jpg");
+            os.write(("--" + boundary + "\r\n").getBytes());
+            os.write(("Content-Disposition: form-data; name=\"background\"; filename=\"" + file2.getName() + "\"\r\n").getBytes());
+            os.write(("Content-Type: " + Files.probeContentType(file2.toPath()) + "\r\n\r\n").getBytes());
+            Files.copy(file2.toPath(), os);
+            os.write("\r\n".getBytes());
+
+            // ===== End Boundary =====
+            os.write(("--" + boundary + "--\r\n").getBytes());
+        }
+
+}
+
+
+import java.io.*;
+import java.net.*;
+import java.nio.charset.StandardCharsets;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        String url = "http://localhost:3000";
+        URL obj = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+        con.setRequestMethod("POST");
+        con.setDoOutput(true);
+        con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        con.setRequestProperty("Authorization", "Bearer sdfsdfsdfds");
+
+        String data = "b=e&c=f&a=d&asdsddd=sdfsafdsd";
+
+        try (OutputStream os = con.getOutputStream()) {
+            byte[] input = data.getBytes(StandardCharsets.UTF_8);
+            os.write(input, 0, input.length);
+        }
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        StringBuilder response = new StringBuilder();
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+        System.out.println(response.toString());
+    }
+}
+
+
+import java.io.*;
+import java.net.*;
+import java.nio.charset.StandardCharsets;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        String url = "http://localhost:3000";
+        URL obj = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+        con.setRequestMethod("POST");
+        con.setDoOutput(true);
+        con.setRequestProperty("Content-Type", "application/json");
+        con.setRequestProperty("Authorization", "Bearer sdfsdfsdfds");
+
+        String jsonData = "{ \"forge\": { \"packagerConfig\": {}, \"makers\": [{\"name\": \"@electron-forge/maker-zip\"}] } }";
+
+        try (OutputStream os = con.getOutputStream()) {
+            byte[] input = jsonData.getBytes(StandardCharsets.UTF_8);
+            os.write(input, 0, input.length);
+        }
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        StringBuilder response = new StringBuilder();
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+        System.out.println(response.toString());
+    }
+}
+
+
+import java.io.*;
+import java.net.*;
+import java.nio.file.Files;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        String url = "http://localhost:3000";
+        URL obj = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+        con.setRequestMethod("POST");
+        con.setDoOutput(true);
+        con.setRequestProperty("Content-Type", "application/octet-stream");
+        con.setRequestProperty("Authorization", "Bearer sdfsdfsdfds");
+
+        byte[] fileBytes = Files.readAllBytes(new File("matthew-smith-Rfflri94rs8-unsplash.jpg").toPath());
+
+        try (OutputStream os = con.getOutputStream()) {
+            os.write(fileBytes);
+        }
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        StringBuilder response = new StringBuilder();
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+        System.out.println(response.toString());
     }
 }
 ```

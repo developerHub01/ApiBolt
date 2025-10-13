@@ -200,7 +200,144 @@ public class Main {
   return generateMaskedAndRealCode({ code, authorization });
 };
 
-export const generateJavaHttpURLConnectionCode = () => {};
+export const generateJavaHttpURLConnectionCode = async ({
+  url,
+  method,
+  headers = [],
+  authorization,
+  formData,
+  xWWWFormUrlencoded,
+  rawBodyDataType,
+  bodyType,
+  binaryData,
+  rawData,
+}: CodeSnippitDataInterface) => {
+  const startString = `public class Main {
+\tpublic static void main(String[] args) throws IOException {
+\t\tString url = "${url}";
+\t\tURL obj = new URL(url);${bodyType === "form-data" ? `\n\t\tString boundary = "===" + System.currentTimeMillis() + "===";` : ""}
+\t\tHttpURLConnection con = (HttpURLConnection) obj.openConnection();${bodyType === "form-data" ? `\n\t\tcon.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);` : ""}
+\t\tcon.setRequestMethod("${method.toUpperCase()}");${bodyType !== "none" && method.toLowerCase() !== "get" ? `\n\t\tcon.setDoOutput(true);` : ""}\n`;
+
+  const endString = `\t\tBufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+\t\tString inputLine;
+\t\tStringBuilder response = new StringBuilder();
+\t\twhile ((inputLine = in.readLine()) != null) {
+\t\t\t response.append(inputLine);
+\t\t}
+\t\tin.close();
+\t\tSystem.out.println(response.toString());
+\t}
+}`;
+
+  const headersList = getHeadersList({
+    headers,
+    authorization,
+    rawBodyDataType,
+    bodyType,
+  });
+
+  /* if binary type and not get method and not have content type then add content type manually */
+  if (
+    bodyType === "binary" &&
+    method.toLowerCase() !== "get" &&
+    !headersList.some((header) => header.key === "Content-Type")
+  ) {
+    headersList.push({
+      key: "Content-Type",
+      value: "application/octet-stream",
+    });
+  }
+
+  let headersString = "";
+  if (headersList.length)
+    headersString = `${headersList.map(({ key, value }) => `\t\tcon.setRequestProperty(${JSON.stringify(key)}, ${JSON.stringify(value)});`).join("\n")}\n\n`;
+  else headersString = "\n";
+
+  let formDataString = "";
+  if (
+    bodyType === "form-data" &&
+    formData.length &&
+    method.toLowerCase() !== "get"
+  ) {
+    const filedString = formData.some((entry) => entry.type === "text")
+      ? `${formData
+          .filter(({ type }) => type === "text")
+          .map(
+            (
+              { key, value },
+              index
+            ) => `\t\t\t// ===== Text Field ${index + 1} =====
+\t\t\tString key${index + 1} = ${JSON.stringify(key)};
+\t\t\tString value${index + 1} = ${JSON.stringify(value)};
+\t\t\tos.write(("--" + boundary + "\\r\\n").getBytes());
+\t\t\tos.write(("Content-Disposition: form-data; name=\\"" + key${index + 1} + "\\"\\r\\n\\r\\n").getBytes());
+\t\t\tos.write((value${index + 1} + "\\r\\n").getBytes());`
+          )
+          .join("\n\n")}\n\n`
+      : "";
+
+    const fileString = formData.some((entry) => entry.type === "file")
+      ? `${formData
+          .filter(({ type }) => type === "file")
+          .map(
+            ({ key, value }, index) => `\t\t\t// ===== File ${index + 1} =====
+\t\t\tFile file${index + 1} = new File(${JSON.stringify(value)});
+\t\t\tos.write(("--" + boundary + "\r\n").getBytes());
+\t\t\tos.write(("Content-Disposition: form-data; name=\\"${key}\\"; filename=\\"" + file${index + 1}.getName() + "\\"\\r\\n").getBytes());
+\t\t\tos.write(("Content-Type: " + Files.probeContentType(file${index + 1}.toPath()) + "\\r\\n\\r\\n").getBytes());
+\t\t\tFiles.copy(file${index + 1}.toPath(), os);
+\t\t\tos.write("\\r\\n".getBytes());`
+          )
+          .join("\n\n")}\n`
+      : "";
+
+    formDataString = `\t\ttry (OutputStream os = con.getOutputStream()) {
+${filedString}${fileString}
+\t\t\tos.write(("--" + boundary + "--\\r\\n").getBytes());
+\t\t}\n\n`;
+  }
+
+  let xWWWFormUrlencodedString = "";
+  if (
+    bodyType === "x-www-form-urlencoded" &&
+    xWWWFormUrlencoded.length &&
+    method.toLowerCase() !== "get"
+  ) {
+    xWWWFormUrlencodedString = `\t\t/* ========= XWWW-Form-Urlencoded ========= */
+\t\tString data = ${JSON.stringify(xWWWFormUrlencoded.map(({ key, value }) => `${key}=${value}`).join("&"))};
+
+\t\ttry (OutputStream os = con.getOutputStream()) {
+\t\t\tbyte[] input = data.getBytes(StandardCharsets.UTF_8);
+\t\t\tos.write(input, 0, input.length);
+\t\t}\n\n`;
+  }
+
+  let binaryDataString = "";
+  if (bodyType === "binary" && method.toLowerCase() !== "get") {
+    binaryDataString = `\t\t/* ========= Binary-data ========= */
+\t\tbyte[] fileBytes = Files.readAllBytes(new File(${JSON.stringify(binaryData) ?? `"${defaultBinaryData}"`}).toPath());
+
+\t\ttry (OutputStream os = con.getOutputStream()) {
+\t\t\tos.write(fileBytes);
+\t\t}\n\n`;
+  }
+
+  let rawDataString = "";
+  if (bodyType === "raw" && method.toLowerCase() !== "get") {
+    rawDataString = `\t\t/* ========= Raw-data ========= */
+\t\tString data = ${JSON.stringify(rawData)};
+
+\t\ttry (OutputStream os = con.getOutputStream()) {
+\t\t\tbyte[] input = data.getBytes(StandardCharsets.UTF_8);
+\t\t\tos.write(input, 0, input.length);
+\t\t}\n\n`;
+  }
+
+  const code = `${startString}${headersString}${formDataString}${xWWWFormUrlencodedString}${binaryDataString}${rawDataString}${endString}`;
+
+  return generateMaskedAndRealCode({ code, authorization });
+};
 
 export const generateJavaApacheHttpClientCode = () => {};
 
@@ -212,9 +349,9 @@ export const generateJavaCode = async (
     case "java-okhttp":
       return await generateJavaOkhttpCode(data);
     case "java-unirest":
-      return generateJavaUnirestCode(data);
-    // case "java-httpurlconnection":
-    //   return generateJavaHttpURLConnectionCode();
+      return await generateJavaUnirestCode(data);
+    case "java-httpurlconnection":
+      return await generateJavaHttpURLConnectionCode(data);
     // case "java-apache-httpclient":
     //   return generateJavaApacheHttpClientCode();
   }
