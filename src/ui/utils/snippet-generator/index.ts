@@ -15,9 +15,9 @@ import { generatePHPCode } from "@/utils/snippet-generator/php/php.utils";
 import { generateGoCode } from "@/utils/snippet-generator/go/go.utils";
 import { generatePythonCode } from "@/utils/snippet-generator/python/python.utils";
 import { generateJavaCode } from "@/utils/snippet-generator/java/java.utils";
+import { generateCSharpCode } from "@/utils/snippet-generator/csharp/csharp.utils";
 // import { generateShellCode } from "@/utils/snippet-generator/shell.utils";
 // import { generatePowerShellCode } from "@/utils/snippet-generator/powershell.utils";
-// import { generateCSharpCode } from "@/utils/snippet-generator/csharp.utils";
 // import { generateElixirCode } from "@/utils/snippet-generator/elixir.utils";
 
 const generatorMap: Record<
@@ -40,7 +40,7 @@ const generatorMap: Record<
   php: generatePHPCode,
   // shell: generateShellCode,
   // powershell: generatePowerShellCode,
-  // csharp: generateCSharpCode,
+  csharp: generateCSharpCode,
   // elixir: generateElixirCode,
 };
 
