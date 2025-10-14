@@ -46,10 +46,8 @@ export const generateShellCURLCode = async ({
   }
 
   if (headersList.length)
-    snippitList.push(
-      `${headersList
-        .map(({ key, value }) => `\t-H ${JSON.stringify(`${key}: ${value}`)}`)
-        .join(` \\\n`)}`
+    headersList.forEach(({ key, value }) =>
+      snippitList.push(`\t-H ${JSON.stringify(`${key}: ${value}`)}`)
     );
 
   if (
@@ -57,8 +55,10 @@ export const generateShellCURLCode = async ({
     formData.length &&
     method.toLowerCase() !== "get"
   )
-    snippitList.push(
-      `${formData.map(({ key, value, type }) => `\t-F ${type === "text" ? JSON.stringify(`${key}=${value}`) : JSON.stringify(`${key}[]=${value}`)}`).join(" \\\n")}`
+    formData.forEach(({ key, value, type }) =>
+      snippitList.push(
+        `\t-F ${type === "text" ? JSON.stringify(`${key}=${value}`) : JSON.stringify(`${key}[]=${value}`)}`
+      )
     );
 
   if (
