@@ -69,6 +69,78 @@ curl -X POST "http://localhost:3000?asdfsdf=sdfsdadfsf" \
 ## ShellHTTPie
 
 ```sh
+# 🟢 1. GET Request
+http GET \
+  "http://localhost:3000?asdfsdf=sdfsdadfsf" \
+  "asfsdfsdf:addsd" \
+  "Authorization:Bearer sdfsdfsdfds"
+
+
+# 🟢 2. POST – Raw JSON
+http POST \
+  "http://localhost:3000?asdfsdf=sdfsdadfsf" \
+  "asfsdfsdf:addsd" \
+  "Authorization:Bearer sdfsdfsdfds" \
+  "Content-Type:application/json" <<< \
+  '{"name":"John","age":30,"car":null}'
+
+
+# 🟢 3. POST – Text / HTML / XML
+http POST \
+  "http://localhost:3000?asdfsdf=sdfsdadfsf" \
+  "asfsdfsdf:addsd" \
+  "Authorization:Bearer sdfsdfsdfds" \
+  "Content-Type:text/plain" <<< \
+  "Hello World"
+
+http POST \
+  "http://localhost:3000" \
+  "Authorization:Bearer sdfsdfsdfds" \
+  "Content-Type:text/html" <<< \
+  "<h1>Hello</h1><p>World</p>"
+
+http POST \
+  "http://localhost:3000" \
+  "Authorization:Bearer sdfsdfsdfds" \
+  "Content-Type:application/xml" <<< \
+  "<note><to>John</to><body>Hello</body></note>"
+
+
+# 🟢 4. POST – x-www-form-urlencoded
+http --form POST \
+  "http://localhost:3000?asdfsdf=sdfsdadfsf" \
+  "asfsdfsdf:addsd" \
+  "Authorization:Bearer sdfsdfsdfds" \
+  "b=e" \
+  "c=f" \
+  "a=d" \
+  "asdsddd=sdfsafdsd"
+
+
+# 🟢 5. POST – multipart/form-data
+http --form POST \
+  "http://localhost:3000?asdfsdf=sdfsdadfsf" \
+  "asfsdfsdf:addsd" \
+  "Authorization:Bearer sdfsdfsdfds" \
+  "username=shakil" \
+  "avatar@/path/to/file.png" \
+  "cover@/path/to/cover.jpg"
+
+
+# 🟢 6. POST – Binary file upload
+http POST \
+  "http://localhost:3000?asdfsdf=sdfsdadfsf" \
+  "asfsdfsdf:addsd" \
+  "Authorization:Bearer sdfsdfsdfds" \
+  "Content-Type:application/octet-stream" < \
+  "/path/to/file.jpg"
+
+
+# 🟢 7. POST – Empty body
+http POST \
+  "http://localhost:3000?asdfsdf=sdfsdadfsf" \
+  "asfsdfsdf:addsd" \
+  "Authorization:Bearer sdfsdfsdfds"
 
 ```
 

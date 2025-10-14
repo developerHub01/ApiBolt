@@ -88,11 +88,11 @@ export const generateShellCURLCode = async ({
 
     rawDataString =
       rawBodyDataType === "json"
-        ? `\t'${rawDataString
+        ? `'${rawDataString
             .split("\n")
             .map((entry, index) => (index && entry ? `\t\t${entry}` : entry))
             .join("\n")}'`
-        : `\t${rawDataString}`;
+        : rawDataString;
 
     snippitList.push(`\t-d ${rawDataString}`);
   }
@@ -114,20 +114,86 @@ export const generateShellHTTPieCode = async ({
   bodyType,
   formData,
 }: CodeSnippitDataInterface) => {
-  console.log({
-    url,
-    method,
+  const snippitList = [];
+
+  snippitList.push(`http ${method.toUpperCase()}`);
+  snippitList.push(`\t${JSON.stringify(url)}`);
+
+  const headersList = getHeadersList({
     headers,
     authorization,
-    xWWWFormUrlencoded,
-    rawData,
-    binaryData,
     rawBodyDataType,
     bodyType,
-    formData,
   });
 
-  const code = ``;
+  let contentType =
+    headersList.find((entry) => entry.key === "Content-Type")?.value ?? "";
+
+  if (
+    headersList.length &&
+    bodyType === "binary" &&
+    !headersList.some((entry) => entry.key === "Content-Type")
+  )
+    contentType = "application/octet-stream";
+
+  if (headersList.length)
+    headersList.forEach(({ key, value }) =>
+      snippitList.push(`\t${JSON.stringify(`${key}: ${value}`)}`)
+    );
+
+  if (
+    bodyType === "form-data" &&
+    formData.length &&
+    method.toLowerCase() !== "get"
+  ) {
+    snippitList[0] = `http --form ${method.toUpperCase()}`;
+    formData.forEach(({ key, value, type }) =>
+      snippitList.push(
+        `\t${JSON.stringify(type === "text" ? `${key}=${value}` : `${key}@${value}`)}`
+      )
+    );
+  }
+
+  if (
+    bodyType === "x-www-form-urlencoded" &&
+    xWWWFormUrlencoded.length &&
+    method.toLowerCase() !== "get"
+  ) {
+    snippitList[0] = `http --form ${method.toUpperCase()}`;
+    xWWWFormUrlencoded.map(({ key, value }) =>
+      snippitList.push(`\t${JSON.stringify(`${key}=${value}`)}`)
+    );
+  }
+
+  if (bodyType === "binary" && method.toLowerCase() !== "get") {
+    snippitList.push(
+      `\t"Content-Type: application/octet-stream" <`,
+      `\t${JSON.stringify(binaryData ?? defaultBinaryData)}`
+    );
+  }
+
+  if (bodyType === "raw" && method.toLowerCase() !== "get") {
+    let rawDataString = await getBodyRawData({
+      rawBodyDataType,
+      bodyType,
+      rawData,
+    });
+
+    rawDataString =
+      rawBodyDataType === "json"
+        ? `'${rawDataString
+            .split("\n")
+            .map((entry, index) => (index && entry ? `\t${entry}` : entry))
+            .join("\n")}'`
+        : rawDataString;
+
+    snippitList.push(
+      `\t${JSON.stringify(`Content-Type: ${contentType}`)} <<<`,
+      `\t${rawDataString}`
+    );
+  }
+
+  const code = snippitList.join(" \\\n");
 
   return generateMaskedAndRealCode({ code, authorization });
 };
