@@ -47,7 +47,7 @@ export const generateShellCURLCode = async ({
 
   if (headersList.length)
     headersList.forEach(({ key, value }) =>
-      snippitList.push(`\t-H ${JSON.stringify(`${key}: ${value}`)}`)
+      snippitList.push(`\t-H ${JSON.stringify(`${key}:${value}`)}`)
     );
 
   if (
@@ -138,7 +138,7 @@ export const generateShellHTTPieCode = async ({
 
   if (headersList.length)
     headersList.forEach(({ key, value }) =>
-      snippitList.push(`\t${JSON.stringify(`${key}: ${value}`)}`)
+      snippitList.push(`\t${JSON.stringify(`${key}:${value}`)}`)
     );
 
   if (
@@ -167,7 +167,7 @@ export const generateShellHTTPieCode = async ({
 
   if (bodyType === "binary" && method.toLowerCase() !== "get") {
     snippitList.push(
-      `\t"Content-Type: application/octet-stream" <`,
+      `\t"Content-Type:application/octet-stream" <`,
       `\t${JSON.stringify(binaryData ?? defaultBinaryData)}`
     );
   }
@@ -188,7 +188,7 @@ export const generateShellHTTPieCode = async ({
         : rawDataString;
 
     snippitList.push(
-      `\t${JSON.stringify(`Content-Type: ${contentType}`)} <<<`,
+      `\t${JSON.stringify(`Content-Type:${contentType}`)} <<<`,
       `\t${rawDataString}`
     );
   }
@@ -208,22 +208,56 @@ export const generateShellWgetCode = async ({
   binaryData,
   rawBodyDataType,
   bodyType,
-  formData,
 }: CodeSnippitDataInterface) => {
-  console.log({
-    url,
-    method,
+  const snippitList = [];
+
+  snippitList.push(`wget`, `\t--method=${method.toUpperCase()}`);
+
+  const headersList = getHeadersList({
     headers,
     authorization,
-    xWWWFormUrlencoded,
-    rawData,
-    binaryData,
     rawBodyDataType,
     bodyType,
-    formData,
   });
 
-  const code = ``;
+  if (headersList.length)
+    headersList.forEach(({ key, value }) =>
+      snippitList.push(`\t--header=${JSON.stringify(`${key}:${value}`)}`)
+    );
+
+  if (
+    bodyType === "x-www-form-urlencoded" &&
+    xWWWFormUrlencoded.length &&
+    method.toLowerCase() !== "get"
+  ) {
+    snippitList.push(
+      `\t--body-data=${JSON.stringify(
+        xWWWFormUrlencoded.map(({ key, value }) => `${key}=${value}`).join("&")
+      )}`
+    );
+  }
+
+  if (bodyType === "binary" && method.toLowerCase() !== "get") {
+    snippitList.push(
+      `\t--header="Content-Type:application/octet-stream"`,
+      `\t--body-file=${JSON.stringify(binaryData ?? defaultBinaryData)}`
+    );
+  }
+
+  if (bodyType === "raw" && method.toLowerCase() !== "get")
+    snippitList.push(`\t--body-data=${JSON.stringify(rawData)}`);
+
+  snippitList.push(`\t${JSON.stringify(url)}`, `\t-O response.txt`);
+
+  const warningMessage = `#===============================================
+# WGET WARNING: multipart/form-data not supported
+# Please use curl or HTTPie for this request type
+# Example:
+# curl -X POST "http://example.com" -F "field=@/path/to/file"
+#===============================================`;
+
+  const code =
+    bodyType === "form-data" ? warningMessage : snippitList.join(" \\\n");
 
   return generateMaskedAndRealCode({ code, authorization });
 };
@@ -238,7 +272,7 @@ export const generateShellCode = async (
     case "shell-httpie":
       return await generateShellHTTPieCode(data);
     case "shell-wget":
-      return await generateShellCURLCode(data);
+      return await generateShellWgetCode(data);
   }
 
   return requestDefaultCodeSnippit;

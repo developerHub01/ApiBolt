@@ -147,5 +147,76 @@ http POST \
 ## ShellWget
 
 ```sh
+# 🟢 1. GET Request
+wget \
+  --method=GET \
+  --header="asfsdfsdf:addsd" \
+  --header="Authorization:Bearer sdfsdfsdfds" \
+  "http://localhost:3000?asdfsdf=sdfsdadfsf" \
+  -O response.txt
+
+
+# 🟢 2. POST – Raw JSON
+wget \
+  --method=POST \
+  --header="Authorization:Bearer sdfsdfsdfds" \
+  --header="Content-Type:application/json" \
+  --body-data='{"name":"John","age":30,"car":null}' \
+  "http://localhost:3000?asdfsdf=sdfsdadfsf" \
+  -O response.txt
+
+
+# 🟢 3. POST – Text / HTML / XML
+wget \
+  --method=POST \
+  --header="Authorization:Bearer sdfsdfsdfds" \
+  --header="Content-Type:text/plain" \
+  --body-data="Hello World" \
+  "http://localhost:3000" \
+  -O response.txt
+
+wget \
+  --method=POST \
+  --header="Authorization:Bearer sdfsdfsdfds" \
+  --header="Content-Type:text/html" \
+  --body-data="<h1>Hello</h1><p>World</p>" \
+  "http://localhost:3000" \
+  -O response.txt
+
+wget \
+  --method=POST \
+  --header="Authorization:Bearer sdfsdfsdfds" \
+  --header="Content-Type:application/xml" \
+  --body-data="<note><to>John</to><body>Hello</body></note>" \
+  "http://localhost:3000" \
+  -O response.txt
+
+
+# 🟢 4. POST – x-www-form-urlencoded
+wget \
+  --method=POST \
+  --header="Authorization:Bearer sdfsdfsdfds" \
+  --header="Content-Type:application/x-www-form-urlencoded" \
+  --body-data="b=e&c=f&a=d&asdsddd=sdfsafdsd" \
+  "http://localhost:3000?asdfsdf=sdfsdadfsf" \
+  -O response.txt
+
+
+# 🟢 5. POST – Binary file upload
+wget \
+  --method=POST \
+  --header="Authorization:Bearer sdfsdfsdfds" \
+  --header="Content-Type:application/octet-stream" \
+  --body-file="/path/to/file.jpg" \
+  "http://localhost:3000?asdfsdf=sdfsdadfsf" \
+  -O response.txt
+
+
+# 🟢 6. POST – Empty body
+wget \
+  --method=POST \
+  --header="Authorization:Bearer sdfsdfsdfds" \
+  "http://localhost:3000?asdfsdf=sdfsdadfsf" \
+  -O response.txt
 
 ```
