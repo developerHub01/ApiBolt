@@ -55,7 +55,6 @@ export const requestCodeSnippitsMap: Record<TRequestCodeType, string> = {
 
   // Kotlin / Android
   "kotlin-okhttp": "Kotlin - OkHttp",
-  "kotlin-retrofit": "Kotlin - Retrofit",
 
   // Dart / Flutter
   "dart-http": "Dart - HTTP",

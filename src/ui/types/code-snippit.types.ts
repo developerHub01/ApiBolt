@@ -47,7 +47,6 @@ export type TRequestCodeType =
   | "swift-alamofire"
   // Kotlin / Android
   | "kotlin-okhttp"
-  | "kotlin-retrofit"
   // Dart / Flutter
   | "dart-http"
   | "dart-dio"

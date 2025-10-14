@@ -122,35 +122,6 @@ val body = file.asRequestBody(${JSON.stringify(binaryData ?? defaultBinaryData)}
   return generateMaskedAndRealCode({ code, authorization });
 };
 
-export const generateKotlinRetrofitCode = async ({
-  url,
-  method,
-  headers,
-  authorization,
-  xWWWFormUrlencoded,
-  rawData,
-  binaryData,
-  rawBodyDataType,
-  bodyType,
-  formData,
-}: CodeSnippitDataInterface) => {
-  console.log({
-    url,
-    method,
-    headers,
-    authorization,
-    xWWWFormUrlencoded,
-    rawData,
-    binaryData,
-    rawBodyDataType,
-    bodyType,
-    formData,
-  });
-
-  const code = ``;
-  return generateMaskedAndRealCode({ code, authorization });
-};
-
 export const generateKotlinCode = async (
   type: TRequestCodeType,
   data: CodeSnippitDataInterface
@@ -158,8 +129,6 @@ export const generateKotlinCode = async (
   switch (type) {
     case "kotlin-okhttp":
       return await generateKotlinOkHttpCode(data);
-    case "kotlin-retrofit":
-      return await generateKotlinRetrofitCode(data);
   }
   return requestDefaultCodeSnippit;
 };
