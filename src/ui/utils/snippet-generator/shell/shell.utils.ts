@@ -9,7 +9,7 @@ import {
   getHeadersList,
 } from "@/utils/snippet-generator/helper.utils";
 import { requestDefaultCodeSnippit } from "@/constant/code-snippit.constant";
-import { getBodyRawData } from "./helper.utils";
+import { getBodyRawData } from "@/utils/snippet-generator/shell/helper.utils";
 
 export const generateShellCURLCode = async ({
   url,

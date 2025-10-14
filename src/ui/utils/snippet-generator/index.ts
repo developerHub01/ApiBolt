@@ -17,8 +17,7 @@ import { generateCSharpCode } from "@/utils/snippet-generator/csharp/csharp.util
 import { generateKotlinCode } from "@/utils/snippet-generator/kotlin/kotlin.utils";
 import { generateDartCode } from "@/utils/snippet-generator/dart/dart.utils";
 import { generateShellCode } from "@/utils/snippet-generator/shell/shell.utils";
-// import { generateShellCode } from "@/utils/snippet-generator/shell.utils";
-// import { generatePowerShellCode } from "@/utils/snippet-generator/powershell.utils";
+import { generatePowerShellCode } from "@/utils/snippet-generator/powershell/powershell.utils";
 // import { generateElixirCode } from "@/utils/snippet-generator/elixir.utils";
 
 const generatorMap: Record<
@@ -40,7 +39,7 @@ const generatorMap: Record<
   // r: generateRCode,
   php: generatePHPCode,
   shell: generateShellCode,
-  // powershell: generatePowerShellCode,
+  powershell: generatePowerShellCode,
   csharp: generateCSharpCode,
   // elixir: generateElixirCode,
 };
