@@ -128,4 +128,210 @@ void main() async {
 }
 ```
 
-##
+## DartDio
+
+```dart
+import 'package:dio/dio.dart';
+
+void main() async {
+  Map<String, String>? headers = {
+    'Authorization': 'Bearer TOKEN',
+    'Accept': 'application/json',
+  };
+
+  Dio dio = Dio();
+
+  Response response = await dio.get(
+    'https://example.com/api/items',
+    options: Options(headers: headers),
+  );
+
+  print(response.data);
+}
+
+
+import 'package:dio/dio.dart';
+
+void main() async {
+  Map<String, String>? headers = {
+    'Authorization': 'Bearer TOKEN',
+    'Content-Type': 'application/json',
+  };
+
+  Map<String, dynamic> bodyData = {
+    'name': 'Shakil',
+    'role': 'developer',
+  };
+
+  Dio dio = Dio();
+
+  Response response = await dio.post(
+    'https://example.com/api/create',
+    data: bodyData,
+    options: Options(headers: headers),
+  );
+
+  print(response.data);
+}
+
+
+import 'package:dio/dio.dart';
+
+void main() async {
+  Map<String, String>? headers = {
+    'Authorization': 'Bearer TOKEN',
+    'Content-Type': 'application/x-www-form-urlencoded',
+  };
+
+  Map<String, dynamic> bodyData = {
+    'username': 'shakil',
+    'password': '12345',
+  };
+
+  Dio dio = Dio();
+
+  Response response = await dio.post(
+    'https://example.com/api/login',
+    data: FormData.fromMap(bodyData),
+    options: Options(headers: headers),
+  );
+
+  print(response.data);
+}
+
+
+import 'package:dio/dio.dart';
+import 'dart:io';
+
+void main() async {
+  Map<String, String>? headers = {
+    'Authorization': 'Bearer TOKEN',
+  };
+
+  Map<String, dynamic> fields = {
+    'username': 'shakil',
+  };
+
+  Map<String, List<File>> files = {
+    'avatar': File('/path/to/file.png'),
+  };
+
+  FormData formData = FormData();
+
+  fields.forEach((key, value) {
+    formData.fields.add(MapEntry(key, value.toString()));
+  });
+
+  for (var entry in files.entries) {
+    for (var file in entry.value) {
+      formData.files.add(MapEntry(
+        entry.key,
+        await MultipartFile.fromFile(file.path),
+      ));
+    }
+  }
+
+  Dio dio = Dio();
+
+  Response response = await dio.post(
+    'https://example.com/api/upload',
+    data: formData,
+    options: Options(headers: headers),
+  );
+
+  print(response.data);
+}
+
+
+import 'package:dio/dio.dart';
+
+void main() async {
+  Map<String, String>? headers = {
+    'Authorization': 'Bearer TOKEN',
+    'Content-Type': 'application/xml',
+  };
+
+  String bodyData = '<note><to>Shakil</to><from>ApiBolt</from><body>Hello</body></note>';
+
+  Dio dio = Dio();
+
+  Response response = await dio.post(
+    'https://example.com/api/xml',
+    data: bodyData,
+    options: Options(headers: headers),
+  );
+
+  print(response.data);
+}
+
+
+import 'dart:convert';
+import 'package:dio/dio.dart';
+
+void main() async {
+  Map<String, String>? headers = {
+    'Authorization': 'Bearer TOKEN',
+    'Content-Type': 'application/json',
+  };
+
+  // JSON body explicitly encoded as string
+  String bodyData = jsonEncode({
+    'name': 'Shakil',
+    'role': 'developer',
+  });
+
+  Dio dio = Dio();
+
+  Response response = await dio.post(
+    'https://example.com/api/create',
+    data: bodyData,
+    options: Options(headers: headers),
+  );
+
+  print(response.data);
+}
+
+
+
+import 'package:dio/dio.dart';
+import 'dart:io';
+
+void main() async {
+  Map<String, String>? headers = {
+    'Authorization': 'Bearer TOKEN',
+    'Content-Type': 'application/octet-stream',
+  };
+
+  File file = File('/path/to/data.bin');
+  List<int> bodyData = file.readAsBytesSync();
+
+  Dio dio = Dio();
+
+  Response response = await dio.put(
+    'https://example.com/api/upload-binary',
+    data: bodyData,
+    options: Options(headers: headers),
+  );
+
+  print(response.data);
+}
+
+
+import 'package:dio/dio.dart';
+
+void main() async {
+  Map<String, String>? headers = {
+    'Authorization': 'Bearer TOKEN',
+  };
+
+  Dio dio = Dio();
+
+  Response response = await dio.post(
+    'https://example.com/api/reset',
+    data: '', // empty body
+    options: Options(headers: headers),
+  );
+
+  print(response.data);
+}
+```
