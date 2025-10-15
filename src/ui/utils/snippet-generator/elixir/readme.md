@@ -69,9 +69,9 @@ HTTPoison.post!(
   "http://localhost:3000?asdfsdf=sdfsdadfsf",
   {:multipart, [
     {"username", "shakil"},
-    {:file, "/path/to/file1.png", {"form-data", [name: "avatar[]", filename: "file1.png"]}, []},
-    {:file, "/path/to/file2.jpg", {"form-data", [name: "avatar[]", filename: "file2.jpg"]}, []},
-    {:file, "/path/to/resume.pdf", {"form-data", [name: "documents[]", filename: "resume.pdf"]}, []}
+    {:file, "/path/to/file1.png", {"form-data", [name: "avatar[]", filename: "file1.png"]}, [{"Content-Type", "image/jpeg"}]},
+    {:file, "/path/to/file2.jpg", {"form-data", [name: "avatar[]", filename: "file2.jpg"]}, [{"Content-Type", "image/jpeg"}]},
+    {:file, "/path/to/resume.pdf", {"form-data", [name: "documents[]", filename: "resume.pdf"]}, [{"Content-Type", "image/jpeg"}]}
   ]},
   [
     {"Authorization", "Bearer sdfsdfsdfds"}
@@ -144,11 +144,12 @@ Tesla.post("http://localhost:3000?asdfsdf=sdfsdadfsf",
 
 # 7️⃣ POST multipart/form-data (files + fields)
 Tesla.post("http://localhost:3000?asdfsdf=sdfsdadfsf",
-  {:multipart, [
+{:multipart, [
     {"username", "shakil"},
-    {:file, "/path/to/file1.png"},
-    {:file, "/path/to/file2.jpg"},
-    {:file, "/path/to/resume.pdf"}
+    {:file, "/path/your_path_here", {"form-data", [name: "avatar[]", filename: "file1.png"]}, [{"Content-Type", "image/jpeg"}]},
+    {:file, "/path/your_path_here", {"form-data", [name: "avatar[]", filename: "file2.jpg"]}, [{"Content-Type", "image/jpeg"}]},
+    {:file, "/path/your_path_here", {"form-data", [name: "documents[]", filename: "resume.pdf"]}, [{"Content-Type", "image/jpeg"}]},
+    {"key", "value"}
   ]},
   headers: [{"Authorization", "Bearer sdfsdfsdfds"}]
 )
