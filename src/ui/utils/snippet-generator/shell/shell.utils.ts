@@ -79,7 +79,6 @@ export const generateShellCURLCode = async ({
   }
 
   if (bodyType === "raw" && method.toLowerCase() !== "get") {
-    snippitList.push();
     let rawDataString = await getBodyRawData({
       rawBodyDataType,
       bodyType,
