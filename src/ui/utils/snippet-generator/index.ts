@@ -6,9 +6,6 @@ import type {
 } from "@/types/code-snippit.types";
 import { generateJavaScriptCode } from "@/utils/snippet-generator/javascript/javascript.utils";
 import { generateNodeCode } from "@/utils/snippet-generator/node/node.utils";
-// import { generateSwiftCode } from "@/utils/snippet-generator/swift.utils";
-// import { generateRubyCode } from "@/utils/snippet-generator/ruby.utils";
-// import { generateRCode } from "@/utils/snippet-generator/r.utils";
 import { generatePHPCode } from "@/utils/snippet-generator/php/php.utils";
 import { generateGoCode } from "@/utils/snippet-generator/go/go.utils";
 import { generatePythonCode } from "@/utils/snippet-generator/python/python.utils";
@@ -18,7 +15,10 @@ import { generateKotlinCode } from "@/utils/snippet-generator/kotlin/kotlin.util
 import { generateDartCode } from "@/utils/snippet-generator/dart/dart.utils";
 import { generateShellCode } from "@/utils/snippet-generator/shell/shell.utils";
 import { generatePowerShellCode } from "@/utils/snippet-generator/powershell/powershell.utils";
-// import { generateElixirCode } from "@/utils/snippet-generator/elixir.utils";
+import { generateSwiftCode } from "@/utils/snippet-generator/swift/swift.utils";
+import { generateRubyCode } from "@/utils/snippet-generator/ruby/ruby.utils";
+import { generateRCode } from "@/utils/snippet-generator/r/r.utils";
+import { generateElixirCode } from "@/utils/snippet-generator/elixir/elixir.utils";
 
 const generatorMap: Record<
   string,
@@ -34,14 +34,14 @@ const generatorMap: Record<
   java: generateJavaCode,
   dart: generateDartCode,
   kotlin: generateKotlinCode,
-  // swift: generateSwiftCode,
-  // ruby: generateRubyCode,
-  // r: generateRCode,
   php: generatePHPCode,
   shell: generateShellCode,
   powershell: generatePowerShellCode,
   csharp: generateCSharpCode,
-  // elixir: generateElixirCode,
+  swift: generateSwiftCode,
+  ruby: generateRubyCode,
+  r: generateRCode,
+  elixir: generateElixirCode,
 };
 
 export const generateCode = async (
