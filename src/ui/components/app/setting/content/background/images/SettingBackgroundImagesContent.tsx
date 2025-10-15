@@ -1,10 +1,11 @@
-import { memo, useCallback, useState } from "react";
+import { memo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import Empty from "@/components/ui/empty";
 import SettingBackgroundImagePreview from "@/components/app/setting/content/background/images/SettingBackgroundImagePreview";
 import SettingBackgroundImageGrid from "@/components/app/setting/content/background/images/SettingBackgroundImageGrid";
 import useCheckBackgroundSettingMaxNumberOfImages from "@/hooks/setting/use-check-background-setting-max-number-of-images";
 import { cn } from "@/lib/utils";
+import { useSettingBackground } from "@/context/setting/background/SettingBackgroundProvider";
 
 interface Props {
   backgroundList: Array<string>;
@@ -15,12 +16,7 @@ const SettingBackgroundImagesContent = memo(
   ({ backgroundList, height = "long" }: Props) => {
     const { senitizedValue: maxNumberOfImages } =
       useCheckBackgroundSettingMaxNumberOfImages();
-    const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-
-    const handleChangeIndex = useCallback(
-      (index?: number) => setSelectedIndex(index ?? null),
-      []
-    );
+    const { selectedBackgroundImageIndex } = useSettingBackground();
 
     return (
       <AnimatePresence>
@@ -37,8 +33,7 @@ const SettingBackgroundImagesContent = memo(
                 {/* LEFT GRID */}
                 <SettingBackgroundImageGrid
                   maxNumberOfImages={maxNumberOfImages}
-                  onClick={handleChangeIndex}
-                  selectedIndex={selectedIndex}
+                  selectedIndex={selectedBackgroundImageIndex}
                   backgroundList={backgroundList}
                   className={cn({
                     "h-80": height === "short",
@@ -46,8 +41,7 @@ const SettingBackgroundImagesContent = memo(
                 />
                 {/* RIGHT PREVIEW */}
                 <SettingBackgroundImagePreview
-                  onClose={handleChangeIndex}
-                  selectedIndex={selectedIndex}
+                  selectedIndex={selectedBackgroundImageIndex}
                   backgroundList={backgroundList}
                   className={cn({
                     "h-80": height === "short",

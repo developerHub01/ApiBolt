@@ -3,16 +3,18 @@ import { AnimatePresence, motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { X as CloseIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useSettingBackground } from "@/context/setting/background/SettingBackgroundProvider";
 
 interface Props {
   backgroundList: Array<string>;
   selectedIndex: number | null;
-  onClose: (index?: number) => void;
   className?: string;
 }
 
 const SettingBackgroundImagePreview = memo(
-  ({ backgroundList, selectedIndex, onClose, className = "" }: Props) => {
+  ({ backgroundList, selectedIndex, className = "" }: Props) => {
+    const { handleChangeSelectedBackgroundImageIndex } = useSettingBackground();
+
     return (
       <AnimatePresence mode="wait">
         {selectedIndex !== null && (
@@ -45,7 +47,7 @@ const SettingBackgroundImagePreview = memo(
             <Button
               variant={"ghost"}
               size={"iconXs"}
-              onClick={() => onClose()}
+              onClick={() => handleChangeSelectedBackgroundImageIndex()}
               className="rounded-full absolute top-1.5 right-1.5"
             >
               <CloseIcon />

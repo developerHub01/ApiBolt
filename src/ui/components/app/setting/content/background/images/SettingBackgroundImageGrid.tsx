@@ -1,14 +1,14 @@
-import { memo } from "react";
+import { memo, useCallback, type MouseEvent } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import SettingBackgroundImage from "@/components/app/setting/content/background/images/SettingBackgroundImage";
+import { useSettingBackground } from "@/context/setting/background/SettingBackgroundProvider";
 
 interface Props {
   backgroundList: Array<string>;
   className?: string;
   selectedIndex: number | null;
   maxNumberOfImages: number;
-  onClick: (index: number) => void;
 }
 
 const SettingBackgroundImageGrid = memo(
@@ -16,9 +16,22 @@ const SettingBackgroundImageGrid = memo(
     backgroundList,
     selectedIndex,
     maxNumberOfImages,
-    onClick,
     className = "",
   }: Props) => {
+    const { handleChangeSelectedBackgroundImageIndex } = useSettingBackground();
+
+    const handleClickGrid = useCallback(
+      (e: MouseEvent<HTMLDivElement>) => {
+        const target = e.target as HTMLElement;
+        const childDiv = target.closest("[data-id]") as HTMLElement | null;
+
+        if (!childDiv || isNaN(Number(childDiv?.dataset?.id))) return;
+
+        handleChangeSelectedBackgroundImageIndex(Number(childDiv.dataset.id));
+      },
+      [handleChangeSelectedBackgroundImageIndex]
+    );
+
     return (
       <ScrollArea
         className={cn(
@@ -38,6 +51,7 @@ const SettingBackgroundImageGrid = memo(
               "grid-cols-3 md:grid-cols-4": selectedIndex == null,
             }
           )}
+          onClick={handleClickGrid}
         >
           {backgroundList.map((img, index) => (
             <SettingBackgroundImage
@@ -45,7 +59,6 @@ const SettingBackgroundImageGrid = memo(
               key={img}
               index={index}
               disabled={index >= maxNumberOfImages}
-              onClick={() => onClick(index)}
               isActive={index === selectedIndex}
             />
           ))}
