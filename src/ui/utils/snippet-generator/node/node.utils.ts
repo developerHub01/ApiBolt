@@ -5,7 +5,7 @@ import type {
   TRequestCodeType,
 } from "@/types/code-snippit.types";
 
-export const generateNodeHttpCode = ({
+export const generateNodeHttpCode = async ({
   url,
   method,
   headers,

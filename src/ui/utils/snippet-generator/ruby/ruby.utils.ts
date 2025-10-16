@@ -2,8 +2,14 @@ import type {
   CodeSnippitDataInterface,
   TRequestCodeType,
 } from "@/types/code-snippit.types";
-import { generateMaskedAndRealCode } from "@/utils/snippet-generator/helper.utils";
+import {
+  defaultBinaryData,
+  generateMaskedAndRealCode,
+  getHeadersList,
+} from "@/utils/snippet-generator/helper.utils";
 import { requestDefaultCodeSnippit } from "@/constant/code-snippit.constant";
+import mime from "mime";
+import { getBodyRawData } from "@/utils/snippet-generator/ruby/helper.utils";
 
 export const generateRubyNetHttpCode = async ({
   url,
@@ -17,20 +23,134 @@ export const generateRubyNetHttpCode = async ({
   binaryData,
   rawData,
 }: CodeSnippitDataInterface) => {
-  console.log({
-    url,
-    method,
+  const startString = `require "net/http"
+require "uri"
+require "json"
+require "net/http/post/multipart"
+
+uri = URI.parse(${JSON.stringify(url)})\n\n`;
+
+  const endString = `\tresponse = http.request(req)
+\tputs response.body
+end`;
+
+  const readFormDataFiles =
+    bodyType === "form-data" &&
+    formData.some((entry) => entry.type === "file") &&
+    method.toLowerCase() !== "get"
+      ? `${formData
+          .filter((entry) => entry.type === "file")
+          .map(
+            ({ value }, index) =>
+              `file${index + 1} = UploadIO.new("/your_file_path_here/${value}", ${JSON.stringify(mime.getType(value))}, ${JSON.stringify(value)})`
+          )
+          .join("\n")}\n\n`
+      : "";
+
+  const headersList = getHeadersList({
     headers,
     authorization,
-    formData,
-    xWWWFormUrlencoded,
     rawBodyDataType,
     bodyType,
-    binaryData,
-    rawData,
   });
 
-  const code = ``;
+  if (
+    headersList.length &&
+    bodyType === "binary" &&
+    !headersList.some((entry) => entry.key === "Content-Type")
+  ) {
+    headersList.push({
+      key: "Content-Type",
+      value: "application/octet-stream",
+    });
+  }
+
+  const headersString = headersList.length
+    ? `${headersList.map(({ key, value }) => `\treq[${JSON.stringify(key)}] = ${JSON.stringify(value)}`).join("\n")}\n`
+    : ``;
+
+  const xWWWFormUrlencodedString =
+    bodyType === "x-www-form-urlencoded" &&
+    xWWWFormUrlencoded.length &&
+    method.toLowerCase() !== "get"
+      ? `\treq.set_form_data({${xWWWFormUrlencoded.map(({ key, value }) => `\t${JSON.stringify(key)}: ${JSON.stringify(value)}`).join(", ")}})\n`
+      : ``;
+
+  const binaryDataString =
+    bodyType === "binary" && method.toLowerCase() !== "get"
+      ? `\treq.body = File.read(${JSON.stringify(binaryData ?? defaultBinaryData)})\n`
+      : ``;
+
+  let rawDataString = "";
+  if (bodyType === "raw" && method.toLowerCase() !== "get") {
+    rawDataString = await getBodyRawData({
+      rawBodyDataType,
+      bodyType,
+      rawData,
+    });
+
+    rawDataString =
+      rawBodyDataType === "json"
+        ? `${rawDataString
+            .split("\n")
+            .map((entry, index) => (index && entry ? `\t${entry}` : entry))
+            .join("\n")}.to_json`
+        : rawDataString;
+
+    rawDataString = `\treq.body = ${rawDataString}\n`;
+  }
+
+  let requestString = `Net::HTTP.start(uri.host, uri.port) do |http|
+\treq = Net::HTTP::${method[0].toUpperCase() + method.slice(1).toLowerCase()}.new(uri)\n`;
+
+  if (readFormDataFiles) {
+    const formDataPartList: Array<string> = [];
+
+    const fieldString = `${
+      formData.some((entry) => entry.type === "text")
+        ? `${formData
+            .filter((entry) => entry.type === "text")
+            .map(
+              ({ key, value }) =>
+                `\t\t${JSON.stringify(key)} => ${JSON.stringify(value)}`
+            )
+            .join(",\n")}`
+        : ""
+    }`;
+
+    if (fieldString) formDataPartList.push(fieldString);
+
+    let fileIndex = 1;
+    const filesData = formData
+      .filter((entry) => entry.type === "file")
+      .reduce(
+        (acc, curr) => {
+          if (!acc[curr.key]) acc[curr.key] = [];
+          acc[curr.key].push(`file${fileIndex++}`);
+
+          return acc;
+        },
+        {} as Record<string, Array<string>>
+      );
+
+    const filesString = formData.some((entry) => entry.type === "file")
+      ? `${Object.entries(filesData)
+          .map(
+            ([key, values]) =>
+              `\t\t${JSON.stringify(key + "[]")} => [${values.join(", ")}]`
+          )
+          .join(",\n")}`
+      : "";
+
+    if (filesString) formDataPartList.push(filesString);
+
+    requestString = `Net::HTTP.start(uri.host, uri.port) do |http|
+\treq = Net::HTTP::Post::Multipart.new(uri.path,
+${formDataPartList.join(",\n")}
+\t)\n`;
+  }
+
+  const code = `${startString}${readFormDataFiles}${requestString}${xWWWFormUrlencodedString}${binaryDataString}${rawDataString}${headersString}${endString}`;
   return generateMaskedAndRealCode({ code, authorization });
 };
 
