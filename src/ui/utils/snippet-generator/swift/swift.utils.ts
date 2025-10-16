@@ -9,35 +9,6 @@ import {
   getHeadersList,
 } from "@/utils/snippet-generator/helper.utils";
 
-export const generateSwiftAlamofireCode = async ({
-  url,
-  method,
-  headers,
-  authorization,
-  formData,
-  xWWWFormUrlencoded,
-  rawBodyDataType,
-  bodyType,
-  binaryData,
-  rawData,
-}: CodeSnippitDataInterface) => {
-  console.log({
-    url,
-    method,
-    headers,
-    authorization,
-    formData,
-    xWWWFormUrlencoded,
-    rawBodyDataType,
-    bodyType,
-    binaryData,
-    rawData,
-  });
-
-  const code = ``;
-  return generateMaskedAndRealCode({ code, authorization });
-};
-
 export const generateSwiftURLSessionCode = async ({
   url,
   method,
@@ -176,6 +147,35 @@ let postData =  parameters.data(using: .utf8)\n\n`;
   return generateMaskedAndRealCode({ code, authorization });
 };
 
+export const generateSwiftAlamofireCode = async ({
+  url,
+  method,
+  headers,
+  authorization,
+  formData,
+  xWWWFormUrlencoded,
+  rawBodyDataType,
+  bodyType,
+  binaryData,
+  rawData,
+}: CodeSnippitDataInterface) => {
+  console.log({
+    url,
+    method,
+    headers,
+    authorization,
+    formData,
+    xWWWFormUrlencoded,
+    rawBodyDataType,
+    bodyType,
+    binaryData,
+    rawData,
+  });
+
+  const code = ``;
+  return generateMaskedAndRealCode({ code, authorization });
+};
+
 export const generateSwiftCode = async (
   type: TRequestCodeType,
   data: CodeSnippitDataInterface
@@ -183,8 +183,6 @@ export const generateSwiftCode = async (
   switch (type) {
     case "swift-urlsession":
       return await generateSwiftURLSessionCode(data);
-    case "swift-alamofire":
-      return await generateSwiftAlamofireCode(data);
   }
 
   return requestDefaultCodeSnippit;

@@ -44,7 +44,6 @@ export type TRequestCodeType =
   | "shell-wget"
   // Swift / iOS
   | "swift-urlsession"
-  | "swift-alamofire"
   // Kotlin / Android
   | "kotlin-okhttp"
   // Dart / Flutter

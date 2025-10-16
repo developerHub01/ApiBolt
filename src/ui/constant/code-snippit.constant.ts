@@ -51,7 +51,6 @@ export const requestCodeSnippitsMap: Record<TRequestCodeType, string> = {
 
   // Swift / iOS
   "swift-urlsession": "Swift - URLSession",
-  "swift-alamofire": "Swift - Alamofire",
 
   // Kotlin / Android
   "kotlin-okhttp": "Kotlin - OkHttp",
