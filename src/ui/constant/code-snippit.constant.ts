@@ -10,7 +10,6 @@ export const requestCodeSnippitsMap: Record<TRequestCodeType, string> = {
   "javascript-jquery": "JavaScript - jQuery",
   "javascript-xhr": "JavaScript - XHR",
   "javascript-superagent": "JavaScript - SuperAgent",
-  "node-http": "Node - HTTP",
 
   // Python
   "python-requests": "Python - Requests",

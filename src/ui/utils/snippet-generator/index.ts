@@ -5,7 +5,6 @@ import type {
   TRequestCodeType,
 } from "@/types/code-snippit.types";
 import { generateJavaScriptCode } from "@/utils/snippet-generator/javascript/javascript.utils";
-import { generateNodeCode } from "@/utils/snippet-generator/node/node.utils";
 import { generatePHPCode } from "@/utils/snippet-generator/php/php.utils";
 import { generateGoCode } from "@/utils/snippet-generator/go/go.utils";
 import { generatePythonCode } from "@/utils/snippet-generator/python/python.utils";
@@ -28,7 +27,6 @@ const generatorMap: Record<
   ) => Promise<RequestCodeSnippitInterface>
 > = {
   javascript: generateJavaScriptCode,
-  node: generateNodeCode,
   python: generatePythonCode,
   go: generateGoCode,
   java: generateJavaCode,

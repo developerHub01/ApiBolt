@@ -11,7 +11,6 @@ export type TRequestCodeType =
   | "javascript-jquery"
   | "javascript-xhr"
   | "javascript-superagent"
-  | "node-http"
   // Python
   | "python-requests"
   | "python-http-client"

@@ -109,7 +109,8 @@ export const generateElixirTeslaCode = async ({
   rawData,
 }: CodeSnippitDataInterface) => {
   const startString = `Tesla.${method.toLowerCase()}(\n`;
-  const endString = `)`;
+  const endString = `
+)`;
 
   const snippitList: Array<string> = [`\t${JSON.stringify(url)}`];
 
