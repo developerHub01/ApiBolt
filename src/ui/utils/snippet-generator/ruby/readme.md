@@ -1,6 +1,4 @@
-# =========================
-# Ruby - net/http
-# =========================
+## Ruby - net/http
 
 ```ruby
 require "net/http"
@@ -114,64 +112,102 @@ end
 
 ```
 
-# =========================
-# Ruby - rest-client
-# =========================
+## Ruby - rest-client
 
 ```ruby
 require "rest-client"
-require "json"
 
-# 1️⃣ GET
+# 0️⃣ GET
 RestClient.get "http://localhost:3000?asdfsdf=sdfsdadfsf",
-  {"asfsdfsdf" => "addsd", "Content-Type" => "application/x-www-form-urlencoded", "Authorization" => "Bearer sdfsdfsdfds"}
+  {
+    "asfsdfsdf" => "addsd",
+    "Content-Type" => "application/x-www-form-urlencoded",
+    "Authorization" => "Bearer sdfsdfsdfds"
+  }
 
-# 2️⃣ POST JSON
+# 1️⃣ POST binary/octet-stream
 RestClient.post "http://localhost:3000?asdfsdf=sdfsdadfsf",
-  {name: "John", age: 30, car: nil}.to_json,
-  {"Content-Type" => "application/json", "Authorization" => "Bearer sdfsdfsdfds"}
+  File.read("/path/to/file.bin"),
+  {
+    "Content-Type" => "application/octet-stream",
+    "Authorization" => "Bearer sdfsdfsdfds"
+  }
+
+# 2️⃣ POST JSON (raw string)
+RestClient.post "http://localhost:3000?asdfsdf=sdfsdadfsf",
+  '{ "name": "John", "age": 30, "car": null }',
+  {
+    "Content-Type" => "application/json",
+    "Authorization" => "Bearer sdfsdfsdfds"
+  }
 
 # 3️⃣ POST Raw Text
-RestClient.post "http://localhost:3000",
+RestClient.post "http://localhost:3000?asdfsdf=sdfsdadfsf",
   "This is a plain text body for the request.",
-  {"Content-Type" => "text/plain", "Authorization" => "Bearer sdfsdfsdfds"}
+  {
+    "Content-Type" => "text/plain",
+    "Authorization" => "Bearer sdfsdfsdfds"
+  }
 
 # 4️⃣ POST x-www-form-urlencoded
 RestClient.post "http://localhost:3000?asdfsdf=sdfsdadfsf",
-  {b: "e", c: "f", a: "d", asdsddd: "sdfsafdsd"},
-  {"Authorization" => "Bearer sdfsdfsdfds"}
+  {
+    "b" => "e",
+    "c" => "f",
+    "a" => "d",
+    "asdsddd" => "sdfsafdsd"
+  },
+  {
+    "Content-Type" => "application/x-www-form-urlencoded",
+    "Authorization" => "Bearer sdfsdfsdfds"
+  }
 
 # 5️⃣ POST multipart/form-data
 RestClient.post "http://localhost:3000?asdfsdf=sdfsdadfsf",
-  {username: "shakil",
-   avatar1: File.new("/path/to/file1.png"),
-   avatar2: File.new("/path/to/file2.jpg"),
-   documents: File.new("/path/to/resume.pdf"),
-   key: "value"},
-  {"Authorization" => "Bearer sdfsdfsdfds"}
+  {
+    "username" => "shakil",
+    "avatar1" => [File.new("/path/to/file1.png"), File.new("/path/to/file2.png")],
+    "documents" => [File.new("/path/to/resume.pdf")],
+    "key" => "value"
+  },
+  {
+    "Authorization" => "Bearer sdfsdfsdfds"
+  }
 
 # 6️⃣ DELETE
 RestClient.delete "http://localhost:3000?asdfsdf=sdfsdadfsf",
-  {"Authorization" => "Bearer sdfsdfsdfds"}
+  {
+    "Authorization" => "Bearer sdfsdfsdfds"
+  }
 
-# 7️⃣ PUT
+# 7️⃣ PUT (JSON raw string)
 RestClient.put "http://localhost:3000?asdfsdf=sdfsdadfsf",
-  {update: "value"}.to_json,
-  {"Content-Type" => "application/json", "Authorization" => "Bearer sdfsdfsdfds"}
+  '{ "update": "value" }',
+  {
+    "Content-Type" => "application/json",
+    "Authorization" => "Bearer sdfsdfsdfds"
+  }
 
-# 8️⃣ PATCH
+# 8️⃣ PATCH (JSON raw string)
 RestClient.patch "http://localhost:3000?asdfsdf=sdfsdadfsf",
-  {patch: "value"}.to_json,
-  {"Content-Type" => "application/json", "Authorization" => "Bearer sdfsdfsdfds"}
+  '{ "patch": "value" }',
+  {
+    "Content-Type" => "application/json",
+    "Authorization" => "Bearer sdfsdfsdfds"
+  }
 
 # 9️⃣ OPTIONS
-RestClient::Request.execute(method: :options, url: "http://localhost:3000?asdfsdf=sdfsdadfsf",
-  headers: {"Authorization" => "Bearer sdfsdfsdfds"})
+RestClient::Request.execute(
+  method: :options,
+  url: "http://localhost:3000?asdfsdf=sdfsdadfsf",
+  headers: {
+    "Authorization" => "Bearer sdfsdfsdfds"
+  }
+)
+
 ```
 
-# =========================
-# Ruby - http.rb
-# =========================
+## Ruby - http.rb
 
 ```ruby
 require 'http'

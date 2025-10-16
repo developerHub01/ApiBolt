@@ -166,20 +166,101 @@ export const generateRubyRestClientCode = async ({
   binaryData,
   rawData,
 }: CodeSnippitDataInterface) => {
-  console.log({
-    url,
-    method,
+  const snippitList: Array<string> = [
+    `RestClient.${method.toLowerCase()} ${JSON.stringify(url)}`,
+  ];
+
+  const headersList = getHeadersList({
     headers,
     authorization,
-    formData,
-    xWWWFormUrlencoded,
     rawBodyDataType,
     bodyType,
-    binaryData,
-    rawData,
   });
 
-  const code = ``;
+  if (
+    headersList.length &&
+    bodyType === "binary" &&
+    !headersList.some((entry) => entry.key === "Content-Type")
+  ) {
+    headersList.push({
+      key: "Content-Type",
+      value: "application/octet-stream",
+    });
+  }
+
+  if (
+    bodyType === "form-data" &&
+    formData.length &&
+    method.toLowerCase() !== "get"
+  ) {
+    const formDataSnippit: Array<string> = [];
+
+    const formDataMap: Record<string, string | Array<string>> = {};
+
+    formData.forEach(({ key, value, type }) => {
+      if (type === "file" && !formDataMap[key]) formDataMap[key] = [];
+      if (type === "text") formDataMap[key] = value;
+      else if (Array.isArray(formDataMap[key])) formDataMap[key].push(value);
+    });
+
+    Object.entries(formDataMap).forEach(([key, value]) =>
+      formDataSnippit.push(
+        `\t\t${JSON.stringify(key)} => ${
+          Array.isArray(value)
+            ? `[
+${value.map((value) => `\t\t\tFile.new(${JSON.stringify(value)})`).join(",\n")}
+\t\t]`
+            : `${JSON.stringify(value)}`
+        }`
+      )
+    );
+
+    snippitList.push(`\t{
+${formDataSnippit.join(",\n")}
+\t}`);
+  }
+
+  if (
+    bodyType === "x-www-form-urlencoded" &&
+    xWWWFormUrlencoded.length &&
+    method.toLowerCase() !== "get"
+  ) {
+    snippitList.push(
+      `\t{
+${xWWWFormUrlencoded.map(({ key, value }) => `\t\t${JSON.stringify(key)} => ${JSON.stringify(value)}`).join(",\n")}
+\t}`
+    );
+  }
+
+  if (bodyType === "binary" && method.toLowerCase() !== "get")
+    snippitList.push(
+      `\tFile.read(${JSON.stringify(binaryData ?? defaultBinaryData)})`
+    );
+
+  if (bodyType === "raw" && method.toLowerCase() !== "get") {
+    let rawDataString = await getBodyRawData({
+      rawBodyDataType,
+      bodyType,
+      rawData,
+    });
+
+    rawDataString =
+      rawBodyDataType === "json"
+        ? `'${rawDataString
+            .split("\n")
+            .map((entry, index) => (index && entry ? `\t${entry}` : entry))
+            .join("\n")}'`
+        : rawDataString;
+
+    snippitList.push(`\t${rawDataString}`);
+  }
+
+  if (headersList.length)
+    snippitList.push(
+      `\t{\n${headersList.map(({ key, value }) => `\t\t${JSON.stringify(key)} => ${JSON.stringify(value)}`).join(",\n")}\n\t}`
+    );
+
+  const code = `${snippitList.join(",\n")}`;
   return generateMaskedAndRealCode({ code, authorization });
 };
 
