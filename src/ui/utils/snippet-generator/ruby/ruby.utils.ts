@@ -276,20 +276,104 @@ export const generateRubyHTTPRbCode = async ({
   binaryData,
   rawData,
 }: CodeSnippitDataInterface) => {
-  console.log({
-    url,
-    method,
+  const startString = `require 'http'\n\n`;
+  const endString = `puts response.to_s`;
+
+  const headersList = getHeadersList({
     headers,
     authorization,
-    formData,
-    xWWWFormUrlencoded,
     rawBodyDataType,
     bodyType,
-    binaryData,
-    rawData,
   });
 
-  const code = ``;
+  if (
+    headersList.length &&
+    bodyType === "binary" &&
+    !headersList.some((entry) => entry.key === "Content-Type")
+  ) {
+    headersList.push({
+      key: "Content-Type",
+      value: "application/octet-stream",
+    });
+  }
+
+  let headersString = "";
+  if (headersList.length) {
+    headersString = `.headers(
+${headersList.map(({ key, value }) => `\t${JSON.stringify(key)} => ${JSON.stringify(value)}`).join(",\n")}
+)`;
+  }
+
+  const snippitList: Array<string> = [`\t${JSON.stringify(url)}`];
+
+  if (
+    bodyType === "form-data" &&
+    formData.length &&
+    method.toLowerCase() !== "get"
+  ) {
+    const formDataMap: Record<string, string | Array<string>> = {};
+
+    formData.forEach(({ key, value, type }) => {
+      if (type === "file" && !formDataMap[key]) formDataMap[key] = [];
+      if (type === "text") formDataMap[key] = value;
+      else if (Array.isArray(formDataMap[key])) formDataMap[key].push(value);
+    });
+
+    snippitList.push(
+      `\tform: {
+${Object.entries(formDataMap)
+  .map(([key, value]) =>
+    Array.isArray(value)
+      ? `\t\t${JSON.stringify(key + "[]")}: [
+${value.map((entry) => `\t\t\tHTTP::FormData::File.new(${JSON.stringify(entry)})`).join(",\n")}
+\t\t]`
+      : `\t\t${JSON.stringify(key)}: ${JSON.stringify(value)}`
+  )
+  .join(",\n")}
+\t}`
+    );
+  }
+
+  if (
+    bodyType === "x-www-form-urlencoded" &&
+    xWWWFormUrlencoded.length &&
+    method.toLowerCase() !== "get"
+  ) {
+    snippitList.push(
+      `\tform: {
+${xWWWFormUrlencoded.map(({ key, value }) => `\t\t${JSON.stringify(key)}: ${JSON.stringify(value)}`).join(",\n")}
+\t}`
+    );
+  }
+
+  if (bodyType === "binary" && method.toLowerCase() !== "get")
+    snippitList.push(
+      `\tbody: File.binread(${JSON.stringify(binaryData ?? defaultBinaryData)})`
+    );
+
+  if (bodyType === "raw" && method.toLowerCase() !== "get") {
+    let rawDataString = await getBodyRawData({
+      rawBodyDataType,
+      bodyType,
+      rawData,
+    });
+
+    rawDataString =
+      rawBodyDataType === "json"
+        ? `'${rawDataString
+            .split("\n")
+            .map((entry, index) => (index && entry ? `\t${entry}` : entry))
+            .join("\n")}'`
+        : rawDataString;
+
+    snippitList.push(`\tbody: ${rawDataString}`);
+  }
+
+  const requestString = `response = HTTP${headersString}.${method.toLowerCase()}(
+${snippitList.join(",\n")}
+)\n`;
+
+  const code = `${startString}${requestString}${endString}`;
   return generateMaskedAndRealCode({ code, authorization });
 };
 

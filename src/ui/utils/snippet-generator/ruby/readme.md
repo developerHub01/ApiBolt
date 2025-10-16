@@ -210,46 +210,135 @@ RestClient::Request.execute(
 ## Ruby - http.rb
 
 ```ruby
+# HTTP.rb examples
 require 'http'
 
-# 1️⃣ GET
-HTTP.headers("asfsdfsdf" => "addsd", "Content-Type" => "application/x-www-form-urlencoded", "Authorization" => "Bearer sdfsdfsdfds")
-    .get("http://localhost:3000?asdfsdf=sdfsdadfsf")
+# ===============================
+# 1️⃣ GET Request
+# ===============================
+response = HTTP.headers(
+  "asfsdfsdf" => "addsd",
+  "Content-Type" => "application/x-www-form-urlencoded",
+  "Authorization" => "Bearer sdfsdfsdfds"
+).get("http://localhost:3000?asdfsdf=sdfsdadfsf")
+puts response.to_s
 
-# 2️⃣ POST JSON
-HTTP.headers("Content-Type" => "application/json", "Authorization" => "Bearer sdfsdfsdfds")
-    .post("http://localhost:3000?asdfsdf=sdfsdadfsf", json: {name: "John", age: 30, car: nil})
+# ===============================
+# 2️⃣ POST JSON (inline JSON)
+# ===============================
+response = HTTP.headers(
+  "Content-Type" => "application/json",
+  "Authorization" => "Bearer sdfsdfsdfds"
+).post("http://localhost:3000?asdfsdf=sdfsdadfsf", body: '{
+  "name": "John",
+  "age": 30,
+  "car": null
+}')
+puts response.to_s
 
+# ===============================
 # 3️⃣ POST Raw Text
-HTTP.headers("Content-Type" => "text/plain", "Authorization" => "Bearer sdfsdfsdfds")
-    .post("http://localhost:3000", body: "This is a plain text body for the request.")
+# ===============================
+response = HTTP.headers(
+  "Content-Type" => "text/plain",
+  "Authorization" => "Bearer sdfsdfsdfds"
+).post("http://localhost:3000",
+  body: "This is a plain text body for the request.")
+puts response.to_s
 
+# ===============================
 # 4️⃣ POST x-www-form-urlencoded
-HTTP.headers("Authorization" => "Bearer sdfsdfsdfds")
-    .post("http://localhost:3000?asdfsdf=sdfsdadfsf", form: {b: "e", c: "f", a: "d", asdsddd: "sdfsafdsd"})
+# ===============================
+response = HTTP.headers(
+  "Authorization" => "Bearer sdfsdfsdfds"
+).post("http://localhost:3000?asdfsdf=sdfsdadfsf",
+  form: {"b" => "e", "c" => "f", "a" => "d", "asdsddd" => "sdfsafdsd"})
+puts response.to_s
 
-# 5️⃣ POST multipart/form-data
-HTTP.headers("Authorization" => "Bearer sdfsdfsdfds")
-    .post("http://localhost:3000?asdfsdf=sdfsdadfsf",
-          form: {username: "shakil",
-                 avatar1: HTTP::FormData::File.new("/path/to/file1.png"),
-                 avatar2: HTTP::FormData::File.new("/path/to/file2.jpg"),
-                 documents: HTTP::FormData::File.new("/path/to/resume.pdf"),
-                 key: "value"})
+# ===============================
+# 5️⃣ POST multipart/form-data (single file per key)
+# ===============================
+response = HTTP.headers(
+  "Authorization" => "Bearer sdfsdfsdfds"
+).post("http://localhost:3000?asdfsdf=sdfsdadfsf",
+  form: {
+    "username" => "shakil",
+    "avatar1" => HTTP::FormData::File.new("/path/to/file1.png"),
+    "avatar2" => HTTP::FormData::File.new("/path/to/file2.jpg"),
+    "documents" => HTTP::FormData::File.new("/path/to/resume.pdf"),
+    "key" => "value"
+  })
+puts response.to_s
 
-# 6️⃣ DELETE
-HTTP.headers("Authorization" => "Bearer sdfsdfsdfds")
-    .delete("http://localhost:3000?asdfsdf=sdfsdadfsf")
+# ===============================
+# 5️⃣a POST multipart/form-data (multiple files for one key)
+# ===============================
+response = HTTP.headers(
+  "Authorization" => "Bearer sdfsdfsdfds"
+).post("http://localhost:3000?asdfsdf=sdfsdadfsf",
+  form: {
+    "username" => "shakil",
+    "attachments[]" => [
+      HTTP::FormData::File.new("/path/to/file1.png"),
+      HTTP::FormData::File.new("/path/to/file2.jpg"),
+      HTTP::FormData::File.new("/path/to/file3.pdf")
+    ],
+    "key" => "value"
+  })
+puts response.to_s
 
-# 7️⃣ PUT
-HTTP.headers("Content-Type" => "application/json", "Authorization" => "Bearer sdfsdfsdfds")
-    .put("http://localhost:3000?asdfsdf=sdfsdadfsf", json: {update: "value"})
+# ===============================
+# 6️⃣ POST binary/octet-stream
+# ===============================
+response = HTTP.headers(
+  "Authorization" => "Bearer sdfsdfsdfds",
+  "Content-Type" => "application/octet-stream"
+).post("http://localhost:3000?asdfsdf=sdfsdadfsf",
+  body: File.binread("/path/to/file.bin"))
+puts response.to_s
 
-# 8️⃣ PATCH
-HTTP.headers("Content-Type" => "application/json", "Authorization" => "Bearer sdfsdfsdfds")
-    .patch("http://localhost:3000?asdfsdf=sdfsdadfsf", json: {patch: "value"})
+# ===============================
+# 7️⃣ DELETE Request
+# ===============================
+response = HTTP.headers(
+  "Authorization" => "Bearer sdfsdfsdfds"
+).delete("http://localhost:3000?asdfsdf=sdfsdadfsf")
+puts response.to_s
 
-# 9️⃣ OPTIONS
-HTTP.headers("Authorization" => "Bearer sdfsdfsdfds")
-    .request(:options, "http://localhost:3000?asdfsdf=sdfsdadfsf")
+# ===============================
+# 8️⃣ PUT Request (inline JSON)
+# ===============================
+response = HTTP.headers(
+  "Content-Type" => "application/json",
+  "Authorization" => "Bearer sdfsdfsdfds"
+).put("http://localhost:3000?asdfsdf=sdfsdadfsf", body: '{
+  "update": "value"
+}')
+puts response.to_s
+
+# ===============================
+# 9️⃣ PATCH Request (inline JSON)
+# ===============================
+response = HTTP.headers(
+  "Content-Type" => "application/json",
+  "Authorization" => "Bearer sdfsdfsdfds"
+).patch("http://localhost:3000?asdfsdf=sdfsdadfsf", body: '{
+  "patch": "value"
+}')
+puts response.to_s
+
+# ===============================
+# 🔟 OPTIONS Request
+# ===============================
+response = HTTP.headers(
+  "Authorization" => "Bearer sdfsdfsdfds"
+).request(:options, "http://localhost:3000?asdfsdf=sdfsdadfsf")
+puts response.to_s
+
+# ===============================
+# 1️⃣1️⃣ GET Request with NO headers
+# ===============================
+response = HTTP.get("http://localhost:3000?asdfsdf=sdfsdadfsf")
+puts response.to_s
+
 ```
