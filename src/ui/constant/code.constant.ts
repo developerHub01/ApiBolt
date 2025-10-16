@@ -18,6 +18,6 @@ export const langMap = {
   kotlin: "kt",
   dart: "dart",
   r: "r",
-  powershell: "sh",
+  powershell: "ps1",
   elixir: "el",
 };

@@ -52,6 +52,8 @@ ${headersList.map(({ key, value }) => `\t${JSON.stringify(key)}=${JSON.stringify
     formData.length &&
     method.toLowerCase() !== "get"
   ) {
+    const snippitList: Array<string> = [];
+
     const fieldsString = formData.some((entry) => entry.type === "text")
       ? `$fields = @{
 ${formData
@@ -60,8 +62,10 @@ ${formData
     ({ key, value }) => `\t${JSON.stringify(key)} = ${JSON.stringify(value)}`
   )
   .join("\n")}
-}\n\n`
+}`
       : ``;
+
+    if (fieldsString) snippitList.push(fieldsString);
 
     const fileMap: Record<string, Array<string>> = {};
     formData
@@ -79,10 +83,12 @@ ${Object.entries(fileMap)
       `\t${JSON.stringify(key)} = @(${values.map((value) => JSON.stringify(value)).join(", ")})`
   )
   .join("\n")}
-}\n\n`
+}`
       : ``;
 
-    formDataString = `${fieldsString}${filesString}
+    if (filesString) snippitList.push(filesString);
+
+    formDataString = `${snippitList.join("\n\n")}
 
 $client = New-Object System.Net.Http.HttpClient
 
