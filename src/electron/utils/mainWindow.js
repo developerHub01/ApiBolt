@@ -4,8 +4,8 @@ import path from "path";
 export const createMainWindow = () => {
   const win = new BrowserWindow({
     show: false,
-    minHeight: 500,
-    minWidth: 650,
+    minHeight: 600,
+    minWidth: 750,
     frame: false,
     titleBarStyle: "hidden",
 
