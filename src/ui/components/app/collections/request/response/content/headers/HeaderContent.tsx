@@ -6,7 +6,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import DataTableCellContent from "@/components/app/collections/request/response/content/DataTableCellContent";
 import { cn } from "@/lib/utils";
 
 interface HeaderContentProps {
@@ -15,7 +14,7 @@ interface HeaderContentProps {
 
 const HeaderContent = ({ headers }: HeaderContentProps) => {
   return (
-    <Table className="w-full h-full border select-text">
+    <Table className="w-full h-full border select-text table-fixed">
       <TableHeader className="[&>tr>th]:border-r [&>tr>th]:last:border-r-0">
         <TableRow>
           <TableHead>Key</TableHead>
@@ -32,7 +31,7 @@ const HeaderContent = ({ headers }: HeaderContentProps) => {
                   capitalize: !index,
                 })}
               >
-                <DataTableCellContent value={value} />
+                {value}
               </TableCell>
             ))}
           </TableRow>
