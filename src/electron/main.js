@@ -4,7 +4,7 @@ import { createSplashWindow } from "./utils/splashWindow.js";
 import { wrapper } from "axios-cookiejar-support";
 import axios from "axios";
 import electronSquirrelStartup from "electron-squirrel-startup";
-import { initialCookieJar } from "./utils/cookieManager.js";
+import { jarManager } from "./utils/cookieManager.js";
 import { registerCookieHandlers } from "./ipc/cookies.js";
 import { windowHandler } from "./ipc/windowHandler.js";
 import { jsonWebTokenHandlers } from "./ipc/jsonWebToken.js";
@@ -33,11 +33,12 @@ import { requestHandler } from "./ipc/requestHandler.js";
 import { fileSystemHandler } from "./ipc/fileSystemHandler.js";
 import { activeSidebarTabHandler } from "./ipc/activeSidebarTabHandler.js";
 import { activeCodeSnippitTypeHandler } from "./ipc/activeCodeSnippitTypeHandler.js";
+import { cookiesHandler } from "./ipc/cookiesHandler.js";
 
 export const userDataDir = app.getPath("userData");
 
 // browser style cookies holder by domain/path
-export const jar = initialCookieJar(undefined, { rejectPublicSuffixes: false });
+export const jar = await jarManager.init();
 // axios client with cookie jar support
 export const client = wrapper(axios.create({ jar }));
 
@@ -87,6 +88,7 @@ app.whenReady().then(async () => {
   activeSidebarTabHandler();
   activeCodeSnippitTypeHandler();
   projectsHandlers();
+  cookiesHandler();
   enviromentsHandlers();
   authorizationHandler();
   requestOrFolderMetaHandler();

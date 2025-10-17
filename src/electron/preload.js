@@ -77,6 +77,17 @@ contextBridge.exposeInMainWorld("electronAPIActiveCodeSnippitTypeDB", {
     await ipcRenderer.invoke("deleteActiveCodeSnippitType"),
 });
 
+contextBridge.exposeInMainWorld("electronAPICookiesDB", {
+  getCookiesByProject: async (...payload) =>
+    await ipcRenderer.invoke("getCookiesByProject", ...payload),
+  createCookiesByProject: async (...payload) =>
+    await ipcRenderer.invoke("createCookiesByProject", ...payload),
+  updateCookiesByProject: async (...payload) =>
+    await ipcRenderer.invoke("updateCookiesByProject", ...payload),
+  deleteCookiesByProject: async (...payload) =>
+    await ipcRenderer.invoke("deleteCookiesByProject", ...payload),
+});
+
 contextBridge.exposeInMainWorld("electronAPIProjectsDB", {
   getProjects: async () => await ipcRenderer.invoke("getProjects"),
   createProjects: async (payload) =>

@@ -24,6 +24,13 @@ export const activeProjectTable = sqliteTable("active_project_table", {
     }),
 });
 
+export const cookiesTable = sqliteTable("cookies_table", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  cookies: text().default("[]"),
+});
+
 export const activeSidebarTabTable = sqliteTable(
   "active_active_sidebar_tab_table",
   {

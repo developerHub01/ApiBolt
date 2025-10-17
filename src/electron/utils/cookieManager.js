@@ -1,45 +1,63 @@
-import { app } from "electron";
-import fs from "fs";
 import { CookieJar } from "tough-cookie";
 import { jar } from "../main.js";
-import path from "path";
+import {
+  getCookiesByProject,
+  updateCookiesByProject,
+} from "../db/cookiesDB.js";
 
-const COOKIE_FILE = path.join(app.getAppPath(), "cookies.json");
-
-/*
- * This function initializes a cookie jar by checking if a cookie file exists.
- * If it does, it reads the cookies from the file and creates a CookieJar instance.
- * If not, it creates a new CookieJar instance.
- *
- * @returns {CookieJar} - A CookieJar instance with cookies loaded from the file or a new one.
- */
-export const initialCookieJar = () => {
-  if (fs.existsSync(COOKIE_FILE)) {
-    const cookieData = JSON.parse(fs.readFileSync(COOKIE_FILE));
-    return CookieJar.fromJSON(cookieData);
+export const clearJar = async (jar) => {
+  const allCookies = await jar.store.getAllCookies();
+  for (const cookie of allCookies) {
+    await jar.removeCookie(cookie.domain, cookie.path, cookie.key);
   }
-
-  return new CookieJar();
 };
 
-/**
- * This function saves the cookies from the provided jar to a file.
- *
- **/
-export const saveCookiesToFile = () => {
-  if (!jar) return;
+export const loadJarFromDB = async (jar, projectId) => {
+  // clear existing cookies first
+  await jarManager.clear();
 
-  const json = jar.toJSON();
-  fs.writeFileSync(COOKIE_FILE, JSON.stringify(json, null, 2));
+  const cookiesData = await getCookiesByProject(projectId);
+  if (!cookiesData) return;
+
+  const cookieData = JSON.parse(cookiesData);
+  const tempJar = CookieJar.fromJSON(cookieData);
+
+  const allCookies = await tempJar.store.getAllCookies();
+  for (const cookie of allCookies) {
+    await jar.setCookie(
+      `${cookie.key}=${cookie.value}; Domain=${cookie.domain}; Path=${cookie.path}`,
+      `https://${cookie.domain}`
+    );
+  }
 };
 
-/**
- * This function clears the cookies by creating a new CookieJar instance and deleting the cookie file.
- *
- * **/
-export const clearCookies = () => {
-  jar = new CookieJar();
-  fs.unlinkSync(COOKIE_FILE);
+export const initialCookieJar = async () => {
+  try {
+    const cookies = await getCookiesByProject();
+    if (cookies) {
+      const cookieData = JSON.parse(cookies);
+      return CookieJar.fromJSON(cookieData);
+    }
+
+    return new CookieJar();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const saveCookiesToDB = async () => {
+  try {
+    if (!jar) return;
+
+    const json = jar.toJSON();
+    // fs.writeFileSync(COOKIE_FILE, JSON.stringify(json, null, 2));
+    await updateCookiesByProject({
+      cookies: JSON.stringify(json),
+    });
+  } catch (error) {
+    console.error("error from save cookiesToFile");
+    console.error(error);
+  }
 };
 
 export const getAllCookies = async () => {
@@ -51,4 +69,14 @@ export const getCookiesByDomain = async (domain) => {
 };
 export const getCookiesStringByDomain = async (domain) => {
   return await jar.getCookieString(domain);
+};
+
+export const jarManager = {
+  clear: () => clearJar(jar),
+  loadFromDB: (projectId) => loadJarFromDB(jar, projectId),
+  saveToDB: () => saveCookiesToDB(),
+  init: () => initialCookieJar(),
+  getCookiesAll: () => getAllCookies(),
+  getCookiesByDomain: (domain) => getCookiesByDomain(domain),
+  getCookiesStringByDomain: (domain) => getCookiesStringByDomain(domain),
 };

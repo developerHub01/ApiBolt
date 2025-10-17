@@ -116,6 +116,16 @@ declare global {
       getActiveProject(): Promise<string | null>;
     };
 
+    electronAPICookiesDB: {
+      getCookiesByProject(): Promise<Array<ProjectInterface>>;
+      createCookiesByProject(payload: { name: string }): Promise<boolean>;
+      updateCookiesByProject(
+        id: string,
+        payload: Omit<ProjectInterface, "id">
+      ): Promise<boolean>;
+      deleteCookiesByProject(id: string): Promise<boolean>;
+    };
+
     electronAPISettingsDB: {
       getSettings(): Promise<SettingsTotalInterface>;
       updateSettings(

@@ -7,6 +7,7 @@ import {
   getProjects,
   updateProjects,
 } from "../db/projectsDB.js";
+import { jarManager } from "../utils/cookieManager.js";
 
 export const projectsHandlers = () => {
   ipcMain.handle("getProjects", async (_) => await getProjects());
@@ -22,9 +23,9 @@ export const projectsHandlers = () => {
     "deleteProjects",
     async (_, ...rest) => await deleteProjects(...rest)
   );
-  ipcMain.handle(
-    "changeActiveProject",
-    async (_, ...rest) => await changeActiveProject(...rest)
-  );
+  ipcMain.handle("changeActiveProject", async (_, ...rest) => {
+    await jarManager.loadFromDB();
+    return await changeActiveProject(...rest);
+  });
   ipcMain.handle("getActiveProject", async (_) => await getActiveProject());
 };

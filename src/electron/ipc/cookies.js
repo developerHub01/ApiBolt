@@ -1,24 +1,24 @@
 import { ipcMain } from "electron";
 import { fetchApi } from "../utils/api.js";
-import {
-  getAllCookies,
-  getCookiesByDomain,
-  getCookiesStringByDomain,
-} from "../utils/cookieManager.js";
+import { jarManager } from "../utils/cookieManager.js";
 
 export const registerCookieHandlers = () => {
   ipcMain.handle("fetchApi", fetchApi);
-  ipcMain.handle("getAllCookies", getAllCookies);
+  ipcMain.handle("getAllCookies", async () => await jarManager.getAllCookies());
   ipcMain.handle("getCookieByDomain", async (_, url) => {
-    const normalizedUrl = new URL(url).origin;
-    return await getCookiesByDomain(normalizedUrl);
+    try {
+      const normalizedUrl = new URL(url).origin;
+      return await jarManager.getCookiesByDomain(normalizedUrl);
+    } catch (error) {
+      console.error(error);
+    }
   });
   ipcMain.handle("getCookieStringByDomain", async (_, url) => {
     try {
       const normalizedUrl = new URL(url).origin;
-      return await getCookiesStringByDomain(normalizedUrl);
+      return await jarManager.getCookiesStringByDomain(normalizedUrl);
     } catch (error) {
-      // console.error(error);
+      console.error(error);
     }
   });
 };

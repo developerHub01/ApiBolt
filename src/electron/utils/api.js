@@ -1,8 +1,8 @@
 import axios from "axios";
 import { getPayloadSize, getRawContentType, requestDataSize } from "./utils.js";
 import { parseSetCookie } from "./cookies.js";
-import { jar } from "../main.js";
-import { getCookiesByDomain, saveCookiesToFile } from "./cookieManager.js";
+import { client, jar } from "../main.js";
+import { jarManager } from "./cookieManager.js";
 import { getBodyBinary } from "../db/bodyBinaryDB.js";
 import path from "path";
 import fs, { constants } from "fs";
@@ -18,7 +18,7 @@ export const fetchApi = async (_, rawPayload) => {
 
   try {
     const normalizedUrl = new URL(payload.url).origin;
-    const res = await axios(payload);
+    const res = await client(payload);
 
     const setCookies = res.headers["set-cookie"] || [];
 
@@ -26,10 +26,10 @@ export const fetchApi = async (_, rawPayload) => {
       setCookies.map((cookie) => jar.setCookie(cookie, normalizedUrl))
     );
 
-    saveCookiesToFile();
+    await jarManager.saveToDB();
 
     const cookies = parseSetCookie(
-      Array.from(await getCookiesByDomain(normalizedUrl))
+      Array.from(await jarManager.getCookiesByDomain(normalizedUrl))
     );
 
     const statusDetails = await getHttpStatusByCode(String(res.status));
@@ -50,6 +50,7 @@ export const fetchApi = async (_, rawPayload) => {
       },
     };
   } catch (error) {
+    console.log(error);
     const statusDetails = await getHttpStatusByCode(
       String(error.response.status)
     );
