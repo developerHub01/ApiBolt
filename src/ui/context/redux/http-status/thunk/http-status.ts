@@ -14,7 +14,7 @@ export const loadHttpStatus = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->("request-url/loadHttpStatus", async (payload, { dispatch, getState }) => {
+>("http-status/loadHttpStatus", async (payload, { dispatch, getState }) => {
   try {
     const once = payload?.once ?? false;
     const state = getState() as RootState;
@@ -38,7 +38,7 @@ export const loadHttpStatusByCode = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->("request-url/loadHttpStatusByCode", async (code, { dispatch }) => {
+>("http-status/loadHttpStatusByCode", async (code, { dispatch }) => {
   try {
     const response =
       await window.electronAPIHttpStatusDB.getHttpStatusByCode(code);
@@ -58,7 +58,7 @@ export const updateHttpStatus = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->("request-url/updateHttpStatus", async (payload, { dispatch }) => {
+>("http-status/updateHttpStatus", async (payload, { dispatch }) => {
   try {
     const response =
       await window.electronAPIHttpStatusDB.updateHttpStatus(payload);

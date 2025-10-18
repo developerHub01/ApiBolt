@@ -21,6 +21,16 @@ interface CopyButtonProps {
   side?: "bottom" | "top" | "right" | "left";
   children?: React.ReactNode;
   size?: "default" | "xs" | "sm" | "lg" | "icon" | "iconSm" | "iconXs";
+  variant?:
+    | "default"
+    | "link"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "warningSecondary"
+    | "destructiveSecondary"
+    | "ghost"
+    | "transparent";
 }
 
 const CopyButton = memo(
@@ -33,6 +43,7 @@ const CopyButton = memo(
     align = "center",
     side = "bottom",
     size = "default",
+    variant = "secondary",
   }: CopyButtonProps & React.ComponentProps<"button">) => {
     const handleClick = async () => {
       try {
@@ -55,7 +66,7 @@ const CopyButton = memo(
             </span>
           ) : (
             <Button
-              variant={"secondary"}
+              variant={variant}
               onClick={handleClick}
               disabled={!value}
               className={className}
