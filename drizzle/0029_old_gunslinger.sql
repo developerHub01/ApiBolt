@@ -1,1 +1,0 @@
-ALTER TABLE `body_form_data_table` RENAME COLUMN "type" TO "valueType";

@@ -1,1 +1,0 @@
-DROP INDEX `authorization_table_projectId_unique`;

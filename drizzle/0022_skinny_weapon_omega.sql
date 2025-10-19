@@ -1,1 +1,0 @@
-ALTER TABLE `body_raw_table` ADD `lineWrap` integer DEFAULT 1;

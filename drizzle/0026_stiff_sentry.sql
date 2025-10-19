@@ -1,1 +1,0 @@
-ALTER TABLE `request_meta_tab_table` RENAME COLUMN "rawRequestBodyType" TO "activeMetaTab";

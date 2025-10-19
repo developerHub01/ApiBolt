@@ -28,7 +28,12 @@ export const cookiesTable = sqliteTable("cookies_table", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => uuidv4()),
-  cookies: text().default("[]"),
+  projectId: text("projectId")
+    .unique()
+    .references(() => projectTable.id, {
+      onDelete: "cascade",
+    }),
+  cookies: text(),
 });
 
 export const activeSidebarTabTable = sqliteTable(
