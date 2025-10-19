@@ -45,7 +45,7 @@ const CookiePreview = memo(({ details }: Props) => {
                     <EditIcon />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent align="end">
+                <TooltipContent align="end" side="bottom">
                   <p>Edit Cookie</p>
                 </TooltipContent>
               </Tooltip>

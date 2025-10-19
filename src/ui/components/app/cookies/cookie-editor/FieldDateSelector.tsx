@@ -22,8 +22,7 @@ interface Props {
 
 const FieldDateSelector = memo(({ value, onChange }: Props) => {
   const [open, setOpen] = useState<boolean>(false);
-
-  console.log({ value });
+  
   const presentableDate = useMemo(() => {
     if (!value) return "Session";
     return dateFormater(value);

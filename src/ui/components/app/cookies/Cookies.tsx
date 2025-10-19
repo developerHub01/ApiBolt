@@ -33,13 +33,9 @@ const Cookies = memo(() => {
           <AnimatedDialogTop>
             <div className="px-4 py-2 text-lg">Cookies</div>
           </AnimatedDialogTop>
-          {isLoading ? (
-            <CookiesSkeleton />
-          ) : (
-            <AnimatedDialogContent>
-              <CookiesContent />
-            </AnimatedDialogContent>
-          )}
+          <AnimatedDialogContent>
+            {isLoading ? <CookiesSkeleton /> : <CookiesContent />}
+          </AnimatedDialogContent>
           <AnimatedDialogBottom>
             <p className="line-clamp-1 text-center max-w-lg text-sm">
               Cookies details which are saved in current project

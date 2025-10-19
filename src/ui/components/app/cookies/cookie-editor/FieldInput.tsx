@@ -4,9 +4,12 @@ import {
   useState,
   type ChangeEvent,
   type FocusEvent,
+  type KeyboardEvent,
 } from "react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
+
+const debounceDelay = 300;
 
 interface Props {
   placeholder?: string;
@@ -23,11 +26,24 @@ const FieldInput = memo(
       setFieldValue(value);
     }, [value]);
 
+    useEffect(() => {
+      const handler = setTimeout(() => {
+        if (fieldValue === value) return;
+        onChange(fieldValue.trim());
+      }, debounceDelay);
+
+      return () => clearTimeout(handler);
+    }, [fieldValue, value, onChange]);
+
     const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
       setFieldValue(e.target.value);
 
     const handleBlur = (e: FocusEvent<HTMLInputElement>) =>
-      onChange(e.target.value);
+      onChange(e.target.value.trim());
+
+    const handleKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
+      if (e.key?.toLowerCase() === "enter") onChange(fieldValue);
+    };
 
     return (
       <Input
@@ -40,6 +56,7 @@ const FieldInput = memo(
         )}
         onChange={handleChange}
         onBlur={handleBlur}
+        onKeyUp={handleKeyUp}
       />
     );
   }
