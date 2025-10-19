@@ -129,6 +129,45 @@ export const cookiesSlice = createSlice({
 
       state.editingCookies[key] = existingCookieData;
     },
+    handleChangeEditCookie: (
+      state,
+      action: PayloadAction<{
+        key?: string;
+        payload: Partial<CookieInterface>;
+      }>
+    ) => {
+      const key = action.payload?.key ?? state.selectedCookieKey;
+      if (!key || !state.editingCookies[key]) return;
+
+      state.editingCookies[key] = {
+        ...state.editingCookies[key],
+        ...action.payload.payload,
+      };
+    },
+    handleSaveEditCookie: (
+      state,
+      action: PayloadAction<
+        | {
+            key?: string;
+          }
+        | undefined
+      >
+    ) => {
+      const key = action.payload?.key ?? state.selectedCookieKey;
+      if (!key || !state.editingCookies[key]) return;
+
+      state.cookies = state.cookies.map((cookie) => {
+        if (cookie.key !== key) return cookie;
+        return {
+          ...cookie,
+          ...state.editingCookies[key],
+        };
+      });
+
+      /* after update clear editing and close isEditing */
+      delete state.editingCookies[key];
+      delete state.isEditing[key];
+    },
   },
 
   extraReducers: (builder) => {
@@ -159,6 +198,8 @@ export const {
   handleChangeAddCookie,
   handleChangeIsEditing,
   handleResetEditing,
+  handleChangeEditCookie,
+  handleSaveEditCookie,
 } = cookiesSlice.actions;
 
 export default cookiesSlice.reducer;

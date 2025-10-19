@@ -121,10 +121,10 @@ declare global {
       getCookiesByProject(projectId?: string): Promise<string>;
       getParsedCookiesByProject(projectId?: string): Promise<CookiesInterface>;
       createCookiesByProject(payload: { name: string }): Promise<boolean>;
-      updateCookiesByProject(
-        id: string,
-        payload: Omit<ProjectInterface, "id">
-      ): Promise<boolean>;
+      updateCookiesByProject(payload: {
+        projectId?: string;
+        cookies: string;
+      }): Promise<boolean>;
       deleteCookiesByProject(projectId?: string): Promise<boolean>;
       deleteCookieKeyByProject(payload: {
         key: string;

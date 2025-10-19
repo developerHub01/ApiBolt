@@ -4,7 +4,8 @@ import {
   handleChangeSelectedCookieKey,
   handleDeleteCookieByKey,
   handleLoadCookies,
-} from "../cookies-slice";
+  handleSaveEditCookie,
+} from "@/context/redux/cookies/cookies-slice";
 
 export const loadCookies = createAsyncThunk<
   void,
@@ -64,6 +65,29 @@ export const clearCookies = createAsyncThunk<
     const response = await window.electronAPICookiesDB.clearCookiesByProject();
 
     if (!response) await dispatch(loadCookies());
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+export const saveEditingCookie = createAsyncThunk<
+  void,
+  void,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("cookies/saveEditingCookie", async (_, { dispatch }) => {
+  try {
+    dispatch(handleSaveEditCookie());
+    // const state = getState() as RootState;
+    // const cookies = state.cookies.cookies;
+
+    // const response = await window.electronAPICookiesDB.updateCookiesByProject({
+    //   cookies: JSON.stringify(cookies),
+    // });
+
+    // if (!response) await dispatch(loadCookies());
   } catch (error) {
     console.error(error);
   }

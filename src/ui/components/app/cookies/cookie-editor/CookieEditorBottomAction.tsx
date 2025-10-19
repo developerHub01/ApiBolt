@@ -6,6 +6,7 @@ interface Props {
   haveChanges?: boolean;
   handleCancel?: () => void;
   handleReset?: () => void;
+  handlePrimaryAction?: () => void;
   cancelLabel?: string;
   resetLabel?: string;
   primaryActionLabel?: string;
@@ -20,6 +21,7 @@ const CookieEditorBottomAction = memo(
     primaryActionLabel = "save",
     handleCancel,
     handleReset,
+    handlePrimaryAction,
   }: Props) => {
     return (
       <div className="flex justify-end gap-2">
@@ -33,7 +35,7 @@ const CookieEditorBottomAction = memo(
         )}
         <Button
           disabled={!isEnabled}
-          onClick={handleCancel}
+          onClick={handlePrimaryAction}
           variant={"default"}
         >
           {primaryActionLabel}

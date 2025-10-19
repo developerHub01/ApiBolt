@@ -42,6 +42,15 @@ export const selectSelectedCookie = createSelector(
     cookies.find((cookie) => cookie.key === selectedCookieKey) ?? null
 );
 
+export const selectSelectedEditingCookieDetails = createSelector(
+  [
+    (state: RootState) => state.cookies.editingCookies,
+    (state: RootState) => state.cookies.selectedCookieKey,
+  ],
+  (editingCookies, selectedCookieKey) =>
+    selectedCookieKey ? (editingCookies[selectedCookieKey] ?? null) : null
+);
+
 export const selectIsAddOptionOpen = createSelector(
   [(state: RootState) => state.cookies.isAddOptionOpen],
   (isAddOptionOpen) => isAddOptionOpen
