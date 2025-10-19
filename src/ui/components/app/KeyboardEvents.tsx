@@ -1,11 +1,12 @@
 import { useEffect } from "react";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { handleChangeIsSettingOpen } from "@/context/redux/setting/setting-slice";
-import { updateSettingsZoomByKeyboard } from "@/context/redux/setting/setting-thunk";
+import { updateSettingsZoomByKeyboard } from "@/context/redux/setting/thunk/setting-thunk";
 import type { TKeyboardShortcutKey } from "@/types/setting.types";
 import { useGlobal } from "@/context/global/GlobalProvider";
 import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
 import { changeActiveTab } from "@/context/redux/sidebar/sidebar-thunk";
+import { handleChangeIsCookiesOpen } from "@/context/redux/cookies/cookies-slice";
 
 const KeyboardEvents = () => {
   const dispatch = useAppDispatch();
@@ -15,6 +16,8 @@ const KeyboardEvents = () => {
     const handler = async (e: KeyboardEvent) => {
       if (e.ctrlKey && e.key === ",") {
         return dispatch(handleChangeIsSettingOpen(true));
+      } else if (e.ctrlKey && e.altKey && e.key === "c") {
+        return dispatch(handleChangeIsCookiesOpen(true));
       } else if (e.key === "F11") {
         return toggleFullscreen();
       } else if (e.ctrlKey && ["+", "-", "=", "0"].includes(e.key)) {

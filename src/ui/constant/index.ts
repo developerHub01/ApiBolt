@@ -13,3 +13,18 @@ export const JWT_ALGO_LIST = [
   "PS256",
   "none",
 ];
+
+export const MONTHS = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];

@@ -12,6 +12,7 @@ import useCheckApplyingLayout from "@/hooks/setting/use-check-applying-layout";
 import GlobalProvider from "@/context/global/GlobalProvider";
 import BackgroundWallpaper from "@/components/app/BackgroundWallpaper";
 import LoadBasicReduxState from "@/components/app/LoadBasicReduxState";
+import Cookies from "@/components/app/cookies/Cookies";
 
 const AppLayout = () => {
   return (
@@ -25,6 +26,7 @@ const AppLayout = () => {
               <Outlet />
             </InnerLayout>
             <Setting />
+            <Cookies />
           </div>
         </ProviderStack>
         <CopyRight />

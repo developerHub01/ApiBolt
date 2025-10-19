@@ -121,3 +121,18 @@ export const ensureAbsoluteUrl = (url: string): string => {
   }
   return `http://${url}`; // fallback (you can choose https if needed)
 };
+
+export const dateFormater = (dateString: string) => {
+  try {
+    const date = new Date(dateString);
+    const formatedDate = date.toLocaleDateString("en-US", {
+      month: "long",
+      day: "2-digit",
+      year: "2-digit",
+    });
+    return formatedDate;
+  } catch (error) {
+    console.error(error);
+    return dateString;
+  }
+};

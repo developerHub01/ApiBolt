@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import DataTableCellContent from "@/components/app/collections/request/response/content/DataTableCellContent";
 import { getCookiePropertyList } from "@/utils/cookie";
-import type { CookieInterface } from "@/types/request-response.types";
+import type { CookieInterface } from "@/types/cookies.types";
 
 interface CookieListProps {
   cookies: Array<CookieInterface>;
@@ -42,7 +42,7 @@ const CookieList = ({ cookies }: CookieListProps) => {
       <TableBody className="[&>tr>td]:border-r [&>tr>td]:last:border-r-0">
         {cookies.map((cookie) => (
           <TableRow
-            key={cookie.name}
+            key={cookie.key}
             className="break-words whitespace-pre-wrap"
           >
             {colList.map((item) => (

@@ -3,10 +3,10 @@ import { cn } from "@/lib/utils";
 import type { TWindowControl } from "@/types";
 
 interface ActionButtonProps {
-  id: TWindowControl;
+  id?: TWindowControl;
   children: React.ReactNode;
   className?: string;
-  onClick: (action: TWindowControl) => void;
+  onClick?: (action: TWindowControl) => void;
 }
 
 const ActionButton = ({
@@ -23,7 +23,7 @@ const ActionButton = ({
         "hover:bg-foreground/10",
         className
       )}
-      onClick={() => onClick(id)}
+      onClick={() => onClick && id && onClick(id)}
     >
       {children}
     </Button>

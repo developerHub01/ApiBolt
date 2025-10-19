@@ -19,7 +19,7 @@ const Headers = () => {
         }
       )}
     >
-      <div className="w-full h-full pb-3">
+      <div className="w-full h-full">
         {headers ? (
           <HeaderContent headers={headers} />
         ) : (

@@ -42,7 +42,7 @@ const AnimatedDialog = memo(
           >
             <motion.div
               className={cn(
-                "absolute top-0 left-0 w-full h-full bg-background/20 backdrop-blur-sm z-0",
+                "absolute top-0 left-0 w-full h-full bg-background/15 backdrop-blur-sm z-0",
                 overlayClassName
               )}
               initial={{
@@ -138,9 +138,17 @@ const AnimatedDialogContent = memo(
     children,
   }: AnimatedDialogContentProps) => {
     return (
-      <div className={cn("w-full h-full min-h-0 flex-1", className)}>
+      <div
+        className={cn(
+          "w-full h-full min-h-0 flex-1 [&>div>div]:h-full",
+          className
+        )}
+      >
         <ScrollArea
-          className={cn("w-full h-full px-3 py-2", scrollAreaClassName)}
+          className={cn(
+            "w-full h-full px-3 py-2 [&>div>div]:h-full",
+            scrollAreaClassName
+          )}
         >
           {children}
         </ScrollArea>

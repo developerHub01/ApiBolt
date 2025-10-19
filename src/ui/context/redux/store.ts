@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import requestResponseReducer from "@/context/redux/request-response/request-response-slice";
 import sidebarReducer from "@/context/redux/sidebar/sidebar-slice";
 import settingReducer from "@/context/redux/setting/setting-slice";
+import cookiesReducer from "@/context/redux/cookies/cookies-slice";
 import requestUrlReducer from "@/context/redux/request-url/request-url-slice";
 import httpStatusReducer from "@/context/redux/http-status/http-status-slice";
 
@@ -10,6 +11,7 @@ export const store = configureStore({
     requestResponse: requestResponseReducer,
     sidebar: sidebarReducer,
     setting: settingReducer,
+    cookies: cookiesReducer,
     requestUrl: requestUrlReducer,
     httpStatus: httpStatusReducer,
   },

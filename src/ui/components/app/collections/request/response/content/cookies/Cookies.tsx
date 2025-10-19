@@ -2,8 +2,8 @@ import Empty from "@/components/ui/empty";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import CookieList from "@/components/app/collections/request/response/content/cookies/CookieList";
 import { useAppSelector } from "@/context/redux/hooks";
-import type { CookieInterface } from "@/types/request-response.types";
 import { selectResponse } from "@/context/redux/request-response/selectors/response";
+import type { CookieInterface } from "@/types/cookies.types";
 
 const Cookies = () => {
   const response = useAppSelector(selectResponse);
@@ -13,7 +13,7 @@ const Cookies = () => {
 
   return (
     <ScrollArea className="flex-1 min-h-0 h-full [&>div>div]:h-full overflow-hidden">
-      <div className="w-full h-full pb-3">
+      <div className="w-full h-full">
         {!cookies || !cookies.length ? (
           <Empty label="No cookies found" />
         ) : (
