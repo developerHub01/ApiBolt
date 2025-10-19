@@ -24,8 +24,9 @@ export const projectsHandlers = () => {
     async (_, ...rest) => await deleteProjects(...rest)
   );
   ipcMain.handle("changeActiveProject", async (_, ...rest) => {
+    const response = await changeActiveProject(...rest);
     await jarManager.loadFromDB();
-    return await changeActiveProject(...rest);
+    return response;
   });
   ipcMain.handle("getActiveProject", async (_) => await getActiveProject());
 };

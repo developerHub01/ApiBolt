@@ -50,7 +50,7 @@ export const fetchApi = async (_, rawPayload) => {
       },
     };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     const statusDetails = await getHttpStatusByCode(
       String(error.response.status)
     );

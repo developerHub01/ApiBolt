@@ -38,6 +38,7 @@ import type {
 } from "@/types/http-status.type";
 import type { TSidebarTab } from "@/types/sidebar.types";
 import type { TRequestCodeType } from "@/types/code-snippit.types";
+import type { CookiesInterface } from "@/types/cookies.types";
 
 declare global {
   interface Window {
@@ -117,13 +118,19 @@ declare global {
     };
 
     electronAPICookiesDB: {
-      getCookiesByProject(): Promise<Array<ProjectInterface>>;
+      getCookiesByProject(projectId?: string): Promise<string>;
+      getParsedCookiesByProject(projectId?: string): Promise<CookiesInterface>;
       createCookiesByProject(payload: { name: string }): Promise<boolean>;
       updateCookiesByProject(
         id: string,
         payload: Omit<ProjectInterface, "id">
       ): Promise<boolean>;
-      deleteCookiesByProject(id: string): Promise<boolean>;
+      deleteCookiesByProject(projectId?: string): Promise<boolean>;
+      deleteCookieKeyByProject(payload: {
+        key: string;
+        projectId?: string;
+      }): Promise<boolean>;
+      clearCookiesByProject(projectId?: string): Promise<boolean>;
     };
 
     electronAPISettingsDB: {

@@ -5,6 +5,7 @@ import type {
   TAuthType,
   TBearerToken,
 } from "@/types/authorization.types";
+import type { CookieInterface } from "@/types/cookies.types";
 
 export type TRequestFolderDescriptionTab =
   | "markdown"
@@ -125,16 +126,6 @@ export interface FormDataInterface
 
 export type FormDataPayloadInterface = Omit<FormDataInterface, "contentType">;
 
-export interface CookieInterface {
-  name: string;
-  value: string;
-  domain?: string;
-  path?: string;
-  expires?: string;
-  HttpOnly?: boolean;
-  secure?: boolean;
-  samesite?: string;
-}
 
 export interface ResponseInterface {
   data: unknown;

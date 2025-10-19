@@ -6,15 +6,12 @@ import {
 } from "../db/cookiesDB.js";
 
 export const clearJar = async (jar) => {
-  const allCookies = await jar.store.getAllCookies();
-  for (const cookie of allCookies) {
-    await jar.removeCookie(cookie.domain, cookie.path, cookie.key);
-  }
+  jar = new CookieJar();
 };
 
 export const loadJarFromDB = async (jar, projectId) => {
   // clear existing cookies first
-  await jarManager.clear();
+  // await jarManager.clear(jar);
 
   const cookiesData = await getCookiesByProject(projectId);
   if (!cookiesData) return;
@@ -42,6 +39,7 @@ export const initialCookieJar = async () => {
     return new CookieJar();
   } catch (error) {
     console.error(error);
+    return new CookieJar();
   }
 };
 
@@ -67,12 +65,13 @@ export const getAllCookies = async () => {
 export const getCookiesByDomain = async (domain) => {
   return await jar.getCookies(domain);
 };
+
 export const getCookiesStringByDomain = async (domain) => {
   return await jar.getCookieString(domain);
 };
 
 export const jarManager = {
-  clear: () => clearJar(jar),
+  clear: (jarParam) => clearJar(jarParam ?? jar),
   loadFromDB: (projectId) => loadJarFromDB(jar, projectId),
   saveToDB: () => saveCookiesToDB(),
   init: () => initialCookieJar(),
