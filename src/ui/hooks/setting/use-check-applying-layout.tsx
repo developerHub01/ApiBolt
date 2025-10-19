@@ -3,7 +3,7 @@ import { selectActiveProjectId } from "@/context/redux/request-response/selector
 import {
   selectLayoutTypeGlobal,
   selectLayoutTypeLocal,
-} from "@/context/redux/setting/setting-selector";
+} from "@/context/redux/setting/selectors/setting-selector";
 import type {
   TLayoutSetting,
   TLayoutSettingNoSenitize,

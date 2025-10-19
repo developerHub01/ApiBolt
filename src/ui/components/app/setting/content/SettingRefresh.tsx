@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/tooltip";
 import { RefreshCw as RefreshIcon, type LucideIcon } from "lucide-react";
 import { useAppDispatch } from "@/context/redux/hooks";
-import { loadSettings } from "@/context/redux/setting/setting-thunk";
+import { loadSettings } from "@/context/redux/setting/thunk/setting-thunk";
 
 interface Props {
   label?: string;

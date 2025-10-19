@@ -17,7 +17,7 @@ import { senitizeValue } from "@/utils/settings.utils";
 import {
   selectLayoutTypeGlobal,
   selectLayoutTypeLocal,
-} from "@/context/redux/setting/setting-selector";
+} from "@/context/redux/setting/selectors/setting-selector";
 import { selectActiveProjectId } from "@/context/redux/request-response/selectors/project";
 import SettingItemContentWrapper from "@/components/app/setting/content/SettingItemContentWrapper";
 

@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from "react";
 import type { SettingType } from "@/types/setting.types";
 import { useAppDispatch } from "@/context/redux/hooks";
-import { updateSettings } from "@/context/redux/setting/setting-thunk";
+import { updateSettings } from "@/context/redux/setting/thunk/setting-thunk";
 import type { TSettingTab } from "@/context/setting/SettingProvider";
 
 const checkIsDefaultType = (value: unknown) =>

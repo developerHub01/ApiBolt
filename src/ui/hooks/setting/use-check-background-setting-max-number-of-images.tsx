@@ -3,7 +3,7 @@ import { selectActiveProjectId } from "@/context/redux/request-response/selector
 import {
   selectMaxImagesGlobal,
   selectMaxImagesLocal,
-} from "@/context/redux/setting/setting-selector";
+} from "@/context/redux/setting/selectors/setting-selector";
 import { useSetting } from "@/context/setting/SettingProvider";
 import useGlobalLocalSettingv1 from "@/hooks/setting/use-global-local-settingv1";
 import { DEFAULT_SETTINGS } from "@/constant/settings.constant";

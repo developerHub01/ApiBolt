@@ -8,7 +8,7 @@ import {
 import useCheckApplyingLayout from "@/hooks/setting/use-check-applying-layout";
 import type { TLayoutSetting } from "@/types/setting.types";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { updateSettings } from "@/context/redux/setting/setting-thunk";
+import { updateSettings } from "@/context/redux/setting/thunk/setting-thunk";
 import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
 import { selectIsRequestListCollapsed } from "@/context/redux/request-response/selectors/request-list";
 

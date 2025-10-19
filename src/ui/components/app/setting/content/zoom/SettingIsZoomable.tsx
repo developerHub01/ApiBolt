@@ -10,12 +10,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { updateSettings } from "@/context/redux/setting/setting-thunk";
+import { updateSettings } from "@/context/redux/setting/thunk/setting-thunk";
 import { useSetting } from "@/context/setting/SettingProvider";
 import {
   selectIsZoomableGlobal,
   selectIsZoomableLocal,
-} from "@/context/redux/setting/setting-selector";
+} from "@/context/redux/setting/selectors/setting-selector";
 import { selectActiveProjectId } from "@/context/redux/request-response/selectors/project";
 
 const zoomableLocalOptions = ["default", "global", "enable", "disable"];

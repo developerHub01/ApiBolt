@@ -11,7 +11,7 @@ import SettingContextBasedLayout from "@/components/app/setting/content/SettingC
 import {
   selectSlideIntervalGlobal,
   selectSlideIntervalLocal,
-} from "@/context/redux/setting/setting-selector";
+} from "@/context/redux/setting/selectors/setting-selector";
 import { selectActiveProjectId } from "@/context/redux/request-response/selectors/project";
 
 const SettingBackgroundSlideInterval = () => {

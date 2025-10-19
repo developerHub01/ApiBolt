@@ -60,8 +60,8 @@ const SettingHttpList = memo(() => {
             <Table className="border rounded-md table-auto">
               <TableHeader>
                 <TableRow className="[&>th]:border-r [&>th]:last:border-r-0">
-                  <TableHead className="w-14">Code</TableHead>
-                  <TableHead className="w-36">Reason</TableHead>
+                  <TableHead className="w-14 p-3">Code</TableHead>
+                  <TableHead className="w-36 p-3">Reason</TableHead>
                   <TableHead>Description</TableHead>
                 </TableRow>
               </TableHeader>
@@ -81,10 +81,10 @@ const SettingHttpList = memo(() => {
                         "focus-within:bg-accent/60 duration-75 transition-colors"
                       )}
                     >
-                      <TableCell className="font-medium whitespace-break-spaces w-14">
+                      <TableCell className="font-medium whitespace-break-spaces w-14 p-3">
                         <p>{code}</p>
                       </TableCell>
-                      <TableCell className="whitespace-break-spaces w-36">
+                      <TableCell className="whitespace-break-spaces w-36 p-3">
                         <SettingHttpEditableContent
                           type="reason"
                           code={code}
@@ -92,7 +92,7 @@ const SettingHttpList = memo(() => {
                           value={reason}
                         />
                       </TableCell>
-                      <TableCell className="whitespace-break-spaces">
+                      <TableCell className="whitespace-break-spaces p-3">
                         <SettingHttpEditableContent
                           type="description"
                           code={code}

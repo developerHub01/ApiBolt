@@ -27,7 +27,7 @@ export const loadSettings = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->("request-response/loadSettings", async (_, { dispatch }) => {
+>("setting/loadSettings", async (_, { dispatch }) => {
   try {
     const response = await window.electronAPISettingsDB.getSettings();
 
@@ -44,7 +44,7 @@ export const updateSettings = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->("request-response/updateSettings", async (payload, { dispatch }) => {
+>("setting/updateSettings", async (payload, { dispatch }) => {
   try {
     const response = await window.electronAPISettingsDB.updateSettings(payload);
 
@@ -70,7 +70,7 @@ export const updateSettingsZoomByKeyboard = createAsyncThunk<
     state: RootState;
   }
 >(
-  "request-response/updateSettingsZoomByKeyboard",
+  "setting/updateSettingsZoomByKeyboard",
   async (type, { dispatch, getState }) => {
     try {
       const state = getState() as RootState;
@@ -140,7 +140,7 @@ export const updateSettingsBackgroundImages = createAsyncThunk<
     state: RootState;
   }
 >(
-  "request-response/updateSettingsBackgroundImages",
+  "setting/updateSettingsBackgroundImages",
   async ({ type, method }, { dispatch, getState }) => {
     try {
       const state = getState() as RootState;

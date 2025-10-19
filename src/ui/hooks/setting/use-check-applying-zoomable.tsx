@@ -4,7 +4,7 @@ import { selectActiveProjectId } from "@/context/redux/request-response/selector
 import {
   selectIsZoomableGlobal,
   selectIsZoomableLocal,
-} from "@/context/redux/setting/setting-selector";
+} from "@/context/redux/setting/selectors/setting-selector";
 import { checkApplyingZoomable } from "@/utils/settings.utils";
 
 const useCheckApplyingZoomable = (): boolean => {
