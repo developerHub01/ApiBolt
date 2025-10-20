@@ -123,7 +123,7 @@ declare global {
       createCookiesByProject(payload: { name: string }): Promise<boolean>;
       updateCookiesByProject(payload: {
         projectId?: string;
-        payload: CookiesInterface;
+        cookies: CookiesInterface;
       }): Promise<boolean>;
       deleteCookiesByProject(projectId?: string): Promise<boolean>;
       deleteCookieKeyByProject(payload: {

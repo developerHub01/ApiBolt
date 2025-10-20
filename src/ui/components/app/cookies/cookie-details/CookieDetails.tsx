@@ -65,7 +65,7 @@ const CookieDetails = memo(() => {
 
   return (
     <ContentWrapper
-      key={`cookie-${filteredDetails?.key}`}
+      key={`cookie-${filteredDetails?.key ?? ""}`}
       open={Boolean(filteredDetails)}
     >
       {cookie && (

@@ -1,11 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import {
+  handleAddCookie,
+  handleChangeIsAddCookieOption,
   handleChangeSelectedCookieKey,
+  handleClearEditing,
   handleDeleteCookieByKey,
   handleLoadCookies,
   handleSaveEditCookie,
 } from "@/context/redux/cookies/cookies-slice";
+import type { CookieInterface } from "@/types/cookies.types";
 
 export const loadCookies = createAsyncThunk<
   void,
@@ -51,7 +55,7 @@ export const deleteCookieByKey = createAsyncThunk<
 });
 
 export const clearCookies = createAsyncThunk<
-  void,
+  boolean,
   void,
   {
     dispatch: AppDispatch;
@@ -63,32 +67,86 @@ export const clearCookies = createAsyncThunk<
     dispatch(handleLoadCookies([]));
 
     const response = await window.electronAPICookiesDB.clearCookiesByProject();
-
     if (!response) await dispatch(loadCookies());
+
+    return response;
   } catch (error) {
     console.error(error);
+    return false;
   }
 });
 
-export const saveEditingCookie = createAsyncThunk<
-  void,
+export const addCookie = createAsyncThunk<
+  boolean,
   void,
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->("cookies/saveEditingCookie", async (_, { dispatch, getState }) => {
+>("cookies/addCookie", async (_, { dispatch }) => {
+  try {
+    dispatch(handleAddCookie());
+    const response = await dispatch(updateCookies()).unwrap();
+
+    /* if added successfully then close it */
+    if (response) dispatch(handleChangeIsAddCookieOption(false));
+    return response;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+});
+
+export const saveEditingCookie = createAsyncThunk<
+  boolean,
+  void,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("cookies/saveEditingCookie", async (_, { dispatch }) => {
   try {
     dispatch(handleSaveEditCookie());
+    const response = await dispatch(updateCookies()).unwrap();
+
+    if (response) dispatch(handleClearEditing());
+    return response;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+});
+
+export const updateCookies = createAsyncThunk<
+  boolean,
+  void,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("cookies/updateCookies", async (_, { dispatch, getState }) => {
+  try {
     const state = getState() as RootState;
-    const cookies = state.cookies.cookies;
+    let cookies = [...(state.cookies.cookies ?? [])];
+
+    cookies = cookies.map((cookie) => {
+      const newCookie: CookieInterface = { ...cookie };
+
+      (Object.keys(newCookie) as Array<keyof CookieInterface>).map((key) => {
+        if (newCookie[key] === null) delete newCookie[key];
+      });
+
+      return newCookie;
+    });
 
     const response = await window.electronAPICookiesDB.updateCookiesByProject({
-      payload: cookies,
+      cookies,
     });
 
     if (!response) await dispatch(loadCookies());
+    return response;
   } catch (error) {
     console.error(error);
+    return false;
   }
 });

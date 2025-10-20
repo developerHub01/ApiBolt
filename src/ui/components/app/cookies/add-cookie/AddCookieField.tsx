@@ -11,7 +11,7 @@ interface Props {
 const AddCookieField = ({ fieldKey, value }: Props) => {
   const dispatch = useAppDispatch();
 
-  const handleChange = (value: string | null | boolean) => {
+  const handleChange = (value: CookieInterface[keyof CookieInterface]) => {
     if (["httpOnly", "secure"].includes(fieldKey))
       value = value === "false" ? false : true;
 

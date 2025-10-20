@@ -74,7 +74,7 @@ const CookiePreview = memo(({ details }: Props) => {
                 "font-medium whitespace-normal break-words break-all min-h-16 p-3"
               )}
             >
-              {String(value)}
+              {String(value ?? "")}
             </TableCell>
           </TableRow>
         ))}

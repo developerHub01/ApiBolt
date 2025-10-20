@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import FieldInput from "@/components/app/cookies/cookie-editor/FieldInput";
 import FieldSelector from "@/components/app/cookies/cookie-editor/FieldSelector";
 import FieldDateSelector from "@/components/app/cookies/cookie-editor/FieldDateSelector";
@@ -34,10 +34,33 @@ const booleanList = [
 interface Props {
   fieldKey: keyof CookieInterface;
   value: CookieInterface[keyof CookieInterface];
-  onChange: (value: string | null | boolean) => void;
+  onChange: (value: CookieInterface[keyof CookieInterface]) => void;
 }
 
 const CookieField = memo(({ fieldKey, value, onChange }: Props) => {
+  const handleChangeWithFilter = useCallback(
+    (value: CookieInterface[keyof CookieInterface]) => {
+      let filterdValue = typeof value === "string" ? value.trim() : value;
+
+      switch (fieldKey) {
+        case "maxAge": {
+          if (isNaN(Number(filterdValue))) filterdValue = null;
+          else filterdValue = Number(filterdValue);
+          break;
+        }
+        case "hostOnly":
+        case "httpOnly"  : 
+        {
+          filterdValue = filterdValue === "true" ? true : false;
+          break;
+        }
+      }
+
+      return onChange(filterdValue);
+    },
+    [fieldKey, onChange]
+  );
+
   return (
     <>
       {fieldKey === "sameSite" ? (
@@ -45,7 +68,7 @@ const CookieField = memo(({ fieldKey, value, onChange }: Props) => {
           list={sameSiteList}
           label="Select samesite"
           value={String(value ?? DEFAULT_COOKIE_DETAILS["sameSite"])}
-          onChange={onChange}
+          onChange={handleChangeWithFilter}
         />
       ) : fieldKey === "httpOnly" ? (
         <FieldSelector

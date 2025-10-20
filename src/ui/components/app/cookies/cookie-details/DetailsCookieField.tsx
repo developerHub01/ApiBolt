@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { handleChangeAddCookie } from "@/context/redux/cookies/cookies-slice";
 import { useAppDispatch } from "@/context/redux/hooks";
 import type { CookieInterface } from "@/types/cookies.types";
@@ -11,16 +12,15 @@ interface Props {
 const DetailsCookieField = ({ fieldKey, value }: Props) => {
   const dispatch = useAppDispatch();
 
-  const handleChange = (value: string | null | boolean) => {
-    if (["httpOnly", "secure"].includes(fieldKey))
-      value = value === "false" ? false : true;
-
-    dispatch(
-      handleChangeAddCookie({
-        [fieldKey]: value,
-      })
-    );
-  };
+  const handleChange = useCallback(
+    (value: CookieInterface[keyof CookieInterface]) =>
+      dispatch(
+        handleChangeAddCookie({
+          [fieldKey]: value,
+        })
+      ),
+    [dispatch, fieldKey]
+  );
 
   return (
     <CookieField fieldKey={fieldKey} value={value} onChange={handleChange} />

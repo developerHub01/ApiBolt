@@ -74,9 +74,12 @@ export const cookiesSlice = createSlice({
       state.selectedCookieKey =
         state.selectedCookieKey === action.payload ? null : action.payload;
     },
-    handleChangeIsAddCookieOption: (state, action: PayloadAction<boolean>) => {
+    handleChangeIsAddCookieOption: (
+      state,
+      action: PayloadAction<boolean | undefined>
+    ) => {
       state.selectedCookieKey = null;
-      state.isAddOptionOpen = action.payload;
+      state.isAddOptionOpen = action.payload ?? !state.isAddOptionOpen;
     },
     handleResetAddCookieDetails: (state) => {
       state.addCookieDetails = DEFAULT_COOKIE_DETAILS;
@@ -93,6 +96,22 @@ export const cookiesSlice = createSlice({
         ...state.addCookieDetails,
         ...action.payload,
       };
+    },
+    handleClearEditing: (
+      state,
+      action: PayloadAction<
+        | {
+            key?: string;
+          }
+        | undefined
+      >
+    ) => {
+      const key = action.payload?.key ?? state.selectedCookieKey;
+      if (!key) return;
+
+      /* after update clear editing and close isEditing */
+      delete state.editingCookies[key];
+      delete state.isEditing[key];
     },
     handleChangeIsEditing: (
       state,
@@ -163,10 +182,10 @@ export const cookiesSlice = createSlice({
         ...state.cookies[index],
         ...state.editingCookies[key],
       };
-
-      /* after update clear editing and close isEditing */
-      delete state.editingCookies[key];
-      delete state.isEditing[key];
+    },
+    handleAddCookie: (state) => {
+      state.cookies.push(state.addCookieDetails);
+      state.addCookieDetails = DEFAULT_COOKIE_DETAILS;
     },
   },
 
@@ -196,10 +215,12 @@ export const {
   handleResetAddCookieDetails,
   handleCancelAddCookie,
   handleChangeAddCookie,
+  handleClearEditing,
   handleChangeIsEditing,
   handleResetEditing,
   handleChangeEditCookie,
   handleSaveEditCookie,
+  handleAddCookie,
 } = cookiesSlice.actions;
 
 export default cookiesSlice.reducer;
