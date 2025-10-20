@@ -7,6 +7,7 @@ import { useGlobal } from "@/context/global/GlobalProvider";
 import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
 import { changeActiveTab } from "@/context/redux/sidebar/sidebar-thunk";
 import { handleChangeIsCookiesOpen } from "@/context/redux/cookies/cookies-slice";
+import { removeTab } from "@/context/redux/request-response/thunks/tab-list";
 
 const KeyboardEvents = () => {
   const dispatch = useAppDispatch();
@@ -69,6 +70,15 @@ const KeyboardEvents = () => {
       ) {
         e.preventDefault();
         await dispatch(changeActiveTab("authorization"));
+      } else if (
+        e.ctrlKey &&
+        !e.shiftKey &&
+        !e.altKey &&
+        !e.metaKey &&
+        e.key === "F4"
+      ) {
+        e.preventDefault();
+        dispatch(removeTab());
       }
     };
 

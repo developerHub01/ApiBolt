@@ -548,8 +548,11 @@ export const requestResponseSlice = createSlice({
       newList.splice(addIndex, 0, id);
       state.tabList = newList;
     },
-    handleRemoveTab: (state, action: PayloadAction<string>) => {
-      const id = action.payload;
+    handleRemoveTab: (state, action: PayloadAction<string | undefined>) => {
+      const id = action.payload ?? state.selectedTab;
+
+      if (!id) return;
+
       const idIndex = state.tabList.findIndex((tabId) => tabId === id);
       const newTabList = state.tabList.filter((tabId) => tabId !== id);
       state.tabList = newTabList;

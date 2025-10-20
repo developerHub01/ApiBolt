@@ -7,6 +7,7 @@ import {
   handleChangeSelectedTab,
   handleChangeTabList,
   handleCreateSingleRequest,
+  handleRemoveTab,
 } from "@/context/redux/request-response/request-response-slice";
 import { v4 as uuidv4 } from "uuid";
 import { getNodeParentsIdList } from "@/utils/request-response.utils";
@@ -111,6 +112,26 @@ export const expendParentsOnSelectedChangeTabsData = createAsyncThunk<
     }
   }
 );
+
+export const removeTab = createAsyncThunk<
+  void,
+  string | undefined,
+  {
+    state: RootState;
+    dispatch: AppDispatch;
+  }
+>("request-response/removeTab", (id, { dispatch, getState }) => {
+  try {
+    const state = getState() as RootState;
+    const activeTab = state.sidebar.activeTab;
+
+    if (activeTab !== "collections") return;
+
+    dispatch(handleRemoveTab(id));
+  } catch (error) {
+    console.error(error);
+  }
+});
 /* ==============================
 ========= TabList end =========
 ================================= */
