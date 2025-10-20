@@ -156,13 +156,13 @@ export const cookiesSlice = createSlice({
       const key = action.payload?.key ?? state.selectedCookieKey;
       if (!key || !state.editingCookies[key]) return;
 
-      state.cookies = state.cookies.map((cookie) => {
-        if (cookie.key !== key) return cookie;
-        return {
-          ...cookie,
-          ...state.editingCookies[key],
-        };
-      });
+      const index = state.cookies.findIndex((cookie) => cookie.key === key);
+      if (index < 0 || !state.cookies[index]) return;
+
+      state.cookies[index] = {
+        ...state.cookies[index],
+        ...state.editingCookies[key],
+      };
 
       /* after update clear editing and close isEditing */
       delete state.editingCookies[key];

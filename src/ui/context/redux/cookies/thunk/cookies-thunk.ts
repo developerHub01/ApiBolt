@@ -77,17 +77,17 @@ export const saveEditingCookie = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->("cookies/saveEditingCookie", async (_, { dispatch }) => {
+>("cookies/saveEditingCookie", async (_, { dispatch, getState }) => {
   try {
     dispatch(handleSaveEditCookie());
-    // const state = getState() as RootState;
-    // const cookies = state.cookies.cookies;
+    const state = getState() as RootState;
+    const cookies = state.cookies.cookies;
 
-    // const response = await window.electronAPICookiesDB.updateCookiesByProject({
-    //   cookies: JSON.stringify(cookies),
-    // });
+    const response = await window.electronAPICookiesDB.updateCookiesByProject({
+      payload: cookies,
+    });
 
-    // if (!response) await dispatch(loadCookies());
+    if (!response) await dispatch(loadCookies());
   } catch (error) {
     console.error(error);
   }

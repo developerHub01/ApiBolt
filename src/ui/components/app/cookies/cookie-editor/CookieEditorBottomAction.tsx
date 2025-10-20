@@ -25,11 +25,11 @@ const CookieEditorBottomAction = memo(
   }: Props) => {
     return (
       <div className="flex justify-end gap-2">
-        <Button onClick={handleCancel} variant={"destructive"}>
+        <Button onClick={handleCancel} variant={"destructive"} size={"sm"}>
           {cancelLabel}
         </Button>
         {haveChanges && (
-          <Button onClick={handleReset} variant={"secondary"}>
+          <Button onClick={handleReset} variant={"secondary"} size={"sm"}>
             {resetLabel}
           </Button>
         )}
@@ -37,6 +37,7 @@ const CookieEditorBottomAction = memo(
           disabled={!isEnabled}
           onClick={handlePrimaryAction}
           variant={"default"}
+          size={"sm"}
         >
           {primaryActionLabel}
         </Button>

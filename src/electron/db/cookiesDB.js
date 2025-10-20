@@ -81,33 +81,40 @@ export const updateCookiesByProject = async (payload) => {
   try {
     if (!payload) return false;
 
-    let { projectId, ...other } = payload;
-    payload = other;
+    let { projectId, payload: cookies } = payload;
+    payload = cookies;
 
     if (!projectId) projectId = await getActiveProject();
     if (!projectId) return false;
 
-    const isExist = (
+    const existing = (
       await db
         .select()
         .from(cookiesTable)
         .where(eq(cookiesTable.projectId, projectId))
     )?.[0];
 
-    if (!isExist) {
+    if (!existing?.cookies) {
       const result = await createCookiesByProject({
-        ...payload,
+        cookies: JSON.stringify({
+          cookies: payload,
+        }),
         projectId,
       });
       return result.changes > 0;
     }
 
+    /* getting existing cookies and updating with payload */
+    const existingCookies = JSON.parse(existing.cookies);
+    existingCookies.cookies = payload;
+
     const updated = await db
       .update(cookiesTable)
       .set({
-        ...payload,
+        cookies: JSON.stringify(existingCookies),
       })
       .where(eq(cookiesTable.projectId, projectId));
+
     return updated?.changes > 0;
   } catch (error) {
     console.error(error);
