@@ -2,7 +2,7 @@ import { CookieJar } from "tough-cookie";
 import { jar } from "../main.js";
 import {
   getCookiesByProject,
-  updateCookiesByProject,
+  replaceCookiesByProject,
 } from "../db/cookiesDB.js";
 
 export const clearJar = async (jar) => {
@@ -11,7 +11,7 @@ export const clearJar = async (jar) => {
 
 export const loadJarFromDB = async (jar, projectId) => {
   // clear existing cookies first
-  // await jarManager.clear(jar);
+  await jarManager.clear(jar);
 
   const cookiesData = await getCookiesByProject(projectId);
   if (!cookiesData) return;
@@ -31,12 +31,11 @@ export const loadJarFromDB = async (jar, projectId) => {
 export const initialCookieJar = async () => {
   try {
     const cookies = await getCookiesByProject();
-    if (cookies) {
-      const cookieData = JSON.parse(cookies);
-      return CookieJar.fromJSON(cookieData);
-    }
+    const cookiesData = JSON.parse(cookies);
+    if (!cookiesData || !cookiesData.cookies)
+      throw new Error("No cookies exist");
 
-    return new CookieJar();
+    return CookieJar.fromJSON(cookiesData);
   } catch (error) {
     console.error(error);
     return new CookieJar();
@@ -48,9 +47,8 @@ export const saveCookiesToDB = async () => {
     if (!jar) return;
 
     const json = jar.toJSON();
-    // fs.writeFileSync(COOKIE_FILE, JSON.stringify(json, null, 2));
-    await updateCookiesByProject({
-      cookies: JSON.stringify(json),
+    await replaceCookiesByProject({
+      cookies: json,
     });
   } catch (error) {
     console.error("error from save cookiesToFile");

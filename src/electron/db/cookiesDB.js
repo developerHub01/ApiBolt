@@ -77,11 +77,50 @@ export const createCookiesByProject = async (payload = {}) => {
   }
 };
 
+export const replaceCookiesByProject = async (payload) => {
+  try {
+    if (!payload) return false;
+
+    let { projectId, cookies } = payload;
+    payload = cookies;
+
+    if (!projectId) projectId = await getActiveProject();
+    if (!projectId) return false;
+
+    const existing = (
+      await db
+        .select()
+        .from(cookiesTable)
+        .where(eq(cookiesTable.projectId, projectId))
+    )?.[0];
+
+    if (!existing?.cookies) {
+      const result = await createCookiesByProject({
+        cookies: JSON.stringify(payload),
+        projectId,
+      });
+      return result.changes > 0;
+    }
+
+    const updated = await db
+      .update(cookiesTable)
+      .set({
+        cookies: JSON.stringify(payload),
+      })
+      .where(eq(cookiesTable.projectId, projectId));
+
+    return updated?.changes > 0;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};
+
 export const updateCookiesByProject = async (payload) => {
   try {
     if (!payload) return false;
 
-    let { projectId, payload: cookies } = payload;
+    let { projectId, cookies } = payload;
     payload = cookies;
 
     if (!projectId) projectId = await getActiveProject();
