@@ -69,7 +69,7 @@ const CookieEditor = memo(
                         }
                       />
                     ) : (
-                      String(value)
+                      String(value ?? "")
                     )}
                   </TableCell>
                 </TableRow>

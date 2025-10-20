@@ -5,9 +5,13 @@ import {
   type ChangeEvent,
   type FocusEvent,
   type KeyboardEvent,
+  type ClipboardEvent,
 } from "react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
+import type { CookieInterface } from "@/types/cookies.types";
+import { normalizePath } from "@/utils/helper";
+import { toast } from "sonner";
 
 const debounceDelay = 300;
 
@@ -15,11 +19,12 @@ interface Props {
   placeholder?: string;
   value: string;
   className?: string;
+  fieldKey: keyof CookieInterface;
   onChange: (value: string) => void;
 }
 
 const FieldInput = memo(
-  ({ placeholder, value, className = "", onChange }: Props) => {
+  ({ placeholder, value, className = "", onChange, fieldKey }: Props) => {
     const [fieldValue, setFieldValue] = useState<string>(value);
 
     useEffect(() => {
@@ -35,14 +40,114 @@ const FieldInput = memo(
       return () => clearTimeout(handler);
     }, [fieldValue, value, onChange]);
 
+    const cleanValue = (input: string): string => {
+      /* Clean input based on field type */
+      switch (fieldKey) {
+        case "key":
+          return input.replace(/[ ,;=]/g, "");
+        case "domain":
+          return input.replace(/[^a-zA-Z0-9.-]/g, "");
+        case "path":
+          return normalizePath(input.replace(/[^a-zA-Z0-9\-._~/]/g, ""));
+        case "maxAge":
+          return input.replace(/[^0-9]/g, "");
+        case "value":
+        default:
+          return input.replace(/[\n]/g, "");
+      }
+    };
+
     const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
       setFieldValue(e.target.value);
 
-    const handleBlur = (e: FocusEvent<HTMLInputElement>) =>
-      onChange(e.target.value.trim());
+    const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
+      let value = e.target.value.trim();
+      const cleaned = cleanValue(value);
 
-    const handleKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
-      if (e.key?.toLowerCase() === "enter") onChange(fieldValue);
+      /* Show toast if cleaned */
+      if (cleaned !== value) {
+        toast("Value cleaned", {
+          description: "Invalid characters were removed automatically.",
+        });
+      }
+
+      /* Special handling for maxAge and path */
+      if (fieldKey === "maxAge" && cleaned) {
+        value = String(Number(cleaned));
+      } else if (fieldKey === "path") {
+        value = normalizePath(cleaned);
+      } else {
+        value = cleaned;
+      }
+
+      onChange(value);
+      setFieldValue(value);
+    };
+
+    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+      const key = e.key;
+
+      /* Allow control keys always */
+      const controlKeys = [
+        "Backspace",
+        "Delete",
+        "ArrowLeft",
+        "ArrowRight",
+        "Tab",
+      ];
+      if (controlKeys.includes(key)) return;
+
+      /* Field-specific validation */
+      switch (fieldKey) {
+        case "key":
+          /* No spaces or separators */
+          if ([" ", ";", ",", "="].includes(key)) e.preventDefault();
+          break;
+        case "value":
+          /* Disallow newlines */
+          if (key === "\n") e.preventDefault();
+          break;
+        case "domain":
+          /* Only letters, digits, "-", "." */
+          if (!/[a-zA-Z0-9.-]/.test(key)) e.preventDefault();
+          break;
+        case "path":
+          /* Only "/", letters, digits, "_", "-", ".", "~" */
+          if (!/[a-zA-Z0-9\-._~/]/.test(key)) e.preventDefault();
+          break;
+        case "maxAge":
+          /* Only digits */
+          if (!/[0-9]/.test(key)) e.preventDefault();
+          break;
+        default:
+          break;
+      }
+
+      if (key === "Enter") onChange(fieldValue.trim());
+    };
+
+    const handlePaste = (e: ClipboardEvent<HTMLInputElement>) => {
+      e.preventDefault();
+      const pasteData = e.clipboardData?.getData("text") ?? "";
+      const cleaned = cleanValue(pasteData);
+
+      if (cleaned === pasteData) {
+        /* Valid paste */
+        setFieldValue(cleaned);
+        onChange(cleaned);
+      } else if (cleaned.length > 0) {
+        /* Cleaned paste */
+        setFieldValue(cleaned);
+        onChange(cleaned);
+        toast("Pasted content cleaned", {
+          description: "Some invalid characters were removed automatically.",
+        });
+      } else {
+        /* Entire paste invalid */
+        toast("Invalid paste", {
+          description: "Pasted content contains only invalid characters.",
+        });
+      }
     };
 
     return (
@@ -56,7 +161,8 @@ const FieldInput = memo(
         )}
         onChange={handleChange}
         onBlur={handleBlur}
-        onKeyUp={handleKeyUp}
+        onKeyDown={handleKeyDown}
+        onPaste={handlePaste}
       />
     );
   }

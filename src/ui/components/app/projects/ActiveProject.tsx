@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { Trash2 as DeleteIcon } from "lucide-react";
 import { updateProject } from "@/context/redux/request-response/thunks/projects";
 import { useProject } from "@/context/project/ProjectProvider";
+import { cn } from "@/lib/utils";
 
 const ActiveProject = () => {
   const dispatch = useAppDispatch();
@@ -91,7 +92,10 @@ const ActiveProject = () => {
         <h3 className="w-full text-xl font-bold flex items-center gap-3 pb-3">
           <span className="inline-block w-2 h-2 rounded-full bg-green-500 shadow-md shadow-green-400"></span>
           <input
-            className="w-full flex-1 outline-none border-b border-transparent focus:border-b-primary"
+            className={cn(
+              "w-full flex-1 outline-none border-b border-transparent focus:border-b-primary",
+              "selection:bg-primary selection:text-primary-foreground"
+            )}
             onKeyDown={handleKeydownName}
             onBlur={handleBlurName}
             ref={nameRef}

@@ -43,3 +43,17 @@ export const isStringIsValidObject = (str: string): boolean => {
     return false;
   }
 };
+
+export const normalizePath = (path: string) => {
+  if (!path) return "/";
+
+  /* Replace multiple consecutive slashes with a single slash */
+  let normalized = path.replace(/\/+/g, "/");
+
+  /* Ensure it starts with a leading slash */
+  if (!normalized.startsWith("/")) {
+    normalized = "/" + normalized;
+  }
+
+  return normalized;
+};

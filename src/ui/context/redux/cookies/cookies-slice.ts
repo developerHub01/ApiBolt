@@ -10,6 +10,7 @@ export const DEFAULT_COOKIE_DETAILS: CookieInterface = {
   maxAge: null,
   expires: null,
   httpOnly: false,
+  hostOnly: false,
   secure: false,
   sameSite: "lax",
 };

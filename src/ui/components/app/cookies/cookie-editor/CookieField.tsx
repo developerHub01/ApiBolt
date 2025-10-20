@@ -49,8 +49,7 @@ const CookieField = memo(({ fieldKey, value, onChange }: Props) => {
           break;
         }
         case "hostOnly":
-        case "httpOnly"  : 
-        {
+        case "httpOnly": {
           filterdValue = filterdValue === "true" ? true : false;
           break;
         }
@@ -101,6 +100,7 @@ const CookieField = memo(({ fieldKey, value, onChange }: Props) => {
           value={String(value ?? "")}
           onChange={onChange}
           placeholder={fieldKey}
+          fieldKey={fieldKey}
         />
       )}
     </>
