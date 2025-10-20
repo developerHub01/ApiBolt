@@ -10,21 +10,26 @@ export const clearJar = async (jar) => {
 };
 
 export const loadJarFromDB = async (jar, projectId) => {
-  // clear existing cookies first
-  await jarManager.clear(jar);
+  try {
+    // clear existing cookies first
+    await jarManager.clear(jar);
 
-  const cookiesData = await getCookiesByProject(projectId);
-  if (!cookiesData) return;
+    const cookiesData = await getCookiesByProject(projectId);
+    if (!cookiesData) return;
 
-  const cookieData = JSON.parse(cookiesData);
-  const tempJar = CookieJar.fromJSON(cookieData);
+    const cookieData = JSON.parse(cookiesData);
+    const tempJar = CookieJar.fromJSON(cookieData);
 
-  const allCookies = await tempJar.store.getAllCookies();
-  for (const cookie of allCookies) {
-    await jar.setCookie(
-      `${cookie.key}=${cookie.value}; Domain=${cookie.domain}; Path=${cookie.path}`,
-      `https://${cookie.domain}`
-    );
+    const allCookies = await tempJar.store.getAllCookies();
+    for (const cookie of allCookies) {
+      const normalizedUrl = new URL(cookie.url).origin;
+      await jar.setCookie(
+        `${cookie.key ?? ""}=${cookie.value ?? ""}; Domain=${cookie.domain ?? ""}; Path=${cookie.path ?? "/"}`,
+        normalizedUrl
+      );
+    }
+  } catch (error) {
+    console.log(error);
   }
 };
 

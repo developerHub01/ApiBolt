@@ -19,18 +19,21 @@ export const cookiesHandler = () => {
     "getParsedCookiesByProject",
     async (_, ...rest) => await getParsedCookiesByProject(...rest)
   );
-  ipcMain.handle(
-    "createCookiesByProject",
-    async (_, ...rest) => await createCookiesByProject(...rest)
-  );
-  ipcMain.handle(
-    "updateCookiesByProject",
-    async (_, ...rest) => await updateCookiesByProject(...rest)
-  );
-  ipcMain.handle(
-    "deleteCookiesByProject",
-    async (_, ...rest) => await deleteCookiesByProject(...rest)
-  );
+  ipcMain.handle("createCookiesByProject", async (_, ...rest) => {
+    const response = await createCookiesByProject(...rest);
+    await jarManager.loadFromDB();
+    return response;
+  });
+  ipcMain.handle("updateCookiesByProject", async (_, ...rest) => {
+    const response = await updateCookiesByProject(...rest);
+    await jarManager.loadFromDB();
+    return response;
+  });
+  ipcMain.handle("deleteCookiesByProject", async (_, ...rest) => {
+    const response = await deleteCookiesByProject(...rest);
+    await jarManager.loadFromDB();
+    return response;
+  });
   ipcMain.handle("deleteCookieKeyByProject", async (_, ...rest) => {
     const response = await deleteCookieKeyByProject(...rest);
     await jarManager.loadFromDB();
