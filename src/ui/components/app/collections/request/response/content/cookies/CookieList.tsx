@@ -43,10 +43,10 @@ const CookieList = ({ cookies }: CookieListProps) => {
         {cookies.map((cookie) => (
           <TableRow
             key={cookie.key}
-            className="break-words whitespace-pre-wrap"
+            className="wrap-break-word whitespace-pre-wrap"
           >
             {colList.map((item) => (
-              <TableCell key={item} className="whitespace-normal break-words">
+              <TableCell key={item} className="whitespace-normal wrap-break-word">
                 <DataTableCellContent
                   value={cookie[item as keyof typeof cookie] ?? ""}
                 />

@@ -91,17 +91,20 @@ const SettingHttpEditableContent = ({
 
   return (
     <div className="w-full h-full group flex items-center">
-      <p
-        contentEditable
-        suppressContentEditableWarning
-        className="w-full outline-none cursor-text"
-        onKeyDown={handleKeydown}
-        onBlur={handleBlur}
-        onPaste={handlePaste}
-        data-value={valueState}
-      >
-        {valueState}
-      </p>
+      <div className="flex-1 border-b border-transparent focus-within:border-primary py-0.5">
+        <p
+          contentEditable
+          suppressContentEditableWarning
+          className="w-full outline-none cursor-text leading-relaxed"
+          onKeyDown={handleKeydown}
+          onBlur={handleBlur}
+          onPaste={handlePaste}
+          data-value={valueState}
+          tabIndex={0}
+        >
+          {valueState}
+        </p>
+      </div>
       {editedValue !== value && editedValue && (
         <TooltipProvider>
           <Tooltip>
