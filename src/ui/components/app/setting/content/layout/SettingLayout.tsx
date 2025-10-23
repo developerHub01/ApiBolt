@@ -58,6 +58,13 @@ const SettingLayout = () => {
 
   const senitizedValue = senitizeValue(value, DEFAULT_SETTINGS.layoutType);
 
+  /**
+   * ===========================================================
+   * This setting is under development so we are not rendering it for now
+   * ===========================================================
+   * ***/
+  return null;
+
   return (
     <SettingItem id="layout" title="Layout Settings">
       <SettingItemContentWrapper className="flex-col gap-4">
