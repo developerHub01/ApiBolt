@@ -1,4 +1,4 @@
-import { memo, useCallback } from "react";
+import { memo, useCallback, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
   AnimatedDialogBottom,
@@ -7,19 +7,27 @@ import {
   AnimatedDialogTop,
 } from "@/components/ui/animated-dialog";
 import { AnimatedDialog } from "@/components/ui/animated-dialog";
-import {
-  selectCookiesIsLoading,
-  selectIsCookiesOpen,
-} from "@/context/redux/cookies/selectors/cookies-selector";
+import { selectIsCookiesOpen } from "@/context/redux/cookies/selectors/cookies-selector";
 import { handleChangeIsCookiesOpen } from "@/context/redux/cookies/cookies-slice";
 import LoadCookies from "@/components/app/cookies/LoadCookies";
 import CookiesContent from "@/components/app/cookies/CookiesContent";
 import CookiesSkeleton from "@/components/app/cookies/CookiesSkeleton";
+import {
+  selectCookiesError,
+  selectCookiesIsLoading,
+} from "@/context/redux/status/selectors/cookies";
+import { toast } from "sonner";
 
 const Cookies = memo(() => {
   const dispatch = useAppDispatch();
   const isCookiesOpen = useAppSelector(selectIsCookiesOpen);
   const isLoading = useAppSelector(selectCookiesIsLoading);
+  const cookiesError = useAppSelector(selectCookiesError);
+
+  useEffect(() => {
+    if (!cookiesError) return;
+    toast.error(cookiesError);
+  }, [cookiesError]);
 
   const handleClose = useCallback(
     () => dispatch(handleChangeIsCookiesOpen(false)),

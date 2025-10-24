@@ -24,8 +24,10 @@ export const loadCookies = createAsyncThunk<
       await window.electronAPICookiesDB.getParsedCookiesByProject();
 
     dispatch(handleLoadCookies(response));
+    throw new Error("");
   } catch (error) {
     console.error(error);
+    throw new Error("Something went wrong, couldn't load cookies");
   }
 });
 

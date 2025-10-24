@@ -5,6 +5,7 @@ import settingReducer from "@/context/redux/setting/setting-slice";
 import cookiesReducer from "@/context/redux/cookies/cookies-slice";
 import requestUrlReducer from "@/context/redux/request-url/request-url-slice";
 import httpStatusReducer from "@/context/redux/http-status/http-status-slice";
+import statusReducer from "@/context/redux/status/status-slice";
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     cookies: cookiesReducer,
     requestUrl: requestUrlReducer,
     httpStatus: httpStatusReducer,
+    status: statusReducer,
   },
 });
 

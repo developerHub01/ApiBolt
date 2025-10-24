@@ -1,6 +1,5 @@
 import type { CookieInterface, CookiesInterface } from "@/types/cookies.types";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { loadCookies } from "@/context/redux/cookies/thunk/cookies-thunk";
 
 export const DEFAULT_COOKIE_DETAILS: CookieInterface = {
   key: "",
@@ -18,8 +17,6 @@ export const DEFAULT_COOKIE_DETAILS: CookieInterface = {
 interface CookiesStateInterface {
   isCookiesOpen: boolean;
   cookies: CookiesInterface;
-  isLoading: boolean;
-  error: null | string;
   selectedCookieKey: null | string;
   isAddOptionOpen: boolean;
   addCookieDetails: CookieInterface;
@@ -31,8 +28,6 @@ interface CookiesStateInterface {
 const initialState: CookiesStateInterface = {
   isCookiesOpen: false,
   cookies: [],
-  isLoading: false,
-  error: null,
   selectedCookieKey: null,
   isAddOptionOpen: false,
   addCookieDetails: DEFAULT_COOKIE_DETAILS,
@@ -188,22 +183,6 @@ export const cookiesSlice = createSlice({
       state.cookies.push(state.addCookieDetails);
       state.addCookieDetails = DEFAULT_COOKIE_DETAILS;
     },
-  },
-
-  extraReducers: (builder) => {
-    builder
-      .addCase(loadCookies.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-      })
-      .addCase(loadCookies.fulfilled, (state) => {
-        state.isLoading = false;
-        state.error = null;
-      })
-      .addCase(loadCookies.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.error.message ?? null;
-      });
   },
 });
 

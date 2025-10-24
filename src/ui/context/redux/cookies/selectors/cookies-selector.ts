@@ -18,16 +18,6 @@ export const selectCookiesCount = createSelector(
   (cookiesCount) => cookiesCount ?? 0
 );
 
-export const selectCookiesIsLoading = createSelector(
-  [(state: RootState) => state.cookies.isLoading],
-  (isLoading) => isLoading
-);
-
-export const selectCookiesError = createSelector(
-  [(state: RootState) => state.cookies.error],
-  (error) => error
-);
-
 export const selectSelectedCookieKey = createSelector(
   [(state: RootState) => state.cookies.selectedCookieKey],
   (selectedCookieKey) => selectedCookieKey
