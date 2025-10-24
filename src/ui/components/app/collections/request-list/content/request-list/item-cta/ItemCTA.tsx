@@ -12,7 +12,7 @@ import { motion } from "motion/react";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { handleChangeDeleteFolderOrRequestId } from "@/context/redux/request-response/request-response-slice";
 import { useRequestListItem } from "@/context/collections/request-list/RequestListItemProvider";
-import useCheckApplyingLayout from "@/hooks/setting/use-check-applying-layout";
+import useCheckApplyingLayoutDirection from "@/hooks/setting/use-check-applying-layout-direction";
 import type { TLayoutSetting } from "@/types/setting.types";
 import {
   createCollection,
@@ -93,7 +93,7 @@ const ItemCTA = memo(() => {
     handleToggleContextMenu,
     handleRenameAction,
   } = useRequestListItem();
-  const layoutTypes: TLayoutSetting = useCheckApplyingLayout();
+  const layoutTypes: TLayoutSetting = useCheckApplyingLayoutDirection();
 
   const handleCTAAction = useCallback(
     (actionType: string) => {

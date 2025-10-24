@@ -9,7 +9,7 @@ import type {
   TLayoutSettingNoSenitize,
 } from "@/types/setting.types";
 
-const useCheckApplyingLayout = (): TLayoutSetting => {
+const useCheckApplyingLayoutDirection = (): TLayoutSetting => {
   const activeProjectId = useAppSelector(selectActiveProjectId);
   const layoutTypeGlobal = useAppSelector(selectLayoutTypeGlobal);
   const layoutTypeLocal = useAppSelector(selectLayoutTypeLocal);
@@ -24,4 +24,4 @@ const useCheckApplyingLayout = (): TLayoutSetting => {
   return layoutTypes as TLayoutSetting;
 };
 
-export default useCheckApplyingLayout;
+export default useCheckApplyingLayoutDirection;

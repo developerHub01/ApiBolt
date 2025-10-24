@@ -35,7 +35,10 @@ const SettingItem = memo(
           {title}
         </AccordionTrigger>
         <AccordionContent
-          className={cn("flex flex-col gap-4 text-balance", contentClassName)}
+          className={cn(
+            "flex flex-col gap-4 text-balance pb-4",
+            contentClassName
+          )}
         >
           {children}
         </AccordionContent>

@@ -7,7 +7,7 @@ import { useAppDispatch } from "@/context/redux/hooks";
 import { handleMoveTab } from "@/context/redux/request-response/request-response-slice";
 import TabActionWrapper from "@/components/app/tab-sidebar/TabActionWrapper";
 import AutoScrollActiveWrapper from "@/components/ui/auto-scroll-active-wrapper";
-import useCheckApplyingLayout from "@/hooks/setting/use-check-applying-layout";
+import useCheckApplyingLayoutDirection from "@/hooks/setting/use-check-applying-layout-direction";
 import type { TLayoutSetting } from "@/types/setting.types";
 import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 import NoTabOpenEmptyBox from "@/components/app/tab-sidebar/empty/NoTabOpenEmptyBox";
@@ -20,7 +20,7 @@ const TabSidebar = memo(() => {
   const dispatch = useAppDispatch();
   const hoverEnterTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const hoverLeaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const layoutTypes: TLayoutSetting = useCheckApplyingLayout();
+  const layoutTypes: TLayoutSetting = useCheckApplyingLayoutDirection();
   const {
     localTabList,
     totalTabsOpen,

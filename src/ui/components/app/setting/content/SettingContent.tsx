@@ -34,7 +34,7 @@ const SettingContent = memo(() => {
           ease: "anticipate",
         }}
       >
-        <Accordion type="multiple" className="w-full flex flex-col px-3 gap-4">
+        <Accordion type="multiple" className="w-full flex flex-col px-3">
           <SettingBackground />
           <SettingZoom />
           <SettingLayout />

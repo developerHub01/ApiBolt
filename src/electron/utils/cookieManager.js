@@ -22,14 +22,20 @@ export const loadJarFromDB = async (jar, projectId) => {
 
     const allCookies = await tempJar.store.getAllCookies();
     for (const cookie of allCookies) {
-      const normalizedUrl = new URL(cookie.domain).origin;
+      let normalizedUrl = "";
+      try {
+        normalizedUrl = new URL(cookie.domain).origin;
+      } catch (error) {
+        normalizedUrl = cookie.domain;
+      }
+
       await jar.setCookie(
         `${cookie.key ?? ""}=${cookie.value ?? ""}; Domain=${cookie.domain ?? ""}; Path=${cookie.path ?? "/"}`,
         normalizedUrl
       );
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 

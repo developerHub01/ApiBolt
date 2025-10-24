@@ -167,6 +167,7 @@ export const settingTable = sqliteTable("setting_table", {
   codeFontSize: int(),
   indentationSize: int(),
   layoutType: text() /* ltr | rtl */,
+  activityBarVisible: int({ mode: boolean }),
   projectId: text()
     .unique()
     .references(() => projectTable.id, {

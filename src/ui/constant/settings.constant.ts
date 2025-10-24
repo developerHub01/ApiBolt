@@ -5,6 +5,8 @@ export const DEFAULT_ZOOM_LEVEL = 1;
 export const MAX_ZOOM_LEVEL = 1.5;
 export const MIN_ZOOM_LEVEL = 0.5;
 
+export const DEFAULT_ACTIVITY_BAR_VISIBLE = 1;
+
 export const DEFAULT_BACKGROUND_BLUR = 0;
 export const MIN_BACKGROUND_BLUR = 0;
 export const MAX_BACKGROUND_BLUR = 30;
@@ -40,6 +42,7 @@ export const DEFAULT_RAW_SETTINGS_VALUES: SettingsInterface = {
   indentationSize: -1,
   zoomLevel: -1,
   isZoomable: -1, // 0: disable, 1: enable, -1: default
+  activityBarVisible: -1,
   layoutType: "default",
   projectId: null,
 };
@@ -54,6 +57,7 @@ export const DEFAULT_SETTINGS: SettingsInterface = {
   indentationSize: DEFAULT_INDENTATION_SIZE,
   zoomLevel: DEFAULT_ZOOM_LEVEL,
   isZoomable: 0, // 0: disable, 1: enable, -1: default
+  activityBarVisible: DEFAULT_ACTIVITY_BAR_VISIBLE,
   layoutType: "ltr",
   projectId: null,
 };

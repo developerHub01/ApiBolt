@@ -14,6 +14,7 @@ export const defaultSettings = {
   indentationSize: -1,
   zoomLevel: -1,
   isZoomable: -1,
+  activityBarVisible: -1,
   layoutType: "default",
   projectId: null,
 };

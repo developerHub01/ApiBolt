@@ -8,7 +8,7 @@ import Setting from "@/components/app/setting/Setting";
 import KeyboardEvents from "@/components/app/KeyboardEvents";
 import type { TLayoutSetting } from "@/types/setting.types";
 import { cn } from "@/lib/utils";
-import useCheckApplyingLayout from "@/hooks/setting/use-check-applying-layout";
+import useCheckApplyingLayoutDirection from "@/hooks/setting/use-check-applying-layout-direction";
 import GlobalProvider from "@/context/global/GlobalProvider";
 import BackgroundWallpaper from "@/components/app/BackgroundWallpaper";
 import LoadBasicReduxState from "@/components/app/LoadBasicReduxState";
@@ -63,7 +63,7 @@ const CustomizedBgWrapper = memo(({ children }: CustomizedBgWrapperProps) => {
 });
 
 const InnerLayout = ({ children }: CustomizedBgWrapperProps) => {
-  const layoutTypes: TLayoutSetting = useCheckApplyingLayout();
+  const layoutTypes: TLayoutSetting = useCheckApplyingLayoutDirection();
 
   return (
     <div

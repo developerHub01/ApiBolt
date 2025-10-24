@@ -1,17 +1,24 @@
 import { useEffect } from "react";
-import { useAppDispatch } from "@/context/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { handleChangeIsSettingOpen } from "@/context/redux/setting/setting-slice";
-import { updateSettingsZoomByKeyboard } from "@/context/redux/setting/thunk/setting-thunk";
+import {
+  updateSettings,
+  updateSettingsZoomByKeyboard,
+} from "@/context/redux/setting/thunk/setting-thunk";
 import type { TKeyboardShortcutKey } from "@/types/setting.types";
 import { useGlobal } from "@/context/global/GlobalProvider";
 import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
 import { changeActiveTab } from "@/context/redux/sidebar/sidebar-thunk";
 import { handleChangeIsCookiesOpen } from "@/context/redux/cookies/cookies-slice";
 import { removeTab } from "@/context/redux/request-response/thunks/tab-list";
+import { selectActiveProjectId } from "@/context/redux/request-response/selectors/project";
+import useCheckApplyingLayoutActivityBarVisible from "@/hooks/setting/use-check-applying-layout-activity-bar-visible";
 
 const KeyboardEvents = () => {
   const dispatch = useAppDispatch();
   const { toggleFullscreen } = useGlobal();
+  const activeProjectId = useAppSelector(selectActiveProjectId);
+  const isActivityBarVisible = useCheckApplyingLayoutActivityBarVisible();
 
   useEffect(() => {
     const handler = async (e: KeyboardEvent) => {
@@ -79,13 +86,21 @@ const KeyboardEvents = () => {
       ) {
         e.preventDefault();
         dispatch(removeTab());
+      } else if (e.metaKey && !e.ctrlKey && !e.shiftKey && e.key === "a") {
+        e.preventDefault();
+        dispatch(
+          updateSettings({
+            activityBarVisible: Number(!isActivityBarVisible),
+            projectId: activeProjectId,
+          })
+        );
       }
     };
 
     window.addEventListener("keydown", handler);
 
     return () => window.removeEventListener("keydown", handler);
-  }, [dispatch, toggleFullscreen]);
+  }, [activeProjectId, dispatch, isActivityBarVisible, toggleFullscreen]);
 
   return null;
 };

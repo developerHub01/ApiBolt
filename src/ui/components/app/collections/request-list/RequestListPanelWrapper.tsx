@@ -14,7 +14,7 @@ const RequestListPanelWrapper = memo(() => {
   const isSmallDevice = useIsSmallDevice(951);
   const resizablePanelRef = useRef<ImperativePanelHandle>(null);
   const requestListCollapsed = useAppSelector(selectIsRequestListCollapsed);
-  // const layoutTypes: TLayoutSetting = useCheckApplyingLayout();
+  // const layoutTypes: TLayoutSetting = useCheckApplyingLayoutDirection();
 
   useEffect(() => {
     const panel = resizablePanelRef.current;

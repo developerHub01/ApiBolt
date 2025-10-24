@@ -3,7 +3,7 @@ import RequestListPanel from "@/components/app/collections/request-list/RequestL
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { AnimatedDialog } from "@/components/ui/animated-dialog";
-import useCheckApplyingLayout from "@/hooks/setting/use-check-applying-layout";
+import useCheckApplyingLayoutDirection from "@/hooks/setting/use-check-applying-layout-direction";
 import type { TLayoutSetting } from "@/types/setting.types";
 
 interface SmallDeviceListWrapperProps {
@@ -13,7 +13,7 @@ interface SmallDeviceListWrapperProps {
 
 const SmallDeviceListWrapper = memo(
   ({ isCollapsed, handleCollapse }: SmallDeviceListWrapperProps) => {
-    const layoutTypes: TLayoutSetting = useCheckApplyingLayout();
+    const layoutTypes: TLayoutSetting = useCheckApplyingLayoutDirection();
 
     return (
       <AnimatedDialog

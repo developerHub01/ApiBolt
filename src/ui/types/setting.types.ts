@@ -13,6 +13,7 @@ export interface SettingsInterface {
   isZoomable: number;
   codeFontSize: number;
   indentationSize: number;
+  activityBarVisible: number;
   layoutType: TLayoutSetting | "default";
   projectId?: string | null;
 }

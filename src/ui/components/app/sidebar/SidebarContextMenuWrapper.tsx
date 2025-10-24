@@ -9,6 +9,8 @@ import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
 import { selectIsRequestListCollapsed } from "@/context/redux/request-response/selectors/request-list";
 import { selectSidebarActiveTab } from "@/context/redux/sidebar/sidebar-selector";
+import { updateSettings } from "@/context/redux/setting/thunk/setting-thunk";
+import { selectActiveProjectId } from "@/context/redux/request-response/selectors/project";
 
 interface SidebarContextMenuWrapperProps {
   children: React.ReactNode;
@@ -18,7 +20,8 @@ const SidebarContextMenuWrapper = ({
   children,
 }: SidebarContextMenuWrapperProps) => {
   const dispatch = useAppDispatch();
-  // const layoutTypes: TLayoutSetting = useCheckApplyingLayout();
+  const activeProjectId = useAppSelector(selectActiveProjectId);
+  // const layoutTypes: TLayoutSetting = useCheckApplyingLayoutDirection();
   // const handleChangeLayout = useCallback(
   //   () =>
   //     dispatch(
@@ -36,6 +39,15 @@ const SidebarContextMenuWrapper = ({
     () => dispatch(handleToggleRequestList()),
     [dispatch]
   );
+
+  const handleHideActivityBar = useCallback(() => {
+    dispatch(
+      updateSettings({
+        activityBarVisible: 0,
+        projectId: activeProjectId,
+      })
+    );
+  }, [activeProjectId, dispatch]);
 
   const menuList = useMemo(() => {
     const list: Array<{
@@ -65,13 +77,18 @@ const SidebarContextMenuWrapper = ({
     }
 
     list.push({
-      id: "sidebar",
-      label: `Hide sidebar`,
-      onClick: () => {},
+      id: "activity-bar",
+      label: `Hide activity bar`,
+      onClick: handleHideActivityBar,
     });
 
     return list;
-  }, [activeSidebarTab, handleToggleRequestListBar, requestListCollapsed]);
+  }, [
+    activeSidebarTab,
+    handleHideActivityBar,
+    handleToggleRequestListBar,
+    requestListCollapsed,
+  ]);
 
   if (!menuList.length) return null;
 

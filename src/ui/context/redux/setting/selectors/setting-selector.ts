@@ -133,6 +133,16 @@ export const selectZoomLevelGlobal = createSelector(
   (zoomLevel) => zoomLevel
 );
 
+export const selectActivityBarVisibleLocal = createSelector(
+  [(state: RootState) => state.setting.settings?.activityBarVisible],
+  (activityBarVisible) => activityBarVisible ?? null
+);
+
+export const selectActivityBarVisibleGlobal = createSelector(
+  [(state: RootState) => state.setting.globalSetting.activityBarVisible],
+  (activityBarVisible) => activityBarVisible
+);
+
 export const selectZoomLevelLocal = createSelector(
   [(state: RootState) => state.setting.settings?.zoomLevel],
   (zoomLevel) => zoomLevel ?? null

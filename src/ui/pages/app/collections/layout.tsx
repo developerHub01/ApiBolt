@@ -2,7 +2,7 @@ import AppMainContentLayoutWrapper from "@/components/app/AppMainContentLayoutWr
 import LTRLayout from "@/components/app/collections/request/LTRLayout";
 
 const CollectionsLayout = () => {
-  // const layoutTypes: TLayoutSetting = useCheckApplyingLayout();
+  // const layoutTypes: TLayoutSetting = useCheckApplyingLayoutDirection();
 
   return (
     <AppMainContentLayoutWrapper>
