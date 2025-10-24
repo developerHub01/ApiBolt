@@ -60,6 +60,31 @@ export const updateMetaShowColumn = createAsyncThunk<
     return false;
   }
 });
+
+export const duplicateMetaShowColumnByOldNewIds = createAsyncThunk<
+  boolean,
+  Record<string, string>,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>(
+  "request-response/duplicateMetaShowColumnByOldNewIds",
+  async (oldNewIdMap) => {
+    try {
+      const response =
+        await window.electronAPIMetaShowColumnDB.duplicateMetaShowColumn(
+          oldNewIdMap
+        );
+
+      return response;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  }
+);
+
 /* ==============================
   ======== MetaShowColumn end =============
   ================================= */

@@ -169,6 +169,7 @@ declare global {
         payload: Partial<Omit<AuthorizationPayloadInterface, "id">>;
       }): Promise<AuthorizationPayloadInterface>;
       deleteAuth(id?: string): Promise<boolean>;
+      duplicateAuth(payload: Record<string, string>): Promise<boolean>;
     };
 
     electronAPIRequestOrFolderMetaDB: {
@@ -220,6 +221,7 @@ declare global {
           requestOrFolderMetaId?: string;
         }
       ): Promise<boolean>;
+      duplicateFolder(payload: Record<string, string>): Promise<boolean>;
     };
 
     electronAPIParamsDB: {
@@ -267,6 +269,7 @@ declare global {
       checkAllHeadersByRequestMetaId(
         requestOrFolderMetaId?: string
       ): Promise<boolean>;
+      duplicateHeaders(payload: Record<string, string>): Promise<boolean>;
     };
 
     electronAPIHiddenHeadersCheckDB: {
@@ -277,6 +280,9 @@ declare global {
       updateHiddenHeadersCheck(
         payload: Partial<HiddenHeadersCheckInterface>
       ): Promise<Partial<HiddenHeadersCheckInterface>>;
+      duplicateHiddenHeadersCheck(
+        payload: Record<string, string>
+      ): Promise<boolean>;
     };
 
     electronAPIShowHiddenMetaDataDB: {
@@ -291,6 +297,9 @@ declare global {
           }
         >
       ): Promise<Partial<ShowHiddenMetaInterface>>;
+      duplicateShowHiddenMetaData(
+        payload: Record<string, string>
+      ): Promise<boolean>;
     };
 
     electronAPIBodyRawDB: {
@@ -301,6 +310,7 @@ declare global {
       ): Promise<boolean>;
       /* if in payload requestOrFolderMetaId not exist then it will pick active tab from backend */
       updateBodyRaw(payload: Partial<BodyRawInterface>): Promise<boolean>;
+      duplicateBodyRaw(payload: Record<string, string>): Promise<boolean>;
     };
 
     electronAPIBodyBinaryDB: {
@@ -308,6 +318,7 @@ declare global {
       createBodyBinary(): Promise<boolean>;
       updateBodyBinary(requestId?: string): Promise<boolean>;
       deleteBodyBinary(requestId?: string): Promise<boolean>;
+      duplicateBodyBinary(payload: Record<string, string>): Promise<boolean>;
     };
 
     electronAPIRequestMetaTabDB: {
@@ -319,6 +330,9 @@ declare global {
         payload: Partial<RequestTabInterface>
       ): Promise<boolean>;
       deleteRequestMetaTab(requestId?: string): Promise<boolean>;
+      duplicateRequestMetaTab(
+        requestId?: Record<string, string>
+      ): Promise<boolean>;
     };
 
     electronAPIBodyXWWWFormUrlencodedDB: {
@@ -342,6 +356,9 @@ declare global {
       ): Promise<boolean>;
       checkAllBodyXWWWFormUrlencodedByRequestMetaId(
         requestOrFolderMetaId?: string
+      ): Promise<boolean>;
+      duplicateBodyXWWWFormUrlencoded(
+        payload: Record<string, string>
       ): Promise<boolean>;
     };
 
@@ -369,6 +386,7 @@ declare global {
       checkAllBodyFormDataByRequestMetaId(
         requestOrFolderMetaId?: string
       ): Promise<boolean>;
+      duplicateBodyFormData(payload: Record<string, string>): Promise<boolean>;
     };
 
     electronAPIMetaShowColumnDB: {
@@ -382,6 +400,9 @@ declare global {
         payload: Partial<MetaShowColumnInterface>
       ): Promise<boolean>;
       deleteMetaShowColumn(requestOrFolderMetaId?: string): Promise<boolean>;
+      duplicateMetaShowColumn(
+        payload: Record<string, string>
+      ): Promise<boolean>;
     };
 
     electronAPIApiUrl: {

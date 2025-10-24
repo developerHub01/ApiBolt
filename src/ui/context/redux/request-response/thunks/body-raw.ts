@@ -75,6 +75,26 @@ export const updateRequestBodyRaw = createAsyncThunk<
     }
   }
 );
+
+export const duplicateBodyRawByOldNewIds = createAsyncThunk<
+  boolean,
+  Record<string, string>,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("request-response/duplicateBodyRawByOldNewIds", async (oldNewIdMap) => {
+  try {
+    const response =
+      await window.electronAPIBodyRawDB.duplicateBodyRaw(oldNewIdMap);
+
+    return response;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+});
+
 /* ==============================
 ======== Body raw end =============
 ================================= */

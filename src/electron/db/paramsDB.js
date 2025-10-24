@@ -192,7 +192,6 @@ export const duplicateParams = async (payload) => {
     const duplicatePayload = existingParamsData.map((param) => {
       delete param["id"];
       delete param["createdAt"];
-
       return {
         ...param,
         requestOrFolderMetaId: payload[param.requestOrFolderMetaId],

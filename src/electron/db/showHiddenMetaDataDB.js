@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { db } from "./index.js";
 import { showHiddenMetaDataTable } from "./schema.js";
 import { getRequestOrFolderMetaById } from "./requestOrFolderMetaDB.js";
@@ -100,6 +100,46 @@ export const updateShowHiddenMetaData = async (payload) => {
       .where(eq(showHiddenMetaDataTable.requestOrFolderMetaId, selectedTab))
       .returning();
     return updated;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+/* 
+payload = {
+  oldId: newId ---> newId means duplicatedId
+}
+*/
+export const duplicateShowHiddenMetaData = async (payload) => {
+  try {
+    if (!payload) return;
+    const oldIds = Object.keys(payload);
+    if (!oldIds.length) return;
+
+    const existingShowHiddenMetaData = await db
+      .select()
+      .from(showHiddenMetaDataTable)
+      .where(inArray(showHiddenMetaDataTable.requestOrFolderMetaId, oldIds));
+
+    if (!existingShowHiddenMetaData.length) return true;
+
+    /**
+     * - Replacing oldId with duplicatedId
+     * and only keeping url so that other things automatically generate by default
+     */
+    const duplicatePayload = existingShowHiddenMetaData.map((metaData) => {
+      delete metaData["id"];
+      return {
+        ...metaData,
+        requestOrFolderMetaId: payload[metaData.requestOrFolderMetaId],
+      };
+    });
+
+    const result = await db
+      .insert(showHiddenMetaDataTable)
+      .values(duplicatePayload);
+
+    return result.changes > 0;
   } catch (error) {
     console.error(error);
   }

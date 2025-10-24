@@ -223,6 +223,26 @@ export const checkAllBodyFormDataByRequestMetaId = createAsyncThunk<
     }
   }
 );
+
+export const duplicateBodyFormDataByOldNewIds = createAsyncThunk<
+  boolean,
+  Record<string, string>,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("request-response/duplicateBodyFormDataByOldNewIds", async (oldNewIdMap) => {
+  try {
+    const response =
+      await window.electronAPIBodyFormDataDB.duplicateBodyFormData(oldNewIdMap);
+
+    return response;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+});
+
 /* ==============================
 ======== BodyFormData end =============
 ================================= */

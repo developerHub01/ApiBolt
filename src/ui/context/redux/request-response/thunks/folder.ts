@@ -92,6 +92,25 @@ export const updateFolder = createAsyncThunk<
   }
 });
 
+export const duplicateFolderByOldNewIds = createAsyncThunk<
+  boolean,
+  Record<string, string>,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("request-response/duplicateFolderByOldNewIds", async (oldNewIdMap) => {
+  try {
+    const response =
+      await window.electronAPIFolderDB.duplicateFolder(oldNewIdMap);
+
+    return response;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+});
+
 /* ==============================
 ======== Folder end =============
 ================================= */

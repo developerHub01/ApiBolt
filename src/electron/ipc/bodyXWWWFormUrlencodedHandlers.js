@@ -4,6 +4,7 @@ import {
   createBodyXWWWFormUrlencoded,
   deleteBodyXWWWFormUrlencoded,
   deleteBodyXWWWFormUrlencodedByRequestMetaId,
+  duplicateBodyXWWWFormUrlencoded,
   getBodyXWWWFormUrlencoded,
   replaceBodyXWWWFormUrlencoded,
   updateBodyXWWWFormUrlencoded,
@@ -39,5 +40,9 @@ export const bodyXWWWFormUrlencodedHandlers = () => {
     "checkAllBodyXWWWFormUrlencodedByRequestMetaId",
     async (_, ...rest) =>
       await checkAllBodyXWWWFormUrlencodedByRequestMetaId(...rest)
+  );
+  ipcMain.handle(
+    "duplicateBodyXWWWFormUrlencoded",
+    async (_, ...rest) => await duplicateBodyXWWWFormUrlencoded(...rest)
   );
 };

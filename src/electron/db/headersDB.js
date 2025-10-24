@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { db } from "./index.js";
 import { headersTable } from "./schema.js";
 import { getTabList } from "./tabsDB.js";
@@ -167,6 +167,45 @@ export const checkAllHeadersByRequestMetaId = async (requestOrFolderMetaId) => {
       })
       .where(eq(headersTable.requestOrFolderMetaId, requestOrFolderMetaId));
     return updated?.changes > 0;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+/* 
+payload = {
+  oldId: newId ---> newId means duplicatedId
+}
+*/
+export const duplicateHeaders = async (payload) => {
+  try {
+    if (!payload) return;
+    const oldIds = Object.keys(payload);
+    if (!oldIds.length) return;
+
+    const existingHeadersData = await db
+      .select()
+      .from(headersTable)
+      .where(inArray(headersTable.requestOrFolderMetaId, oldIds));
+
+    if (!existingHeadersData.length) return true;
+
+    /**
+     * - Replacing oldId with duplicatedId
+     * and only keeping url so that other things automatically generate by default
+     */
+    const duplicatePayload = existingHeadersData.map((header) => {
+      delete header["id"];
+      delete header["createdAt"];
+      return {
+        ...header,
+        requestOrFolderMetaId: payload[header.requestOrFolderMetaId],
+      };
+    });
+
+    const result = await db.insert(headersTable).values(duplicatePayload);
+
+    return result.changes > 0;
   } catch (error) {
     console.error(error);
   }

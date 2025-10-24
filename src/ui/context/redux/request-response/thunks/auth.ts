@@ -562,6 +562,26 @@ export const updateAuthorization = createAsyncThunk<
     }
   }
 );
+
+export const duplicateAuthorizationByOldNewIds = createAsyncThunk<
+  boolean,
+  Record<string, string>,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("request-response/duplicateAuthorizationByOldNewIds", async (oldNewIdMap) => {
+  try {
+    const response =
+      await window.electronAPIAuthorizationDB.duplicateAuth(oldNewIdMap);
+
+    return response;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+});
+
 /* ==============================
 ============== Auth end =========
 ================================= */

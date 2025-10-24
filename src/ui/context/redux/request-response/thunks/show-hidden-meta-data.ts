@@ -128,6 +128,30 @@ export const toggleShowHiddenMetaData = createAsyncThunk<
     }
   }
 );
+
+export const duplicateShowHiddenMetaDataByOldNewIds = createAsyncThunk<
+  boolean,
+  Record<string, string>,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>(
+  "request-response/duplicateShowHiddenMetaDataByOldNewIds",
+  async (oldNewIdMap) => {
+    try {
+      const response =
+        await window.electronAPIShowHiddenMetaDataDB.duplicateShowHiddenMetaData(
+          oldNewIdMap
+        );
+
+      return response;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  }
+);
 /* ==============================
 ======== show-hidden-meta-data end =============
 ================================= */

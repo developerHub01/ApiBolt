@@ -4,6 +4,7 @@ import {
   createHeaders,
   deleteHeaders,
   deleteHeadersByRequestMetaId,
+  duplicateHeaders,
   getHeaders,
   replaceHeaders,
   updateHeaders,
@@ -34,5 +35,9 @@ export const headersHandlers = () => {
   ipcMain.handle(
     "checkAllHeadersByRequestMetaId",
     async (_, ...rest) => await checkAllHeadersByRequestMetaId(...rest)
+  );
+  ipcMain.handle(
+    "duplicateHeaders",
+    async (_, ...rest) => await duplicateHeaders(...rest)
   );
 };

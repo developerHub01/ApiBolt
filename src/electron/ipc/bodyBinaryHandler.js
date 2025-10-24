@@ -4,6 +4,7 @@ import { dialog, ipcMain } from "electron";
 import {
   createBodyBinary,
   deleteBodyBinary,
+  duplicateBodyBinary,
   getBodyBinary,
   updateBodyBinary,
 } from "../db/bodyBinaryDB.js";
@@ -51,5 +52,9 @@ export const bodyBinaryHandler = () => {
   ipcMain.handle(
     "deleteBodyBinary",
     async (_, ...rest) => await deleteBodyBinary(...rest)
+  );
+  ipcMain.handle(
+    "duplicateBodyBinary",
+    async (_, ...rest) => await duplicateBodyBinary(...rest)
   );
 };

@@ -2,6 +2,7 @@ import { ipcMain } from "electron";
 import {
   createMetaShowColumn,
   deleteMetaShowColumn,
+  duplicateMetaShowColumn,
   getMetaShowColumn,
   updateMetaShowColumn,
 } from "../db/metaShowColumnDB.js";
@@ -22,5 +23,9 @@ export const metaShowColumnHandlers = () => {
   ipcMain.handle(
     "deleteMetaShowColumn",
     async (_, ...rest) => await deleteMetaShowColumn(...rest)
+  );
+  ipcMain.handle(
+    "duplicateMetaShowColumn",
+    async (_, ...rest) => await duplicateMetaShowColumn(...rest)
   );
 };

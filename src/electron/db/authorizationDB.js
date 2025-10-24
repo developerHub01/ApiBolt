@@ -1,4 +1,4 @@
-import { and, eq, isNull } from "drizzle-orm";
+import { and, eq, inArray, isNull } from "drizzle-orm";
 import { db } from "./index.js";
 import { authorizationTable, requestOrFolderMetaTable } from "./schema.js";
 import { getActiveProject } from "./projectsDB.js";
@@ -239,5 +239,43 @@ export const deleteAuthByRequestMetaId = async (requestOrFolderMetaId) => {
   } catch (error) {
     console.error(error);
     return false;
+  }
+};
+
+/* 
+payload = {
+  oldId: newId ---> newId means duplicatedId
+}
+*/
+export const duplicateAuth = async (payload) => {
+  try {
+    if (!payload) return;
+    const oldIds = Object.keys(payload);
+    if (!oldIds.length) return;
+
+    const existingAuthData = await db
+      .select()
+      .from(authorizationTable)
+      .where(inArray(authorizationTable.requestOrFolderMetaId, oldIds));
+
+    if (!existingAuthData.length) return true;
+
+    /**
+     * - Replacing oldId with duplicatedId
+     * and only keeping url so that other things automatically generate by default
+     */
+    const duplicatePayload = existingAuthData.map((auth) => {
+      delete auth["id"];
+      return {
+        ...auth,
+        requestOrFolderMetaId: payload[auth.requestOrFolderMetaId],
+      };
+    });
+
+    const result = await db.insert(authorizationTable).values(duplicatePayload);
+
+    return result.changes > 0;
+  } catch (error) {
+    console.error(error);
   }
 };

@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { db } from "./index.js";
 import { metaShowColumnTable } from "./schema.js";
 import { getTabList } from "./tabsDB.js";
@@ -104,6 +104,47 @@ export const deleteMetaShowColumn = async (requestOrFolderMetaId) => {
       );
 
     return deleted?.changes > 0;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+/* 
+payload = {
+  oldId: newId ---> newId means duplicatedId
+}
+*/
+export const duplicateMetaShowColumn = async (payload) => {
+  try {
+    if (!payload) return;
+    const oldIds = Object.keys(payload);
+    if (!oldIds.length) return;
+
+    const existingMetaShowColumn = await db
+      .select()
+      .from(metaShowColumnTable)
+      .where(inArray(metaShowColumnTable.requestOrFolderMetaId, oldIds));
+
+    if (!existingMetaShowColumn.length) return true;
+
+    /**
+     * - Replacing oldId with duplicatedId
+     * and only keeping url so that other things automatically generate by default
+     */
+    const duplicatePayload = existingMetaShowColumn.map((meta) => {
+      delete meta["id"];
+      delete meta["createdAt"];
+      return {
+        ...meta,
+        requestOrFolderMetaId: payload[meta.requestOrFolderMetaId],
+      };
+    });
+
+    const result = await db
+      .insert(metaShowColumnTable)
+      .values(duplicatePayload);
+
+    return result.changes > 0;
   } catch (error) {
     console.error(error);
   }

@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { db } from "./index.js";
 import { requestMetaTabTable } from "./schema.js";
 import { getTabList } from "./tabsDB.js";
@@ -97,6 +97,46 @@ export const deleteRequestMetaTab = async (requestOrFolderMetaId) => {
       );
 
     return deleted.changes > 0;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+/* 
+payload = {
+  oldId: newId ---> newId means duplicatedId
+}
+*/
+export const duplicateRequestMetaTab = async (payload) => {
+  try {
+    if (!payload) return;
+    const oldIds = Object.keys(payload);
+    if (!oldIds.length) return;
+
+    const existingRequestMetaTabData = await db
+      .select()
+      .from(requestMetaTabTable)
+      .where(inArray(requestMetaTabTable.requestOrFolderMetaId, oldIds));
+
+    if (!existingRequestMetaTabData.length) return true;
+
+    /**
+     * - Replacing oldId with duplicatedId
+     * and only keeping url so that other things automatically generate by default
+     */
+    const duplicatePayload = existingRequestMetaTabData.map((tab) => {
+      delete tab["id"];
+      return {
+        ...tab,
+        requestOrFolderMetaId: payload[tab.requestOrFolderMetaId],
+      };
+    });
+
+    const result = await db
+      .insert(requestMetaTabTable)
+      .values(duplicatePayload);
+
+    return result.changes > 0;
   } catch (error) {
     console.error(error);
   }

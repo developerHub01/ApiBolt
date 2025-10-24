@@ -7,6 +7,7 @@ import {
   deleteBodyFormData,
   deleteBodyFormDataByRequestMetaId,
   deleteBodyFormDataFile,
+  duplicateBodyFormData,
   getBodyFormData,
   getBodyFormDataByFormId,
   replaceBodyFormData,
@@ -129,5 +130,9 @@ export const bodyFormDataHandlers = () => {
   ipcMain.handle(
     "checkAllBodyFormDataByRequestMetaId",
     async (_, ...rest) => await checkAllBodyFormDataByRequestMetaId(...rest)
+  );
+  ipcMain.handle(
+    "duplicateBodyFormData",
+    async (_, ...rest) => await duplicateBodyFormData(...rest)
   );
 };

@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { db } from "./index.js";
 import { hiddenHeadersCheckTable } from "./schema.js";
 import { getTabList } from "./tabsDB.js";
@@ -79,6 +79,46 @@ export const updateHiddenHeadersCheck = async (payload) => {
       })
       .where(eq(hiddenHeadersCheckTable.requestOrFolderMetaId, selectedTab));
     return updated?.changes > 0;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+/* 
+payload = {
+  oldId: newId ---> newId means duplicatedId
+}
+*/
+export const duplicateHiddenHeadersCheck = async (payload) => {
+  try {
+    if (!payload) return;
+    const oldIds = Object.keys(payload);
+    if (!oldIds.length) return;
+
+    const existingHeadersCheckData = await db
+      .select()
+      .from(hiddenHeadersCheckTable)
+      .where(inArray(hiddenHeadersCheckTable.requestOrFolderMetaId, oldIds));
+
+    if (!existingHeadersCheckData.length) return true;
+
+    /**
+     * - Replacing oldId with duplicatedId
+     * and only keeping url so that other things automatically generate by default
+     */
+    const duplicatePayload = existingHeadersCheckData.map((headersCheck) => {
+      delete headersCheck["id"];
+      return {
+        ...headersCheck,
+        requestOrFolderMetaId: payload[headersCheck.requestOrFolderMetaId],
+      };
+    });
+
+    const result = await db
+      .insert(hiddenHeadersCheckTable)
+      .values(duplicatePayload);
+
+    return result.changes > 0;
   } catch (error) {
     console.error(error);
   }

@@ -24,6 +24,19 @@ import {
 import { loadTabsData } from "@/context/redux/request-response/thunks/tab-list";
 import { duplicateRequestApiUrlsByOldNewIds } from "@/context/redux/request-url/request-url-thunk";
 import { duplicateParamsByOldNewIds } from "@/context/redux/request-response/thunks/params";
+import {
+  duplicateHeadersByOldNewIds,
+  duplicateHiddenHeadersByOldNewIds,
+} from "@/context/redux/request-response/thunks/headers";
+import { duplicateShowHiddenMetaDataByOldNewIds } from "@/context/redux/request-response/thunks/show-hidden-meta-data";
+import { duplicateRequestMetaTabByOldNewIds } from "@/context/redux/request-response/thunks/request-meta-tab";
+import { duplicateBodyRawByOldNewIds } from "@/context/redux/request-response/thunks/body-raw";
+import { duplicateBodyBinaryByOldNewIds } from "@/context/redux/request-response/thunks/body-binary";
+import { duplicateBodyXWWWFormUrlencodedByOldNewIds } from "@/context/redux/request-response/thunks/body-x-www-form-urlencoded";
+import { duplicateBodyFormDataByOldNewIds } from "@/context/redux/request-response/thunks/body-form-data";
+import { duplicateMetaShowColumnByOldNewIds } from "@/context/redux/request-response/thunks/meta-show-column";
+import { duplicateAuthorizationByOldNewIds } from "@/context/redux/request-response/thunks/auth";
+import { duplicateFolderByOldNewIds } from "@/context/redux/request-response/thunks/folder";
 
 /* ==============================
 ===== RequestList start =========
@@ -517,9 +530,31 @@ export const duplicateRequestOrFolder = createAsyncThunk<
 
       if (!response) return;
       /* duplicate urls */
-      console.log(oldNewIdMap);
       await dispatch(duplicateRequestApiUrlsByOldNewIds(oldNewIdMap));
+      /* duplicate params */
       await dispatch(duplicateParamsByOldNewIds(oldNewIdMap));
+      /* duplicate headers */
+      await dispatch(duplicateHeadersByOldNewIds(oldNewIdMap));
+      /* duplicate hidden headers */
+      await dispatch(duplicateHiddenHeadersByOldNewIds(oldNewIdMap));
+      /* duplicate show hidden meta-data */
+      await dispatch(duplicateShowHiddenMetaDataByOldNewIds(oldNewIdMap));
+      /* duplicate request meta tab */
+      await dispatch(duplicateRequestMetaTabByOldNewIds(oldNewIdMap));
+      /* duplicate request body raw */
+      await dispatch(duplicateBodyRawByOldNewIds(oldNewIdMap));
+      /* duplicate request body binary */
+      await dispatch(duplicateBodyBinaryByOldNewIds(oldNewIdMap));
+      /* duplicate request body x-www-url-formencoded */
+      await dispatch(duplicateBodyXWWWFormUrlencodedByOldNewIds(oldNewIdMap));
+      /* duplicate request body form-data */
+      await dispatch(duplicateBodyFormDataByOldNewIds(oldNewIdMap));
+      /* duplicate request meta show column */
+      await dispatch(duplicateMetaShowColumnByOldNewIds(oldNewIdMap));
+      /* duplicate request auth */
+      await dispatch(duplicateAuthorizationByOldNewIds(oldNewIdMap));
+      /* duplicate folder */
+      await dispatch(duplicateFolderByOldNewIds(oldNewIdMap));
 
       dispatch(handleChangeIsRequestListLoaded(false));
     } catch (error) {

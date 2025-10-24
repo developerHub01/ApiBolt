@@ -1,6 +1,7 @@
 import { ipcMain } from "electron";
 import {
   createHiddenHeadersCheck,
+  duplicateHiddenHeadersCheck,
   getHiddenHeadersCheck,
   updateHiddenHeadersCheck,
 } from "../db/hiddenHeadersCheckDB.js";
@@ -17,5 +18,9 @@ export const hiddenHeadersCheckHandler = () => {
   ipcMain.handle(
     "updateHiddenHeadersCheck",
     async (_, ...rest) => await updateHiddenHeadersCheck(...rest)
+  );
+  ipcMain.handle(
+    "duplicateHiddenHeadersCheck",
+    async (_, ...rest) => await duplicateHiddenHeadersCheck(...rest)
   );
 };

@@ -1,4 +1,4 @@
-import { and, eq, like, not } from "drizzle-orm";
+import { and, eq, inArray, like, not } from "drizzle-orm";
 import { db } from "./index.js";
 import { bodyFormDataTable } from "./schema.js";
 import { getTabList } from "./tabsDB.js";
@@ -230,6 +230,45 @@ export const checkAllBodyFormDataByRequestMetaId = async (
         eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId)
       );
     return updated?.changes > 0;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+/* 
+payload = {
+  oldId: newId ---> newId means duplicatedId
+}
+*/
+export const duplicateBodyFormData = async (payload) => {
+  try {
+    if (!payload) return;
+    const oldIds = Object.keys(payload);
+    if (!oldIds.length) return;
+
+    const existingBodyFormData = await db
+      .select()
+      .from(bodyFormDataTable)
+      .where(inArray(bodyFormDataTable.requestOrFolderMetaId, oldIds));
+
+    if (!existingBodyFormData.length) return true;
+
+    /**
+     * - Replacing oldId with duplicatedId
+     * and only keeping url so that other things automatically generate by default
+     */
+    const duplicatePayload = existingBodyFormData.map((formData) => {
+      delete formData["id"];
+      delete formData["createdAt"];
+      return {
+        ...formData,
+        requestOrFolderMetaId: payload[formData.requestOrFolderMetaId],
+      };
+    });
+
+    const result = await db.insert(bodyFormDataTable).values(duplicatePayload);
+
+    return result.changes > 0;
   } catch (error) {
     console.error(error);
   }

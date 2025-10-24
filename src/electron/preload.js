@@ -139,6 +139,8 @@ contextBridge.exposeInMainWorld("electronAPIAuthorizationDB", {
     await ipcRenderer.invoke("updateAuth", ...payload),
   deleteAuth: async (...payload) =>
     await ipcRenderer.invoke("deleteAuth", ...payload),
+  duplicateAuth: async (...payload) =>
+    await ipcRenderer.invoke("duplicateAuth", ...payload),
 });
 
 contextBridge.exposeInMainWorld("electronAPIRequestOrFolderMetaDB", {
@@ -184,6 +186,8 @@ contextBridge.exposeInMainWorld("electronAPIFolderDB", {
     await ipcRenderer.invoke("getFolder", ...payload),
   updateFolder: async (...payload) =>
     await ipcRenderer.invoke("updateFolder", ...payload),
+  duplicateFolder: async (...payload) =>
+    await ipcRenderer.invoke("duplicateFolder", ...payload),
 });
 
 contextBridge.exposeInMainWorld("electronAPIParamsDB", {
@@ -220,6 +224,8 @@ contextBridge.exposeInMainWorld("electronAPIHeadersDB", {
     await ipcRenderer.invoke("replaceHeaders", ...payload),
   checkAllHeadersByRequestMetaId: async (...payload) =>
     await ipcRenderer.invoke("checkAllHeadersByRequestMetaId", ...payload),
+  duplicateHeaders: async (...payload) =>
+    await ipcRenderer.invoke("duplicateHeaders", ...payload),
 });
 
 contextBridge.exposeInMainWorld("electronAPIHiddenHeadersCheckDB", {
@@ -229,6 +235,8 @@ contextBridge.exposeInMainWorld("electronAPIHiddenHeadersCheckDB", {
     await ipcRenderer.invoke("createHiddenHeadersCheck", ...payload),
   updateHiddenHeadersCheck: async (...payload) =>
     await ipcRenderer.invoke("updateHiddenHeadersCheck", ...payload),
+  duplicateHiddenHeadersCheck: async (...payload) =>
+    await ipcRenderer.invoke("duplicateHiddenHeadersCheck", ...payload),
 });
 
 contextBridge.exposeInMainWorld("electronAPIShowHiddenMetaDataDB", {
@@ -238,6 +246,8 @@ contextBridge.exposeInMainWorld("electronAPIShowHiddenMetaDataDB", {
     await ipcRenderer.invoke("createShowHiddenMetaData", ...payload),
   updateShowHiddenMetaData: async (...payload) =>
     await ipcRenderer.invoke("updateShowHiddenMetaData", ...payload),
+  duplicateShowHiddenMetaData: async (...payload) =>
+    await ipcRenderer.invoke("duplicateShowHiddenMetaData", ...payload),
 });
 
 contextBridge.exposeInMainWorld("electronAPIBodyRawDB", {
@@ -247,6 +257,8 @@ contextBridge.exposeInMainWorld("electronAPIBodyRawDB", {
     await ipcRenderer.invoke("createBodyRaw", ...payload),
   updateBodyRaw: async (...payload) =>
     await ipcRenderer.invoke("updateBodyRaw", ...payload),
+  duplicateBodyRaw: async (...payload) =>
+    await ipcRenderer.invoke("duplicateBodyRaw", ...payload),
 });
 
 contextBridge.exposeInMainWorld("electronAPIBodyBinaryDB", {
@@ -258,6 +270,8 @@ contextBridge.exposeInMainWorld("electronAPIBodyBinaryDB", {
     await ipcRenderer.invoke("updateBodyBinary", ...payload),
   deleteBodyBinary: async (...payload) =>
     await ipcRenderer.invoke("deleteBodyBinary", ...payload),
+  duplicateBodyBinary: async (...payload) =>
+    await ipcRenderer.invoke("duplicateBodyBinary", ...payload),
 });
 
 contextBridge.exposeInMainWorld("electronAPIRequestMetaTabDB", {
@@ -269,6 +283,8 @@ contextBridge.exposeInMainWorld("electronAPIRequestMetaTabDB", {
     await ipcRenderer.invoke("updateRequestMetaTab", ...payload),
   deleteRequestMetaTab: async (...payload) =>
     await ipcRenderer.invoke("deleteRequestMetaTab", ...payload),
+  duplicateRequestMetaTab: async (...payload) =>
+    await ipcRenderer.invoke("duplicateRequestMetaTab", ...payload),
 });
 
 contextBridge.exposeInMainWorld("electronAPIBodyXWWWFormUrlencodedDB", {
@@ -292,6 +308,8 @@ contextBridge.exposeInMainWorld("electronAPIBodyXWWWFormUrlencodedDB", {
       "checkAllBodyXWWWFormUrlencodedByRequestMetaId",
       ...payload
     ),
+  duplicateBodyXWWWFormUrlencoded: async (...payload) =>
+    await ipcRenderer.invoke("duplicateBodyXWWWFormUrlencoded", ...payload),
 });
 
 contextBridge.exposeInMainWorld("electronAPIBodyFormDataDB", {
@@ -313,6 +331,8 @@ contextBridge.exposeInMainWorld("electronAPIBodyFormDataDB", {
     await ipcRenderer.invoke("replaceBodyFormData", ...payload),
   checkAllBodyFormDataByRequestMetaId: async (...payload) =>
     await ipcRenderer.invoke("checkAllBodyFormDataByRequestMetaId", ...payload),
+  duplicateBodyFormData: async (...payload) =>
+    await ipcRenderer.invoke("duplicateBodyFormData", ...payload),
 });
 
 contextBridge.exposeInMainWorld("electronAPIMetaShowColumnDB", {
@@ -324,6 +344,8 @@ contextBridge.exposeInMainWorld("electronAPIMetaShowColumnDB", {
     await ipcRenderer.invoke("updateMetaShowColumn", ...payload),
   deleteMetaShowColumn: async (...payload) =>
     await ipcRenderer.invoke("deleteMetaShowColumn", ...payload),
+  duplicateMetaShowColumn: async (...payload) =>
+    await ipcRenderer.invoke("duplicateMetaShowColumn", ...payload),
 });
 
 contextBridge.exposeInMainWorld("electronAPIApiUrl", {

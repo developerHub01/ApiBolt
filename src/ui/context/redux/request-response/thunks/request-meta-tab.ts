@@ -70,6 +70,30 @@ export const updateRequestMetaTab = createAsyncThunk<
     console.error(error);
   }
 });
+
+export const duplicateRequestMetaTabByOldNewIds = createAsyncThunk<
+  boolean,
+  Record<string, string>,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>(
+  "request-response/duplicateRequestMetaTabByOldNewIds",
+  async (oldNewIdMap) => {
+    try {
+      const response =
+        await window.electronAPIRequestMetaTabDB.duplicateRequestMetaTab(
+          oldNewIdMap
+        );
+
+      return response;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  }
+);
 /* ==============================
 ======== ReqestMetaTab end =============
 ================================= */

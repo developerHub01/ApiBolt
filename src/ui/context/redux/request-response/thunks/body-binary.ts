@@ -84,6 +84,26 @@ export const deleteRequestBodyBinary = createAsyncThunk<
     console.error(error);
   }
 });
+
+export const duplicateBodyBinaryByOldNewIds = createAsyncThunk<
+  boolean,
+  Record<string, string>,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("request-response/duplicateBodyBinaryByOldNewIds", async (oldNewIdMap) => {
+  try {
+    const response =
+      await window.electronAPIBodyBinaryDB.duplicateBodyBinary(oldNewIdMap);
+
+    return response;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+});
+
 /* ==============================
 ======== Body binary end =============
 ================================= */

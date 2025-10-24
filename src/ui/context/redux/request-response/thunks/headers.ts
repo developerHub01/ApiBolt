@@ -210,6 +210,45 @@ export const updateHiddenHeaders = createAsyncThunk<
   }
 );
 
+export const duplicateHeadersByOldNewIds = createAsyncThunk<
+  boolean,
+  Record<string, string>,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("request-response/duplicateHeadersByOldNewIds", async (oldNewIdMap) => {
+  try {
+    const response =
+      await window.electronAPIHeadersDB.duplicateHeaders(oldNewIdMap);
+
+    return response;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+});
+
+export const duplicateHiddenHeadersByOldNewIds = createAsyncThunk<
+  boolean,
+  Record<string, string>,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("request-response/duplicateHiddenHeadersByOldNewIds", async (oldNewIdMap) => {
+  try {
+    const response =
+      await window.electronAPIHiddenHeadersCheckDB.duplicateHiddenHeadersCheck(
+        oldNewIdMap
+      );
+
+    return response;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+});
 /* ==============================
 ======== Headers end =============
 ================================= */

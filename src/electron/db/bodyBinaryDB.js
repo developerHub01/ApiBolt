@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { db } from "./index.js";
 import { bodyBinaryTable } from "./schema.js";
 import { getTabList } from "./tabsDB.js";
@@ -91,6 +91,44 @@ export const deleteBodyBinary = async (requestOrFolderMetaId) => {
       .where(eq(bodyBinaryTable.requestOrFolderMetaId, requestOrFolderMetaId));
 
     return deleted.changes > 0;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+/* 
+payload = {
+  oldId: newId ---> newId means duplicatedId
+}
+*/
+export const duplicateBodyBinary = async (payload) => {
+  try {
+    if (!payload) return;
+    const oldIds = Object.keys(payload);
+    if (!oldIds.length) return;
+
+    const existingBodyBinaryData = await db
+      .select()
+      .from(bodyBinaryTable)
+      .where(inArray(bodyBinaryTable.requestOrFolderMetaId, oldIds));
+
+    if (!existingBodyBinaryData.length) return true;
+
+    /**
+     * - Replacing oldId with duplicatedId
+     * and only keeping url so that other things automatically generate by default
+     */
+    const duplicatePayload = existingBodyBinaryData.map((binary) => {
+      delete binary["id"];
+      return {
+        ...binary,
+        requestOrFolderMetaId: payload[binary.requestOrFolderMetaId],
+      };
+    });
+
+    const result = await db.insert(bodyBinaryTable).values(duplicatePayload);
+
+    return result.changes > 0;
   } catch (error) {
     console.error(error);
   }

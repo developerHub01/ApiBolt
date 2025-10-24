@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { db } from "./index.js";
 import { bodyXWWWFormUrlencodedTable } from "./schema.js";
 import { getTabList } from "./tabsDB.js";
@@ -179,6 +179,52 @@ export const checkAllBodyXWWWFormUrlencodedByRequestMetaId = async (
         )
       );
     return updated?.changes > 0;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+/* 
+payload = {
+  oldId: newId ---> newId means duplicatedId
+}
+*/
+export const duplicateBodyXWWWFormUrlencoded = async (payload) => {
+  try {
+    if (!payload) return;
+    const oldIds = Object.keys(payload);
+    if (!oldIds.length) return;
+
+    const existingBodyXWWWFormUrlencodedData = await db
+      .select()
+      .from(bodyXWWWFormUrlencodedTable)
+      .where(
+        inArray(bodyXWWWFormUrlencodedTable.requestOrFolderMetaId, oldIds)
+      );
+
+    if (!existingBodyXWWWFormUrlencodedData.length) return true;
+
+    /**
+     * - Replacing oldId with duplicatedId
+     * and only keeping url so that other things automatically generate by default
+     */
+    const duplicatePayload = existingBodyXWWWFormUrlencodedData.map(
+      (bodyXWWWFormUrlencoded) => {
+        delete bodyXWWWFormUrlencoded["id"];
+        delete bodyXWWWFormUrlencoded["createdAt"];
+        return {
+          ...bodyXWWWFormUrlencoded,
+          requestOrFolderMetaId:
+            payload[bodyXWWWFormUrlencoded.requestOrFolderMetaId],
+        };
+      }
+    );
+
+    const result = await db
+      .insert(bodyXWWWFormUrlencodedTable)
+      .values(duplicatePayload);
+
+    return result.changes > 0;
   } catch (error) {
     console.error(error);
   }

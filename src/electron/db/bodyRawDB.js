@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { db } from "./index.js";
 import { bodyRawTable } from "./schema.js";
 import { getTabList } from "./tabsDB.js";
@@ -101,5 +101,43 @@ export const deleteBodyRawByRequestMetaId = async (requestOrFolderMetaId) => {
   } catch (error) {
     console.error(error);
     return false;
+  }
+};
+
+/* 
+payload = {
+  oldId: newId ---> newId means duplicatedId
+}
+*/
+export const duplicateBodyRaw = async (payload) => {
+  try {
+    if (!payload) return;
+    const oldIds = Object.keys(payload);
+    if (!oldIds.length) return;
+
+    const existingBodyRawData = await db
+      .select()
+      .from(bodyRawTable)
+      .where(inArray(bodyRawTable.requestOrFolderMetaId, oldIds));
+
+    if (!existingBodyRawData.length) return true;
+
+    /**
+     * - Replacing oldId with duplicatedId
+     * and only keeping url so that other things automatically generate by default
+     */
+    const duplicatePayload = existingBodyRawData.map((raw) => {
+      delete raw["id"];
+      return {
+        ...raw,
+        requestOrFolderMetaId: payload[raw.requestOrFolderMetaId],
+      };
+    });
+
+    const result = await db.insert(bodyRawTable).values(duplicatePayload);
+
+    return result.changes > 0;
+  } catch (error) {
+    console.error(error);
   }
 };

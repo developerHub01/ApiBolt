@@ -187,6 +187,31 @@ export const checkAllBodyXWWWFormUrlencodedByRequestMetaId = createAsyncThunk<
     }
   }
 );
+
+export const duplicateBodyXWWWFormUrlencodedByOldNewIds = createAsyncThunk<
+  boolean,
+  Record<string, string>,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>(
+  "request-response/duplicateBodyXWWWFormUrlencodedByOldNewIds",
+  async (oldNewIdMap) => {
+    try {
+      const response =
+        await window.electronAPIBodyXWWWFormUrlencodedDB.duplicateBodyXWWWFormUrlencoded(
+          oldNewIdMap
+        );
+
+      return response;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  }
+);
+
 /* ==============================
   ======== BodyXWWWFormUrlencoded end =============
 ================================= */
