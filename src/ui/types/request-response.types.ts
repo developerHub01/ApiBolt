@@ -57,6 +57,12 @@ export interface RequestListInterface {
   [key: string]: RequestListItemInterface;
 }
 
+export interface FlexibleRequestListInterface<
+  Extra extends Record<string, unknown> = Record<string, unknown>,
+> {
+  [key: string]: RequestListItemInterface & Extra;
+}
+
 export type TRequestBodyType =
   | "none"
   | "form-data"
@@ -125,7 +131,6 @@ export interface FormDataInterface
 }
 
 export type FormDataPayloadInterface = Omit<FormDataInterface, "contentType">;
-
 
 export interface ResponseInterface {
   data: unknown;

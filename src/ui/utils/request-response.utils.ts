@@ -2,6 +2,7 @@ import { MAX_REQUEST_LIST_NESTED_FOLDER_COUNT } from "@/constant/request-respons
 import { URL_PURE_VARIABLE_REGEX } from "@/constant/request-url.constant";
 import type { EnvironmentInterface } from "@/types/environment.types";
 import type {
+  FlexibleRequestListInterface,
   ParamInterface,
   RequestListInterface,
   RequestListItemInterface,
@@ -97,11 +98,15 @@ export const duplicateRequestOrFolderNode = ({
   id: string;
   parentId?: string;
   result?: {
-    nodes: RequestListInterface;
+    nodes: FlexibleRequestListInterface<{
+      oldId: string;
+    }>;
     newParentId: string;
   };
 }): {
-  nodes: RequestListInterface;
+  nodes: FlexibleRequestListInterface<{
+    oldId: string;
+  }>;
   newParentId: string;
 } => {
   const nodeId = uuidv4();
@@ -111,6 +116,7 @@ export const duplicateRequestOrFolderNode = ({
     ...data,
     parentId,
     id: nodeId,
+    oldId: id,
   };
   if (!result.newParentId) result.newParentId = nodeId;
 
