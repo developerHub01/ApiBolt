@@ -7,8 +7,8 @@ import {
   selectIsZoomableGlobal,
   selectIsZoomableLocal,
 } from "@/context/redux/setting/selectors/setting-selector";
-import { selectActiveProjectId } from "@/context/redux/request-response/selectors/project";
 import SettingOptionSelector from "@/components/app/setting/content/SettingOptionSelector";
+import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 
 const zoomableLocalOptions = ["default", "global", "enable", "disable"];
 const zoomableGlobalOptions = ["default", "enable", "disable"];

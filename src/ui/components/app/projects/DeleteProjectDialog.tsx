@@ -22,7 +22,7 @@ import PasteButton from "@/components/ui/paste-button";
 import CopyButton from "@/components/ui/copy-button";
 import { ClipboardCopy as ClipboardCopyIcon } from "lucide-react";
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
-import { selectProjectById } from "@/context/redux/request-response/selectors/project";
+import { selectProjectById } from "@/context/redux/project/selectors/project";
 
 const defaultName = "";
 

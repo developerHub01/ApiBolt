@@ -487,7 +487,7 @@ export const duplicateRequestOrFolder = createAsyncThunk<
   async (id: string, { dispatch, getState }) => {
     try {
       const state = getState() as RootState;
-      const projectId = state.requestResponse.activeProjectId;
+      const projectId = state.project.activeProjectId;
       const requestList = state.requestResponse.requestList;
 
       if (!projectId) return;

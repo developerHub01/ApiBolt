@@ -15,7 +15,7 @@ import {
 import type { TSidebarTab } from "@/types/sidebar.types";
 import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
 import { selectSidebarActiveTab } from "@/context/redux/sidebar/sidebar-selector";
-import { selectActiveProjectId } from "@/context/redux/request-response/selectors/project";
+import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 
 const SidebarMenu = memo(() => {
   const dispatch = useAppDispatch();

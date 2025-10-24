@@ -11,8 +11,8 @@ import { handleToggleRequestList } from "@/context/redux/request-response/reques
 import { changeActiveTab } from "@/context/redux/sidebar/sidebar-thunk";
 import { handleChangeIsCookiesOpen } from "@/context/redux/cookies/cookies-slice";
 import { removeTab } from "@/context/redux/request-response/thunks/tab-list";
-import { selectActiveProjectId } from "@/context/redux/request-response/selectors/project";
 import useCheckApplyingLayoutActivityBarVisible from "@/hooks/setting/use-check-applying-layout-activity-bar-visible";
+import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 
 const KeyboardEvents = () => {
   const dispatch = useAppDispatch();

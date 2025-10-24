@@ -1,5 +1,4 @@
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectActiveProjectId } from "@/context/redux/request-response/selectors/project";
 import {
   selectMaxImagesGlobal,
   selectMaxImagesLocal,
@@ -8,6 +7,7 @@ import { useSetting } from "@/context/setting/SettingProvider";
 import useGlobalLocalSettingv1 from "@/hooks/setting/use-global-local-settingv1";
 import { DEFAULT_SETTINGS } from "@/constant/settings.constant";
 import { senitizeValue } from "@/utils/settings.utils";
+import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 
 const useCheckBackgroundSettingMaxNumberOfImages = () => {
   const { activeTab } = useSetting();

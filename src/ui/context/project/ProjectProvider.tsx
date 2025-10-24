@@ -6,11 +6,11 @@ import React, {
   useState,
 } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import type { ProjectInterface } from "@/types/project.types";
 import {
   changeActiveProject,
   deleteProject,
-} from "@/context/redux/request-response/thunks/projects";
-import type { ProjectInterface } from "@/types/project.types";
+} from "@/context/redux/project/thunks/projects";
 
 interface ProjectContext {
   projectList: Array<ProjectInterface>;
@@ -43,7 +43,7 @@ interface ProjectProviderProps {
 const ProjectProvider = ({ children }: ProjectProviderProps) => {
   const dispatch = useAppDispatch();
   const projectListFromStore = useAppSelector(
-    (state) => state.requestResponse.projectList
+    (state) => state.project.projectList
   );
 
   const [deletionCandidate, setDeletionCandidate] = useState<string | null>();

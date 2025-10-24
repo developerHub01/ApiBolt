@@ -1,15 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
-import {
-  handleChangeActiveProject,
-  handleChangeIsRequestListLoaded,
-  handleLoadProjectsList,
-} from "@/context/redux/request-response/request-response-slice";
+import { handleChangeIsRequestListLoaded } from "@/context/redux/request-response/request-response-slice";
 import { loadTabsData } from "@/context/redux/request-response/thunks/tab-list";
 import type { ProjectInterface } from "@/types/project.types";
 import { DEFAULT_AUTHORIZATION_ID } from "@/constant/authorization.constant";
 import { loadEnvironmentsList } from "@/context/redux/request-response/thunks/environment";
 import { loadAuthorization } from "@/context/redux/request-response/thunks/auth";
+import {
+  handleChangeActiveProject,
+  handleLoadProjectsList,
+} from "@/context/redux/project/project-slice";
 
 /* ==============================
 ========== Projects start =========

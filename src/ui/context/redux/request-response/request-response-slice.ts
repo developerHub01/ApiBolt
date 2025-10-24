@@ -42,7 +42,6 @@ import type {
   TAuthType,
   TBearerToken,
 } from "@/types/authorization.types";
-import type { ProjectInterface } from "@/types/project.types";
 import type { EnvironmentInterface } from "@/types/environment.types";
 import {
   DEFAULT_FOLDER_DESCRIPTION,
@@ -51,8 +50,6 @@ import {
 import type { TRequestCodeType } from "@/types/code-snippit.types";
 
 interface RequestResponseState {
-  projectList: Array<ProjectInterface>;
-  activeProjectId: string | null;
   codeSnippitType: TRequestCodeType | null;
 
   environmentsList: Record<string, EnvironmentInterface>;
@@ -138,8 +135,6 @@ interface RequestResponseState {
 
 // Define the initial state using that type
 const initialState: RequestResponseState = {
-  projectList: [],
-  activeProjectId: null,
   codeSnippitType: null,
 
   environmentsList: {},
@@ -203,22 +198,6 @@ export const requestResponseSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    /* =============== Project reducers start ============= */
-    handleLoadProjectsList: (
-      state,
-      action: PayloadAction<Array<ProjectInterface>>
-    ) => {
-      state.projectList = action.payload;
-    },
-    handleChangeActiveProject: (
-      state,
-      action: PayloadAction<string | null>
-    ) => {
-      if (state.activeProjectId === action.payload) return;
-      state.activeProjectId = action.payload;
-    },
-    /* =============== Project reducers end ============= */
-
     /* =============== CodeSnippit reducers start ============= */
     handleChangeCodeSnippitType: (
       state,
@@ -234,8 +213,6 @@ export const requestResponseSlice = createSlice({
       state,
       action: PayloadAction<Record<string, EnvironmentInterface>>
     ) => {
-      if (!state.activeProjectId) return;
-
       state.environmentsList = action.payload;
     },
     /* =============== Environment reducers end ============= */
@@ -248,7 +225,6 @@ export const requestResponseSlice = createSlice({
         inheritedId: string;
       }>
     ) => {
-      if (!state.activeProjectId) return;
       const { requestId, inheritedId = DEFAULT_AUTHORIZATION_ID } =
         action.payload;
 
@@ -262,7 +238,6 @@ export const requestResponseSlice = createSlice({
         payload: Partial<AuthorizationPayloadInterface>;
       }>
     ) => {
-      if (!state.activeProjectId) return;
       const { id = DEFAULT_AUTHORIZATION_ID, payload } = action.payload;
 
       const {
@@ -376,7 +351,6 @@ export const requestResponseSlice = createSlice({
     },
     handleAuthorizationsDefault: (state, action: PayloadAction<string>) => {
       const id = action.payload;
-      if (!state.activeProjectId) return;
       /* auth type start =========== */
       state.authType[id] = "inherit-parent";
       /* auth type end =========== */
@@ -1326,9 +1300,6 @@ export const selectRequestNameById =
     state.requestList[id]?.name;
 
 export const {
-  handleLoadProjectsList,
-  handleChangeActiveProject,
-
   handleChangeCodeSnippitType,
   handleLoadEnvironmentsList,
 

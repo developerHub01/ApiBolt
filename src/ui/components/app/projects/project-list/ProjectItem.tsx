@@ -2,9 +2,9 @@ import { useCallback, type MouseEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { useProject } from "@/context/project/ProjectProvider";
 import { useAppDispatch } from "@/context/redux/hooks";
-import { changeActiveProject } from "@/context/redux/request-response/thunks/projects";
 import { cn } from "@/lib/utils";
 import { Trash2 as DeleteIcon } from "lucide-react";
+import { changeActiveProject } from "@/context/redux/project/thunks/projects";
 
 interface ProjectItemProps {
   id: string;

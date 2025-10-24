@@ -6,7 +6,7 @@ import { useProject } from "@/context/project/ProjectProvider";
 import {
   selectActiveProjectId,
   selectProjectList,
-} from "@/context/redux/request-response/selectors/project";
+} from "@/context/redux/project/selectors/project";
 
 const ProjectList = () => {
   const projectListFromStore = useAppSelector(selectProjectList);

@@ -9,7 +9,6 @@ import {
   selectLayoutTypeGlobal,
   selectLayoutTypeLocal,
 } from "@/context/redux/setting/selectors/setting-selector";
-import { selectActiveProjectId } from "@/context/redux/request-response/selectors/project";
 import SettingItemContentWrapper from "@/components/app/setting/content/SettingItemContentWrapper";
 import { motion } from "motion/react";
 import {
@@ -19,6 +18,7 @@ import {
 } from "lucide-react";
 import type { TLayoutSetting } from "@/types/setting.types";
 import { cn } from "@/lib/utils";
+import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 
 const layoutList: Array<{
   id: TLayoutSetting;

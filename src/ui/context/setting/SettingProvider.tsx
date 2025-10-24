@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectActiveProjectId } from "@/context/redux/request-response/selectors/project";
+import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 
 export type TSettingTab = "global" | "project";
 

@@ -3,12 +3,12 @@ import type { RootState } from "@/context/redux/store";
 import type { ProjectInterface } from "@/types/project.types";
 
 export const selectActiveProjectId = createSelector(
-  [(state: RootState) => state.requestResponse.activeProjectId],
+  [(state: RootState) => state.project.activeProjectId],
   (activeProjectId): string | null => (activeProjectId ? activeProjectId : null)
 );
 
 export const selectProjectList = createSelector(
-  [(state: RootState) => state.requestResponse.projectList],
+  [(state: RootState) => state.project.projectList],
   (projectList): Array<ProjectInterface> => projectList ?? []
 );
 

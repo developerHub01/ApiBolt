@@ -10,7 +10,7 @@ import { handleToggleRequestList } from "@/context/redux/request-response/reques
 import { selectIsRequestListCollapsed } from "@/context/redux/request-response/selectors/request-list";
 import { selectSidebarActiveTab } from "@/context/redux/sidebar/sidebar-selector";
 import { updateSettings } from "@/context/redux/setting/thunk/setting-thunk";
-import { selectActiveProjectId } from "@/context/redux/request-response/selectors/project";
+import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 
 interface SidebarContextMenuWrapperProps {
   children: React.ReactNode;

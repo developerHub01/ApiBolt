@@ -1,5 +1,5 @@
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectActiveProjectId } from "@/context/redux/request-response/selectors/project";
+import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 import {
   selectLayoutTypeGlobal,
   selectLayoutTypeLocal,

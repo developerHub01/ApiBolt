@@ -2,10 +2,10 @@ import { useEffect } from "react";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { loadEnvironmentsList } from "@/context/redux/request-response/thunks/environment";
 import { loadAuthorization } from "@/context/redux/request-response/thunks/auth";
-import { loadProjectList } from "@/context/redux/request-response/thunks/projects";
 import { DEFAULT_AUTHORIZATION_ID } from "@/constant/authorization.constant";
 import { loadActiveTab } from "@/context/redux/sidebar/sidebar-thunk";
 import { loadCodeSnippitType } from "@/context/redux/request-response/thunks/code-snippit";
+import { loadProjectList } from "@/context/redux/project/thunks/projects";
 
 const LoadBasicReduxState = () => {
   const dispatch = useAppDispatch();

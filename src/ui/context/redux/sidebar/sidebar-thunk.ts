@@ -20,7 +20,7 @@ export const loadActiveTab = createAsyncThunk<
      * =============== SAFTY POURPOSE MOSTLY NOT TRIGGER ================
      * - when no active project and if tab is other then projects then dont allow to set instead set "projects" as default
      */
-    if (!state.requestResponse.activeProjectId && response !== "projects")
+    if (!state.project.activeProjectId && response !== "projects")
       response = "projects";
 
     dispatch(handleChangeActiveTab(response));
@@ -45,7 +45,7 @@ export const changeActiveTab = createAsyncThunk<
      */
     if (
       state.sidebar.activeTab === tabId ||
-      (!state.requestResponse.activeProjectId && tabId !== "projects")
+      (!state.project.activeProjectId && tabId !== "projects")
     )
       return;
 

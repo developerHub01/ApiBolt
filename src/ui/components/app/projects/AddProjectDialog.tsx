@@ -11,7 +11,6 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import LoaderV1 from "@/components/LoaderV1";
 import { useAppDispatch } from "@/context/redux/hooks";
-import { createProject } from "@/context/redux/request-response/thunks/projects";
 import {
   AnimatedDialog,
   AnimatedDialogBottom,
@@ -23,6 +22,7 @@ import {
   DEFAULT_PROJECT_NAME,
   MAX_PROJECT_NAME_LENGTH,
 } from "@/constant/project.constant";
+import { createProject } from "@/context/redux/project/thunks/projects";
 
 const AddProjectDialog = memo(() => {
   const dispatch = useAppDispatch();

@@ -75,7 +75,7 @@ export const updateSettingsZoomByKeyboard = createAsyncThunk<
     try {
       const state = getState() as RootState;
 
-      const activeProjectId = state.requestResponse.activeProjectId ?? null;
+      const activeProjectId = state.project.activeProjectId ?? null;
 
       /* first checking do we can zoom? based on the local(project based), global, default */
       const isZoomable = checkApplyingZoomable({
@@ -145,7 +145,7 @@ export const updateSettingsBackgroundImages = createAsyncThunk<
     try {
       const state = getState() as RootState;
 
-      const activeProjectId = state.requestResponse.activeProjectId ?? null;
+      const activeProjectId = state.project.activeProjectId ?? null;
 
       const response =
         await window.electronAPISettingsDB.updateSettingsBackgroundImages({

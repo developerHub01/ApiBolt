@@ -9,7 +9,7 @@ import { AnimatedDialog } from "@/components/ui/animated-dialog";
 import { loadSettings } from "@/context/redux/setting/thunk/setting-thunk";
 import SettingProvider from "@/context/setting/SettingProvider";
 import { selectIsSettingOpen } from "@/context/redux/setting/selectors/setting-selector";
-import { selectActiveProjectId } from "@/context/redux/request-response/selectors/project";
+import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 
 const Setting = () => {
   const dispatch = useAppDispatch();

@@ -3,9 +3,9 @@ import { useAppSelector } from "@/context/redux/hooks";
 import { useNavigate } from "react-router-dom";
 import { SIDEBAR_MENU_LIST } from "@/constant/sidebar.constant";
 import { selectSidebarActiveTab } from "@/context/redux/sidebar/sidebar-selector";
-import { selectActiveProjectId } from "@/context/redux/request-response/selectors/project";
 import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
 import { selectActiveRequestOrFolder } from "@/context/redux/request-response/selectors/request-list";
+import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 
 const Redirector = () => {
   const navigate = useNavigate();

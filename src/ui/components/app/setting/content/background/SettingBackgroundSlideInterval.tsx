@@ -12,7 +12,7 @@ import {
   selectSlideIntervalGlobal,
   selectSlideIntervalLocal,
 } from "@/context/redux/setting/selectors/setting-selector";
-import { selectActiveProjectId } from "@/context/redux/request-response/selectors/project";
+import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 
 const SettingBackgroundSlideInterval = () => {
   const { activeTab } = useSetting();

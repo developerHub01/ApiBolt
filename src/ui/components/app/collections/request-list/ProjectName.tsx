@@ -1,5 +1,5 @@
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectActiveProject } from "@/context/redux/request-response/selectors/project";
+import { selectActiveProject } from "@/context/redux/project/selectors/project";
 
 const ProjectName = () => {
   const activeProject = useAppSelector(selectActiveProject);

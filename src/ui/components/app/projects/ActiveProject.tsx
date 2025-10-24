@@ -10,9 +10,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { Trash2 as DeleteIcon } from "lucide-react";
-import { updateProject } from "@/context/redux/request-response/thunks/projects";
 import { useProject } from "@/context/project/ProjectProvider";
 import { cn } from "@/lib/utils";
+import { updateProject } from "@/context/redux/project/thunks/projects";
 
 const ActiveProject = () => {
   const dispatch = useAppDispatch();
@@ -21,11 +21,9 @@ const ActiveProject = () => {
   const nameRef = useRef<HTMLInputElement>(null);
 
   const activeProjectId = useAppSelector(
-    (state) => state.requestResponse.activeProjectId
+    (state) => state.project.activeProjectId
   );
-  const projectList = useAppSelector(
-    (state) => state.requestResponse.projectList
-  );
+  const projectList = useAppSelector((state) => state.project.projectList);
 
   // Find active project
   const activeProject = useMemo(() => {

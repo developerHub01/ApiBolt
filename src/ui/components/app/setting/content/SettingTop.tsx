@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 import { AnimatedDialogTop } from "@/components/ui/animated-dialog";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectActiveProjectId } from "@/context/redux/request-response/selectors/project";
+import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 
 const buttonList: Array<{
   id: TSettingTab;

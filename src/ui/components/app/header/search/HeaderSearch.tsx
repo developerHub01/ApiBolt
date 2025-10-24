@@ -23,7 +23,7 @@ import { selectSidebarActiveTab } from "@/context/redux/sidebar/sidebar-selector
 import {
   selectActiveProjectId,
   selectActiveProjectName,
-} from "@/context/redux/request-response/selectors/project";
+} from "@/context/redux/project/selectors/project";
 import { selectRequestOrFolderList } from "@/context/redux/request-response/selectors/request-list";
 import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
 
