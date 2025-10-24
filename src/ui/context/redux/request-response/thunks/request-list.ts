@@ -472,7 +472,10 @@ export const duplicateRequestOrFolder = createAsyncThunk<
   async (id: string, { dispatch, getState }) => {
     try {
       const state = getState() as RootState;
+      const projectId = state.requestResponse.activeProjectId;
       const requestList = state.requestResponse.requestList;
+
+      if (!projectId) return;
 
       const { newParentId, nodes: duplicatedNodes } =
         duplicateRequestOrFolderNode({
@@ -488,17 +491,22 @@ export const duplicateRequestOrFolder = createAsyncThunk<
           duplicatedNodes[newParentId].isExpended = false;
       }
 
-      const duplicatedData = Object.values(duplicatedNodes).map(
+      const duplicatedData = Object.values(duplicatedNodes);
+      const duplicatedDataFiltered = duplicatedData.map(
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        ({ children, createdAt, ...rest }) => rest
+        ({ children, createdAt, oldId, ...rest }) => ({
+          ...rest,
+          projectId,
+        })
       );
 
       const response =
         await window.electronAPIRequestOrFolderMetaDB.duplicateRequestOrFolderMeta(
-          duplicatedData
+          duplicatedDataFiltered
         );
 
-      if (response) dispatch(handleChangeIsRequestListLoaded(false));
+      if (!response) return;
+      dispatch(handleChangeIsRequestListLoaded(false));
     } catch (error) {
       console.error(error);
     }
