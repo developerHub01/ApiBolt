@@ -1,14 +1,5 @@
 import { useCallback, useMemo } from "react";
 import SettingItemHorizontalLayout from "@/components/app/setting/content/SettingItemHorizontalLayout";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { updateSettings } from "@/context/redux/setting/thunk/setting-thunk";
 import { useSetting } from "@/context/setting/SettingProvider";
@@ -17,6 +8,7 @@ import {
   selectIsZoomableLocal,
 } from "@/context/redux/setting/selectors/setting-selector";
 import { selectActiveProjectId } from "@/context/redux/request-response/selectors/project";
+import SettingOptionSelector from "@/components/app/setting/content/SettingOptionSelector";
 
 const zoomableLocalOptions = ["default", "global", "enable", "disable"];
 const zoomableGlobalOptions = ["default", "enable", "disable"];
@@ -63,10 +55,10 @@ const SettingIsZoomable = () => {
   );
 
   return (
-    <SettingItemHorizontalLayout className="py-2.5">
+    <SettingItemHorizontalLayout className="py-2.5 items-center">
       <p className="flex-1">Allow keyboard shortcuts to zoom in/out</p>
       {
-        <ZoomableOptionSelector
+        <SettingOptionSelector
           list={
             activeTab === "project"
               ? zoomableLocalOptions
@@ -74,38 +66,12 @@ const SettingIsZoomable = () => {
           }
           value={activeZoomOption}
           onChange={handleIsZoomableChange}
+          placeholder="Zoom level"
+          label="Zoom"
         />
       }
     </SettingItemHorizontalLayout>
   );
 };
-
-interface ZoomableOptionSelectorProps {
-  list: Array<string>;
-  value: string;
-  onChange: (value?: string) => void;
-}
-
-const ZoomableOptionSelector = ({
-  list,
-  value,
-  onChange,
-}: ZoomableOptionSelectorProps) => (
-  <Select value={value} onValueChange={onChange}>
-    <SelectTrigger className="w-full max-w-32 capitalize" size="sm">
-      <SelectValue placeholder="Zoom level" />
-    </SelectTrigger>
-    <SelectContent>
-      <SelectGroup>
-        <SelectLabel>Zoom</SelectLabel>
-        {list.map((size: string) => (
-          <SelectItem key={size} value={size} className="capitalize">
-            {size}
-          </SelectItem>
-        ))}
-      </SelectGroup>
-    </SelectContent>
-  </Select>
-);
 
 export default SettingIsZoomable;
