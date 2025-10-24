@@ -47,7 +47,13 @@ const RequestCodeTypeSelector = memo(() => {
           ))}
         </SelectContent>
       </Select>
-      <CopyButton value={code} align="end" Icon={CopyIcon} size="sm" />
+      <CopyButton
+        value={code}
+        align="end"
+        Icon={CopyIcon}
+        size="sm"
+        label="Copy Code Snippit"
+      />
     </div>
   );
 });

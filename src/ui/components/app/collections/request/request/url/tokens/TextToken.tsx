@@ -8,8 +8,8 @@ import {
 } from "react";
 import { Trash2 as DeleteIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import TokenDragHandler from "@/components/app/collections/request/request/meta-data/url/TokenDragHandler";
-import ChangeTokenType from "@/components/app/collections/request/request/meta-data/url/tokens/ChangeTokenType";
+import TokenDragHandler from "@/components/app/collections/request/request/url/TokenDragHandler";
+import ChangeTokenType from "@/components/app/collections/request/request/url/tokens/ChangeTokenType";
 import { useAppDispatch } from "@/context/redux/hooks";
 import {
   requestUrlDeleteToken,
@@ -64,7 +64,7 @@ const TextToken = memo(({ id, value }: TextTokenProps) => {
         <p
           contentEditable
           suppressContentEditableWarning
-          className="outline-none cursor-text border-b w-full min-w-12 max-w-96 text-center break-words break-all whitespace-normal font-normal"
+          className="outline-none cursor-text border-b w-full min-w-12 max-w-96 text-center wrap-break-word break-all whitespace-normal font-normal"
           onKeyDown={handleKeydown}
           onBlur={handleBlur}
           onPaste={handlePaste}

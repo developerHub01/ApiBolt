@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { Trash2 as DeleteIcon } from "lucide-react";
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
-import TokenDragHandler from "@/components/app/collections/request/request/meta-data/url/TokenDragHandler";
-import ChangeTokenType from "@/components/app/collections/request/request/meta-data/url/tokens/ChangeTokenType";
+import TokenDragHandler from "@/components/app/collections/request/request/url/TokenDragHandler";
+import ChangeTokenType from "@/components/app/collections/request/request/url/tokens/ChangeTokenType";
 import {
   requestUrlDeleteToken,
   requestUrlUpdateToken,

@@ -1,8 +1,8 @@
 import { Fragment, memo } from "react";
 import type { UrlTokenInterface } from "@/types/request-url.types";
-import VariableToken from "@/components/app/collections/request/request/meta-data/url/tokens/VariableToken";
-import AddUrlPart from "@/components/app/collections/request/request/meta-data/url/AddUrlPart";
-import TextToken from "@/components/app/collections/request/request/meta-data/url/tokens/TextToken";
+import VariableToken from "@/components/app/collections/request/request/url/tokens/VariableToken";
+import AddUrlPart from "@/components/app/collections/request/request/url/AddUrlPart";
+import TextToken from "@/components/app/collections/request/request/url/tokens/TextToken";
 
 interface Props {
   token: UrlTokenInterface;
