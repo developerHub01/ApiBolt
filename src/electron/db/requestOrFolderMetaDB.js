@@ -149,7 +149,6 @@ export const deleteRequestOrFolderMetaById = async (id) => {
 export const duplicateRequestOrFolderMeta = async (payload) => {
   try {
     if (!payload || !Array.isArray(payload)) return;
-
     const result = await db.insert(requestOrFolderMetaTable).values(payload);
 
     return result?.changes > 0;

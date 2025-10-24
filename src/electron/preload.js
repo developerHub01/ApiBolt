@@ -329,6 +329,8 @@ contextBridge.exposeInMainWorld("electronAPIApiUrl", {
     await ipcRenderer.invoke("getApiUrlDB", ...payload),
   createApiUrl: async (...payload) =>
     await ipcRenderer.invoke("createApiUrl", ...payload),
+  duplicateApiUrl: async (...payload) =>
+    await ipcRenderer.invoke("duplicateApiUrl", ...payload),
   updateApiUrl: async (...payload) =>
     await ipcRenderer.invoke("updateApiUrl", ...payload),
 });

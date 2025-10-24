@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { db } from "./index.js";
 import { API_URL_DEFAULT_VALUE, apiUrlTable } from "./schema.js";
 import { getTabList } from "./tabsDB.js";
@@ -29,6 +29,43 @@ export const createApiUrl = async (payload = {}) => {
     if (!payload.requestOrFolderMetaId) return false;
 
     const result = await db.insert(apiUrlTable).values(payload);
+    return result.changes > 0;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+/* 
+payload = {
+  oldId: newId ---> newId means duplicatedId
+}
+*/
+export const duplicateApiUrl = async (payload) => {
+  try {
+    if (!payload) return;
+    const oldIds = Object.keys(payload);
+    if (!oldIds.length) return;
+
+    const existingUrlData = await db
+      .select()
+      .from(apiUrlTable)
+      .where(inArray(apiUrlTable.requestOrFolderMetaId, oldIds));
+
+    if (!existingUrlData.length) return true;
+
+    /**
+     * - Replacing oldId with duplicatedId
+     * and only keeping url so that other things automatically generate by default
+     */
+    const duplicatePayload = existingUrlData.map(
+      ({ url, requestOrFolderMetaId }) => ({
+        requestOrFolderMetaId: payload[requestOrFolderMetaId],
+        url,
+      })
+    );
+
+    const result = await db.insert(apiUrlTable).values(duplicatePayload);
+
     return result.changes > 0;
   } catch (error) {
     console.error(error);

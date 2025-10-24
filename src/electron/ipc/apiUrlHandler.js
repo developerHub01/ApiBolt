@@ -1,5 +1,10 @@
 import { ipcMain } from "electron";
-import { createApiUrl, getApiUrlDB, updateApiUrl } from "../db/apiUrlDB.js";
+import {
+  createApiUrl,
+  duplicateApiUrl,
+  getApiUrlDB,
+  updateApiUrl,
+} from "../db/apiUrlDB.js";
 
 export const apiUrlHandler = () => {
   ipcMain.handle(
@@ -9,6 +14,10 @@ export const apiUrlHandler = () => {
   ipcMain.handle(
     "createApiUrl",
     async (_, ...rest) => await createApiUrl(...rest)
+  );
+  ipcMain.handle(
+    "duplicateApiUrl",
+    async (_, ...rest) => await duplicateApiUrl(...rest)
   );
   ipcMain.handle(
     "updateApiUrl",

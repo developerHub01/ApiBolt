@@ -22,6 +22,7 @@ import {
   getRequestType,
 } from "@/utils/request-response.utils";
 import { loadTabsData } from "@/context/redux/request-response/thunks/tab-list";
+import { uplicateRequestApiUrlsByOldNewIds } from "@/context/redux/request-url/request-url-thunk";
 
 /* ==============================
 ===== RequestList start =========
@@ -484,6 +485,14 @@ export const duplicateRequestOrFolder = createAsyncThunk<
           parentId: requestList[id]?.parentId,
         });
 
+      const oldNewIdMap = Object.values(duplicatedNodes).reduce(
+        (acc, curr) => {
+          acc[curr.oldId] = curr.id;
+          return acc;
+        },
+        {} as Record<string, string>
+      );
+
       if (duplicatedNodes?.[newParentId]?.name) {
         duplicatedNodes[newParentId].name += " copy";
 
@@ -506,6 +515,10 @@ export const duplicateRequestOrFolder = createAsyncThunk<
         );
 
       if (!response) return;
+      /* duplicate urls */
+      console.log(oldNewIdMap);
+      await dispatch(uplicateRequestApiUrlsByOldNewIds(oldNewIdMap));
+
       dispatch(handleChangeIsRequestListLoaded(false));
     } catch (error) {
       console.error(error);
