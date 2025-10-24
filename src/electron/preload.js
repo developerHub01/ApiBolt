@@ -201,6 +201,8 @@ contextBridge.exposeInMainWorld("electronAPIParamsDB", {
     await ipcRenderer.invoke("replaceParams", ...payload),
   checkAllParamsByRequestMetaId: async (...payload) =>
     await ipcRenderer.invoke("checkAllParamsByRequestMetaId", ...payload),
+  duplicateParams: async (...payload) =>
+    await ipcRenderer.invoke("duplicateParams", ...payload),
 });
 
 contextBridge.exposeInMainWorld("electronAPIHeadersDB", {

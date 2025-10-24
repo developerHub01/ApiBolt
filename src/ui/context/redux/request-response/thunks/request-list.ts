@@ -22,7 +22,8 @@ import {
   getRequestType,
 } from "@/utils/request-response.utils";
 import { loadTabsData } from "@/context/redux/request-response/thunks/tab-list";
-import { uplicateRequestApiUrlsByOldNewIds } from "@/context/redux/request-url/request-url-thunk";
+import { duplicateRequestApiUrlsByOldNewIds } from "@/context/redux/request-url/request-url-thunk";
+import { duplicateParamsByOldNewIds } from "@/context/redux/request-response/thunks/params";
 
 /* ==============================
 ===== RequestList start =========
@@ -517,7 +518,8 @@ export const duplicateRequestOrFolder = createAsyncThunk<
       if (!response) return;
       /* duplicate urls */
       console.log(oldNewIdMap);
-      await dispatch(uplicateRequestApiUrlsByOldNewIds(oldNewIdMap));
+      await dispatch(duplicateRequestApiUrlsByOldNewIds(oldNewIdMap));
+      await dispatch(duplicateParamsByOldNewIds(oldNewIdMap));
 
       dispatch(handleChangeIsRequestListLoaded(false));
     } catch (error) {

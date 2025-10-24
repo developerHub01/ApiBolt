@@ -242,6 +242,7 @@ declare global {
       checkAllParamsByRequestMetaId(
         requestOrFolderMetaId?: string
       ): Promise<boolean>;
+      duplicateParams(payload: Record<string, string>): Promise<boolean>;
     };
 
     electronAPIHeadersDB: {

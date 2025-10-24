@@ -312,6 +312,25 @@ export const updateParamsFromSearchParams = createAsyncThunk<
   }
 );
 
+export const duplicateParamsByOldNewIds = createAsyncThunk<
+  boolean,
+  Record<string, string>,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("request-response/duplicateParamsByOldNewIds", async (oldNewIdMap) => {
+  try {
+    const response =
+      await window.electronAPIParamsDB.duplicateParams(oldNewIdMap);
+
+    return response;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+});
+
 /* ==============================
 ======== Params end =============
 ================================= */

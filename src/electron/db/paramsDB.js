@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { db } from "./index.js";
 import { paramsTable } from "./schema.js";
 import { getTabList } from "./tabsDB.js";
@@ -162,6 +162,46 @@ export const checkAllParamsByRequestMetaId = async (requestOrFolderMetaId) => {
       .where(eq(paramsTable.requestOrFolderMetaId, requestOrFolderMetaId));
 
     return updated?.changes > 0;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+/* 
+payload = {
+  oldId: newId ---> newId means duplicatedId
+}
+*/
+export const duplicateParams = async (payload) => {
+  try {
+    if (!payload) return;
+    const oldIds = Object.keys(payload);
+    if (!oldIds.length) return;
+
+    const existingParamsData = await db
+      .select()
+      .from(paramsTable)
+      .where(inArray(paramsTable.requestOrFolderMetaId, oldIds));
+
+    if (!existingParamsData.length) return true;
+
+    /**
+     * - Replacing oldId with duplicatedId
+     * and only keeping url so that other things automatically generate by default
+     */
+    const duplicatePayload = existingParamsData.map((param) => {
+      delete param["id"];
+      delete param["createdAt"];
+
+      return {
+        ...param,
+        requestOrFolderMetaId: payload[param.requestOrFolderMetaId],
+      };
+    });
+
+    const result = await db.insert(paramsTable).values(duplicatePayload);
+
+    return result.changes > 0;
   } catch (error) {
     console.error(error);
   }

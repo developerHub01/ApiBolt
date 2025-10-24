@@ -4,6 +4,7 @@ import {
   createParams,
   deleteParams,
   deleteParamsByRequestMetaId,
+  duplicateParams,
   getParams,
   replaceParams,
   updateParams,
@@ -34,5 +35,9 @@ export const paramsHandlers = () => {
   ipcMain.handle(
     "checkAllParamsByRequestMetaId",
     async (_, ...rest) => await checkAllParamsByRequestMetaId(...rest)
+  );
+  ipcMain.handle(
+    "duplicateParams",
+    async (_, ...rest) => await duplicateParams(...rest)
   );
 };

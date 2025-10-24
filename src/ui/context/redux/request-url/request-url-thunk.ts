@@ -177,14 +177,14 @@ export const changeRequestApiUrlWithBackend = createAsyncThunk<
   }
 );
 
-export const uplicateRequestApiUrlsByOldNewIds = createAsyncThunk<
+export const duplicateRequestApiUrlsByOldNewIds = createAsyncThunk<
   boolean,
   Record<string, string>,
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->("request-url/uplicateRequestApiUrlsByOldNewIds", async (oldNewIdMap) => {
+>("request-url/duplicateRequestApiUrlsByOldNewIds", async (oldNewIdMap) => {
   try {
     const response =
       await window.electronAPIApiUrl.duplicateApiUrl(oldNewIdMap);

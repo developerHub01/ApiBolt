@@ -16,7 +16,3 @@ export interface UrlTokenInterface {
 export interface ApiUrlPayload {
   url: string;
 }
-
-export interface ApiUrlDuplicatePayloadItem extends ApiUrlPayload {
-  requestOrFolderMetaId: string;
-}
