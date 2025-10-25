@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-import { Kbd, KbdGroup } from "@/components/ui/kbd";
+import { Kbd, KbdGroup } from "@/components/ui/kbd-custom";
 
 interface Props {
   id: string;
@@ -41,7 +41,11 @@ const KeyboardShortcutsRow = memo(({ id, label, keyMap }: Props) => {
           <KbdGroup>
             {keyMap?.map((key, index) => (
               <>
-                <Kbd key={key + index} className="capitalize">
+                <Kbd
+                  key={key + index}
+                  className="capitalize"
+                  variant={"outline"}
+                >
                   {key}
                 </Kbd>
                 {index + 1 < keyMap.length && (
