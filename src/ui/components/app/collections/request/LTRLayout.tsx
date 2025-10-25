@@ -27,11 +27,11 @@ const LTRLayout = memo(() => {
                   </ProviderStack>
                 </ResizablePanel>
               </ResizablePanelGroup>
-              <TabSidebar />
             </>
           ) : (
             <Outlet />
           )}
+          <TabSidebar />
         </section>
       </ResizablePanel>
     </>

@@ -16,9 +16,9 @@ const RTLLayout = memo(() => {
     <>
       <ResizablePanel defaultSize={70}>
         <section className="flex w-full h-full">
+          <TabSidebar />
           {requestId ? (
             <>
-              <TabSidebar />
               <ResizablePanelGroup direction="vertical">
                 <ResizablePanel defaultSize={25}>
                   <ProviderStack>
