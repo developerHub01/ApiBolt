@@ -64,14 +64,14 @@ const CookiePreview = memo(({ details }: Props) => {
           >
             <TableCell
               className={cn(
-                "font-medium whitespace-normal break-words break-all min-h-16 capitalize p-3"
+                "font-medium whitespace-normal wrap-break-word break-all min-h-16 capitalize p-3"
               )}
             >
               {key}
             </TableCell>
             <TableCell
               className={cn(
-                "font-medium whitespace-normal break-words break-all min-h-16 p-3"
+                "font-medium whitespace-normal wrap-break-word break-all min-h-16 p-3"
               )}
             >
               {String(value ?? "")}

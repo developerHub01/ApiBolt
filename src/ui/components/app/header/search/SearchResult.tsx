@@ -4,6 +4,7 @@ import EmptyBox from "@/components/app/header/search/EmptyBox";
 import EmptySearchTermBox from "@/components/app/header/search/EmptySearchTermBox";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import SearchResultItem from "@/components/app/header/search/SearchResultItem";
+import { cn } from "@/lib/utils";
 
 interface SearchResultProps {
   searchTerm: string;
@@ -19,9 +20,15 @@ const SearchResult = memo(
 
     return (
       <ScrollArea className="w-full h-full min-h-0">
-        <div className="h-full min-h-0 max-h-96 w-full">
-          {list.map((data) => (
-            <SearchResultItem {...data} selectedTab={selectedTab} />
+        <div className="h-full min-h-0 max-h-96 w-full flex flex-col">
+          {list.map((data, index) => (
+            <SearchResultItem
+              {...data}
+              selectedTab={selectedTab}
+              className={cn({
+                "border-0": index + 1 === list.length,
+              })}
+            />
           ))}
         </div>
       </ScrollArea>

@@ -39,7 +39,7 @@ const Cookie = memo(({ id, selected = false }: Props) => {
       </Button>
       <Button
         variant="ghost"
-        className="flex-shrink-0 px-2 py-2 border-l"
+        className="shrink-0 px-2 py-2 border-l"
         onClick={handleDeleteCookie}
       >
         <CloseIcon />

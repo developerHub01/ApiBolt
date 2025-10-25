@@ -12,6 +12,7 @@ import { expendParentsOnSelectedChangeTabsData } from "@/context/redux/request-r
 
 interface Props extends RequestListItemInterface {
   selectedTab?: string | null;
+  className?: string;
 }
 
 const SearchResultItem = ({
@@ -20,6 +21,7 @@ const SearchResultItem = ({
   method,
   children,
   name,
+  className = "",
 }: Props) => {
   const dispatch = useAppDispatch();
 
@@ -33,7 +35,7 @@ const SearchResultItem = ({
   return (
     <div
       className={cn(
-        "w-full h-8 cursor-pointer px-1 border-x-2 border-transparent rounded-sm",
+        "w-full h-8 cursor-pointer px-3 shrink-0 border-b border-accent",
         {
           "bg-accent hover:bg-accent/80": selectedTab === id,
           "bg-transparent hover:bg-accent/50": selectedTab !== id,
@@ -43,13 +45,14 @@ const SearchResultItem = ({
           "border-orange-500": selectedTab === id && method === "patch",
           "border-red-500": selectedTab === id && method === "delete",
           "border-primary": selectedTab === id && !method,
-        }
+        },
+        className
       )}
       onClick={handleClick}
     >
       <div className="w-full h-full flex items-center gap-2 px-1">
         {(children || method) && (
-          <div className="flex justify-center items-center w-12 flex-shrink-0">
+          <div className="flex justify-center items-center w-12 shrink-0">
             {children && <FolderIcon size={16} />}
             {method && (
               <RequestMethodTag
