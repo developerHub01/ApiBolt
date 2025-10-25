@@ -23,6 +23,11 @@ import {
 import { selectRequestOrFolderById } from "@/context/redux/request-response/selectors/request-list";
 import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
 import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const TabItem = memo(({ id, index }: { id: string; index: number }) => {
   const dispatch = useAppDispatch();
@@ -175,13 +180,20 @@ const TabItem = memo(({ id, index }: { id: string; index: number }) => {
                 exit={{ opacity: 0, scale: 0.85 }}
                 transition={{ duration: 0.15, ease: "easeInOut" }}
               >
-                <Button
-                  size={"iconXs"}
-                  variant={"ghost"}
-                  onClick={handleCloseBtnClick}
-                >
-                  <CloseIcon />
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      size={"iconXs"}
+                      variant={"ghost"}
+                      onClick={handleCloseBtnClick}
+                    >
+                      <CloseIcon />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent align="end" side="bottom">
+                    <p>Close Tab (Ctrl+F4)</p>
+                  </TooltipContent>
+                </Tooltip>
               </motion.div>
             )}
           </AnimatePresence>

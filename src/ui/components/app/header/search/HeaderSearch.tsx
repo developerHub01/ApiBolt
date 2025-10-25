@@ -158,7 +158,7 @@ const HeaderSearch = () => {
                   >
                     <SearchIcon size={16} />
                     <p className="truncate w-full">{activeProjectName}</p>
-                    <p className="text-muted-foreground text-xs">(Ctrl + k)</p>
+                    <p className="text-muted-foreground text-xs">(Ctrl+k)</p>
                   </motion.div>
                 )}
               </AnimatePresence>
