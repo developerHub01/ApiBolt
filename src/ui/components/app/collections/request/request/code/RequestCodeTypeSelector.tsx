@@ -19,10 +19,21 @@ import { Copy as CopyIcon } from "lucide-react";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectSelectedCodeSnippit } from "@/context/redux/request-response/selectors/code-snippit";
 import { useRequestCodeSnippit } from "@/context/collections/request/meta-data/code/RequestCodeSnippitProvider";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const RequestCodeTypeSelector = memo(() => {
   const selectedType = useAppSelector(selectSelectedCodeSnippit);
-  const { code, handleChangeCodeSnippitLanguageType } = useRequestCodeSnippit();
+  const {
+    code,
+    handleChangeCodeSnippitLanguageType,
+    lineWrap,
+    handleToggleLineWrap,
+  } = useRequestCodeSnippit();
 
   return (
     <div className="flex justify-between items-center gap-3">
@@ -34,6 +45,20 @@ const RequestCodeTypeSelector = memo(() => {
         <SelectTrigger size="sm">
           <SelectValue placeholder="Select a code snippit" />
         </SelectTrigger>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              size={"sm"}
+              variant={"secondary"}
+              onClick={handleToggleLineWrap}
+            >
+              Line {lineWrap ? "Unwrap" : "Wrap"}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="bottom">
+            <p>Alt+Z</p>
+          </TooltipContent>
+        </Tooltip>
         <SelectContent side="bottom" align="end">
           {codeSnippitLanguageList.map((lang) => (
             <SelectGroup>
