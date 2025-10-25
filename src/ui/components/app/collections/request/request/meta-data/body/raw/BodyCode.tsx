@@ -61,7 +61,11 @@ const BodyCode = memo(() => {
     const timeout = setTimeout(async () => {
       const parser = getParser(rawRequestBodyType);
       const codeString = code.trim();
-      if (!codeString) return;
+      if (!codeString) {
+        /* if empty then no need to show error */
+        setIsError(false);
+        return;
+      }
       const { success = false } = await formatCode(codeString, parser);
       // Only update if different
       setIsError((prev) => (prev !== !success ? !success : prev));
