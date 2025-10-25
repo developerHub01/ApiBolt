@@ -12,6 +12,7 @@ import KeyboardShortcutsContent from "@/components/app/keyboard-shortcuts/Keyboa
 import KeyboardShortcutsTop from "@/components/app/keyboard-shortcuts/KeyboardShortcutsTop";
 import KeyboardShortcutsProvider from "@/context/keyboard-shortcuts/KeyboardShortcutsProvider";
 import { selectIsKeyboardShortcutPanelOpen } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
+import KeyboardShortcutsEdit from "@/components/app/keyboard-shortcuts/keyboard-editor/KeyboardShortcutsEdit";
 
 const KeyboardShortcuts = memo(() => {
   const dispatch = useAppDispatch();
@@ -36,6 +37,7 @@ const KeyboardShortcuts = memo(() => {
             </p>
           </AnimatedDialogBottom>
           <LoadCookies />
+          <KeyboardShortcutsEdit />
         </AnimatedDialogContentWrapper>
       </AnimatedDialog>
     </KeyboardShortcutsProvider>

@@ -28,7 +28,7 @@ const KeyboardShortcutsContent = memo(() => {
       <Table className="w-full border table-fixed overflow-hidden relative">
         <TableHeader className="bg-secondary font-bold">
           <TableRow className="[&>th]:border-r [&>th]:last:border-r-0">
-            {["id", "label", "Key binding"].map((label) => (
+            {["label", "Key binding"].map((label) => (
               <TableHead className="whitespace-normal p-3 capitalize">
                 {label}
               </TableHead>

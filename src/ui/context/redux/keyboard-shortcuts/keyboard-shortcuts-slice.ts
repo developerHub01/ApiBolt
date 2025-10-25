@@ -8,6 +8,7 @@ interface KeyboardShortcutsStateInterface {
   isKeyboardShortcutPanelOpen: boolean;
   globalShortcuts: Record<string, KeybaordShortCutInterface>;
   localShortcuts: Record<string, KeybaordShortCutInterface>;
+  editingId: string | null;
 }
 
 // Define the initial state using that type
@@ -15,6 +16,7 @@ const initialState: KeyboardShortcutsStateInterface = {
   isKeyboardShortcutPanelOpen: false,
   globalShortcuts: {},
   localShortcuts: {},
+  editingId: null,
 };
 
 export const keyboardShortcutsSlice = createSlice({
@@ -25,8 +27,9 @@ export const keyboardShortcutsSlice = createSlice({
       state,
       action: PayloadAction<boolean | undefined>
     ) => {
-      state.isKeyboardShortcutPanelOpen =
-        action.payload ?? !state.isKeyboardShortcutPanelOpen;
+      const payload = action.payload ?? !state.isKeyboardShortcutPanelOpen;
+      state.isKeyboardShortcutPanelOpen = payload;
+      if (!payload && state.editingId) state.editingId = null;
     },
     handleReplaceShortcuts: (
       state,
@@ -35,12 +38,19 @@ export const keyboardShortcutsSlice = createSlice({
       state.globalShortcuts = action.payload.global;
       state.localShortcuts = action.payload.local;
     },
+    handleChangeEditingId: (
+      state,
+      action: PayloadAction<string | undefined | null>
+    ) => {
+      state.editingId = action.payload ?? null;
+    },
   },
 });
 
 export const {
   handleChangeIsKeyboardShortcutPanelOpen,
   handleReplaceShortcuts,
+  handleChangeEditingId,
 } = keyboardShortcutsSlice.actions;
 
 export default keyboardShortcutsSlice.reducer;

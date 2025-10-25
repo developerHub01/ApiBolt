@@ -1,4 +1,4 @@
-import { memo } from "react";
+import React, { Fragment, memo, useCallback } from "react";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { Kbd, KbdGroup } from "@/components/ui/kbd-custom";
@@ -9,6 +9,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useAppDispatch } from "@/context/redux/hooks";
+import { handleChangeEditingId } from "@/context/redux/keyboard-shortcuts/keyboard-shortcuts-slice";
 
 interface KeyboardShortcutsRowProps {
   id: string;
@@ -18,6 +20,12 @@ interface KeyboardShortcutsRowProps {
 
 const KeyboardShortcutsRow = memo(
   ({ id, label, keyMap }: KeyboardShortcutsRowProps) => {
+    const dispatch = useAppDispatch();
+    const handleSelectEdit = useCallback(
+      () => dispatch(handleChangeEditingId(id)),
+      [dispatch, id]
+    );
+
     return (
       <TableRow
         key={id}
@@ -27,79 +35,80 @@ const KeyboardShortcutsRow = memo(
           "group"
         )}
       >
-        <TableCell
-          className={cn(
-            "font-normal whitespace-normal wrap-break-word break-all min-h-16 p-3"
-          )}
-        >
-          {id}
-        </TableCell>
-        <TableCell
-          className={cn(
-            "font-normal whitespace-normal wrap-break-word break-all min-h-16 p-3"
-          )}
-        >
-          {label}
-        </TableCell>
-        <TableCell
-          className={cn(
-            "font-normal whitespace-normal wrap-break-word break-all min-h-16 p-3"
-          )}
-        >
-          <KeyCellContent keyMap={keyMap} />
-        </TableCell>
+        <Cell>{label}</Cell>
+        <Cell>
+          <KeyCellContent keyMap={keyMap} onSelect={handleSelectEdit} />
+        </Cell>
       </TableRow>
     );
   }
 );
 
-interface KeyCellContentProps {
-  keyMap: Array<string> | null;
+interface CellProps {
+  children: React.ReactNode;
 }
 
-const KeyCellContent = ({ keyMap }: KeyCellContentProps) => (
-  <div className="w-full flex items-center">
-    <KeyList keyMap={keyMap} />
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Button
-          variant={"ghost"}
-          size={"iconXs"}
-          className="opacity-0 transition-opacity duration-100 group-hover:opacity-100"
-        >
-          <EditIcon />
-        </Button>
-      </TooltipTrigger>
-      <TooltipContent side="bottom" align="end">
-        <p>Change Keybinding</p>
-      </TooltipContent>
-    </Tooltip>
-  </div>
+const Cell = ({ children }: CellProps) => (
+  <TableCell
+    className={cn(
+      "font-normal whitespace-normal wrap-break-word break-all min-h-16 px-3 py-2"
+    )}
+  >
+    {children}
+  </TableCell>
 );
 
 interface KeyListProps {
   keyMap: Array<string> | null;
 }
 
-const KeyList = ({ keyMap }: KeyListProps) => {
+const KeyList = memo(({ keyMap }: KeyListProps) => {
   return (
     <div className="flex-1">
       {Array.isArray(keyMap) ? (
         <KbdGroup>
           {keyMap?.map((key, index) => (
-            <>
-              <Kbd key={key + index} className="capitalize" variant={"outline"}>
+            <Fragment key={key + index}>
+              <Kbd className="capitalize" variant={"outline"}>
                 {key}
               </Kbd>
               {index + 1 < keyMap.length && (
                 <span className="text-muted-foreground">+</span>
               )}
-            </>
+            </Fragment>
           ))}
         </KbdGroup>
       ) : null}
     </div>
   );
-};
+});
+
+interface KeyCellContentProps {
+  keyMap: Array<string> | null;
+  onSelect: () => void;
+}
+
+const KeyCellContent = memo(({ keyMap, onSelect }: KeyCellContentProps) => {
+  return (
+    <div className="w-full flex items-center">
+      <KeyList keyMap={keyMap} />
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant={"ghost"}
+            size={"iconXs"}
+            className="opacity-0 transition-opacity duration-100 group-hover:opacity-100"
+            onClick={onSelect}
+          >
+            <EditIcon />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side="bottom" align="end">
+          <p>Change Keybinding</p>
+        </TooltipContent>
+      </Tooltip>
+    </div>
+  );
+});
 
 export default KeyboardShortcutsRow;
