@@ -48,28 +48,38 @@ export const changeActiveProject = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->("request-response/changeActiveProject", async (id, { dispatch }) => {
-  try {
-    dispatch(handleChangeActiveProject(id));
-    const response = await window.electronAPIProjectsDB.changeActiveProject(id);
+>(
+  "request-response/changeActiveProject",
+  async (id, { dispatch, getState }) => {
+    try {
+      const state = getState() as RootState;
+      const activeProjectId = state.project.activeProjectId;
+      const newActiveProjectId = activeProjectId === id ? null : id;
 
-    if (response) {
-      dispatch(handleChangeIsRequestListLoaded(false));
-      dispatch(loadTabsData());
-      dispatch(loadEnvironmentsList());
-      dispatch(
-        loadAuthorization({
-          requestOrFolderId: DEFAULT_AUTHORIZATION_ID,
-        })
-      );
+      dispatch(handleChangeActiveProject(newActiveProjectId));
+      const response =
+        await window.electronAPIProjectsDB.changeActiveProject(
+          newActiveProjectId
+        );
+
+      if (response) {
+        dispatch(handleChangeIsRequestListLoaded(false));
+        dispatch(loadTabsData());
+        dispatch(loadEnvironmentsList());
+        dispatch(
+          loadAuthorization({
+            requestOrFolderId: DEFAULT_AUTHORIZATION_ID,
+          })
+        );
+      }
+
+      return response;
+    } catch (error) {
+      console.error(error);
+      return false;
     }
-
-    return response;
-  } catch (error) {
-    console.error(error);
-    return false;
   }
-});
+);
 
 export const createProject = createAsyncThunk<
   boolean,

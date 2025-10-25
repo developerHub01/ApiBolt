@@ -51,7 +51,7 @@ const SettingTop = memo(() => {
         })}
         <div
           className={cn(
-            "w-full h-full grid gap-2 absolute top-0 left-0 rounded-xl pointer-events-none z-[1]",
+            "w-full h-full grid gap-2 absolute top-0 left-0 rounded-xl pointer-events-none z-1",
             {
               "grid-cols-2": activeProjectId,
             }

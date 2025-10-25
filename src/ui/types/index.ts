@@ -113,7 +113,7 @@ declare global {
         payload: Omit<ProjectInterface, "id">
       ): Promise<boolean>;
       deleteProjects(id: string): Promise<boolean>;
-      changeActiveProject(id: string): Promise<boolean>;
+      changeActiveProject(id?: string | null): Promise<boolean>;
       getActiveProject(): Promise<string | null>;
     };
 
