@@ -30,11 +30,13 @@ import { changeCodeSnippitType } from "@/context/redux/request-response/thunks/c
 
 interface RequestCodeSnippitContext {
   code: string;
+  lineWrap: boolean;
   maskedCode: string;
   language: string;
   handleChangeCodeSnippitLanguageType: (
     value: TRequestCodeType
   ) => Promise<void>;
+  handleToggleLineWrap: () => void;
 }
 
 const RequestCodeSnippitContext =
@@ -61,6 +63,7 @@ const RequestCodeSnippitProvider = ({
   children,
 }: RequestCodeSnippitProviderProps) => {
   const dispatch = useAppDispatch();
+  const [lineWrap, setLineWrap] = useState<boolean>(false);
   const [code, setCode] = useState<string | null>(null);
   const [maskedCode, setMaskedCode] = useState<string | null>(null);
   const selectedCodeType = useAppSelector(selectSelectedCodeSnippit);
@@ -175,13 +178,19 @@ const RequestCodeSnippitProvider = ({
     [dispatch]
   );
 
+  const handleToggleLineWrap = useCallback(() => {
+    setLineWrap((prev) => !prev);
+  }, []);
+
   return (
     <RequestCodeSnippitContext.Provider
       value={{
         code: code ?? "",
         maskedCode: maskedCode ?? "",
         language,
+        lineWrap,
         handleChangeCodeSnippitLanguageType,
+        handleToggleLineWrap,
       }}
     >
       {children}

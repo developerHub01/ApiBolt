@@ -13,6 +13,7 @@ import GlobalProvider from "@/context/global/GlobalProvider";
 import BackgroundWallpaper from "@/components/app/BackgroundWallpaper";
 import LoadBasicReduxState from "@/components/app/LoadBasicReduxState";
 import Cookies from "@/components/app/cookies/Cookies";
+import KeyboardShortcuts from "@/components/app/keyboard-shortcuts/KeyboardShortcuts";
 
 const AppLayout = () => {
   return (
@@ -25,8 +26,7 @@ const AppLayout = () => {
               <Sidebar />
               <Outlet />
             </InnerLayout>
-            <Setting />
-            <Cookies />
+            <DialogsAnchor />
           </div>
         </ProviderStack>
         <CopyRight />
@@ -54,7 +54,7 @@ interface CustomizedBgWrapperProps {
 const CustomizedBgWrapper = memo(({ children }: CustomizedBgWrapperProps) => {
   return (
     <section className="h-dvh w-dvw overflow-hidden relative">
-      <section className="h-full relative z-[2] flex flex-col">
+      <section className="h-full relative z-2 flex flex-col">
         {children}
       </section>
       <BackgroundWallpaper />
@@ -75,5 +75,15 @@ const InnerLayout = ({ children }: CustomizedBgWrapperProps) => {
     </div>
   );
 };
+
+const DialogsAnchor = memo(() => {
+  return (
+    <>
+      <Setting />
+      <Cookies />
+      <KeyboardShortcuts />
+    </>
+  );
+});
 
 export default AppLayout;

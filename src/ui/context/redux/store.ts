@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import projectReducer from "@/context/redux/project/project-slice";
+import keyboardShortcutsReducer from "@/context/redux/keyboard-shortcuts/keyboard-shortcuts-slice";
 import requestResponseReducer from "@/context/redux/request-response/request-response-slice";
 import sidebarReducer from "@/context/redux/sidebar/sidebar-slice";
 import settingReducer from "@/context/redux/setting/setting-slice";
@@ -11,6 +12,7 @@ import statusReducer from "@/context/redux/status/status-slice";
 export const store = configureStore({
   reducer: {
     project: projectReducer,
+    keyboardShortcuts: keyboardShortcutsReducer,
     requestResponse: requestResponseReducer,
     sidebar: sidebarReducer,
     setting: settingReducer,

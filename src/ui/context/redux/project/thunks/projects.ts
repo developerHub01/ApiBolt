@@ -64,6 +64,7 @@ export const changeActiveProject = createAsyncThunk<
 
       if (response) {
         dispatch(handleChangeIsRequestListLoaded(false));
+        dispatch(loadEnvironmentsList());
         dispatch(loadTabsData());
         dispatch(loadEnvironmentsList());
         dispatch(

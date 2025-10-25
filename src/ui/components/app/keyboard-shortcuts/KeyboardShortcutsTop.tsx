@@ -1,31 +1,31 @@
 import { memo } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  useSetting,
-  type TSettingTab,
-} from "@/context/setting/SettingProvider";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 import { AnimatedDialogTop } from "@/components/ui/animated-dialog";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
+import {
+  useKeyboardShortcuts,
+  type TKeyboardShortcutsTab,
+} from "@/context/keyboard-shortcuts/KeyboardShortcutsProvider";
 
 const buttonList: Array<{
-  id: TSettingTab;
+  id: TKeyboardShortcutsTab;
   label: string;
 }> = [
   {
     id: "global",
-    label: "Global Setting",
+    label: "Global keybindings",
   },
   {
     id: "project",
-    label: "Project Setting",
+    label: "Project keybindings",
   },
 ];
 
-const SettingTop = memo(() => {
-  const { activeTab, handleChangeActiveTab } = useSetting();
+const KeyboardShortcutsTop = memo(() => {
+  const { activeTab, handleChangeActiveTab } = useKeyboardShortcuts();
   const activeProjectId = useAppSelector(selectActiveProjectId);
 
   return (
@@ -76,4 +76,4 @@ const SettingTop = memo(() => {
   );
 });
 
-export default SettingTop;
+export default KeyboardShortcutsTop;

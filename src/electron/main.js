@@ -34,6 +34,8 @@ import { fileSystemHandler } from "./ipc/fileSystemHandler.js";
 import { activeSidebarTabHandler } from "./ipc/activeSidebarTabHandler.js";
 import { activeCodeSnippitTypeHandler } from "./ipc/activeCodeSnippitTypeHandler.js";
 import { cookiesHandler } from "./ipc/cookiesHandler.js";
+import { generateKeyboardBindingsSeed } from "./seeders/keyboardShortcutSeed.js";
+import { keyboardShortcutHandler } from "./ipc/keyboardShortcutHandler.js";
 
 export const userDataDir = app.getPath("userData");
 
@@ -108,7 +110,9 @@ app.whenReady().then(async () => {
   apiUrlHandler();
   requestHandler();
   fileSystemHandler();
+  keyboardShortcutHandler();
   await generateHttpStatusSeed();
+  await generateKeyboardBindingsSeed();
 });
 
 app.on("window-all-closed", () => {

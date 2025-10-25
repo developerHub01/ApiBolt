@@ -39,6 +39,7 @@ import type {
 import type { TSidebarTab } from "@/types/sidebar.types";
 import type { TRequestCodeType } from "@/types/code-snippit.types";
 import type { CookiesInterface } from "@/types/cookies.types";
+import type { KeybaordShortCutReceivePayloadInterface } from "@/types/keyboard-shortcut.types";
 
 declare global {
   interface Window {
@@ -415,6 +416,12 @@ declare global {
 
     electronAPIRequest: {
       clearRequestDB(requestOrFolderMetaId?: string): Promise<boolean>;
+    };
+
+    electronAPIKeyboardShortcut: {
+      getKeyboardShortcuts(
+        projectId?: string
+      ): Promise<KeybaordShortCutReceivePayloadInterface>;
     };
   }
 }

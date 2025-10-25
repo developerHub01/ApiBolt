@@ -363,3 +363,8 @@ contextBridge.exposeInMainWorld("electronAPIRequest", {
   clearRequestDB: async (...payload) =>
     await ipcRenderer.invoke("clearRequestDB", ...payload),
 });
+
+contextBridge.exposeInMainWorld("electronAPIKeyboardShortcut", {
+  getKeyboardShortcuts: async (...payload) =>
+    await ipcRenderer.invoke("getKeyboardShortcuts", ...payload),
+});

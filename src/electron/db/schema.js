@@ -1,6 +1,13 @@
 import { sql } from "drizzle-orm";
 import { boolean } from "drizzle-orm/gel-core";
-import { int, integer, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import {
+  int,
+  integer,
+  primaryKey,
+  real,
+  sqliteTable,
+  text,
+} from "drizzle-orm/sqlite-core";
 import { v4 as uuidv4 } from "uuid";
 
 export const ACTIVE_PROJECT_ID = "singleton";
@@ -389,3 +396,20 @@ export const metaShowColumnTable = sqliteTable("meta_show_column_table", {
     .notNull()
     .default(sql`(current_timestamp)`),
 });
+
+export const keyboardShortcutTable = sqliteTable(
+  "keyboard_shortcut_table",
+  {
+    id: text().notNull(),
+    label: text().default(""),
+    key: text(),
+    projectId: text().references(() => projectTable.id, {
+      onDelete: "cascade",
+    }),
+  },
+  (table) => [
+    primaryKey({
+      columns: [table.id, table.projectId],
+    }),
+  ]
+);

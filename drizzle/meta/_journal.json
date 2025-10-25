@@ -15,6 +15,27 @@
       "when": 1761304555646,
       "tag": "0001_smooth_cargill",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1761408703291,
+      "tag": "0002_demonic_gideon",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1761409430547,
+      "tag": "0003_nervous_micromacro",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1761419610723,
+      "tag": "0004_unusual_mandroid",
+      "breakpoints": true
     }
   ]
 }
