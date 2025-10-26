@@ -1,5 +1,5 @@
-import { memo, useEffect } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { memo, useEffect, type ComponentProps } from "react";
+import { AnimatePresence, motion, type HTMLMotionProps } from "motion/react";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -18,7 +18,8 @@ const AnimatedDialog = memo(
     children,
     className = "",
     overlayClassName = "",
-  }: AnimatedDialogProps) => {
+    ...props
+  }: AnimatedDialogProps & ComponentProps<"section">) => {
     useEffect(() => {
       const handleKeyEsc = (e: KeyboardEvent) => {
         if (e.key === "Escape") onClose();
@@ -39,6 +40,7 @@ const AnimatedDialog = memo(
               className
             )}
             onClick={onClose}
+            {...props}
           >
             <motion.div
               className={cn(
@@ -76,7 +78,11 @@ interface AnimatedDialogContentWrapperProps {
 }
 
 const AnimatedDialogContentWrapper = memo(
-  ({ className = "", children }: AnimatedDialogContentWrapperProps) => {
+  ({
+    className = "",
+    children,
+    ...props
+  }: AnimatedDialogContentWrapperProps & HTMLMotionProps<"section">) => {
     return (
       <motion.section
         className={cn(
@@ -107,6 +113,7 @@ const AnimatedDialogContentWrapper = memo(
           type: "spring",
           ease: "anticipate",
         }}
+        {...props}
       >
         {children}
       </motion.section>
@@ -120,8 +127,16 @@ interface AnimatedDialogTopProps {
 }
 
 const AnimatedDialogTop = memo(
-  ({ className = "", children }: AnimatedDialogTopProps) => {
-    return <div className={cn("border-b-2 p-2.5", className)}>{children}</div>;
+  ({
+    className = "",
+    children,
+    ...props
+  }: AnimatedDialogTopProps & ComponentProps<"div">) => {
+    return (
+      <div className={cn("border-b-2 p-2.5", className)} {...props}>
+        {children}
+      </div>
+    );
   }
 );
 
@@ -136,13 +151,15 @@ const AnimatedDialogContent = memo(
     className = "",
     scrollAreaClassName = "",
     children,
-  }: AnimatedDialogContentProps) => {
+    ...props
+  }: AnimatedDialogContentProps & ComponentProps<"div">) => {
     return (
       <div
         className={cn(
           "w-full h-full min-h-0 flex-1 [&>div>div]:h-full",
           className
         )}
+        {...props}
       >
         <ScrollArea
           className={cn(
@@ -158,13 +175,18 @@ const AnimatedDialogContent = memo(
 );
 
 const AnimatedDialogBottom = memo(
-  ({ className = "", children }: AnimatedDialogTopProps) => {
+  ({
+    className = "",
+    children,
+    ...props
+  }: AnimatedDialogTopProps & ComponentProps<"div">) => {
     return (
       <div
         className={cn(
           "border-t-2 p-2.5 flex justify-center items-center",
           className
         )}
+        {...props}
       >
         {children}
       </div>
