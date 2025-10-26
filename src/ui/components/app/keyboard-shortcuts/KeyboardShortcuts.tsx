@@ -8,7 +8,7 @@ import {
 import { AnimatedDialog } from "@/components/ui/animated-dialog";
 import LoadCookies from "@/components/app/cookies/LoadCookies";
 import { handleChangeIsKeyboardShortcutPanelOpen } from "@/context/redux/keyboard-shortcuts/keyboard-shortcuts-slice";
-import KeyboardShortcutsContent from "@/components/app/keyboard-shortcuts/KeyboardShortcutsContent";
+import KeyboardShortcutsContent from "@/components/app/keyboard-shortcuts/keyboard-content/KeyboardShortcutsContent";
 import KeyboardShortcutsTop from "@/components/app/keyboard-shortcuts/KeyboardShortcutsTop";
 import KeyboardShortcutsProvider from "@/context/keyboard-shortcuts/KeyboardShortcutsProvider";
 import { selectIsKeyboardShortcutPanelOpen } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";

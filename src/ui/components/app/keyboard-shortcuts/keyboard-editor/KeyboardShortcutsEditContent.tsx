@@ -1,18 +1,44 @@
-import { Fragment, memo, useEffect, useState } from "react";
+import {
+  Fragment,
+  memo,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Kbd, KbdGroup } from "@/components/ui/kbd-custom";
+import { useAppDispatch } from "@/context/redux/hooks";
+import { updateKeyboardShortcuts } from "@/context/redux/keyboard-shortcuts/thunks/keyboard-shortcuts";
+import { useKeyboardShortcuts } from "@/context/keyboard-shortcuts/KeyboardShortcutsProvider";
+import { handleChangeEditingId } from "@/context/redux/keyboard-shortcuts/keyboard-shortcuts-slice";
 
 const modifierKeys = new Set(["control", "shift", "alt", "meta"]);
 
-interface Props {
-  shortcutId: string;
-}
-
-const KeyboardShortcutsEditContent = memo(({ shortcutId }: Props) => {
+const KeyboardShortcutsEditContent = memo(() => {
+  const dispatch = useAppDispatch();
   const [keyList, setKeyList] = useState<Array<string>>([]);
+  const { activeTab } = useKeyboardShortcuts();
+  const keyboardShortcutPanelRef = useRef<HTMLDivElement>(null);
+
+  const handleClose = useCallback(
+    () => dispatch(handleChangeEditingId()),
+    [dispatch]
+  );
+
+  const handleUpdate = useCallback(async () => {
+    if (!keyList.length) return handleClose();
+    await dispatch(
+      updateKeyboardShortcuts({
+        type: activeTab,
+        key: keyList,
+      })
+    );
+  }, [activeTab, dispatch, handleClose, keyList]);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.key.toLowerCase() === "enter") return;
+      if (e.key.toLowerCase() === "escape") return handleClose();
+      if (e.key.toLowerCase() === "enter") return handleUpdate();
 
       const list = [];
       /* handle modifiere keys */
@@ -32,13 +58,26 @@ const KeyboardShortcutsEditContent = memo(({ shortcutId }: Props) => {
     return () => {
       document.removeEventListener("keydown", handler);
     };
+  }, [handleClose, handleUpdate]);
+
+  useEffect(() => {
+    keyboardShortcutPanelRef.current?.focus();
+
+    const handler = (e: KeyboardEvent) => e.stopPropagation();
+    document.addEventListener("keydown", handler);
+
+    return () => {
+      document.removeEventListener("keydown", handler);
+    };
   }, []);
 
-  console.log(shortcutId);
-
   return (
-    <div className="w-full h-full flex flex-col justify-center items-center gap-5 p-6 text-center">
-      <p className="text-sm leading-relaxed">
+    <div
+      className="w-full h-full flex flex-col justify-center items-center gap-5 p-6 text-center"
+      ref={keyboardShortcutPanelRef}
+      tabIndex={0}
+    >
+      <p className="w-4/5 text-sm leading-relaxed">
         Press desired keys combination and then press ENTER.
       </p>
       <div className="w-4/5 px-2 py-3 bg-background/80 border-2 border-ring rounded-md min-h-11 flex justify-center items-center">

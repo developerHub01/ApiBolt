@@ -13,7 +13,7 @@ import {
 } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
 import { useKeyboardShortcuts } from "@/context/keyboard-shortcuts/KeyboardShortcutsProvider";
 import type { KeybaordShortCutInterface } from "@/types/keyboard-shortcut.types";
-import KeyboardShortcutsRow from "@/components/app/keyboard-shortcuts/KeyboardShortcutsRow";
+import KeyboardShortcutsRow from "@/components/app/keyboard-shortcuts/keyboard-content/KeyboardShortcutsRow";
 
 const KeyboardShortcutsContent = memo(() => {
   const { activeTab } = useKeyboardShortcuts();
