@@ -1,7 +1,8 @@
-import { eq, isNull } from "drizzle-orm";
+import { and, eq, isNull } from "drizzle-orm";
 import { db } from "./index.js";
 import { keyboardShortcutTable } from "./schema.js";
 import { getActiveProject } from "./projectsDB.js";
+import { keyboardBindings } from "../../data/keyboard_short_cut_list.js";
 
 /* id === projectId */
 export const getKeyboardShortcuts = async () => {
@@ -39,6 +40,87 @@ export const getKeyboardShortcuts = async () => {
       global: globalShortCuts,
       local: localShortCuts,
     };
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getKeyboardShortcutsById = async ({ id, projectId } = {}) => {
+  try {
+    const activeProjectId = projectId ?? (await getActiveProject());
+
+    const result = (
+      await db
+        .select()
+        .from(keyboardShortcutTable)
+        .where(
+          activeProjectId
+            ? and(
+                eq(keyboardShortcutTable.id, id),
+                eq(keyboardShortcutTable.projectId, activeProjectId)
+              )
+            : and(
+                eq(keyboardShortcutTable.id, id),
+                isNull(keyboardShortcutTable.projectId)
+              )
+        )
+        .limit(1)
+    )?.[0];
+
+    if (result.key) result.key = JSON.parse(result.key);
+
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const updateKeyboardShortcuts = async (payload) => {
+  if (!payload || typeof payload !== "object" || !("id" in payload))
+    return false;
+
+  if (!("projectId" in payload)) payload["projectId"] = null;
+  if (payload["key"]) payload["key"] = JSON.stringify(payload["key"]);
+
+  try {
+    const defaultPayload =
+      (
+        await db
+          .select()
+          .from(keyboardShortcutTable)
+          .where(
+            and(
+              eq(keyboardShortcutTable.id, payload.id),
+              isNull(keyboardShortcutTable.projectId)
+            )
+          )
+          .limit(0)
+      )?.[0] ?? keyboardBindings[payload.id];
+
+    if (!defaultPayload) return false;
+
+    payload = {
+      ...defaultPayload,
+      ...payload,
+    };
+
+    const { id, projectId, ...upsertPayload } = payload;
+
+    const result = await db
+      .insert(keyboardShortcutTable)
+      .values({
+        ...payload,
+      })
+      .onConflictDoUpdate({
+        target: [keyboardShortcutTable.id, keyboardShortcutTable.projectId],
+        set: {
+          ...upsertPayload,
+        },
+      });
+
+    return false;
+
+    return Boolean(result?.changes > 0);
   } catch (error) {
     console.error(error);
   }

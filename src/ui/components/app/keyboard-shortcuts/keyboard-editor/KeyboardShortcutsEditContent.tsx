@@ -36,7 +36,8 @@ const KeyboardShortcutsEditContent = memo(() => {
   }, [activeTab, dispatch, handleClose, keyList]);
 
   useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
+    const handlerKeydown = (e: KeyboardEvent) => {
+      e.preventDefault();
       if (e.key.toLowerCase() === "escape") return handleClose();
       if (e.key.toLowerCase() === "enter") return handleUpdate();
 
@@ -53,10 +54,10 @@ const KeyboardShortcutsEditContent = memo(() => {
       setKeyList(list);
     };
 
-    document.addEventListener("keydown", handler);
+    document.addEventListener("keydown", handlerKeydown);
 
     return () => {
-      document.removeEventListener("keydown", handler);
+      document.removeEventListener("keydown", handlerKeydown);
     };
   }, [handleClose, handleUpdate]);
 

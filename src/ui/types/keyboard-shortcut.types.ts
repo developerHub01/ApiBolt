@@ -9,3 +9,7 @@ export interface KeybaordShortCutReceivePayloadInterface {
   global: Record<string, KeybaordShortCutInterface>;
   local: Record<string, KeybaordShortCutInterface>;
 }
+
+export type KeybaordShortCutUpdatePayloadInterface =
+  Partial<KeybaordShortCutInterface> &
+    Pick<KeybaordShortCutInterface, "id" | "projectId">;

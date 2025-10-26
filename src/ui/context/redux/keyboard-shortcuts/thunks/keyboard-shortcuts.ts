@@ -1,8 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import {
-  handleChangeEditingId,
   handleReplaceShortcuts,
+  handleUpdateKeyboardShortcuts,
 } from "@/context/redux/keyboard-shortcuts/keyboard-shortcuts-slice";
 import type { TKeyboardShortcutsTab } from "@/context/keyboard-shortcuts/KeyboardShortcutsProvider";
 
@@ -38,10 +38,48 @@ export const updateKeyboardShortcuts = createAsyncThunk<
   }
 >(
   "keyboard-shortcuts/updateKeyboardShortcuts",
-  async ({ type, key }, { dispatch }) => {
+  async ({ type, key }, { dispatch, getState }) => {
     try {
-      console.log({ type, key });
-      dispatch(handleChangeEditingId());
+      const state = getState() as RootState;
+      const activeProjectId = state.project.activeProjectId;
+      const editingKeyId = state.keyboardShortcuts.editingId;
+
+      if (!editingKeyId) return;
+
+      const payload = {
+        id: editingKeyId,
+        projectId:
+          type === "project" && activeProjectId ? activeProjectId : null,
+        key,
+      };
+
+      dispatch(
+        handleUpdateKeyboardShortcuts({
+          ...payload,
+        })
+      );
+
+      const response =
+        await window.electronAPIKeyboardShortcut.updateKeyboardShortcuts({
+          ...payload,
+        });
+
+      if (response) return;
+
+      /* if not successfull then rollback */
+      const rollbackData =
+        await window.electronAPIKeyboardShortcut.getKeyboardShortcutsById({
+          id: editingKeyId,
+          projectId: activeProjectId,
+        });
+
+      if (!rollbackData) return;
+
+      dispatch(
+        handleUpdateKeyboardShortcuts({
+          ...rollbackData,
+        })
+      );
     } catch (error) {
       console.error(error);
     }

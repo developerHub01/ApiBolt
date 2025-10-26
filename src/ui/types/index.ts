@@ -39,7 +39,11 @@ import type {
 import type { TSidebarTab } from "@/types/sidebar.types";
 import type { TRequestCodeType } from "@/types/code-snippit.types";
 import type { CookiesInterface } from "@/types/cookies.types";
-import type { KeybaordShortCutReceivePayloadInterface } from "@/types/keyboard-shortcut.types";
+import type {
+  KeybaordShortCutInterface,
+  KeybaordShortCutReceivePayloadInterface,
+  KeybaordShortCutUpdatePayloadInterface,
+} from "@/types/keyboard-shortcut.types";
 
 declare global {
   interface Window {
@@ -422,6 +426,12 @@ declare global {
       getKeyboardShortcuts(
         projectId?: string
       ): Promise<KeybaordShortCutReceivePayloadInterface>;
+      getKeyboardShortcutsById(
+        payload: Pick<KeybaordShortCutInterface, "id" | "projectId">
+      ): Promise<KeybaordShortCutInterface>;
+      updateKeyboardShortcuts(
+        payload: KeybaordShortCutUpdatePayloadInterface
+      ): Promise<boolean>;
     };
   }
 }

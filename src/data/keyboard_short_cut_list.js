@@ -1,62 +1,58 @@
-export const keyboardBindings = [
-  {
-    id: "navigate_projects",
+export const keyboardBindings = {
+  navigate_projects: {
     label: "Naviage to projects",
     key: ["ctrl", "shift", "p"],
   },
-  {
-    id: "navigate_collections",
+  navigate_collections: {
     label: "Naviage to collections",
     key: ["ctrl", "shift", "c"],
   },
-  {
-    id: "navigate_environments",
+  navigate_environments: {
     label: "Naviage to environments",
     key: ["ctrl", "shift", "c"],
   },
-  {
-    id: "navigate_authorization",
+  navigate_authorization: {
     label: "Naviage to authorization",
     key: ["ctrl", "shift", "a"],
   },
-  {
-    id: "toggle_fullscreen",
+  toggle_activitybar: {
+    label: "Toggle activitybar",
+    key: ["meta", "a"],
+  },
+  toggle_sidebar: {
+    label: "Toggle activitybar",
+    key: ["ctrl", "b"],
+  },
+  toggle_fullscreen: {
     label: "Toggle fullscreen",
     key: ["ctrl", "shift", "f11"],
   },
-  {
-    id: "open_cookies",
+  open_cookies: {
     label: "Open Cookies",
     key: ["ctrl", "alt", "c"],
   },
-  {
-    id: "open_keyboard_shortcut",
+  open_keyboard_shortcut: {
     label: "Open keyboard shortcut",
     key: ["ctrl", "alt", "k"],
   },
-  {
-    id: "open_settings",
+  open_settings: {
     label: "Open Settings",
     key: ["ctrl", ","],
   },
-  {
-    id: "close_tab",
+  close_tab: {
     label: "Close Tab",
     key: ["ctrl", "f4"],
   },
-  {
-    id: "search_collection",
+  search_collection: {
     label: "Search collection",
     key: ["ctrl", "k"],
   },
-  {
-    id: "code_line_wrap",
+  code_line_wrap: {
     label: "Code line wrap",
     key: ["alt", "z"],
   },
-  {
-    id: "code_beautify",
+  code_beautify: {
     label: "Code beautify",
     key: ["alt", "shift", "f"],
   },
-];
+};

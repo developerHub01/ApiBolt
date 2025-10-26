@@ -367,4 +367,8 @@ contextBridge.exposeInMainWorld("electronAPIRequest", {
 contextBridge.exposeInMainWorld("electronAPIKeyboardShortcut", {
   getKeyboardShortcuts: async (...payload) =>
     await ipcRenderer.invoke("getKeyboardShortcuts", ...payload),
+  getKeyboardShortcutsById: async (...payload) =>
+    await ipcRenderer.invoke("getKeyboardShortcutsById", ...payload),
+  updateKeyboardShortcuts: async (...payload) =>
+    await ipcRenderer.invoke("updateKeyboardShortcuts", ...payload),
 });

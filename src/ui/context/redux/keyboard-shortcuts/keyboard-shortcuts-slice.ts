@@ -1,6 +1,7 @@
 import type {
   KeybaordShortCutInterface,
   KeybaordShortCutReceivePayloadInterface,
+  KeybaordShortCutUpdatePayloadInterface,
 } from "@/types/keyboard-shortcut.types";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
@@ -44,6 +45,25 @@ export const keyboardShortcutsSlice = createSlice({
     ) => {
       state.editingId = action.payload ?? null;
     },
+    handleUpdateKeyboardShortcuts: (
+      state,
+      action: PayloadAction<KeybaordShortCutUpdatePayloadInterface>
+    ) => {
+      if (state.editingId) state.editingId = null;
+      const payload = action.payload;
+
+      if (payload.projectId) {
+        state.localShortcuts[payload.id] = {
+          ...(state.localShortcuts[payload.id] ?? {}),
+          ...payload,
+        };
+      } else {
+        state.globalShortcuts[payload.id] = {
+          ...(state.globalShortcuts[payload.id] ?? {}),
+          ...payload,
+        };
+      }
+    },
   },
 });
 
@@ -51,6 +71,7 @@ export const {
   handleChangeIsKeyboardShortcutPanelOpen,
   handleReplaceShortcuts,
   handleChangeEditingId,
+  handleUpdateKeyboardShortcuts,
 } = keyboardShortcutsSlice.actions;
 
 export default keyboardShortcutsSlice.reducer;
