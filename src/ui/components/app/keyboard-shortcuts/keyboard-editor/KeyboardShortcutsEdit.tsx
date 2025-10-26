@@ -14,12 +14,9 @@ const KeyboardShortcutsEdit = () => {
   const handleClose = () => dispatch(handleChangeEditingId());
 
   return (
-    <AnimatedDialog
-      isOpen={Boolean(shortcutId)}
-      onClose={handleClose}
-    >
+    <AnimatedDialog isOpen={Boolean(shortcutId)} onClose={handleClose}>
       <AnimatedDialogContentWrapper className="border bg-background/60 max-w-[400px] max-h-60">
-        <KeyboardShortcutsEditContent />
+        <KeyboardShortcutsEditContent shortcutId={shortcutId!} />
       </AnimatedDialogContentWrapper>
     </AnimatedDialog>
   );

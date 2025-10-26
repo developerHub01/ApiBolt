@@ -6,22 +6,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useAppSelector } from "@/context/redux/hooks";
-import {
-  selectGlobalKeyboardShortcuts,
-  selectLocalKeyboardShortcuts,
-} from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
 import { useKeyboardShortcuts } from "@/context/keyboard-shortcuts/KeyboardShortcutsProvider";
 import type { KeybaordShortCutInterface } from "@/types/keyboard-shortcut.types";
 import KeyboardShortcutsRow from "@/components/app/keyboard-shortcuts/keyboard-content/KeyboardShortcutsRow";
 
 const KeyboardShortcutsContent = memo(() => {
-  const { activeTab } = useKeyboardShortcuts();
-  const keyboardShortcuts = useAppSelector(
-    activeTab === "global"
-      ? selectGlobalKeyboardShortcuts
-      : selectLocalKeyboardShortcuts
-  );
+  const { applyingKeybindingMap } = useKeyboardShortcuts();
 
   return (
     <div className="w-full">
@@ -37,7 +27,7 @@ const KeyboardShortcutsContent = memo(() => {
         </TableHeader>
         <TableBody>
           {(
-            Object.entries(keyboardShortcuts) as Array<
+            Object.entries(applyingKeybindingMap) as Array<
               [string, KeybaordShortCutInterface]
             >
           ).map(([id, { key, ...rest }]) => (

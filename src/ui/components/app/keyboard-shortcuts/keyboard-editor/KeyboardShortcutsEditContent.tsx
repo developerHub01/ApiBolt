@@ -11,14 +11,21 @@ import { useAppDispatch } from "@/context/redux/hooks";
 import { updateKeyboardShortcuts } from "@/context/redux/keyboard-shortcuts/thunks/keyboard-shortcuts";
 import { useKeyboardShortcuts } from "@/context/keyboard-shortcuts/KeyboardShortcutsProvider";
 import { handleChangeEditingId } from "@/context/redux/keyboard-shortcuts/keyboard-shortcuts-slice";
+import { cn } from "@/lib/utils";
+import MatchWarning from "./MatchWarning";
 
 const modifierKeys = new Set(["control", "shift", "alt", "meta"]);
 
-const KeyboardShortcutsEditContent = memo(() => {
+interface Props {
+  shortcutId: string;
+}
+
+const KeyboardShortcutsEditContent = memo(({ shortcutId }: Props) => {
   const dispatch = useAppDispatch();
   const [keyList, setKeyList] = useState<Array<string>>([]);
-  const { activeTab } = useKeyboardShortcuts();
+  const { activeTab, applyingKeybindingMap } = useKeyboardShortcuts();
   const keyboardShortcutPanelRef = useRef<HTMLDivElement>(null);
+  const [isExisting, setIsExisting] = useState<boolean>(false);
 
   const handleClose = useCallback(
     () => dispatch(handleChangeEditingId()),
@@ -26,6 +33,7 @@ const KeyboardShortcutsEditContent = memo(() => {
   );
 
   const handleUpdate = useCallback(async () => {
+    if (isExisting) return;
     if (!keyList.length) return handleClose();
     await dispatch(
       updateKeyboardShortcuts({
@@ -33,7 +41,7 @@ const KeyboardShortcutsEditContent = memo(() => {
         key: keyList,
       })
     );
-  }, [activeTab, dispatch, handleClose, keyList]);
+  }, [activeTab, dispatch, handleClose, isExisting, keyList]);
 
   useEffect(() => {
     const handlerKeydown = (e: KeyboardEvent) => {
@@ -72,6 +80,16 @@ const KeyboardShortcutsEditContent = memo(() => {
     };
   }, []);
 
+  useEffect(() => {
+    const keyString = keyList.join("+");
+    const matchedKey =
+      Object.values(applyingKeybindingMap).findIndex(
+        (item) => item.key?.join("+") === keyString && item.id !== shortcutId
+      ) >= 0;
+
+    setIsExisting(matchedKey);
+  }, [keyList, activeTab, applyingKeybindingMap, shortcutId]);
+
   return (
     <div
       className="w-full h-full flex flex-col justify-center items-center gap-5 p-6 text-center"
@@ -81,12 +99,22 @@ const KeyboardShortcutsEditContent = memo(() => {
       <p className="w-4/5 text-sm leading-relaxed">
         Press desired keys combination and then press ENTER.
       </p>
-      <div className="w-4/5 px-2 py-3 bg-background/80 border-2 border-ring rounded-md min-h-11 flex justify-center items-center">
+      <div
+        className={cn(
+          "w-4/5 px-2 py-3 bg-background/80 border-2 border-ring rounded-md min-h-11 flex justify-center items-center",
+          {
+            "border-destructive": isExisting,
+          }
+        )}
+      >
         {keyList.length ? (
           <KbdGroup>
             {keyList?.map((key, index) => (
               <Fragment key={key + index}>
-                <Kbd className="capitalize" variant={"outline"}>
+                <Kbd
+                  className="capitalize"
+                  variant={isExisting ? "destructive" : "outline"}
+                >
                   {key}
                 </Kbd>
                 {index + 1 < keyList.length && (
@@ -99,6 +127,7 @@ const KeyboardShortcutsEditContent = memo(() => {
           <p className="text-sm text-secondary-foreground">Press keys</p>
         )}
       </div>
+      <MatchWarning show={isExisting} />
     </div>
   );
 });
