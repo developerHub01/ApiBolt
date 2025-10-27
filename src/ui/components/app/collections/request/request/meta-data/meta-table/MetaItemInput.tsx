@@ -88,7 +88,6 @@ const MetaItemInput = memo(
             "border-b border-transparent focus:border-primary",
             "placeholder:capitalize placeholder:opacity-50",
             "disabled:opacity-95",
-            "selection:bg-primary selection:text-primary-foreground",
             className
           )}
           placeholder={cellType}

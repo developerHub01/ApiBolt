@@ -47,7 +47,7 @@ const SettingHttpList = memo(() => {
   }, [statusList]);
 
   return (
-    <div className="w-full flex flex-col border rounded-md selection:bg-primary/90 selection:text-primary-foreground">
+    <div className="w-full flex flex-col border rounded-md">
       <Accordion type="single" collapsible className="w-full">
         {list.map(({ type, value }) => (
           <SettingItem

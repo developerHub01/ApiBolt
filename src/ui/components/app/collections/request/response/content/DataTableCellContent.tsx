@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input-transparent";
 
 interface DataTableCellContentProps {
   value: unknown;
@@ -6,12 +6,7 @@ interface DataTableCellContentProps {
 
 const DataTableCellContent = ({ value }: DataTableCellContentProps) => {
   return (
-    <input
-      type="text"
-      value={String(value)}
-      disabled
-      className={cn("w-full p-0.5", "focus:bg-background")}
-    />
+    <Input type="text" value={String(value)} readOnly className="w-full" />
   );
 };
 

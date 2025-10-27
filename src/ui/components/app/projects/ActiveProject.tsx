@@ -91,8 +91,7 @@ const ActiveProject = () => {
           <span className="inline-block w-2 h-2 rounded-full bg-green-500 shadow-md shadow-green-400"></span>
           <input
             className={cn(
-              "w-full flex-1 outline-none border-b border-transparent focus:border-b-primary",
-              "selection:bg-primary selection:text-primary-foreground"
+              "w-full flex-1 outline-none border-b border-transparent focus:border-b-primary"
             )}
             onKeyDown={handleKeydownName}
             onBlur={handleBlurName}
