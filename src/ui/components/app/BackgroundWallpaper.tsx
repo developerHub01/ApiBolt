@@ -27,7 +27,7 @@ const BackgroundWallpaper = () => {
         />
       </div>
       <span
-        className="absolute top-0 left-0 w-full h-full bg-background z-[1] pointer-events-none"
+        className="absolute top-0 left-0 w-full h-full bg-background z-1 pointer-events-none"
         style={{
           opacity: backgroundOpacity,
         }}

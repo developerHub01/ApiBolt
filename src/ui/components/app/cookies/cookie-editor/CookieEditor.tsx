@@ -53,10 +53,10 @@ const CookieEditor = memo(
                     "focus-within:bg-accent/60 duration-75 transition-colors"
                   )}
                 >
-                  <TableCell className="font-bold whitespace-normal break-words break-all capitalize p-3">
+                  <TableCell className="font-bold whitespace-normal wrap-break-word break-all capitalize p-3">
                     {key}
                   </TableCell>
-                  <TableCell className="font-medium whitespace-normal break-words break-all p-3">
+                  <TableCell className="font-medium whitespace-normal wrap-break-word break-all p-3">
                     {!nonEditableField.has(key) ? (
                       <CookieField
                         fieldKey={key as keyof CookieInterface}

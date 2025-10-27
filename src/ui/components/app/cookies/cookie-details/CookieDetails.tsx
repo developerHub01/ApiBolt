@@ -69,7 +69,7 @@ const CookieDetails = memo(() => {
       open={Boolean(filteredDetails)}
     >
       {cookie && (
-        <div className="w-full bg-accent/50 text-accent-foreground text-sm px-3 py-4 rounded-md relative break-words break-all leading-relaxed">
+        <div className="w-full bg-accent/50 text-accent-foreground text-sm px-3 py-4 rounded-md relative wrap-break-word break-all leading-relaxed">
           <CopyButton
             value={cookie}
             className="absolute top-1 right-1"

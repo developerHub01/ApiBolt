@@ -45,10 +45,10 @@ const SettingBackgroundImagePreview = memo(
               <CloseIcon />
             </Button>
             {/* Container for image and navigation */}
-            <div className="flex flex-col flex-grow gap-3 overflow-hidden">
+            <div className="flex flex-col grow gap-3 overflow-hidden">
               {/* Image wrapper with flex-grow to fill space */}
               <div
-                className="flex-grow flex justify-center items-center overflow-hidden perspective-distant"
+                className="grow flex justify-center items-center overflow-hidden perspective-distant"
                 style={{
                   perspective: 1500,
                 }}

@@ -1,9 +1,9 @@
+import React, { createContext, useCallback, useContext, useState } from "react";
 import useCheckBackgroundSettingImages from "@/hooks/setting/use-check-background-setting-images";
 import type {
   SettingType,
   UpdateBackgroundImagePayloadMethodType,
 } from "@/types/setting.types";
-import React, { createContext, useCallback, useContext, useState } from "react";
 export type TSettingBackgroundTab = "global" | "project";
 
 interface SettingBackgroundContext {

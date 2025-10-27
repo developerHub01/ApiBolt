@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { selectEnvironmentsList } from "@/context/redux/request-response/selectors/environment";
 
-const listItemToHide = ["export", "delete"];
+const listItemToHide = new Set(["export", "delete"]);
 
 const ThreeeDotAction = () => {
   const dispatch = useAppDispatch();
@@ -53,7 +53,7 @@ const ThreeeDotAction = () => {
           onClick: handleDeleteAll,
         },
       ].filter((item /* if no list item then dont hide listItemToHides */) =>
-        haveListItem ? true : !listItemToHide.includes(item.id)
+        haveListItem ? true : !listItemToHide.has(item.id)
       ),
     [handleDeleteAll, haveListItem]
   );

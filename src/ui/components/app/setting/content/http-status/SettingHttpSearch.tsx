@@ -1,5 +1,5 @@
-import Searchbar from "@/components/ui/searchbar";
 import { memo } from "react";
+import Searchbar from "@/components/ui/searchbar";
 
 interface SettingHttpSearchProps {
   value: string;

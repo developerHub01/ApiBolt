@@ -139,7 +139,7 @@ const Splash = () => {
 
         {/* API Method Display */}
         <motion.div
-          className="bg-muted/50 backdrop-blur-sm rounded-md px-3 py-1.5 border border-border min-w-[80px] flex justify-center"
+          className="bg-muted/50 backdrop-blur-sm rounded-md px-3 py-1.5 border border-border min-w-20 flex justify-center"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, delay: 0.9 }}

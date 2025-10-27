@@ -1,3 +1,4 @@
+import { memo } from "react";
 import SettingItemHorizontalLayout from "@/components/app/setting/content/SettingItemHorizontalLayout";
 import SettingType from "@/components/app/setting/SettingTypeSelector";
 import { Button } from "@/components/ui/button";
@@ -9,7 +10,6 @@ import SettingBackgroundImagesFolderPath from "@/components/app/setting/content/
 import SettingBackgroundProvider, {
   useSettingBackground,
 } from "@/context/setting/background/SettingBackgroundProvider";
-import { memo } from "react";
 
 const SettingBackgroundImages = () => {
   return (

@@ -114,7 +114,7 @@ const HostToken = memo(({ hostType }: HostTokenProps) => {
             ref={hostnameRef}
             contentEditable
             suppressContentEditableWarning
-            className="outline-none cursor-text border-b w-full min-w-12 text-center break-words break-all whitespace-normal font-normal"
+            className="outline-none cursor-text border-b w-full min-w-12 text-center wrap-break-word break-all whitespace-normal font-normal"
             onKeyDown={handleKeydown}
             onBlur={handleBlurHost}
             onPaste={handlePaste}
