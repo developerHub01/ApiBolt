@@ -15,7 +15,6 @@ export const generateKeyboardBindingsSeed = async () => {
         .where(isNull(keyboardShortcutTable.projectId))) ?? []
     ).map((item) => item.id);
 
-    console.log(existingGlobalKeybindingIds);
     /* making exsting ids set */
     const existingIdSet = new Set(existingGlobalKeybindingIds);
 
@@ -27,8 +26,6 @@ export const generateKeyboardBindingsSeed = async () => {
         ...value,
         key: JSON.stringify(value.key),
       }));
-    console.log(payload);
-
     /* nothing to update then exit */
     if (!payload.length) return;
 

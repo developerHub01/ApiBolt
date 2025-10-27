@@ -1,18 +1,18 @@
 export const keyboardBindings = {
   navigate_projects: {
-    label: "Naviage to projects",
+    label: "Navigate to projects",
     key: ["ctrl", "shift", "p"],
   },
   navigate_collections: {
-    label: "Naviage to collections",
+    label: "Navigate to collections",
     key: ["ctrl", "shift", "c"],
   },
   navigate_environments: {
-    label: "Naviage to environments",
-    key: ["ctrl", "shift", "c"],
+    label: "Navigate to environments",
+    key: ["ctrl", "shift", "e"],
   },
   navigate_authorization: {
-    label: "Naviage to authorization",
+    label: "Navigate to authorization",
     key: ["ctrl", "shift", "a"],
   },
   toggle_activitybar: {
