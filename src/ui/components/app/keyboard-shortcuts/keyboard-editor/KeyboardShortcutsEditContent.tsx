@@ -42,7 +42,7 @@ const KeyboardShortcutsEditContent = memo(({ shortcutId }: Props) => {
     );
   }, [activeTab, dispatch, isExisting, keyList]);
 
-  useTrackKeyTyped({
+  const handleKeyDown = useTrackKeyTyped<HTMLDivElement>({
     onEnter: handleUpdate,
     onEscape: handleClose,
     onChange: setKeyList,
@@ -74,6 +74,7 @@ const KeyboardShortcutsEditContent = memo(({ shortcutId }: Props) => {
       className="w-full h-full flex flex-col justify-center items-center gap-5 p-6 text-center"
       ref={keyboardShortcutPanelRef}
       tabIndex={0}
+      onKeyDown={handleKeyDown}
     >
       <p className="w-4/5 text-sm leading-relaxed">
         Press desired keys combination and then press ENTER.

@@ -31,6 +31,7 @@ const ActionButton = ({
           title={label}
           id={`search_${id}`}
           onClick={onClick}
+          tabIndex={-1}
         >
           <Icon />
         </Button>

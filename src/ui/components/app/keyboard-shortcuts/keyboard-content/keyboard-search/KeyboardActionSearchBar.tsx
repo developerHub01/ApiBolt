@@ -1,9 +1,15 @@
-import { type ChangeEvent, type FocusEvent } from "react";
-import { Input } from "@/components/ui/input";
+import { useEffect, useRef, type ChangeEvent, type FocusEvent } from "react";
+import { Input } from "@/components/ui/input-transparent";
 import { useKeyboardShortcuts } from "@/context/keyboard-shortcuts/KeyboardShortcutsProvider";
 
 const KeyboardActionSearchBar = () => {
   const { searchTerm, handleChangeSearchTerm } = useKeyboardShortcuts();
+  const searchBarRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (document.activeElement === searchBarRef.current) return;
+    searchBarRef.current?.focus();
+  }, [searchTerm]);
 
   const handleActionTextChange = (e: ChangeEvent<HTMLInputElement>) =>
     handleChangeSearchTerm(e.target.value);
@@ -13,9 +19,10 @@ const KeyboardActionSearchBar = () => {
 
   return (
     <Input
-      className="w-full h-full border-none outline-none bg-transparent dark:bg-transparent focus-visible:ring-0 px-0"
+      className="w-full p-1.5 pl-2.5"
       placeholder="Search by action name"
       value={searchTerm}
+      ref={searchBarRef}
       onChange={handleActionTextChange}
       onBlur={handleActionTextBlur}
     />

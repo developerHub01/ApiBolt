@@ -81,17 +81,19 @@ const KeyboardShortcutSearch = () => {
 
   return (
     <div className="w-full px-3 py-2">
-      <div className="w-full border rounded-md p-1.5 flex items-center gap-2 min-h-11">
-        <div className="flex-1 h-full px-1 items-center">
+      <div className="w-full rounded-md flex items-center border-2 border-secondary focus-within:border-primary/50 transition-colors duration-100">
+        <div className="flex-1 h-full items-center">
           {searchByType === "keyboard" ? (
             <KeyboardKeyboardSearchBar />
           ) : (
             <KeyboardActionSearchBar />
           )}
         </div>
-        {menuList.map((item) => (
-          <ActionButton key={item.id} {...item} />
-        ))}
+        <div className="flex items-center gap-1.5 p-1.5">
+          {menuList.map((item) => (
+            <ActionButton key={item.id} {...item} />
+          ))}
+        </div>
       </div>
     </div>
   );

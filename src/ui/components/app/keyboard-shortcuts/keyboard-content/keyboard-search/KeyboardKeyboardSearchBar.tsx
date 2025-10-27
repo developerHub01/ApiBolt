@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import { Kbd, KbdGroup } from "@/components/ui/kbd-custom";
 import useTrackKeyTyped from "@/hooks/keyboard-shortcut/use-track-key-typed";
 import { useKeyboardShortcuts } from "@/context/keyboard-shortcuts/KeyboardShortcutsProvider";
@@ -6,12 +6,23 @@ import { Input } from "@/components/ui/input";
 
 const KeyboardKeyboardSearchBar = () => {
   const { searchKeyList, handleChangeSearchKeyList } = useKeyboardShortcuts();
-  useTrackKeyTyped({
+  const searchBarRef = useRef<HTMLDivElement>(null);
+  const handleKeyDown = useTrackKeyTyped({
     onChange: handleChangeSearchKeyList,
   });
 
+  useEffect(() => {
+    if (document.activeElement === searchBarRef.current) return;
+    searchBarRef.current?.focus();
+  }, [searchKeyList]);
+
   return (
-    <>
+    <div
+      className="w-full p-1.5 pl-2.5 flex items-center focus-visible:border-0 focus-visible:shadow-none focus-visible:ring-0 focus:outline-0"
+      tabIndex={-1}
+      onKeyDown={handleKeyDown}
+      ref={searchBarRef}
+    >
       {searchKeyList.length ? (
         <KbdGroup>
           {searchKeyList?.map((key, index) => (
@@ -32,7 +43,7 @@ const KeyboardKeyboardSearchBar = () => {
           readOnly
         />
       )}
-    </>
+    </div>
   );
 };
 

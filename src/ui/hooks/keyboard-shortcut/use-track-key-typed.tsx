@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, type KeyboardEvent } from "react";
 
 const modifierKeys = new Set(["control", "shift", "alt", "meta"]);
 
@@ -8,13 +8,13 @@ interface useTrackKeyTypedProps {
   onChange: (keyList: Array<string>) => void;
 }
 
-const useTrackKeyTyped = ({
+const useTrackKeyTyped = <T extends HTMLElement>({
   onEnter,
   onEscape,
   onChange,
 }: useTrackKeyTypedProps) => {
   const handlerKeydown = useCallback(
-    (e: KeyboardEvent) => {
+    (e: KeyboardEvent<T>) => {
       e.preventDefault();
       e.stopPropagation();
       let key = e.key.toLowerCase();
@@ -37,13 +37,7 @@ const useTrackKeyTyped = ({
     [onChange, onEnter, onEscape]
   );
 
-  useEffect(() => {
-    document.addEventListener("keydown", handlerKeydown);
-
-    return () => {
-      document.removeEventListener("keydown", handlerKeydown);
-    };
-  }, [handlerKeydown]);
+  return handlerKeydown;
 };
 
 export default useTrackKeyTyped;

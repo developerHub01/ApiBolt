@@ -28,7 +28,7 @@ const KeyboardShortcuts = memo(() => {
           <KeyboardShortcutsTop />
           <KeyboardShortcutsContent />
           <AnimatedDialogBottom>
-            <p className="line-clamp-1 text-center max-w-lg text-sm">
+            <p className="line-clamp-1 text-center text-muted-foreground max-w-lg text-sm">
               List of all keybindings in the app
             </p>
           </AnimatedDialogBottom>
