@@ -29,7 +29,7 @@ const SettingBackgroundContent = memo(() => {
     isHideMoreData,
     handleChangeSettingType,
   } = useSettingBackground();
-  
+
   return (
     <SettingItemHorizontalLayout
       className={cn("flex-col gap-4 justify-center border-b py-2.5", {
@@ -39,20 +39,19 @@ const SettingBackgroundContent = memo(() => {
       <SettingItemHorizontalLayout className="items-center gap-2">
         <p className="flex-1">Choose Background images</p>
         {/* render only if custom and have atleast selected folder. if have array means have selected folder */}
-        {["custom", "global"].includes(settingType) &&
-          Array.isArray(senitizedValue) && (
-            <SettingRefresh
-              label="Reload Background Images..."
-              className="ml-auto"
-            />
-          )}
+        <SettingRefresh
+          label="Reload Background Images..."
+          className="ml-auto"
+          show={
+            Array.isArray(senitizedValue) &&
+            ["custom", "global"].includes(settingType)
+          }
+        />
         <SettingType value={settingType} onChange={handleChangeSettingType} />
       </SettingItemHorizontalLayout>
       {/* if type is custom or global and also if have children under the section then only render */}
-      {["custom", "global"].includes(settingType) &&
-        (Boolean(folderPath) ||
-          Array.isArray(senitizedValue) ||
-          settingType === "custom") && (
+      {settingType === "global" &&
+        (Boolean(folderPath) || Array.isArray(senitizedValue)) && (
           <SettingItemHorizontalLayout className="flex-col justify-center items-center gap-4">
             <SettingBackgroundImagesFolderPath path={folderPath} />
             <SettingBackgroundImagesContent
@@ -64,17 +63,20 @@ const SettingBackgroundContent = memo(() => {
                   : "long"
               }
             />
-            {settingType === "custom" && (
-              <Button
-                onClick={() => handleChange("upload")}
-                variant={"secondary"}
-                className="capitalize"
-              >
-                Choose background folder
-              </Button>
-            )}
           </SettingItemHorizontalLayout>
         )}
+
+      {settingType === "custom" && (
+        <SettingItemHorizontalLayout className="justify-center items-center">
+          <Button
+            onClick={() => handleChange("upload")}
+            variant={"secondary"}
+            className="capitalize"
+          >
+            Choose background folder
+          </Button>
+        </SettingItemHorizontalLayout>
+      )}
     </SettingItemHorizontalLayout>
   );
 });
