@@ -125,7 +125,7 @@ export const removeTab = createAsyncThunk<
     const state = getState() as RootState;
     const activeTab = state.sidebar.activeTab;
 
-    if (activeTab !== "collections") return;
+    if (activeTab !== "navigate_collections") return;
 
     dispatch(handleRemoveTab(id));
   } catch (error) {

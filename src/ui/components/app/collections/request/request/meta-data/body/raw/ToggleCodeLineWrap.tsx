@@ -8,10 +8,20 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip-custom";
+import { selectApplyingKeyboardShortcutsById } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
+import { keyListStringify } from "@/utils/keyboard-shortcut.utils";
 
 const ToggleCodeLineWrap = memo(() => {
   const { codeLineWrap, handleToggleCodeLineWrap } = useRequestBody();
   const requestBodyType = useAppSelector(selectRequestBodyType);
+  const shortcuts = useAppSelector((state) =>
+    selectApplyingKeyboardShortcutsById(state, "code_line_wrap")
+  );
+
+  const shortcutString =
+    Array.isArray(shortcuts) && shortcuts.length
+      ? keyListStringify(shortcuts)
+      : "";
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -37,9 +47,11 @@ const ToggleCodeLineWrap = memo(() => {
           Line {codeLineWrap ? "Unwrap" : "Wrap"}
         </Button>
       </TooltipTrigger>
-      <TooltipContent side="bottom" variant={"secondary"}>
-        <p>Alt+Z</p>
-      </TooltipContent>
+      {Boolean(shortcutString) && (
+        <TooltipContent side="bottom" variant={"secondary"}>
+          <p>{shortcutString}</p>
+        </TooltipContent>
+      )}
     </Tooltip>
   );
 });

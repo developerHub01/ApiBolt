@@ -18,9 +18,12 @@ const Redirector = () => {
     let route = "";
     if (!activeProjectId) {
       route =
-        SIDEBAR_MENU_LIST.find((entry) => entry.id === "projects")?.path ??
-        "/projects";
-    } else if (sidebarActiveTab === "collections" && activeRequestOrFolder) {
+        SIDEBAR_MENU_LIST.find((entry) => entry.id === "navigate_projects")
+          ?.path ?? "/projects";
+    } else if (
+      sidebarActiveTab === "navigate_collections" &&
+      activeRequestOrFolder
+    ) {
       route = `${route}/${activeRequestOrFolder.method ? "request" : "folder"}/${activeRequestOrFolder.id}`;
     } else {
       route =

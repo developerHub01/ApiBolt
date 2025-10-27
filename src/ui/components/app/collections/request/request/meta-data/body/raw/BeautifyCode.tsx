@@ -15,12 +15,22 @@ import {
   selectRawRequestBodyType,
   selectRequestBodyType,
 } from "@/context/redux/request-response/selectors/body-raw";
+import { selectApplyingKeyboardShortcutsById } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
+import { keyListStringify } from "@/utils/keyboard-shortcut.utils";
 
 const BeautifyCode = memo(() => {
   const { handleChangeRawData } = useRequestBody();
   const requestBodyType = useAppSelector(selectRequestBodyType);
   const rawRequestBodyType = useAppSelector(selectRawRequestBodyType);
   const code = useAppSelector(selectRawData);
+  const shortcuts = useAppSelector((state) =>
+    selectApplyingKeyboardShortcutsById(state, "code_beautify")
+  );
+
+  const shortcutString =
+    Array.isArray(shortcuts) && shortcuts.length
+      ? keyListStringify(shortcuts)
+      : "";
 
   const parser = useMemo(
     () => getParser(rawRequestBodyType),
@@ -45,9 +55,11 @@ const BeautifyCode = memo(() => {
             Beautify
           </Button>
         </TooltipTrigger>
-        <TooltipContent side="bottom" align="end" variant={"secondary"}>
-          <p>Alt + Shift + F</p>
-        </TooltipContent>
+        {Boolean(shortcutString) && (
+          <TooltipContent side="bottom" align="end" variant={"secondary"}>
+            <p>{shortcutString}</p>
+          </TooltipContent>
+        )}
       </Tooltip>
     </TooltipProvider>
   );

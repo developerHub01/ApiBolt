@@ -28,6 +28,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip-custom";
+import { selectApplyingKeyboardShortcutsById } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
+import { keyListStringify } from "@/utils/keyboard-shortcut.utils";
 
 const TabItem = memo(({ id, index }: { id: string; index: number }) => {
   const dispatch = useAppDispatch();
@@ -195,7 +197,7 @@ const TabItem = memo(({ id, index }: { id: string; index: number }) => {
                     side="bottom"
                     variant={"secondary"}
                   >
-                    <p>Close Tab (Ctrl+F4)</p>
+                    <ShortcutText />
                   </TooltipContent>
                 </Tooltip>
               </motion.div>
@@ -206,5 +208,20 @@ const TabItem = memo(({ id, index }: { id: string; index: number }) => {
     </div>
   );
 });
+
+const ShortcutText = () => {
+  const shortcuts = useAppSelector((state) =>
+    selectApplyingKeyboardShortcutsById(state, "close_tab")
+  );
+
+  const shortcutString =
+    Array.isArray(shortcuts) && shortcuts.length
+      ? ` (${keyListStringify(shortcuts)})`
+      : "";
+
+  if (!shortcutString) return null;
+
+  return <p>Close Tab {shortcutString}</p>;
+};
 
 export default TabItem;

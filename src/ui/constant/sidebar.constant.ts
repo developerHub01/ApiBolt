@@ -8,43 +8,44 @@ import {
 } from "lucide-react";
 
 export const SIDEBAR_MENU_LIST: Array<{
-  id: TSidebarTab;
+  id: Exclude<TSidebarTab, null>;
   Icon: LucideIcon;
   label: string;
   path: string;
 }> = [
   {
-    id: "projects",
+    id: "navigate_projects",
     Icon: ProjectsIcon,
-    label: "Projects (Ctrl+Shift+P)",
+    label: "Projects",
     path: "/projects",
   },
   {
-    id: "collections",
+    id: "navigate_collections",
     Icon: CollectionsIcon,
-    label: "Collections (Ctrl+Shift+C)",
+    label: "Collections",
     path: "/",
   },
   {
-    id: "environments",
+    id: "navigate_environments",
     Icon: EnvironmentsIcon,
-    label: "Environments (Ctrl+Shift+E)",
+    label: "Environments",
     path: "/environments",
   },
   {
-    id: "authorization",
+    id: "navigate_authorization",
     Icon: AuthorizationIcon,
-    label: "Authorization (Ctrl+Shift+A)",
+    label: "Authorization",
     path: "/authorization",
   },
 ];
 
 export const HIDDEN_TABS_WHEN_NOT_PROJECT_SELECTED: Array<TSidebarTab> = [
-  "collections",
-  "environments",
-  "authorization",
+  "navigate_collections",
+  "navigate_environments",
+  "navigate_authorization",
 ];
 
 export const LOCAL_STORAGE_SIDEBAR_ACTIVE_TAB_KEY = "sidebar-active-tab";
 
-export const LOCAL_STORAGE_SIDEBAR_LAST_ACTIVE_TAB_KEY = "sidebar-last-active-tab";
+export const LOCAL_STORAGE_SIDEBAR_LAST_ACTIVE_TAB_KEY =
+  "sidebar-last-active-tab";

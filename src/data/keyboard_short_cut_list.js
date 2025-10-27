@@ -20,12 +20,12 @@ export const keyboardBindings = {
     key: ["meta", "a"],
   },
   toggle_sidebar: {
-    label: "Toggle activitybar",
+    label: "Toggle sidebar",
     key: ["ctrl", "b"],
   },
   toggle_fullscreen: {
     label: "Toggle fullscreen",
-    key: ["ctrl", "shift", "f11"],
+    key: ["f11"],
   },
   open_cookies: {
     label: "Open Cookies",

@@ -39,7 +39,7 @@ export const loadAuthorization = createAsyncThunk<
       if (!requestOrFolderId) {
         /* if not id passed then check is selected tab is collection if then is there any selected tab, if then use that selectedTab as id else passed id */
         requestOrFolderId =
-          state.sidebar.activeTab === "collections" && selectedTab
+          state.sidebar.activeTab === "navigate_collections" && selectedTab
             ? selectedTab
             : requestOrFolderId;
       } else if (requestOrFolderId === DEFAULT_AUTHORIZATION_ID)
@@ -464,7 +464,7 @@ export const updateAuthorization = createAsyncThunk<
       if (!requestOrFolderId) {
         /* if not id passed then check is selected tab is collection if then is there any selected tab, if then use that selectedTab as id else passed id */
         requestOrFolderId =
-          (state.sidebar.activeTab === "collections" && selectedTab
+          (state.sidebar.activeTab === "navigate_collections" && selectedTab
             ? selectedTab
             : requestOrFolderId) ?? DEFAULT_AUTHORIZATION_ID;
       }

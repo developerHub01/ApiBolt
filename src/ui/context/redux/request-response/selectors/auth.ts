@@ -18,7 +18,7 @@ export const selectAuthId = createSelector(
   (state: RootState) => state.sidebar.activeTab,
   (state: RootState) => state.requestResponse.selectedTab,
   (activeTab, selectedTab) =>
-    activeTab === "collections" && selectedTab
+    activeTab === "navigate_collections" && selectedTab
       ? selectedTab
       : DEFAULT_AUTHORIZATION_ID
 );

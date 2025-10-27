@@ -1,8 +1,9 @@
 import { Fragment, memo } from "react";
 import { Kbd, KbdGroup } from "@/components/ui/kbd-custom";
+import type { TShortcutKey } from "@/types/keyboard-shortcut.types";
 
 interface KeyListProps {
-  keyMap: Array<string> | null;
+  keyMap: TShortcutKey;
 }
 
 const KeyboardKeyList = memo(({ keyMap }: KeyListProps) => {

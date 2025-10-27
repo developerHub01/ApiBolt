@@ -19,3 +19,6 @@ export const areKeyListMatched = (
 
   return false;
 };
+
+export const keyListStringify = (keyList: Array<string>) =>
+  keyList.map((key) => key[0].toUpperCase() + key.slice(1)).join("+");

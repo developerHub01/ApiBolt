@@ -49,7 +49,7 @@ const KeyboardEvents = () => {
         e.key.toLowerCase() === "p"
       ) {
         e.preventDefault();
-        await dispatch(changeActiveTab("projects"));
+        await dispatch(changeActiveTab("navigate_projects"));
       } else if (
         e.ctrlKey &&
         e.shiftKey &&
@@ -58,7 +58,7 @@ const KeyboardEvents = () => {
         e.key.toLowerCase() === "c"
       ) {
         e.preventDefault();
-        await dispatch(changeActiveTab("collections"));
+        await dispatch(changeActiveTab("navigate_collections"));
       } else if (
         e.ctrlKey &&
         e.shiftKey &&
@@ -67,7 +67,7 @@ const KeyboardEvents = () => {
         e.key.toLowerCase() === "e"
       ) {
         e.preventDefault();
-        await dispatch(changeActiveTab("environments"));
+        await dispatch(changeActiveTab("navigate_environments"));
       } else if (
         e.ctrlKey &&
         e.shiftKey &&
@@ -76,7 +76,7 @@ const KeyboardEvents = () => {
         e.key.toLowerCase() === "a"
       ) {
         e.preventDefault();
-        await dispatch(changeActiveTab("authorization"));
+        await dispatch(changeActiveTab("navigate_authorization"));
       } else if (
         e.ctrlKey &&
         !e.shiftKey &&

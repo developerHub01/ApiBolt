@@ -26,6 +26,8 @@ import {
 } from "@/context/redux/project/selectors/project";
 import { selectRequestOrFolderList } from "@/context/redux/request-response/selectors/request-list";
 import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
+import { selectApplyingKeyboardShortcutsById } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
+import { keyListStringify } from "@/utils/keyboard-shortcut.utils";
 
 const DELAY_TIME = 300;
 
@@ -98,7 +100,7 @@ const HeaderSearch = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (activeTab !== "collections" || !activeProjectId) return null;
+  if (activeTab !== "navigate_collections" || !activeProjectId) return null;
 
   return (
     <div
@@ -158,7 +160,7 @@ const HeaderSearch = () => {
                   >
                     <SearchIcon size={16} />
                     <p className="truncate w-full">{activeProjectName}</p>
-                    <p className="text-muted-foreground text-xs">(Ctrl+k)</p>
+                    <ShortcutText />
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -179,6 +181,21 @@ const HeaderSearch = () => {
       </Popover>
     </div>
   );
+};
+
+const ShortcutText = () => {
+  const shortcuts = useAppSelector((state) =>
+    selectApplyingKeyboardShortcutsById(state, "search_collection")
+  );
+
+  const shortcutString =
+    Array.isArray(shortcuts) && shortcuts.length
+      ? `(${keyListStringify(shortcuts)})`
+      : "";
+
+  if (!shortcutString) return null;
+
+  return <p className="text-muted-foreground text-xs">{shortcutString}</p>;
 };
 
 export default HeaderSearch;

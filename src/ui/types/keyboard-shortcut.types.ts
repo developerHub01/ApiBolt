@@ -1,7 +1,9 @@
+export type TShortcutKey = Array<string> | null;
+
 export interface KeybaordShortCutInterface {
   id: string;
   label: string;
-  key: Array<string> | null;
+  key: TShortcutKey;
   projectId: string | null;
 }
 

@@ -11,6 +11,8 @@ import { selectIsRequestListCollapsed } from "@/context/redux/request-response/s
 import { selectSidebarActiveTab } from "@/context/redux/sidebar/sidebar-selector";
 import { updateSettings } from "@/context/redux/setting/thunk/setting-thunk";
 import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
+import { selectApplyingKeyboardShortcuts } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
+import { keyListStringify } from "@/utils/keyboard-shortcut.utils";
 
 interface SidebarContextMenuWrapperProps {
   children: React.ReactNode;
@@ -34,6 +36,7 @@ const SidebarContextMenuWrapper = ({
 
   const requestListCollapsed = useAppSelector(selectIsRequestListCollapsed);
   const activeSidebarTab = useAppSelector(selectSidebarActiveTab);
+  const shortcuts = useAppSelector(selectApplyingKeyboardShortcuts);
 
   const handleToggleRequestListBar = useCallback(
     () => dispatch(handleToggleRequestList()),
@@ -68,17 +71,23 @@ const SidebarContextMenuWrapper = ({
     // });
 
     /* toggle request list sidebar  */
-    if (activeSidebarTab === "collections") {
+    if (activeSidebarTab === "navigate_collections") {
+      const keybindingString = shortcuts["toggle_sidebar"]
+        ? ` (${keyListStringify(shortcuts["toggle_sidebar"])})`
+        : "";
+
       list.push({
         id: "request-list-sidebar",
-        label: `${requestListCollapsed ? "Expand" : "Collapse"} Primary Sidebar`,
+        label: `${requestListCollapsed ? "Expand" : "Collapse"} Primary Sidebar${keybindingString}`,
         onClick: handleToggleRequestListBar,
       });
     }
 
+    const activitBarShortcutString = `${shortcuts["toggle_activitybar"] ? ` (${keyListStringify(shortcuts["toggle_activitybar"])})` : ""}`;
+    
     list.push({
       id: "activity-bar",
-      label: `Hide activity bar`,
+      label: `Hide activity bar${activitBarShortcutString}`,
       onClick: handleHideActivityBar,
     });
 
@@ -88,6 +97,7 @@ const SidebarContextMenuWrapper = ({
     handleHideActivityBar,
     handleToggleRequestListBar,
     requestListCollapsed,
+    shortcuts,
   ]);
 
   if (!menuList.length) return null;

@@ -5,6 +5,7 @@ import {
   handleUpdateKeyboardShortcuts,
 } from "@/context/redux/keyboard-shortcuts/keyboard-shortcuts-slice";
 import type { TKeyboardShortcutsTab } from "@/context/keyboard-shortcuts/KeyboardShortcutsProvider";
+import type { TShortcutKey } from "@/types/keyboard-shortcut.types";
 
 /* ==============================
 ========== Keyboard Shortcuts start =========
@@ -30,7 +31,7 @@ export const updateKeyboardShortcuts = createAsyncThunk<
   void,
   {
     type: TKeyboardShortcutsTab;
-    key: Array<string> | null;
+    key: TShortcutKey;
   },
   {
     dispatch: AppDispatch;

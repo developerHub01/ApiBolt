@@ -1,8 +1,8 @@
 export type TSidebarTab =
-  | "projects"
-  | "collections"
-  | "environments"
-  | "authorization"
+  | "navigate_projects"
+  | "navigate_collections"
+  | "navigate_environments"
+  | "navigate_authorization"
   | null;
 
 export interface SidebarState {

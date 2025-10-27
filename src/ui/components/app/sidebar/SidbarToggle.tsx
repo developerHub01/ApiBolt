@@ -10,21 +10,29 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip-custom";
+import { selectApplyingKeyboardShortcutsById } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
+import { keyListStringify } from "@/utils/keyboard-shortcut.utils";
 
 const SidbarToggle = memo(() => {
   const dispath = useAppDispatch();
   const activeTab = useAppSelector(selectSidebarActiveTab);
+  const shortcut = useAppSelector((state) =>
+    selectApplyingKeyboardShortcutsById(state, "toggle_sidebar")
+  );
+
+  const shortCutString =
+    Array.isArray(shortcut) && shortcut.length
+      ? ` (${keyListStringify(shortcut)})`
+      : "";
 
   const handleCollapse = useCallback(
     () => dispath(handleToggleRequestList()),
     [dispath]
   );
 
-  if (activeTab !== "collections") return null;
-
   return (
     <AnimatePresence>
-      {activeTab === "collections" && (
+      {activeTab === "navigate_collections" && (
         <motion.span
           key="toggle-collection-list"
           initial={{
@@ -51,7 +59,7 @@ const SidbarToggle = memo(() => {
               </Button>
             </TooltipTrigger>
             <TooltipContent side="right" variant={"secondary"}>
-              <p>Toggle Sidebar (Ctrl+B)</p>
+              <p>Toggle Sidebar{shortCutString}</p>
             </TooltipContent>
           </Tooltip>
         </motion.span>

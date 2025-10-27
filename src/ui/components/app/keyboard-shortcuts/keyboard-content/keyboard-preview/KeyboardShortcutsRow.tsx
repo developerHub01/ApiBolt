@@ -5,11 +5,12 @@ import { useAppDispatch } from "@/context/redux/hooks";
 import { handleChangeEditingId } from "@/context/redux/keyboard-shortcuts/keyboard-shortcuts-slice";
 import KeyboardKeyCellContent from "@/components/app/keyboard-shortcuts/keyboard-content/keyboard-preview/KeyboardKeyCellContent";
 import KeyboardCell from "@/components/app/keyboard-shortcuts/keyboard-content/keyboard-preview/KeyboardCell";
+import type { TShortcutKey } from "@/types/keyboard-shortcut.types";
 
 interface KeyboardShortcutsRowProps {
   id: string;
   label: string;
-  keyMap: Array<string> | null;
+  keyMap: TShortcutKey;
 }
 
 const KeyboardShortcutsRow = memo(
@@ -29,7 +30,7 @@ const KeyboardShortcutsRow = memo(
           "group"
         )}
       >
-        <KeyboardCell>{label}</KeyboardCell>
+        <KeyboardCell className="capitalize">{label}</KeyboardCell>
         <KeyboardCell>
           <KeyboardKeyCellContent keyMap={keyMap} onSelect={handleSelectEdit} />
         </KeyboardCell>
