@@ -13,6 +13,7 @@ import {
   selectLocalKeyboardShortcuts,
 } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
 import type { KeybaordShortCutInterface } from "@/types/keyboard-shortcut.types";
+import { areKeyListMatched } from "@/utils/keyboard-shortcut.utils";
 
 export type TKeyboardShortcutsTab = "global" | "local";
 export type TSearchByType = "action" | "keyboard";
@@ -133,10 +134,7 @@ const KeyboardShortcutsProvider = ({
 
       const isSearchKeybindingMatched =
         selectedSearchByType[activeTab] === "keyboard" &&
-        data.key
-          ?.join("+")
-          .toLowerCase()
-          .includes(searchKeyList[activeTab].join("+").toLowerCase().trim());
+        areKeyListMatched(data.key ?? [], searchKeyList[activeTab]);
 
       if (isSearchTermMatched || isSearchKeybindingMatched) {
         keybindingMap[id] = {
