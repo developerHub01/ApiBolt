@@ -4,7 +4,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip-custom";
 import { Copy as CopyIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useAppSelector } from "@/context/redux/hooks";
@@ -32,7 +32,7 @@ const BodyTopCopy = () => {
           <CopyIcon />
         </Button>
       </TooltipTrigger>
-      <TooltipContent side="bottom">
+      <TooltipContent side="bottom" variant={"secondary"}>
         <p>Copy</p>
       </TooltipContent>
     </Tooltip>

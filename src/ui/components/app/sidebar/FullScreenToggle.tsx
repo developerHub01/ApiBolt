@@ -6,7 +6,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip-custom";
 import { Button } from "@/components/ui/button";
 import { useGlobal } from "@/context/global/GlobalProvider";
 
@@ -28,7 +28,7 @@ const FullScreenToggle = () => {
           )}
         </Button>
       </TooltipTrigger>
-      <TooltipContent side="right">
+      <TooltipContent side="right" variant={"secondary"}>
         <p>
           {isFullscreen ? "Exit Full Screen (F11)" : "Enter Full Screen (F11)"}
         </p>

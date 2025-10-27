@@ -11,7 +11,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip-custom";
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 import { dateFormater } from "@/utils";
 
@@ -22,7 +22,7 @@ interface Props {
 
 const FieldDateSelector = memo(({ value, onChange }: Props) => {
   const [open, setOpen] = useState<boolean>(false);
-  
+
   const presentableDate = useMemo(() => {
     if (!value) return "Session";
     return dateFormater(value);
@@ -87,7 +87,7 @@ const ExpireSessionButton = ({ onChange }: ExpireSessionButtonProps) => {
           <ClearIcon />
         </Button>
       </TooltipTrigger>
-      <TooltipContent align="end" side="bottom">
+      <TooltipContent align="end" side="bottom" variant={"secondary"}>
         <p>Make Expire Session</p>
       </TooltipContent>
     </Tooltip>

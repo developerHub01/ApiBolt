@@ -6,7 +6,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip-custom";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { useRequestResponse } from "@/context/collections/request/RequestResponseProvider";
 import { handleToggleCollapse } from "@/context/redux/request-response/request-response-slice";
@@ -39,7 +39,7 @@ const ResponsCollapseButton = () => {
             />
           </Button>
         </TooltipTrigger>
-        <TooltipContent side="bottom" align="end">
+        <TooltipContent side="bottom" align="end" variant={"secondary"}>
           <p>{isResponseCollapsed ? "Expend" : "Collaps"} Response Panel</p>
         </TooltipContent>
       </Tooltip>

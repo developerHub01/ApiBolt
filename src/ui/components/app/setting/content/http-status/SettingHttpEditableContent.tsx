@@ -13,7 +13,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip-custom";
 import { Button } from "@/components/ui/button";
 
 const REASON_MAX_LENGTH = 40;
@@ -118,7 +118,7 @@ const SettingHttpEditableContent = ({
                 <ResetIcon />
               </Button>
             </TooltipTrigger>
-            <TooltipContent side="bottom" align="end">
+            <TooltipContent side="bottom" align="end" variant={"secondary"}>
               <p>Reset {type}</p>
             </TooltipContent>
           </Tooltip>

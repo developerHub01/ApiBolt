@@ -1,4 +1,4 @@
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { TooltipProvider } from "@/components/ui/tooltip-custom";
 import SidebarMenu from "@/components/app/sidebar/SidebarMenu";
 import FullScreenToggle from "@/components/app/sidebar/FullScreenToggle";
 import ThemeToggle from "@/components/app/sidebar/ThemeToggle";

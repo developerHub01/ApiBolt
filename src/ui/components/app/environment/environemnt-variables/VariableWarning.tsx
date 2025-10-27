@@ -4,7 +4,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip-custom";
 import { TriangleAlert as WarningIcon } from "lucide-react";
 
 const VariableWarning = memo(() => {
@@ -24,6 +24,7 @@ const VariableWarning = memo(() => {
         side="bottom"
         align="end"
         alignOffset={5}
+        variant={"secondary"}
       >
         <p>This variable has been overwritten by a duplicate variable.</p>
       </TooltipContent>

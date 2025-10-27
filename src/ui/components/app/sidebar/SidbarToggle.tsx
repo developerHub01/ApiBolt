@@ -9,7 +9,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip-custom";
 
 const SidbarToggle = memo(() => {
   const dispath = useAppDispatch();
@@ -50,7 +50,7 @@ const SidbarToggle = memo(() => {
                 <MenuIcon />
               </Button>
             </TooltipTrigger>
-            <TooltipContent side="right">
+            <TooltipContent side="right" variant={"secondary"}>
               <p>Toggle Sidebar (Ctrl+B)</p>
             </TooltipContent>
           </Tooltip>

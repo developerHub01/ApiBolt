@@ -1,4 +1,4 @@
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { TooltipProvider } from "@/components/ui/tooltip-custom";
 import { useResponse } from "@/context/collections/request/ResponseProvider";
 import BodyTopCodeWrap from "@/components/app/collections/request/response/content/body/BodyTopCodeWrap";
 import BodyTopCopy from "@/components/app/collections/request/response/content/body/BodyTopCopy";

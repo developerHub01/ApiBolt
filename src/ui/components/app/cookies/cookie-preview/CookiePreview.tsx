@@ -17,7 +17,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip-custom";
 
 interface Props {
   details: CookieInterface;
@@ -45,7 +45,7 @@ const CookiePreview = memo(({ details }: Props) => {
                     <EditIcon />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent align="end" side="bottom">
+                <TooltipContent align="end" side="bottom" variant={"secondary"}>
                   <p>Edit Cookie</p>
                 </TooltipContent>
               </Tooltip>

@@ -4,7 +4,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip-custom";
 import { RefreshCw as RefreshIcon, type LucideIcon } from "lucide-react";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { loadSettings } from "@/context/redux/setting/thunk/setting-thunk";
@@ -66,7 +66,7 @@ const SettingRefresh = memo(
                   <Icon />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent side={side} align={align}>
+              <TooltipContent side={side} align={align} variant={"secondary"}>
                 <p>{label ? label : "Refresh Settings"}</p>
               </TooltipContent>
             </Tooltip>

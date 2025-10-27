@@ -15,7 +15,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip-custom";
 import { Button } from "@/components/ui/button";
 import { AnimatePresence, motion } from "motion/react";
 import { codeFormatter } from "@/utils/code";
@@ -157,6 +157,7 @@ const ErrorAlert = memo(({ isError }: ErrorAlertProps) => {
               side="top"
               align="end"
               alignOffset={5}
+              variant={"secondary"}
             >
               <p>Request body have some errors.</p>
             </TooltipContent>

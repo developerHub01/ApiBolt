@@ -24,7 +24,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip-custom";
 
 const RequestCodeTypeSelector = memo(() => {
   const selectedType = useAppSelector(selectSelectedCodeSnippit);
@@ -55,7 +55,7 @@ const RequestCodeTypeSelector = memo(() => {
               Line {lineWrap ? "Unwrap" : "Wrap"}
             </Button>
           </TooltipTrigger>
-          <TooltipContent side="bottom">
+          <TooltipContent side="bottom" variant={"secondary"}>
             <p>Alt+Z</p>
           </TooltipContent>
         </Tooltip>

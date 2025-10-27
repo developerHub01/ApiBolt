@@ -3,7 +3,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip-custom";
 import { useTheme } from "@/components/theme-provider";
 import { Moon as DarkIcon, Sun as LightIcon } from "lucide-react";
 
@@ -21,7 +21,7 @@ const ThemeToggle = () => {
           {theme === "light" ? <DarkIcon size={18} /> : <LightIcon size={18} />}
         </Button>
       </TooltipTrigger>
-      <TooltipContent side="right">
+      <TooltipContent side="right" variant={"secondary"}>
         <p>Change Theme</p>
       </TooltipContent>
     </Tooltip>

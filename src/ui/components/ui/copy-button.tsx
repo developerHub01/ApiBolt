@@ -8,7 +8,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip-custom";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -76,7 +76,7 @@ const CopyButton = memo(
             </Button>
           )}
         </TooltipTrigger>
-        <TooltipContent side={side} align={align}>
+        <TooltipContent side={side} align={align} variant={"secondary"}>
           <p>{label || "Copy text"}</p>
         </TooltipContent>
       </Tooltip>

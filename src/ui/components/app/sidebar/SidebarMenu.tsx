@@ -4,7 +4,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip-custom";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { Link } from "react-router-dom";
 import { changeActiveTab } from "@/context/redux/sidebar/sidebar-thunk";
@@ -56,7 +56,7 @@ const SidebarMenu = memo(() => {
                 </Button>
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="right">
+            <TooltipContent side="right" variant={"secondary"}>
               <p>{label}</p>
             </TooltipContent>
           </Tooltip>

@@ -3,7 +3,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip-custom";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { requestUrlUpdateToken } from "@/context/redux/request-url/request-url-thunk";
 import { ArrowDownUp as SwitchIcon } from "lucide-react";
@@ -36,7 +36,12 @@ const ChangeTokenType = ({ id, type }: Props) => {
           <SwitchIcon />
         </Button>
       </TooltipTrigger>
-      <TooltipContent side="bottom" align="center" sideOffset={8}>
+      <TooltipContent
+        side="bottom"
+        align="center"
+        sideOffset={8}
+        variant={"secondary"}
+      >
         <p>Change into {type === "env" ? "text" : "environment"} type</p>
       </TooltipContent>
     </Tooltip>

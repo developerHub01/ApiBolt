@@ -7,7 +7,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip-custom";
 
 const ToggleCodeLineWrap = memo(() => {
   const { codeLineWrap, handleToggleCodeLineWrap } = useRequestBody();
@@ -37,7 +37,7 @@ const ToggleCodeLineWrap = memo(() => {
           Line {codeLineWrap ? "Unwrap" : "Wrap"}
         </Button>
       </TooltipTrigger>
-      <TooltipContent side="bottom">
+      <TooltipContent side="bottom" variant={"secondary"}>
         <p>Alt+Z</p>
       </TooltipContent>
     </Tooltip>

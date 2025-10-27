@@ -8,7 +8,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip-custom";
 
 interface PasteButtonProps {
   className?: string;
@@ -70,7 +70,7 @@ const PasteButton = memo(
             </Button>
           )}
         </TooltipTrigger>
-        <TooltipContent side="bottom">
+        <TooltipContent side="bottom" variant={"secondary"}>
           <p>{label || "Paste copied"}</p>
         </TooltipContent>
       </Tooltip>

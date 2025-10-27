@@ -7,7 +7,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip-custom";
 
 interface ActionButtonProps extends BottomActionButtonInterface {
   onClick?: (id: ListBottomActionType) => void;
@@ -25,7 +25,7 @@ const ActionButton = memo(({ id, label, Icon, onClick }: ActionButtonProps) => {
           <Icon size={16} />
         </button>
       </TooltipTrigger>
-      <TooltipContent className="p-1">
+      <TooltipContent className="p-1" variant={"secondary"}>
         <p>{label}</p>
       </TooltipContent>
     </Tooltip>

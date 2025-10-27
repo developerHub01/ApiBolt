@@ -6,7 +6,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip-custom";
 import { useRequestBody } from "@/context/collections/request/RequestBodyProvider";
 import { formatCode, getParser } from "@/utils/prettier.utils";
 import { useAppSelector } from "@/context/redux/hooks";
@@ -45,7 +45,7 @@ const BeautifyCode = memo(() => {
             Beautify
           </Button>
         </TooltipTrigger>
-        <TooltipContent side="bottom" align="end">
+        <TooltipContent side="bottom" align="end" variant={"secondary"}>
           <p>Alt + Shift + F</p>
         </TooltipContent>
       </Tooltip>

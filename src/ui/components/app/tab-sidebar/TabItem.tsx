@@ -27,7 +27,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip-custom";
 
 const TabItem = memo(({ id, index }: { id: string; index: number }) => {
   const dispatch = useAppDispatch();
@@ -190,7 +190,11 @@ const TabItem = memo(({ id, index }: { id: string; index: number }) => {
                       <CloseIcon />
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent align="end" side="bottom">
+                  <TooltipContent
+                    align="end"
+                    side="bottom"
+                    variant={"secondary"}
+                  >
                     <p>Close Tab (Ctrl+F4)</p>
                   </TooltipContent>
                 </Tooltip>
