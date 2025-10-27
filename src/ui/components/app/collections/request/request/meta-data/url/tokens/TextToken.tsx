@@ -8,8 +8,8 @@ import {
 } from "react";
 import { Trash2 as DeleteIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import TokenDragHandler from "@/components/app/collections/request/request/url/TokenDragHandler";
-import ChangeTokenType from "@/components/app/collections/request/request/url/tokens/ChangeTokenType";
+import TokenDragHandler from "@/components/app/collections/request/request/meta-data/url/TokenDragHandler";
+import ChangeTokenType from "@/components/app/collections/request/request/meta-data/url/tokens/ChangeTokenType";
 import { useAppDispatch } from "@/context/redux/hooks";
 import {
   requestUrlDeleteToken,

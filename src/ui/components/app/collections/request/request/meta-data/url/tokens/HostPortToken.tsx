@@ -1,6 +1,6 @@
 import { memo } from "react";
-import PortToken from "@/components/app/collections/request/request/url/tokens/PortToken";
-import HostToken from "@/components/app/collections/request/request/url/tokens/HostToken";
+import PortToken from "@/components/app/collections/request/request/meta-data/url/tokens/PortToken";
+import HostToken from "@/components/app/collections/request/request/meta-data/url/tokens/HostToken";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectRequestUrlTokenHostType } from "@/context/redux/request-url/selectors/host";
 

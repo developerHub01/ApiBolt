@@ -1,6 +1,6 @@
 import { memo } from "react";
-import RequestCodeTypeSelector from "@/components/app/collections/request/request/code/RequestCodeTypeSelector";
-import RequestCodeContent from "@/components/app/collections/request/request/code/RequestCodeContent";
+import RequestCodeTypeSelector from "@/components/app/collections/request/request/meta-data/code/RequestCodeTypeSelector";
+import RequestCodeContent from "@/components/app/collections/request/request/meta-data/code/RequestCodeContent";
 import RequestCodeSnippitProvider from "@/context/collections/request/meta-data/code/RequestCodeSnippitProvider";
 
 const RequestCode = memo(() => {
