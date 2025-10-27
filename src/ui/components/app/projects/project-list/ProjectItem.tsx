@@ -33,9 +33,10 @@ const ProjectItem = ({ id, name, activeProjectId }: ProjectItemProps) => {
       onClick={handleChangeActiveProject}
       id={id}
       className={cn(
-        "group w-full flex justify-between p-5 rounded-md bg-accent/50 hover:bg-accent/80 transition-all duration-200 cursor-pointer",
+        "group w-full flex justify-between p-5 rounded-md bg-accent/50 cursor-pointer",
+        "hover:bg-accent/80 transition-all duration-200",
         {
-          "ring-2 ring-primary/50": activeProjectId === id,
+          "ring-2 ring-primary/50 backdrop-blur-xs": activeProjectId === id,
           "ring-0": activeProjectId !== id,
         }
       )}
@@ -46,7 +47,10 @@ const ProjectItem = ({ id, name, activeProjectId }: ProjectItemProps) => {
       <Button
         size={"iconXs"}
         variant={"destructive"}
-        className="opacity-0 pointer-events-none transition-opacity duration-100 ease-in group-hover:opacity-100 group-hover:pointer-events-auto"
+        className={cn(
+          "opacity-0 pointer-events-none",
+          "transition-opacity duration-100 ease-in group-hover:opacity-100 group-hover:pointer-events-auto"
+        )}
         onClick={handleDeleteActiveProject}
       >
         <DeleteIcon />

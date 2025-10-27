@@ -84,7 +84,13 @@ const ActiveProject = () => {
   if (!activeProject) return null;
 
   return (
-    <div className="w-full border-2 border-dotted rounded-md p-4 flex gap-2 bg-accent/50 hover:bg-accent/80 transition-all duration-200 group">
+    <div
+      className={cn(
+        "w-full border-2 border-dotted rounded-md p-4 flex gap-2 bg-accent/50",
+        "backdrop-blur-xs",
+        "group hover:bg-accent/80 transition-all duration-200"
+      )}
+    >
       <div className="w-full flex flex-col flex-1">
         <p className="text-sm font-semibold pb-0.5">Active Project</p>
         <h3 className="w-full text-xl font-bold flex items-center gap-3 pb-3">
