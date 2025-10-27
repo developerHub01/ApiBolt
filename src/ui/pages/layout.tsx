@@ -8,7 +8,6 @@ const RootLayout = () => {
     <section
       className={cn(
         "bg-background",
-        "selection:bg-primary selection:text-primary-foreground",
         {
           "select-none": isElectron(),
         }

@@ -136,6 +136,18 @@
   * {
     @apply border-border outline-ring/50;
   }
+  p::selection,
+  h1::selection,
+  h2::selection,
+  h3::selection,
+  h4::selection,
+  h5::selection,
+  h6::selection,
+  input::selection,
+  textarea::selection
+   {
+    @apply bg-primary text-primary-foreground;
+  }
   body {
     @apply bg-background text-foreground;
   }
