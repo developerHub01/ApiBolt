@@ -15,7 +15,7 @@ const KeyboardShortcutsEdit = () => {
 
   return (
     <AnimatedDialog isOpen={Boolean(shortcutId)} onClose={handleClose}>
-      <AnimatedDialogContentWrapper className="border bg-background/60 max-w-[400px] max-h-60">
+      <AnimatedDialogContentWrapper className="max-w-[400px] max-h-60">
         <KeyboardShortcutsEditContent shortcutId={shortcutId!} />
       </AnimatedDialogContentWrapper>
     </AnimatedDialog>

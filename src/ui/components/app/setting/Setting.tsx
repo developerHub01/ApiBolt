@@ -23,7 +23,7 @@ const Setting = () => {
   return (
     <SettingProvider>
       <AnimatedDialog isOpen={isSettingOpen} onClose={handleClose}>
-        <AnimatedDialogContentWrapper className="border bg-background/60 max-w-3xl">
+        <AnimatedDialogContentWrapper className="max-w-3xl">
           <SettingTop />
           <SettingContent />
           <SettingBottom />

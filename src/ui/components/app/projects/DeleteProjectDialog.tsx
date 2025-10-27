@@ -81,7 +81,7 @@ const DeleteProjectDialog = memo(() => {
 
   return (
     <AnimatedDialog isOpen={Boolean(deletionCandidate)} onClose={handleClose}>
-      <AnimatedDialogContentWrapper className="border max-h-[350px] max-w-[450px] md:max-w-[500px]">
+      <AnimatedDialogContentWrapper className="max-h-[350px] max-w-[450px] md:max-w-[500px]">
         <AnimatedDialogTop className="flex flex-col gap-3 px-4 py-3">
           <h3 className="text-lg leading-none font-semibold">Delete Project</h3>
           <p className="text-muted-foreground text-sm">

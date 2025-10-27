@@ -37,7 +37,7 @@ const Cookies = memo(() => {
   return (
     <>
       <AnimatedDialog isOpen={isCookiesOpen} onClose={handleClose}>
-        <AnimatedDialogContentWrapper className="border bg-background/60 max-w-3xl">
+        <AnimatedDialogContentWrapper className="max-w-3xl">
           <AnimatedDialogTop>
             <div className="px-4 py-2 text-lg">Cookies</div>
           </AnimatedDialogTop>
