@@ -2,7 +2,6 @@ import { memo, useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
   AnimatedDialogBottom,
-  AnimatedDialogContent,
   AnimatedDialogContentWrapper,
 } from "@/components/ui/animated-dialog";
 import { AnimatedDialog } from "@/components/ui/animated-dialog";
@@ -27,9 +26,7 @@ const KeyboardShortcuts = memo(() => {
       <AnimatedDialog isOpen={isOpen} onClose={handleClose}>
         <AnimatedDialogContentWrapper className="border bg-background/60 max-w-3xl">
           <KeyboardShortcutsTop />
-          <AnimatedDialogContent>
-            <KeyboardShortcutsContent />
-          </AnimatedDialogContent>
+          <KeyboardShortcutsContent />
           <AnimatedDialogBottom>
             <p className="line-clamp-1 text-center max-w-lg text-sm">
               List of all keybindings in the app

@@ -155,10 +155,7 @@ const AnimatedDialogContent = memo(
   }: AnimatedDialogContentProps & ComponentProps<"div">) => {
     return (
       <div
-        className={cn(
-          "w-full h-full min-h-0 flex-1 [&>div>div]:h-full",
-          className
-        )}
+        className={cn("w-full min-h-0 flex-1 [&>div>div]:h-full", className)}
         {...props}
       >
         <ScrollArea

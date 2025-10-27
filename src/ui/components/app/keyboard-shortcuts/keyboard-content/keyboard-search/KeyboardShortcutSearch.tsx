@@ -20,14 +20,14 @@ interface ActionItemInterface {
 
 const actionList: Array<ActionItemInterface> = [
   {
-    id: "keyboard",
-    label: "Search by keyboard",
-    Icon: KeyboardIcon,
-  },
-  {
     id: "action",
     label: "Search by action",
     Icon: ActionIcon,
+  },
+  {
+    id: "keyboard",
+    label: "Search by keyboard",
+    Icon: KeyboardIcon,
   },
 ];
 
@@ -48,7 +48,7 @@ const KeyboardShortcutSearch = () => {
   } = useKeyboardShortcuts();
 
   const menuList = useMemo(() => {
-    if (searchByType === "keyboard") {
+    if (searchByType === "action") {
       actionList[0].isActive = true;
       actionList[1].isActive = false;
     } else {
@@ -56,8 +56,8 @@ const KeyboardShortcutSearch = () => {
       actionList[1].isActive = true;
     }
 
-    actionList[0].onClick = () => handleChangeSearchByType("keyboard");
-    actionList[1].onClick = () => handleChangeSearchByType("action");
+    actionList[0].onClick = () => handleChangeSearchByType("action");
+    actionList[1].onClick = () => handleChangeSearchByType("keyboard");
     clearAction.onClick = () =>
       searchByType === "action"
         ? handleChangeSearchTerm()
@@ -80,17 +80,19 @@ const KeyboardShortcutSearch = () => {
   ]);
 
   return (
-    <div className="w-full border rounded-md p-1.5 flex items-center gap-2 min-h-11">
-      <div className="flex-1 h-full px-1 items-center">
-        {searchByType === "keyboard" ? (
-          <KeyboardKeyboardSearchBar />
-        ) : (
-          <KeyboardActionSearchBar />
-        )}
+    <div className="w-full px-3 py-2">
+      <div className="w-full border rounded-md p-1.5 flex items-center gap-2 min-h-11">
+        <div className="flex-1 h-full px-1 items-center">
+          {searchByType === "keyboard" ? (
+            <KeyboardKeyboardSearchBar />
+          ) : (
+            <KeyboardActionSearchBar />
+          )}
+        </div>
+        {menuList.map((item) => (
+          <ActionButton key={item.id} {...item} />
+        ))}
       </div>
-      {menuList.map((item) => (
-        <ActionButton key={item.id} {...item} />
-      ))}
     </div>
   );
 };
