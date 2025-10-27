@@ -17,6 +17,7 @@ import {
   selectCookiesIsLoading,
 } from "@/context/redux/status/selectors/cookies";
 import { toast } from "sonner";
+import { handleChangeIsCookiesError } from "@/context/redux/status/status-slice";
 
 const Cookies = memo(() => {
   const dispatch = useAppDispatch();
@@ -27,7 +28,8 @@ const Cookies = memo(() => {
   useEffect(() => {
     if (!cookiesError) return;
     toast.error(cookiesError);
-  }, [cookiesError]);
+    dispatch(handleChangeIsCookiesError());
+  }, [cookiesError, dispatch]);
 
   const handleClose = useCallback(
     () => dispatch(handleChangeIsCookiesOpen(false)),
@@ -35,24 +37,22 @@ const Cookies = memo(() => {
   );
 
   return (
-    <>
-      <AnimatedDialog isOpen={isCookiesOpen} onClose={handleClose}>
-        <AnimatedDialogContentWrapper className="max-w-3xl">
-          <AnimatedDialogTop>
-            <div className="px-4 py-2 text-lg">Cookies</div>
-          </AnimatedDialogTop>
-          <AnimatedDialogContent>
-            {isLoading ? <CookiesSkeleton /> : <CookiesContent />}
-          </AnimatedDialogContent>
-          <AnimatedDialogBottom>
-            <p className="line-clamp-1 text-center max-w-lg text-sm">
-              Cookies details which are saved in current project
-            </p>
-          </AnimatedDialogBottom>
-          <LoadCookies />
-        </AnimatedDialogContentWrapper>
-      </AnimatedDialog>
-    </>
+    <AnimatedDialog isOpen={isCookiesOpen} onClose={handleClose}>
+      <AnimatedDialogContentWrapper className="max-w-3xl">
+        <AnimatedDialogTop>
+          <div className="px-4 py-2 text-lg">Cookies</div>
+        </AnimatedDialogTop>
+        <AnimatedDialogContent>
+          {isLoading ? <CookiesSkeleton /> : <CookiesContent />}
+        </AnimatedDialogContent>
+        <AnimatedDialogBottom>
+          <p className="line-clamp-1 text-center max-w-lg text-sm">
+            Cookies details which are saved in current project
+          </p>
+        </AnimatedDialogBottom>
+        <LoadCookies />
+      </AnimatedDialogContentWrapper>
+    </AnimatedDialog>
   );
 });
 

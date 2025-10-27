@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { loadCookies } from "@/context/redux/cookies/thunk/cookies-thunk";
 
 interface StatusInterface {
@@ -16,7 +16,14 @@ export const statusSlice = createSlice({
   name: "status",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
-  reducers: {},
+  reducers: {
+    handleChangeIsCookiesError: (
+      state,
+      action: PayloadAction<string | null | undefined>
+    ) => {
+      state.isCookiesError = action.payload ?? null;
+    },
+  },
 
   extraReducers: (builder) => {
     builder
@@ -35,6 +42,6 @@ export const statusSlice = createSlice({
   },
 });
 
-// export const {} = statusSlice.actions;
+export const { handleChangeIsCookiesError } = statusSlice.actions;
 
 export default statusSlice.reducer;
