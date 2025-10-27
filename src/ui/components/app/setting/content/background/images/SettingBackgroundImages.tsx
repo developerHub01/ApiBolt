@@ -4,12 +4,11 @@ import SettingType from "@/components/app/setting/SettingTypeSelector";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import SettingRefresh from "@/components/app/setting/content/SettingRefresh";
-import SettingBackgroundImagesContent from "@/components/app/setting/content/background/images/SettingBackgroundImagesContent";
 import { useSetting } from "@/context/setting/SettingProvider";
-import SettingBackgroundImagesFolderPath from "@/components/app/setting/content/background/images/SettingBackgroundImagesFolderPath";
 import SettingBackgroundProvider, {
   useSettingBackground,
 } from "@/context/setting/background/SettingBackgroundProvider";
+import SettingBackgroundImagesDetails from "@/components/app/setting/content/background/images/SettingBackgroundImagesDetails";
 
 const SettingBackgroundImages = () => {
   return (
@@ -50,22 +49,15 @@ const SettingBackgroundContent = memo(() => {
         <SettingType value={settingType} onChange={handleChangeSettingType} />
       </SettingItemHorizontalLayout>
       {/* if type is custom or global and also if have children under the section then only render */}
-      {settingType === "global" &&
-        (Boolean(folderPath) || Array.isArray(senitizedValue)) && (
-          <SettingItemHorizontalLayout className="flex-col justify-center items-center gap-4">
-            <SettingBackgroundImagesFolderPath path={folderPath} />
-            <SettingBackgroundImagesContent
-              backgroundList={senitizedValue as Array<string>}
-              /* if images showing from project and global then short height */
-              height={
-                activeTab === "project" && settingType === "global"
-                  ? "short"
-                  : "long"
-              }
-            />
-          </SettingItemHorizontalLayout>
-        )}
-
+      <SettingBackgroundImagesDetails
+        isOpen={
+          ["global", "custom"].includes(settingType) && Boolean(folderPath)
+        }
+        activeTab={activeTab}
+        folderPath={folderPath}
+        senitizedValue={senitizedValue as Array<string>}
+        settingType={settingType}
+      />
       {settingType === "custom" && (
         <SettingItemHorizontalLayout className="justify-center items-center">
           <Button

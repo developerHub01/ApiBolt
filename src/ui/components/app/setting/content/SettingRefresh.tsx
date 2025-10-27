@@ -47,6 +47,13 @@ const SettingRefresh = memo(
               opacity: 0,
               scale: 0.5,
             }}
+            transition={{
+              duration: 0.3,
+              ease: "easeInOut",
+            }}
+            style={{
+              transformOrigin: "center",
+            }}
           >
             <Tooltip>
               <TooltipTrigger asChild>
