@@ -38,7 +38,9 @@ const useCheckBackgroundSettingImages = () => {
     handleChange,
     handleChangeSettingType,
     settingType,
-    senitizedValue: senitizedValue?.slice(1),
+    senitizedValue: Array.isArray(senitizedValue)
+      ? senitizedValue?.slice(1)
+      : [],
     folderPath,
     activeTab,
     isHideMoreData,
