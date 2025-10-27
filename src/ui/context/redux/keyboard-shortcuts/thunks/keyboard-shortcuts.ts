@@ -48,8 +48,7 @@ export const updateKeyboardShortcuts = createAsyncThunk<
 
       const payload = {
         id: editingKeyId,
-        projectId:
-          type === "project" && activeProjectId ? activeProjectId : null,
+        projectId: type === "local" && activeProjectId ? activeProjectId : null,
         key,
       };
 

@@ -3,8 +3,8 @@ import { TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { handleChangeEditingId } from "@/context/redux/keyboard-shortcuts/keyboard-shortcuts-slice";
-import KeyboardKeyCellContent from "@/components/app/keyboard-shortcuts/keyboard-content/KeyboardKeyCellContent";
-import KeyboardCell from "@/components/app/keyboard-shortcuts/keyboard-content/KeyboardCell";
+import KeyboardKeyCellContent from "@/components/app/keyboard-shortcuts/keyboard-content/keyboard-preview/KeyboardKeyCellContent";
+import KeyboardCell from "@/components/app/keyboard-shortcuts/keyboard-content/keyboard-preview/KeyboardCell";
 
 interface KeyboardShortcutsRowProps {
   id: string;

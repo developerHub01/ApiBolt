@@ -10,7 +10,7 @@ const Header = () => {
       <p className="justify-start flex-1 select-none text-lg md:text-xl font-bold tracking-wide px-2.5 py-1.5">
         ApiBolt
       </p>
-      <div className="w-full flex-[2] flex justify-center items-center">
+      <div className="w-full flex-2 flex justify-center items-center">
         <HeaderSearch />
       </div>
       <div

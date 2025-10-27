@@ -5,6 +5,8 @@ export const selectIsSettingButtonEnabled = createSelector(
   [
     (state: RootState) => state.setting.isSettingOpen,
     (state: RootState) => state.cookies.isCookiesOpen,
+    (state: RootState) => state.keyboardShortcuts.isKeyboardShortcutPanelOpen,
   ],
-  (isSettingOpen, isCookiesOpen) => !(isSettingOpen || isCookiesOpen)
+  (isSettingOpen, isCookiesOpen, isKeyboardShortcutPanelOpen) =>
+    !(isSettingOpen || isCookiesOpen || isKeyboardShortcutPanelOpen)
 );

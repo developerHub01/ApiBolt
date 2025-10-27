@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { Button } from "@/components/ui/button";
 import { Pencil as EditIcon } from "lucide-react";
-import KeyboardKeyList from "@/components/app/keyboard-shortcuts/keyboard-content/KeyboardKeyList";
+import KeyboardKeyList from "@/components/app/keyboard-shortcuts/keyboard-content/keyboard-preview/KeyboardKeyList";
 
 interface KeyboardKeyCellContentProps {
   keyMap: Array<string> | null;

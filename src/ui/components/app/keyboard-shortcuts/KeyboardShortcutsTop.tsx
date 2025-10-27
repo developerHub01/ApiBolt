@@ -19,7 +19,7 @@ const buttonList: Array<{
     label: "Global keybindings",
   },
   {
-    id: "project",
+    id: "local",
     label: "Project keybindings",
   },
 ];
@@ -62,7 +62,7 @@ const KeyboardShortcutsTop = memo(() => {
             layout
             className={cn("w-[90%] mx-auto border-b-2 border-primary", {
               "col-start-1": !activeProjectId || activeTab === "global",
-              "col-start-2": activeProjectId && activeTab === "project",
+              "col-start-2": activeProjectId && activeTab === "local",
             })}
             transition={{
               type: "spring",

@@ -12,9 +12,8 @@ import { updateKeyboardShortcuts } from "@/context/redux/keyboard-shortcuts/thun
 import { useKeyboardShortcuts } from "@/context/keyboard-shortcuts/KeyboardShortcutsProvider";
 import { handleChangeEditingId } from "@/context/redux/keyboard-shortcuts/keyboard-shortcuts-slice";
 import { cn } from "@/lib/utils";
-import MatchWarning from "./MatchWarning";
-
-const modifierKeys = new Set(["control", "shift", "alt", "meta"]);
+import MatchWarning from "@/components/app/keyboard-shortcuts/keyboard-editor/MatchWarning";
+import useTrackKeyTyped from "@/hooks/keyboard-shortcut/use-track-key-typed";
 
 interface Props {
   shortcutId: string;
@@ -22,10 +21,10 @@ interface Props {
 
 const KeyboardShortcutsEditContent = memo(({ shortcutId }: Props) => {
   const dispatch = useAppDispatch();
-  const [keyList, setKeyList] = useState<Array<string>>([]);
   const { activeTab, applyingKeybindingMap } = useKeyboardShortcuts();
   const keyboardShortcutPanelRef = useRef<HTMLDivElement>(null);
   const [isExisting, setIsExisting] = useState<boolean>(false);
+  const [keyList, setKeyList] = useState<Array<string>>([]);
 
   const handleClose = useCallback(
     () => dispatch(handleChangeEditingId()),
@@ -34,40 +33,20 @@ const KeyboardShortcutsEditContent = memo(({ shortcutId }: Props) => {
 
   const handleUpdate = useCallback(async () => {
     if (isExisting) return;
-    if (!keyList.length) return handleClose();
+    if (!keyList.length) return dispatch(handleChangeEditingId());
     await dispatch(
       updateKeyboardShortcuts({
         type: activeTab,
         key: keyList,
       })
     );
-  }, [activeTab, dispatch, handleClose, isExisting, keyList]);
+  }, [activeTab, dispatch, isExisting, keyList]);
 
-  useEffect(() => {
-    const handlerKeydown = (e: KeyboardEvent) => {
-      e.preventDefault();
-      if (e.key.toLowerCase() === "escape") return handleClose();
-      if (e.key.toLowerCase() === "enter") return handleUpdate();
-
-      const list = [];
-      /* handle modifiere keys */
-      if (e.ctrlKey) list.push("ctrl");
-      if (e.altKey) list.push("alt");
-      if (e.shiftKey) list.push("shift");
-      if (e.metaKey) list.push("meta");
-      /* handle normal keys */
-      const key = e.key.toLowerCase();
-      if (key && !modifierKeys.has(key)) list.push(key);
-
-      setKeyList(list);
-    };
-
-    document.addEventListener("keydown", handlerKeydown);
-
-    return () => {
-      document.removeEventListener("keydown", handlerKeydown);
-    };
-  }, [handleClose, handleUpdate]);
+  useTrackKeyTyped({
+    onEnter: handleUpdate,
+    onEscape: handleClose,
+    onChange: setKeyList,
+  });
 
   useEffect(() => {
     keyboardShortcutPanelRef.current?.focus();
