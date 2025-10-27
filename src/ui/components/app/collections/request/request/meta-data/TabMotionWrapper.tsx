@@ -12,7 +12,7 @@ const TabMotionWrapper = ({ children }: TabMotionWrapperProps) => {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 20 }}
       transition={{ duration: 0.2 }}
-      className="h-full flex flex-col gap-3 relative"
+      className="h-full flex flex-1 flex-col gap-3 relative"
     >
       {children}
     </motion.div>
