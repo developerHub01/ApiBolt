@@ -48,29 +48,33 @@ const SettingBackgroundContent = memo(() => {
           )}
         <SettingType value={settingType} onChange={handleChangeSettingType} />
       </SettingItemHorizontalLayout>
-      {["custom", "global"].includes(settingType) && (
-        <SettingItemHorizontalLayout className="flex-col justify-center items-center gap-4">
-          <SettingBackgroundImagesFolderPath path={folderPath} />
-          <SettingBackgroundImagesContent
-            backgroundList={senitizedValue as Array<string>}
-            /* if images showing from project and global then short height */
-            height={
-              activeTab === "project" && settingType === "global"
-                ? "short"
-                : "long"
-            }
-          />
-          {settingType === "custom" && (
-            <Button
-              onClick={() => handleChange("upload")}
-              variant={"secondary"}
-              className="capitalize"
-            >
-              Choose background folder
-            </Button>
-          )}
-        </SettingItemHorizontalLayout>
-      )}
+      {/* if type is custom or global and also if have children under the section then only render */}
+      {["custom", "global"].includes(settingType) &&
+        (Boolean(folderPath) ||
+          Array.isArray(senitizedValue) ||
+          settingType === "custom") && (
+          <SettingItemHorizontalLayout className="flex-col justify-center items-center gap-4">
+            <SettingBackgroundImagesFolderPath path={folderPath} />
+            <SettingBackgroundImagesContent
+              backgroundList={senitizedValue as Array<string>}
+              /* if images showing from project and global then short height */
+              height={
+                activeTab === "project" && settingType === "global"
+                  ? "short"
+                  : "long"
+              }
+            />
+            {settingType === "custom" && (
+              <Button
+                onClick={() => handleChange("upload")}
+                variant={"secondary"}
+                className="capitalize"
+              >
+                Choose background folder
+              </Button>
+            )}
+          </SettingItemHorizontalLayout>
+        )}
     </SettingItemHorizontalLayout>
   );
 });
