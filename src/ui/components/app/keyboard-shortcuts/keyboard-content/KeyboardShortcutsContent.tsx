@@ -4,7 +4,7 @@ import KeyboardShortcutSearch from "@/components/app/keyboard-shortcuts/keyboard
 
 const KeyboardShortcutsContent = memo(() => {
   return (
-    <div className="w-full flex flex-col gap-5">
+    <div className="w-full h-full flex flex-col gap-2.5">
       <KeyboardShortcutSearch />
       <KeyboardShortcutPreview />
     </div>

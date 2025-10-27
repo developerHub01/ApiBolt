@@ -6,7 +6,6 @@ import {
   AnimatedDialogContentWrapper,
 } from "@/components/ui/animated-dialog";
 import { AnimatedDialog } from "@/components/ui/animated-dialog";
-import LoadCookies from "@/components/app/cookies/LoadCookies";
 import { handleChangeIsKeyboardShortcutPanelOpen } from "@/context/redux/keyboard-shortcuts/keyboard-shortcuts-slice";
 import KeyboardShortcutsContent from "@/components/app/keyboard-shortcuts/keyboard-content/KeyboardShortcutsContent";
 import KeyboardShortcutsTop from "@/components/app/keyboard-shortcuts/KeyboardShortcutsTop";
@@ -36,7 +35,6 @@ const KeyboardShortcuts = memo(() => {
               List of all keybindings in the app
             </p>
           </AnimatedDialogBottom>
-          <LoadCookies />
           <KeyboardShortcutsEdit />
         </AnimatedDialogContentWrapper>
       </AnimatedDialog>
