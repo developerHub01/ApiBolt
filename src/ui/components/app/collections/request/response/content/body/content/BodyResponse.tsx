@@ -7,6 +7,7 @@ import Code from "@/components/ui/code";
 import { useAppSelector } from "@/context/redux/hooks";
 import type { TContentType } from "@/types/request-response.types";
 import { selectResponse } from "@/context/redux/request-response/selectors/response";
+import { cn } from "@/lib/utils";
 
 const BodyResponse = memo(() => {
   const response = useAppSelector(selectResponse);
@@ -39,7 +40,14 @@ const BodyResponse = memo(() => {
   if (!response) return;
 
   return (
-    <ScrollArea className="flex-1 min-h-0 h-full overflow-hidden [&>div>div]:h-full">
+    <ScrollArea
+      className={cn(
+        "flex-1 min-h-0 h-full overflow-hidden [&>div>div]:h-full",
+        "rounded-md border",
+        "bg-background/10",
+        "backdrop-blur-xs"
+      )}
+    >
       <Code
         code={formattedCode}
         contentType={responseType}

@@ -87,7 +87,9 @@ const BodyCode = memo(() => {
   return (
     <ScrollArea
       className={cn(
-        "flex-1 min-h-0 h-full overflow-hidden [&>div>div]:h-full relative bg-background/10 rounded-md border",
+        "flex-1 min-h-0 h-full overflow-hidden [&>div>div]:h-full relative",
+        "rounded-md border",
+        "bg-background/10",
         "backdrop-blur-xs",
         {
           "border-destructive/50 ring-1 ring-destructive/50": isError,
