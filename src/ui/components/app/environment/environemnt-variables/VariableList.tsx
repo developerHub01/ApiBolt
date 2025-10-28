@@ -64,7 +64,6 @@ const VariableList = memo(() => {
         label="No item matched"
         animationSrc="./lottie/no-search-item-available.lottie"
         showFallback
-        className="max-w-md mt-4 md:mt-10"
         innerClassName="w-56"
       />
     );
@@ -76,7 +75,6 @@ const VariableList = memo(() => {
         label="No variables available. Create one."
         description="Your currently have no variables. You can start by clicking on the '+ Add New Variable' button or from right side tab list."
         showFallback
-        className="max-w-md mt-4 md:mt-10"
       />
     );
 

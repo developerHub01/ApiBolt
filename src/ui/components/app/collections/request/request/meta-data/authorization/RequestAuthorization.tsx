@@ -15,7 +15,7 @@ const RequestAuthorization = memo(() => {
     <>
       <p className="text-foreground text-sm select-none">Authorization</p>
       <ScrollArea className="w-full flex-1 border-t py-3 overflow-visible min-h-0 h-full [&>div>div]:h-full shrink-0 flex flex-col gap-3">
-        <div className="w-full h-full flex flex-col">
+        <div className="w-full h-full flex flex-col gap-2">
           <div className="w-full flex flex-col gap-1.5 pb-3">
             <div className="flex justify-between items-center gap-4">
               <p className="text-sm shrink-0">Auth Type:</p>

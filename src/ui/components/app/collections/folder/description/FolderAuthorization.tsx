@@ -10,7 +10,7 @@ const FolderAuthorization = memo(() => {
   if (!selectedTab) return null;
 
   return (
-    <div className="w-full h-full p-3 flex flex-col gap-5">
+    <div className="w-full h-full p-3 flex flex-col gap-4">
       <AuthTop id={selectedTab} />
       <Separator className="w-full" />
       <AuthContent id={selectedTab} />
