@@ -1,4 +1,5 @@
-import { motion, AnimatePresence } from "motion/react";
+import { cn } from "@/lib/utils";
+import { motion, AnimatePresence, type HTMLMotionProps } from "motion/react";
 
 interface LoaderV1Props {
   isLoading: boolean;
@@ -7,12 +8,17 @@ interface LoaderV1Props {
   [key: string]: unknown;
 }
 
-const LoaderV1 = ({ isLoading, key="loader", ...props }: LoaderV1Props) => {
+const LoaderV1 = ({
+  isLoading,
+  key = "loader",
+  className,
+  ...props
+}: LoaderV1Props & HTMLMotionProps<"div">) => {
   return (
     <AnimatePresence>
       {isLoading && (
         <motion.div
-          className="relative w-full h-1.5 bg-foreground/5"
+          className={cn("relative w-full h-1.5 bg-foreground/5", className)}
           key={key}
           exit={{ opacity: 0, height: 0 }}
           {...props}
