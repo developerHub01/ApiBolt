@@ -11,6 +11,7 @@ import type { TContentType } from "@/types/request-response.types";
 import { toast } from "sonner";
 import { langs } from "@uiw/codemirror-extensions-langs";
 import { langMap } from "@/constant/code.constant";
+import useCodeKeybaordShortcut from "@/hooks/code/use-code-keybaord-shortcut";
 
 export type TLanguageType =
   | TContentType
@@ -79,9 +80,10 @@ interface CodeProps {
   copy?: boolean;
   autoFocus?: boolean;
   placeholder?: string;
-  [key: string]: unknown;
   handleFormat?: () => void;
+  handleLineWrap?: () => void;
   beforeComp?: JSX.Element | null;
+  [key: string]: unknown;
 }
 
 const Code = ({
@@ -103,6 +105,7 @@ const Code = ({
   autoFocus = true,
   placeholder = "",
   handleFormat,
+  handleLineWrap,
   beforeComp = null,
   ...props
 }: CodeProps) => {
@@ -110,6 +113,10 @@ const Code = ({
   const { resolvedTheme } = useTheme();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const isMounted = useMounted();
+  const handleKeyDown = useCodeKeybaordShortcut({
+    handleLineWrap,
+    handleFormat,
+  });
 
   const extensions: Array<Extension> = [
     langs[langMap?.[contentType] ?? "text"](),
@@ -118,7 +125,6 @@ const Code = ({
 
   useEffect(() => {
     const wrapper = wrapperRef.current;
-
     if (!zoomable || !wrapper) return;
 
     const handleKeydownEvent = (e: globalThis.KeyboardEvent) => {
@@ -127,7 +133,6 @@ const Code = ({
           case "0":
             return setFontSizeState(fontSize);
           case "+":
-          case "=":
             return setFontSizeState((prev) =>
               Math.min(prev + 1, fontSizeLimit.max)
             );
@@ -136,10 +141,6 @@ const Code = ({
               Math.max(prev - 1, fontSizeLimit.min)
             );
         }
-      }
-      if (e.altKey && e.shiftKey && e.key.toLowerCase() === "f") {
-        e.preventDefault();
-        if (handleFormat) handleFormat();
       }
     };
 
@@ -163,7 +164,7 @@ const Code = ({
       wrapper.removeEventListener("keydown", handleKeydownEvent);
       wrapper.removeEventListener("wheel", handleWheellEvent);
     };
-  }, [zoomable, fontSize, handleFormat]);
+  }, [zoomable, fontSize]);
 
   const handleCopy = useCallback(async () => {
     try {
@@ -197,9 +198,13 @@ const Code = ({
 
   return (
     <div
-      className={cn("w-full h-full relative flex flex-col", className)}
+      className={cn(
+        "w-full h-full relative flex flex-col focus:outline-0",
+        className
+      )}
       tabIndex={0}
       ref={wrapperRef}
+      onKeyDown={handleKeyDown}
       {...props}
     >
       {copy && (

@@ -1,4 +1,4 @@
-import { memo, useEffect } from "react";
+import { memo } from "react";
 import Code, { type TLanguageType } from "@/components/ui/code";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
@@ -7,16 +7,6 @@ import { useRequestCodeSnippit } from "@/context/collections/request/meta-data/c
 const RequestCodeContent = memo(() => {
   const { maskedCode, language, lineWrap, handleToggleLineWrap } =
     useRequestCodeSnippit();
-
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.altKey && e.key.toLowerCase() === "z") handleToggleLineWrap();
-    };
-    document.addEventListener("keydown", handler);
-    return () => {
-      document.removeEventListener("keydown", handler);
-    };
-  }, [handleToggleLineWrap]);
 
   return (
     <ScrollArea
@@ -34,6 +24,7 @@ const RequestCodeContent = memo(() => {
         zoomable={true}
         lineWrap={lineWrap}
         copy={false}
+        handleLineWrap={handleToggleLineWrap}
       />
       <ScrollBar orientation="horizontal" />
     </ScrollArea>

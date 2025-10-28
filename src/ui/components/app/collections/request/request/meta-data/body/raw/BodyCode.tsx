@@ -35,7 +35,8 @@ const placeholderLabel = (type: TContentType) =>
   `Write you raw body data in ${bodyTypeLabel(type)}`;
 
 const BodyCode = memo(() => {
-  const { handleChangeRawData, codeLineWrap } = useRequestBody();
+  const { handleChangeRawData, codeLineWrap, handleToggleCodeLineWrap } =
+    useRequestBody();
   const rawData = useAppSelector(selectRawData);
   const rawRequestBodyType = useAppSelector(selectRawRequestBodyType);
   const [code, setCode] = useState<string>(rawData);
@@ -104,6 +105,7 @@ const BodyCode = memo(() => {
         onBlur={handleBlur}
         zoomable={true}
         lineWrap={codeLineWrap}
+        handleLineWrap={handleToggleCodeLineWrap}
         handleFormat={handleFormat}
         placeholder={placeholderLabel(rawRequestBodyType)}
         className="static"

@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 
 const BodyResponse = memo(() => {
   const response = useAppSelector(selectResponse);
-  const { responseCodeWrap } = useResponse();
+  const { responseCodeWrap, handleToggleResponseCodeWrap } = useResponse();
   const [formattedCode, setFormattedCode] = useState("");
 
   const responseType = getResponseType(
@@ -54,6 +54,7 @@ const BodyResponse = memo(() => {
         editable={false}
         zoomable={true}
         lineWrap={responseCodeWrap}
+        handleLineWrap={handleToggleResponseCodeWrap}
         copy={false}
         innerClassName="pb-3"
       />

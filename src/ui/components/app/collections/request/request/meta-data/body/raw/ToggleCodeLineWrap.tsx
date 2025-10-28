@@ -1,4 +1,4 @@
-import { memo, useEffect } from "react";
+import { memo } from "react";
 import { Button } from "@/components/ui/button";
 import { useRequestBody } from "@/context/collections/request/RequestBodyProvider";
 import { useAppSelector } from "@/context/redux/hooks";
@@ -22,17 +22,6 @@ const ToggleCodeLineWrap = memo(() => {
     Array.isArray(shortcuts) && shortcuts.length
       ? keyListStringify(shortcuts)
       : "";
-
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.altKey && e.key.toLowerCase() === "z") handleToggleCodeLineWrap();
-    };
-    document.addEventListener("keydown", handler);
-
-    return () => {
-      document.removeEventListener("keydown", handler);
-    };
-  }, [handleToggleCodeLineWrap]);
 
   if (requestBodyType !== "raw") return null;
 
