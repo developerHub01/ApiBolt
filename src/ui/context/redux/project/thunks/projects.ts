@@ -10,6 +10,7 @@ import {
   handleChangeActiveProject,
   handleLoadProjectsList,
 } from "@/context/redux/project/project-slice";
+import { loadKeyboardShortcuts } from "@/context/redux/keyboard-shortcuts/thunks/keyboard-shortcuts";
 
 /* ==============================
 ========== Projects start =========
@@ -62,17 +63,20 @@ export const changeActiveProject = createAsyncThunk<
           newActiveProjectId
         );
 
-      if (response) {
-        dispatch(handleChangeIsRequestListLoaded(false));
-        dispatch(loadEnvironmentsList());
-        dispatch(loadTabsData());
-        dispatch(loadEnvironmentsList());
+      if (!response) return response;
+
+      dispatch(handleChangeIsRequestListLoaded(false));
+      await Promise.all([
+        dispatch(loadEnvironmentsList()),
+        dispatch(loadTabsData()),
+        dispatch(loadEnvironmentsList()),
         dispatch(
           loadAuthorization({
             requestOrFolderId: DEFAULT_AUTHORIZATION_ID,
           })
-        );
-      }
+        ),
+        dispatch(loadKeyboardShortcuts()),
+      ]);
 
       return response;
     } catch (error) {
