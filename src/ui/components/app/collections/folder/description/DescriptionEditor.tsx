@@ -3,8 +3,13 @@ import Code from "@/components/ui/code";
 import { useRequestFolder } from "@/context/collections/folder/FolderProvider";
 
 const DescriptionEditor = memo(() => {
-  const { folderDescription, handleChangeDescription, handleBlurDescription } =
-    useRequestFolder();
+  const {
+    folderDescription,
+    handleChangeDescription,
+    handleBlurDescription,
+    handleLineWrap,
+    isLineWrap,
+  } = useRequestFolder();
 
   if (folderDescription === null) return null;
 
@@ -15,8 +20,9 @@ const DescriptionEditor = memo(() => {
       onChange={handleChangeDescription}
       onBlur={handleBlurDescription}
       fontSize={18}
-      lineWrap={true}
+      lineWrap={isLineWrap}
       zoomable={true}
+      handleLineWrap={handleLineWrap}
       className="h-full pr-1 static"
       placeholder="Start typing here..."
     />

@@ -42,3 +42,13 @@ export const selectIsFolderLoading = createSelector(
   ],
   (folderDescriptionActiveTab): boolean => folderDescriptionActiveTab
 );
+
+export const selectIsFolderDescriptionLineWrap = createSelector(
+  [
+    (state: RootState) =>
+      state.requestResponse.folderDescriptionLineWrap[
+        state.requestResponse.selectedTab! ?? ""
+      ] ?? "markdown",
+  ],
+  (folderDescriptionActiveTab): boolean => folderDescriptionActiveTab
+);

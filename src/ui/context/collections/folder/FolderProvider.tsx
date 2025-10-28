@@ -8,12 +8,18 @@ import React, {
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { updateFolder } from "@/context/redux/request-response/thunks/folder";
-import { selectRequestFolderDescription } from "@/context/redux/request-response/selectors/folder";
+import {
+  selectIsFolderDescriptionLineWrap,
+  selectRequestFolderDescription,
+} from "@/context/redux/request-response/selectors/folder";
+import { handleChangeFolderDescriptionLineWrap } from "@/context/redux/request-response/request-response-slice";
 
 interface RequestFolderContext {
   folderDescription: string;
+  isLineWrap: boolean;
   handleChangeDescription: (value: string) => void;
   handleBlurDescription: () => void;
+  handleLineWrap: () => void;
 }
 
 const RequestFolderContext = createContext<RequestFolderContext | null>(null);
@@ -39,6 +45,7 @@ const RequestFolderProvider = ({ children }: RequestFolderProviderProps) => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const description = useAppSelector(selectRequestFolderDescription);
+  const isLineWrap = useAppSelector(selectIsFolderDescriptionLineWrap);
   const [folderDescription, setFolderDescription] = useState<string>("");
 
   useEffect(() => {
@@ -62,14 +69,21 @@ const RequestFolderProvider = ({ children }: RequestFolderProviderProps) => {
     [dispatch, folderDescription]
   );
 
+  const handleLineWrap = useCallback(
+    () => dispatch(handleChangeFolderDescriptionLineWrap()),
+    [dispatch]
+  );
+
   if (!id) return null;
 
   return (
     <RequestFolderContext.Provider
       value={{
+        isLineWrap,
         folderDescription,
         handleChangeDescription,
         handleBlurDescription,
+        handleLineWrap,
       }}
     >
       {children}
