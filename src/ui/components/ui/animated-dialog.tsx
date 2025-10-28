@@ -21,7 +21,6 @@ const AnimatedDialog = memo(
     ...props
   }: AnimatedDialogProps & ComponentProps<"section">) => {
     const handleKeyDown = (e: KeyboardEvent<HTMLElement>) => {
-      e.preventDefault();
       e.stopPropagation();
       if (e.key === "Escape") onClose();
     };
