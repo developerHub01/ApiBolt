@@ -127,6 +127,7 @@ interface RequestResponseState {
   folderTitle: Record<string, string>;
   folderDescription: Record<string, string>;
   folderDescriptionActiveTab: Record<string, TRequestFolderDescriptionTab>;
+  folderDescriptionLineWrap: Record<string, boolean>;
 
   /* loaders start ================ */
   isLoadingFolder: Record<string, boolean>;
@@ -187,6 +188,7 @@ const initialState: RequestResponseState = {
   folderTitle: {},
   folderDescription: {},
   folderDescriptionActiveTab: {},
+  folderDescriptionLineWrap: {},
 
   /* loaders start ================ */
   isLoadingFolder: {},
@@ -1280,6 +1282,16 @@ export const requestResponseSlice = createSlice({
 
       state.folderDescriptionActiveTab[id] = action.payload.value;
     },
+    handleToggleFolderDescriptionLineWrap: (
+      state,
+      action: PayloadAction<string | undefined>
+    ) => {
+      const id = action.payload ?? state.selectedTab;
+      if (!id) return;
+
+      state.folderDescriptionLineWrap[id] =
+        !state.folderDescriptionLineWrap[id];
+    },
     /* ================ Request Folder end =================== */
   },
   extraReducers(builder) {
@@ -1388,6 +1400,7 @@ export const {
   handleLoadFolder,
   handleUpdateFolder,
   handleChangeFolderDescriptionActiveTab,
+  handleToggleFolderDescriptionLineWrap,
 } = requestResponseSlice.actions;
 
 export default requestResponseSlice.reducer;

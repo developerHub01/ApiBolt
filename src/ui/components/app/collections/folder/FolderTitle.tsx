@@ -34,7 +34,14 @@ const FolderTitle = memo(() => {
     const el = e.currentTarget;
     if (
       el.innerText.length >= MAX_TITLE_LENGTH &&
-      !["Backspace", "Delete", "ArrowLeft", "ArrowRight"].includes(e.key)
+      ![
+        "Backspace",
+        "Delete",
+        "ArrowLeft",
+        "ArrowRight",
+        "ArrowUp",
+        "ArrowDown",
+      ].includes(e.key)
     )
       e.preventDefault();
   }, []);

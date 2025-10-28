@@ -12,7 +12,7 @@ import {
   selectIsFolderDescriptionLineWrap,
   selectRequestFolderDescription,
 } from "@/context/redux/request-response/selectors/folder";
-import { handleChangeFolderDescriptionLineWrap } from "@/context/redux/request-response/request-response-slice";
+import { handleToggleFolderDescriptionLineWrap } from "@/context/redux/request-response/request-response-slice";
 
 interface RequestFolderContext {
   folderDescription: string;
@@ -70,7 +70,7 @@ const RequestFolderProvider = ({ children }: RequestFolderProviderProps) => {
   );
 
   const handleLineWrap = useCallback(
-    () => dispatch(handleChangeFolderDescriptionLineWrap()),
+    () => dispatch(handleToggleFolderDescriptionLineWrap()),
     [dispatch]
   );
 
