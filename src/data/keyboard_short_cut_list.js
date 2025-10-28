@@ -55,4 +55,16 @@ export const keyboardBindings = {
     label: "Code beautify",
     key: ["alt", "shift", "f"],
   },
+  zoom_in: {
+    label: "Zoom in",
+    key: ["ctrl", "+"],
+  },
+  zoom_out: {
+    label: "Zoom out",
+    key: ["ctrl", "-"],
+  },
+  zoom_reset: {
+    label: "Zoom reset",
+    key: ["ctrl", "0"],
+  },
 };

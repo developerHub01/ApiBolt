@@ -4,6 +4,7 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type MouseEvent,
 } from "react";
 import {
   Popover,
@@ -11,7 +12,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { isElectron } from "@/utils/electron";
-import { useAppSelector } from "@/context/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { normalizeText } from "@/utils";
 import type { RequestListItemInterface } from "@/types/request-response.types";
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
@@ -28,32 +29,37 @@ import { selectRequestOrFolderList } from "@/context/redux/request-response/sele
 import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
 import { selectApplyingKeyboardShortcutsById } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
 import { keyListStringify } from "@/utils/keyboard-shortcut.utils";
+import {
+  selectHeaderIsOpen,
+  selectHeaderSearchTerm,
+} from "@/context/redux/header/selectors/header";
+import { changeHeaderIsOpen } from "@/context/redux/header/thunk/header";
+import { handleChangeSearchTerm } from "@/context/redux/header/header-slice";
 
 const DELAY_TIME = 300;
 
 const HeaderSearch = () => {
+  const dispatch = useAppDispatch();
   const activeTab = useAppSelector(selectSidebarActiveTab);
   const activeProjectId = useAppSelector(selectActiveProjectId);
   const requestList = useAppSelector(selectRequestOrFolderList);
-
   const activeProjectName = useAppSelector(selectActiveProjectName);
   const selectedTab = useAppSelector(selectSelectedTab);
   const [requestOrFolderList, setRequestOrFolderList] = useState<
     Array<RequestListItemInterface>
   >([]);
-  const [open, setOpen] = useState<boolean>(false);
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const isOpen = useAppSelector(selectHeaderIsOpen);
+  const searchTerm = useAppSelector(selectHeaderSearchTerm);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSearchChange = useCallback(
-    (value: string) => setSearchTerm(value),
-    []
+    (value: string) => dispatch(handleChangeSearchTerm(value)),
+    [dispatch]
   );
 
   const handleClose = useCallback(() => {
-    setOpen(false);
-    setSearchTerm("");
-  }, []);
+    dispatch(changeHeaderIsOpen(false));
+  }, [dispatch]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -80,25 +86,20 @@ const HeaderSearch = () => {
 
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchTerm, open]);
+  }, [searchTerm, isOpen]);
 
   useEffect(() => {
-    if (open) {
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 10);
-    }
-  }, [open]);
+    if (!isOpen) return;
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 10);
+  }, [isOpen]);
 
-  useEffect(() => {
-    const handleKeyDownhandler = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.key === "k" && !open) setOpen(true);
-    };
-
-    document.addEventListener("keydown", handleKeyDownhandler);
-    return () => document.removeEventListener("keydown", handleKeyDownhandler);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const handleButtonClick = (e: MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!isOpen) dispatch(changeHeaderIsOpen(true));
+  };
 
   if (activeTab !== "navigate_collections" || !activeProjectId) return null;
 
@@ -110,7 +111,7 @@ const HeaderSearch = () => {
       }
     >
       <Popover
-        open={open}
+        open={isOpen}
         onOpenChange={(newOpen) => {
           if (!newOpen) handleClose(); /* Close only on outside click or Esc */
         }}
@@ -121,15 +122,11 @@ const HeaderSearch = () => {
             className="w-full"
             variant={"outline"}
             size={"sm"}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              if (!open) setOpen(true);
-            }}
+            onClick={handleButtonClick}
           >
             <div>
               <AnimatePresence>
-                {open && (
+                {isOpen && (
                   <SearchBar
                     inputRef={inputRef}
                     projectName={activeProjectName}
@@ -137,7 +134,7 @@ const HeaderSearch = () => {
                     onChange={handleSearchChange}
                   />
                 )}
-                {!open && (
+                {!isOpen && (
                   <motion.div
                     initial={{
                       opacity: 0,

@@ -1,11 +1,7 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { handleChangeIsSettingOpen } from "@/context/redux/setting/setting-slice";
-import {
-  updateSettings,
-  updateSettingsZoomByKeyboard,
-} from "@/context/redux/setting/thunk/setting-thunk";
-import type { TKeyboardShortcutKey } from "@/types/setting.types";
+import { updateSettings } from "@/context/redux/setting/thunk/setting-thunk";
 import { useGlobal } from "@/context/global/GlobalProvider";
 import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
 import { changeActiveTab } from "@/context/redux/sidebar/sidebar-thunk";
@@ -15,6 +11,7 @@ import useCheckApplyingLayoutActivityBarVisible from "@/hooks/setting/use-check-
 import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 import { selectApplyingKeyboardShortcutsStringFormated } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
 import { handleChangeIsKeyboardShortcutPanelOpen } from "@/context/redux/keyboard-shortcuts/keyboard-shortcuts-slice";
+import { changeHeaderIsOpen as changeHeaderSearchIsOpen } from "@/context/redux/header/thunk/header";
 
 const KeyboardEvents = () => {
   const dispatch = useAppDispatch();
@@ -49,8 +46,7 @@ const KeyboardEvents = () => {
         case "navigate_environments":
         case "navigate_authorization": {
           e.preventDefault();
-          await dispatch(changeActiveTab(actionId));
-          return;
+          return await dispatch(changeActiveTab(actionId));
         }
         case "toggle_activitybar": {
           e.preventDefault();
@@ -78,18 +74,17 @@ const KeyboardEvents = () => {
           return dispatch(handleChangeIsKeyboardShortcutPanelOpen(true));
         }
         case "open_settings": {
+          e.preventDefault();
           return dispatch(handleChangeIsSettingOpen(true));
         }
         case "close_tab": {
           e.preventDefault();
           return dispatch(removeTab());
         }
-      }
-
-      if (e.ctrlKey && ["+", "-", "=", "0"].includes(e.key)) {
-        return dispatch(
-          updateSettingsZoomByKeyboard(e.key as TKeyboardShortcutKey)
-        );
+        case "search_collection": {
+          e.preventDefault();
+          return dispatch(changeHeaderSearchIsOpen(true));
+        }
       }
     };
 
