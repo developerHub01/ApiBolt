@@ -1,4 +1,5 @@
 import {
+  memo,
   useCallback,
   useEffect,
   useMemo,
@@ -14,7 +15,7 @@ import { useProject } from "@/context/project/ProjectProvider";
 import { cn } from "@/lib/utils";
 import { updateProject } from "@/context/redux/project/thunks/projects";
 
-const ActiveProject = () => {
+const ActiveProject = memo(() => {
   const dispatch = useAppDispatch();
   const { handleChangeDeletionCandidate } = useProject();
   const [name, setName] = useState("");
@@ -86,9 +87,9 @@ const ActiveProject = () => {
   return (
     <div
       className={cn(
-        "w-full border-2 border-dotted rounded-md p-4 flex gap-2 bg-accent/50",
+        "w-full border-2 border-dotted border-primary/50 rounded-md p-4 flex gap-2 bg-accent/50",
         "backdrop-blur-xs",
-        "group hover:bg-accent/80 transition-all duration-200"
+        "group hover:bg-accent/80 focus-within:bg-accent/80 transition-all duration-200"
       )}
     >
       <div className="w-full flex flex-col flex-1">
@@ -120,6 +121,6 @@ const ActiveProject = () => {
       </div>
     </div>
   );
-};
+});
 
 export default ActiveProject;
