@@ -14,6 +14,7 @@ import { handleChangeEditingId } from "@/context/redux/keyboard-shortcuts/keyboa
 import { cn } from "@/lib/utils";
 import MatchWarning from "@/components/app/keyboard-shortcuts/keyboard-editor/MatchWarning";
 import useTrackKeyTyped from "@/hooks/keyboard-shortcut/use-track-key-typed";
+import { toast } from "sonner";
 
 interface Props {
   shortcutId: string;
@@ -34,12 +35,15 @@ const KeyboardShortcutsEditContent = memo(({ shortcutId }: Props) => {
   const handleUpdate = useCallback(async () => {
     if (isExisting) return;
     if (!keyList.length) return dispatch(handleChangeEditingId());
-    await dispatch(
+    const response = await dispatch(
       updateKeyboardShortcuts({
         type: activeTab,
         key: keyList,
       })
-    );
+    ).unwrap();
+
+    if (response) toast.success("Keybinding updated successfully.");
+    else toast.error("Failed to update keybinding. Please try again.");
   }, [activeTab, dispatch, isExisting, keyList]);
 
   const handleKeyDown = useTrackKeyTyped<HTMLDivElement>({

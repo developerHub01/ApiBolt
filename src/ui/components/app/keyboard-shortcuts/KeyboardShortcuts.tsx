@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
   AnimatedDialogBottom,
   AnimatedDialogContentWrapper,
+  AnimatedDialogLoader,
 } from "@/components/ui/animated-dialog";
 import { AnimatedDialog } from "@/components/ui/animated-dialog";
 import { handleChangeIsKeyboardShortcutPanelOpen } from "@/context/redux/keyboard-shortcuts/keyboard-shortcuts-slice";
@@ -11,10 +12,12 @@ import KeyboardShortcutsTop from "@/components/app/keyboard-shortcuts/KeyboardSh
 import KeyboardShortcutsProvider from "@/context/keyboard-shortcuts/KeyboardShortcutsProvider";
 import { selectIsKeyboardShortcutPanelOpen } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
 import KeyboardShortcutsEdit from "@/components/app/keyboard-shortcuts/keyboard-editor/KeyboardShortcutsEdit";
+import { selectKeyboardShortcutsIsLoading } from "@/context/redux/status/selectors/keyboard-shortcuts";
 
 const KeyboardShortcuts = memo(() => {
   const dispatch = useAppDispatch();
   const isOpen = useAppSelector(selectIsKeyboardShortcutPanelOpen);
+  const isLoading = useAppSelector(selectKeyboardShortcutsIsLoading);
 
   const handleClose = useCallback(
     () => dispatch(handleChangeIsKeyboardShortcutPanelOpen(false)),
@@ -32,6 +35,7 @@ const KeyboardShortcuts = memo(() => {
               List of all keybindings in the app
             </p>
           </AnimatedDialogBottom>
+          <AnimatedDialogLoader isLoading={isLoading} />
           <KeyboardShortcutsEdit />
         </AnimatedDialogContentWrapper>
       </AnimatedDialog>

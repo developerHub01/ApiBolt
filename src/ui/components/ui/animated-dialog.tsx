@@ -2,6 +2,7 @@ import { memo, type ComponentProps, type KeyboardEvent } from "react";
 import { AnimatePresence, motion, type HTMLMotionProps } from "motion/react";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import LoaderV1 from "@/components/loader-v1";
 
 interface AnimatedDialogProps {
   isOpen?: boolean;
@@ -189,10 +190,26 @@ const AnimatedDialogBottom = memo(
   }
 );
 
+interface AnimatedDialogLoaderProps {
+  isLoading?: boolean;
+}
+
+const AnimatedDialogLoader = memo(
+  ({
+    isLoading = false,
+    className = "",
+  }: AnimatedDialogLoaderProps & HTMLMotionProps<"div">) => {
+    return (
+      <LoaderV1 key="loader" isLoading={isLoading} className={className} />
+    );
+  }
+);
+
 export {
   AnimatedDialog,
   AnimatedDialogContentWrapper,
   AnimatedDialogTop,
   AnimatedDialogContent,
   AnimatedDialogBottom,
+  AnimatedDialogLoader,
 };

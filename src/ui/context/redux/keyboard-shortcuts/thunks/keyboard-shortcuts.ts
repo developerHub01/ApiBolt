@@ -28,7 +28,7 @@ export const loadKeyboardShortcuts = createAsyncThunk<
 });
 
 export const updateKeyboardShortcuts = createAsyncThunk<
-  void,
+  boolean,
   {
     type: TKeyboardShortcutsTab;
     key: TShortcutKey;
@@ -45,7 +45,7 @@ export const updateKeyboardShortcuts = createAsyncThunk<
       const activeProjectId = state.project.activeProjectId;
       const editingKeyId = state.keyboardShortcuts.editingId;
 
-      if (!editingKeyId) return;
+      if (!editingKeyId) return false;
 
       const payload = {
         id: editingKeyId,
@@ -64,7 +64,7 @@ export const updateKeyboardShortcuts = createAsyncThunk<
           ...payload,
         });
 
-      if (response) return;
+      if (response) return true;
 
       /* if not successfull then rollback */
       const rollbackData =
@@ -73,21 +73,23 @@ export const updateKeyboardShortcuts = createAsyncThunk<
           projectId: activeProjectId,
         });
 
-      if (!rollbackData) return;
+      if (!rollbackData) return false;
 
       dispatch(
         handleUpdateKeyboardShortcuts({
           ...rollbackData,
         })
       );
+      return false;
     } catch (error) {
       console.error(error);
+      return false;
     }
   }
 );
 
 export const resetKeyboardShortcuts = createAsyncThunk<
-  void,
+  boolean,
   {
     id: string;
     type: TKeyboardShortcutsTab;
@@ -112,16 +114,18 @@ export const resetKeyboardShortcuts = createAsyncThunk<
         await window.electronAPIKeyboardShortcut.resetKeyboardShortcuts({
           ...payload,
         });
-
-      if (!response) return;
+      if (!response) return false;
 
       dispatch(
         handleUpdateKeyboardShortcuts({
           ...response,
         })
       );
+
+      return true;
     } catch (error) {
       console.error(error);
+      return false;
     }
   }
 );

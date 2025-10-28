@@ -8,6 +8,7 @@ import KeyboardCell from "@/components/app/keyboard-shortcuts/keyboard-content/k
 import type { TShortcutKey } from "@/types/keyboard-shortcut.types";
 import { useKeyboardShortcuts } from "@/context/keyboard-shortcuts/KeyboardShortcutsProvider";
 import { resetKeyboardShortcuts } from "@/context/redux/keyboard-shortcuts/thunks/keyboard-shortcuts";
+import { toast } from "sonner";
 
 interface KeyboardShortcutsRowProps {
   id: string;
@@ -24,13 +25,16 @@ const KeyboardShortcutsRow = memo(
       [dispatch, id]
     );
 
-    const handleReset = useCallback(() => {
-      dispatch(
+    const handleReset = useCallback(async () => {
+      const response = await dispatch(
         resetKeyboardShortcuts({
           id,
           type: activeTab,
         })
-      );
+      ).unwrap();
+
+      if (response) toast.success("Keybinding updated successfully.");
+      else toast.error("Failed to update keybinding. Please try again.");
     }, [activeTab, dispatch, id]);
 
     return (
