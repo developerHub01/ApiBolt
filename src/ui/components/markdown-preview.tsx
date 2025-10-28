@@ -77,8 +77,8 @@ const MarkdownPreview = ({
             } else if (typeof children === "string") {
               return (
                 <Code
-                  code={`\`\`\`${language}\n${children}\`\`\``}
-                  contentType="markdown"
+                  code={children}
+                  contentType={language}
                   editable={false}
                   copy={true}
                   className="rounded-md overflow-hidden border"
