@@ -1,7 +1,10 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { handleChangeIsSettingOpen } from "@/context/redux/setting/setting-slice";
-import { updateSettings, updateSettingsZoomByKeyboard } from "@/context/redux/setting/thunk/setting-thunk";
+import {
+  updateSettings,
+  updateSettingsZoomByKeyboard,
+} from "@/context/redux/setting/thunk/setting-thunk";
 import { useGlobal } from "@/context/global/GlobalProvider";
 import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
 import { changeActiveTab } from "@/context/redux/sidebar/sidebar-thunk";
@@ -9,17 +12,18 @@ import { handleChangeIsCookiesOpen } from "@/context/redux/cookies/cookies-slice
 import { removeTab } from "@/context/redux/request-response/thunks/tab-list";
 import useCheckApplyingLayoutActivityBarVisible from "@/hooks/setting/use-check-applying-layout-activity-bar-visible";
 import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
-import { selectApplyingKeyboardShortcutsStringFormated } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
+import { selectApplyingKeyboardShortcutsStrFormated } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
 import { handleChangeIsKeyboardShortcutPanelOpen } from "@/context/redux/keyboard-shortcuts/keyboard-shortcuts-slice";
 import { changeHeaderIsOpen as changeHeaderSearchIsOpen } from "@/context/redux/header/thunk/header";
 import type { TKeyboardShortcutKey } from "@/types/setting.types";
+import { MODIFIER_KEY_TRACK_ORDER } from "@/constant/keyboard-shortcut.constant";
 
 const KeyboardEvents = () => {
   const dispatch = useAppDispatch();
   const { toggleFullscreen } = useGlobal();
   const activeProjectId = useAppSelector(selectActiveProjectId);
   const keybindingMap = useAppSelector(
-    selectApplyingKeyboardShortcutsStringFormated
+    selectApplyingKeyboardShortcutsStrFormated
   );
   const isActivityBarVisible = useCheckApplyingLayoutActivityBarVisible();
 
@@ -27,10 +31,9 @@ const KeyboardEvents = () => {
     const handler = async (e: KeyboardEvent) => {
       const keyList = [];
 
-      if (e.ctrlKey) keyList.push("ctrl");
-      if (e.shiftKey) keyList.push("shift");
-      if (e.altKey) keyList.push("alt");
-      if (e.metaKey) keyList.push("meta");
+      MODIFIER_KEY_TRACK_ORDER.forEach(({ eventProperty, key }) => {
+        if (e[eventProperty]) keyList.push(key);
+      });
       if (e.key) keyList.push(e.key.toLowerCase());
 
       const keyString = keyList.join("+");

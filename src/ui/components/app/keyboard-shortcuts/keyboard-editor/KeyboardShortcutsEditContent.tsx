@@ -50,13 +50,6 @@ const KeyboardShortcutsEditContent = memo(({ shortcutId }: Props) => {
 
   useEffect(() => {
     keyboardShortcutPanelRef.current?.focus();
-
-    const handler = (e: KeyboardEvent) => e.stopPropagation();
-    document.addEventListener("keydown", handler);
-
-    return () => {
-      document.removeEventListener("keydown", handler);
-    };
   }, []);
 
   useEffect(() => {

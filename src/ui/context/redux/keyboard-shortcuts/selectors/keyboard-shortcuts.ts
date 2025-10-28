@@ -54,7 +54,7 @@ export const selectApplyingKeyboardShortcuts = createSelector(
   }
 );
 
-export const selectApplyingKeyboardShortcutsStringFormated = createSelector(
+export const selectApplyingKeyboardShortcutsStrFormated = createSelector(
   [selectApplyingKeyboardShortcuts],
   (keyMap) =>
     Object.fromEntries(
@@ -76,4 +76,9 @@ export const selectApplyingKeyboardShortcutsById = createSelector(
         : globalShortcuts[id]?.key) ?? null
     );
   }
+);
+
+export const selectApplyingKeyboardShortcutsByIdStrFormated = createSelector(
+  [(state, id: string) => selectApplyingKeyboardShortcutsById(state, id)],
+  (key) => key?.join("+") ?? null
 );

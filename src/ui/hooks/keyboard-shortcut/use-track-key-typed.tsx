@@ -1,4 +1,5 @@
 import { useCallback, type KeyboardEvent } from "react";
+import { MODIFIER_KEY_TRACK_ORDER } from "@/constant/keyboard-shortcut.constant";
 
 const modifierKeys = new Set(["control", "shift", "alt", "meta"]);
 
@@ -24,10 +25,9 @@ const useTrackKeyTyped = <T extends HTMLElement>({
 
       const list = [];
       /* handle modifiere keys */
-      if (e.ctrlKey) list.push("ctrl");
-      if (e.altKey) list.push("alt");
-      if (e.shiftKey) list.push("shift");
-      if (e.metaKey) list.push("meta");
+      MODIFIER_KEY_TRACK_ORDER.forEach(({ eventProperty, key }) => {
+        if (e[eventProperty]) list.push(key);
+      });
       if (key === " ") key = "space";
       /* handle normal keys */
       if (key && !modifierKeys.has(key)) list.push(key);
