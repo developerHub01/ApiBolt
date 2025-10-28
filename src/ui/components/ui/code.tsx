@@ -219,7 +219,8 @@ const Code = ({
       )}
       {beforeComp}
       <style>{` 
-        .cm-gutter.cm-lineNumbers {
+        .cm-gutter.cm-lineNumbers,
+        .cm-gutter.cm-foldGutter {
             user-select: none;
         }
       `}</style>
