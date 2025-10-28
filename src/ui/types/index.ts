@@ -432,6 +432,9 @@ declare global {
       updateKeyboardShortcuts(
         payload: KeybaordShortCutUpdatePayloadInterface
       ): Promise<boolean>;
+      resetKeyboardShortcuts(
+        payload: Pick<KeybaordShortCutInterface, "id" | "projectId">
+      ): Promise<KeybaordShortCutInterface>;
     };
   }
 }

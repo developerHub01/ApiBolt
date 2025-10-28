@@ -85,6 +85,46 @@ export const updateKeyboardShortcuts = createAsyncThunk<
     }
   }
 );
+
+export const resetKeyboardShortcuts = createAsyncThunk<
+  void,
+  {
+    id: string;
+    type: TKeyboardShortcutsTab;
+  },
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>(
+  "keyboard-shortcuts/resetKeyboardShortcuts",
+  async ({ id, type }, { dispatch, getState }) => {
+    try {
+      const state = getState() as RootState;
+      const activeProjectId = state.project.activeProjectId;
+
+      const payload = {
+        id,
+        projectId: type === "local" && activeProjectId ? activeProjectId : null,
+      };
+
+      const response =
+        await window.electronAPIKeyboardShortcut.resetKeyboardShortcuts({
+          ...payload,
+        });
+
+      if (!response) return;
+
+      dispatch(
+        handleUpdateKeyboardShortcuts({
+          ...response,
+        })
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
 /* ==============================
 ========== Keyboard Shortcuts end =========
 ================================= */

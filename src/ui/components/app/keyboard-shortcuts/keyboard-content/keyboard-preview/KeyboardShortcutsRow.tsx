@@ -6,6 +6,8 @@ import { handleChangeEditingId } from "@/context/redux/keyboard-shortcuts/keyboa
 import KeyboardKeyCellContent from "@/components/app/keyboard-shortcuts/keyboard-content/keyboard-preview/KeyboardKeyCellContent";
 import KeyboardCell from "@/components/app/keyboard-shortcuts/keyboard-content/keyboard-preview/KeyboardCell";
 import type { TShortcutKey } from "@/types/keyboard-shortcut.types";
+import { useKeyboardShortcuts } from "@/context/keyboard-shortcuts/KeyboardShortcutsProvider";
+import { resetKeyboardShortcuts } from "@/context/redux/keyboard-shortcuts/thunks/keyboard-shortcuts";
 
 interface KeyboardShortcutsRowProps {
   id: string;
@@ -16,10 +18,20 @@ interface KeyboardShortcutsRowProps {
 const KeyboardShortcutsRow = memo(
   ({ id, label, keyMap }: KeyboardShortcutsRowProps) => {
     const dispatch = useAppDispatch();
-    const handleSelectEdit = useCallback(
+    const { activeTab } = useKeyboardShortcuts();
+    const handleEdit = useCallback(
       () => dispatch(handleChangeEditingId(id)),
       [dispatch, id]
     );
+
+    const handleReset = useCallback(() => {
+      dispatch(
+        resetKeyboardShortcuts({
+          id,
+          type: activeTab,
+        })
+      );
+    }, [activeTab, dispatch, id]);
 
     return (
       <TableRow
@@ -32,7 +44,11 @@ const KeyboardShortcutsRow = memo(
       >
         <KeyboardCell className="capitalize">{label}</KeyboardCell>
         <KeyboardCell>
-          <KeyboardKeyCellContent keyMap={keyMap} onSelect={handleSelectEdit} />
+          <KeyboardKeyCellContent
+            keyMap={keyMap}
+            onEdit={handleEdit}
+            onReset={handleReset}
+          />
         </KeyboardCell>
       </TableRow>
     );

@@ -118,9 +118,65 @@ export const updateKeyboardShortcuts = async (payload) => {
         },
       });
 
+    return Boolean(result?.changes > 0);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const resetKeyboardShortcuts = async (payload) => {
+  if (!payload || typeof payload !== "object" || !("id" in payload))
     return false;
 
-    return Boolean(result?.changes > 0);
+  if (!("projectId" in payload)) payload["projectId"] = null;
+
+  try {
+    const defaultPayload =
+      (
+        await db
+          .select()
+          .from(keyboardShortcutTable)
+          .where(
+            and(
+              eq(keyboardShortcutTable.id, payload.id),
+              isNull(keyboardShortcutTable.projectId)
+            )
+          )
+          .limit(0)
+      )?.[0] ?? keyboardBindings[payload.id];
+
+    if (!defaultPayload) return false;
+
+    /* replacing key with default keybinding */
+    let newKeyList = keyboardBindings[payload.id].key;
+    if (newKeyList) newKeyList = JSON.stringify(newKeyList);
+    payload = {
+      ...defaultPayload,
+      ...payload,
+      key: newKeyList,
+    };
+
+    const { id, projectId, ...upsertPayload } = payload;
+
+    const result = (
+      await db
+        .insert(keyboardShortcutTable)
+        .values({
+          ...payload,
+        })
+        .onConflictDoUpdate({
+          target: [keyboardShortcutTable.id, keyboardShortcutTable.projectId],
+          set: {
+            ...upsertPayload,
+          },
+        })
+        .returning()
+    )?.[0];
+
+    if (!result || typeof result !== "object") return null;
+    if (result.key) result.key = JSON.parse(result.key);
+
+    return result;
   } catch (error) {
     console.error(error);
   }
