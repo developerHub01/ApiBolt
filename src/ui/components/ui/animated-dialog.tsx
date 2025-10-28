@@ -1,4 +1,4 @@
-import { memo, useEffect, type ComponentProps } from "react";
+import { memo, type ComponentProps, type KeyboardEvent } from "react";
 import { AnimatePresence, motion, type HTMLMotionProps } from "motion/react";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -20,15 +20,11 @@ const AnimatedDialog = memo(
     overlayClassName = "",
     ...props
   }: AnimatedDialogProps & ComponentProps<"section">) => {
-    useEffect(() => {
-      const handleKeyEsc = (e: KeyboardEvent) => {
-        if (e.key === "Escape") onClose();
-      };
-
-      window.addEventListener("keydown", handleKeyEsc);
-
-      return () => window.removeEventListener("keydown", handleKeyEsc);
-    }, [onClose]);
+    const handleKeyDown = (e: KeyboardEvent<HTMLElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.key === "Escape") onClose();
+    };
 
     return (
       <AnimatePresence>
@@ -36,11 +32,13 @@ const AnimatedDialog = memo(
           <section
             id="setting"
             className={cn(
-              "absolute top-0 left-0 w-full h-full flex justify-center items-center p-10 z-50 overflow-hidden",
+              "absolute top-0 left-0 w-full h-full flex justify-center items-center p-10 z-50 overflow-hidden focus:outline-0",
               className
             )}
             onClick={onClose}
             {...props}
+            onKeyDown={handleKeyDown}
+            tabIndex={-1}
           >
             <motion.div
               className={cn(
