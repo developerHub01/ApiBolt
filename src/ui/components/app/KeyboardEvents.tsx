@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { handleChangeIsSettingOpen } from "@/context/redux/setting/setting-slice";
-import { updateSettings } from "@/context/redux/setting/thunk/setting-thunk";
+import { updateSettings, updateSettingsZoomByKeyboard } from "@/context/redux/setting/thunk/setting-thunk";
 import { useGlobal } from "@/context/global/GlobalProvider";
 import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
 import { changeActiveTab } from "@/context/redux/sidebar/sidebar-thunk";
@@ -12,6 +12,7 @@ import { selectActiveProjectId } from "@/context/redux/project/selectors/project
 import { selectApplyingKeyboardShortcutsStringFormated } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
 import { handleChangeIsKeyboardShortcutPanelOpen } from "@/context/redux/keyboard-shortcuts/keyboard-shortcuts-slice";
 import { changeHeaderIsOpen as changeHeaderSearchIsOpen } from "@/context/redux/header/thunk/header";
+import type { TKeyboardShortcutKey } from "@/types/setting.types";
 
 const KeyboardEvents = () => {
   const dispatch = useAppDispatch();
@@ -84,6 +85,19 @@ const KeyboardEvents = () => {
         case "search_collection": {
           e.preventDefault();
           return dispatch(changeHeaderSearchIsOpen(true));
+        }
+        case "zoom_in":
+        case "zoom_out":
+        case "zoom_reset": {
+          e.preventDefault();
+          const shortcutString = keybindingMap[actionId]?.at(-1);
+          if (!shortcutString) return;
+
+          return dispatch(
+            updateSettingsZoomByKeyboard(
+              keybindingMap[actionId]?.at(-1) as TKeyboardShortcutKey
+            )
+          );
         }
       }
     };

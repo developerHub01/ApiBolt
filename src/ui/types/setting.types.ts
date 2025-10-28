@@ -1,4 +1,4 @@
-export type TKeyboardShortcutKey = "+" | "-" | "=" | "0";
+export type TKeyboardShortcutKey = "+" | "-" | "0";
 
 export type TLayoutSetting = "ltr" | "rtl";
 export type TLayoutSettingNoSenitize = "ltr" | "rtl" | "default";
