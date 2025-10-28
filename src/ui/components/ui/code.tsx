@@ -63,7 +63,7 @@ const getEditableOptions = ({
 };
 
 interface CodeProps {
-  contentType: TLanguageType;
+  contentType: TLanguageType | string;
   fontSize?: number;
   code: string;
   onChange?: (code: string) => void;
@@ -119,7 +119,7 @@ const Code = ({
   });
 
   const extensions: Array<Extension> = [
-    langs[langMap?.[contentType] ?? "text"](),
+    langs[langMap?.[contentType] ?? contentType ?? "text"](),
   ];
   if (lineWrap) extensions.push(EditorView.lineWrapping);
 

@@ -1,7 +1,7 @@
-export const langMap = {
+export const langMap: Record<string, string> = {
   json: "json",
   text: "text",
-  markdown: "md",
+  markdown: "markdown",
   xml: "xml",
   html: "html",
   javascript: "js",
