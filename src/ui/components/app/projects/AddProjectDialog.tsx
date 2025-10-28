@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import LoaderV1 from "@/components/LoaderV1";
+import LoaderV1 from "@/components/loader-v1";
 import { useAppDispatch } from "@/context/redux/hooks";
 import {
   AnimatedDialog,

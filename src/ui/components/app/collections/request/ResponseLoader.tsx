@@ -1,4 +1,4 @@
-import LoaderV1 from "@/components/LoaderV1";
+import LoaderV1 from "@/components/loader-v1";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectIsResponseLoading } from "@/context/redux/request-response/selectors/response";
 

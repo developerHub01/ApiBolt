@@ -1,4 +1,4 @@
-import AddNewData from "@/components/AddNewData";
+import AddNewData from "@/components/add-new-data";
 import VariableList from "@/components/app/environment/environemnt-variables/VariableList";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { createEnvironments } from "@/context/redux/request-response/thunks/environment";

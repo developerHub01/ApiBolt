@@ -2,7 +2,7 @@ import React from "react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { cn } from "@/lib/utils";
 import { AnimatePresence } from "motion/react";
-import AnimationWrapper from "@/components/ui/AnimationWrapper";
+import AnimationWrapper from "@/components/ui/animation-wrapper";
 
 interface EmptyProps {
   label?: string;

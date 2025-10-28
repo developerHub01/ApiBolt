@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { useRequestMetaData } from "@/context/collections/request/RequestMetaDataProvider";
-import AddNewData from "@/components/AddNewData";
+import AddNewData from "@/components/add-new-data";
 
 interface AddNewMetaDataProps {
   label?: string;
@@ -12,7 +12,7 @@ interface AddNewMetaDataProps {
 const AddNewMetaData = memo(
   ({ label = "", onClick, className, ...props }: AddNewMetaDataProps) => {
     const { handleAddNewData } = useRequestMetaData();
-    
+
     return (
       <AddNewData
         className={className}
