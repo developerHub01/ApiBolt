@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAppDispatch } from "@/context/redux/hooks";
-import { requestUrlAddToken } from "@/context/redux/request-url/request-url-thunk";
+import { requestUrlAddToken } from "@/context/redux/request-url/thunks/request-url";
 import type { TAPIUrlTokenType } from "@/types/request-url.types";
 import { Plus as AddIcon } from "lucide-react";
 

@@ -8,7 +8,7 @@ import { senitizeValue } from "@/utils/settings.utils";
 import {
   selectLayoutTypeGlobal,
   selectLayoutTypeLocal,
-} from "@/context/redux/setting/selectors/setting-selector";
+} from "@/context/redux/setting/selectors/setting";
 import SettingItemContentWrapper from "@/components/app/setting/content/SettingItemContentWrapper";
 import { motion } from "motion/react";
 import {

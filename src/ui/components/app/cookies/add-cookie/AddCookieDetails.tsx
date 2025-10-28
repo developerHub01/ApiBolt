@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import {
   selectAddCookieDetails,
   selectIsAddOptionOpen,
-} from "@/context/redux/cookies/selectors/cookies-selector";
+} from "@/context/redux/cookies/selectors/cookies";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import AddCookieBottomAction from "@/components/app/cookies/add-cookie/AddCookieBottomAction";
 import CookieEditor from "@/components/app/cookies/cookie-editor/CookieEditor";

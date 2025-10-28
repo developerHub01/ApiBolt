@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { loadCookies } from "@/context/redux/cookies/thunk/cookies-thunk";
+import { loadCookies } from "@/context/redux/cookies/thunks/cookies";
 
 interface StatusInterface {
   isCookiesLoading: boolean;

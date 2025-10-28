@@ -4,17 +4,17 @@ import { handleChangeIsSettingOpen } from "@/context/redux/setting/setting-slice
 import {
   updateSettings,
   updateSettingsZoomByKeyboard,
-} from "@/context/redux/setting/thunk/setting-thunk";
+} from "@/context/redux/setting/thunks/setting";
 import { useGlobal } from "@/context/global/GlobalProvider";
 import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
-import { changeActiveTab } from "@/context/redux/sidebar/sidebar-thunk";
+import { changeActiveTab } from "@/context/redux/sidebar/thunks/sidebar";
 import { handleChangeIsCookiesOpen } from "@/context/redux/cookies/cookies-slice";
 import { removeTab } from "@/context/redux/request-response/thunks/tab-list";
 import useCheckApplyingLayoutActivityBarVisible from "@/hooks/setting/use-check-applying-layout-activity-bar-visible";
 import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 import { selectApplyingKeyboardShortcutsStrFormated } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
 import { handleChangeIsKeyboardShortcutPanelOpen } from "@/context/redux/keyboard-shortcuts/keyboard-shortcuts-slice";
-import { changeHeaderIsOpen as changeHeaderSearchIsOpen } from "@/context/redux/header/thunk/header";
+import { changeHeaderIsOpen as changeHeaderSearchIsOpen } from "@/context/redux/header/thunks/header";
 import type { TKeyboardShortcutKey } from "@/types/setting.types";
 import { MODIFIER_KEY_TRACK_ORDER } from "@/constant/keyboard-shortcut.constant";
 

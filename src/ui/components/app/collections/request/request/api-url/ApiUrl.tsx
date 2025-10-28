@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
   changeRequestApiUrl,
   changeRequestApiUrlWithBackend,
-} from "@/context/redux/request-url/request-url-thunk";
+} from "@/context/redux/request-url/thunks/request-url";
 import { isValidApiUrl } from "@/utils/request-url.utils";
 import { cn } from "@/lib/utils";
 import { selectRequestUrl } from "@/context/redux/request-url/selectors/url";

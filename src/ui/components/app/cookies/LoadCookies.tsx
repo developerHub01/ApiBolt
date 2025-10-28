@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { loadCookies } from "@/context/redux/cookies/thunk/cookies-thunk";
+import { loadCookies } from "@/context/redux/cookies/thunks/cookies";
 import { useAppDispatch } from "@/context/redux/hooks";
 
 const LoadCookies = () => {

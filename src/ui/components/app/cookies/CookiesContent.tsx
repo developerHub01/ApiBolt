@@ -2,7 +2,7 @@ import { memo } from "react";
 import CookiesList from "@/components/app/cookies/cookies-list/CookiesList";
 import CookieDetails from "@/components/app/cookies/cookie-details/CookieDetails";
 import NoCookies from "@/components/app/cookies/cookies-list/NoCookies";
-import { selectCookiesCount } from "@/context/redux/cookies/selectors/cookies-selector";
+import { selectCookiesCount } from "@/context/redux/cookies/selectors/cookies";
 import { useAppSelector } from "@/context/redux/hooks";
 import AddCookieDetails from "@/components/app/cookies/add-cookie/AddCookieDetails";
 

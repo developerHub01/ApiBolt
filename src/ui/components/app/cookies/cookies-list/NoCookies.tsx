@@ -3,7 +3,7 @@ import {
   selectCookiesCount,
   selectIsAddOptionOpen,
   selectSelectedCookieKey,
-} from "@/context/redux/cookies/selectors/cookies-selector";
+} from "@/context/redux/cookies/selectors/cookies";
 import { useAppSelector } from "@/context/redux/hooks";
 
 const NoCookies = () => {

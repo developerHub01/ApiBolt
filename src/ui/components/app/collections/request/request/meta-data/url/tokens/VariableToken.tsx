@@ -9,7 +9,7 @@ import ChangeTokenType from "@/components/app/collections/request/request/meta-d
 import {
   requestUrlDeleteToken,
   requestUrlUpdateToken,
-} from "@/context/redux/request-url/request-url-thunk";
+} from "@/context/redux/request-url/thunks/request-url";
 import EnvVariableSelector from "@/components/app/collections/request/request/EnvVariableSelector";
 import { selectEnvironmentsVariableList } from "@/context/redux/request-response/selectors/environment";
 

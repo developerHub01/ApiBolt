@@ -4,8 +4,8 @@ import {
 } from "@/context/redux/cookies/cookies-slice";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import CookieEditorBottomAction from "@/components/app/cookies/cookie-editor/CookieEditorBottomAction";
-import { selectUpdateCookieHaveChanges } from "@/context/redux/cookies/selectors/cookies-selector";
-import { saveEditingCookie } from "@/context/redux/cookies/thunk/cookies-thunk";
+import { selectUpdateCookieHaveChanges } from "@/context/redux/cookies/selectors/cookies";
+import { saveEditingCookie } from "@/context/redux/cookies/thunks/cookies";
 import { toast } from "sonner";
 
 const CookieDetailsEditBottomAction = () => {

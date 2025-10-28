@@ -1,7 +1,7 @@
 import { DEFAULT_SETTINGS } from "@/constant/settings.constant";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
-import { selectSettingBackground } from "@/context/redux/setting/selectors/setting-selector";
+import { selectSettingBackground } from "@/context/redux/setting/selectors/setting";
 
 const useCheckApplyingBackground = (): {
   backgroundImages: Array<string> | string;

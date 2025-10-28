@@ -6,7 +6,7 @@ import {
   type KeyboardEvent,
 } from "react";
 import { useAppDispatch } from "@/context/redux/hooks";
-import { updateHttpStatus } from "@/context/redux/http-status/thunk/http-status";
+import { updateHttpStatus } from "@/context/redux/http-status/thunks/http-status";
 import { RefreshCw as ResetIcon } from "lucide-react";
 import {
   Tooltip,

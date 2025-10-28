@@ -22,7 +22,7 @@ import {
   getRequestType,
 } from "@/utils/request-response.utils";
 import { loadTabsData } from "@/context/redux/request-response/thunks/tab-list";
-import { duplicateRequestApiUrlsByOldNewIds } from "@/context/redux/request-url/request-url-thunk";
+import { duplicateRequestApiUrlsByOldNewIds } from "@/context/redux/request-url/thunks/request-url";
 import { duplicateParamsByOldNewIds } from "@/context/redux/request-response/thunks/params";
 import {
   duplicateHeadersByOldNewIds,

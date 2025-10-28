@@ -8,8 +8,8 @@ import {
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
 import { selectIsRequestListCollapsed } from "@/context/redux/request-response/selectors/request-list";
-import { selectSidebarActiveTab } from "@/context/redux/sidebar/sidebar-selector";
-import { updateSettings } from "@/context/redux/setting/thunk/setting-thunk";
+import { selectSidebarActiveTab } from "@/context/redux/sidebar/selectors/sidebar";
+import { updateSettings } from "@/context/redux/setting/thunks/setting";
 import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 import { selectApplyingKeyboardShortcuts } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
 import { keyListStringify } from "@/utils/keyboard-shortcut.utils";
@@ -84,7 +84,7 @@ const SidebarContextMenuWrapper = ({
     }
 
     const activitBarShortcutString = `${shortcuts["toggle_activitybar"] ? ` (${keyListStringify(shortcuts["toggle_activitybar"])})` : ""}`;
-    
+
     list.push({
       id: "activity-bar",
       label: `Hide activity bar${activitBarShortcutString}`,

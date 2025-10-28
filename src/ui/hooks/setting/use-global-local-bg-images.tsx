@@ -5,7 +5,7 @@ import type {
 } from "@/types/setting.types";
 import type { TSettingTab } from "@/context/setting/SettingProvider";
 import { DEFAULT_SETTINGS } from "@/constant/settings.constant";
-import { updateSettingsBackgroundImages } from "@/context/redux/setting/thunk/setting-thunk";
+import { updateSettingsBackgroundImages } from "@/context/redux/setting/thunks/setting";
 import { useAppDispatch } from "@/context/redux/hooks";
 
 const checkIsDefaultType = (value: unknown) =>

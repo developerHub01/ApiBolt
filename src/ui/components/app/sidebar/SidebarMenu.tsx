@@ -7,14 +7,14 @@ import {
 } from "@/components/ui/tooltip-custom";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { Link } from "react-router-dom";
-import { changeActiveTab } from "@/context/redux/sidebar/sidebar-thunk";
+import { changeActiveTab } from "@/context/redux/sidebar/thunks/sidebar";
 import {
   HIDDEN_TABS_WHEN_NOT_PROJECT_SELECTED,
   SIDEBAR_MENU_LIST,
 } from "@/constant/sidebar.constant";
 import type { TSidebarTab } from "@/types/sidebar.types";
 import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
-import { selectSidebarActiveTab } from "@/context/redux/sidebar/sidebar-selector";
+import { selectSidebarActiveTab } from "@/context/redux/sidebar/selectors/sidebar";
 import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 import { selectApplyingKeyboardShortcuts } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
 import { keyListStringify } from "@/utils/keyboard-shortcut.utils";

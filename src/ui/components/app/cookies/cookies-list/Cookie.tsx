@@ -5,7 +5,7 @@ import { X as CloseIcon } from "lucide-react";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { handleChangeSelectedCookieKey } from "@/context/redux/cookies/cookies-slice";
 import { cn } from "@/lib/utils";
-import { deleteCookieByKey } from "@/context/redux/cookies/thunk/cookies-thunk";
+import { deleteCookieByKey } from "@/context/redux/cookies/thunks/cookies";
 
 interface Props {
   id: string;

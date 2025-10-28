@@ -6,9 +6,9 @@ import SettingContent from "@/components/app/setting/content/SettingContent";
 import SettingBottom from "@/components/app/setting/content/SettingBottom";
 import { AnimatedDialogContentWrapper } from "@/components/ui/animated-dialog";
 import { AnimatedDialog } from "@/components/ui/animated-dialog";
-import { loadSettings } from "@/context/redux/setting/thunk/setting-thunk";
+import { loadSettings } from "@/context/redux/setting/thunks/setting";
 import SettingProvider from "@/context/setting/SettingProvider";
-import { selectIsSettingOpen } from "@/context/redux/setting/selectors/setting-selector";
+import { selectIsSettingOpen } from "@/context/redux/setting/selectors/setting";
 import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 
 const Setting = () => {

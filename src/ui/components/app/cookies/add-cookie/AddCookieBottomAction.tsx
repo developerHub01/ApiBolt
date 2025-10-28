@@ -5,10 +5,10 @@ import {
 import {
   selectAddCookieEnabled,
   selectAddCookieHaveChanges,
-} from "@/context/redux/cookies/selectors/cookies-selector";
+} from "@/context/redux/cookies/selectors/cookies";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import CookieEditorBottomAction from "@/components/app/cookies/cookie-editor/CookieEditorBottomAction";
-import { addCookie } from "@/context/redux/cookies/thunk/cookies-thunk";
+import { addCookie } from "@/context/redux/cookies/thunks/cookies";
 import { toast } from "sonner";
 
 const AddCookieBottomAction = () => {

@@ -7,7 +7,7 @@ import {
   AnimatedDialogTop,
 } from "@/components/ui/animated-dialog";
 import { AnimatedDialog } from "@/components/ui/animated-dialog";
-import { selectIsCookiesOpen } from "@/context/redux/cookies/selectors/cookies-selector";
+import { selectIsCookiesOpen } from "@/context/redux/cookies/selectors/cookies";
 import { handleChangeIsCookiesOpen } from "@/context/redux/cookies/cookies-slice";
 import LoadCookies from "@/components/app/cookies/LoadCookies";
 import CookiesContent from "@/components/app/cookies/CookiesContent";

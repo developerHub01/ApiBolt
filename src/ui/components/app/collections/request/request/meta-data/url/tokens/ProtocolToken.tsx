@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/select";
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { requestUrlUpdateOriginToken } from "@/context/redux/request-url/request-url-thunk";
+import { requestUrlUpdateOriginToken } from "@/context/redux/request-url/thunks/request-url";
 import { selectRequestUrlTokenProtocol } from "@/context/redux/request-url/selectors/protocol";
 
 const optionList: Array<{

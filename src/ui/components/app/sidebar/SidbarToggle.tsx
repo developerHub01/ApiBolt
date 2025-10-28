@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
-import { selectSidebarActiveTab } from "@/context/redux/sidebar/sidebar-selector";
+import { selectSidebarActiveTab } from "@/context/redux/sidebar/selectors/sidebar";
 import {
   Tooltip,
   TooltipContent,

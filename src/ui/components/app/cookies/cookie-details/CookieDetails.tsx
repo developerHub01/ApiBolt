@@ -3,7 +3,7 @@ import {
   selectIsCookieEditing,
   selectSelectedCookie,
   selectSelectedEditingCookieDetails,
-} from "@/context/redux/cookies/selectors/cookies-selector";
+} from "@/context/redux/cookies/selectors/cookies";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { cookieToString } from "@/utils/cookies";
 import CopyButton from "@/components/ui/copy-button";

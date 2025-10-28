@@ -11,7 +11,7 @@ import SettingContextBasedLayout from "@/components/app/setting/content/SettingC
 import {
   selectBlurGlobal,
   selectBlurLocal,
-} from "@/context/redux/setting/selectors/setting-selector";
+} from "@/context/redux/setting/selectors/setting";
 import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 
 const SettingBackgroundBlur = () => {

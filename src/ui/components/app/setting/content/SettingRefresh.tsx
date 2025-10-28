@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/tooltip-custom";
 import { RefreshCw as RefreshIcon, type LucideIcon } from "lucide-react";
 import { useAppDispatch } from "@/context/redux/hooks";
-import { loadSettings } from "@/context/redux/setting/thunk/setting-thunk";
+import { loadSettings } from "@/context/redux/setting/thunks/setting";
 import { AnimatePresence, motion } from "motion/react";
 
 interface Props {

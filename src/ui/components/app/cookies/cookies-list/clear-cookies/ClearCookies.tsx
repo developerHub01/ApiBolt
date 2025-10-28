@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { selectCookiesCount } from "@/context/redux/cookies/selectors/cookies-selector";
+import { selectCookiesCount } from "@/context/redux/cookies/selectors/cookies";
 import { useAppSelector } from "@/context/redux/hooks";
 import ClearAlert from "@/components/app/cookies/cookies-list/clear-cookies/ClearAlert";
 

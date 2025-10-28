@@ -10,7 +10,7 @@ import { loadRequestMetaTab } from "@/context/redux/request-response/thunks/requ
 import { loadBodyXWWWFormUrlencoded } from "@/context/redux/request-response/thunks/body-x-www-form-urlencoded";
 import { loadBodyFormData } from "@/context/redux/request-response/thunks/body-form-data";
 import { loadMetaShowColumn } from "@/context/redux/request-response/thunks/meta-show-column";
-import { loadApiUrl } from "@/context/redux/request-url/request-url-thunk";
+import { loadApiUrl } from "@/context/redux/request-url/thunks/request-url";
 import { loadAuthorization } from "@/context/redux/request-response/thunks/auth";
 import { loadShowHiddenMetaData } from "@/context/redux/request-response/thunks/show-hidden-meta-data";
 

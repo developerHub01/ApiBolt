@@ -2,7 +2,7 @@ import { useAppSelector } from "@/context/redux/hooks";
 import {
   selectBackgroundImagesGlobal,
   selectBackgroundImagesLocal,
-} from "@/context/redux/setting/selectors/setting-selector";
+} from "@/context/redux/setting/selectors/setting";
 import { useSetting } from "@/context/setting/SettingProvider";
 
 const useCheckApplyingSettingScopeBackgroundImages = () => {

@@ -8,7 +8,7 @@ import {
 } from "react";
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { requestUrlUpdateOriginToken } from "@/context/redux/request-url/request-url-thunk";
+import { requestUrlUpdateOriginToken } from "@/context/redux/request-url/thunks/request-url";
 import { isValidPort } from "@/utils/request-url.utils";
 import { cn } from "@/lib/utils";
 import { selectRequestUrlTokenPort } from "@/context/redux/request-url/selectors/protocol";

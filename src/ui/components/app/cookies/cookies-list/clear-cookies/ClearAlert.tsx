@@ -9,7 +9,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { clearCookies } from "@/context/redux/cookies/thunk/cookies-thunk";
+import { clearCookies } from "@/context/redux/cookies/thunks/cookies";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { cn } from "@/lib/utils";
 

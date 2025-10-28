@@ -5,7 +5,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip-custom";
 import { useAppDispatch } from "@/context/redux/hooks";
-import { requestUrlUpdateToken } from "@/context/redux/request-url/request-url-thunk";
+import { requestUrlUpdateToken } from "@/context/redux/request-url/thunks/request-url";
 import { ArrowDownUp as SwitchIcon } from "lucide-react";
 
 interface Props {

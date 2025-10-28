@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useAppSelector } from "@/context/redux/hooks";
 import { useNavigate } from "react-router-dom";
 import { SIDEBAR_MENU_LIST } from "@/constant/sidebar.constant";
-import { selectSidebarActiveTab } from "@/context/redux/sidebar/sidebar-selector";
+import { selectSidebarActiveTab } from "@/context/redux/sidebar/selectors/sidebar";
 import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
 import { selectActiveRequestOrFolder } from "@/context/redux/request-response/selectors/request-list";
 import { selectActiveProjectId } from "@/context/redux/project/selectors/project";

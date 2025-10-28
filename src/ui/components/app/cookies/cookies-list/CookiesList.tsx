@@ -2,7 +2,7 @@ import { memo } from "react";
 import {
   selectCookies,
   selectSelectedCookieKey,
-} from "@/context/redux/cookies/selectors/cookies-selector";
+} from "@/context/redux/cookies/selectors/cookies";
 import { useAppSelector } from "@/context/redux/hooks";
 import Cookie from "@/components/app/cookies/cookies-list/Cookie";
 import ClearCookies from "@/components/app/cookies/cookies-list/clear-cookies/ClearCookies";

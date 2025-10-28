@@ -1,12 +1,12 @@
 import { useCallback, useMemo } from "react";
 import SettingItemHorizontalLayout from "@/components/app/setting/content/SettingItemHorizontalLayout";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { updateSettings } from "@/context/redux/setting/thunk/setting-thunk";
+import { updateSettings } from "@/context/redux/setting/thunks/setting";
 import { useSetting } from "@/context/setting/SettingProvider";
 import {
   selectIsZoomableGlobal,
   selectIsZoomableLocal,
-} from "@/context/redux/setting/selectors/setting-selector";
+} from "@/context/redux/setting/selectors/setting";
 import SettingOptionSelector from "@/components/app/setting/content/SettingOptionSelector";
 import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 

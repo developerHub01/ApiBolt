@@ -14,7 +14,7 @@ import { useAppDispatch } from "@/context/redux/hooks";
 import {
   requestUrlDeleteToken,
   requestUrlUpdateToken,
-} from "@/context/redux/request-url/request-url-thunk";
+} from "@/context/redux/request-url/thunks/request-url";
 import FlexibleHightButtonLikeDiv from "@/components/ui/flexible-hight-button-like-div";
 
 interface TextTokenProps {

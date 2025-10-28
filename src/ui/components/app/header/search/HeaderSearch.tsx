@@ -20,7 +20,7 @@ import SearchBar from "@/components/app/header/search/SearchBar";
 import SearchResult from "@/components/app/header/search/SearchResult";
 import { Search as SearchIcon } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { selectSidebarActiveTab } from "@/context/redux/sidebar/sidebar-selector";
+import { selectSidebarActiveTab } from "@/context/redux/sidebar/selectors/sidebar";
 import {
   selectActiveProjectId,
   selectActiveProjectName,
@@ -33,7 +33,7 @@ import {
   selectHeaderIsOpen,
   selectHeaderSearchTerm,
 } from "@/context/redux/header/selectors/header";
-import { changeHeaderIsOpen } from "@/context/redux/header/thunk/header";
+import { changeHeaderIsOpen } from "@/context/redux/header/thunks/header";
 import { handleChangeSearchTerm } from "@/context/redux/header/header-slice";
 
 const DELAY_TIME = 300;

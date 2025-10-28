@@ -3,7 +3,7 @@ import { selectActiveProjectId } from "@/context/redux/project/selectors/project
 import {
   selectActivityBarVisibleGlobal,
   selectActivityBarVisibleLocal,
-} from "@/context/redux/setting/selectors/setting-selector";
+} from "@/context/redux/setting/selectors/setting";
 
 const useCheckApplyingLayoutActivityBarVisible = () => {
   const activeProjectId = useAppSelector(selectActiveProjectId);

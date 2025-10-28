@@ -21,7 +21,7 @@ import { cn } from "@/lib/utils";
 import type { THostType } from "@/types/request-url.types";
 import { API_HOST_TYPE_LIST } from "@/constant/request-url.constant";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { requestUrlUpdateOriginToken } from "@/context/redux/request-url/request-url-thunk";
+import { requestUrlUpdateOriginToken } from "@/context/redux/request-url/thunks/request-url";
 import FlexibleHightButtonLikeDiv from "@/components/ui/flexible-hight-button-like-div";
 import { isValidHost } from "@/utils/request-url.utils";
 import { selectRequestUrlTokenHost } from "@/context/redux/request-url/selectors/host";
