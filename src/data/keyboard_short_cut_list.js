@@ -1,3 +1,5 @@
+/* order is "ctrl" | "shift" | "alt" | "meta" */
+
 export const keyboardBindings = {
   navigate_projects: {
     label: "Navigate to projects",
@@ -53,7 +55,7 @@ export const keyboardBindings = {
   },
   code_beautify: {
     label: "Code beautify",
-    key: ["alt", "shift", "f"],
+    key: ["shift", "alt", "f"],
   },
   zoom_in: {
     label: "Zoom in",
