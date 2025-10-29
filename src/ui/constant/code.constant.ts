@@ -21,3 +21,8 @@ export const langMap: Record<string, string> = {
   powershell: "ps1",
   elixir: "el",
 };
+
+export const fontSizeLimit = {
+  max: 40,
+  min: 5,
+};

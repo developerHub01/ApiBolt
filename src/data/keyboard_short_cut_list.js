@@ -69,4 +69,16 @@ export const keyboardBindings = {
     label: "Zoom reset",
     key: ["ctrl", "0"],
   },
+  code_zoom_in: {
+    label: "Code zoom in",
+    key: ["ctrl", "+"],
+  },
+  code_zoom_out: {
+    label: "Code zoom out",
+    key: ["ctrl", "-"],
+  },
+  code_zoom_reset: {
+    label: "Code zoom reset",
+    key: ["ctrl", "0"],
+  },
 };

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type JSX } from "react";
+import { useCallback, useRef, useState, type JSX } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import type { Extension } from "@uiw/react-codemirror";
 import { EditorView } from "@codemirror/view";
@@ -21,11 +21,6 @@ export type TLanguageType =
   | "php"
   | "python"
   | "java";
-
-const fontSizeLimit = {
-  max: 40,
-  min: 5,
-};
 
 const getEditableOptions = ({
   editable,
@@ -113,58 +108,18 @@ const Code = ({
   const { resolvedTheme } = useTheme();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const isMounted = useMounted();
-  const handleKeyDown = useCodeKeybaordShortcut({
-    handleLineWrap,
-    handleFormat,
-  });
 
   const extensions: Array<Extension> = [
     langs[langMap?.[contentType] ?? contentType ?? "text"](),
   ];
   if (lineWrap) extensions.push(EditorView.lineWrapping);
 
-  useEffect(() => {
-    const wrapper = wrapperRef.current;
-    if (!zoomable || !wrapper) return;
-
-    const handleKeydownEvent = (e: globalThis.KeyboardEvent) => {
-      if (e.ctrlKey) {
-        switch (e.key.toLowerCase()) {
-          case "0":
-            return setFontSizeState(fontSize);
-          case "+":
-            return setFontSizeState((prev) =>
-              Math.min(prev + 1, fontSizeLimit.max)
-            );
-          case "-":
-            return setFontSizeState((prev) =>
-              Math.max(prev - 1, fontSizeLimit.min)
-            );
-        }
-      }
-    };
-
-    const handleWheellEvent = (e: globalThis.WheelEvent) => {
-      if (!e.ctrlKey) return;
-
-      if (e.deltaY < 0)
-        return setFontSizeState((prev) =>
-          Math.min(prev + 1, fontSizeLimit.max)
-        );
-      else
-        return setFontSizeState((prev) =>
-          Math.max(prev - 1, fontSizeLimit.min)
-        );
-    };
-
-    wrapper.addEventListener("keydown", handleKeydownEvent);
-    wrapper.addEventListener("wheel", handleWheellEvent);
-
-    return () => {
-      wrapper.removeEventListener("keydown", handleKeydownEvent);
-      wrapper.removeEventListener("wheel", handleWheellEvent);
-    };
-  }, [zoomable, fontSize]);
+  const handleKeyDown = useCodeKeybaordShortcut({
+    handleLineWrap,
+    handleFormat,
+    fontSize,
+    handleFontSize: zoomable ? setFontSizeState : undefined,
+  });
 
   const handleCopy = useCallback(async () => {
     try {
