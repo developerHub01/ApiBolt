@@ -20,7 +20,8 @@ export const getParser = (type: string) => {
 
 export const formatCode = async (
   code: string,
-  parserType: "babel" | "html" | "json"
+  parserType: "babel" | "html" | "json",
+  tabSize = 2
 ): Promise<{
   success?: boolean;
   data?: string;
@@ -29,13 +30,12 @@ export const formatCode = async (
   const parser = getParser(parserType);
   try {
     let formatedCode = "";
-    if (parserType === "json")
-      formatedCode = JSON.stringify(JSON.parse(code), null, 2);
-    else
-      formatedCode = await prettier.format(code, {
-        parser,
-        plugins: [parserBabel, parserHtml, parserEstree],
-      });
+    formatedCode = await prettier.format(code, {
+      parser,
+      plugins: [parserBabel, parserHtml, parserEstree],
+      tabWidth: tabSize,
+      useTabs: true,
+    });
 
     return {
       success: true,
