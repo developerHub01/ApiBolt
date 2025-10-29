@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState, type JSX } from "react";
+import { useCallback, useEffect, useRef, useState, type JSX } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import type { Extension } from "@uiw/react-codemirror";
 import { EditorView } from "@codemirror/view";
@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { langs } from "@uiw/codemirror-extensions-langs";
 import { langMap } from "@/constant/code.constant";
 import useCodeKeybaordShortcut from "@/hooks/code/use-code-keybaord-shortcut";
+import useCheckApplyingCodeFontsize from "@/hooks/setting/use-check-applying-code-fontsize";
 
 export type TLanguageType =
   | TContentType
@@ -59,7 +60,6 @@ const getEditableOptions = ({
 
 interface CodeProps {
   contentType: TLanguageType | string;
-  fontSize?: number;
   code: string;
   onChange?: (code: string) => void;
   onBlur?: () => void;
@@ -83,7 +83,6 @@ interface CodeProps {
 
 const Code = ({
   contentType,
-  fontSize = 16,
   code = "",
   onChange,
   onBlur,
@@ -104,10 +103,13 @@ const Code = ({
   beforeComp = null,
   ...props
 }: CodeProps) => {
+  const fontSize = useCheckApplyingCodeFontsize();
   const [fontSizeState, setFontSizeState] = useState(fontSize);
   const { resolvedTheme } = useTheme();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const isMounted = useMounted();
+
+  useEffect(() => setFontSizeState(fontSize), [fontSize]);
 
   const extensions: Array<Extension> = [
     langs[langMap?.[contentType] ?? contentType ?? "text"](),

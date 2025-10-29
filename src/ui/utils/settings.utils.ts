@@ -29,3 +29,40 @@ export const checkApplyingZoomable = ({
 
   return Boolean(resolvedZoomable);
 };
+
+export const checkApplyingCodeFontSize = ({
+  activeProjectId,
+  localCodeFontSize,
+  globalCodeFontSize,
+  defaultCodeFontSize,
+}: {
+  activeProjectId: string | null;
+  localCodeFontSize: number | null | undefined;
+  globalCodeFontSize: number | null | undefined;
+  defaultCodeFontSize: number;
+}): number => {
+  const globalFontSizeFinder = ({
+    global,
+    default: defaultSize,
+  }: {
+    global: number | null | undefined;
+    default: number;
+  }): number => (global && global !== -1 ? global : defaultSize);
+
+  return activeProjectId
+    ? localCodeFontSize && localCodeFontSize !== -1
+      ? localCodeFontSize
+      : localCodeFontSize === -1
+        ? defaultCodeFontSize
+        : globalFontSizeFinder({
+            global: globalCodeFontSize,
+            default: defaultCodeFontSize,
+          })
+    : /**
+       *  if global and not -1 then render global else default
+       */
+      globalFontSizeFinder({
+        global: globalCodeFontSize,
+        default: defaultCodeFontSize,
+      });
+};
