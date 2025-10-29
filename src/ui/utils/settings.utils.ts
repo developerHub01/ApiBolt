@@ -30,16 +30,16 @@ export const checkApplyingZoomable = ({
   return Boolean(resolvedZoomable);
 };
 
-export const checkApplyingCodeFontSize = ({
+export const checkApplyingCodeFont = ({
   activeProjectId,
-  localCodeFontSize,
-  globalCodeFontSize,
-  defaultCodeFontSize,
+  localCodeFont,
+  globalCodeFont,
+  defaultCodeFont,
 }: {
   activeProjectId: string | null;
-  localCodeFontSize: number | null | undefined;
-  globalCodeFontSize: number | null | undefined;
-  defaultCodeFontSize: number;
+  localCodeFont: number | null | undefined;
+  globalCodeFont: number | null | undefined;
+  defaultCodeFont: number;
 }): number => {
   const globalFontSizeFinder = ({
     global,
@@ -50,19 +50,19 @@ export const checkApplyingCodeFontSize = ({
   }): number => (global && global !== -1 ? global : defaultSize);
 
   return activeProjectId
-    ? localCodeFontSize && localCodeFontSize !== -1
-      ? localCodeFontSize
-      : localCodeFontSize === -1
-        ? defaultCodeFontSize
+    ? localCodeFont && localCodeFont !== -1
+      ? localCodeFont
+      : localCodeFont === -1
+        ? defaultCodeFont
         : globalFontSizeFinder({
-            global: globalCodeFontSize,
-            default: defaultCodeFontSize,
+            global: globalCodeFont,
+            default: defaultCodeFont,
           })
     : /**
        *  if global and not -1 then render global else default
        */
       globalFontSizeFinder({
-        global: globalCodeFontSize,
-        default: defaultCodeFontSize,
+        global: globalCodeFont,
+        default: defaultCodeFont,
       });
 };

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type JSX } from "react";
-import CodeMirror from "@uiw/react-codemirror";
+import CodeMirror, { EditorState } from "@uiw/react-codemirror";
 import type { Extension } from "@uiw/react-codemirror";
 import { EditorView } from "@codemirror/view";
 import { useTheme } from "next-themes";
@@ -12,7 +12,9 @@ import { toast } from "sonner";
 import { langs } from "@uiw/codemirror-extensions-langs";
 import { langMap } from "@/constant/code.constant";
 import useCodeKeybaordShortcut from "@/hooks/code/use-code-keybaord-shortcut";
-import useCheckApplyingCodeFontsize from "@/hooks/setting/use-check-applying-code-fontsize";
+import useCheckApplyingCodeFontSize from "@/hooks/setting/use-check-applying-code-font-size";
+import useCheckApplyingCodeIndentationSize from "@/hooks/setting/use-check-applying-code-indentation-size";
+import { indentUnit } from "@codemirror/language";
 
 export type TLanguageType =
   | TContentType
@@ -103,7 +105,8 @@ const Code = ({
   beforeComp = null,
   ...props
 }: CodeProps) => {
-  const fontSize = useCheckApplyingCodeFontsize();
+  const fontSize = useCheckApplyingCodeFontSize();
+  const indentationSize = useCheckApplyingCodeIndentationSize();
   const [fontSizeState, setFontSizeState] = useState(fontSize);
   const { resolvedTheme } = useTheme();
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -113,6 +116,8 @@ const Code = ({
 
   const extensions: Array<Extension> = [
     langs[langMap?.[contentType] ?? contentType ?? "text"](),
+    EditorState.tabSize.of(indentationSize),
+    indentUnit.of(" ".repeat(indentationSize)),
   ];
   if (lineWrap) extensions.push(EditorView.lineWrapping);
 

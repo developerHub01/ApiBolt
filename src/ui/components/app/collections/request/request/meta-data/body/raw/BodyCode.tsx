@@ -19,6 +19,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { AnimatePresence, motion } from "motion/react";
 import { codeFormatter } from "@/utils/code";
+import useCheckApplyingCodeIndentationSize from "@/hooks/setting/use-check-applying-code-indentation-size";
 
 const bodyTypeLabel = (type: TContentType) =>
   type === "html"
@@ -39,6 +40,7 @@ const BodyCode = memo(() => {
     useRequestBody();
   const rawData = useAppSelector(selectRawData);
   const rawRequestBodyType = useAppSelector(selectRawRequestBodyType);
+  const indentationSize = useCheckApplyingCodeIndentationSize();
   const [code, setCode] = useState<string>(rawData);
   const [isError, setIsError] = useState<boolean>(false);
 
@@ -67,7 +69,11 @@ const BodyCode = memo(() => {
         setIsError(false);
         return;
       }
-      const { success = false } = await formatCode(codeString, parser);
+      const { success = false } = await formatCode(
+        codeString,
+        parser,
+        indentationSize
+      );
       // Only update if different
       setIsError((prev) => (prev !== !success ? !success : prev));
     }, 500); // debounce for 500ms
@@ -76,7 +82,7 @@ const BodyCode = memo(() => {
       clearTimeout(timeout);
       controller.abort();
     };
-  }, [code, rawRequestBodyType]);
+  }, [code, indentationSize, rawRequestBodyType]);
 
   const handleChange = useCallback((value: string) => setCode(value), []);
 
