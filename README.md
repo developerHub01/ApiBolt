@@ -1,4 +1,4 @@
-# API_Bolt: a REST api client
+# API_Bolt: A REST api client
 
 To run the project
 Clone using
