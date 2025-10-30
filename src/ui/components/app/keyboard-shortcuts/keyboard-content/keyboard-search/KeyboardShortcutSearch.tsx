@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import {
   Keyboard as KeyboardIcon,
   X as ClearIcon,
@@ -78,6 +78,14 @@ const KeyboardShortcutSearch = () => {
     searchKeyList.length,
     searchTerm,
   ]);
+
+  /* clear search term and keylist when unmounting */
+  useEffect(() => {
+    return () => {
+      handleChangeSearchKeyList([]);
+      handleChangeSearchTerm("");
+    };
+  }, [handleChangeSearchKeyList, handleChangeSearchTerm]);
 
   return (
     <div className="w-full px-3 py-2">
