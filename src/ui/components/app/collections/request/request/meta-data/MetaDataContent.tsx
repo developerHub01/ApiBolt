@@ -18,32 +18,32 @@ const MetaDataContent = memo(() => {
     <RequestMetaDataProvider>
       <AnimatePresence>
         {activeMetaTab === "url" && (
-          <TabMotionWrapper key="url">
+          <TabMotionWrapper id="url">
             <Url />
           </TabMotionWrapper>
         )}
         {activeMetaTab === "params" && (
-          <TabMotionWrapper key="params">
+          <TabMotionWrapper id="params">
             <Params />
           </TabMotionWrapper>
         )}
         {activeMetaTab === "authorization" && (
-          <TabMotionWrapper key="authorization">
+          <TabMotionWrapper id="authorization">
             <RequestAuthorization />
           </TabMotionWrapper>
         )}
         {activeMetaTab === "headers" && (
-          <TabMotionWrapper key="headers">
+          <TabMotionWrapper id="headers">
             <Headers />
           </TabMotionWrapper>
         )}
         {activeMetaTab === "body" && (
-          <TabMotionWrapper key="body">
+          <TabMotionWrapper id="body">
             <Body />
           </TabMotionWrapper>
         )}
         {activeMetaTab === "code" && (
-          <TabMotionWrapper key="code">
+          <TabMotionWrapper id="code">
             <RequestCode />
           </TabMotionWrapper>
         )}
