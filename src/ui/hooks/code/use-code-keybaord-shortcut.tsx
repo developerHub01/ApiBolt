@@ -23,7 +23,6 @@ const useCodeKeybaordShortcut = <T extends HTMLElement>({
 
   const handlerKeydown = useCallback(
     (e: KeyboardEvent<T>) => {
-      e.stopPropagation();
       const keyList = [];
 
       MODIFIER_KEY_TRACK_ORDER.forEach(({ eventProperty, key }) => {
@@ -44,16 +43,19 @@ const useCodeKeybaordShortcut = <T extends HTMLElement>({
       switch (actionId) {
         case "code_line_wrap": {
           e.preventDefault();
+          e.stopPropagation();
           if (handleLineWrap) return handleLineWrap();
           return;
         }
         case "code_beautify": {
           e.preventDefault();
+          e.stopPropagation();
           if (handleFormat) return handleFormat();
           return;
         }
         case "code_zoom_in": {
           e.preventDefault();
+          e.stopPropagation();
           if (handleFontSize && typeof fontSize === "number")
             return handleFontSize((prev) =>
               Math.min(prev + 1, fontSizeLimit.max)
@@ -62,6 +64,7 @@ const useCodeKeybaordShortcut = <T extends HTMLElement>({
         }
         case "code_zoom_out": {
           e.preventDefault();
+          e.stopPropagation();
           if (handleFontSize && typeof fontSize === "number")
             return handleFontSize((prev) =>
               Math.max(prev - 1, fontSizeLimit.min)
@@ -70,6 +73,7 @@ const useCodeKeybaordShortcut = <T extends HTMLElement>({
         }
         case "code_zoom_reset": {
           e.preventDefault();
+          e.stopPropagation();
           if (handleFontSize && typeof fontSize === "number")
             return handleFontSize(fontSize);
           return;
