@@ -7,11 +7,12 @@ import { useAppSelector } from "@/context/redux/hooks";
 import { selectResponse } from "@/context/redux/request-response/selectors/response";
 import History from "@/components/app/collections/request/response/content/history/History";
 import EmptyResponse from "@/components/app/collections/request/response/content/EmptyResponse";
+import ResponseError from "@/components/app/collections/request/response/content/error/ResponseError";
 
 const ResposneContent = memo(() => {
   const { activeMetaTab } = useResponse();
   const response = useAppSelector(selectResponse);
-
+  
   return (
     <div className="p-2.5 pt-1 flex-1 min-h-0 flex">
       {activeMetaTab === "history" ? (
@@ -23,6 +24,10 @@ const ResposneContent = memo(() => {
               {activeMetaTab === "body" && <Body />}
               {activeMetaTab === "cookies" && <Cookies />}
               {activeMetaTab === "headers" && <Headers />}
+              {activeMetaTab === "error" && !response.status && (
+                <ResponseError />
+              )}
+              {!activeMetaTab && <EmptyResponse />}
             </>
           ) : (
             <EmptyResponse />

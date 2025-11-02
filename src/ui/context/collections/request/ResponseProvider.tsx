@@ -1,3 +1,5 @@
+import { useAppSelector } from "@/context/redux/hooks";
+import { selectResponse } from "@/context/redux/request-response/selectors/response";
 import React, {
   createContext,
   useCallback,
@@ -9,7 +11,7 @@ import React, {
 export type TResponseTab = "raw" | "preview";
 
 interface ResponseContext {
-  activeMetaTab: string;
+  activeMetaTab: string | null;
   handleChangeActiveMetaTab: (id: string) => void;
   responseTab: TResponseTab;
   handleChangeActiveResponseTab: (value: TResponseTab) => void;
@@ -39,20 +41,30 @@ interface ResponseProviderProps {
 }
 
 const ResponseProvider = ({ children }: ResponseProviderProps) => {
-  const [activeMetaTab, setActiveMetaTab] = useState<string>(
+  const [activeMetaTab, setActiveMetaTab] = useState<string | null>(
     () => localStorage.getItem(localStorageResponseActiveTabKey) ?? "body"
   );
   const [responseTab, setResponseTab] = useState<TResponseTab>("raw");
   const [responseCodeWrap, setResponseCodeWrap] = useState<boolean>(false);
+  const response = useAppSelector(selectResponse);
+  const responseStatus = response?.status;
 
   useEffect(() => {
-    setActiveMetaTab(
-      localStorage.getItem(localStorageResponseActiveTabKey) ?? "body"
-    );
+    setActiveMetaTab(null);
   }, []);
+
   useEffect(() => {
+    if (!activeMetaTab) return;
     localStorage.setItem(localStorageResponseActiveTabKey, activeMetaTab);
   }, [activeMetaTab]);
+
+  useEffect(() => {
+    if (responseStatus && activeMetaTab !== "error") return;
+    if (responseStatus && activeMetaTab === "error")
+      return setActiveMetaTab("body");
+    setActiveMetaTab("error");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [responseStatus]);
 
   const handleChangeActiveMetaTab = useCallback(
     (id: string) => {

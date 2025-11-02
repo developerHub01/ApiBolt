@@ -11,7 +11,7 @@ interface TabItemInterface {
   count?: number;
 }
 
-const tabList: Array<TabItemInterface> = [
+const TAB_LIST: Array<TabItemInterface> = [
   {
     id: "body",
     label: "Body",
@@ -24,38 +24,63 @@ const tabList: Array<TabItemInterface> = [
     id: "headers",
     label: "Headers",
   },
-  {
-    id: "history",
-    label: "History",
-  },
 ];
+
+const historyTab: TabItemInterface = {
+  id: "history",
+  label: "History",
+};
+
+const errorTab: TabItemInterface = {
+  id: "error",
+  label: "Error",
+};
 
 const MetaDataTab = memo(() => {
   const { activeMetaTab, handleChangeActiveMetaTab } = useResponse();
   const response = useAppSelector(selectResponse);
 
   const tabListWithActivity = useMemo(() => {
-    if (!response) return [tabList.at(-1) as TabItemInterface];
+    const list: Array<TabItemInterface> = [];
 
-    return tabList.map((item) => {
-      if (item.id === "cookies") {
-        item.count = response?.cookies?.length ?? 0;
-      } else if (item.id === "headers") {
-        item.count = Object.keys(response?.headers ?? {}).length;
+    if (response) {
+      if (!response.status) list.push(errorTab);
+      else {
+        TAB_LIST.forEach((item) => {
+          if (item.id === "cookies") {
+            item.count = response?.cookies?.length ?? 0;
+          } else if (item.id === "headers") {
+            item.count = Object.keys(response?.headers ?? {}).length;
+          }
+          list.push(item);
+        });
       }
-      return item;
-    });
+    }
+
+    list.push(historyTab);
+
+    return list;
   }, [response]);
 
-  const list = useMemo(() => {
-    if (response) return [...tabList];
-    return [tabList.at(-1) as TabItemInterface];
+  const tabList = useMemo(() => {
+    const list: Array<TabItemInterface> = [];
+
+    if (response) {
+      if (!response.status) list.push(errorTab);
+      else list.push(...TAB_LIST);
+    }
+
+    list.push(historyTab);
+
+    return list;
   }, [response]);
+
+  if (!activeMetaTab) return null;
 
   return (
     <>
       <SelectV1
-        list={list}
+        list={tabList}
         value={activeMetaTab}
         handleChange={handleChangeActiveMetaTab}
         className="block md:hidden"

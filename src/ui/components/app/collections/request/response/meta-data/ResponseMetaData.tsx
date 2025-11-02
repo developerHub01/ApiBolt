@@ -12,6 +12,7 @@ const ResponseMetaData = memo(() => {
         <Separator orientation="vertical" />
       </div>
       <MetaDataTab />
+      <span className="ml-auto"></span>
       <ResponseInfo />
       <ResponsCollapseButton />
     </div>
