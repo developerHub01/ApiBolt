@@ -102,6 +102,17 @@ export const fetchApi = createAsyncThunk<
         response,
       })
     );
+
+    /* history handling */
+
+    console.log(payload);
+
+    console.log(state.requestResponse.authType[requestId]);
+    console.log(state.requestResponse.authInheritedId[requestId]);
+    console.log(state.requestResponse.basicAuth[requestId]);
+    console.log(state.requestResponse.apiKeyAuth[requestId]);
+    console.log(state.requestResponse.jwtBearerAuth[requestId]);
+    console.log(state.requestResponse.bearerTokenAuth[requestId]);
   } catch (error) {
     console.error(error);
   }

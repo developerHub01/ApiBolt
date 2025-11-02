@@ -9,6 +9,7 @@ import cookiesReducer from "@/context/redux/cookies/cookies-slice";
 import requestUrlReducer from "@/context/redux/request-url/request-url-slice";
 import httpStatusReducer from "@/context/redux/http-status/http-status-slice";
 import statusReducer from "@/context/redux/status/status-slice";
+import historyReducer from "@/context/redux/history/history-slice";
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ export const store = configureStore({
     requestUrl: requestUrlReducer,
     httpStatus: httpStatusReducer,
     status: statusReducer,
+    history: historyReducer,
   },
 });
 
