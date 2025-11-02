@@ -3,6 +3,7 @@ import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { cn } from "@/lib/utils";
 import { AnimatePresence } from "motion/react";
 import AnimationWrapper from "@/components/ui/animation-wrapper";
+import BorderedWrapper from "@/components/ui/bordered-wrapper";
 
 interface EmptyProps {
   label?: string;
@@ -30,9 +31,8 @@ const Empty = ({
   ...props
 }: EmptyProps) => {
   return (
-    <div
+    <BorderedWrapper
       className={cn(
-        "w-full h-full min-h-24 border-2 border-dashed p-4 rounded-md text-muted-foreground select-none",
         centered && "flex flex-col justify-center items-center text-center",
         className
       )}
@@ -62,7 +62,7 @@ const Empty = ({
       </div>
 
       {children && <div className="mt-2">{children}</div>}
-    </div>
+    </BorderedWrapper>
   );
 };
 
