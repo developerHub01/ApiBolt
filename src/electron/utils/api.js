@@ -50,9 +50,6 @@ export const fetchApi = async (_, rawPayload) => {
       },
     };
   } catch (error) {
-    console.log("============================");
-    console.log("Error caught:", error.message);
-
     if (axios.isAxiosError(error) && error.response) {
       /* Server responded with error status (4xx, 5xx) */
       const statusDetails = await getHttpStatusByCode(
@@ -127,7 +124,6 @@ export const fetchApi = async (_, rawPayload) => {
       };
     }
 
-    console.log(responsePayload);
     return responsePayload;
   }
 };
