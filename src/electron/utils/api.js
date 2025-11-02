@@ -50,12 +50,15 @@ export const fetchApi = async (_, rawPayload) => {
       },
     };
   } catch (error) {
-    console.error(error);
-    const statusDetails = await getHttpStatusByCode(
-      String(error.response.status)
-    );
+    console.log("============================");
+    console.log("Error caught:", error.message);
 
     if (axios.isAxiosError(error) && error.response) {
+      /* Server responded with error status (4xx, 5xx) */
+      const statusDetails = await getHttpStatusByCode(
+        String(error.response.status)
+      );
+
       responsePayload = {
         data: error.response.data,
         headers: error.response.headers,
@@ -71,14 +74,31 @@ export const fetchApi = async (_, rawPayload) => {
           body: getPayloadSize(error.response.data) ?? 0,
         },
       };
-    } else {
+    } else if (axios.isAxiosError(error) && error.request) {
+      /* Request was made but no response received (network error, timeout, etc.) */
       responsePayload = {
         data: null,
         headers: {},
         status: 0,
         statusText: "Network Error",
         statusDescription:
+          error.message ||
           "Could not connect to the server. Check your internet or API URL.",
+        responseSize: {
+          header: 0,
+          body: 0,
+        },
+      };
+    } else {
+      /* Something else happened (error in request setup, etc.) */
+      responsePayload = {
+        data: null,
+        headers: {},
+        status: 0,
+        statusText: "Request Error",
+        statusDescription:
+          error.message ||
+          "An unexpected error occurred while setting up the request.",
         responseSize: {
           header: 0,
           body: 0,
@@ -106,6 +126,8 @@ export const fetchApi = async (_, rawPayload) => {
         }),
       };
     }
+
+    console.log(responsePayload);
     return responsePayload;
   }
 };
