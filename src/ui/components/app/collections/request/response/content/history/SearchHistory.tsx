@@ -72,7 +72,9 @@ const SearchHistory = () => {
           <SelectGroup>
             <SelectLabel>Methods</SelectLabel>
             {methodList.map(({ id, label }) => (
-              <SelectItem value={id}>{label}</SelectItem>
+              <SelectItem value={id} className="uppercase">
+                {label}
+              </SelectItem>
             ))}
           </SelectGroup>
         </SelectContent>

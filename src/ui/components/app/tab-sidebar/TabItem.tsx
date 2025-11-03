@@ -11,12 +11,10 @@ import { cn } from "@/lib/utils";
 import { FolderClosed as FolderIcon, X as CloseIcon } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import {
-  handleChangeSelectedTab,
-  handleMoveTab,
-} from "@/context/redux/request-response/request-response-slice";
+import { handleMoveTab } from "@/context/redux/request-response/request-response-slice";
 import type { THTTPMethods } from "@/types/request-response.types";
 import {
+  changeSelectedTab,
   expendParentsOnSelectedChangeTabsData,
   removeTab,
 } from "@/context/redux/request-response/thunks/tab-list";
@@ -86,7 +84,7 @@ const TabItem = memo(({ id, index }: { id: string; index: number }) => {
   };
 
   const handleClick = useCallback(async () => {
-    dispatch(handleChangeSelectedTab(id));
+    dispatch(changeSelectedTab(id));
 
     if (selectedTab === id) return;
     dispatch(expendParentsOnSelectedChangeTabsData(id));
