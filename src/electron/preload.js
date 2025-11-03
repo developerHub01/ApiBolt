@@ -384,4 +384,6 @@ contextBridge.exposeInMainWorld("electronAPIHistory", {
     await ipcRenderer.invoke("createHistory", ...payload),
   deleteHistoryById: async (...payload) =>
     await ipcRenderer.invoke("deleteHistoryById", ...payload),
+  deleteHistoryByRequestId: async (...payload) =>
+    await ipcRenderer.invoke("deleteHistoryByRequestId", ...payload),
 });

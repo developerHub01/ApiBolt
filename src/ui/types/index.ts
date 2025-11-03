@@ -451,6 +451,7 @@ declare global {
         payload: CreateHistoryItemInterface
       ): Promise<HistoryItemMetaInterface | null>;
       deleteHistoryById(id: string): Promise<boolean>;
+      deleteHistoryByRequestId(id: string): Promise<boolean>;
     };
   }
 }

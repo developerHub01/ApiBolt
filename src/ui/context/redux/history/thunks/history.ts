@@ -1,13 +1,16 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import {
+  handleChangeFilterMethod,
+  handleClearHistoryCacheByRequestId,
   handleDeleteHistoryByRequestId,
   handleLoadHistoryByRequestId,
 } from "@/context/redux/history/history-slice";
+import type { THistoryFilter } from "@/types/history.types";
 
 export const loadRequestHistoryMeta = createAsyncThunk<
   void,
-  string | void,
+  string | void | null,
   {
     dispatch: AppDispatch;
     state: RootState;
@@ -15,8 +18,7 @@ export const loadRequestHistoryMeta = createAsyncThunk<
 >("history/loadRequestHistoryMeta", async (id, { dispatch, getState }) => {
   try {
     const state = getState() as RootState;
-    if (!id && state.requestResponse.selectedTab)
-      id = state.requestResponse.selectedTab;
+    if (!id) id = state.requestResponse.selectedTab;
 
     if (!id) return;
 
@@ -35,7 +37,7 @@ export const loadRequestHistoryMeta = createAsyncThunk<
 
 export const deleteRequestHistoryById = createAsyncThunk<
   boolean,
-  string | void,
+  string | void | undefined | null,
   {
     dispatch: AppDispatch;
     state: RootState;
@@ -64,3 +66,66 @@ export const deleteRequestHistoryById = createAsyncThunk<
     return false;
   }
 });
+
+export const deleteRequestHistoryByRequestId = createAsyncThunk<
+  boolean,
+  string | void | undefined | null,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>(
+  "history/deleteRequestHistoryByRequestId",
+  async (requestId, { dispatch, getState }) => {
+    try {
+      const state = getState() as RootState;
+      if (!requestId) requestId = state.requestResponse.selectedTab;
+      if (!requestId) return false;
+
+      dispatch(handleClearHistoryCacheByRequestId(requestId));
+
+      const response =
+        await window.electronAPIHistory.deleteHistoryByRequestId(requestId);
+
+      if (response) return true;
+
+      dispatch(loadRequestHistoryMeta(requestId));
+      return false;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  }
+);
+
+export const changeHistoryFilterMethod = createAsyncThunk<
+  void,
+  {
+    requestId?: string;
+    method: THistoryFilter;
+  },
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>(
+  "history/changeHistoryFilterMethod",
+  async ({ requestId, method }, { dispatch, getState }) => {
+    try {
+      const state = getState() as RootState;
+
+      if (!requestId)
+        requestId = state.requestResponse.selectedTab ?? undefined;
+      if (!requestId) return;
+
+      dispatch(
+        handleChangeFilterMethod({
+          requestId,
+          method,
+        })
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);

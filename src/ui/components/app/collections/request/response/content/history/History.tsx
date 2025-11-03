@@ -1,33 +1,52 @@
-import { useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import HistoryItem from "@/components/app/collections/request/response/content/history/HistoryItem";
-import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import { useAppSelector } from "@/context/redux/hooks";
 import {
-  selectMetaList,
-  selectMetaListIsLoading,
+  selectHistoryMetaCount,
+  selectHistoryMetaListIsLoading,
 } from "@/context/redux/history/selectors/history";
 import HistorySkeleton from "@/components/app/collections/request/response/content/history/skeleton/HistorySkeleton";
-import { loadRequestHistoryMeta } from "@/context/redux/history/thunks/history";
+import { useHistory } from "@/context/history/HistoryProvider";
+import SearchHistory from "@/components/app/collections/request/response/content/history/SearchHistory";
+import Empty from "@/components/ui/empty";
 
 const History = () => {
-  const dispatch = useAppDispatch();
-  const isLoading = useAppSelector(selectMetaListIsLoading);
-  const metaList = useAppSelector(selectMetaList);
-
-  useEffect(() => {
-    dispatch(loadRequestHistoryMeta());
-  }, [dispatch]);
+  const isLoading = useAppSelector(selectHistoryMetaListIsLoading);
+  const metaCount = useAppSelector(selectHistoryMetaCount);
+  const { metaList } = useHistory();
 
   if (isLoading) return <HistorySkeleton />;
 
   return (
-    <ScrollArea className="flex-1 min-h-0 h-full overflow-hidden [&>div>div]:h-full">
-      <div className="flex flex-col divide-y divide-border/40">
-        {metaList.map((meta) => (
-          <HistoryItem key={meta.id} {...meta} />
-        ))}
-      </div>
-    </ScrollArea>
+    <section className="flex-1 flex flex-col gap-2">
+      {Boolean(metaCount) && <SearchHistory />}
+      <ScrollArea className="flex-1 min-h-0 h-full overflow-hidden [&>div>div]:h-full">
+        {metaCount ? (
+          <>
+            {!metaList.length ? (
+              <Empty
+                label="No history matched"
+                animationSrc="./lottie/no-search-item-available.lottie"
+                showFallback
+                innerClassName="w-56"
+              />
+            ) : (
+              <div className="flex flex-col divide-y divide-border/40">
+                {metaList.map((meta) => (
+                  <HistoryItem key={meta.id} {...meta} />
+                ))}
+              </div>
+            )}
+          </>
+        ) : (
+          <Empty
+            label="No history available."
+            description="There is no history for the request. History will only appear after seding any http request"
+            showFallback
+          />
+        )}
+      </ScrollArea>
+    </section>
   );
 };
 

@@ -12,25 +12,25 @@ import ResponseError from "@/components/app/collections/request/response/content
 const ResposneContent = memo(() => {
   const { activeMetaTab } = useResponse();
   const response = useAppSelector(selectResponse);
-  
+
+  if (!activeMetaTab || (!response && activeMetaTab !== "history"))
+    return <EmptyResponse />;
+
   return (
     <div className="p-2.5 pt-1 flex-1 min-h-0 flex">
       {activeMetaTab === "history" ? (
         <History />
       ) : (
         <>
-          {response ? (
+          {Boolean(response) && (
             <>
               {activeMetaTab === "body" && <Body />}
               {activeMetaTab === "cookies" && <Cookies />}
               {activeMetaTab === "headers" && <Headers />}
-              {activeMetaTab === "error" && !response.status && (
+              {activeMetaTab === "error" && !response?.status && (
                 <ResponseError />
               )}
-              {!activeMetaTab && <EmptyResponse />}
             </>
-          ) : (
-            <EmptyResponse />
           )}
         </>
       )}

@@ -1,16 +1,21 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { HistoryItemMetaInterface } from "@/types/history.types";
+import type {
+  HistoryItemMetaInterface,
+  THistoryFilter,
+} from "@/types/history.types";
 import { loadRequestHistoryMeta } from "@/context/redux/history/thunks/history";
 
 interface HistoryInterface {
   meta: Record<string, Array<HistoryItemMetaInterface>>;
   isMetaLoading: boolean;
+  selectedFilterMethod: Record<string, THistoryFilter>;
 }
 
 // Define the initial state using that type
 const initialState: HistoryInterface = {
   meta: {},
   isMetaLoading: false,
+  selectedFilterMethod: {},
 };
 
 export const historySlice = createSlice({
@@ -18,6 +23,16 @@ export const historySlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
+    handleChangeFilterMethod: (
+      state,
+      action: PayloadAction<{
+        requestId: string;
+        method: THistoryFilter;
+      }>
+    ) => {
+      state.selectedFilterMethod[action.payload.requestId] =
+        action.payload.method;
+    },
     handleClearHistoryCacheByRequestId: (
       state,
       action: PayloadAction<string>
@@ -42,7 +57,7 @@ export const historySlice = createSlice({
     ) => {
       state.meta[action.payload.requestId] = [
         action.payload.payload,
-        ...state.meta[action.payload.requestId],
+        ...(state.meta[action.payload.requestId] ?? []),
       ];
     },
     handleDeleteHistoryByRequestId: (
@@ -76,6 +91,7 @@ export const historySlice = createSlice({
 });
 
 export const {
+  handleChangeFilterMethod,
   handleClearHistoryCacheByRequestId,
   handleLoadHistoryByRequestId,
   handleAddHistoryByRequestId,

@@ -15,6 +15,7 @@ interface EmptyProps {
   animationSrc?: string;
   showFallback?: boolean;
   centered?: boolean;
+  innerClassName?: string;
   [key: string]: unknown;
 }
 
@@ -28,6 +29,7 @@ const Empty = ({
   animationSrc = "./lottie/empty-box.lottie",
   showFallback = false,
   centered = true,
+  innerClassName = "",
   ...props
 }: EmptyProps) => {
   return (
@@ -53,7 +55,7 @@ const Empty = ({
         )}
       </AnimatePresence>
 
-      <div className="mx-auto w-full max-w-md">
+      <div className={cn("mx-auto w-full max-w-md", innerClassName)}>
         {label && <h4 className="font-medium">{label}</h4>}
 
         {description && (

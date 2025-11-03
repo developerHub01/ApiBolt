@@ -52,3 +52,5 @@ export type CreateHistoryItemInterface = Omit<
   HistoryItemInterface,
   "id" | "createdAt"
 >;
+
+export type THistoryFilter = THTTPMethods | "all";

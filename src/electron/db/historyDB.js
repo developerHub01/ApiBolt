@@ -151,3 +151,17 @@ export const deleteHistoryById = async (id) => {
     console.error(error);
   }
 };
+
+export const deleteHistoryByRequestId = async (request) => {
+  try {
+    if (!request) return false;
+
+    const result = await db
+      .delete(historyTable)
+      .where(eq(historyTable.request, request));
+
+    return result.changes > 0;
+  } catch (error) {
+    console.error(error);
+  }
+};

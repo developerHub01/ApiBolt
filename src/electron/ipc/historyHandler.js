@@ -2,6 +2,7 @@ import { ipcMain } from "electron";
 import {
   createHistory,
   deleteHistoryById,
+  deleteHistoryByRequestId,
   getHistoryById,
   getHistoryByRequestId,
 } from "../db/historyDB.js";
@@ -22,5 +23,9 @@ export const historyHandler = () => {
   ipcMain.handle(
     "deleteHistoryById",
     async (_, ...rest) => await deleteHistoryById(...rest)
+  );
+  ipcMain.handle(
+    "deleteHistoryByRequestId",
+    async (_, ...rest) => await deleteHistoryByRequestId(...rest)
   );
 };
