@@ -44,6 +44,11 @@ import type {
   KeybaordShortCutReceivePayloadInterface,
   KeybaordShortCutUpdatePayloadInterface,
 } from "@/types/keyboard-shortcut.types";
+import type {
+  CreateHistoryItemInterface,
+  HistoryItemInterface,
+  HistoryItemMetaInterface,
+} from "@/types/history.types";
 
 declare global {
   interface Window {
@@ -435,6 +440,17 @@ declare global {
       resetKeyboardShortcuts(
         payload: Pick<KeybaordShortCutInterface, "id" | "projectId">
       ): Promise<KeybaordShortCutInterface>;
+    };
+
+    electronAPIHistory: {
+      getHistoryById(id: string): Promise<HistoryItemInterface>;
+      getHistoryByRequestId(
+        requestId: string
+      ): Promise<Array<HistoryItemMetaInterface>>;
+      createHistory(
+        payload: CreateHistoryItemInterface
+      ): Promise<HistoryItemMetaInterface | null>;
+      deleteHistoryById(id: string): Promise<boolean>;
     };
   }
 }

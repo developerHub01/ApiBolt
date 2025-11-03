@@ -36,6 +36,7 @@ import { activeCodeSnippitTypeHandler } from "./ipc/activeCodeSnippitTypeHandler
 import { cookiesHandler } from "./ipc/cookiesHandler.js";
 import { generateKeyboardBindingsSeed } from "./seeders/keyboardShortcutSeed.js";
 import { keyboardShortcutHandler } from "./ipc/keyboardShortcutHandler.js";
+import { historyHandler } from "./ipc/historyHandler.js";
 
 export const userDataDir = app.getPath("userData");
 
@@ -111,6 +112,7 @@ app.whenReady().then(async () => {
   requestHandler();
   fileSystemHandler();
   keyboardShortcutHandler();
+  historyHandler();
   await generateHttpStatusSeed();
   await generateKeyboardBindingsSeed();
 });

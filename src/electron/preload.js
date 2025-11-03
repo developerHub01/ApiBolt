@@ -374,3 +374,14 @@ contextBridge.exposeInMainWorld("electronAPIKeyboardShortcut", {
   resetKeyboardShortcuts: async (...payload) =>
     await ipcRenderer.invoke("resetKeyboardShortcuts", ...payload),
 });
+
+contextBridge.exposeInMainWorld("electronAPIHistory", {
+  getHistoryById: async (...payload) =>
+    await ipcRenderer.invoke("getHistoryById", ...payload),
+  getHistoryByRequestId: async (...payload) =>
+    await ipcRenderer.invoke("getHistoryByRequestId", ...payload),
+  createHistory: async (...payload) =>
+    await ipcRenderer.invoke("createHistory", ...payload),
+  deleteHistoryById: async (...payload) =>
+    await ipcRenderer.invoke("deleteHistoryById", ...payload),
+});

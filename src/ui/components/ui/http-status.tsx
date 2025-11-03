@@ -14,7 +14,6 @@ const HttpStatus = ({
   variant = "primary",
   className = "",
 }: Props) => {
-  console.log({ variant });
   return (
     <Badge
       className={cn(

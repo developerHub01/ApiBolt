@@ -47,7 +47,7 @@ export const selectMetaData = ({
       authInheritedIds,
       authorizationHeaders,
       authorizationParams
-    ): Array<ParamInterface | FormDataInterface> | null => {
+    ) => {
       const metaId = id ?? selectedTab;
       if (!metaId) return null;
 
@@ -64,22 +64,25 @@ export const selectMetaData = ({
 
       switch (type) {
         case "params":
-          return params[metaId] ?? [];
+          return (params[metaId] ?? []) as Array<ParamInterface>;
         case "hiddenParams":
-          return authorizationParam ? [authorizationParam] : [];
+          return (
+            authorizationParam ? [authorizationParam] : []
+          ) as Array<ParamInterface>;
         case "headers":
-          return headers[metaId] ?? [];
+          return (headers[metaId] ?? []) as Array<ParamInterface>;
         case "hiddenHeaders": {
           return [
             ...(authorizationHeader ? [authorizationHeader] : []),
             hiddenCookie,
             ...(hiddenHeaders[metaId] ?? []),
-          ];
+          ] as Array<ParamInterface>;
         }
         case "form-data":
-          return formData[metaId] ?? [];
+          return formData[metaId] ?? ([] as Array<FormDataInterface>);
         case "x-www-form-urlencoded":
-          return xWWWFormUrlencodedData[metaId] ?? [];
+          return (xWWWFormUrlencodedData[metaId] ??
+            []) as Array<ParamInterface>;
       }
       return [];
     }

@@ -15,7 +15,6 @@ import { getHttpStatusByCode } from "../db/httpStatusDB.js";
 export const fetchApi = async (_, rawPayload) => {
   const payload = await apiPayloadHandler(rawPayload);
   let responsePayload = {};
-  console.log(payload);
 
   try {
     const normalizedUrl = new URL(payload.url).origin;

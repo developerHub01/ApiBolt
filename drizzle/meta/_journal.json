@@ -36,6 +36,20 @@
       "when": 1761419610723,
       "tag": "0004_unusual_mandroid",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1762164541352,
+      "tag": "0005_early_black_tom",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1762166100076,
+      "tag": "0006_stiff_captain_america",
+      "breakpoints": true
     }
   ]
 }

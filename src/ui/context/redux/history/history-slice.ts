@@ -1,24 +1,16 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { loadCookies } from "@/context/redux/cookies/thunks/cookies";
-import {
-  loadKeyboardShortcuts,
-  resetKeyboardShortcuts,
-  updateKeyboardShortcuts,
-} from "@/context/redux/keyboard-shortcuts/thunks/keyboard-shortcuts";
+import type { HistoryItemMetaInterface } from "@/types/history.types";
+import { loadRequestHistoryMeta } from "@/context/redux/history/thunks/history";
 
 interface HistoryInterface {
-  isCookiesLoading: boolean;
-  isCookiesError: null | string;
-  isKeyboardShortcutLoading: boolean;
-  isKeyboardShortcutError: null | string;
+  meta: Record<string, Array<HistoryItemMetaInterface>>;
+  isMetaLoading: boolean;
 }
 
 // Define the initial state using that type
 const initialState: HistoryInterface = {
-  isCookiesLoading: false,
-  isCookiesError: null,
-  isKeyboardShortcutLoading: false,
-  isKeyboardShortcutError: null,
+  meta: {},
+  isMetaLoading: false,
 };
 
 export const historySlice = createSlice({
@@ -26,73 +18,68 @@ export const historySlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    handleChangeIsCookiesError: (
+    handleClearHistoryCacheByRequestId: (
       state,
-      action: PayloadAction<string | null | undefined>
+      action: PayloadAction<string>
     ) => {
-      state.isCookiesError = action.payload ?? null;
+      delete state.meta[action.payload];
+    },
+    handleLoadHistoryByRequestId: (
+      state,
+      action: PayloadAction<{
+        requestId: string;
+        payload: Array<HistoryItemMetaInterface>;
+      }>
+    ) => {
+      state.meta[action.payload.requestId] = action.payload.payload;
+    },
+    handleAddHistoryByRequestId: (
+      state,
+      action: PayloadAction<{
+        requestId: string;
+        payload: HistoryItemMetaInterface;
+      }>
+    ) => {
+      state.meta[action.payload.requestId] = [
+        action.payload.payload,
+        ...state.meta[action.payload.requestId],
+      ];
+    },
+    handleDeleteHistoryByRequestId: (
+      state,
+      action: PayloadAction<{
+        id: string;
+        requestId: string;
+      }>
+    ) => {
+      const index = state.meta[action.payload.requestId]?.findIndex(
+        (item) => item.id === action.payload.id
+      );
+      if (index < 0) return;
+
+      state.meta[action.payload.requestId].splice(index, 1);
     },
   },
 
   extraReducers: (builder) => {
     builder
-      .addCase(loadCookies.pending, (state) => {
-        state.isCookiesLoading = true;
-        state.isCookiesError = null;
+      .addCase(loadRequestHistoryMeta.pending, (state) => {
+        state.isMetaLoading = true;
       })
-      .addCase(loadCookies.fulfilled, (state) => {
-        state.isCookiesLoading = false;
-        state.isCookiesError = null;
+      .addCase(loadRequestHistoryMeta.fulfilled, (state) => {
+        state.isMetaLoading = false;
       })
-      .addCase(loadCookies.rejected, (state, action) => {
-        state.isCookiesLoading = false;
-        state.isCookiesError = action.error?.message ?? null;
-      })
-
-      /**
-       * =======================
-       * keyboard shortcut
-       * =======================
-       */
-      .addCase(loadKeyboardShortcuts.pending, (state) => {
-        state.isKeyboardShortcutLoading = true;
-        state.isKeyboardShortcutError = null;
-      })
-      .addCase(loadKeyboardShortcuts.fulfilled, (state) => {
-        state.isKeyboardShortcutLoading = false;
-        state.isKeyboardShortcutError = null;
-      })
-      .addCase(loadKeyboardShortcuts.rejected, (state, action) => {
-        state.isKeyboardShortcutLoading = false;
-        state.isKeyboardShortcutError = action.error?.message ?? null;
-      })
-      .addCase(updateKeyboardShortcuts.pending, (state) => {
-        state.isKeyboardShortcutLoading = true;
-        state.isKeyboardShortcutError = null;
-      })
-      .addCase(updateKeyboardShortcuts.fulfilled, (state) => {
-        state.isKeyboardShortcutLoading = false;
-        state.isKeyboardShortcutError = null;
-      })
-      .addCase(updateKeyboardShortcuts.rejected, (state, action) => {
-        state.isKeyboardShortcutLoading = false;
-        state.isKeyboardShortcutError = action.error?.message ?? null;
-      })
-      .addCase(resetKeyboardShortcuts.pending, (state) => {
-        state.isKeyboardShortcutLoading = true;
-        state.isKeyboardShortcutError = null;
-      })
-      .addCase(resetKeyboardShortcuts.fulfilled, (state) => {
-        state.isKeyboardShortcutLoading = false;
-        state.isKeyboardShortcutError = null;
-      })
-      .addCase(resetKeyboardShortcuts.rejected, (state, action) => {
-        state.isKeyboardShortcutLoading = false;
-        state.isKeyboardShortcutError = action.error?.message ?? null;
+      .addCase(loadRequestHistoryMeta.rejected, (state) => {
+        state.isMetaLoading = false;
       });
   },
 });
 
-export const { handleChangeIsCookiesError } = historySlice.actions;
+export const {
+  handleClearHistoryCacheByRequestId,
+  handleLoadHistoryByRequestId,
+  handleAddHistoryByRequestId,
+  handleDeleteHistoryByRequestId,
+} = historySlice.actions;
 
 export default historySlice.reducer;

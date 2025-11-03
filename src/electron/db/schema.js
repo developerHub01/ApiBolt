@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { boolean } from "drizzle-orm/gel-core";
+import { boolean, uuid } from "drizzle-orm/gel-core";
 import {
   int,
   integer,
@@ -413,3 +413,30 @@ export const keyboardShortcutTable = sqliteTable(
     }),
   ]
 );
+
+export const historyTable = sqliteTable("history_table", {
+  id: text()
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  request: text().references(() => requestOrFolderMetaTable.id, {
+    onDelete: "cascade",
+  }),
+  url: text().default(""),
+  method: text(),
+  name: text(),
+  authorization: text(),
+  params: text(),
+  headers: text(),
+  formData: text(),
+  xWWWFormUrlencoded: text(),
+  binaryData: text(),
+  raw: text(),
+  rawType: text().default("json") /* text, javascript, json, html, xml */,
+  requestBodyType:
+    text() /* "none" | "form-data" | "x-www-form-urlencoded" | "raw" | "binary" */,
+  responseStatus: text(),
+  responseSize: text(),
+  createdAt: text()
+    .notNull()
+    .default(sql`(current_timestamp)`),
+});

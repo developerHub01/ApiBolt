@@ -14,31 +14,41 @@ import type {
 } from "@/types/authorization.types";
 
 export interface HistoryItemInterface {
+  id: string;
   url: string;
   method: THTTPMethods;
-  authorization: {
+  name: string;
+  request: string;
+  authorization?: {
     type: TAuthType;
-    data?:
-      | BasicAuthInterface
-      | TBearerToken
-      | JWTBearerAuthInterface
-      | APIKeyInterface;
+    inheritedId: string | null;
+    basicAuth: BasicAuthInterface;
+    bearerAuth: TBearerToken;
+    jwtAuth: JWTBearerAuthInterface;
+    apiKeyAuth: APIKeyInterface;
   };
-  body: {
-    selected: TRequestBodyType;
-    rawData: string;
-    headers: Array<ParamInterface>;
-    formData: Array<ParamInterface>;
-    xWWWFormUrlencodedData: Array<ParamInterface>;
-    binaryData: string | null;
-    rawRequestBodyType: TContentType;
-  };
-  status?: {
-    code: string;
-    details: string;
-  };
-  size?: {
+  params?: Array<ParamInterface>;
+  headers?: Array<ParamInterface>;
+  formData?: Array<ParamInterface>;
+  xWWWFormUrlencoded?: Array<ParamInterface>;
+  binaryData?: string;
+  raw?: string;
+  rawType?: TContentType;
+  requestBodyType?: TRequestBodyType;
+  responseStatus?: string;
+  responseSize?: {
     requestSize: RequestResponseSizeInterface;
     responseSize: RequestResponseSizeInterface;
   };
+  createdAt?: string;
 }
+
+export type HistoryItemMetaInterface = Pick<
+  HistoryItemInterface,
+  "id" | "method" | "responseStatus" | "createdAt"
+>;
+
+export type CreateHistoryItemInterface = Omit<
+  HistoryItemInterface,
+  "id" | "createdAt"
+>;
