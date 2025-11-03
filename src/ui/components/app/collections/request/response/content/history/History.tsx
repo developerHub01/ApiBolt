@@ -31,7 +31,7 @@ const History = () => {
                 innerClassName="w-56"
               />
             ) : (
-              <div className="flex flex-col divide-y divide-border/40">
+              <div className="flex flex-col divide-y divide-border/50">
                 {metaList.map((meta) => (
                   <HistoryItem key={meta.id} {...meta} />
                 ))}
