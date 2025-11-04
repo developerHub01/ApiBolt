@@ -15,26 +15,33 @@ interface SelectV1Props {
     isActive?: boolean;
     count?: number;
   }>;
-  value: string;
+  value?: string;
   handleChange: (id: string) => void;
   className?: string;
+  placeholder?: string;
 }
 
-const SelectV1 = ({ list, value, handleChange, className }: SelectV1Props) => {
+const SelectV1 = ({
+  list,
+  value,
+  handleChange,
+  className,
+  placeholder,
+}: SelectV1Props) => {
   return (
     <div className={cn("select-none", className)}>
       <Select
-        defaultValue={value ?? list[0].id}
-        value={value ?? list[0].id}
-        onValueChange={handleChange}
+        defaultValue={(value ?? list[0].id) as string}
+        value={value}
+        onValueChange={(value) => handleChange(value)}
       >
         <SelectTrigger size="sm" className="min-w-[120px]">
-          <SelectValue placeholder="Select Tab" />
+          <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
             {list.map(({ id, label, isActive, count }) => (
-              <SelectItem key={id} value={id}>
+              <SelectItem key={id} value={id as string}>
                 {label}
                 {Boolean(count) && <p className="text-primary">({count})</p>}
                 {isActive && (

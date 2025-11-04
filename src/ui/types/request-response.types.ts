@@ -265,3 +265,13 @@ export interface MetaShowColumnInterface {
   xWWWFormUrlencodedValue: boolean;
   xWWWFormUrlencodedDescription: boolean;
 }
+
+export type TResponseMetaTab =
+  | "body"
+  | "cookies"
+  | "headers"
+  | "history"
+  | "error"
+  | null;
+
+export type TResponseDataTab = "raw" | "preview";

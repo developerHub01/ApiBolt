@@ -30,6 +30,8 @@ import type {
   TRequestFolderDescriptionTab,
   ShowHiddenMetaInterface,
   FormDataPayloadInterface,
+  TResponseDataTab,
+  TResponseMetaTab,
 } from "@/types/request-response.types";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
@@ -124,6 +126,10 @@ interface RequestResponseState {
    */
   jwtBearerAuth: Record<string, JWTBearerAuthInterface>;
 
+  activeResponseMetaTab: Record<string, TResponseMetaTab>;
+  activeResponseDataTab: Record<string, TResponseDataTab>;
+  responseCodeWrap: Record<string, boolean>;
+
   folderTitle: Record<string, string>;
   folderDescription: Record<string, string>;
   folderDescriptionActiveTab: Record<string, TRequestFolderDescriptionTab>;
@@ -184,6 +190,10 @@ const initialState: RequestResponseState = {
   basicAuth: {},
   bearerTokenAuth: {},
   jwtBearerAuth: {},
+
+  activeResponseMetaTab: {},
+  activeResponseDataTab: {},
+  responseCodeWrap: {},
 
   folderTitle: {},
   folderDescription: {},
@@ -1169,6 +1179,37 @@ export const requestResponseSlice = createSlice({
 
       state.isDownloadRequestWithBase64[selectedTab] = action.payload;
     },
+
+    handleActiveResponseMetaTab: (
+      state,
+      action: PayloadAction<TResponseMetaTab | undefined>
+    ) => {
+      const selectedTab = state.selectedTab;
+      if (!selectedTab) return;
+
+      if (!action.payload) delete state.activeResponseMetaTab[selectedTab];
+      else state.activeResponseMetaTab[selectedTab] = action.payload;
+    },
+
+    handleActiveResponseDataTab: (
+      state,
+      action: PayloadAction<TResponseDataTab>
+    ) => {
+      const selectedTab = state.selectedTab;
+      if (!selectedTab) return;
+      state.activeResponseDataTab[selectedTab] = action.payload;
+    },
+
+    handleToggleResponseCodeWrap: (
+      state,
+      action: PayloadAction<boolean | undefined>
+    ) => {
+      const selectedTab = state.selectedTab;
+      if (!selectedTab) return;
+      state.responseCodeWrap[selectedTab] =
+        action.payload ?? !state.responseCodeWrap[selectedTab];
+    },
+
     handleClearRequestResponse: () =>
       // state,
       // action: PayloadAction<
@@ -1396,6 +1437,10 @@ export const {
   handleChangeAuthType,
   handleIsDownloadRequestWithBase64,
   handleClearRequestResponse,
+
+  handleActiveResponseMetaTab,
+  handleActiveResponseDataTab,
+  handleToggleResponseCodeWrap,
 
   handleLoadFolder,
   handleUpdateFolder,

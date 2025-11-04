@@ -8,7 +8,7 @@ interface TabV1Props {
     isActive?: boolean;
     count?: number;
   }>;
-  activeTab: string;
+  activeTab?: string;
   handleSelect: (id: string) => void;
   className?: string;
 }

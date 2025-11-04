@@ -17,6 +17,7 @@ import type {
 } from "@/types/request-response.types";
 import { filterAndUniqueMetaData } from "@/context/redux/request-response/utils";
 import {
+  handleActiveResponseMetaTab,
   handleChangeIsLoading,
   handleSetResponse,
 } from "@/context/redux/request-response/request-response-slice";
@@ -176,6 +177,14 @@ export const fetchApi = createAsyncThunk<
           payload: historyResponse,
         })
       );
+
+    /**
+     * ================================
+     * Handle response tabs
+     * ================================
+     */
+    if (!response?.status) dispatch(handleActiveResponseMetaTab("error"));
+    else dispatch(handleActiveResponseMetaTab("body"));
   } catch (error) {
     console.error(error);
   }

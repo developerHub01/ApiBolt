@@ -24,6 +24,7 @@ export const selectIsResponseLoading = createSelector(
   ],
   (isLoading): boolean => isLoading
 );
+
 export const selectResponse = createSelector(
   [
     (state: RootState) =>
@@ -31,6 +32,7 @@ export const selectResponse = createSelector(
   ],
   (response): ResponseInterface | null => response
 );
+
 export const selectRequestSize = createSelector(
   [
     (state: RootState) =>
@@ -39,6 +41,7 @@ export const selectRequestSize = createSelector(
   ],
   (requestSize) => requestSize
 );
+
 export const selectResponseSize = createSelector(
   [
     (state: RootState) =>
@@ -46,6 +49,36 @@ export const selectResponseSize = createSelector(
         ?.responseSize,
   ],
   (responseSize) => responseSize
+);
+
+export const selectActiveResponseMetaTab = createSelector(
+  [
+    (state: RootState) =>
+      state.requestResponse.activeResponseMetaTab[
+        state.requestResponse.selectedTab ?? ""
+      ],
+  ],
+  (activeResponseMetaTab) => activeResponseMetaTab
+);
+
+export const selectActiveResponseDataTab = createSelector(
+  [
+    (state: RootState) =>
+      state.requestResponse.activeResponseDataTab[
+        state.requestResponse.selectedTab ?? ""
+      ],
+  ],
+  (activeResponseDataTab) => activeResponseDataTab ?? "raw"
+);
+
+export const selectResponseCodeWrap = createSelector(
+  [
+    (state: RootState) =>
+      state.requestResponse.responseCodeWrap[
+        state.requestResponse.selectedTab ?? ""
+      ],
+  ],
+  (codeWrap) => codeWrap
 );
 /*
  * ===============================================

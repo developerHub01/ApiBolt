@@ -1,20 +1,25 @@
-import { useAppSelector } from "@/context/redux/hooks";
-import { selectResponse } from "@/context/redux/request-response/selectors/response";
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-
-export type TResponseTab = "raw" | "preview";
+import React, { createContext, useCallback, useContext } from "react";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import {
+  selectActiveResponseDataTab,
+  selectActiveResponseMetaTab,
+  selectResponseCodeWrap,
+} from "@/context/redux/request-response/selectors/response";
+import type {
+  TResponseDataTab,
+  TResponseMetaTab,
+} from "@/types/request-response.types";
+import {
+  handleActiveResponseDataTab,
+  handleActiveResponseMetaTab,
+  handleToggleResponseCodeWrap as handleResponseCodeWrap,
+} from "@/context/redux/request-response/request-response-slice";
 
 interface ResponseContext {
   activeMetaTab: string | null;
-  handleChangeActiveMetaTab: (id: string) => void;
-  responseTab: TResponseTab;
-  handleChangeActiveResponseTab: (value: TResponseTab) => void;
+  handleChangeActiveMetaTab: (id: TResponseMetaTab) => void;
+  responseTab: TResponseDataTab;
+  handleChangeActiveResponseTab: (value: TResponseDataTab) => void;
   responseCodeWrap: boolean;
   handleToggleResponseCodeWrap: () => void;
 }
@@ -34,57 +39,35 @@ export const useResponse = () => {
   return context;
 };
 
-const localStorageResponseActiveTabKey = "response-active-tab";
-
 interface ResponseProviderProps {
   children: React.ReactNode;
 }
 
 const ResponseProvider = ({ children }: ResponseProviderProps) => {
-  const [activeMetaTab, setActiveMetaTab] = useState<string | null>(
-    () => localStorage.getItem(localStorageResponseActiveTabKey) ?? "body"
-  );
-  const [responseTab, setResponseTab] = useState<TResponseTab>("raw");
-  const [responseCodeWrap, setResponseCodeWrap] = useState<boolean>(false);
-  const response = useAppSelector(selectResponse);
-  const responseStatus = response?.status;
-
-  useEffect(() => {
-    setActiveMetaTab(null);
-  }, []);
-
-  useEffect(() => {
-    if (!activeMetaTab) return;
-    localStorage.setItem(localStorageResponseActiveTabKey, activeMetaTab);
-  }, [activeMetaTab]);
-
-  useEffect(() => {
-    if (responseStatus && activeMetaTab !== "error") return;
-    if (responseStatus && activeMetaTab === "error")
-      return setActiveMetaTab("body");
-    setActiveMetaTab("error");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [responseStatus]);
+  const dispatch = useAppDispatch();
+  const activeMetaTab = useAppSelector(selectActiveResponseMetaTab);
+  const responseTab = useAppSelector(selectActiveResponseDataTab);
+  const responseCodeWrap = useAppSelector(selectResponseCodeWrap);
 
   const handleChangeActiveMetaTab = useCallback(
-    (id: string) => {
+    (id: TResponseMetaTab) => {
       if (id === activeMetaTab) return;
-      setActiveMetaTab(id);
+      dispatch(handleActiveResponseMetaTab(id));
     },
-    [activeMetaTab]
+    [activeMetaTab, dispatch]
   );
 
   const handleChangeActiveResponseTab = useCallback(
-    (id: TResponseTab) => {
+    (id: TResponseDataTab) => {
       if (id === responseTab) return;
-      setResponseTab(id);
+      dispatch(handleActiveResponseDataTab(id));
     },
-    [responseTab]
+    [dispatch, responseTab]
   );
 
   const handleToggleResponseCodeWrap = useCallback(
-    () => setResponseCodeWrap((prev) => !prev),
-    []
+    () => dispatch(handleResponseCodeWrap()),
+    [dispatch]
   );
 
   return (

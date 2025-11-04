@@ -1,12 +1,14 @@
-import { memo, useMemo } from "react";
+import { memo, useCallback, useMemo } from "react";
 import TabV1 from "@/components/tab-v1";
 import SelectV1 from "@/components/select-v1";
 import { useResponse } from "@/context/collections/request/ResponseProvider";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectResponse } from "@/context/redux/request-response/selectors/response";
+import type { TResponseMetaTab } from "@/types/request-response.types";
+import { motion, AnimatePresence } from "motion/react";
 
 interface TabItemInterface {
-  id: string;
+  id: TResponseMetaTab;
   label: string;
   count?: number;
 }
@@ -59,7 +61,7 @@ const MetaDataTab = memo(() => {
 
     list.push(historyTab);
 
-    return list;
+    return list as Array<TabItemInterface & { id: string }>;
   }, [response]);
 
   const tabList = useMemo(() => {
@@ -72,23 +74,50 @@ const MetaDataTab = memo(() => {
 
     list.push(historyTab);
 
-    return list;
+    return list as Array<TabItemInterface & { id: string }>;
   }, [response]);
 
-  if (!activeMetaTab) return null;
+  const handleChange = useCallback(
+    (value: string) => handleChangeActiveMetaTab(value as TResponseMetaTab),
+    [handleChangeActiveMetaTab]
+  );
 
   return (
     <>
-      <SelectV1
-        list={tabList}
-        value={activeMetaTab}
-        handleChange={handleChangeActiveMetaTab}
-        className="block md:hidden"
-      />
+      <AnimatePresence>
+        {activeMetaTab ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="block md:hidden"
+          >
+            <SelectV1
+              list={tabList}
+              value={activeMetaTab}
+              handleChange={handleChange}
+              placeholder="Select Tab"
+            />
+          </motion.div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="block md:hidden"
+          >
+            <TabV1
+              list={tabListWithActivity}
+              activeTab={activeMetaTab ?? undefined}
+              handleSelect={handleChange}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
       <TabV1
         list={tabListWithActivity}
-        activeTab={activeMetaTab}
-        handleSelect={handleChangeActiveMetaTab}
+        activeTab={activeMetaTab ?? undefined}
+        handleSelect={handleChange}
         className="hidden md:flex"
       />
     </>
