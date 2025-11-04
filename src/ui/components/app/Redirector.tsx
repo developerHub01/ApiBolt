@@ -44,13 +44,14 @@ const Redirector = () => {
     if (location.pathname === route) return;
 
     navigate(route);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     isProjectsLoading,
     isSidebarActiveTabIsLoading,
     activeRequestOrFolder,
     activeProjectId,
     selectedTab,
+    sidebarActiveTab,
+    navigate,
   ]);
 
   return null;
