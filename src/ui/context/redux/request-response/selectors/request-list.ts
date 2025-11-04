@@ -60,3 +60,11 @@ export const selectRequestName = createSelector(
   ],
   (name): string => name
 );
+
+export const selectIsRequestOrFolderExist = createSelector(
+  [
+    (state: RootState) => state.requestResponse.requestList,
+    (_, id: string | undefined) => id,
+  ],
+  (requestList, id): boolean => Boolean(id ? requestList[id] : false)
+);
