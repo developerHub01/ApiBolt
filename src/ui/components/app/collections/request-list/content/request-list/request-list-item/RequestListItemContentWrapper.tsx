@@ -83,7 +83,7 @@ const RequestListItemContentWrapper = memo(
         <RequestListItemContentWrapperParent
           className={cn({
             /* active tab style */
-            "bg-accent": selectedTab === id,
+            "bg-accent/80": selectedTab === id,
 
             /* active tab border color */
             "bg-transparent hover:bg-accent/50": selectedTab !== id,
