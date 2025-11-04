@@ -55,7 +55,12 @@ const Empty = ({
         )}
       </AnimatePresence>
 
-      <div className={cn("mx-auto w-full max-w-md", innerClassName)}>
+      <div
+        className={cn(
+          "mx-auto w-full max-w-md flex flex-col gap-2",
+          innerClassName
+        )}
+      >
         {label && <h4 className="font-medium">{label}</h4>}
 
         {description && (
