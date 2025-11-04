@@ -34,8 +34,8 @@ const HttpStatus = ({
         className
       )}
     >
-      {status && <span>{status}</span>}
-      {statusText && <span>{statusText}</span>}
+      {Boolean(status) && <span>{status}</span>}
+      {Boolean(statusText) && <span>{statusText}</span>}
     </Badge>
   );
 };
