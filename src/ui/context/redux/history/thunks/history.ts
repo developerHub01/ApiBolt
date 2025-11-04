@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import {
   handleChangeFilterMethod,
+  handleChangeOpenedHistory,
   handleClearHistoryCacheByRequestId,
   handleDeleteHistoryByRequestId,
   handleLoadHistoryByRequestId,
@@ -129,3 +130,31 @@ export const changeHistoryFilterMethod = createAsyncThunk<
     }
   }
 );
+
+export const changeOpenedHistory = createAsyncThunk<
+  void,
+  string | undefined | null,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("history/changeOpenedHistory", async (id, { dispatch, getState }) => {
+  try {
+    const state = getState() as RootState;
+    const requestId = state.requestResponse.selectedTab ?? undefined;
+
+    if (!id || !requestId) {
+      dispatch(handleChangeOpenedHistory());
+      return;
+    }
+
+    dispatch(
+      handleChangeOpenedHistory({
+        id,
+        requestId,
+      })
+    );
+  } catch (error) {
+    console.error(error);
+  }
+});

@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
   selectHistoryMetaList,
+  selectIsHistoryMetaLoaded,
   selectSelectedFilterMethod,
 } from "@/context/redux/history/selectors/history";
 import type {
@@ -38,6 +39,7 @@ const HistoryProvider = ({ children }: HistoryProviderProps) => {
   const dispatch = useAppDispatch();
   const method = useAppSelector(selectSelectedFilterMethod);
   const metaList = useAppSelector(selectHistoryMetaList);
+  const isMetaLoaded = useAppSelector(selectIsHistoryMetaLoaded);
 
   const filteredMetaList = useMemo(() => {
     if (method !== "all")
@@ -46,8 +48,9 @@ const HistoryProvider = ({ children }: HistoryProviderProps) => {
   }, [method, metaList]);
 
   useEffect(() => {
+    if (isMetaLoaded) return;
     dispatch(loadRequestHistoryMeta());
-  }, [dispatch]);
+  }, [dispatch, isMetaLoaded]);
 
   if (!id) return null;
 

@@ -39,3 +39,23 @@ export const selectHistoryMetaCount = createSelector(
   ],
   (count) => count ?? 0
 );
+
+export const selectIsHistoryMetaLoaded = createSelector(
+  [
+    (state: RootState) =>
+      Array.isArray(
+        state.history.meta[state.requestResponse.selectedTab ?? ""]
+      ),
+  ],
+  (isLoaded) => isLoaded
+);
+
+export const selectOpenedHistory = createSelector(
+  [(state: RootState) => state.history.openedHistory],
+  (opened) => opened
+);
+
+export const selectIsHistoryItemOpen = createSelector(
+  [(state: RootState) => state.history.openedHistory],
+  (opened) => Boolean(opened?.id && opened?.requestId)
+);

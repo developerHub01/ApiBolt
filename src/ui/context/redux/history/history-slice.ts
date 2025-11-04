@@ -9,6 +9,10 @@ interface HistoryInterface {
   meta: Record<string, Array<HistoryItemMetaInterface>>;
   isMetaLoading: boolean;
   selectedFilterMethod: Record<string, THistoryFilter>;
+  openedHistory: {
+    id: string;
+    requestId: string;
+  } | null;
 }
 
 // Define the initial state using that type
@@ -16,6 +20,7 @@ const initialState: HistoryInterface = {
   meta: {},
   isMetaLoading: false,
   selectedFilterMethod: {},
+  openedHistory: null,
 };
 
 export const historySlice = createSlice({
@@ -74,6 +79,19 @@ export const historySlice = createSlice({
 
       state.meta[action.payload.requestId].splice(index, 1);
     },
+    handleChangeOpenedHistory: (
+      state,
+      action: PayloadAction<
+        | {
+            id: string;
+            requestId: string;
+          }
+        | null
+        | undefined
+      >
+    ) => {
+      state.openedHistory = action.payload ?? null;
+    },
   },
 
   extraReducers: (builder) => {
@@ -96,6 +114,7 @@ export const {
   handleLoadHistoryByRequestId,
   handleAddHistoryByRequestId,
   handleDeleteHistoryByRequestId,
+  handleChangeOpenedHistory,
 } = historySlice.actions;
 
 export default historySlice.reducer;

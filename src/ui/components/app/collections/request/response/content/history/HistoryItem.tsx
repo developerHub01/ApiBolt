@@ -6,7 +6,10 @@ import { AnimatePresence, motion } from "motion/react";
 import HttpStatus from "@/components/ui/http-status";
 import type { HistoryItemMetaInterface } from "@/types/history.types";
 import { useAppDispatch } from "@/context/redux/hooks";
-import { deleteRequestHistoryById } from "@/context/redux/history/thunks/history";
+import {
+  changeOpenedHistory,
+  deleteRequestHistoryById,
+} from "@/context/redux/history/thunks/history";
 import { toast } from "sonner";
 
 const HistoryItem = memo(
@@ -22,12 +25,15 @@ const HistoryItem = memo(
       if (response) toast.success("History Deleted successfully!");
     };
 
+    const handleOpen = () => dispatch(changeOpenedHistory(id));
+
     return (
       <motion.div
         className="flex items-center justify-between gap-2 min-h-9 hover:bg-secondary/50 transition-colors px-2 cursor-pointer"
         onHoverStart={() => setIsHovered(true)}
         onHoverEnd={() => setIsHovered(false)}
         transition={{ layout: { duration: 0.3, ease: "easeInOut" } }}
+        onClick={handleOpen}
       >
         <RequestMethodTag
           method={method}
@@ -39,7 +45,6 @@ const HistoryItem = memo(
           className="ml-auto text-xs text-muted-foreground flex items-center gap-2"
           transition={{ layout: { duration: 0.3, ease: "easeInOut" } }}
         >
-          {/* <p>Today, 7:23 PM</p> */}
           <p>{createdAt}</p>
           <HttpStatus
             status={statusCode}
@@ -54,6 +59,7 @@ const HistoryItem = memo(
               animate={{ opacity: 1, scale: 1, width: "auto" }}
               exit={{ opacity: 0, scale: 0.5, width: "0" }}
               transition={{ duration: 0.2 }}
+              onClick={(e) => e.stopPropagation()}
             >
               <Button
                 variant={"destructive"}
