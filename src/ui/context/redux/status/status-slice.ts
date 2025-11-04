@@ -5,8 +5,12 @@ import {
   resetKeyboardShortcuts,
   updateKeyboardShortcuts,
 } from "@/context/redux/keyboard-shortcuts/thunks/keyboard-shortcuts";
+import { loadProjectList } from "@/context/redux/project/thunks/projects";
+import { loadActiveTab } from "@/context/redux/sidebar/thunks/sidebar";
 
 interface StatusInterface {
+  isProjectLoading: boolean;
+  isSidebarActiiveTabLoading: boolean;
   isCookiesLoading: boolean;
   isCookiesError: null | string;
   isKeyboardShortcutLoading: boolean;
@@ -15,6 +19,8 @@ interface StatusInterface {
 
 // Define the initial state using that type
 const initialState: StatusInterface = {
+  isProjectLoading: true,
+  isSidebarActiiveTabLoading: true,
   isCookiesLoading: false,
   isCookiesError: null,
   isKeyboardShortcutLoading: false,
@@ -36,6 +42,40 @@ export const statusSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
+      /**
+       * =======================
+       * Projects
+       * =======================
+       */
+      .addCase(loadProjectList.pending, (state) => {
+        state.isProjectLoading = true;
+      })
+      .addCase(loadProjectList.fulfilled, (state) => {
+        state.isProjectLoading = false;
+      })
+      .addCase(loadProjectList.rejected, (state) => {
+        state.isProjectLoading = false;
+      })
+      /**
+       * =======================
+       * sidebar active tab
+       * =======================
+       */
+      .addCase(loadActiveTab.pending, (state) => {
+        state.isSidebarActiiveTabLoading = true;
+      })
+      .addCase(loadActiveTab.fulfilled, (state) => {
+        state.isSidebarActiiveTabLoading = false;
+      })
+      .addCase(loadActiveTab.rejected, (state) => {
+        state.isSidebarActiiveTabLoading = false;
+      })
+
+      /**
+       * =======================
+       * Cookies
+       * =======================
+       */
       .addCase(loadCookies.pending, (state) => {
         state.isCookiesLoading = true;
         state.isCookiesError = null;

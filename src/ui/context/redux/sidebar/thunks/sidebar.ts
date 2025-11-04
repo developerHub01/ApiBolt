@@ -10,9 +10,8 @@ export const loadActiveTab = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->("sidebar/loadActiveTab", async (_, { dispatch, getState }) => {
+>("sidebar/loadActiveTab", async (_, { dispatch }) => {
   try {
-    const state = getState() as RootState;
     let response =
       await window.electronAPIActiveSidebarTabDB.getActiveSidebarTab();
 
@@ -20,9 +19,7 @@ export const loadActiveTab = createAsyncThunk<
      * =============== SAFTY POURPOSE MOSTLY NOT TRIGGER ================
      * - when no active project and if tab is other then projects then dont allow to set instead set "projects" as default
      */
-    if (!state.project.activeProjectId && response !== "navigate_projects")
-      response = "navigate_projects";
-
+    if (!response) response = "navigate_projects";
     dispatch(handleChangeActiveTab(response));
   } catch (error) {
     console.error(error);

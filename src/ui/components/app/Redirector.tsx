@@ -6,15 +6,23 @@ import { selectSidebarActiveTab } from "@/context/redux/sidebar/selectors/sideba
 import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
 import { selectActiveRequestOrFolder } from "@/context/redux/request-response/selectors/request-list";
 import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
+import { selectIsPorjectLoading } from "@/context/redux/status/selectors/projects";
+import { selectSidebarActiveTabIsLoading } from "@/context/redux/status/selectors/sidebar";
 
 const Redirector = () => {
   const navigate = useNavigate();
   const activeProjectId = useAppSelector(selectActiveProjectId);
+  const isProjectsLoading = useAppSelector(selectIsPorjectLoading);
+  const isSidebarActiveTabIsLoading = useAppSelector(
+    selectSidebarActiveTabIsLoading
+  );
   const selectedTab = useAppSelector(selectSelectedTab);
   const activeRequestOrFolder = useAppSelector(selectActiveRequestOrFolder);
   const sidebarActiveTab = useAppSelector(selectSidebarActiveTab);
 
   useEffect(() => {
+    if (isProjectsLoading || isSidebarActiveTabIsLoading) return;
+
     let route = "";
     if (!activeProjectId) {
       route =
@@ -34,10 +42,16 @@ const Redirector = () => {
 
     /* find the path from the list */
     if (location.pathname === route) return;
-    navigate(route);
 
+    navigate(route);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeProjectId, selectedTab, sidebarActiveTab]);
+  }, [
+    isProjectsLoading,
+    isSidebarActiveTabIsLoading,
+    activeRequestOrFolder,
+    activeProjectId,
+    selectedTab,
+  ]);
 
   return null;
 };
