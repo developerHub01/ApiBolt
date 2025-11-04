@@ -48,13 +48,13 @@ const RequestTopRight = () => {
   const handleExport = useCallback(async () => {
     await handleDownloadRequest(selectedTab!);
 
-    toast("Successfully downloaded!!", {
+    toast.success("Request downloaded", {
       description: `${requestName}.json downloaded successfully`,
     });
   }, [handleDownloadRequest, requestName, selectedTab]);
 
   const handleImport = useCallback(async (file: File | undefined) => {
-    if (!file) return toast("Please select a valid JSON file.");
+    if (!file) return toast.error("Please select a valid JSON file.");
     // dispatch(
     //   importRequestFromFile({
     //     file,

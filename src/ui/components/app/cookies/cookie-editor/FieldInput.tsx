@@ -66,7 +66,7 @@ const FieldInput = memo(
 
       /* Show toast if cleaned */
       if (cleaned !== value) {
-        toast("Value cleaned", {
+        toast.info("Value cleaned", {
           description: "Invalid characters were removed automatically.",
         });
       }
@@ -139,12 +139,12 @@ const FieldInput = memo(
         /* Cleaned paste */
         setFieldValue(cleaned);
         onChange(cleaned);
-        toast("Pasted content cleaned", {
+        toast.info("Pasted content cleaned", {
           description: "Some invalid characters were removed automatically.",
         });
       } else {
         /* Entire paste invalid */
-        toast("Invalid paste", {
+        toast.error("Invalid paste", {
           description: "Pasted content contains only invalid characters.",
         });
       }

@@ -52,7 +52,9 @@ const SearchHistory = () => {
   const { method } = useHistory();
   const handleClear = async () => {
     const response = await dispatch(deleteRequestHistoryByRequestId()).unwrap();
-    if (response) toast.success("History Cleared successfully!");
+    if (response) {
+      toast.success("History cleared successfully");
+    }
   };
 
   const handleChangeFilter = (value: string) =>
@@ -66,7 +68,7 @@ const SearchHistory = () => {
     <div className="flex items-center gap-2 justify-end">
       <Select value={method} onValueChange={handleChangeFilter}>
         <SelectTrigger className="w-28" size="sm">
-          <SelectValue placeholder="Select method" />
+          <SelectValue placeholder="Filter by method" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
@@ -80,7 +82,7 @@ const SearchHistory = () => {
         </SelectContent>
       </Select>
       <Button variant={"secondary"} size={"sm"} onClick={handleClear}>
-        Clear All
+        Clear History
       </Button>
     </div>
   );

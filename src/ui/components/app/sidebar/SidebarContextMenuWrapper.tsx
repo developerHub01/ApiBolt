@@ -78,7 +78,7 @@ const SidebarContextMenuWrapper = ({
 
       list.push({
         id: "request-list-sidebar",
-        label: `${requestListCollapsed ? "Expand" : "Collapse"} Primary Sidebar${keybindingString}`,
+        label: `${requestListCollapsed ? "Expand" : "Collapse"} sidebar${keybindingString}`,
         onClick: handleToggleRequestListBar,
       });
     }

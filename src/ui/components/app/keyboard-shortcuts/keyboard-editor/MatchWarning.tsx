@@ -30,7 +30,8 @@ const MatchWarning = ({ show }: Props) => {
             transformOrigin: "center",
           }}
         >
-          This keybinding already exist, try different.
+          This keyboard shortcut already exists. Please choose a different
+          combination.
         </motion.p>
       )}
     </AnimatePresence>

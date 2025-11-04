@@ -22,7 +22,9 @@ const HistoryItem = memo(
 
     const handleDelete = async () => {
       const response = await dispatch(deleteRequestHistoryById(id)).unwrap();
-      if (response) toast.success("History Deleted successfully!");
+      if (response) {
+        toast.success("History item deleted successfully");
+      }
     };
 
     const handleOpen = () => dispatch(changeOpenedHistory(id));

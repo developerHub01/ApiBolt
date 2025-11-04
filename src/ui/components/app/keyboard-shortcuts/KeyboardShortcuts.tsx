@@ -32,7 +32,7 @@ const KeyboardShortcuts = memo(() => {
           <KeyboardShortcutsContent />
           <AnimatedDialogBottom>
             <p className="line-clamp-1 text-center text-muted-foreground max-w-lg text-sm">
-              List of all keybindings in the app
+              List of all keyboard shortcuts in the app
             </p>
           </AnimatedDialogBottom>
           <AnimatedDialogLoader isLoading={isLoading} />

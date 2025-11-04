@@ -48,7 +48,7 @@ const ThreeeDotAction = () => {
         },
         {
           id: "delete",
-          label: "Delete All",
+          label: "Delete all",
           Icon: DeleteIcon,
           onClick: handleDeleteAll,
         },

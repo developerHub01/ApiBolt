@@ -20,7 +20,7 @@ const KeyboardShortcutPreview = () => {
         <Table className="w-full border table-fixed overflow-hidden relative">
           <TableHeader className="bg-secondary font-bold sticky">
             <TableRow className="[&>th]:border-r [&>th]:last:border-r-0">
-              {["action", "Key binding"].map((label) => (
+              {["Action", "Keyboard Shortcut"].map((label) => (
                 <TableHead className="whitespace-normal p-3 capitalize">
                   {label}
                 </TableHead>
@@ -40,8 +40,8 @@ const KeyboardShortcutPreview = () => {
       ) : (
         <Empty
           className="min-h-60"
-          label="No keybinding matched"
-          description="No result matched with your search term."
+          label="No shortcuts found"
+          description="Try adjusting your search term or check your spelling"
           showFallback
         />
       )}

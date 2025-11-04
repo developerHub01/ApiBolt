@@ -46,7 +46,7 @@ const ProtocolToken = memo(() => {
     >
       <ButtonLikeDiv variant={"secondary"} className="p-0">
         <SelectTrigger className="w-[120px]">
-          <SelectValue placeholder="Select protocol" />
+          <SelectValue placeholder="Choose protocol" />
         </SelectTrigger>
       </ButtonLikeDiv>
       <SelectContent>

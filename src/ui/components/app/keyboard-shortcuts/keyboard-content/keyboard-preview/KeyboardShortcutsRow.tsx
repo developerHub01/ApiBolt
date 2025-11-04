@@ -33,8 +33,11 @@ const KeyboardShortcutsRow = memo(
         })
       ).unwrap();
 
-      if (response) toast.success("Keybinding updated successfully.");
-      else toast.error("Failed to update keybinding. Please try again.");
+      if (response) {
+        toast.success("Keyboard shortcut reset successfully");
+      } else {
+        toast.error("Failed to reset keyboard shortcut. Please try again.");
+      }
     }, [activeTab, dispatch, id]);
 
     return (

@@ -47,7 +47,7 @@ const Cookies = memo(() => {
         </AnimatedDialogContent>
         <AnimatedDialogBottom>
           <p className="line-clamp-1 text-center max-w-lg text-sm">
-            Cookies details which are saved in current project
+            Cookies saved in the current project
           </p>
         </AnimatedDialogBottom>
         <LoadCookies />

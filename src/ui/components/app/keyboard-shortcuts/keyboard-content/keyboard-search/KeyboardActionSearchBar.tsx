@@ -20,7 +20,7 @@ const KeyboardActionSearchBar = () => {
   return (
     <Input
       className="w-full p-1.5 pl-2.5"
-      placeholder="Search by action name"
+      placeholder="Search actions..."
       value={searchTerm}
       ref={searchBarRef}
       onChange={handleActionTextChange}

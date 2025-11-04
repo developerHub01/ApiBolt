@@ -15,13 +15,13 @@ const KeyboardKeyCellContent = memo(
     const actionList = [
       {
         id: "edit",
-        label: "Edit shortcut",
+        label: "Edit",
         Icon: EditIcon,
         onClick: onEdit,
       },
       {
         id: "reset",
-        label: "Reset shortcut",
+        label: "Reset",
         Icon: ResetIcon,
         onClick: onReset,
       },

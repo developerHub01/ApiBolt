@@ -19,8 +19,11 @@ const AddCookieBottomAction = () => {
   const handleReset = () => dispatch(handleResetAddCookieDetails());
   const handleAdd = async () => {
     const response = await dispatch(addCookie()).unwrap();
-    if (response) toast.success("Cookie added successfully.");
-    else toast.error("Something went wrong, cant add cookie.");
+    if (response) {
+      toast.success("Cookie added successfully");
+    } else {
+      toast.error("Failed to add cookie. Please try again.");
+    }
   };
 
   return (

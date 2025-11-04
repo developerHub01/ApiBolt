@@ -33,7 +33,7 @@ const RequestCodeTypeSelector = memo(() => {
         onValueChange={handleChangeCodeSnippitLanguageType}
       >
         <SelectTrigger size="sm">
-          <SelectValue placeholder="Select a code snippit" />
+          <SelectValue placeholder="Choose code snippet" />
         </SelectTrigger>
         <RequestCodeLineWrapButton />
         <SelectContent side="bottom" align="end">
@@ -54,7 +54,7 @@ const RequestCodeTypeSelector = memo(() => {
         align="end"
         Icon={CopyIcon}
         size="sm"
-        label="Copy Code Snippit"
+        label="Copy code snippet"
       />
     </div>
   );

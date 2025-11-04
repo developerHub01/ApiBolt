@@ -52,7 +52,11 @@ const DeleteProjectDialog = memo(() => {
     setName(defaultName);
 
     if (response) handleClose();
-    toast(response ? "Project Deleted Successfully!" : "Something went wrong!");
+    if (response) {
+      toast.success("Project deleted successfully");
+    } else {
+      toast.error("Failed to delete project. Please try again.");
+    }
   }, [handleClose, handleDeleteProject, name, projectName]);
 
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -85,7 +89,9 @@ const DeleteProjectDialog = memo(() => {
         <AnimatedDialogTop className="flex flex-col gap-3 px-4 py-3">
           <h3 className="text-lg leading-none font-semibold">Delete Project</h3>
           <p className="text-muted-foreground text-sm">
-            <span className="pr-1.5">To delete project type </span>
+            <span className="pr-1.5">
+              To confirm deletion, type the project name:{" "}
+            </span>
             <div className="inline-flex items-center gap-1.5">
               <ButtonLikeDiv
                 variant={"outline"}

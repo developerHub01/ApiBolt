@@ -134,15 +134,12 @@ const Code = ({
         typeof code === "object" ? JSON.stringify(code) : String(code).trim();
       await navigator.clipboard.writeText(cleanCode);
 
-      toast("Code copied", {
-        description: "Successfully copied code into your clipboard",
-      });
+      toast.success("Code copied to clipboard");
     } catch (error) {
-      toast("Something went wrong", {
-        description:
-          "Couldn't copy. facing some issue. " +
-          (error instanceof Error ? error.message : ""),
-      });
+      toast.error(
+        "Failed to copy code. " +
+          (error instanceof Error ? error.message : "Please try again.")
+      );
     }
   }, [code]);
 

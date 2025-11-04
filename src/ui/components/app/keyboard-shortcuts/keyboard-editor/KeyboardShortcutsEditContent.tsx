@@ -42,8 +42,11 @@ const KeyboardShortcutsEditContent = memo(({ shortcutId }: Props) => {
       })
     ).unwrap();
 
-    if (response) toast.success("Keybinding updated successfully.");
-    else toast.error("Failed to update keybinding. Please try again.");
+    if (response) {
+      toast.success("Keyboard shortcut updated successfully");
+    } else {
+      toast.error("Failed to update keyboard shortcut. Please try again.");
+    }
   }, [activeTab, dispatch, isExisting, keyList]);
 
   const handleKeyDown = useTrackKeyTyped<HTMLDivElement>({
@@ -74,7 +77,7 @@ const KeyboardShortcutsEditContent = memo(({ shortcutId }: Props) => {
       onKeyDown={handleKeyDown}
     >
       <p className="w-4/5 text-sm leading-relaxed">
-        Press desired keys combination and then press ENTER.
+        Press your desired key combination, then press ENTER to save.
       </p>
       <div
         className={cn(
@@ -101,7 +104,9 @@ const KeyboardShortcutsEditContent = memo(({ shortcutId }: Props) => {
             ))}
           </KbdGroup>
         ) : (
-          <p className="text-sm text-secondary-foreground">Press keys</p>
+          <p className="text-sm text-secondary-foreground">
+            Press keys to set shortcut
+          </p>
         )}
       </div>
       <MatchWarning show={isExisting} />

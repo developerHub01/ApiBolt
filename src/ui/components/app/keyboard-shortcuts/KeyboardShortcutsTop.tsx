@@ -16,11 +16,11 @@ const buttonList: Array<{
 }> = [
   {
     id: "global",
-    label: "Global keybindings",
+    label: "Global shortcuts",
   },
   {
     id: "local",
-    label: "Project keybindings",
+    label: "Project shortcuts",
   },
 ];
 

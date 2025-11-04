@@ -28,7 +28,7 @@ const ProjectSearch = () => {
   return (
     <div className="w-full flex items-center gap-2 px-2 py-1 border-2 border-muted focus-within:border-primary/50 duration-75 transition-colors rounded-md min-h-10 my-1">
       <input
-        placeholder="Search Project"
+        placeholder="Search projects..."
         className="w-full outline-none border-none"
         value={searchTerm}
         onChange={handleChange}

@@ -1,22 +1,25 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Api Bolt</title>
-    <script>
-      const theme = localStorage.getItem("vite-ui-theme");
-      /* for some unknown reason it is showing opposite theme in design so toggled it */
-      if (theme === "dark") {
-        document.documentElement.classList.add("light");
-      } else {
-        document.documentElement.classList.add("dark");
-      }
-    </script>
-  </head>
-  <body style="background: transparent; overflow: hidden">
-    <div id="root" style="background: transparent; overflow: hidden"></div>
-    <script type="module" src="/src/ui/splash-main.tsx"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ApiBolt - Loading</title>
+  <script>
+    const theme = localStorage.getItem("vite-ui-theme");
+    /* for some unknown reason it is showing opposite theme in design so toggled it */
+    if (theme === "dark") {
+      document.documentElement.classList.add("light");
+    } else {
+      document.documentElement.classList.add("dark");
+    }
+  </script>
+</head>
+
+<body style="background: transparent; overflow: hidden">
+  <div id="root" style="background: transparent; overflow: hidden"></div>
+  <script type="module" src="/src/ui/splash-main.tsx"></script>
+</body>
+
 </html>

@@ -68,7 +68,7 @@ const SettingLayoutActivityBar = () => {
           }
           value={activeActivityBarVisibleOption}
           onChange={handleActivityBarVisible}
-          placeholder="Activity bar visibility"
+          placeholder="Select visibility"
         />
       }
     </SettingItemHorizontalLayout>

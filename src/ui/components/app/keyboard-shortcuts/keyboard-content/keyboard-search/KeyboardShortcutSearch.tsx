@@ -21,19 +21,19 @@ interface ActionItemInterface {
 const actionList: Array<ActionItemInterface> = [
   {
     id: "action",
-    label: "Search by action",
+    label: "Search by action name",
     Icon: ActionIcon,
   },
   {
     id: "keyboard",
-    label: "Search by keyboard",
+    label: "Search by keyboard shortcut",
     Icon: KeyboardIcon,
   },
 ];
 
 const clearAction: ActionItemInterface = {
   id: "clear",
-  label: "Clear search",
+  label: "Clear",
   Icon: ClearIcon,
 };
 

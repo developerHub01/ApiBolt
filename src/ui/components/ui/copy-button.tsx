@@ -48,7 +48,7 @@ const CopyButton = memo(
     const handleClick = async () => {
       try {
         await window.navigator.clipboard.writeText(value);
-        toast("Copied Successfully");
+        toast.success("Copied to clipboard");
       } catch (error) {
         console.error(error);
       }

@@ -5,8 +5,8 @@ const EmptyBox = memo(() => (
   <div className="w-full px-2">
     <Empty
       className="min-h-60"
-      label="No result matched"
-      description="No result matched with your search term."
+      label="No results found"
+      description="Try adjusting your search term or check your spelling"
       showFallback
     />
   </div>

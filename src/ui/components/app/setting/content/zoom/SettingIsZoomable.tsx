@@ -56,7 +56,7 @@ const SettingIsZoomable = () => {
 
   return (
     <SettingItemHorizontalLayout className="py-2.5 items-center">
-      <p className="flex-1">Allow keyboard shortcuts to zoom in/out</p>
+      <p className="flex-1">Enable keyboard shortcuts for zoom in/out</p>
       {
         <SettingOptionSelector
           list={
@@ -66,7 +66,7 @@ const SettingIsZoomable = () => {
           }
           value={activeZoomOption}
           onChange={handleIsZoomableChange}
-          placeholder="Zoom level"
+          placeholder="Select zoom setting"
           label="Zoom"
         />
       }

@@ -15,7 +15,8 @@ const RequestListItemFolderEmpty = memo(() => {
     [dispatch, id]
   );
 
-  const emptyLeftSpace = REQUEST_ITEM_SPACE_SIZE + REQUEST_ITEM_SPACE_SIZE * lavel;
+  const emptyLeftSpace =
+    REQUEST_ITEM_SPACE_SIZE + REQUEST_ITEM_SPACE_SIZE * lavel;
 
   return (
     <RequestListItemContentWrapperParent className="h-auto cursor-auto">
@@ -26,7 +27,7 @@ const RequestListItemFolderEmpty = memo(() => {
         }}
       >
         <RequestListItemLine
-          lavel={lavel+1}
+          lavel={lavel + 1}
           className="select-none leading-relaxed py-1.5"
           isLastChild={true}
           isExpended={false}
@@ -42,7 +43,7 @@ const RequestListItemFolderEmpty = memo(() => {
           >
             Add a request
           </Button>{" "}
-          to start working.
+          to get started.
         </RequestListItemLine>
       </div>
     </RequestListItemContentWrapperParent>

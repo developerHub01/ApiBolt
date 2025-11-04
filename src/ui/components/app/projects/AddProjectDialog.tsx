@@ -37,7 +37,11 @@ const AddProjectDialog = memo(() => {
     setName(DEFAULT_PROJECT_NAME);
 
     if (response) handleChangeIsCreateDialogOpen();
-    toast(response ? "Project Created Successfully!" : "Something went wrong!");
+    if (response) {
+      toast.success("Project created successfully");
+    } else {
+      toast.error("Failed to create project. Please try again.");
+    }
   }, [dispatch, handleChangeIsCreateDialogOpen, name]);
 
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -67,9 +71,11 @@ const AddProjectDialog = memo(() => {
     <AnimatedDialog isOpen={isCreateDialogOpen} onClose={handleClose}>
       <AnimatedDialogContentWrapper className="max-h-[350px] max-w-[450px] md:max-w-[500px]">
         <AnimatedDialogTop className="flex flex-col gap-3 px-4 py-3">
-          <h3 className="text-lg leading-none font-semibold">New Project</h3>
+          <h3 className="text-lg leading-none font-semibold">
+            Create New Project
+          </h3>
           <p className="text-muted-foreground text-sm">
-            Create new project here
+            Organize your API requests into a new project
           </p>
         </AnimatedDialogTop>
         <div className="flex-1 flex flex-col gap-3 px-4 py-5">
@@ -82,7 +88,7 @@ const AddProjectDialog = memo(() => {
           <Input
             id="name-1"
             name="name"
-            placeholder="Project name..."
+            placeholder="Enter project name..."
             value={name}
             onChange={handleChange}
             onKeyDown={handleKeyDown}

@@ -96,7 +96,7 @@ const MetaDataTab = memo(() => {
               list={tabList}
               value={activeMetaTab}
               handleChange={handleChange}
-              placeholder="Select Tab"
+              placeholder="Choose tab"
             />
           </motion.div>
         ) : (

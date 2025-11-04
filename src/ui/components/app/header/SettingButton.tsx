@@ -59,7 +59,7 @@ const SettingButton = () => {
     },
     {
       id: "open_settings",
-      label: "Setting",
+      label: "Settings",
       onClick: () => dispatch(handleChangeIsSettingOpen()),
       isSeparatorAbove: true,
     },

@@ -20,7 +20,7 @@ interface EmptyProps {
 }
 
 const Empty = ({
-  label = "Nothing here yet!",
+  label = "No data available",
   description,
   children,
   className = "",

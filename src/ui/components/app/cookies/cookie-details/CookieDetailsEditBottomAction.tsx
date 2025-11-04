@@ -15,8 +15,11 @@ const CookieDetailsEditBottomAction = () => {
   const handleReset = () => dispatch(handleResetEditing());
   const handleSave = async () => {
     const response = await dispatch(saveEditingCookie()).unwrap();
-    if (response) toast.success("Cookie updated successfully.");
-    else toast.error("Something went wrong, cant update cookie.");
+    if (response) {
+      toast.success("Cookie updated successfully");
+    } else {
+      toast.error("Failed to update cookie. Please try again.");
+    }
   };
 
   return (

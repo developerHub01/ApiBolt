@@ -113,7 +113,7 @@ const Splash = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            API Testing Client
+            Powerful API Testing Tool
           </motion.p>
         </motion.div>
 
@@ -168,7 +168,7 @@ const Splash = () => {
         >
           <div className="flex justify-between items-center mb-1.5">
             <span className="text-muted-foreground text-xs font-medium">
-              Initializing
+              Loading
             </span>
             <span className="text-muted-foreground text-xs font-medium">
               {loadingProgress}%

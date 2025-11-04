@@ -5,7 +5,7 @@ const EmptySearchTermBox = memo(() => (
   <div className="w-full px-2">
     <Empty
       label="No search term"
-      description="Start searching."
+      description="Enter a search term to find requests and folders"
       className="min-h-60"
     />
   </div>

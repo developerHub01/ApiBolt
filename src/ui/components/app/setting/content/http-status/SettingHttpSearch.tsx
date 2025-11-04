@@ -13,7 +13,7 @@ const SettingHttpSearch = memo(
         <Searchbar
           value={value}
           onChange={onChange}
-          placeholder="Search by code"
+          placeholder="Search by status code..."
         />
       </div>
     );
