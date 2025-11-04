@@ -97,7 +97,7 @@ function TooltipContent({
       >
         {children}
         <TooltipPrimitive.Arrow
-          className={cn(tooltipArrowVariants({ variant, className }))}
+          className={cn(tooltipArrowVariants({ variant }))}
         />
       </TooltipPrimitive.Content>
     </TooltipPrimitive.Portal>

@@ -20,7 +20,7 @@ const VariableWarning = memo(() => {
         </Button>
       </TooltipTrigger>
       <TooltipContent
-        className="w-52 p-2 bg-accent [&>span>svg]:bg-accent [&>span>svg]:fill-accent text-accent-foreground"
+        className="w-52 p-2"
         side="bottom"
         align="end"
         alignOffset={5}
