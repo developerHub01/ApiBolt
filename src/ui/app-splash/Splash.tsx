@@ -1,5 +1,5 @@
 import { useEffect, useState, type CSSProperties } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { Zap, Activity, Code, Database } from "lucide-react";
 
 const dragableStyle = {

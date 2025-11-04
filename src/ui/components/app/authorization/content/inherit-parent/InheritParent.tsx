@@ -1,7 +1,7 @@
 import { memo } from "react";
 import InheritParentContent from "@/components/app/authorization/content/inherit-parent/InheritParentContent";
 import { Skeleton } from "@/components/ui/skeleton";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { useCollection } from "@/context/collections/CollectionProvider";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectAuthInheritedId } from "@/context/redux/request-response/selectors/auth";

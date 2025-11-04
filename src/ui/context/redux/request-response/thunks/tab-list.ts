@@ -11,7 +11,7 @@ import {
 } from "@/context/redux/request-response/request-response-slice";
 import { v4 as uuidv4 } from "uuid";
 import { getNodeParentsIdList } from "@/utils/request-response.utils";
-import { handleClearHistoryCacheByRequestId } from "../../history/history-slice";
+import { handleClearHistoryCacheByRequestId } from "@/context/redux/history/history-slice";
 
 /* ==============================
 ========= TabList start =========

@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "motion/react";
 import Url from "@/components/app/collections/request/request/meta-data/url/Url";
 import Params from "@/components/app/collections/request/request/meta-data/params/Params";
 import Headers from "@/components/app/collections/request/request/meta-data/headers/Headers";
