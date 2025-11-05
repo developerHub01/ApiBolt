@@ -6,13 +6,14 @@ import {
   selectHistoryMetaListIsLoading,
 } from "@/context/redux/history/selectors/history";
 import HistorySkeleton from "@/components/app/collections/request/response/content/history/skeleton/HistorySkeleton";
-import { useHistory } from "@/context/history/HistoryProvider";
 import HistoryTop from "@/components/app/collections/request/response/content/history/HistoryTop";
 import Empty from "@/components/ui/empty";
+import { useHistoryMetaList } from "@/context/history/HistoryMetaListProvider";
+
 const HistoryContent = () => {
   const isLoading = useAppSelector(selectHistoryMetaListIsLoading);
   const metaCount = useAppSelector(selectHistoryMetaCount);
-  const { metaList } = useHistory();
+  const { metaList } = useHistoryMetaList();
 
   if (isLoading) return <HistorySkeleton />;
 

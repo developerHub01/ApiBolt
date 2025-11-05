@@ -13,30 +13,36 @@ import type {
 } from "@/types/history.types";
 import { loadRequestHistoryMeta } from "@/context/redux/history/thunks/history";
 
-interface HistoryContext {
+interface HistoryMetaListContext {
   method: THistoryFilter;
   metaList: Array<HistoryItemMetaInterface>;
   metaCount: number;
 }
 
-const HistoryContext = createContext<HistoryContext | null>(null);
+const HistoryMetaListContext = createContext<HistoryMetaListContext | null>(
+  null
+);
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const useHistory = () => {
-  const context = useContext(HistoryContext);
+export const useHistoryMetaList = () => {
+  const context = useContext(HistoryMetaListContext);
 
   if (!context) {
-    throw new Error("useHistory must be used within a HistoryProvider.");
+    throw new Error(
+      "useHistoryMetaList must be used within a HistoryMetaListProvider."
+    );
   }
 
   return context;
 };
 
-interface HistoryProviderProps {
+interface HistoryMetaListProviderProps {
   children: React.ReactNode;
 }
 
-const HistoryProvider = ({ children }: HistoryProviderProps) => {
+const HistoryMetaListProvider = ({
+  children,
+}: HistoryMetaListProviderProps) => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const method = useAppSelector(selectSelectedFilterMethod);
@@ -58,7 +64,7 @@ const HistoryProvider = ({ children }: HistoryProviderProps) => {
   if (!id) return null;
 
   return (
-    <HistoryContext.Provider
+    <HistoryMetaListContext.Provider
       value={{
         method,
         metaList: filteredMetaList,
@@ -66,8 +72,8 @@ const HistoryProvider = ({ children }: HistoryProviderProps) => {
       }}
     >
       {children}
-    </HistoryContext.Provider>
+    </HistoryMetaListContext.Provider>
   );
 };
 
-export default HistoryProvider;
+export default HistoryMetaListProvider;

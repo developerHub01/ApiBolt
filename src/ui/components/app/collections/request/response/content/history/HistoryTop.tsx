@@ -16,7 +16,7 @@ import {
 import { useAppDispatch } from "@/context/redux/hooks";
 import type { THistoryFilter } from "@/types/history.types";
 import { toast } from "sonner";
-import { useHistory } from "@/context/history/HistoryProvider";
+import { useHistoryMetaList } from "@/context/history/HistoryMetaListProvider";
 
 const methodList: Array<{
   id: THistoryFilter;
@@ -50,7 +50,7 @@ const methodList: Array<{
 
 const HistoryTop = memo(() => {
   const dispatch = useAppDispatch();
-  const { method, metaCount } = useHistory();
+  const { method, metaCount } = useHistoryMetaList();
   const handleClear = async () => {
     const response = await dispatch(deleteRequestHistoryByRequestId()).unwrap();
     if (response) {
