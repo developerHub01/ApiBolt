@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
+  selectHistoryMetaCount,
   selectHistoryMetaList,
   selectIsHistoryMetaLoaded,
   selectSelectedFilterMethod,
@@ -15,6 +16,7 @@ import { loadRequestHistoryMeta } from "@/context/redux/history/thunks/history";
 interface HistoryContext {
   method: THistoryFilter;
   metaList: Array<HistoryItemMetaInterface>;
+  metaCount: number;
 }
 
 const HistoryContext = createContext<HistoryContext | null>(null);
@@ -39,6 +41,7 @@ const HistoryProvider = ({ children }: HistoryProviderProps) => {
   const dispatch = useAppDispatch();
   const method = useAppSelector(selectSelectedFilterMethod);
   const metaList = useAppSelector(selectHistoryMetaList);
+  const metaCount = useAppSelector(selectHistoryMetaCount);
   const isMetaLoaded = useAppSelector(selectIsHistoryMetaLoaded);
 
   const filteredMetaList = useMemo(() => {
@@ -59,6 +62,7 @@ const HistoryProvider = ({ children }: HistoryProviderProps) => {
       value={{
         method,
         metaList: filteredMetaList,
+        metaCount,
       }}
     >
       {children}

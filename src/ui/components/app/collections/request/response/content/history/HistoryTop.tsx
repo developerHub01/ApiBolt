@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -47,9 +48,9 @@ const methodList: Array<{
   },
 ];
 
-const SearchHistory = () => {
+const HistoryTop = memo(() => {
   const dispatch = useAppDispatch();
-  const { method } = useHistory();
+  const { method, metaCount } = useHistory();
   const handleClear = async () => {
     const response = await dispatch(deleteRequestHistoryByRequestId()).unwrap();
     if (response) {
@@ -65,7 +66,8 @@ const SearchHistory = () => {
     );
 
   return (
-    <div className="flex items-center gap-2 justify-end">
+    <div className="flex items-center gap-2 justify-between">
+      <p className="text-sm mr-auto">Total history: {metaCount} </p>
       <Select value={method} onValueChange={handleChangeFilter}>
         <SelectTrigger className="w-28" size="sm">
           <SelectValue placeholder="Filter by method" />
@@ -86,6 +88,6 @@ const SearchHistory = () => {
       </Button>
     </div>
   );
-};
+});
 
-export default SearchHistory;
+export default HistoryTop;

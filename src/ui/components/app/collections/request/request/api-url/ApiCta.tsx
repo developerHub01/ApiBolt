@@ -2,10 +2,10 @@ import { memo } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader as LoaderIcon } from "lucide-react";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectIsResponseLoading } from "@/context/redux/request-response/selectors/response";
+import { selectIsFetchApiLoading } from "@/context/redux/status/selectors/fetch-api";
 
 const ApiCta = memo(() => {
-  const isLoading = useAppSelector(selectIsResponseLoading);
+  const isLoading = useAppSelector(selectIsFetchApiLoading);
 
   return (
     <Button

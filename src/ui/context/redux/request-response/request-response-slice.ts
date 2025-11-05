@@ -67,7 +67,6 @@ interface RequestResponseState {
 
   isResponseCollapsed: Record<string, boolean>;
   activeMetaTab: Record<string, TActiveTabType>;
-  isLoading: Record<string, boolean>;
 
   metaShowColumn: Record<string, MetaShowColumnInterface>;
   paramsBulkEditOpen: Record<string, boolean>;
@@ -157,7 +156,6 @@ const initialState: RequestResponseState = {
   selectedTab: null,
   isResponseCollapsed: {},
   activeMetaTab: {},
-  isLoading: {},
 
   metaShowColumn: {},
   paramsBulkEditOpen: {},
@@ -1066,20 +1064,6 @@ export const requestResponseSlice = createSlice({
       state.activeMetaTab[id] = type;
     },
 
-    handleChangeIsLoading: (
-      state,
-      action: PayloadAction<{
-        id?: string;
-        value: boolean;
-      }>
-    ) => {
-      const { value } = action.payload;
-      const id = action.payload.id ?? state.selectedTab;
-      if (!id) return;
-
-      state.isLoading[id] = value;
-    },
-
     handleSetResponse: (
       state,
       action: PayloadAction<{
@@ -1426,7 +1410,6 @@ export const {
   handleClearReqestMetaTab,
   handleUpdateReqestMetaTab,
 
-  handleChangeIsLoading,
   handleSetResponse,
 
   handleSetFormData,

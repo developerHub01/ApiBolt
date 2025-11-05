@@ -65,6 +65,15 @@ export const historySlice = createSlice({
         ...(state.meta[action.payload.requestId] ?? []),
       ];
     },
+    handleReplaceHistoryByRequestId: (
+      state,
+      action: PayloadAction<{
+        requestId: string;
+        payload: Array<HistoryItemMetaInterface>;
+      }>
+    ) => {
+      state.meta[action.payload.requestId] = action.payload.payload;
+    },
     handleDeleteHistoryByRequestId: (
       state,
       action: PayloadAction<{
@@ -113,6 +122,7 @@ export const {
   handleClearHistoryCacheByRequestId,
   handleLoadHistoryByRequestId,
   handleAddHistoryByRequestId,
+  handleReplaceHistoryByRequestId,
   handleDeleteHistoryByRequestId,
   handleChangeOpenedHistory,
 } = historySlice.actions;

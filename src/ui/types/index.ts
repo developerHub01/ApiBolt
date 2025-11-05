@@ -449,7 +449,9 @@ declare global {
       ): Promise<Array<HistoryItemMetaInterface>>;
       createHistory(
         payload: CreateHistoryItemInterface
-      ): Promise<HistoryItemMetaInterface | null>;
+      ): Promise<
+        Array<HistoryItemMetaInterface> | HistoryItemMetaInterface | null
+      >;
       deleteHistoryById(id: string): Promise<boolean>;
       deleteHistoryByRequestId(id: string): Promise<boolean>;
     };

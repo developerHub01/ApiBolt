@@ -17,14 +17,6 @@ export const selectIsResponseCollapsed = createSelector(
   (isResponseCollapsed): boolean => isResponseCollapsed
 );
 
-export const selectIsResponseLoading = createSelector(
-  [
-    (state: RootState) =>
-      state.requestResponse.isLoading[state.requestResponse.selectedTab!],
-  ],
-  (isLoading): boolean => isLoading
-);
-
 export const selectResponse = createSelector(
   [
     (state: RootState) =>

@@ -15,6 +15,7 @@ interface StatusInterface {
   isCookiesError: null | string;
   isKeyboardShortcutLoading: boolean;
   isKeyboardShortcutError: null | string;
+  isFetchApiLoading: Record<string, boolean>;
 }
 
 // Define the initial state using that type
@@ -25,6 +26,7 @@ const initialState: StatusInterface = {
   isCookiesError: null,
   isKeyboardShortcutLoading: false,
   isKeyboardShortcutError: null,
+  isFetchApiLoading: {},
 };
 
 export const statusSlice = createSlice({
@@ -37,6 +39,17 @@ export const statusSlice = createSlice({
       action: PayloadAction<string | null | undefined>
     ) => {
       state.isCookiesError = action.payload ?? null;
+    },
+    handleIsFetchApiLoading: (
+      state,
+      action: PayloadAction<{
+        requestId: string;
+        isLoading: boolean;
+      }>
+    ) => {
+      if (action.payload.isLoading)
+        state.isFetchApiLoading[action.payload.requestId] = true;
+      else delete state.isFetchApiLoading[action.payload.requestId];
     },
   },
 
@@ -133,6 +146,7 @@ export const statusSlice = createSlice({
   },
 });
 
-export const { handleChangeIsCookiesError } = statusSlice.actions;
+export const { handleChangeIsCookiesError, handleIsFetchApiLoading } =
+  statusSlice.actions;
 
 export default statusSlice.reducer;

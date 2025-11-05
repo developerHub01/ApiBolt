@@ -18,11 +18,14 @@ import type {
 import { filterAndUniqueMetaData } from "@/context/redux/request-response/utils";
 import {
   handleActiveResponseMetaTab,
-  handleChangeIsLoading,
   handleSetResponse,
 } from "@/context/redux/request-response/request-response-slice";
 import type { CreateHistoryItemInterface } from "@/types/history.types";
-import { handleAddHistoryByRequestId } from "@/context/redux/history/history-slice";
+import {
+  handleAddHistoryByRequestId,
+  handleReplaceHistoryByRequestId,
+} from "@/context/redux/history/history-slice";
+import { handleIsFetchApiLoading } from "@/context/redux/status/status-slice";
 
 export const fetchApi = createAsyncThunk<
   void,
@@ -37,6 +40,14 @@ export const fetchApi = createAsyncThunk<
     const requestId = state.requestResponse.selectedTab;
     if (!requestId || !state.requestResponse.requestList[requestId].method)
       return;
+
+    /* start loading =================== */
+    dispatch(
+      handleIsFetchApiLoading({
+        requestId,
+        isLoading: true,
+      })
+    );
 
     const payload: APIPayloadBody = {
       url: "",
@@ -91,19 +102,7 @@ export const fetchApi = createAsyncThunk<
       }
     }
 
-    dispatch(
-      handleChangeIsLoading({
-        id: requestId,
-        value: true,
-      })
-    );
     const response = (await window.electronAPI.fetchApi(payload)) ?? null;
-    dispatch(
-      handleChangeIsLoading({
-        id: requestId,
-        value: false,
-      })
-    );
 
     dispatch(
       handleSetResponse({
@@ -172,10 +171,17 @@ export const fetchApi = createAsyncThunk<
 
     if (historyResponse)
       dispatch(
-        handleAddHistoryByRequestId({
-          requestId,
-          payload: historyResponse,
-        })
+        /* if array response means history modified so replace full history list */
+        Array.isArray(historyResponse)
+          ? handleReplaceHistoryByRequestId({
+              requestId,
+              payload: historyResponse,
+            })
+          : /* if not array repsonse means history not modified so just add new history at top */
+            handleAddHistoryByRequestId({
+              requestId,
+              payload: historyResponse,
+            })
       );
 
     /**
@@ -183,8 +189,20 @@ export const fetchApi = createAsyncThunk<
      * Handle response tabs
      * ================================
      */
+    const existingActiveTab =
+      state.requestResponse.activeResponseMetaTab[requestId];
+
     if (!response?.status) dispatch(handleActiveResponseMetaTab("error"));
-    else dispatch(handleActiveResponseMetaTab("body"));
+    else if (!existingActiveTab || existingActiveTab === "error")
+      dispatch(handleActiveResponseMetaTab("body"));
+
+    /* end loading ================== */
+    dispatch(
+      handleIsFetchApiLoading({
+        requestId,
+        isLoading: false,
+      })
+    );
   } catch (error) {
     console.error(error);
   }

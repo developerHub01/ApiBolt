@@ -7,9 +7,8 @@ import {
 } from "@/context/redux/history/selectors/history";
 import HistorySkeleton from "@/components/app/collections/request/response/content/history/skeleton/HistorySkeleton";
 import { useHistory } from "@/context/history/HistoryProvider";
-import SearchHistory from "@/components/app/collections/request/response/content/history/SearchHistory";
+import HistoryTop from "@/components/app/collections/request/response/content/history/HistoryTop";
 import Empty from "@/components/ui/empty";
-
 const HistoryContent = () => {
   const isLoading = useAppSelector(selectHistoryMetaListIsLoading);
   const metaCount = useAppSelector(selectHistoryMetaCount);
@@ -19,7 +18,7 @@ const HistoryContent = () => {
 
   return (
     <section className="flex-1 flex flex-col gap-2">
-      {Boolean(metaCount) && <SearchHistory />}
+      {Boolean(metaCount) && <HistoryTop />}
       <ScrollArea className="flex-1 min-h-0 h-full overflow-hidden [&>div>div]:h-full">
         {metaCount ? (
           <>
@@ -32,8 +31,8 @@ const HistoryContent = () => {
               />
             ) : (
               <div className="flex flex-col divide-y divide-border/50">
-                {metaList.map((meta) => (
-                  <HistoryItem key={meta.id} {...meta} />
+                {metaList.map((meta, index) => (
+                  <HistoryItem key={meta.id} {...meta} index={index} />
                 ))}
               </div>
             )}
@@ -41,7 +40,7 @@ const HistoryContent = () => {
         ) : (
           <Empty
             label="No history available."
-            description="There is no history for the request. History will only appear after seding any http request"
+            description="There is no history for the request. History will only appear after sending any HTTP request"
             showFallback
           />
         )}
