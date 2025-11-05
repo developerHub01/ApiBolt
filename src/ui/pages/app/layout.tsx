@@ -14,7 +14,7 @@ import BackgroundWallpaper from "@/components/app/BackgroundWallpaper";
 import LoadBasicReduxState from "@/components/app/LoadBasicReduxState";
 import Cookies from "@/components/app/cookies/Cookies";
 import KeyboardShortcuts from "@/components/app/keyboard-shortcuts/KeyboardShortcuts";
-import HistoryDetails from "@/components/app/history-details/HistoryDetails";
+import History from "@/components/app/history-details/History";
 
 const AppLayout = () => {
   return (
@@ -83,7 +83,7 @@ const DialogsAnchor = memo(() => {
       <Setting />
       <Cookies />
       <KeyboardShortcuts />
-      <HistoryDetails />
+      <History />
     </>
   );
 });

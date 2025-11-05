@@ -32,6 +32,22 @@ export const selectHistoryMetaList = createSelector(
     })
 );
 
+export const selectHistoryMeta = createSelector(
+  [
+    (state: RootState) =>
+      state.history.meta[state.history.openedHistory?.requestId ?? ""]?.find(
+        (item) => item.id === state.history.openedHistory?.id
+      ),
+  ],
+  (meta) => {
+    if (!meta) return null;
+    const data = { ...meta };
+    if (data.createdAt) data.createdAt = formatCreatedAt(data.createdAt);
+
+    return data;
+  }
+);
+
 export const selectHistoryMetaCount = createSelector(
   [
     (state: RootState) =>
