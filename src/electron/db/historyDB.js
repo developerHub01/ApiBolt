@@ -81,13 +81,15 @@ export const createHistory = async (payload = {}) => {
     )?.[0];
 
     /* filtering to get returning meta data */
-    const filteredResult = {};
+    let filteredResult = {};
     const resultKeys = ["id", "method", "responseStatus", "createdAt"];
     for (const key of resultKeys) {
       if (result[key]) filteredResult[key] = result[key];
     }
 
     if (!result) return null;
+
+    let haveTruncated = false;
 
     /* removing total exiting rows */
     const totalRows = (
@@ -104,6 +106,7 @@ export const createHistory = async (payload = {}) => {
       const idsToDelete = oldRows.map((r) => r.id);
 
       if (idsToDelete.length) {
+        haveTruncated = true;
         await db
           .delete(historyTable)
           .where(inArray(historyTable.id, idsToDelete));
@@ -128,10 +131,25 @@ export const createHistory = async (payload = {}) => {
       const idsToDelete = oldRows.map((r) => r.id);
 
       if (idsToDelete.length) {
+        haveTruncated = true;
         await db
           .delete(historyTable)
           .where(inArray(historyTable.id, idsToDelete));
       }
+    }
+
+    if (haveTruncated) {
+      filteredResult = await db
+        .select({
+          id: historyTable.id,
+          method: historyTable.method,
+          responseStatus: historyTable.responseStatus,
+          createdAt: historyTable.createdAt,
+        })
+        .from(historyTable)
+        .where(eq(historyTable.request, payload.request))
+        .orderBy(desc(historyTable.createdAt))
+        .limit(MAX_LIMIT_OF_HISTORY_PER_REQUEST);
     }
 
     return filteredResult;
