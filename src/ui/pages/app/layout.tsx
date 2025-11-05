@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "@/components/app/sidebar/Sidebar";
 import CopyRight from "@/components/copy-right";
 import TabSidebarProvider from "@/context/tab-sidebar/TabSidebarProvider";
-import Header from "@/components/app/header/Header";
+import Header from "@/components/app/header/header/Header";
 import Setting from "@/components/app/setting/Setting";
 import KeyboardEvents from "@/components/app/KeyboardEvents";
 import type { TLayoutSetting } from "@/types/setting.types";

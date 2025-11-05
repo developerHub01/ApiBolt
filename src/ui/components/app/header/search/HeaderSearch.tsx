@@ -35,6 +35,8 @@ import {
 } from "@/context/redux/header/selectors/header";
 import { changeHeaderIsOpen } from "@/context/redux/header/thunks/header";
 import { handleChangeSearchTerm } from "@/context/redux/header/header-slice";
+import { useGlobal } from "@/context/global/GlobalProvider";
+import { cn } from "@/lib/utils";
 
 const DELAY_TIME = 300;
 
@@ -51,6 +53,7 @@ const HeaderSearch = () => {
   const isOpen = useAppSelector(selectHeaderIsOpen);
   const searchTerm = useAppSelector(selectHeaderSearchTerm);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { isFullscreen } = useGlobal();
 
   const handleSearchChange = useCallback(
     (value: string) => dispatch(handleChangeSearchTerm(value)),
@@ -103,80 +106,112 @@ const HeaderSearch = () => {
 
   if (activeTab !== "navigate_collections" || !activeProjectId) return null;
 
+  const isOpenInFullScreen = isFullscreen && isOpen;
+
   return (
-    <div
-      className="lg:w-xl md:w-96 w-72"
-      style={
-        isElectron() ? ({ appRegion: "no-drag" } as CSSProperties) : undefined
-      }
-    >
-      <Popover
-        open={isOpen}
-        onOpenChange={(newOpen) => {
-          if (!newOpen) handleClose(); /* Close only on outside click or Esc */
-        }}
-      >
-        <PopoverTrigger asChild>
-          <ButtonLikeDiv
-            asChild
-            className="w-full"
-            variant={"outline"}
-            size={"sm"}
-            onClick={handleButtonClick}
-          >
-            <div>
-              <AnimatePresence>
-                {isOpen && (
-                  <SearchBar
-                    inputRef={inputRef}
-                    projectName={activeProjectName}
-                    value={searchTerm}
-                    onChange={handleSearchChange}
-                  />
-                )}
-                {!isOpen && (
-                  <motion.div
-                    initial={{
-                      opacity: 0,
-                      scaleX: 1,
-                    }}
-                    exit={{
-                      opacity: 0,
-                      scaleX: 0.4,
-                    }}
-                    animate={{
-                      opacity: 1,
-                      scaleX: 1,
-                    }}
-                    transition={{
-                      duration: 0.4,
-                      ease: "anticipate",
-                      type: "decay",
-                    }}
-                    className="text-center capitalize text-accent-foreground flex items-center justify-center gap-2 font-medium overflow-hidden"
-                  >
-                    <SearchIcon size={16} />
-                    <p className="truncate w-full">{activeProjectName}</p>
-                    <ShortcutText />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </ButtonLikeDiv>
-        </PopoverTrigger>
-        <PopoverContent
-          onPointerDown={(e) => e.stopPropagation()}
-          className="lg:w-xl md:w-96 w-72 bg-background/30 backdrop-blur-sm px-0 py-2 border rounded-lg"
-          sideOffset={12}
+    <AnimatePresence>
+      {(!isFullscreen || isOpenInFullScreen) && (
+        <motion.div
+          className={cn("lg:w-xl md:w-96 w-72 relative z-20", {
+            "fixed bg-accent left-1/2 -translate-x-1/2": isOpenInFullScreen,
+          })}
+          style={
+            isElectron()
+              ? ({ appRegion: "no-drag" } as CSSProperties)
+              : undefined
+          }
+          initial={{
+            opacity: 0.5,
+            top: 0,
+          }}
+          animate={{
+            opacity: 1,
+            top: isOpenInFullScreen ? 10 : 0,
+          }}
+          exit={{
+            opacity: 0,
+            top: 0,
+            transition: {
+              ease: "easeInOut",
+            },
+          }}
+          transition={{
+            duration: 0.3,
+            ease: "anticipate",
+          }}
         >
-          <SearchResult
-            searchTerm={searchTerm}
-            list={requestOrFolderList}
-            selectedTab={selectedTab}
-          />
-        </PopoverContent>
-      </Popover>
-    </div>
+          <div className="w-full">
+            <Popover
+              open={isOpen}
+              onOpenChange={(newOpen) => {
+                /* Close only on outside click or Esc */
+                if (!newOpen) handleClose();
+              }}
+            >
+              <PopoverTrigger asChild>
+                <ButtonLikeDiv
+                  asChild
+                  className="w-full"
+                  variant={"outline"}
+                  size={"sm"}
+                  onClick={handleButtonClick}
+                >
+                  <div>
+                    <AnimatePresence>
+                      {isOpen && (
+                        <SearchBar
+                          inputRef={inputRef}
+                          projectName={activeProjectName}
+                          value={searchTerm}
+                          onChange={handleSearchChange}
+                        />
+                      )}
+                      {!isOpen && (
+                        <motion.div
+                          initial={{
+                            opacity: 0,
+                            scaleX: 1,
+                          }}
+                          exit={{
+                            opacity: 0,
+                            scaleX: 0.4,
+                          }}
+                          animate={{
+                            opacity: 1,
+                            scaleX: 1,
+                          }}
+                          transition={{
+                            duration: 0.4,
+                            ease: "anticipate",
+                            type: "decay",
+                          }}
+                          className="text-center capitalize text-accent-foreground flex items-center justify-center gap-2 font-medium overflow-hidden"
+                        >
+                          <SearchIcon size={16} />
+                          <p className="truncate w-full">{activeProjectName}</p>
+                          <ShortcutText />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </ButtonLikeDiv>
+              </PopoverTrigger>
+              <PopoverContent
+                onPointerDown={(e) => e.stopPropagation()}
+                className="lg:w-xl md:w-96 w-72 bg-background/30 backdrop-blur-sm px-0 py-2 border rounded-lg"
+                sideOffset={12}
+              >
+                <SearchResult
+                  searchTerm={searchTerm}
+                  list={requestOrFolderList}
+                  selectedTab={selectedTab}
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 
