@@ -3,6 +3,7 @@ import type {
   BasicAuthInterface,
   JWTBearerAuthInterface,
   TAuthContextType,
+  TAuthType,
 } from "@/types/authorization.types";
 
 export const DEFAULT_AUTHORIZATION_ID: TAuthContextType = "global";
@@ -44,4 +45,38 @@ export const INITIAL_HIDDEN_HEADER_AUTHORIZATION_DATA = {
   value: "",
   prevent: true,
   isCheck: true,
+};
+
+export const AUTH_LIST: Array<{
+  id: TAuthType;
+  label: string;
+}> = [
+  {
+    id: "no-auth",
+    label: "No auth",
+  },
+  {
+    id: "basic-auth",
+    label: "Basic auth",
+  },
+  {
+    id: "bearer-token",
+    label: "Bearer token",
+  },
+  {
+    id: "jwt-bearer",
+    label: "JWT bearer",
+  },
+  {
+    id: "api-key",
+    label: "API key",
+  },
+];
+
+export const INHERIT_AUTH: {
+  id: TAuthType;
+  label: string;
+} = {
+  id: "inherit-parent",
+  label: "Inherit auth from parent",
 };

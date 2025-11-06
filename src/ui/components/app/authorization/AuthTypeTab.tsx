@@ -2,44 +2,14 @@ import { memo, useCallback, useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { updateAuthorization } from "@/context/redux/request-response/thunks/auth";
 import type { TAuthType } from "@/types/authorization.types";
-import { DEFAULT_AUTHORIZATION_ID } from "@/constant/authorization.constant";
+import {
+  AUTH_LIST,
+  DEFAULT_AUTHORIZATION_ID,
+  INHERIT_AUTH,
+} from "@/constant/authorization.constant";
 import { selectAuthTypeById } from "@/context/redux/request-response/selectors/auth";
 import AuthContentSelect from "@/components/app/authorization/content/AuthContentSelect";
 import { cn } from "@/lib/utils";
-
-const authTypeList: Array<{
-  id: TAuthType;
-  label: string;
-}> = [
-  {
-    id: "no-auth",
-    label: "No auth",
-  },
-  {
-    id: "basic-auth",
-    label: "Basic auth",
-  },
-  {
-    id: "bearer-token",
-    label: "Bearer token",
-  },
-  {
-    id: "jwt-bearer",
-    label: "JWT bearer",
-  },
-  {
-    id: "api-key",
-    label: "API key",
-  },
-];
-
-const inheritTypeAuth: {
-  id: TAuthType;
-  label: string;
-} = {
-  id: "inherit-parent",
-  label: "Inherit auth from parent",
-};
 
 interface Props {
   id: string;
@@ -53,8 +23,8 @@ const AuthTypeTab = memo(({ id, className = "" }: Props) => {
   const list = useMemo(
     () =>
       id === DEFAULT_AUTHORIZATION_ID
-        ? authTypeList
-        : [inheritTypeAuth, ...authTypeList],
+        ? AUTH_LIST
+        : [INHERIT_AUTH, ...AUTH_LIST],
     [id]
   );
 
