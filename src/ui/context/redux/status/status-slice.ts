@@ -33,8 +33,8 @@ const initialState: StatusInterface = {
   isKeyboardShortcutLoading: false,
   isKeyboardShortcutError: null,
   isFetchApiLoading: {},
-  isHistoryMetaLoading: true,
-  isHistoryDetailsLoading: true,
+  isHistoryMetaLoading: false,
+  isHistoryDetailsLoading: false,
 };
 
 export const statusSlice = createSlice({

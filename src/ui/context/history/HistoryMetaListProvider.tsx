@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
   selectHistoryMetaCount,
   selectHistoryMetaList,
-  selectIsHistoryMetaLoaded,
+  selectIsHistoryMetaHave,
   selectSelectedFilterMethod,
 } from "@/context/redux/history/selectors/history";
 import type {
@@ -48,7 +48,7 @@ const HistoryMetaListProvider = ({
   const method = useAppSelector(selectSelectedFilterMethod);
   const metaList = useAppSelector(selectHistoryMetaList);
   const metaCount = useAppSelector(selectHistoryMetaCount);
-  const isMetaLoaded = useAppSelector(selectIsHistoryMetaLoaded);
+  const listAlreadyHave = useAppSelector(selectIsHistoryMetaHave);
 
   const filteredMetaList = useMemo(() => {
     if (method !== "all")
@@ -57,9 +57,10 @@ const HistoryMetaListProvider = ({
   }, [method, metaList]);
 
   useEffect(() => {
-    if (isMetaLoaded) return;
+    if (listAlreadyHave) return;
     dispatch(loadRequestHistoryMeta());
-  }, [dispatch, isMetaLoaded]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
 
   if (!id) return null;
 
