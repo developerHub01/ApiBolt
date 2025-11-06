@@ -26,7 +26,7 @@ const addToList = [
 ];
 
 interface Props {
-  id: string;
+  id?: string;
   disabled?: boolean;
   authData: JWTBearerAuthInterface;
 }
@@ -77,7 +77,7 @@ const JWTBearer = memo(({ id, authData, disabled = false }: Props) => {
         placeholder="Secret"
         disabled={disabled}
       />
-      <AuthContentInoutLabel htmlFor="api-key-payload">
+      <AuthContentInoutLabel htmlFor="api-key-payload" className="self-start">
         Payload
       </AuthContentInoutLabel>
       <PayloadCode

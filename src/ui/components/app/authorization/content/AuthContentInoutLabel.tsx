@@ -1,3 +1,4 @@
+import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 import { cn } from "@/lib/utils";
 
 const AuthContentInoutLabel = ({
@@ -6,12 +7,11 @@ const AuthContentInoutLabel = ({
   ...props
 }: React.ComponentProps<"label">) => {
   return (
-    <label
-      className={cn("text-sm select-none", className)}
-      {...props}
-    >
-      {children}
-    </label>
+    <ButtonLikeDiv variant={"transparent"} className="px-0 justify-start">
+      <label className={cn("text-sm select-none", className)} {...props}>
+        {children}
+      </label>
+    </ButtonLikeDiv>
   );
 };
 

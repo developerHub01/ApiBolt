@@ -19,7 +19,7 @@ const addToList = [
 ];
 
 interface Props {
-  id: string;
+  id?: string;
   disabled?: boolean;
   authData: APIKeyInterface;
 }

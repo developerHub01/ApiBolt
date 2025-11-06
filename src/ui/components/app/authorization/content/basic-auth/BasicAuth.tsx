@@ -7,7 +7,7 @@ import { useAppDispatch } from "@/context/redux/hooks";
 import { updateAuthorization } from "@/context/redux/request-response/thunks/auth";
 
 interface Props {
-  id: string;
+  id?: string;
   disabled?: boolean;
   authData: BasicAuthInterface;
 }
