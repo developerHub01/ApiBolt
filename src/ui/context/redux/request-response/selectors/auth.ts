@@ -24,13 +24,12 @@ export const selectAuthType = createSelector(
     (id === DEFAULT_AUTHORIZATION_ID ? "no-auth" : "inherit-parent")
 );
 
-export const selectAuthTypeById = (id: string) =>
-  createSelector(
-    [(state: RootState) => state.requestResponse.authType[id]],
-    (authType): TAuthType =>
-      authType ??
-      (id === DEFAULT_AUTHORIZATION_ID ? "no-auth" : "inherit-parent")
-  );
+export const selectAuthTypeById = createSelector(
+  [(state: RootState) => state.requestResponse.authType, (_, id: string) => id],
+  (authType, id) =>
+    authType[id] ??
+    (id === DEFAULT_AUTHORIZATION_ID ? "no-auth" : "inherit-parent")
+);
 
 export const selectAuthInheritedId = createSelector(
   [selectAuthId, (state: RootState) => state.requestResponse.authInheritedId],

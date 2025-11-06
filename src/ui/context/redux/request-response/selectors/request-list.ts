@@ -27,21 +27,25 @@ export const selectActiveRequestOrFolder = createSelector(
   (requestOrFolder): RequestListItemInterface | null => requestOrFolder
 );
 
-export const selectRequestOrFolderById = (id: string) =>
-  createSelector(
-    [(state: RootState) => state.requestResponse.requestList[id]],
-    (request): RequestListItemInterface => request
-  );
+export const selectRequestOrFolderById = createSelector(
+  [
+    (state: RootState) => state.requestResponse.requestList,
+    (_, id: string) => id,
+  ],
+  (request, id): RequestListItemInterface => request[id]
+);
 
-export const selectRequestOrFolderLavelById = (id: string) =>
-  createSelector(
-    [(state: RootState) => state.requestResponse.requestList],
-    (requestList): number =>
-      getRequestNodeLevel({
-        source: requestList,
-        id,
-      })
-  );
+export const selectRequestOrFolderLavelById = createSelector(
+  [
+    (state: RootState) => state.requestResponse.requestList,
+    (_, id: string) => id,
+  ],
+  (requestList, id): number =>
+    getRequestNodeLevel({
+      source: requestList,
+      id,
+    })
+);
 
 export const selectIsHttpMethodType = createSelector(
   [

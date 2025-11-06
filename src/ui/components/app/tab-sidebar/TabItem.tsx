@@ -34,7 +34,8 @@ const TabItem = memo(({ id, index }: { id: string; index: number }) => {
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [isTabHovering, setIsTabHovering] = useState<boolean>(false);
 
-  const tabDetails = useAppSelector(selectRequestOrFolderById(id)) ?? {};
+  const tabDetails =
+    useAppSelector((state) => selectRequestOrFolderById(state, id)) ?? {};
   const { isTabListHovering } = useTabSidebar();
   const selectedTab = useAppSelector(selectSelectedTab);
 

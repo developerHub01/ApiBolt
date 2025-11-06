@@ -18,7 +18,7 @@ interface Props {
 
 const AuthTypeTab = memo(({ id, className = "" }: Props) => {
   const dispatch = useAppDispatch();
-  const authType = useAppSelector(selectAuthTypeById(id));
+  const authType = useAppSelector((state) => selectAuthTypeById(state, id));
 
   const list = useMemo(
     () =>

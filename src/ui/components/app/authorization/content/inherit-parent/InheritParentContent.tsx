@@ -13,7 +13,7 @@ interface Props {
 }
 
 const InheritParentContent = memo(({ id }: Props) => {
-  const authType = useAppSelector(selectAuthTypeById(id));
+  const authType = useAppSelector((state) => selectAuthTypeById(state, id));
   const {
     basicAuthData,
     bearerTokenAuthData,

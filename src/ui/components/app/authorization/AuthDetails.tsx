@@ -6,7 +6,7 @@ interface Props {
 }
 
 const AuthDetails = ({ id }: Props) => {
-  const authType = useAppSelector(selectAuthTypeById(id));
+  const authType = useAppSelector((state) => selectAuthTypeById(state, id));
   if (authType === "no-auth") return null;
 
   return (
