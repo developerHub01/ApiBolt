@@ -6,6 +6,7 @@ import {
   handleClearHistoryCacheByRequestId,
   handleDeleteHistoryByRequestId,
   handleLoadHistoryByRequestId,
+  handleReplaceHistoryDetails,
 } from "@/context/redux/history/history-slice";
 import type { THistoryFilter } from "@/types/history.types";
 
@@ -31,6 +32,26 @@ export const loadRequestHistoryMeta = createAsyncThunk<
         payload: response,
       })
     );
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+export const loadRequestHistory = createAsyncThunk<
+  void,
+  void,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("history/loadRequestHistory", async (_, { dispatch, getState }) => {
+  try {
+    const state = getState() as RootState;
+    const id = state.history.openedHistory;
+    if (!id || !id.id) return;
+
+    const response = await window.electronAPIHistory.getHistoryById(id.id);
+    dispatch(handleReplaceHistoryDetails(response));
   } catch (error) {
     console.error(error);
   }

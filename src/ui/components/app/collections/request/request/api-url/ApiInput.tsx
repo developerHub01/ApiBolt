@@ -27,7 +27,7 @@ const ApiInput = memo(({ value, isError, onChange, onBlur }: ApiInputProps) => {
 
   return (
     <div
-      className={cn("w-full h-full border-b", {
+      className={cn("w-full border-b", {
         "border-destructive/80": isError,
         "border-input/80": !isError,
       })}

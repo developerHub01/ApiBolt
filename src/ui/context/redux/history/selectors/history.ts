@@ -2,11 +2,6 @@ import { createSelector } from "@reduxjs/toolkit";
 import type { RootState } from "@/context/redux/store";
 import { formatCreatedAt } from "@/utils/history";
 
-export const selectHistoryMetaListIsLoading = createSelector(
-  [(state: RootState) => state.history.isMetaLoading],
-  (isLoading) => isLoading
-);
-
 export const selectSelectedFilterMethod = createSelector(
   [
     (state: RootState) =>
@@ -74,4 +69,15 @@ export const selectOpenedHistory = createSelector(
 export const selectIsHistoryItemOpen = createSelector(
   [(state: RootState) => state.history.openedHistory],
   (opened) => Boolean(opened?.id && opened?.requestId)
+);
+
+export const selectHistoryDetails = createSelector(
+  [(state: RootState) => state.history.historyDetails],
+  (details) => {
+    const data = { ...(details ?? {}) };
+
+    if (data.createdAt) data.createdAt = formatCreatedAt(data.createdAt);
+
+    return data;
+  }
 );

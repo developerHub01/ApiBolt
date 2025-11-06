@@ -7,6 +7,10 @@ import {
 } from "@/context/redux/keyboard-shortcuts/thunks/keyboard-shortcuts";
 import { loadProjectList } from "@/context/redux/project/thunks/projects";
 import { loadActiveTab } from "@/context/redux/sidebar/thunks/sidebar";
+import {
+  loadRequestHistory,
+  loadRequestHistoryMeta,
+} from "@/context/redux/history/thunks/history";
 
 interface StatusInterface {
   isProjectLoading: boolean;
@@ -16,6 +20,8 @@ interface StatusInterface {
   isKeyboardShortcutLoading: boolean;
   isKeyboardShortcutError: null | string;
   isFetchApiLoading: Record<string, boolean>;
+  isHistoryMetaLoading: boolean;
+  isHistoryDetailsLoading: boolean;
 }
 
 // Define the initial state using that type
@@ -27,6 +33,8 @@ const initialState: StatusInterface = {
   isKeyboardShortcutLoading: false,
   isKeyboardShortcutError: null,
   isFetchApiLoading: {},
+  isHistoryMetaLoading: true,
+  isHistoryDetailsLoading: true,
 };
 
 export const statusSlice = createSlice({
@@ -142,6 +150,34 @@ export const statusSlice = createSlice({
       .addCase(resetKeyboardShortcuts.rejected, (state, action) => {
         state.isKeyboardShortcutLoading = false;
         state.isKeyboardShortcutError = action.error?.message ?? null;
+      })
+      /**
+       * =======================
+       * load history meta
+       * =======================
+       */
+      .addCase(loadRequestHistoryMeta.pending, (state) => {
+        state.isHistoryMetaLoading = true;
+      })
+      .addCase(loadRequestHistoryMeta.fulfilled, (state) => {
+        state.isHistoryMetaLoading = false;
+      })
+      .addCase(loadRequestHistoryMeta.rejected, (state) => {
+        state.isHistoryMetaLoading = false;
+      })
+      /**
+       * =======================
+       * load history details
+       * =======================
+       */
+      .addCase(loadRequestHistory.pending, (state) => {
+        state.isHistoryDetailsLoading = true;
+      })
+      .addCase(loadRequestHistory.fulfilled, (state) => {
+        state.isHistoryDetailsLoading = false;
+      })
+      .addCase(loadRequestHistory.rejected, (state) => {
+        state.isHistoryDetailsLoading = false;
       });
   },
 });
