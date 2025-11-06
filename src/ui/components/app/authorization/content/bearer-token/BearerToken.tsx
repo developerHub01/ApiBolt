@@ -2,19 +2,18 @@ import { memo, useCallback } from "react";
 import ContentWrapper from "@/components/app/authorization/content/ContentWrapper";
 import AuthContentInput from "@/components/app/authorization/content/AuthContentInput";
 import AuthContentInoutLabel from "@/components/app/authorization/content/AuthContentInoutLabel";
-import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import { useAppDispatch } from "@/context/redux/hooks";
 import { updateAuthorization } from "@/context/redux/request-response/thunks/auth";
-import { selectAuthBearerTokenAuth } from "@/context/redux/request-response/selectors/auth";
 
 interface Props {
   id: string;
   disabled?: boolean;
+  authData: string;
+  onBlur?: (value: string) => void;
 }
 
-const BearerToken = memo(({ id, disabled = false }: Props) => {
+const BearerToken = memo(({ id, authData, disabled = false }: Props) => {
   const dispatch = useAppDispatch();
-  const authData = useAppSelector(selectAuthBearerTokenAuth(id));
-
   const handleBlur = useCallback(
     (value: string) => {
       dispatch(
@@ -29,7 +28,7 @@ const BearerToken = memo(({ id, disabled = false }: Props) => {
   );
 
   return (
-    <ContentWrapper>
+    <ContentWrapper key={id}>
       <AuthContentInoutLabel htmlFor="bearer-token">
         Token
       </AuthContentInoutLabel>

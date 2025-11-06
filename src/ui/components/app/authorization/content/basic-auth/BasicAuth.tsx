@@ -2,19 +2,18 @@ import { memo, useCallback } from "react";
 import ContentWrapper from "@/components/app/authorization/content/ContentWrapper";
 import AuthContentInput from "@/components/app/authorization/content/AuthContentInput";
 import AuthContentInoutLabel from "@/components/app/authorization/content/AuthContentInoutLabel";
-import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import type { BasicAuthInterface } from "@/types/authorization.types";
+import { useAppDispatch } from "@/context/redux/hooks";
 import { updateAuthorization } from "@/context/redux/request-response/thunks/auth";
-import { selectAuthBasicAuth } from "@/context/redux/request-response/selectors/auth";
 
 interface Props {
   id: string;
   disabled?: boolean;
+  authData: BasicAuthInterface;
 }
 
-const BasicAuth = memo(({ id, disabled = false }: Props) => {
+const BasicAuth = memo(({ id, authData, disabled = false }: Props) => {
   const dispatch = useAppDispatch();
-  const authData = useAppSelector(selectAuthBasicAuth(id));
-
   const handleBlur = useCallback(
     (key: "basicAuthUsername" | "basicAuthPassword", value: string) => {
       dispatch(
@@ -29,7 +28,7 @@ const BasicAuth = memo(({ id, disabled = false }: Props) => {
   );
 
   return (
-    <ContentWrapper>
+    <ContentWrapper key={id}>
       <AuthContentInoutLabel htmlFor="basic-auth-username" className="w-17">
         Username
       </AuthContentInoutLabel>

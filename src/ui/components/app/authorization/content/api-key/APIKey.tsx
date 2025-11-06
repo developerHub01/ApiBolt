@@ -3,9 +3,9 @@ import ContentWrapper from "@/components/app/authorization/content/ContentWrappe
 import AuthContentInput from "@/components/app/authorization/content/AuthContentInput";
 import AuthContentInoutLabel from "@/components/app/authorization/content/AuthContentInoutLabel";
 import AuthContentSelect from "@/components/app/authorization/content/AuthContentSelect";
-import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import type { APIKeyInterface } from "@/types/authorization.types";
+import { useAppDispatch } from "@/context/redux/hooks";
 import { updateAuthorization } from "@/context/redux/request-response/thunks/auth";
-import { selectAuthApiKey } from "@/context/redux/request-response/selectors/auth";
 
 const addToList = [
   {
@@ -21,12 +21,11 @@ const addToList = [
 interface Props {
   id: string;
   disabled?: boolean;
+  authData: APIKeyInterface;
 }
 
-const APIKey = memo(({ id, disabled = false }: Props) => {
+const APIKey = memo(({ id, authData, disabled = false }: Props) => {
   const dispatch = useAppDispatch();
-  const authData = useAppSelector(selectAuthApiKey(id));
-
   const handleBlur = useCallback(
     (key: "apiKeyKey" | "apiKeyValue" | "apiKeyAddTo", value: string) => {
       dispatch(
@@ -41,7 +40,7 @@ const APIKey = memo(({ id, disabled = false }: Props) => {
   );
 
   return (
-    <ContentWrapper>
+    <ContentWrapper key={id}>
       <AuthContentInoutLabel htmlFor="api-key">Key</AuthContentInoutLabel>
       <AuthContentInput
         id="api-key"

@@ -9,6 +9,7 @@ import { useAppSelector } from "@/context/redux/hooks";
 import { cn } from "@/lib/utils";
 import InheritParent from "@/components/app/authorization/content/inherit-parent/InheritParent";
 import { selectAuthType } from "@/context/redux/request-response/selectors/auth";
+import useGetAuthData from "@/hooks/auth/use-get-auth-data";
 
 interface Props {
   id: string;
@@ -17,6 +18,12 @@ interface Props {
 
 const AuthContent = memo(({ id, className = "" }: Props) => {
   const authType = useAppSelector(selectAuthType);
+  const {
+    basicAuthData,
+    bearerTokenAuthData,
+    jwtBearerAuthData,
+    apiKeyAuthData,
+  } = useGetAuthData(id);
 
   return (
     <ScrollArea
@@ -24,10 +31,16 @@ const AuthContent = memo(({ id, className = "" }: Props) => {
     >
       {authType === "inherit-parent" && <InheritParent />}
       {authType === "no-auth" && <NoAuth />}
-      {authType === "basic-auth" && <BasicAuth id={id} />}
-      {authType === "bearer-token" && <BearerToken id={id} />}
-      {authType === "jwt-bearer" && <JWTBearer id={id} />}
-      {authType === "api-key" && <APIKey id={id} />}
+      {authType === "basic-auth" && (
+        <BasicAuth id={id} authData={basicAuthData} />
+      )}
+      {authType === "bearer-token" && (
+        <BearerToken id={id} authData={bearerTokenAuthData} />
+      )}
+      {authType === "jwt-bearer" && (
+        <JWTBearer id={id} authData={jwtBearerAuthData} />
+      )}
+      {authType === "api-key" && <APIKey id={id} authData={apiKeyAuthData} />}
     </ScrollArea>
   );
 });

@@ -5,9 +5,9 @@ import AuthContentSelect from "@/components/app/authorization/content/AuthConten
 import AuthContentInoutLabel from "@/components/app/authorization/content/AuthContentInoutLabel";
 import { JWT_ALGO_LIST } from "@/constant";
 import PayloadCode from "@/components/app/authorization/content/jwt-bearer/PayloadCode";
-import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import type { JWTBearerAuthInterface } from "@/types/authorization.types";
+import { useAppDispatch } from "@/context/redux/hooks";
 import { updateAuthorization } from "@/context/redux/request-response/thunks/auth";
-import { selectAuthJWTBearerAuth } from "@/context/redux/request-response/selectors/auth";
 
 const algoList = JWT_ALGO_LIST.map((algo) => ({
   id: algo,
@@ -28,12 +28,11 @@ const addToList = [
 interface Props {
   id: string;
   disabled?: boolean;
+  authData: JWTBearerAuthInterface;
 }
 
-const JWTBearer = memo(({ id, disabled = false }: Props) => {
+const JWTBearer = memo(({ id, authData, disabled = false }: Props) => {
   const dispatch = useAppDispatch();
-  const authData = useAppSelector(selectAuthJWTBearerAuth(id));
-
   const handleBlur = useCallback(
     (
       key:
@@ -56,7 +55,7 @@ const JWTBearer = memo(({ id, disabled = false }: Props) => {
   );
 
   return (
-    <ContentWrapper>
+    <ContentWrapper key={id}>
       <AuthContentInoutLabel htmlFor="api-key-algo">
         Algorithm
       </AuthContentInoutLabel>

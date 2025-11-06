@@ -6,13 +6,7 @@ import {
   DEFAULT_BASIC_AUTH,
   DEFAULT_JWT_BEARER_AUTH,
 } from "@/constant/authorization.constant";
-import type {
-  APIKeyInterface,
-  BasicAuthInterface,
-  JWTBearerAuthInterface,
-  TAuthType,
-  TBearerToken,
-} from "@/types/authorization.types";
+import type { TAuthType } from "@/types/authorization.types";
 
 export const selectAuthId = createSelector(
   (state: RootState) => state.sidebar.activeTab,
@@ -43,32 +37,42 @@ export const selectAuthInheritedId = createSelector(
   (id, inheritedIds): string | null => inheritedIds[id]
 );
 
-export const selectAuthInheritedIdById = (id: string) =>
-  createSelector(
-    [(state: RootState) => state.requestResponse.authInheritedId[id]],
-    (inheritedId): string | null => inheritedId
-  );
+export const selectAuthInheritedIdById = createSelector(
+  [
+    (state: RootState) => state.requestResponse.authInheritedId,
+    (_, id: string) => id,
+  ],
+  (inheritedIds, id): string | null => inheritedIds[id]
+);
 
-export const selectAuthApiKey = (id: string) =>
-  createSelector(
-    [(state: RootState) => state.requestResponse.apiKeyAuth[id]],
-    (authData): APIKeyInterface => authData ?? DEFAULT_API_KEY
-  );
+export const selectAuthApiKey = createSelector(
+  [
+    (state: RootState) => state.requestResponse.apiKeyAuth,
+    (_, id: string) => id,
+  ],
+  (authData, id) => authData[id] ?? DEFAULT_API_KEY
+);
 
-export const selectAuthBasicAuth = (id: string) =>
-  createSelector(
-    [(state: RootState) => state.requestResponse.basicAuth[id]],
-    (authData): BasicAuthInterface => authData ?? DEFAULT_BASIC_AUTH
-  );
+export const selectAuthBasicAuth = createSelector(
+  [
+    (state: RootState) => state.requestResponse.basicAuth,
+    (_, id: string) => id,
+  ],
+  (authData, id) => authData[id] ?? DEFAULT_BASIC_AUTH
+);
 
-export const selectAuthBearerTokenAuth = (id: string) =>
-  createSelector(
-    [(state: RootState) => state.requestResponse.bearerTokenAuth[id]],
-    (authData): TBearerToken => authData ?? ""
-  );
+export const selectAuthBearerTokenAuth = createSelector(
+  [
+    (state: RootState) => state.requestResponse.bearerTokenAuth,
+    (_, id: string) => id,
+  ],
+  (authData, id) => authData[id] ?? ""
+);
 
-export const selectAuthJWTBearerAuth = (id: string) =>
-  createSelector(
-    [(state: RootState) => state.requestResponse.jwtBearerAuth[id]],
-    (authData): JWTBearerAuthInterface => authData ?? DEFAULT_JWT_BEARER_AUTH
-  );
+export const selectAuthJWTBearerAuth = createSelector(
+  [
+    (state: RootState) => state.requestResponse.jwtBearerAuth,
+    (_, id: string) => id,
+  ],
+  (authData, id) => authData[id] ?? DEFAULT_JWT_BEARER_AUTH
+);
