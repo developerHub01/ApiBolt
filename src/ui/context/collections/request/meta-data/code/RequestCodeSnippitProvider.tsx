@@ -86,7 +86,9 @@ const RequestCodeSnippitProvider = ({
       })) ?? [],
     [xWWWFormUrlencoded]
   );
-  const formData = useAppSelector(selectFilterAndUniqueFormData());
+  const formData = useAppSelector((state) =>
+    selectFilterAndUniqueFormData(state)
+  );
 
   const serializedFormData = useMemo(() => {
     const serialized: CodeSnippitDataInterface["formData"] = [];

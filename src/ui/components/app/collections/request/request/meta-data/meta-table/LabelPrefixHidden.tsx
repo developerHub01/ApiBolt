@@ -13,7 +13,9 @@ interface Props {
 
 const LabelPrefixHidden = memo(({ type }: Props) => {
   const dispatch = useAppDispatch();
-  const showHiddenData = useAppSelector(selectShowHiddenMetaData(type));
+  const showHiddenData = useAppSelector((state) =>
+    selectShowHiddenMetaData(state, type)
+  );
   const hiddenData =
     useAppSelector(
       selectMetaData({

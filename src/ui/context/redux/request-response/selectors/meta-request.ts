@@ -138,19 +138,19 @@ export const selectAuthorizationParamData = ({ id }: { id?: string } = {}) =>
     }
   );
 
-export const selectFilterAndUniqueFormData = ({ id }: { id?: string } = {}) =>
-  createSelector(
-    [
-      (state: RootState) => state.requestResponse.selectedTab,
-      (state: RootState) => state.requestResponse.formData,
-    ],
-    (selectedTab, formData) => {
-      const metaId = id ?? selectedTab;
-      if (!metaId) return null;
+export const selectFilterAndUniqueFormData = createSelector(
+  [
+    (state: RootState) => state.requestResponse.selectedTab,
+    (state: RootState) => state.requestResponse.formData,
+    (_, payload: { id?: string } = {}) => payload,
+  ],
+  (selectedTab, formData, { id }) => {
+    const metaId = id ?? selectedTab;
+    if (!metaId) return null;
 
-      return filterAndUniqueFormData(formData[metaId] ?? []);
-    }
-  );
+    return filterAndUniqueFormData(formData[metaId] ?? []);
+  }
+);
 
 export const selectActiveMetaTab = createSelector(
   [
@@ -305,20 +305,20 @@ export const selectRequestMetaShowColumn = createSelector(
   }
 );
 
-export const selectShowHiddenMetaData = (type: "header" | "param") =>
-  createSelector(
-    [
-      (state: RootState) => state.requestResponse.selectedTab!,
-      (state: RootState) => state.requestResponse.showHiddenParams,
-      (state: RootState) => state.requestResponse.showHiddenHeaders,
-    ],
-    (selectedTab, showHiddenParams, showHiddenHeaders): boolean => {
-      if (!selectedTab) return false;
+export const selectShowHiddenMetaData = createSelector(
+  [
+    (state: RootState) => state.requestResponse.selectedTab!,
+    (state: RootState) => state.requestResponse.showHiddenParams,
+    (state: RootState) => state.requestResponse.showHiddenHeaders,
+    (_, type: "header" | "param") => type,
+  ],
+  (selectedTab, showHiddenParams, showHiddenHeaders, type): boolean => {
+    if (!selectedTab) return false;
 
-      return (
-        (type === "header"
-          ? showHiddenHeaders[selectedTab]
-          : showHiddenParams[selectedTab]) ?? false
-      );
-    }
-  );
+    return (
+      (type === "header"
+        ? showHiddenHeaders[selectedTab]
+        : showHiddenParams[selectedTab]) ?? false
+    );
+  }
+);
