@@ -12,7 +12,9 @@ interface SettingHttpSearchResultProps {
 
 const SettingHttpSearchResult = memo(
   ({ value }: SettingHttpSearchResultProps) => {
-    const details = useAppSelector(selectHttpStatusCodeDetailsPartial(value));
+    const details = useAppSelector((state) =>
+      selectHttpStatusCodeDetailsPartial(state, value)
+    );
 
     if (!details)
       return (

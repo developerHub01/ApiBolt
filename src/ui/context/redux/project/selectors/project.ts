@@ -29,9 +29,11 @@ export const selectActiveProjectName = createSelector(
     projectList.find((project) => project.id === projectId)?.name ?? ""
 );
 
-export const selectProjectById = (id?: string | null) =>
-  createSelector(selectProjectList, (projectList): ProjectInterface | null => {
+export const selectProjectById = createSelector(
+  [selectProjectList, (_, id?: string | null) => id],
+  (projectList, id): ProjectInterface | null => {
     if (!id) return null;
 
     return projectList.find((project) => project.id === id) ?? null;
-  });
+  }
+);

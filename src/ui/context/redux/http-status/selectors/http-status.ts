@@ -22,14 +22,16 @@ export const selectHttpStatusCodeDetails = (code: string) =>
     (httpStatusDetails) => httpStatusDetails
   );
 
-export const selectHttpStatusCodeDetailsPartial = (code: string) =>
-  createSelector(
+export const selectHttpStatusCodeDetailsPartial = createSelector(
+  [
     (state: RootState) => state.httpStatus.httpStatus,
-    (httpStatusList) =>
-      Object.keys(httpStatusList)
-        .filter((httpCode) => httpCode.startsWith(code))
-        .map((statusCode) => ({
-          code: statusCode,
-          ...httpStatusList[statusCode],
-        }))
-  );
+    (_, code: string) => code,
+  ],
+  (httpStatusList, code) =>
+    Object.keys(httpStatusList)
+      .filter((httpCode) => httpCode.startsWith(code))
+      .map((statusCode) => ({
+        code: statusCode,
+        ...httpStatusList[statusCode],
+      }))
+);
