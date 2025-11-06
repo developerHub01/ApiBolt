@@ -26,7 +26,7 @@ const ApiUrl = memo(() => {
         <ApiMethodSelect disabled>
           <ApiMethodSelectTrigger
             methodType={method ?? "get"}
-            className="w-full h-full py-0"
+            className="w-full h-full py-0 justify-center"
             size="sm"
             showIcon={false}
           />

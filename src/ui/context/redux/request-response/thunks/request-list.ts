@@ -129,7 +129,7 @@ export const createRestApiBasic = createAsyncThunk<
   try {
     const parentFolder: RequestListItemInterface = {
       id: uuidv4(),
-      name: "REST API basics: CRUD, test & variable",
+      name: "REST API basics",
       children: [],
       createdAt: Date.now(),
     };
@@ -277,7 +277,7 @@ export const createRestApiBasicBySelectedTab = createAsyncThunk<
 
       const newParentFolder: RequestListItemInterface = {
         id: uuidv4(),
-        name: "REST API basics: CRUD, test & variable",
+        name: "REST API basics",
         children: [],
         createdAt: Date.now(),
         parentId,

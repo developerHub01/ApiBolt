@@ -8,7 +8,7 @@ import ResponseMetaWrapper from "@/components/app/collections/request/response/m
 const ResponseMetaData = memo(() => {
   return (
     <ResponseMetaWrapper>
-      <p className="select-none text-secondary-foreground">Response</p>
+      <p className="select-none text-sm text-secondary-foreground">Response</p>
       <div className="h-full py-3">
         <Separator orientation="vertical" />
       </div>

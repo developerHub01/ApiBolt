@@ -24,7 +24,7 @@ const ResponsePanelWrapper = memo(({ children }: ResponsePanelWrapperProps) => {
     <ResizablePanel
       onResize={handleResize}
       id="response-panel"
-      className="min-h-12 border-t-4"
+      className="min-h-11 border-t-4"
       defaultSize={0}
     >
       {children}
