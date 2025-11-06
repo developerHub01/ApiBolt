@@ -179,7 +179,7 @@ const AnimatedDialogBottom = memo(
     return (
       <div
         className={cn(
-          "border-t-2 px-3 py-2 flex justify-center items-center",
+          "border-t-2 p-3 flex justify-center items-center",
           className
         )}
         {...props}

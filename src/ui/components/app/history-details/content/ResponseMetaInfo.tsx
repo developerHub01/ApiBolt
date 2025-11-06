@@ -11,7 +11,7 @@ const ResponseMetaInfo = () => {
   const statusText = responseStatus?.split(" ")?.slice(1)?.join(" ") ?? "";
 
   return (
-    <ResponseMetaWrapper className="bg-accent/50 rounded-md">
+    <ResponseMetaWrapper className="bg-accent/50 rounded-md p-2">
       <p className="select-none text-sm text-secondary-foreground mr-auto">
         Response
       </p>
