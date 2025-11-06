@@ -59,14 +59,14 @@ export const fetchApi = createAsyncThunk<
     payload.url = selectParsedRequestUrl(state);
     payload.method = selectIsHttpMethodType(state);
     const rawHeaders = filterAndUniqueMetaData(
-      selectMetaData({
+      selectMetaData(state, {
         type: "headers",
-      })(state) ?? []
+      }) ?? []
     );
     const rawHiddenHeaders = filterAndUniqueMetaData(
-      selectMetaData({
+      selectMetaData(state, {
         type: "hiddenHeaders",
-      })(state) ?? []
+      }) ?? []
     );
 
     rawHeaders
@@ -86,13 +86,13 @@ export const fetchApi = createAsyncThunk<
 
         case "x-www-form-urlencoded":
           payload.xWWWformDataUrlencoded = filterAndUniqueMetaData(
-            selectMetaData({ type: "x-www-form-urlencoded" })(state) ?? []
+            selectMetaData(state, { type: "x-www-form-urlencoded" }) ?? []
           ) as APIPayloadBody["xWWWformDataUrlencoded"];
           break;
 
         case "form-data":
           payload.formData = filterAndUniqueMetaData(
-            selectMetaData({ type: "form-data" })(state) ?? []
+            selectMetaData(state, { type: "form-data" }) ?? []
           );
           break;
 
@@ -117,22 +117,22 @@ export const fetchApi = createAsyncThunk<
      * ====================================
      * ***/
     const rawHeaderData = (
-      selectMetaData({
+      selectMetaData(state, {
         type: "headers",
-      })(state) ?? []
+      }) ?? []
     ).concat(
-      selectMetaData({
+      selectMetaData(state, {
         type: "hiddenHeaders",
-      })(state) ?? []
+      }) ?? []
     ) as Array<ParamInterface>;
 
-    const rawFormData = (selectMetaData({
+    const rawFormData = (selectMetaData(state, {
       type: "form-data",
-    })(state) ?? []) as Array<ParamInterface>;
+    }) ?? []) as Array<ParamInterface>;
 
-    const xWWWFormUrlencoded = (selectMetaData({
+    const xWWWFormUrlencoded = (selectMetaData(state, {
       type: "x-www-form-urlencoded",
-    })(state) ?? []) as Array<ParamInterface>;
+    }) ?? []) as Array<ParamInterface>;
 
     const historyPayload: CreateHistoryItemInterface = {
       request: requestId,

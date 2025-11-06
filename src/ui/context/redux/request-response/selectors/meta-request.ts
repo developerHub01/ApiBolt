@@ -14,129 +14,140 @@ import {
 } from "@/context/redux/request-response/utils";
 import { AUTHORIZATION_DATA_ID } from "@/constant/authorization.constant";
 
-export const selectMetaData = ({
-  id,
-  type,
-}: {
-  id?: string;
-  type: TMetaTableType | null;
-}) =>
-  createSelector(
-    [
-      (state: RootState) => state.requestResponse.selectedTab,
-      (state: RootState) => state.requestResponse.params,
-      (state: RootState) => state.requestResponse.headers,
-      (state: RootState) => state.requestResponse.hiddenCookie,
-      (state: RootState) => state.requestResponse.hiddenHeaders,
-      (state: RootState) => state.requestResponse.formData,
-      (state: RootState) => state.requestResponse.xWWWFormUrlencodedData,
-      (state: RootState) => state.requestResponse.authType,
-      (state: RootState) => state.requestResponse.authInheritedId,
-      (state: RootState) => state.requestResponse.authorizationHeader,
-      (state: RootState) => state.requestResponse.authorizationParam,
-    ],
+export const selectMetaData = createSelector(
+  [
+    (state: RootState) => state.requestResponse.selectedTab,
+    (state: RootState) => state.requestResponse.params,
+    (state: RootState) => state.requestResponse.headers,
+    (state: RootState) => state.requestResponse.hiddenCookie,
+    (state: RootState) => state.requestResponse.hiddenHeaders,
+    (state: RootState) => state.requestResponse.formData,
+    (state: RootState) => state.requestResponse.xWWWFormUrlencodedData,
+    (state: RootState) => state.requestResponse.authType,
+    (state: RootState) => state.requestResponse.authInheritedId,
+    (state: RootState) => state.requestResponse.authorizationHeader,
+    (state: RootState) => state.requestResponse.authorizationParam,
     (
-      selectedTab,
-      params,
-      headers,
-      hiddenCookie,
-      hiddenHeaders,
-      formData,
-      xWWWFormUrlencodedData,
-      authType,
-      authInheritedIds,
-      authorizationHeaders,
-      authorizationParams
-    ) => {
-      const metaId = id ?? selectedTab;
-      if (!metaId) return null;
-
-      const authApplyingMetaId =
-        authType[metaId] === "inherit-parent"
-          ? authInheritedIds[metaId]
-          : metaId;
-      const authorizationHeader = authApplyingMetaId
-        ? authorizationHeaders[authApplyingMetaId]
-        : null;
-      const authorizationParam = authApplyingMetaId
-        ? authorizationParams[authApplyingMetaId]
-        : null;
-
-      switch (type) {
-        case "params":
-          return (params[metaId] ?? []) as Array<ParamInterface>;
-        case "hiddenParams":
-          return (
-            authorizationParam ? [authorizationParam] : []
-          ) as Array<ParamInterface>;
-        case "headers":
-          return (headers[metaId] ?? []) as Array<ParamInterface>;
-        case "hiddenHeaders": {
-          return [
-            ...(authorizationHeader ? [authorizationHeader] : []),
-            hiddenCookie,
-            ...(hiddenHeaders[metaId] ?? []),
-          ] as Array<ParamInterface>;
-        }
-        case "form-data":
-          return formData[metaId] ?? ([] as Array<FormDataInterface>);
-        case "x-www-form-urlencoded":
-          return (xWWWFormUrlencodedData[metaId] ??
-            []) as Array<ParamInterface>;
+      _,
+      payload: {
+        id?: string;
+        type: TMetaTableType | null;
       }
-      return [];
-    }
-  );
+    ) => payload,
+  ],
+  (
+    selectedTab,
+    params,
+    headers,
+    hiddenCookie,
+    hiddenHeaders,
+    formData,
+    xWWWFormUrlencodedData,
+    authType,
+    authInheritedIds,
+    authorizationHeaders,
+    authorizationParams,
+    { id, type }
+  ) => {
+    const metaId = id ?? selectedTab;
+    if (!metaId) return null;
 
-export const selectFilterAndUniqueMetaData = ({
-  id,
-  type,
-}: {
-  id?: string;
-  type: TMetaTableType | null;
-}) =>
-  createSelector(
-    [
-      selectMetaData({
+    const authApplyingMetaId =
+      authType[metaId] === "inherit-parent" ? authInheritedIds[metaId] : metaId;
+    const authorizationHeader = authApplyingMetaId
+      ? authorizationHeaders[authApplyingMetaId]
+      : null;
+    const authorizationParam = authApplyingMetaId
+      ? authorizationParams[authApplyingMetaId]
+      : null;
+
+    switch (type) {
+      case "params":
+        return (params[metaId] ?? []) as Array<ParamInterface>;
+      case "hiddenParams":
+        return (
+          authorizationParam ? [authorizationParam] : []
+        ) as Array<ParamInterface>;
+      case "headers":
+        return (headers[metaId] ?? []) as Array<ParamInterface>;
+      case "hiddenHeaders": {
+        return [
+          ...(authorizationHeader ? [authorizationHeader] : []),
+          hiddenCookie,
+          ...(hiddenHeaders[metaId] ?? []),
+        ] as Array<ParamInterface>;
+      }
+      case "form-data":
+        return formData[metaId] ?? ([] as Array<FormDataInterface>);
+      case "x-www-form-urlencoded":
+        return (xWWWFormUrlencodedData[metaId] ?? []) as Array<ParamInterface>;
+    }
+    return [];
+  }
+);
+
+export const selectFilterAndUniqueMetaData = createSelector(
+  [
+    (
+      state,
+      {
+        id,
+        type,
+      }: {
+        id?: string;
+        type: TMetaTableType | null;
+      }
+    ) =>
+      selectMetaData(state, {
         id,
         type,
       }),
-    ],
-    (metaData) => {
-      if (!metaData) return null;
-      return filterAndUniqueMetaData(metaData);
-    }
-  );
+  ],
+  (metaData) => {
+    if (!metaData) return null;
+    return filterAndUniqueMetaData(metaData);
+  }
+);
 
-export const selectAuthorizationHeaderData = ({ id }: { id?: string } = {}) =>
-  createSelector(
-    [
-      selectMetaData({
-        id,
+export const selectAuthorizationHeaderData = createSelector(
+  [
+    (
+      state,
+      payload?: {
+        id?: string;
+      } | null
+    ) =>
+      selectMetaData(state, {
+        id: payload?.id,
         type: "hiddenHeaders",
       }),
-    ],
-    (metaData) => {
-      if (!metaData) return null;
-      return metaData.find((header) => header.id === AUTHORIZATION_DATA_ID);
-    }
-  );
+  ],
+  (metaData) => {
+    if (!metaData) return null;
+    return metaData.find((header) => header.id === AUTHORIZATION_DATA_ID);
+  }
+);
 
-export const selectAuthorizationParamData = ({ id }: { id?: string } = {}) =>
-  createSelector(
-    [
-      selectMetaData({
-        id,
+export const selectAuthorizationParamData = createSelector(
+  [
+    (
+      state,
+      payload?: {
+        id?: string;
+      } | null
+    ) =>
+      selectMetaData(state, {
+        id: payload?.id,
         type: "hiddenParams",
       }),
-    ],
-    (metaData) => {
-      if (!metaData) return null;
-      return metaData.find(
-        (header) => header.id === AUTHORIZATION_DATA_ID
-      ) as ParamInterface<string>;
-    }
-  );
+  ],
+  (metaData) => {
+    if (!metaData) return null;
+    return metaData.find(
+      (header) => header.id === AUTHORIZATION_DATA_ID
+    ) as ParamInterface<string>;
+  }
+);
 
 export const selectFilterAndUniqueFormData = createSelector(
   [

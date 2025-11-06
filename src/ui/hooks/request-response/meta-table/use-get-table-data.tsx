@@ -65,8 +65,8 @@ export const useGetTableData = () => {
   }, [activeMetaTab, requestBodyType]);
 
   const data =
-    useAppSelector(
-      selectMetaData({
+    useAppSelector((state) =>
+      selectMetaData(state, {
         type,
       })
     ) ?? [];

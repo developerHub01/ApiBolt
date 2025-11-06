@@ -73,8 +73,8 @@ const RequestCodeSnippitProvider = ({
   const rawBodyDataType = useAppSelector(selectRawRequestBodyType);
   const rawData = useAppSelector(selectRawData);
   const binaryData = useAppSelector(selectBinaryData)?.path;
-  const xWWWFormUrlencoded = useAppSelector(
-    selectFilterAndUniqueMetaData({
+  const xWWWFormUrlencoded = useAppSelector((state) =>
+    selectFilterAndUniqueMetaData(state, {
       type: "x-www-form-urlencoded",
     })
   );
@@ -114,8 +114,8 @@ const RequestCodeSnippitProvider = ({
     return serialized;
   }, [formData]);
 
-  const headers = useAppSelector(
-    selectFilterAndUniqueMetaData({
+  const headers = useAppSelector((state) =>
+    selectFilterAndUniqueMetaData(state, {
       type: "headers",
     })
   );
@@ -128,7 +128,9 @@ const RequestCodeSnippitProvider = ({
     [headers]
   );
 
-  const authorization = useAppSelector(selectAuthorizationHeaderData());
+  const authorization = useAppSelector((state) =>
+    selectAuthorizationHeaderData(state)
+  );
 
   const serializedAuthorization = useMemo(() => {
     if (!authorization || !authorization.value) return;

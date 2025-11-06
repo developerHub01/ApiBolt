@@ -17,8 +17,8 @@ const LabelPrefixHidden = memo(({ type }: Props) => {
     selectShowHiddenMetaData(state, type)
   );
   const hiddenData =
-    useAppSelector(
-      selectMetaData({
+    useAppSelector((state) =>
+      selectMetaData(state, {
         type: type === "header" ? "hiddenHeaders" : "hiddenParams",
       })
     ) ?? [];

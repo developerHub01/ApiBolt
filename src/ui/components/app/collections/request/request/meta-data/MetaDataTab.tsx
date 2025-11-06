@@ -46,23 +46,23 @@ const MetaDataTab = memo(() => {
   const dispatch = useAppDispatch();
   const activeTabList = useAppSelector(selectActiveMetaTabList);
   const activeMetaTab = useAppSelector(selectActiveMetaTab);
-  const params = useAppSelector(
-    selectMetaData({
+  const params = useAppSelector((state) =>
+    selectMetaData(state, {
       type: "params",
     })
   );
-  const hiddenParams = useAppSelector(
-    selectMetaData({
+  const hiddenParams = useAppSelector((state) =>
+    selectMetaData(state, {
       type: "hiddenParams",
     })
   );
-  const headers = useAppSelector(
-    selectMetaData({
+  const headers = useAppSelector((state) =>
+    selectMetaData(state, {
       type: "headers",
     })
   );
-  const hiddenHeaders = useAppSelector(
-    selectMetaData({
+  const hiddenHeaders = useAppSelector((state) =>
+    selectMetaData(state, {
       type: "hiddenHeaders",
     })
   );

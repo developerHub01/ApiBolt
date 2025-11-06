@@ -8,7 +8,6 @@ import { useAppSelector } from "@/context/redux/hooks";
 
 const Authorization = () => {
   const { authorization } = useAppSelector(selectHistoryDetails);
-
   const authType = useMemo(
     () =>
       (
@@ -17,8 +16,6 @@ const Authorization = () => {
       ).label,
     [authorization?.type]
   );
-
-  console.log(authorization);
 
   if (!authorization) return;
 

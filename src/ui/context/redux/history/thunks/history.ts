@@ -21,7 +21,6 @@ export const loadRequestHistoryMeta = createAsyncThunk<
   try {
     const state = getState() as RootState;
     if (!id) id = state.requestResponse.selectedTab;
-
     if (!id) return;
 
     const response = await window.electronAPIHistory.getHistoryByRequestId(id);
