@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { useParams } from "react-router-dom";
 import type { HistoryItemMetaInterface } from "@/types/history.types";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
@@ -7,9 +13,12 @@ import {
   selectIsHistoryItemOpen,
 } from "@/context/redux/history/selectors/history";
 import { loadRequestHistory } from "@/context/redux/history/thunks/history";
+import type { TActiveTabType } from "@/types/request-response.types";
 
 interface HistoryDetailsContext {
   meta: HistoryItemMetaInterface | null;
+  activeMetaTab: TActiveTabType;
+  handleChangeActiveMetaTab: (value: TActiveTabType) => void;
 }
 
 const HistoryDetailsContext = createContext<HistoryDetailsContext | null>(null);
@@ -36,6 +45,12 @@ const HistoryDetailsProvider = ({ children }: HistoryDetailsProviderProps) => {
   const dispatch = useAppDispatch();
   const meta = useAppSelector(selectHistoryMeta);
   const isOpen = useAppSelector(selectIsHistoryItemOpen);
+  const [activeMetaTab, setActiveMetaTab] = useState<TActiveTabType>("params");
+
+  const handleChangeActiveMetaTab = useCallback(
+    (value: TActiveTabType) => setActiveMetaTab(value),
+    []
+  );
 
   useEffect(() => {
     if (!isOpen) return;
@@ -48,6 +63,8 @@ const HistoryDetailsProvider = ({ children }: HistoryDetailsProviderProps) => {
     <HistoryDetailsContext.Provider
       value={{
         meta,
+        activeMetaTab,
+        handleChangeActiveMetaTab,
       }}
     >
       {children}

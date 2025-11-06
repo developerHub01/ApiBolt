@@ -8,7 +8,7 @@ import { selectIsHistoryItemOpen } from "@/context/redux/history/selectors/histo
 import { changeOpenedHistory } from "@/context/redux/history/thunks/history";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import HistoryTop from "@/components/app/history-details/HistoryTop";
-import HistoryContent from "@/components/app/history-details/HistoryContent";
+import HistoryContent from "@/components/app/history-details/content/HistoryContent";
 import HistoryBottom from "@/components/app/history-details/HistoryBottom";
 import { useHistoryDetails } from "@/context/history/HistoryDetailsProvider";
 import { selectHistoryDetailsLoading } from "@/context/redux/status/selectors/history";
