@@ -153,15 +153,72 @@ export const fetchApi = createAsyncThunk<
       },
     };
 
-    if (state.requestResponse.authType[requestId])
+    if (state.requestResponse.authType[requestId]) {
       historyPayload.authorization = {
         type: state.requestResponse.authType[requestId],
-        inheritedId: state.requestResponse.authInheritedId[requestId],
-        basicAuth: state.requestResponse.basicAuth[requestId],
-        bearerAuth: state.requestResponse.bearerTokenAuth[requestId],
-        jwtAuth: state.requestResponse.jwtBearerAuth[requestId],
-        apiKeyAuth: state.requestResponse.apiKeyAuth[requestId],
       };
+
+      /***
+       * ============================
+       * if inheritedId have that mean inherited type so then type will show inherited authorization type
+       * if not inherited then it will show current auth type in type and the details of that type auth only
+       * ============================
+       * **/
+      if (
+        state.requestResponse.authType[requestId] === "inherit-parent" &&
+        state.requestResponse.authInheritedId[requestId]
+      ) {
+        /* as inherited then type will be inherited authorization type */
+        historyPayload.authorization.type =
+          state.requestResponse.authType[
+            state.requestResponse.authInheritedId[requestId]
+          ];
+
+        historyPayload.authorization.inheritedId =
+          state.requestResponse.authInheritedId[requestId];
+
+        /* pick data based on inherited authorization type */
+        switch (historyPayload.authorization.type) {
+          case "basic-auth":
+            historyPayload.authorization.basicAuth =
+              state.requestResponse.basicAuth[requestId];
+            break;
+          case "api-key":
+            historyPayload.authorization.apiKeyAuth =
+              state.requestResponse.apiKeyAuth[requestId];
+            break;
+          case "bearer-token":
+            historyPayload.authorization.bearerAuth =
+              state.requestResponse.bearerTokenAuth[requestId];
+            break;
+          case "jwt-bearer":
+            historyPayload.authorization.jwtAuth =
+              state.requestResponse.jwtBearerAuth[requestId];
+            break;
+        }
+      } else {
+        historyPayload.authorization.inheritedId = null;
+
+        switch (state.requestResponse.authType[requestId]) {
+          case "basic-auth":
+            historyPayload.authorization.basicAuth =
+              state.requestResponse.basicAuth[requestId];
+            break;
+          case "api-key":
+            historyPayload.authorization.apiKeyAuth =
+              state.requestResponse.apiKeyAuth[requestId];
+            break;
+          case "bearer-token":
+            historyPayload.authorization.bearerAuth =
+              state.requestResponse.bearerTokenAuth[requestId];
+            break;
+          case "jwt-bearer":
+            historyPayload.authorization.jwtAuth =
+              state.requestResponse.jwtBearerAuth[requestId];
+            break;
+        }
+      }
+    }
 
     if (payload.binaryData) historyPayload.binaryData = payload.binaryData;
 

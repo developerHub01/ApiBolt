@@ -21,11 +21,11 @@ export interface HistoryItemInterface {
   request: string;
   authorization?: {
     type: TAuthType;
-    inheritedId: string | null;
-    basicAuth: BasicAuthInterface;
-    bearerAuth: TBearerToken;
-    jwtAuth: JWTBearerAuthInterface;
-    apiKeyAuth: APIKeyInterface;
+    inheritedId?: string | null;
+    basicAuth?: BasicAuthInterface;
+    bearerAuth?: TBearerToken;
+    jwtAuth?: JWTBearerAuthInterface;
+    apiKeyAuth?: APIKeyInterface;
   };
   params?: Array<ParamInterface>;
   headers?: Array<ParamInterface>;

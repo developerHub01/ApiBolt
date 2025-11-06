@@ -18,13 +18,14 @@ const HistoryContent = memo(() => {
         {isLoading ? (
           <HistorySkeleton />
         ) : (
-          <motion.div className="w-full h-full p-2 flex flex-col gap-2">
-            <ApiUrl />
-            <MetaDataTab />
-            <MetaDataContent />
-            <div className="flex-1"></div>
+          <motion.section className="w-full h-full p-2 flex flex-col gap-2">
+            <section className="flex-1 h-full flex flex-col gap-2">
+              <ApiUrl />
+              <MetaDataTab />
+              <MetaDataContent />
+            </section>
             <ResponseMetaInfo />
-          </motion.div>
+          </motion.section>
         )}
       </AnimatePresence>
     </AnimatedDialogContent>
