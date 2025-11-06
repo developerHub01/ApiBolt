@@ -13,44 +13,41 @@ import {
 } from "lucide-react";
 import { formatSize } from "@/utils";
 import Warning from "@/components/warning";
-import { useAppSelector } from "@/context/redux/hooks";
-import {
-  selectRequestSize,
-  selectResponse,
-  selectResponseSize,
-} from "@/context/redux/request-response/selectors/response";
+import type { RequestResponseSizeInterface } from "@/types/request-response.types";
 
 const defaultSizeObj = {
   header: 0,
   body: 0,
 };
 
-const RequestResponseSize = memo(() => {
-  const response = useAppSelector(selectResponse);
-  const requestSize = useAppSelector(selectRequestSize) ?? defaultSizeObj;
-  const responseSize = useAppSelector(selectResponseSize) ?? defaultSizeObj;
-  if (!response) return null;
+interface Props {
+  requestSize?: RequestResponseSizeInterface;
+  responseSize?: RequestResponseSizeInterface;
+}
 
-  return (
-    <HoverCard>
-      <HoverCardTrigger asChild>
-        <Badge className={cn("select-none text-foreground bg-secondary")}>
-          {formatSize(responseSize.header + responseSize.body)}
-        </Badge>
-      </HoverCardTrigger>
-      <HoverCardContent
-        className="w-60 flex flex-col gap-2 bg-background p-2.5"
-        side="bottom"
-        align="end"
-      >
-        <SizeDetails type="request" {...requestSize} />
-        <Separator />
-        <SizeDetails type="response" {...responseSize} />
-        <Warning label="These values are approximate, not exact network size." />
-      </HoverCardContent>
-    </HoverCard>
-  );
-});
+const RequestResponseSize = memo(
+  ({ requestSize = defaultSizeObj, responseSize = defaultSizeObj }: Props) => {
+    return (
+      <HoverCard>
+        <HoverCardTrigger asChild>
+          <Badge className={cn("select-none text-foreground bg-secondary")}>
+            {formatSize(responseSize.header + responseSize.body)}
+          </Badge>
+        </HoverCardTrigger>
+        <HoverCardContent
+          className="w-60 flex flex-col gap-2 bg-background p-2.5"
+          side="bottom"
+          align="end"
+        >
+          <SizeDetails type="request" {...requestSize} />
+          <Separator />
+          <SizeDetails type="response" {...responseSize} />
+          <Warning label="These values are approximate, not exact network size." />
+        </HoverCardContent>
+      </HoverCard>
+    );
+  }
+);
 RequestResponseSize.displayName = "Request response size";
 
 interface SizeDetailsProps {
