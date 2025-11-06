@@ -8,8 +8,8 @@ const HistoryTop = memo(() => {
 
   return (
     <AnimatedDialogTop>
-      <div className="px-4 py-2 text-lg flex items-center gap-3">
-        <p>History</p>
+      <div className="p-2 text-lg flex items-center gap-3">
+        <p className="font-semibold">History</p>
         {Boolean(meta?.createdAt) && (
           <Badge
             variant={"secondary"}

@@ -132,7 +132,7 @@ const AnimatedDialogTop = memo(
     ...props
   }: AnimatedDialogTopProps & ComponentProps<"div">) => {
     return (
-      <div className={cn("border-b-2 p-2.5", className)} {...props}>
+      <div className={cn("border-b-2 px-3 py-2", className)} {...props}>
         {children}
       </div>
     );
@@ -179,7 +179,7 @@ const AnimatedDialogBottom = memo(
     return (
       <div
         className={cn(
-          "border-t-2 p-2.5 flex justify-center items-center",
+          "border-t-2 px-3 py-2 flex justify-center items-center",
           className
         )}
         {...props}

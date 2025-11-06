@@ -27,11 +27,13 @@ function ApiMethodSelect({
 function ApiMethodSelectTrigger({
   className,
   size = "default",
+  showIcon = true,
   methodType,
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Trigger> & {
   size?: "sm" | "default";
   methodType: THTTPMethods;
+  showIcon?: boolean;
 }) {
   return (
     <SelectPrimitive.Trigger
@@ -54,9 +56,11 @@ function ApiMethodSelectTrigger({
       {...props}
     >
       <span className="uppercase">{methodType}</span>
-      <SelectPrimitive.Icon asChild>
-        <ChevronDownIcon className={cn("size-4")} />
-      </SelectPrimitive.Icon>
+      {showIcon && (
+        <SelectPrimitive.Icon asChild>
+          <ChevronDownIcon className={cn("size-4")} />
+        </SelectPrimitive.Icon>
+      )}
     </SelectPrimitive.Trigger>
   );
 }
