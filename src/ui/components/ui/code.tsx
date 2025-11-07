@@ -9,12 +9,11 @@ import { Button } from "@/components/ui/button";
 import { Copy as CopyIcon } from "lucide-react";
 import type { TContentType } from "@/types/request-response.types";
 import { toast } from "sonner";
-import { langs } from "@uiw/codemirror-extensions-langs";
-import { langMap } from "@/constant/code.constant";
 import useCodeKeybaordShortcut from "@/hooks/code/use-code-keybaord-shortcut";
 import useCheckApplyingCodeFontSize from "@/hooks/setting/use-check-applying-code-font-size";
 import useCheckApplyingCodeIndentationSize from "@/hooks/setting/use-check-applying-code-indentation-size";
 import { indentUnit } from "@codemirror/language";
+import { getLangExtension } from "@/utils/code";
 
 export type TLanguageType =
   | TContentType
@@ -115,7 +114,7 @@ const Code = ({
   useEffect(() => setFontSizeState(fontSize), [fontSize]);
 
   const extensions: Array<Extension> = [
-    langs[langMap?.[contentType] ?? contentType ?? "text"](),
+    getLangExtension(contentType)(),
     EditorState.tabSize.of(indentationSize),
     indentUnit.of(" ".repeat(indentationSize)),
   ];

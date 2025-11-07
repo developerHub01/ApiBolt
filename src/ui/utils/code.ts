@@ -1,5 +1,8 @@
+import { langMap } from "@/constant/code.constant";
+import type { LangFactory } from "@/types/code";
 import type { TContentType } from "@/types/request-response.types";
 import { formatCode, getParser } from "@/utils/prettier.utils";
+import { langs } from "@uiw/codemirror-extensions-langs";
 import { toast } from "sonner";
 
 export const codeFormatter = async ({
@@ -19,4 +22,14 @@ export const codeFormatter = async ({
   if (!success || !data) return message && showErrorToast && toast(message);
   if (callback) callback(data);
   return data;
+};
+
+/**
+ * Returns the language factory for a given content type
+ */
+export const getLangExtension = (contentType: string): LangFactory => {
+  const key = (langMap?.[contentType] ??
+    contentType ??
+    "text") as keyof typeof langs;
+  return langs[key];
 };
