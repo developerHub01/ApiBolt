@@ -51,5 +51,12 @@ export const generateCode = async (
   const key = (Object.keys(generatorMap).find((k) => lowerType.startsWith(k)) ??
     null) as keyof typeof generatorMap | null;
 
-  return key ? await generatorMap[key](type, data) : requestDefaultCodeSnippit;
+  /**
+   * 💣💣💣
+   * structuredClone so that it remove all references and send a pure cloned data
+   * 💣💣💣
+   */
+  return key
+    ? await generatorMap[key](type, structuredClone(data))
+    : requestDefaultCodeSnippit;
 };
