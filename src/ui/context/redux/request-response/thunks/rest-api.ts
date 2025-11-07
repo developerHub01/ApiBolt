@@ -141,11 +141,6 @@ export const fetchApi = createAsyncThunk<
       name: state.requestResponse.requestList[requestId].name,
       params: state.requestResponse.params[requestId],
       headers: rawHeaderData,
-      formData: rawFormData,
-      xWWWFormUrlencoded: xWWWFormUrlencoded,
-      requestBodyType: payload.bodyType,
-      rawType: payload.rawSubType,
-      raw: payload.rawData,
       responseStatus: `${response.status} ${response.statusText}`,
       responseSize: {
         requestSize: response.requestSize,
@@ -220,11 +215,41 @@ export const fetchApi = createAsyncThunk<
       }
     }
 
-    if (payload.binaryData) historyPayload.binaryData = payload.binaryData;
+    if (payload.bodyType !== "none") {
+      historyPayload.body = {
+        type: payload.bodyType,
+      };
+
+      switch (payload.bodyType) {
+        case "binary": {
+          if (payload.binaryData)
+            historyPayload.body.binaryData = payload.binaryData;
+          break;
+        }
+        case "form-data": {
+          if (rawFormData) historyPayload.body.formData = rawFormData;
+          break;
+        }
+        case "x-www-form-urlencoded": {
+          if (xWWWFormUrlencoded)
+            historyPayload.body.xWWWFormUrlencoded = xWWWFormUrlencoded;
+          break;
+        }
+        case "raw": {
+          if (payload.rawData) {
+            historyPayload.body.raw = payload.rawData;
+            historyPayload.body.rawType = payload.rawSubType;
+          }
+          break;
+        }
+      }
+    }
 
     const historyResponse = await window.electronAPIHistory.createHistory({
       ...historyPayload,
     });
+
+    console.log(historyResponse);
 
     if (historyResponse)
       dispatch(

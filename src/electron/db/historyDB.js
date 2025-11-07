@@ -18,14 +18,7 @@ export const getHistoryById = async (id) => {
         .limit(1)
     )?.[0];
 
-    const keys = [
-      "params",
-      "headers",
-      "formData",
-      "xWWWFormUrlencoded",
-      "authorization",
-      "responseSize",
-    ];
+    const keys = ["params", "headers", "authorization", "body", "responseSize"];
     for (const key of keys) {
       if (response[key]) response[key] = JSON.parse(response[key]);
     }
@@ -67,9 +60,8 @@ export const createHistory = async (payload = {}) => {
     const keys = [
       "params",
       "headers",
-      "formData",
-      "xWWWFormUrlencoded",
       "authorization",
+      "body",
       "responseSize",
     ];
     for (const key of keys) {

@@ -424,16 +424,10 @@ export const historyTable = sqliteTable("history_table", {
   url: text().default(""),
   method: text(),
   name: text(),
-  authorization: text(),
   params: text(),
   headers: text(),
-  formData: text(),
-  xWWWFormUrlencoded: text(),
-  binaryData: text(),
-  raw: text(),
-  rawType: text().default("json") /* text, javascript, json, html, xml */,
-  requestBodyType:
-    text() /* "none" | "form-data" | "x-www-form-urlencoded" | "raw" | "binary" */,
+  authorization: text(),
+  body: text(),
   responseStatus: text(),
   responseSize: text(),
   createdAt: text()

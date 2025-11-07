@@ -19,6 +19,8 @@ export interface HistoryItemInterface {
   method: THTTPMethods;
   name: string;
   request: string;
+  params?: Array<ParamInterface>;
+  headers?: Array<ParamInterface>;
   authorization?: {
     type: TAuthType;
     inheritedId?: string | null;
@@ -27,14 +29,14 @@ export interface HistoryItemInterface {
     jwtAuth?: JWTBearerAuthInterface;
     apiKeyAuth?: APIKeyInterface;
   };
-  params?: Array<ParamInterface>;
-  headers?: Array<ParamInterface>;
-  formData?: Array<ParamInterface>;
-  xWWWFormUrlencoded?: Array<ParamInterface>;
-  binaryData?: string;
-  raw?: string;
-  rawType?: TContentType;
-  requestBodyType?: TRequestBodyType;
+  body?: {
+    type: TRequestBodyType;
+    formData?: Array<ParamInterface>;
+    xWWWFormUrlencoded?: Array<ParamInterface>;
+    binaryData?: string;
+    rawType?: TContentType;
+    raw?: string;
+  };
   responseStatus?: string;
   responseSize?: {
     requestSize: RequestResponseSizeInterface;
