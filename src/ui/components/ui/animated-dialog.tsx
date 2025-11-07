@@ -1,4 +1,5 @@
 import { memo, type ComponentProps, type KeyboardEvent } from "react";
+import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
 import { AnimatePresence, motion, type HTMLMotionProps } from "motion/react";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -148,24 +149,36 @@ interface AnimatedDialogContentProps {
 const AnimatedDialogContent = memo(
   ({
     className = "",
-    scrollAreaClassName = "",
     children,
     ...props
   }: AnimatedDialogContentProps & ComponentProps<"div">) => {
     return (
       <div
-        className={cn("w-full min-h-0 flex-1 [&>div>div]:h-full", className)}
+        className={cn("w-full min-h-0 flex-1 flex flex-col", className)}
         {...props}
       >
-        <ScrollArea
-          className={cn(
-            "w-full h-full px-3 py-2 [&>div>div]:h-full",
-            scrollAreaClassName
-          )}
-        >
-          {children}
-        </ScrollArea>
+        {children}
       </div>
+    );
+  }
+);
+const AnimatedDialogContentScroll = memo(
+  ({
+    className = "",
+    children,
+    ...props
+  }: AnimatedDialogContentProps &
+    ComponentProps<typeof ScrollAreaPrimitive.Root>) => {
+    return (
+      <ScrollArea
+        className={cn(
+          "w-full flex-1 min-h-0 px-3 py-2 [&>div>div]:h-full",
+          className
+        )}
+        {...props}
+      >
+        {children}
+      </ScrollArea>
     );
   }
 );
@@ -210,6 +223,7 @@ export {
   AnimatedDialogContentWrapper,
   AnimatedDialogTop,
   AnimatedDialogContent,
+  AnimatedDialogContentScroll,
   AnimatedDialogBottom,
   AnimatedDialogLoader,
 };
