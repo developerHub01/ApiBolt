@@ -69,6 +69,11 @@ export const selectIsHistoryItemOpen = createSelector(
   (opened) => Boolean(opened?.id && opened?.requestId)
 );
 
+export const selectHistoryItemOpenId = createSelector(
+  [(state: RootState) => state.history.openedHistory?.id],
+  (id) => id ?? null
+);
+
 export const selectHistoryDetails = createSelector(
   [(state: RootState) => state.history.historyDetails],
   (details) => {

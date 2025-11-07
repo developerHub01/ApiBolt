@@ -5,10 +5,10 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { useParams } from "react-router-dom";
 import type { HistoryItemMetaInterface } from "@/types/history.types";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
+  selectHistoryItemOpenId,
   selectHistoryMeta,
   selectIsHistoryItemOpen,
 } from "@/context/redux/history/selectors/history";
@@ -43,10 +43,10 @@ interface HistoryDetailsProviderProps {
 }
 
 const HistoryDetailsProvider = ({ children }: HistoryDetailsProviderProps) => {
-  const { id } = useParams();
   const dispatch = useAppDispatch();
   const meta = useAppSelector(selectHistoryMeta);
   const isOpen = useAppSelector(selectIsHistoryItemOpen);
+  const historyId = useAppSelector(selectHistoryItemOpenId);
   const [activeMetaTab, setActiveMetaTab] = useState<TActiveTabType>("params");
   const [codeWrap, setCodeWrap] = useState<boolean>(false);
 
@@ -64,7 +64,9 @@ const HistoryDetailsProvider = ({ children }: HistoryDetailsProviderProps) => {
     dispatch(loadRequestHistory());
   }, [dispatch, isOpen]);
 
-  if (!id) return null;
+  useEffect(() => {
+    setActiveMetaTab("params");
+  }, [historyId]);
 
   return (
     <HistoryDetailsContext.Provider
