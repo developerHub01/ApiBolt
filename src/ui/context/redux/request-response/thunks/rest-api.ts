@@ -249,8 +249,6 @@ export const fetchApi = createAsyncThunk<
       ...historyPayload,
     });
 
-    console.log(historyResponse);
-
     if (historyResponse)
       dispatch(
         /* if array response means history modified so replace full history list */

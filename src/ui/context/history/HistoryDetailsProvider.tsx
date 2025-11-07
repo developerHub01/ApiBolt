@@ -18,7 +18,9 @@ import type { TActiveTabType } from "@/types/request-response.types";
 interface HistoryDetailsContext {
   meta: HistoryItemMetaInterface | null;
   activeMetaTab: TActiveTabType;
+  codeWrap: boolean;
   handleChangeActiveMetaTab: (value: TActiveTabType) => void;
+  handleToggleCodeWrap: (value?: boolean) => void;
 }
 
 const HistoryDetailsContext = createContext<HistoryDetailsContext | null>(null);
@@ -46,9 +48,14 @@ const HistoryDetailsProvider = ({ children }: HistoryDetailsProviderProps) => {
   const meta = useAppSelector(selectHistoryMeta);
   const isOpen = useAppSelector(selectIsHistoryItemOpen);
   const [activeMetaTab, setActiveMetaTab] = useState<TActiveTabType>("params");
+  const [codeWrap, setCodeWrap] = useState<boolean>(false);
 
   const handleChangeActiveMetaTab = useCallback(
     (value: TActiveTabType) => setActiveMetaTab(value),
+    []
+  );
+  const handleToggleCodeWrap = useCallback(
+    (value?: boolean) => setCodeWrap((prev) => value ?? !prev),
     []
   );
 
@@ -64,7 +71,9 @@ const HistoryDetailsProvider = ({ children }: HistoryDetailsProviderProps) => {
       value={{
         meta,
         activeMetaTab,
+        codeWrap,
         handleChangeActiveMetaTab,
+        handleToggleCodeWrap,
       }}
     >
       {children}

@@ -2,6 +2,7 @@ import TabMotionWrapper from "@/components/app/collections/request/request/meta-
 import { useHistoryDetails } from "@/context/history/HistoryDetailsProvider";
 import { AnimatePresence } from "motion/react";
 import Authorization from "@/components/app/history-details/content/meta/authorization/Authorization";
+import Body from "@/components/app/history-details/content/meta/body/Body";
 
 const MetaDataContent = () => {
   const { activeMetaTab } = useHistoryDetails();
@@ -20,16 +21,17 @@ const MetaDataContent = () => {
           {/* <RequestAuthorization /> */}
         </TabMotionWrapper>
       )}
+      {activeMetaTab === "body" && (
+        <TabMotionWrapper id="body">
+          <Body />
+        </TabMotionWrapper>
+      )}
       {/* {activeMetaTab === "headers" && (
         <TabMotionWrapper id="headers">
           <Headers />
         </TabMotionWrapper>
       )}
-      {activeMetaTab === "body" && (
-        <TabMotionWrapper id="body">
-          <Body />
-        </TabMotionWrapper>
-      )}*/}
+      */}
     </AnimatePresence>
   );
 };

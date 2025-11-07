@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { AUTH_LIST, INHERIT_AUTH } from "@/constant/authorization.constant";
@@ -12,7 +12,7 @@ import JWTBearer from "@/components/app/authorization/content/jwt-bearer/JWTBear
 import APIKey from "@/components/app/authorization/content/api-key/APIKey";
 import BorderedWrapper from "@/components/ui/bordered-wrapper";
 
-const Authorization = () => {
+const Authorization = memo(() => {
   const { authorization } = useAppSelector(selectHistoryDetails);
   const authType = useMemo(() => {
     if (authorization?.inheritedId) return INHERIT_AUTH.label;
@@ -63,6 +63,6 @@ const Authorization = () => {
       </div>
     </ScrollArea>
   );
-};
+});
 
 export default Authorization;
