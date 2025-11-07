@@ -14,6 +14,7 @@ import { useAppDispatch } from "@/context/redux/hooks";
 import {
   AnimatedDialog,
   AnimatedDialogBottom,
+  AnimatedDialogContent,
   AnimatedDialogContentWrapper,
   AnimatedDialogTop,
 } from "@/components/ui/animated-dialog";
@@ -78,24 +79,26 @@ const AddProjectDialog = memo(() => {
             Organize your API requests into a new project
           </p>
         </AnimatedDialogTop>
-        <div className="flex-1 flex flex-col gap-3 px-4 py-5">
-          <Label htmlFor="name-1" className="font-normal text-sm">
-            Project Name
-            <span className="ml-1 text-xs text-accent-foreground/70 tracking-widest">
-              (limit: {name.length}/{MAX_PROJECT_NAME_LENGTH})
-            </span>
-          </Label>
-          <Input
-            id="name-1"
-            name="name"
-            placeholder="Enter project name..."
-            value={name}
-            onChange={handleChange}
-            onKeyDown={handleKeyDown}
-            disabled={isLoading}
-            maxLength={MAX_PROJECT_NAME_LENGTH}
-          />
-        </div>
+        <AnimatedDialogContent>
+          <div className="flex-1 flex flex-col gap-3 px-4 py-5">
+            <Label htmlFor="name-1" className="font-normal text-sm">
+              Project Name
+              <span className="ml-1 text-xs text-accent-foreground/70 tracking-widest">
+                (limit: {name.length}/{MAX_PROJECT_NAME_LENGTH})
+              </span>
+            </Label>
+            <Input
+              id="name-1"
+              name="name"
+              placeholder="Enter project name..."
+              value={name}
+              onChange={handleChange}
+              onKeyDown={handleKeyDown}
+              disabled={isLoading}
+              maxLength={MAX_PROJECT_NAME_LENGTH}
+            />
+          </div>
+        </AnimatedDialogContent>
         <AnimatedDialogBottom className="justify-end gap-3 px-4 py-3">
           <Button variant="outline" onClick={handleClose}>
             Close

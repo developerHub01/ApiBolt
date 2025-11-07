@@ -56,6 +56,7 @@ interface KeyboardShortcutsContext {
   handleChangeActiveTab: (value?: TKeyboardShortcutsTab) => void;
   applyingKeybindingMap: Record<string, KeybaordShortCutInterface>;
   searchResult: Record<string, KeybaordShortCutInterface>;
+  searchResultCount: number;
   handleChangeSearchTerm: (value?: string) => void;
   handleChangeSearchByType: (value: TSearchByType) => void;
   handleChangeSearchKeyList: (value: Array<string>) => void;
@@ -206,6 +207,11 @@ const KeyboardShortcutsProvider = ({
     [searchKeyList, activeTab]
   );
 
+  const searchResultCount = useMemo(
+    () => Object.keys(searchResult).length,
+    [searchResult]
+  );
+
   return (
     <KeyboardShortcutsContext.Provider
       value={{
@@ -216,6 +222,7 @@ const KeyboardShortcutsProvider = ({
         handleChangeActiveTab,
         applyingKeybindingMap,
         searchResult,
+        searchResultCount,
         handleChangeSearchTerm,
         handleChangeSearchByType,
         handleChangeSearchKeyList,

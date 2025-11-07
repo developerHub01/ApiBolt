@@ -14,6 +14,7 @@ import { useAppSelector } from "@/context/redux/hooks";
 import {
   AnimatedDialog,
   AnimatedDialogBottom,
+  AnimatedDialogContent,
   AnimatedDialogContentWrapper,
   AnimatedDialogTop,
 } from "@/components/ui/animated-dialog";
@@ -112,24 +113,26 @@ const DeleteProjectDialog = memo(() => {
             </div>
           </p>
         </AnimatedDialogTop>
-        <div className="flex-1 flex flex-col gap-3 px-4 py-5">
-          <Label htmlFor="project-name" className="font-normal text-sm">
-            Project Name
-          </Label>
-          <div className="flex gap-2">
-            <Input
-              id="project-name"
-              name="project-name"
-              className="w-full flex-1"
-              placeholder={projectName}
-              value={name}
-              onChange={handleChange}
-              onKeyDown={handleKeyDown}
-              disabled={isLoading}
-            />
-            <PasteButton handleChange={handleChangeName} />
+        <AnimatedDialogContent>
+          <div className="flex-1 flex flex-col gap-3 px-4 py-5">
+            <Label htmlFor="project-name" className="font-normal text-sm">
+              Project Name
+            </Label>
+            <div className="flex gap-2">
+              <Input
+                id="project-name"
+                name="project-name"
+                className="w-full flex-1"
+                placeholder={projectName}
+                value={name}
+                onChange={handleChange}
+                onKeyDown={handleKeyDown}
+                disabled={isLoading}
+              />
+              <PasteButton handleChange={handleChangeName} />
+            </div>
           </div>
-        </div>
+        </AnimatedDialogContent>
         <AnimatedDialogBottom className="justify-end gap-3 px-4 py-3">
           <Button variant="outline" onClick={handleClose}>
             Close

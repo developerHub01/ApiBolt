@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
   AnimatedDialogBottom,
   AnimatedDialogContent,
+  AnimatedDialogContentScroll,
   AnimatedDialogContentWrapper,
   AnimatedDialogTop,
 } from "@/components/ui/animated-dialog";
@@ -43,7 +44,9 @@ const Cookies = memo(() => {
           <div className="p-2 text-lg font-medium">Cookies</div>
         </AnimatedDialogTop>
         <AnimatedDialogContent>
-          {isLoading ? <CookiesSkeleton /> : <CookiesContent />}
+          <AnimatedDialogContentScroll>
+            {isLoading ? <CookiesSkeleton /> : <CookiesContent />}
+          </AnimatedDialogContentScroll>
         </AnimatedDialogContent>
         <AnimatedDialogBottom>
           <p className="line-clamp-1 text-center max-w-lg text-sm">

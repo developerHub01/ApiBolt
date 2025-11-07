@@ -1,13 +1,19 @@
 import { memo } from "react";
 import KeyboardShortcutPreview from "@/components/app/keyboard-shortcuts/keyboard-content/keyboard-preview/KeyboardShortcutPreview";
 import KeyboardShortcutSearch from "@/components/app/keyboard-shortcuts/keyboard-content/keyboard-search/KeyboardShortcutSearch";
+import {
+  AnimatedDialogContent,
+  AnimatedDialogContentScroll,
+} from "@/components/ui/animated-dialog";
 
 const KeyboardShortcutsContent = memo(() => {
   return (
-    <div className="w-full min-h-0 flex flex-1 flex-col p-2">
+    <AnimatedDialogContent>
       <KeyboardShortcutSearch />
-      <KeyboardShortcutPreview />
-    </div>
+      <AnimatedDialogContentScroll>
+        <KeyboardShortcutPreview />
+      </AnimatedDialogContentScroll>
+    </AnimatedDialogContent>
   );
 });
 

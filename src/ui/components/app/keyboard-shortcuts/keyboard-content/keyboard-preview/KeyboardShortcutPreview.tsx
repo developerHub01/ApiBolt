@@ -9,14 +9,13 @@ import { useKeyboardShortcuts } from "@/context/keyboard-shortcuts/KeyboardShort
 import type { KeybaordShortCutInterface } from "@/types/keyboard-shortcut.types";
 import KeyboardShortcutsRow from "@/components/app/keyboard-shortcuts/keyboard-content/keyboard-preview/KeyboardShortcutsRow";
 import Empty from "@/components/ui/empty";
-import { AnimatedDialogContent } from "@/components/ui/animated-dialog";
 
 const KeyboardShortcutPreview = () => {
-  const { searchResult } = useKeyboardShortcuts();
+  const { searchResult, searchResultCount } = useKeyboardShortcuts();
 
   return (
-    <AnimatedDialogContent scrollAreaClassName="pt-1">
-      {Object.keys(searchResult).length ? (
+    <>
+      {searchResultCount ? (
         <Table className="w-full border table-fixed overflow-hidden relative">
           <TableHeader className="bg-secondary font-bold sticky">
             <TableRow className="[&>th]:border-r [&>th]:last:border-r-0">
@@ -45,7 +44,7 @@ const KeyboardShortcutPreview = () => {
           showFallback
         />
       )}
-    </AnimatedDialogContent>
+    </>
   );
 };
 
