@@ -125,6 +125,8 @@ export interface FileDataInterface {
   path: string;
 }
 
+export type TBinaryData = FileDataInterface | null;
+
 export interface FormDataInterface
   extends ParamInterface<string | Array<FileDataInterface>> {
   contentType?: string;

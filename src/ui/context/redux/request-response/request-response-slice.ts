@@ -32,6 +32,7 @@ import type {
   FormDataPayloadInterface,
   TResponseDataTab,
   TResponseMetaTab,
+  TBinaryData,
 } from "@/types/request-response.types";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
@@ -88,13 +89,7 @@ interface RequestResponseState {
   authorizationHeader: Record<string, ParamInterface>;
   authorizationParam: Record<string, ParamInterface>;
   showHiddenHeaders: Record<string, boolean>;
-  binaryData: Record<
-    string,
-    {
-      file: string;
-      path: string;
-    } | null
-  >;
+  binaryData: Record<string, TBinaryData>;
   formData: Record<string, Array<FormDataInterface>>;
   xWWWFormUrlencodedData: Record<string, Array<ParamInterface>>;
   isDownloadRequestWithBase64: Record<string, boolean>;
