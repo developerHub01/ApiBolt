@@ -6,19 +6,22 @@ import BodyBinary from "@/components/app/history-details/content/meta/body/BodyB
 
 const Body = memo(() => {
   const { body } = useAppSelector(selectHistoryDetails);
-
   if (!body) return null;
 
   const { type, formData, xWWWFormUrlencoded, binaryData, raw, rawType } = body;
-  
-  console.log({ type, formData, xWWWFormUrlencoded, binaryData, raw, rawType });
+
+  console.log({ formData, xWWWFormUrlencoded });
 
   return (
     <div className="w-full min-h-0 flex-1">
       {type === "raw" && raw !== undefined && (
         <BodyRaw code={raw} contentType={rawType} />
       )}
-      {type === "binary" && binaryData !== undefined && <BodyBinary />}
+      {type === "binary" &&
+        binaryData !== undefined &&
+        (binaryData?.file || binaryData?.path) && (
+          <BodyBinary {...binaryData} />
+        )}
     </div>
   );
 });

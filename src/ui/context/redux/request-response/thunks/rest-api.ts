@@ -222,8 +222,8 @@ export const fetchApi = createAsyncThunk<
 
       switch (payload.bodyType) {
         case "binary": {
-          if (payload.binaryData)
-            historyPayload.body.binaryData = payload.binaryData;
+          historyPayload.body.binaryData =
+            state.requestResponse.binaryData[requestId] ?? null;
           break;
         }
         case "form-data": {

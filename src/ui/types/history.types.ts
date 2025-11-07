@@ -1,6 +1,7 @@
 import type {
   ParamInterface,
   RequestResponseSizeInterface,
+  TBinaryData,
   TContentType,
   THTTPMethods,
   TRequestBodyType,
@@ -33,7 +34,7 @@ export interface HistoryItemInterface {
     type: TRequestBodyType;
     formData?: Array<ParamInterface>;
     xWWWFormUrlencoded?: Array<ParamInterface>;
-    binaryData?: string;
+    binaryData?: TBinaryData;
     rawType?: TContentType;
     raw?: string;
   };
