@@ -16,7 +16,7 @@ const MetaTableHeader = memo(({ type }: MetaTableHeaderProps) => {
   const { value, description } = showColumn;
 
   return (
-    <TableHeader className="select-none">
+    <TableHeader className="select-none bg-secondary/80">
       <TableRow className="[&>th]:border-r [&>th]:last:border-r-0">
         <TableHead
           className="px-0"

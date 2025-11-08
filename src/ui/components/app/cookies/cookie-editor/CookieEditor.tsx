@@ -32,7 +32,7 @@ const CookieEditor = memo(
     return (
       <div className="flex flex-col gap-3" key={"add-cookie"}>
         <Table className="w-full border table-fixed overflow-hidden">
-          <TableHeader className="bg-secondary font-bold">
+          <TableHeader className="bg-secondary/80 font-bold">
             <TableRow className="[&>th]:border-r [&>th]:last:border-r-0">
               <TableHead className="w-48 whitespace-normal p-3">Key</TableHead>
               <TableHead className="whitespace-normal p-3">Value</TableHead>

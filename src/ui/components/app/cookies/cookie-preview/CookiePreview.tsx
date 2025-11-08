@@ -29,7 +29,7 @@ const CookiePreview = memo(({ details }: Props) => {
 
   return (
     <Table className="w-full border table-fixed overflow-hidden relative">
-      <TableHeader className="bg-secondary font-bold">
+      <TableHeader className="font-bold bg-secondary/80">
         <TableRow className="[&>th]:border-r [&>th]:last:border-r-0">
           <TableHead className="w-48 whitespace-normal p-3">Key</TableHead>
           <TableHead className="whitespace-normal px-0">

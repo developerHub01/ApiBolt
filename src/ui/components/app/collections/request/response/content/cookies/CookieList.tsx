@@ -30,7 +30,7 @@ const CookieList = ({ cookies }: CookieListProps) => {
 
   return (
     <Table className="w-full h-full border select-text">
-      <TableHeader className="[&>tr>th]:border-r [&>tr>th]:last:border-r-0">
+      <TableHeader className="[&>tr>th]:border-r [&>tr>th]:last:border-r-0 bg-secondary/80">
         <TableRow>
           {colList.map((item) => (
             <TableHead key={item} className="capitalize">
@@ -46,7 +46,10 @@ const CookieList = ({ cookies }: CookieListProps) => {
             className="wrap-break-word whitespace-pre-wrap"
           >
             {colList.map((item) => (
-              <TableCell key={item} className="whitespace-normal wrap-break-word">
+              <TableCell
+                key={item}
+                className="whitespace-normal wrap-break-word"
+              >
                 <DataTableCellContent
                   value={cookie[item as keyof typeof cookie] ?? ""}
                 />

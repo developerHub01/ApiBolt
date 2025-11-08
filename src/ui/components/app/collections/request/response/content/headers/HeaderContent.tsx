@@ -15,7 +15,7 @@ interface HeaderContentProps {
 const HeaderContent = ({ headers }: HeaderContentProps) => {
   return (
     <Table className="w-full h-full border select-text table-fixed">
-      <TableHeader className="[&>tr>th]:border-r [&>tr>th]:last:border-r-0">
+      <TableHeader className="[&>tr>th]:border-r [&>tr>th]:last:border-r-0 bg-secondary/80">
         <TableRow>
           <TableHead>Key</TableHead>
           <TableHead>Value</TableHead>

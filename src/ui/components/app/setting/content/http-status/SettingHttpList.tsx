@@ -58,7 +58,7 @@ const SettingHttpList = memo(() => {
             contentClassName="px-3"
           >
             <Table className="border rounded-md table-auto">
-              <TableHeader>
+              <TableHeader className="bg-secondary/80">
                 <TableRow className="[&>th]:border-r [&>th]:last:border-r-0">
                   <TableHead className="w-14 p-3">Code</TableHead>
                   <TableHead className="w-36 p-3">Reason</TableHead>

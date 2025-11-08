@@ -13,7 +13,7 @@ const ArrayHeaderPreview = ({ data = [] }: ArrayHeaderPreviewProps) => {
   );
 
   return (
-    <TableHeader>
+    <TableHeader className="bg-secondary/80">
       <TableRow
         style={{
           borderBottomWidth: 1,
