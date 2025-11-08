@@ -1,9 +1,4 @@
-import { memo, useCallback, type MouseEvent, type RefObject } from "react";
-import { useAppDispatch } from "@/context/redux/hooks";
-import {
-  deleteBodyFormDataFile,
-  updateBodyFormDataFile,
-} from "@/context/redux/request-response/thunks/body-form-data";
+import { memo, type MouseEvent, type RefObject } from "react";
 import {
   Popover,
   PopoverContent,
@@ -20,39 +15,34 @@ interface Props {
   value: string | Array<FileDataInterface>;
   triggerRef?: RefObject<HTMLButtonElement | null>;
   open?: boolean;
+  disabled?: boolean;
   setOpen?: (value: boolean) => void;
+  onUploadFile?: () => void;
+  onDeleteFormFile?: (index: number) => void;
+  children?: React.ReactNode;
 }
 
 const FormDataValuePopover = memo(
-  ({ id, value, open, setOpen, triggerRef }: Props) => {
-    const dispatch = useAppDispatch();
-    const handleUploadFile = useCallback(
-      () => dispatch(updateBodyFormDataFile(id)),
-      [dispatch, id]
-    );
-
-    const handleDeleteFormFile = useCallback(
-      (id: string, index: number) =>
-        dispatch(
-          deleteBodyFormDataFile({
-            id,
-            index,
-          })
-        ),
-      [dispatch]
-    );
-
+  ({
+    value,
+    open,
+    setOpen,
+    disabled = false,
+    triggerRef,
+    children,
+    onUploadFile,
+    onDeleteFormFile,
+  }: Props) => {
     return (
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button
-            ref={triggerRef}
-            size={"iconXs"}
-            variant={"secondary"}
-            className="size-6"
-          >
-            <AddIcon />
-          </Button>
+          {children ? (
+            children
+          ) : (
+            <Button ref={triggerRef} size={"iconXs"} variant={"secondary"}>
+              <AddIcon />
+            </Button>
+          )}
         </PopoverTrigger>
         <PopoverContent
           className="w-3xs min-h-full shadow-2xs bg-background p-1 border rounded-md flex flex-col gap-1.5"
@@ -66,22 +56,25 @@ const FormDataValuePopover = memo(
               <div className="max-h-28 w-full h-full flex flex-col gap-1.5 select-none">
                 {value.map((file, index) => (
                   <FileTag
+                    disabled={disabled}
                     key={`${file}-${index}`}
                     name={file.file ?? "unknown"}
-                    onClose={() => handleDeleteFormFile(id, index)}
+                    onClose={() => onDeleteFormFile && onDeleteFormFile(index)}
                   />
                 ))}
               </div>
             </ScrollArea>
           )}
-          <Button
-            className="w-full"
-            size={"sm"}
-            variant={"secondary"}
-            onClick={handleUploadFile}
-          >
-            <AddIcon /> Add new file
-          </Button>
+          {!disabled && (
+            <Button
+              className="w-full"
+              size={"xs"}
+              variant={"secondary"}
+              onClick={onUploadFile}
+            >
+              <AddIcon /> Add new file
+            </Button>
+          )}
         </PopoverContent>
       </Popover>
     );

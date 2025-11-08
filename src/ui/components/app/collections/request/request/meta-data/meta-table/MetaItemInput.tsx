@@ -23,7 +23,7 @@ interface MetaItemInputProps
   cellType: string;
   value?: string;
   type: "text" | "password";
-  onBlur: (id: string, key: string, value: string) => void;
+  onBlur?: (id: string, key: string, value: string) => void;
   className?: string;
 }
 
@@ -63,7 +63,7 @@ const MetaItemInput = memo(
         if (!e.target.dataset.metaItemType) return;
         const value = e.target.value.trim();
         setValueState(value);
-        onBlur(id, e.target.dataset.metaItemType, value);
+        if (onBlur) onBlur(id, e.target.dataset.metaItemType, value);
       },
       [onBlur, id]
     );

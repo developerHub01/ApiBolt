@@ -1,5 +1,4 @@
 import { memo, useCallback, useMemo } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Trash2 as DeleteIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -13,6 +12,7 @@ import type {
   TParamContentType,
 } from "@/types/request-response.types";
 import { AUTHORIZATION_DATA_ID } from "@/constant/authorization.constant";
+import CheckCell from "@/components/app/collections/request/request/meta-data/meta-table/CheckCell";
 
 const calculateDynamicText = "<calculated when request is sent>";
 
@@ -94,17 +94,12 @@ const MetaTableRow = memo(
           "focus-within:bg-accent/60 duration-75 transition-colors"
         )}
       >
-        <TableCell className="px-0">
-          <div className="w-full flex justify-center items-center">
-            <Checkbox
-              className="cursor-pointer"
-              id={`${type}-check-${id}`}
-              checked={isCheck || preventCheck}
-              disabled={preventCheck || id === AUTHORIZATION_DATA_ID}
-              onCheckedChange={handleCheckChange}
-            />
-          </div>
-        </TableCell>
+        <CheckCell
+          id={`${type}-check-${id}`}
+          checked={isCheck || preventCheck}
+          disabled={preventCheck || id === AUTHORIZATION_DATA_ID}
+          onChange={handleCheckChange}
+        />
         {cellList.map((cellType) => {
           const value = data[cellType];
           return (

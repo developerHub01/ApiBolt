@@ -11,6 +11,11 @@ import type {
 } from "@/types/request-response.types";
 import FormDataValuePopover from "@/components/app/collections/request/request/meta-data/meta-table/FormDataValuePopover";
 import ParamCell from "@/components/app/collections/request/request/meta-data/meta-table/ParamCell";
+import { useAppDispatch } from "@/context/redux/hooks";
+import {
+  deleteBodyFormDataFile,
+  updateBodyFormDataFile,
+} from "@/context/redux/request-response/thunks/body-form-data";
 
 interface MetaTableCellProps {
   cellType: string;
@@ -34,6 +39,7 @@ const MetaTableCell = memo(
     inputType = "text",
     prevent = false,
   }: MetaTableCellProps) => {
+    const dispatch = useAppDispatch();
     const addButtonRef = useRef<HTMLButtonElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const [popoverOpen, setPopoverOpen] = useState<boolean>(false);
@@ -47,6 +53,22 @@ const MetaTableCell = memo(
       inputRef.current?.focus();
     }, []);
 
+    const handleUploadFile = useCallback(
+      () => dispatch(updateBodyFormDataFile(id)),
+      [dispatch, id]
+    );
+
+    const handleDeleteFormFile = useCallback(
+      (index: number) =>
+        dispatch(
+          deleteBodyFormDataFile({
+            id,
+            index,
+          })
+        ),
+      [dispatch, id]
+    );
+
     return (
       <TableCell
         className={cn("p-2 relative overflow-hidden min-w-auto md:min-w-24")}
@@ -56,7 +78,7 @@ const MetaTableCell = memo(
           {Array.isArray(value) && value.length ? (
             <div onClick={openPopover} className="w-full cursor-pointer">
               <FileTag
-                className="w-full px-1.5 rounded-md max-w-full min-w-40"
+                className="w-full px-1.5 rounded-md max-w-full"
                 name={`${value.length} Files`}
               />
             </div>
@@ -101,6 +123,8 @@ const MetaTableCell = memo(
               open={popoverOpen}
               setOpen={setPopoverOpen}
               triggerRef={addButtonRef}
+              onUploadFile={handleUploadFile}
+              onDeleteFormFile={handleDeleteFormFile}
             />
           )}
         </div>
