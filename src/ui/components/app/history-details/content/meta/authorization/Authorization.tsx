@@ -1,7 +1,13 @@
 import { memo, useMemo } from "react";
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { AUTH_LIST, INHERIT_AUTH } from "@/constant/authorization.constant";
+import {
+  AUTH_LIST,
+  DEFAULT_API_KEY,
+  DEFAULT_BASIC_AUTH,
+  DEFAULT_JWT_BEARER_AUTH,
+  INHERIT_AUTH,
+} from "@/constant/authorization.constant";
 import { selectHistoryDetails } from "@/context/redux/history/selectors/history";
 import { useAppSelector } from "@/context/redux/hooks";
 import { cn } from "@/lib/utils";
@@ -22,9 +28,7 @@ const Authorization = memo(() => {
     ).label;
   }, [authorization?.inheritedId, authorization?.type]);
 
-  if (!authorization) return;
-
-  const { basicAuth, apiKeyAuth, bearerAuth, jwtAuth, type } = authorization;
+  const { basicAuth, apiKeyAuth, bearerAuth, jwtAuth, type } = authorization!;
 
   return (
     <ScrollArea className="w-full flex-1 overflow-visible min-h-0 h-full [&>div>div]:h-full shrink-0 flex flex-col gap-3">
@@ -41,25 +45,34 @@ const Authorization = memo(() => {
             </ButtonLikeDiv>
           </div>
         </div>
-        <BorderedWrapper>
-          <ScrollArea
-            className={cn("w-full flex-1 min-h-0 py-2 [&>div>div]:h-full")}
-          >
-            {type === "no-auth" && <NoAuth />}
-            {type === "basic-auth" && basicAuth && (
-              <BasicAuth disabled authData={basicAuth} />
-            )}
-            {type === "bearer-token" && bearerAuth && (
-              <BearerToken disabled authData={bearerAuth} />
-            )}
-            {type === "jwt-bearer" && jwtAuth && (
-              <JWTBearer disabled authData={jwtAuth} />
-            )}
-            {type === "api-key" && apiKeyAuth && (
-              <APIKey disabled authData={apiKeyAuth} />
-            )}
-          </ScrollArea>
-        </BorderedWrapper>
+        <ScrollArea
+          className={cn("w-full flex-1 min-h-0 py-2 [&>div>div]:h-full")}
+        >
+          {!type || type === "no-auth" ? (
+            <NoAuth />
+          ) : (
+            <BorderedWrapper>
+              {type === "basic-auth" && (
+                <BasicAuth
+                  disabled
+                  authData={basicAuth ?? DEFAULT_BASIC_AUTH}
+                />
+              )}
+              {type === "bearer-token" && (
+                <BearerToken disabled authData={bearerAuth ?? ""} />
+              )}
+              {type === "jwt-bearer" && (
+                <JWTBearer
+                  disabled
+                  authData={jwtAuth ?? DEFAULT_JWT_BEARER_AUTH}
+                />
+              )}
+              {type === "api-key" && (
+                <APIKey disabled authData={apiKeyAuth ?? DEFAULT_API_KEY} />
+              )}
+            </BorderedWrapper>
+          )}
+        </ScrollArea>
       </div>
     </ScrollArea>
   );

@@ -10,8 +10,6 @@ const DataContextBasedInfo = () => {
 
   const { type, formData, xWWWFormUrlencoded, binaryData, raw, rawType } = body;
 
-  console.log({ formData, xWWWFormUrlencoded });
-
   return (
     <div className="flex items-center gap-2">
       {type === "form-data" && Boolean(formData?.length) && (

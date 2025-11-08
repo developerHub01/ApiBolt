@@ -17,7 +17,7 @@ const HistoryContent = memo(() => {
       {isLoading ? (
         <HistorySkeleton />
       ) : (
-        <section className="min-h-0 flex-1 py-4 flex flex-col gap-2">
+        <section className="min-h-0 flex-1 py-4 flex flex-col gap-3">
           <section className="px-5 flex flex-col gap-2">
             <ApiUrl />
             <MetaDataTop />
