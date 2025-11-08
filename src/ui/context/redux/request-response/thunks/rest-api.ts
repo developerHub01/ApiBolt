@@ -118,11 +118,11 @@ export const fetchApi = createAsyncThunk<
      * ***/
     const rawHeaderData = (
       selectMetaData(state, {
-        type: "headers",
+        type: "hiddenHeaders",
       }) ?? []
     ).concat(
       selectMetaData(state, {
-        type: "hiddenHeaders",
+        type: "headers",
       }) ?? []
     ) as Array<ParamInterface>;
 

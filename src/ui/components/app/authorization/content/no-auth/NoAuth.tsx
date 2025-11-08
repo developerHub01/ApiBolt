@@ -8,7 +8,7 @@ const NoAuth = memo(() => {
       description="This request does not use any authorization."
       animationSrc="./lottie/nodata.lottie"
       showFallback
-      innerClassName="w-56"
+      innerClassName="w-64"
       className="h-full"
       key="no-auth"
     />
