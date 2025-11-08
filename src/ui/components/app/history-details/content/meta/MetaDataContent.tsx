@@ -18,7 +18,6 @@ const MetaDataContent = () => {
       {activeMetaTab === "authorization" && (
         <TabMotionWrapper id="authorization">
           <Authorization />
-          {/* <RequestAuthorization /> */}
         </TabMotionWrapper>
       )}
       {activeMetaTab === "body" && (

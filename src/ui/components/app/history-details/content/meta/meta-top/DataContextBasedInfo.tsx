@@ -14,6 +14,17 @@ const DataContextBasedInfo = () => {
 
   return (
     <div className="flex items-center gap-2">
+      {type === "form-data" && Boolean(formData?.length) && (
+        <ButtonLikeDiv variant={"secondary"} size={"sm"}>
+          form-data
+        </ButtonLikeDiv>
+      )}
+      {type === "x-www-form-urlencoded" &&
+        Boolean(xWWWFormUrlencoded?.length) && (
+          <ButtonLikeDiv variant={"secondary"} size={"sm"}>
+            x-www-form-urlencoded
+          </ButtonLikeDiv>
+        )}
       {type === "binary" && (binaryData?.file || binaryData?.path) && (
         <ButtonLikeDiv variant={"secondary"} size={"sm"}>
           Binary
