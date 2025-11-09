@@ -78,8 +78,9 @@ const HistoryItem = memo(({ id, method, createdAt, responseStatus }: Props) => {
               variant={"destructive"}
               size={"iconXs"}
               onClick={handleDelete}
+              className="size-5.5"
             >
-              <DeleteIcon />
+              <DeleteIcon size={10} />
             </Button>
           </motion.span>
         )}

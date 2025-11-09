@@ -69,21 +69,21 @@ const HistoryTop = memo(() => {
     <div className="flex items-center gap-2 justify-between">
       <p className="text-sm mr-auto">Total history: {metaCount} </p>
       <Select value={method} onValueChange={handleChangeFilter}>
-        <SelectTrigger className="w-28" size="sm">
+        <SelectTrigger className="w-28 text-xs" size="xs">
           <SelectValue placeholder="Filter by method" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Methods</SelectLabel>
             {methodList.map(({ id, label }) => (
-              <SelectItem value={id} className="uppercase">
+              <SelectItem value={id} className="uppercase text-xs">
                 {label}
               </SelectItem>
             ))}
           </SelectGroup>
         </SelectContent>
       </Select>
-      <Button variant={"secondary"} size={"sm"} onClick={handleClear}>
+      <Button variant={"secondary"} size={"xs"} onClick={handleClear}>
         Clear History
       </Button>
     </div>
