@@ -141,3 +141,27 @@ export const duplicateRequestMetaTab = async (payload) => {
     console.error(error);
   }
 };
+
+export const replaceRequestMetaTab = async (payload = {}) => {
+  try {
+    const updatPayload = { ...payload };
+    delete updatPayload["id"];
+    delete updatPayload["requestOrFolderMetaId"];
+
+    const result = await db
+      .insert(requestMetaTabTable)
+      .values({
+        ...payload,
+      })
+      .onConflictDoUpdate({
+        target: requestMetaTabTable.requestOrFolderMetaId,
+        set: {
+          ...updatPayload,
+        },
+      });
+
+    return result.changes > 0;
+  } catch (error) {
+    console.error(error);
+  }
+};

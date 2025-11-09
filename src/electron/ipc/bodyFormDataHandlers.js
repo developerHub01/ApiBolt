@@ -11,6 +11,7 @@ import {
   getBodyFormData,
   getBodyFormDataByFormId,
   replaceBodyFormData,
+  replaceFullBodyFormData,
   updateBodyFormData,
 } from "../db/bodyFormDataDB.js";
 
@@ -126,6 +127,10 @@ export const bodyFormDataHandlers = () => {
   ipcMain.handle(
     "replaceBodyFormData",
     async (_, ...rest) => await replaceBodyFormData(...rest)
+  );
+  ipcMain.handle(
+    "replaceFullBodyFormData",
+    async (_, ...rest) => await replaceFullBodyFormData(...rest)
   );
   ipcMain.handle(
     "checkAllBodyFormDataByRequestMetaId",

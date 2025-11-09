@@ -6,6 +6,7 @@ import {
   deleteBodyBinary,
   duplicateBodyBinary,
   getBodyBinary,
+  replaceBodyBinary,
   updateBodyBinary,
 } from "../db/bodyBinaryDB.js";
 
@@ -56,5 +57,9 @@ export const bodyBinaryHandler = () => {
   ipcMain.handle(
     "duplicateBodyBinary",
     async (_, ...rest) => await duplicateBodyBinary(...rest)
+  );
+  ipcMain.handle(
+    "replaceBodyBinary",
+    async (_, ...rest) => await replaceBodyBinary(...rest)
   );
 };

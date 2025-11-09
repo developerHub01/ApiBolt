@@ -115,16 +115,15 @@ export const replaceBodyXWWWFormUrlencoded = async (
   requestOrFolderMetaId,
   payload
 ) => {
-  if (!payload) return false;
-
-  payload.map((XWWFormUrlencoded) => {
-    delete XWWFormUrlencoded["id"];
-    delete XWWFormUrlencoded["requestOrFolderMetaId"];
-    delete XWWFormUrlencoded["createdAt"];
-    if ("isCheck" in XWWFormUrlencoded)
-      XWWFormUrlencoded["isCheck"] = Number(XWWFormUrlencoded["isCheck"]);
-    XWWFormUrlencoded["requestOrFolderMetaId"] = requestOrFolderMetaId;
-  });
+  if (payload)
+    payload.map((XWWFormUrlencoded) => {
+      delete XWWFormUrlencoded["id"];
+      delete XWWFormUrlencoded["requestOrFolderMetaId"];
+      delete XWWFormUrlencoded["createdAt"];
+      if ("isCheck" in XWWFormUrlencoded)
+        XWWFormUrlencoded["isCheck"] = Number(XWWFormUrlencoded["isCheck"]);
+      XWWFormUrlencoded["requestOrFolderMetaId"] = requestOrFolderMetaId;
+    });
 
   try {
     await db
@@ -136,6 +135,7 @@ export const replaceBodyXWWWFormUrlencoded = async (
         )
       );
 
+    if (!payload.length) return true;
     const created = await db
       .insert(bodyXWWWFormUrlencodedTable)
       .values(payload);

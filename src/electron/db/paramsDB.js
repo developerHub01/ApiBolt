@@ -112,14 +112,13 @@ export const updateParams = async (paramId, payload) => {
 };
 
 export const replaceParams = async (requestOrFolderMetaId, payload) => {
-  if (!payload) return false;
-
-  payload.map((param) => {
-    delete param["requestOrFolderMetaId"];
-    delete param["createdAt"];
-    if ("isCheck" in param) param["isCheck"] = Number(param["isCheck"]);
-    param["requestOrFolderMetaId"] = requestOrFolderMetaId;
-  });
+  if (payload)
+    payload.map((param) => {
+      delete param["requestOrFolderMetaId"];
+      delete param["createdAt"];
+      if ("isCheck" in param) param["isCheck"] = Number(param["isCheck"]);
+      param["requestOrFolderMetaId"] = requestOrFolderMetaId;
+    });
 
   try {
     await db

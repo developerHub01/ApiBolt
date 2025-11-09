@@ -141,3 +141,27 @@ export const duplicateBodyRaw = async (payload) => {
     console.error(error);
   }
 };
+
+export const replaceBodyRaw = async (payload = {}) => {
+  try {
+    const updatPayload = { ...payload };
+    delete updatPayload["id"];
+    delete updatPayload["requestOrFolderMetaId"];
+
+    const result = await db
+      .insert(bodyRawTable)
+      .values({
+        ...payload,
+      })
+      .onConflictDoUpdate({
+        target: bodyRawTable.requestOrFolderMetaId,
+        set: {
+          ...updatPayload,
+        },
+      });
+
+    return result.changes > 0;
+  } catch (error) {
+    console.error(error);
+  }
+};

@@ -27,7 +27,7 @@ const MetaTable = memo(({ type, data }: Props) => {
   );
 
   const isAllChecked = useMemo(
-    () => data.every((item) => item.isCheck || item.prevent),
+    () => data.every((item) => item.isCheck),
     [data]
   );
 

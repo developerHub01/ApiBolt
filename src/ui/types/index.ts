@@ -249,7 +249,7 @@ declare global {
       ): Promise<boolean>;
       replaceParams(
         requestOrFolderMetaId: string,
-        payload: Array<Partial<ParamHeaderBuildPayloadInterface>>
+        payload?: Array<Partial<ParamHeaderBuildPayloadInterface>>
       ): Promise<boolean>;
       checkAllParamsByRequestMetaId(
         requestOrFolderMetaId?: string
@@ -321,6 +321,7 @@ declare global {
       /* if in payload requestOrFolderMetaId not exist then it will pick active tab from backend */
       updateBodyRaw(payload: Partial<BodyRawInterface>): Promise<boolean>;
       duplicateBodyRaw(payload: Record<string, string>): Promise<boolean>;
+      replaceBodyRaw(payload: Partial<BodyRawInterface>): Promise<boolean>;
     };
 
     electronAPIBodyBinaryDB: {
@@ -329,6 +330,13 @@ declare global {
       updateBodyBinary(requestId?: string): Promise<boolean>;
       deleteBodyBinary(requestId?: string): Promise<boolean>;
       duplicateBodyBinary(payload: Record<string, string>): Promise<boolean>;
+      replaceBodyBinary(
+        payload: Partial<
+          Pick<BodyBinaryInterface, "requestOrFolderMetaId"> & {
+            path: BodyBinaryInterface["path"] | null;
+          }
+        >
+      ): Promise<boolean>;
     };
 
     electronAPIRequestMetaTabDB: {
@@ -342,6 +350,9 @@ declare global {
       deleteRequestMetaTab(requestId?: string): Promise<boolean>;
       duplicateRequestMetaTab(
         requestId?: Record<string, string>
+      ): Promise<boolean>;
+      replaceRequestMetaTab(
+        payload?: Partial<RequestTabInterface>
       ): Promise<boolean>;
     };
 
@@ -362,7 +373,7 @@ declare global {
       ): Promise<boolean>;
       replaceBodyXWWWFormUrlencoded(
         requestOrFolderMetaId: string,
-        payload: Array<Partial<FormDataPayloadInterface>>
+        payload?: Array<Partial<FormDataPayloadInterface>>
       ): Promise<boolean>;
       checkAllBodyXWWWFormUrlencodedByRequestMetaId(
         requestOrFolderMetaId?: string
@@ -391,7 +402,11 @@ declare global {
       updateBodyFormDataFile(formId: string): Promise<boolean>;
       replaceBodyFormData(
         requestOrFolderMetaId: string,
-        payload: Array<Partial<FormDataPayloadInterface>>
+        payload?: Array<Partial<FormDataPayloadInterface>>
+      ): Promise<boolean>;
+      replaceFullBodyFormData(
+        requestOrFolderMetaId: string,
+        payload?: Array<Partial<FormDataPayloadInterface>>
       ): Promise<boolean>;
       checkAllBodyFormDataByRequestMetaId(
         requestOrFolderMetaId?: string

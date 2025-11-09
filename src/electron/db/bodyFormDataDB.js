@@ -168,16 +168,15 @@ export const updateBodyFormData = async (formId, payload) => {
 };
 
 export const replaceBodyFormData = async (requestOrFolderMetaId, payload) => {
-  if (!payload) return false;
-
-  payload.map((formData) => {
-    delete formData["id"];
-    delete formData["requestOrFolderMetaId"];
-    delete formData["createdAt"];
-    if ("isCheck" in formData)
-      formData["isCheck"] = Number(formData["isCheck"]);
-    formData["requestOrFolderMetaId"] = requestOrFolderMetaId;
-  });
+  if (payload)
+    payload.map((formData) => {
+      delete formData["id"];
+      delete formData["requestOrFolderMetaId"];
+      delete formData["createdAt"];
+      if ("isCheck" in formData)
+        formData["isCheck"] = Number(formData["isCheck"]);
+      formData["requestOrFolderMetaId"] = requestOrFolderMetaId;
+    });
 
   try {
     await db.delete(bodyFormDataTable).where(
@@ -194,7 +193,36 @@ export const replaceBodyFormData = async (requestOrFolderMetaId, payload) => {
     );
 
     if (!payload?.length) return true;
+    const created = await db.insert(bodyFormDataTable).values(payload);
 
+    return created?.changes > 0;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const replaceFullBodyFormData = async (
+  requestOrFolderMetaId,
+  payload
+) => {
+  if (payload)
+    payload.map((formData) => {
+      delete formData["id"];
+      delete formData["requestOrFolderMetaId"];
+      delete formData["createdAt"];
+      if ("isCheck" in formData)
+        formData["isCheck"] = Number(formData["isCheck"]);
+      formData["requestOrFolderMetaId"] = requestOrFolderMetaId;
+    });
+
+  try {
+    await db
+      .delete(bodyFormDataTable)
+      .where(
+        eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId)
+      );
+
+    if (!payload?.length) return true;
     const created = await db.insert(bodyFormDataTable).values(payload);
 
     return created?.changes > 0;

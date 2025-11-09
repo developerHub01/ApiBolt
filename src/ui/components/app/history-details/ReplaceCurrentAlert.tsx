@@ -10,9 +10,22 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { useHistoryDetails } from "@/context/history/HistoryDetailsProvider";
+import { replaceCurrentByHistory } from "@/context/redux/history/thunks/history";
+import { useAppDispatch } from "@/context/redux/hooks";
+import { toast } from "sonner";
 
 const ReplaceCurrentAlert = () => {
+  const dispatch = useAppDispatch();
   const { isReplaceAlertOpen, handleToggleReplaceAlert } = useHistoryDetails();
+
+  const handleReplace = async () => {
+    const response = await dispatch(replaceCurrentByHistory()).unwrap();
+    if (response) {
+      handleToggleReplaceAlert(false);
+      toast.success("Request replaced with selected history");
+    } else toast.error("Current request data has been updated.");
+  };
+
   return (
     <AlertDialog open={isReplaceAlertOpen}>
       <AlertDialogContent>
@@ -33,10 +46,7 @@ const ReplaceCurrentAlert = () => {
             </Button>
           </AlertDialogCancel>
           <AlertDialogAction asChild>
-            <Button
-              variant={"default"}
-              onClick={() => handleToggleReplaceAlert(false)}
-            >
+            <Button variant={"default"} onClick={handleReplace}>
               Replace
             </Button>
           </AlertDialogAction>

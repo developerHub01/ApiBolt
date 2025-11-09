@@ -78,3 +78,13 @@ export const INITIAL_HIDDEN_HEADERS_DATA = [
     isCheck: true,
   },
 ];
+
+export const HEADERS_HIDDEN_IDS = new Set([
+  "authorization",
+  "cookie",
+  "userAgent",
+  "contentLength",
+  "accept",
+  "acceptEncoding",
+  "connection",
+]);

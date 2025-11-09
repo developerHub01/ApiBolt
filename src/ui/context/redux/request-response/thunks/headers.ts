@@ -137,7 +137,6 @@ export const deleteHeadersByRequestMetaId = createAsyncThunk<
     try {
       const state = getState() as RootState;
       if (!id) id = state.requestResponse.selectedTab;
-
       if (!id) return false;
 
       const response =

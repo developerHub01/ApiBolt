@@ -25,7 +25,6 @@ const MetaTableRow = memo(
     showDescription,
     calculateDynamicly,
     isCheck,
-    prevent,
   }: Props) => {
     const metaValue = calculateDynamicly
       ? "<calculated when request is sent>"
@@ -35,7 +34,7 @@ const MetaTableRow = memo(
       <TableRow>
         <CheckCell
           id={`${type}-check-${id}`}
-          checked={Boolean(isCheck || prevent)}
+          checked={Boolean(isCheck)}
           disabled
         />
         <MetaTableCell

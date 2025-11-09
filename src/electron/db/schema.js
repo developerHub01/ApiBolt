@@ -267,6 +267,7 @@ export const hiddenHeadersCheckTable = sqliteTable(
       .references(() => requestOrFolderMetaTable.id, {
         onDelete: "cascade",
       }),
+    authorization: int({ mode: boolean }).default(1),
     userAgent: int({ mode: boolean }).default(1),
     contentLength: int({ mode: boolean }).default(1),
     accept: int({ mode: boolean }).default(1),

@@ -57,6 +57,13 @@
       "when": 1762506648048,
       "tag": "0007_pretty_captain_midlands",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1762702448693,
+      "tag": "0008_wild_blue_marvel",
+      "breakpoints": true
     }
   ]
 }

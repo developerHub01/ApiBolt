@@ -133,3 +133,23 @@ export const duplicateBodyBinary = async (payload) => {
     console.error(error);
   }
 };
+
+export const replaceBodyBinary = async (payload = {}) => {
+  try {
+    const result = await db
+      .insert(bodyBinaryTable)
+      .values({
+        ...payload,
+      })
+      .onConflictDoUpdate({
+        target: bodyBinaryTable.requestOrFolderMetaId,
+        set: {
+          path: payload.path,
+        },
+      });
+
+    return result.changes > 0;
+  } catch (error) {
+    console.error(error);
+  }
+};
