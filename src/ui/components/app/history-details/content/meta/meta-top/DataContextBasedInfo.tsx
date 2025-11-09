@@ -13,27 +13,27 @@ const DataContextBasedInfo = () => {
   return (
     <div className="flex items-center gap-2">
       {type === "form-data" && Boolean(formData?.length) && (
-        <ButtonLikeDiv variant={"secondary"} size={"sm"}>
+        <ButtonLikeDiv variant={"secondary"} size={"xs"}>
           form-data
         </ButtonLikeDiv>
       )}
       {type === "x-www-form-urlencoded" &&
         Boolean(xWWWFormUrlencoded?.length) && (
-          <ButtonLikeDiv variant={"secondary"} size={"sm"}>
+          <ButtonLikeDiv variant={"secondary"} size={"xs"}>
             x-www-form-urlencoded
           </ButtonLikeDiv>
         )}
       {type === "binary" && (binaryData?.file || binaryData?.path) && (
-        <ButtonLikeDiv variant={"secondary"} size={"sm"}>
+        <ButtonLikeDiv variant={"secondary"} size={"xs"}>
           Binary
         </ButtonLikeDiv>
       )}
       {type === "raw" && raw !== "undefined" && (
         <>
-          <ButtonLikeDiv variant={"secondary"} size={"sm"}>
+          <ButtonLikeDiv variant={"secondary"} size={"xs"}>
             Raw
           </ButtonLikeDiv>
-          <ButtonLikeDiv variant={"outline"} size={"sm"} className="uppercase">
+          <ButtonLikeDiv variant={"outline"} size={"xs"} className="uppercase">
             {rawType ?? "text"}
           </ButtonLikeDiv>
         </>

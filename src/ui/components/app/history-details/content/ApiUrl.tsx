@@ -47,7 +47,7 @@ const ApiUrl = memo(() => {
         size={"sm"}
         onClick={() => handleToggleReplaceAlert(true)}
       >
-        Send
+        Replace
       </Button>
     </form>
   );

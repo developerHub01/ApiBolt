@@ -33,17 +33,15 @@ const Authorization = memo(() => {
   return (
     <ScrollArea className="w-full flex-1 overflow-visible min-h-0 h-full [&>div>div]:h-full shrink-0 flex flex-col gap-3">
       <div className="w-full h-full flex flex-col gap-2">
-        <div className="w-full flex flex-col gap-1.5 pb-3">
-          <div className="flex justify-between items-center gap-4">
-            <p className="text-sm shrink-0">Auth Type:</p>
-            <ButtonLikeDiv
-              variant={"secondary"}
-              className="capitalize"
-              size={"sm"}
-            >
-              {authType}
-            </ButtonLikeDiv>
-          </div>
+        <div className="flex justify-between items-center gap-4">
+          <p className="text-sm shrink-0">Auth Type:</p>
+          <ButtonLikeDiv
+            variant={"secondary"}
+            className="capitalize"
+            size={"sm"}
+          >
+            {authType}
+          </ButtonLikeDiv>
         </div>
         <ScrollArea
           className={cn("w-full flex-1 min-h-0 py-2 [&>div>div]:h-full")}
