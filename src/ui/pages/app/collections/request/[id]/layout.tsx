@@ -3,7 +3,7 @@ import { Outlet, useParams } from "react-router-dom";
 import RequestResponseProvider from "@/context/collections/request/RequestResponseProvider";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { loadParams } from "@/context/redux/request-response/thunks/params";
-import { loadHeaders } from "@/context/redux/request-response/thunks/headers";
+import { loadHeaders, loadHiddenHeaders } from "@/context/redux/request-response/thunks/headers";
 import { loadRequestBodyRaw } from "@/context/redux/request-response/thunks/body-raw";
 import { loadRequestBodyBinary } from "@/context/redux/request-response/thunks/body-binary";
 import { loadRequestMetaTab } from "@/context/redux/request-response/thunks/request-meta-tab";
@@ -33,6 +33,7 @@ const RequestLayout = () => {
       loadAuthorization,
       loadParams,
       loadHeaders,
+      loadHiddenHeaders,
       loadRequestMetaTab,
       loadMetaShowColumn,
       loadShowHiddenMetaData,

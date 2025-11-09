@@ -33,6 +33,7 @@ import type {
   TResponseDataTab,
   TResponseMetaTab,
   TBinaryData,
+  HiddenHeadersCheckInterface,
 } from "@/types/request-response.types";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
@@ -803,8 +804,27 @@ export const requestResponseSlice = createSlice({
 
       if (!selectedTab || !state.hiddenHeaders[selectedTab]) return;
 
-      state.hiddenHeaders[selectedTab].map((header: ParamInterface) => {
+      state.hiddenHeaders[selectedTab] = (
+        state.hiddenHeaders[selectedTab] ?? []
+      ).map((header: ParamInterface) => {
         if (header.id === keyName) header["isCheck"] = !header["isCheck"];
+
+        return header;
+      });
+    },
+    handleLoadHiddenHeadersIsCheck: (
+      state,
+      action: PayloadAction<HiddenHeadersCheckInterface>
+    ) => {
+      const selectedTab = state.selectedTab;
+      if (!selectedTab || !state.hiddenHeaders[selectedTab]) return;
+
+      state.hiddenHeaders[selectedTab] = (
+        state.hiddenHeaders[selectedTab] ?? []
+      ).map((header: ParamInterface) => {
+        if (header.id in action.payload)
+          header["isCheck"] =
+            action.payload[header.id as keyof HiddenHeadersCheckInterface];
 
         return header;
       });
@@ -1388,6 +1408,7 @@ export const {
   handleUpdateHiddenAuthorizationHeaders,
   handleClearHiddenAuthorizationHeaders,
   handleUpdateHiddenHeadersIsCheck,
+  handleLoadHiddenHeadersIsCheck,
 
   handleCheckToggleMetaData,
 

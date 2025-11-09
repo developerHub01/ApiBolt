@@ -6,6 +6,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import {
   handleLoadHeaders,
+  handleLoadHiddenHeadersIsCheck,
   handleUpdateHiddenHeadersIsCheck,
 } from "@/context/redux/request-response/request-response-slice";
 
@@ -39,6 +40,39 @@ export const loadHeaders = createAsyncThunk<
     console.error(error);
   }
 });
+
+export const loadHiddenHeaders = createAsyncThunk<
+  void,
+  void | { requestOrFolderId?: string | null | undefined; once?: boolean },
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>(
+  "request-response/loadHiddenHeaders",
+  async (payload, { dispatch, getState }) => {
+    try {
+      if (!payload) payload = {};
+
+      const state = getState() as RootState;
+      const selectedTab =
+        payload.requestOrFolderId ?? state.requestResponse.selectedTab;
+      const once = payload.once ?? false;
+
+      if (!selectedTab || (state.requestResponse.headers[selectedTab] && once))
+        return;
+
+      const response =
+        await window.electronAPIHiddenHeadersCheckDB.getHiddenHeadersCheck(
+          selectedTab
+        );
+
+      dispatch(handleLoadHiddenHeadersIsCheck(response));
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
 
 export const addHeaders = createAsyncThunk<
   boolean,
@@ -185,12 +219,12 @@ export const updateHiddenHeaders = createAsyncThunk<
   async ({ keyName }, { dispatch, getState }) => {
     try {
       const state = getState() as RootState;
-
-      if (!state.requestResponse.selectedTab) return;
+      const selectedTab = state.requestResponse.selectedTab;
+      if (!selectedTab) return;
 
       const newValue = !state.requestResponse.hiddenHeaders?.[
-        state.requestResponse.selectedTab!
-      ]?.find((header) => header.isCheck);
+        selectedTab
+      ]?.find((header) => header.id === keyName)?.isCheck;
 
       const response =
         await window.electronAPIHiddenHeadersCheckDB.updateHiddenHeadersCheck({

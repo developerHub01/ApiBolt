@@ -3,6 +3,14 @@ import { db } from "./index.js";
 import { hiddenHeadersCheckTable } from "./schema.js";
 import { getTabList } from "./tabsDB.js";
 
+const booleanFields = new Set([
+  "userAgent",
+  "contentLength",
+  "accept",
+  "acceptEncoding",
+  "connection",
+]);
+
 /* id === requestOrFolderMetaId */
 export const getHiddenHeadersCheck = async (id) => {
   try {
@@ -15,6 +23,11 @@ export const getHiddenHeadersCheck = async (id) => {
         .from(hiddenHeadersCheckTable)
         .where(eq(hiddenHeadersCheckTable.requestOrFolderMetaId, id))
     )?.[0];
+
+    for (const key in result) {
+      if (!booleanFields.has(key)) continue;
+      result[key] = Boolean(result[key]);
+    }
 
     return result;
   } catch (error) {
