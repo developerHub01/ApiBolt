@@ -7,9 +7,11 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectHistoryDetails } from "@/context/redux/history/selectors/history";
+import { useHistoryDetails } from "@/context/history/HistoryDetailsProvider";
 
 const ApiUrl = memo(() => {
   const { url, method } = useAppSelector(selectHistoryDetails);
+  const { handleToggleReplaceAlert } = useHistoryDetails();
 
   return (
     <form
@@ -40,10 +42,10 @@ const ApiUrl = memo(() => {
         />
       </div>
       <Button
-        type="submit"
-        disabled
+        type="button"
         className="rounded-l-none uppercase"
         size={"sm"}
+        onClick={() => handleToggleReplaceAlert(true)}
       >
         Send
       </Button>

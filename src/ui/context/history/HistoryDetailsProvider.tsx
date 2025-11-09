@@ -21,6 +21,8 @@ interface HistoryDetailsContext {
   codeWrap: boolean;
   handleChangeActiveMetaTab: (value: TActiveTabType) => void;
   handleToggleCodeWrap: (value?: boolean) => void;
+  isReplaceAlertOpen: boolean;
+  handleToggleReplaceAlert: (value?: boolean) => void;
 }
 
 const HistoryDetailsContext = createContext<HistoryDetailsContext | null>(null);
@@ -49,6 +51,7 @@ const HistoryDetailsProvider = ({ children }: HistoryDetailsProviderProps) => {
   const historyId = useAppSelector(selectHistoryItemOpenId);
   const [activeMetaTab, setActiveMetaTab] = useState<TActiveTabType>("params");
   const [codeWrap, setCodeWrap] = useState<boolean>(false);
+  const [isReplaceAlertOpen, setIsReplaceAlertOpen] = useState<boolean>(false);
 
   const handleChangeActiveMetaTab = useCallback(
     (value: TActiveTabType) => setActiveMetaTab(value),
@@ -56,6 +59,10 @@ const HistoryDetailsProvider = ({ children }: HistoryDetailsProviderProps) => {
   );
   const handleToggleCodeWrap = useCallback(
     (value?: boolean) => setCodeWrap((prev) => value ?? !prev),
+    []
+  );
+  const handleToggleReplaceAlert = useCallback(
+    (value?: boolean) => setIsReplaceAlertOpen((prev) => value ?? !prev),
     []
   );
 
@@ -76,6 +83,8 @@ const HistoryDetailsProvider = ({ children }: HistoryDetailsProviderProps) => {
         codeWrap,
         handleChangeActiveMetaTab,
         handleToggleCodeWrap,
+        isReplaceAlertOpen,
+        handleToggleReplaceAlert,
       }}
     >
       {children}
