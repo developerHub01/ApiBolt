@@ -11,7 +11,7 @@ import {
 } from "@/context/redux/request-response/request-response-slice";
 import { v4 as uuidv4 } from "uuid";
 import { getNodeParentsIdList } from "@/utils/request-response.utils";
-import { handleClearHistoryCacheByRequestId } from "@/context/redux/history/history-slice";
+import { handleClearHistoryCache } from "@/context/redux/history/history-slice";
 
 /* ==============================
 ========= TabList start =========
@@ -51,8 +51,7 @@ export const changeSelectedTab = createAsyncThunk<
      * =============================================
      * **/
     const previousSelectedTab = state.requestResponse.selectedTab;
-    if (previousSelectedTab)
-      dispatch(handleClearHistoryCacheByRequestId(previousSelectedTab));
+    if (previousSelectedTab) dispatch(handleClearHistoryCache());
   } catch (error) {
     console.error(error);
   }

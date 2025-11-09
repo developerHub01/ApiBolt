@@ -13,10 +13,7 @@ export const selectSelectedFilterMethod = createSelector(
 );
 
 export const selectHistoryMetaList = createSelector(
-  [
-    (state: RootState) =>
-      state.history.meta[state.requestResponse.selectedTab ?? ""],
-  ],
+  [(state: RootState) => state.history.meta],
   (metaList) =>
     (metaList ?? [])?.map((meta) => {
       const data = { ...meta };
@@ -30,7 +27,7 @@ export const selectHistoryMetaList = createSelector(
 export const selectHistoryMeta = createSelector(
   [
     (state: RootState) =>
-      state.history.meta[state.history.openedHistory?.requestId ?? ""]?.find(
+      state.history.meta?.find(
         (item) => item.id === state.history.openedHistory?.id
       ),
   ],
@@ -44,18 +41,12 @@ export const selectHistoryMeta = createSelector(
 );
 
 export const selectHistoryMetaCount = createSelector(
-  [
-    (state: RootState) =>
-      state.history.meta[state.requestResponse.selectedTab ?? ""]?.length,
-  ],
+  [(state: RootState) => state.history.meta?.length],
   (count) => count ?? 0
 );
 
 export const selectIsHistoryMetaHave = createSelector(
-  [
-    (state: RootState) =>
-      Boolean(state.history.meta[state.requestResponse.selectedTab ?? ""]),
-  ],
+  [(state: RootState) => Boolean(state.history.meta)],
   (have) => have
 );
 

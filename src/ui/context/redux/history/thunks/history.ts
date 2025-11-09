@@ -3,9 +3,9 @@ import type { AppDispatch, RootState } from "@/context/redux/store";
 import {
   handleChangeFilterMethod,
   handleChangeOpenedHistory,
-  handleClearHistoryCacheByRequestId,
-  handleDeleteHistoryByRequestId,
-  handleLoadHistoryByRequestId,
+  handleClearHistoryCache,
+  handleDeleteHistory,
+  handleLoadHistory,
   handleReplaceHistoryDetails,
 } from "@/context/redux/history/history-slice";
 import type { THistoryFilter } from "@/types/history.types";
@@ -25,12 +25,7 @@ export const loadRequestHistoryMeta = createAsyncThunk<
 
     const response = await window.electronAPIHistory.getHistoryByRequestId(id);
 
-    dispatch(
-      handleLoadHistoryByRequestId({
-        requestId: id,
-        payload: response,
-      })
-    );
+    dispatch(handleLoadHistory(response));
   } catch (error) {
     console.error(error);
   }
@@ -69,12 +64,7 @@ export const deleteRequestHistoryById = createAsyncThunk<
     const requestId = state.requestResponse.selectedTab;
     if (!id || !requestId) return false;
 
-    dispatch(
-      handleDeleteHistoryByRequestId({
-        id,
-        requestId,
-      })
-    );
+    dispatch(handleDeleteHistory(id));
 
     const response = await window.electronAPIHistory.deleteHistoryById(id);
 
@@ -103,7 +93,7 @@ export const deleteRequestHistoryByRequestId = createAsyncThunk<
       if (!requestId) requestId = state.requestResponse.selectedTab;
       if (!requestId) return false;
 
-      dispatch(handleClearHistoryCacheByRequestId(requestId));
+      dispatch(handleClearHistoryCache());
 
       const response =
         await window.electronAPIHistory.deleteHistoryByRequestId(requestId);

@@ -22,8 +22,8 @@ import {
 } from "@/context/redux/request-response/request-response-slice";
 import type { CreateHistoryItemInterface } from "@/types/history.types";
 import {
-  handleAddHistoryByRequestId,
-  handleReplaceHistoryByRequestId,
+  handleAddHistory,
+  handleReplaceHistory,
 } from "@/context/redux/history/history-slice";
 import { handleIsFetchApiLoading } from "@/context/redux/status/status-slice";
 
@@ -253,15 +253,9 @@ export const fetchApi = createAsyncThunk<
       dispatch(
         /* if array response means history modified so replace full history list */
         Array.isArray(historyResponse)
-          ? handleReplaceHistoryByRequestId({
-              requestId,
-              payload: historyResponse,
-            })
+          ? handleReplaceHistory(historyResponse)
           : /* if not array repsonse means history not modified so just add new history at top */
-            handleAddHistoryByRequestId({
-              requestId,
-              payload: historyResponse,
-            })
+            handleAddHistory(historyResponse)
       );
 
     /**

@@ -4,9 +4,10 @@ import type {
   HistoryItemMetaInterface,
   THistoryFilter,
 } from "@/types/history.types";
+import { MAX_LIMIT_OF_HISTORY_PER_REQUEST } from "@/constant/history.constant";
 
 interface HistoryInterface {
-  meta: Record<string, Array<HistoryItemMetaInterface>>;
+  meta: Array<HistoryItemMetaInterface> | null;
   selectedFilterMethod: Record<string, THistoryFilter>;
   openedHistory: {
     id: string;
@@ -17,7 +18,7 @@ interface HistoryInterface {
 
 // Define the initial state using that type
 const initialState: HistoryInterface = {
-  meta: {},
+  meta: null,
   selectedFilterMethod: {},
   openedHistory: null,
   historyDetails: null,
@@ -38,55 +39,35 @@ export const historySlice = createSlice({
       state.selectedFilterMethod[action.payload.requestId] =
         action.payload.method;
     },
-    handleClearHistoryCacheByRequestId: (
-      state,
-      action: PayloadAction<string>
-    ) => {
-      delete state.meta[action.payload];
+    handleClearHistoryCache: (state) => {
+      state.meta = [];
     },
-    handleLoadHistoryByRequestId: (
+    handleLoadHistory: (
       state,
-      action: PayloadAction<{
-        requestId: string;
-        payload: Array<HistoryItemMetaInterface>;
-      }>
+      action: PayloadAction<Array<HistoryItemMetaInterface>>
     ) => {
-      state.meta[action.payload.requestId] = action.payload.payload;
+      state.meta = action.payload;
     },
-    handleAddHistoryByRequestId: (
+    handleAddHistory: (
       state,
-      action: PayloadAction<{
-        requestId: string;
-        payload: HistoryItemMetaInterface;
-      }>
+      action: PayloadAction<HistoryItemMetaInterface>
     ) => {
-      state.meta[action.payload.requestId] = [
-        action.payload.payload,
-        ...(state.meta[action.payload.requestId] ?? []),
-      ];
-    },
-    handleReplaceHistoryByRequestId: (
-      state,
-      action: PayloadAction<{
-        requestId: string;
-        payload: Array<HistoryItemMetaInterface>;
-      }>
-    ) => {
-      state.meta[action.payload.requestId] = action.payload.payload;
-    },
-    handleDeleteHistoryByRequestId: (
-      state,
-      action: PayloadAction<{
-        id: string;
-        requestId: string;
-      }>
-    ) => {
-      const index = state.meta[action.payload.requestId]?.findIndex(
-        (item) => item.id === action.payload.id
+      state.meta = [action.payload, ...(state.meta ?? [])].slice(
+        0,
+        MAX_LIMIT_OF_HISTORY_PER_REQUEST
       );
-      if (index < 0) return;
+    },
+    handleReplaceHistory: (
+      state,
+      action: PayloadAction<Array<HistoryItemMetaInterface>>
+    ) => {
+      state.meta = action.payload;
+    },
+    handleDeleteHistory: (state, action: PayloadAction<string>) => {
+      const index = state.meta?.findIndex((item) => item.id === action.payload);
+      if (index === undefined || index < 0) return;
 
-      state.meta[action.payload.requestId].splice(index, 1);
+      state.meta?.splice(index, 1);
     },
     handleChangeOpenedHistory: (
       state,
@@ -112,11 +93,11 @@ export const historySlice = createSlice({
 
 export const {
   handleChangeFilterMethod,
-  handleClearHistoryCacheByRequestId,
-  handleLoadHistoryByRequestId,
-  handleAddHistoryByRequestId,
-  handleReplaceHistoryByRequestId,
-  handleDeleteHistoryByRequestId,
+  handleClearHistoryCache,
+  handleLoadHistory,
+  handleAddHistory,
+  handleReplaceHistory,
+  handleDeleteHistory,
   handleChangeOpenedHistory,
   handleReplaceHistoryDetails,
 } = historySlice.actions;
