@@ -8,10 +8,11 @@ import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectHistoryDetails } from "@/context/redux/history/selectors/history";
 import { useHistoryDetails } from "@/context/history/HistoryDetailsProvider";
+import { Loader as LoaderIcon } from "lucide-react";
 
 const ApiUrl = memo(() => {
   const { url, method } = useAppSelector(selectHistoryDetails);
-  const { handleToggleReplaceAlert } = useHistoryDetails();
+  const { isLoading, handleToggleReplaceAlert } = useHistoryDetails();
 
   return (
     <form
@@ -45,9 +46,11 @@ const ApiUrl = memo(() => {
         type="button"
         className="rounded-l-none uppercase"
         size={"sm"}
+        disabled={isLoading}
         onClick={() => handleToggleReplaceAlert(true)}
       >
-        Replace
+        {isLoading && <LoaderIcon className="animate-spin" size={14} />}
+        {isLoading ? "Replacing" : "Replace"}
       </Button>
     </form>
   );

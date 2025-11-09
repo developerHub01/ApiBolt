@@ -14,7 +14,7 @@ const ApiCta = memo(() => {
       className="rounded-l-none uppercase"
     >
       {isLoading && <LoaderIcon className="animate-spin" size={16} />}
-      Send
+      {isLoading ? "Sending" : "Send"}
     </Button>
   );
 });

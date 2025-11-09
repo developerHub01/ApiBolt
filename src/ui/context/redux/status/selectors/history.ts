@@ -10,3 +10,8 @@ export const selectHistoryDetailsLoading = createSelector(
   [(state: RootState) => state.status.isHistoryDetailsLoading],
   (isLoading) => isLoading
 );
+
+export const selectHistoryReplacingIsLoading = createSelector(
+  [(state: RootState) => state.status.isHistoryReplacingLoading],
+  (isLoading) => isLoading
+);

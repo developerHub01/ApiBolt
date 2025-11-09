@@ -14,10 +14,15 @@ import {
 } from "@/context/redux/history/selectors/history";
 import { loadRequestHistory } from "@/context/redux/history/thunks/history";
 import type { TActiveTabType } from "@/types/request-response.types";
+import {
+  selectHistoryDetailsLoading,
+  selectHistoryReplacingIsLoading,
+} from "@/context/redux/status/selectors/history";
 
 interface HistoryDetailsContext {
   meta: HistoryItemMetaInterface | null;
   activeMetaTab: TActiveTabType;
+  isLoading: boolean;
   codeWrap: boolean;
   handleChangeActiveMetaTab: (value: TActiveTabType) => void;
   handleToggleCodeWrap: (value?: boolean) => void;
@@ -49,6 +54,11 @@ const HistoryDetailsProvider = ({ children }: HistoryDetailsProviderProps) => {
   const meta = useAppSelector(selectHistoryMeta);
   const isOpen = useAppSelector(selectIsHistoryItemOpen);
   const historyId = useAppSelector(selectHistoryItemOpenId);
+  const isHistoryDetailsLoading = useAppSelector(selectHistoryDetailsLoading);
+  const isHistoryReplacinglsLoading = useAppSelector(
+    selectHistoryReplacingIsLoading
+  );
+  const isLoading = isHistoryDetailsLoading || isHistoryReplacinglsLoading;
   const [activeMetaTab, setActiveMetaTab] = useState<TActiveTabType>("params");
   const [codeWrap, setCodeWrap] = useState<boolean>(false);
   const [isReplaceAlertOpen, setIsReplaceAlertOpen] = useState<boolean>(false);
@@ -85,6 +95,7 @@ const HistoryDetailsProvider = ({ children }: HistoryDetailsProviderProps) => {
         handleToggleCodeWrap,
         isReplaceAlertOpen,
         handleToggleReplaceAlert,
+        isLoading,
       }}
     >
       {children}

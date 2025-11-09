@@ -2,7 +2,6 @@ import { memo, useCallback } from "react";
 import {
   AnimatedDialog,
   AnimatedDialogContentWrapper,
-  AnimatedDialogLoader,
 } from "@/components/ui/animated-dialog";
 import { selectIsHistoryItemOpen } from "@/context/redux/history/selectors/history";
 import { changeOpenedHistory } from "@/context/redux/history/thunks/history";
@@ -11,14 +10,13 @@ import HistoryTop from "@/components/app/history-details/HistoryTop";
 import HistoryContent from "@/components/app/history-details/content/HistoryContent";
 import HistoryBottom from "@/components/app/history-details/HistoryBottom";
 import { useHistoryDetails } from "@/context/history/HistoryDetailsProvider";
-import { selectHistoryDetailsLoading } from "@/context/redux/status/selectors/history";
 import ReplaceCurrentAlert from "@/components/app/history-details/ReplaceCurrentAlert";
+import Loader from "@/components/app/history-details/Loader";
 
 const HistoryDetails = memo(() => {
   const dispatch = useAppDispatch();
   const isOpen = useAppSelector(selectIsHistoryItemOpen);
   const { meta } = useHistoryDetails();
-  const isLoading = useAppSelector(selectHistoryDetailsLoading);
 
   const handleClose = useCallback(
     () => dispatch(changeOpenedHistory()),
@@ -31,7 +29,8 @@ const HistoryDetails = memo(() => {
         <HistoryTop />
         <HistoryContent />
         <HistoryBottom />
-        <AnimatedDialogLoader isLoading={isLoading} />
+        <Loader />
+
         <ReplaceCurrentAlert />
       </AnimatedDialogContentWrapper>
     </AnimatedDialog>

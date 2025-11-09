@@ -10,6 +10,7 @@ import { loadActiveTab } from "@/context/redux/sidebar/thunks/sidebar";
 import {
   loadRequestHistory,
   loadRequestHistoryMeta,
+  replaceCurrentByHistory,
 } from "@/context/redux/history/thunks/history";
 
 interface StatusInterface {
@@ -22,6 +23,7 @@ interface StatusInterface {
   isFetchApiLoading: Record<string, boolean>;
   isHistoryMetaLoading: boolean;
   isHistoryDetailsLoading: boolean;
+  isHistoryReplacingLoading: boolean;
 }
 
 // Define the initial state using that type
@@ -35,6 +37,7 @@ const initialState: StatusInterface = {
   isFetchApiLoading: {},
   isHistoryMetaLoading: false,
   isHistoryDetailsLoading: false,
+  isHistoryReplacingLoading: false,
 };
 
 export const statusSlice = createSlice({
@@ -77,6 +80,7 @@ export const statusSlice = createSlice({
       .addCase(loadProjectList.rejected, (state) => {
         state.isProjectLoading = false;
       })
+
       /**
        * =======================
        * sidebar active tab
@@ -151,6 +155,7 @@ export const statusSlice = createSlice({
         state.isKeyboardShortcutLoading = false;
         state.isKeyboardShortcutError = action.error?.message ?? null;
       })
+
       /**
        * =======================
        * load history meta
@@ -165,6 +170,7 @@ export const statusSlice = createSlice({
       .addCase(loadRequestHistoryMeta.rejected, (state) => {
         state.isHistoryMetaLoading = false;
       })
+
       /**
        * =======================
        * load history details
@@ -178,6 +184,21 @@ export const statusSlice = createSlice({
       })
       .addCase(loadRequestHistory.rejected, (state) => {
         state.isHistoryDetailsLoading = false;
+      })
+
+      /**
+       * =======================
+       * replace request by history
+       * =======================
+       */
+      .addCase(replaceCurrentByHistory.pending, (state) => {
+        state.isHistoryReplacingLoading = true;
+      })
+      .addCase(replaceCurrentByHistory.fulfilled, (state) => {
+        state.isHistoryReplacingLoading = false;
+      })
+      .addCase(replaceCurrentByHistory.rejected, (state) => {
+        state.isHistoryReplacingLoading = false;
       });
   },
 });
