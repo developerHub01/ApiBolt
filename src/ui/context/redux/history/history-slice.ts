@@ -40,7 +40,7 @@ export const historySlice = createSlice({
         action.payload.method;
     },
     handleClearHistoryCache: (state) => {
-      state.meta = [];
+      state.meta = null;
     },
     handleLoadHistory: (
       state,

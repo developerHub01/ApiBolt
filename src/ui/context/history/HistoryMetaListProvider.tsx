@@ -59,8 +59,7 @@ const HistoryMetaListProvider = ({
   useEffect(() => {
     if (listAlreadyHave) return;
     dispatch(loadRequestHistoryMeta());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
+  }, [dispatch, id, listAlreadyHave]);
 
   if (!id) return null;
 
