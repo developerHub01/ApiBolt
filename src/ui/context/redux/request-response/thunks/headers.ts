@@ -67,7 +67,7 @@ export const loadHiddenHeaders = createAsyncThunk<
           selectedTab
         );
 
-      dispatch(handleLoadHiddenHeadersIsCheck(response));
+      if (response) dispatch(handleLoadHiddenHeadersIsCheck(response));
     } catch (error) {
       console.error(error);
     }
