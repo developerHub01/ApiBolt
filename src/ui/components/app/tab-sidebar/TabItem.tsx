@@ -8,7 +8,7 @@ import {
 import RequestMethodTag from "@/components/app/RequestMethodTag";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { FolderClosed as FolderIcon, X as CloseIcon } from "lucide-react";
+import { X as CloseIcon } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { handleMoveTab } from "@/context/redux/request-response/request-response-slice";
@@ -29,7 +29,12 @@ import {
 import { selectApplyingKeyboardShortcutsById } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
 import { keyListStringify } from "@/utils/keyboard-shortcut.utils";
 
-const TabItem = memo(({ id, index }: { id: string; index: number }) => {
+interface Props {
+  id: string;
+  index: number;
+}
+
+const TabItem = memo(({ id, index }: Props) => {
   const dispatch = useAppDispatch();
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [isTabHovering, setIsTabHovering] = useState<boolean>(false);
@@ -137,7 +142,13 @@ const TabItem = memo(({ id, index }: { id: string; index: number }) => {
               "w-8": !isTabListHovering,
             })}
           >
-            {children && <FolderIcon size={20} />}
+            {children && (
+              <img
+                className="w-6 h-full object-contain"
+                src="./icons/folder.png"
+                alt="folder"
+              />
+            )}
             {method && (
               <RequestMethodTag
                 method={method as THTTPMethods}

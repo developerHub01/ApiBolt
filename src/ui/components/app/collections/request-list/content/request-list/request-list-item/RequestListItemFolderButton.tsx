@@ -1,8 +1,4 @@
 import { memo, type MouseEvent } from "react";
-import {
-  Folder as FolderIcon,
-  FolderOpen as FolderOpenIcon,
-} from "lucide-react";
 
 interface Props {
   isExpended: boolean;
@@ -17,10 +13,15 @@ const RequestListItemFolderButton = memo(({ isExpended, onClick }: Props) => {
 
   return (
     <button
+      type="button"
       className="w-full p-0.5 h-full aspect-square cursor-pointer"
       onClick={handleClick}
     >
-      {isExpended ? <FolderOpenIcon size={23} /> : <FolderIcon size={23} />}
+      <img
+        className="w-full h-full object-contain"
+        src={isExpended ? "./icons/folder-open.png" : "./icons/folder.png"}
+        alt={isExpended ? "folder-open" : "folder"}
+      />
     </button>
   );
 });
