@@ -79,7 +79,7 @@ const VariableList = memo(() => {
     );
 
   return (
-    <Table className="border">
+    <Table className="border-b">
       <VariableListHeader />
       <TableBody>
         {list.map((data) => (

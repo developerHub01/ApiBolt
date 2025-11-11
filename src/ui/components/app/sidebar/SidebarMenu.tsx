@@ -64,7 +64,7 @@ const SidebarMenu = memo(() => {
               <Link to={path}>
                 <Button
                   size={"icon"}
-                  variant={activeTab === id ? "default" : "outline"}
+                  variant={activeTab === id ? "default" : "background"}
                   className="mt-auto"
                   onClick={() => handleClick(id)}
                 >

@@ -1,5 +1,6 @@
 import { memo, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
+import { motion } from "motion/react";
 
 interface Props {
   className?: string;
@@ -26,12 +27,12 @@ const AutoScrollActiveWrapper = memo(
     }, [block]);
 
     return (
-      <div
+      <motion.div
         className={cn("w-full flex flex-col", className)}
         ref={scrollAreaRef}
       >
         {children}
-      </div>
+      </motion.div>
     );
   }
 );

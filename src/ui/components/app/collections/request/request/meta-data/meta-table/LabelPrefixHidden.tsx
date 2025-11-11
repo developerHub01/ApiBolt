@@ -34,6 +34,7 @@ const LabelPrefixHidden = memo(({ type }: Props) => {
 
   return (
     <button
+      type="button"
       className="select-none flex items-center gap-2 [&>svg]:size-3.5 text-xs px-2 py-1 bg-accent rounded-full cursor-pointer"
       onClick={handleToggle}
     >

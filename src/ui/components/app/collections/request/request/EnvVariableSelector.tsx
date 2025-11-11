@@ -34,7 +34,6 @@ const EnvVariableSelector = memo(
       [value, variableList]
     );
 
-    const isExist = value && isVariableExistInList;
     const isNotExist = value && !isVariableExistInList;
 
     const handleChange = (val: string) => {
@@ -50,14 +49,13 @@ const EnvVariableSelector = memo(
             role="combobox"
             aria-expanded={open}
             className={cn(
-              "flex-1 w-full justify-between cursor-pointer",
+              "flex-1 w-full justify-between cursor-pointer text-sm font-semibold",
               {
-                "text-green-500/60": isExist,
                 "text-red-500/60": isNotExist,
               },
               className
             )}
-            size={"sm"}
+            size={"xs"}
           >
             <input
               className="w-full h-full flex-1 truncate text-left 

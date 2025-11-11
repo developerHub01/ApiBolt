@@ -9,11 +9,13 @@ const EnvironmentVariables = () => {
 
   return (
     <>
-      <ScrollArea className="w-full min-h-0 h-full pb-5 [&>div>div]:h-full">
-        <div className="w-full h-full flex flex-col items-center gap-5 p-2.5">
-          <VariableList />
-        </div>
-      </ScrollArea>
+      <section className="w-full min-h-0 h-full flex-1">
+        <ScrollArea className="w-full min-h-0 h-full [&>div>div]:h-full rounded-lg border">
+          <div className="w-full h-full flex flex-col items-center gap-5">
+            <VariableList />
+          </div>
+        </ScrollArea>
+      </section>
       <AddNewData
         onClick={() => dispatch(createEnvironments())}
         label="Add New Variable"

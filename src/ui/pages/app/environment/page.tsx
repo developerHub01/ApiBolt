@@ -3,7 +3,7 @@ import EnvironmentTop from "@/components/app/environment/environment-top/Environ
 
 const EnvironmentPage = () => {
   return (
-    <div className="flex flex-col w-full max-w-5xl h-full items-center p-5">
+    <div className="flex flex-col w-full max-w-5xl h-full items-center p-5 gap-3">
       <EnvironmentTop />
       <EnvironmentVariables />
     </div>

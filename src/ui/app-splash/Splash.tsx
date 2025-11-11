@@ -38,17 +38,17 @@ const Splash = () => {
 
   return (
     <div
-      className="w-full h-full aspect-square bg-primary backdrop-blur-3xl flex flex-col justify-center items-center overflow-hidden relative rounded-lg border border-border/20 p-3"
+      className="w-full h-full aspect-square bg-background backdrop-blur-3xl flex flex-col justify-center items-center overflow-hidden relative rounded-lg border border-border/20 p-3"
       style={dragableStyle}
     >
       {/* Subtle Light Effects */}
       <motion.div
-        className="absolute top-6 right-6 w-1 h-1 bg-primary-foreground/40 rounded-full"
+        className="absolute top-6 right-6 w-1 h-1 bg-foreground/40 rounded-full"
         animate={{ opacity: [0.4, 0.8, 0.4] }}
         transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
       />
       <motion.div
-        className="absolute top-10 right-10 w-0.5 h-0.5 bg-primary-foreground/30 rounded-full"
+        className="absolute top-10 right-10 w-0.5 h-0.5 bg-primary/30 rounded-full"
         animate={{ opacity: [0.3, 0.6, 0.3] }}
         transition={{
           duration: 1.5,
@@ -57,7 +57,12 @@ const Splash = () => {
         }}
       />
       <motion.div
-        className="absolute bottom-8 left-8 w-1 h-1 bg-primary-foreground/20 rounded-full"
+        className="absolute bottom-8 left-8 w-1 h-1 bg-primary/20 rounded-full"
+        animate={{ opacity: [0.2, 0.5, 0.2] }}
+        transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, delay: 1 }}
+      />
+      <motion.div
+        className="absolute bottom-8 left-10 w-1 h-1 bg-secondary/20 rounded-full"
         animate={{ opacity: [0.2, 0.5, 0.2] }}
         transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, delay: 1 }}
       />
@@ -77,7 +82,7 @@ const Splash = () => {
             animate={{ scale: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <div className="w-10 h-10 bg-primary-foreground/10 backdrop-blur-sm rounded-lg flex items-center justify-center border border-border shadow-lg">
+            <div className="w-10 h-10 bg-secondary backdrop-blur-sm rounded-lg flex items-center justify-center border border-border shadow-lg">
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{
@@ -86,7 +91,7 @@ const Splash = () => {
                   ease: "linear",
                 }}
               >
-                <Zap className="w-5 h-5 text-primary-foreground" />
+                <Zap className="w-5 h-5 text-primary" />
               </motion.div>
             </div>
 
@@ -99,7 +104,7 @@ const Splash = () => {
           </motion.div>
 
           <motion.h1
-            className="text-xl font-semibold text-primary-foreground tracking-wide"
+            className="text-xl font-semibold text-primary tracking-wide"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
@@ -127,19 +132,19 @@ const Splash = () => {
           {[Activity, Code, Database].map((Icon, index) => (
             <motion.div
               key={index}
-              className="w-7 h-7 bg-primary-foreground/8 backdrop-blur-sm rounded-md flex items-center justify-center border border-border"
+              className="w-7 h-7 bg-secondary/80 backdrop-blur-sm rounded-md flex items-center justify-center border border-border"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4, delay: 0.7 + index * 0.1 }}
             >
-              <Icon className="w-3.5 h-3.5 text-muted-foreground" />
+              <Icon className="w-3.5 h-3.5 text-foreground" />
             </motion.div>
           ))}
         </motion.div>
 
         {/* API Method Display */}
         <motion.div
-          className="bg-muted/50 backdrop-blur-sm rounded-md px-3 py-1.5 border border-border min-w-20 flex justify-center"
+          className="bg-secondary/80 backdrop-blur-sm rounded-md px-3 py-1.5 border border-border min-w-20 flex justify-center"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, delay: 0.9 }}
@@ -167,16 +172,16 @@ const Splash = () => {
           transition={{ duration: 0.6, delay: 1.1 }}
         >
           <div className="flex justify-between items-center mb-1.5">
-            <span className="text-muted-foreground text-xs font-medium">
+            <span className="text-secondary-foreground text-xs font-medium">
               Loading
             </span>
-            <span className="text-muted-foreground text-xs font-medium">
+            <span className="text-secondary-foreground text-xs font-medium">
               {loadingProgress}%
             </span>
           </div>
           <div className="w-full bg-muted/30 rounded-full h-1 overflow-hidden border border-border">
             <motion.div
-              className="h-full bg-primary-foreground/80 rounded-full"
+              className="h-full bg-primary rounded-full"
               initial={{ width: 0 }}
               animate={{ width: `${loadingProgress}%` }}
               transition={{ duration: 0.1 }}
@@ -188,7 +193,7 @@ const Splash = () => {
         <AnimatePresence>
           {isReady && (
             <motion.div
-              className="text-primary-foreground/90 font-medium text-xs flex items-center gap-1.5"
+              className="text-foreground font-medium text-xs flex items-center gap-1.5"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4 }}
@@ -206,12 +211,12 @@ const Splash = () => {
 
       {/* Professional corner accents */}
       <div className="absolute top-0 right-0 w-8 h-8">
-        <div className="absolute top-3 right-3 w-1 h-1 bg-primary-foreground/20 rounded-full" />
-        <div className="absolute top-5 right-5 w-0.5 h-0.5 bg-primary-foreground/15 rounded-full" />
+        <div className="absolute top-3 right-3 w-1 h-1 bg-secondary-foreground/20 rounded-full" />
+        <div className="absolute top-5 right-5 w-0.5 h-0.5 bg-secondary-foreground/15 rounded-full" />
       </div>
 
       <div className="absolute bottom-0 left-0 w-6 h-6">
-        <div className="absolute bottom-3 left-3 w-0.5 h-0.5 bg-primary-foreground/15 rounded-full" />
+        <div className="absolute bottom-3 left-3 w-0.5 h-0.5 bg-secondary-foreground/15 rounded-full" />
       </div>
     </div>
   );

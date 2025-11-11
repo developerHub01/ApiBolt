@@ -45,7 +45,7 @@ const TabSearchBar = memo(() => {
   return (
     <Button
       asChild
-      variant={"secondary"}
+      variant={"background"}
       size={"sm"}
       className="overflow-hidden gap-0"
     >

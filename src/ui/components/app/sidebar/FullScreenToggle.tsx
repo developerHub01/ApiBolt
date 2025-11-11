@@ -28,7 +28,7 @@ const FullScreenToggle = () => {
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          variant="outline"
+          variant={"background"}
           onClick={() => toggleFullscreen()}
           size="icon"
         >

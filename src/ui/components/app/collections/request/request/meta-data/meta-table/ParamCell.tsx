@@ -88,7 +88,7 @@ const TypeMenu = memo(({ value, onChange }: TypeMenuProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="secondary" size={"iconSm"}>
+        <Button variant="secondary" size={"iconXs"}>
           <ChangeTypeIcon />
         </Button>
       </DropdownMenuTrigger>

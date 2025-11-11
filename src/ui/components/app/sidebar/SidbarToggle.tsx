@@ -52,7 +52,7 @@ const SidbarToggle = memo(() => {
             <TooltipTrigger asChild>
               <Button
                 size={"icon"}
-                variant={"outline"}
+                variant={"background"}
                 onClick={handleCollapse}
               >
                 <MenuIcon />

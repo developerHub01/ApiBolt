@@ -8,10 +8,12 @@ interface MetaTableWrapperProps {
 
 const MetaTableWrapper = ({ children, header }: MetaTableWrapperProps) => {
   return (
-    <Table className="border w-full h-full table-fixed">
-      {header}
-      <TableBody>{children}</TableBody>
-    </Table>
+    <section className="w-full rounded-lg border border-t-0 overflow-hidden">
+      <Table className="w-full h-full table-fixed border-0">
+        {header}
+        <TableBody>{children}</TableBody>
+      </Table>
+    </section>
   );
 };
 

@@ -15,7 +15,7 @@ const TabBottomCTA = memo(
   ({ isHovering, onClick, Icon, label }: TabBottomCTAProps) => {
     return (
       <Button
-        variant={"secondary"}
+        variant={"background"}
         size={"sm"}
         className={cn("w-full gap-0 overflow-hidden", {
           "justify-start": isHovering,

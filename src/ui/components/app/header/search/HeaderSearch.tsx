@@ -113,7 +113,7 @@ const HeaderSearch = () => {
       {(!isFullscreen || isOpenInFullScreen) && (
         <motion.div
           className={cn("lg:w-xl md:w-96 w-72 relative z-20", {
-            "fixed bg-accent left-1/2 -translate-x-1/2": isOpenInFullScreen,
+            "fixed left-1/2 -translate-x-1/2": isOpenInFullScreen,
           })}
           style={
             isElectron()
@@ -152,7 +152,7 @@ const HeaderSearch = () => {
                 <ButtonLikeDiv
                   asChild
                   className="w-full"
-                  variant={"outline"}
+                  variant={"background"}
                   size={"sm"}
                   onClick={handleButtonClick}
                 >

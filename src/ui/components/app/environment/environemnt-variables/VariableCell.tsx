@@ -145,7 +145,7 @@ const VariableCell = memo(
                   defaultValue={value ?? selectList[0].id}
                 />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent align="center">
                 {selectList.map(({ id, label }) => (
                   <SelectItem value={id} className="capitalize">
                     {label}

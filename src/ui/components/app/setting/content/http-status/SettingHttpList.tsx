@@ -57,54 +57,53 @@ const SettingHttpList = memo(() => {
             triggerClassName="capitalize px-3"
             contentClassName="px-3"
           >
-            <Table className="border rounded-md table-auto">
-              <TableHeader className="bg-secondary/80">
-                <TableRow className="[&>th]:border-r [&>th]:last:border-r-0">
-                  <TableHead className="w-14 p-3">Code</TableHead>
-                  <TableHead className="w-36 p-3">Reason</TableHead>
-                  <TableHead>Description</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {Object.values(value).map(
-                  ({
-                    code,
-                    reason,
-                    editedReason,
-                    description,
-                    editedDescription,
-                  }) => (
-                    <TableRow
-                      key={code}
-                      className={cn(
-                        "[&>td]:border-r [&>td]:last:border-r-0",
-                        "focus-within:bg-accent/60 duration-75 transition-colors"
-                      )}
-                    >
-                      <TableCell className="font-medium whitespace-break-spaces w-14 p-3">
-                        <p>{code}</p>
-                      </TableCell>
-                      <TableCell className="whitespace-break-spaces w-36 p-3">
-                        <SettingHttpEditableContent
-                          type="reason"
-                          code={code}
-                          editedValue={editedReason}
-                          value={reason}
-                        />
-                      </TableCell>
-                      <TableCell className="whitespace-break-spaces p-3">
-                        <SettingHttpEditableContent
-                          type="description"
-                          code={code}
-                          editedValue={editedDescription}
-                          value={description}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  )
-                )}
-              </TableBody>
-            </Table>
+            <div className="border w-full h-full rounded-lg overflow-hidden">
+              <Table className="table-auto">
+                <TableHeader className="bg-secondary/80">
+                  <TableRow className="[&>th]:border-r [&>th]:last:border-r-0">
+                    <TableHead className="w-14 p-3">Code</TableHead>
+                    <TableHead className="w-36 p-3">Reason</TableHead>
+                    <TableHead>Description</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {Object.values(value).map(
+                    ({
+                      code,
+                      reason,
+                      editedReason,
+                      description,
+                      editedDescription,
+                    }) => (
+                      <TableRow
+                        key={code}
+                        className={cn("[&>td]:border-r [&>td]:last:border-r-0")}
+                      >
+                        <TableCell className="font-medium whitespace-break-spaces w-14 p-3">
+                          <p>{code}</p>
+                        </TableCell>
+                        <TableCell className="whitespace-break-spaces w-36 p-3">
+                          <SettingHttpEditableContent
+                            type="reason"
+                            code={code}
+                            editedValue={editedReason}
+                            value={reason}
+                          />
+                        </TableCell>
+                        <TableCell className="whitespace-break-spaces p-3">
+                          <SettingHttpEditableContent
+                            type="description"
+                            code={code}
+                            editedValue={editedDescription}
+                            value={description}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    )
+                  )}
+                </TableBody>
+              </Table>
+            </div>
           </SettingItem>
         ))}
       </Accordion>

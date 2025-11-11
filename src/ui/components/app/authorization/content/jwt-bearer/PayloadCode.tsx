@@ -55,7 +55,7 @@ const PayloadCode = memo(
       >
         <ScrollArea
           className={cn(
-            "w-full h-full rounded-lg overflow-hidden border [&>div>div]:h-full",
+            "w-full h-full overflow-hidden [&>div>div]:h-full",
             "backdrop-blur-xs",
             {
               "cursor-not-allowed": disabled,

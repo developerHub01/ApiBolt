@@ -99,7 +99,7 @@ const TabSidebar = memo(() => {
         transition={{ duration: 0.3, ease: "easeInOut" }}
         className={cn(
           "h-full flex flex-col absolute right-0 top-0 z-40 gap-0.5 shadow-2xl border-l border-muted-foreground/20",
-          "bg-background/30",
+          "bg-secondary/30",
           "backdrop-blur-lg transition-all duration-150",
           {
             "right-0 border-l": layoutTypes === "ltr",

@@ -106,9 +106,9 @@ const TabItem = memo(({ id, index }: Props) => {
         "w-full h-9 cursor-pointer px-1 border-x-2 border-transparent",
         {
           /* active tab style */
-          "bg-accent hover:bg-accent/80": selectedTab === id,
+          "bg-accent/80 hover:bg-accent/60": selectedTab === id,
           /* active tab border color */
-          "bg-transparent hover:bg-accent/50": selectedTab !== id,
+          "bg-transparent hover:bg-accent/60": selectedTab !== id,
           "border-green-500": selectedTab === id && method === "get",
           "border-blue-500": selectedTab === id && method === "post",
           "border-yellow-500": selectedTab === id && method === "put",

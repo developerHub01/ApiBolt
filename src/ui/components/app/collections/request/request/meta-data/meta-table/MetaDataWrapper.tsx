@@ -38,7 +38,7 @@ const Metadata = memo(({ children }: MetaDataProps) => {
   if (isBulkEditorOpen) return <BulkEditor />;
 
   return (
-    <ScrollArea className="flex-1 overflow-hidden w-full min-h-0 h-full [&>div>div]:h-full border-t">
+    <ScrollArea className="flex-1 overflow-hidden w-full min-h-0 h-full [&>div>div]:h-full border-t rounded-lg">
       <div className="w-full h-full flex flex-col gap-4 items-center pb-5">
         {children}
       </div>
