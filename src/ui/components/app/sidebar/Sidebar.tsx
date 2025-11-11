@@ -1,7 +1,6 @@
 import { TooltipProvider } from "@/components/ui/tooltip-custom";
 import SidebarMenu from "@/components/app/sidebar/SidebarMenu";
 import FullScreenToggle from "@/components/app/sidebar/FullScreenToggle";
-import ThemeToggle from "@/components/app/sidebar/ThemeToggle";
 import SidbarToggle from "@/components/app/sidebar/SidbarToggle";
 import { cn } from "@/lib/utils";
 import useCheckApplyingLayoutDirection from "@/hooks/setting/use-check-applying-layout-direction";
@@ -45,7 +44,6 @@ const Sidebar = () => {
               >
                 <div className="flex flex-col gap-2">
                   <SidebarMenu />
-                  <ThemeToggle />
                 </div>
                 <div className="flex flex-col gap-2">
                   <SidbarToggle />

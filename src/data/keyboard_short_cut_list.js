@@ -17,6 +17,10 @@ export const keyboardBindings = {
     label: "Navigate to authorization",
     key: ["ctrl", "shift", "a"],
   },
+  navigate_themes: {
+    label: "Navigate to themes",
+    key: ["ctrl", "shift", "t"],
+  },
   toggle_activitybar: {
     label: "Toggle activitybar",
     key: ["meta", "a"],

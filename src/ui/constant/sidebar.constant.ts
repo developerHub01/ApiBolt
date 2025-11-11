@@ -5,6 +5,7 @@ import {
   type LucideIcon,
   Layers as ProjectsIcon,
   KeyRound as AuthorizationIcon,
+  Palette as ThemeIcon,
 } from "lucide-react";
 
 export const SIDEBAR_MENU_LIST: Array<{
@@ -36,6 +37,12 @@ export const SIDEBAR_MENU_LIST: Array<{
     Icon: AuthorizationIcon,
     label: "Authorization",
     path: "/authorization",
+  },
+  {
+    id: "navigate_themes",
+    Icon: ThemeIcon,
+    label: "Themes",
+    path: "/themes",
   },
 ];
 

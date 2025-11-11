@@ -18,6 +18,8 @@ import AuthorizationLayout from "@/pages/app/authorization/layout";
 import AuthorizationPage from "@/pages/app/authorization/page";
 import CollectionsLayout from "@/pages/app/collections/layout";
 import CollectionPage from "@/pages/app/collections/page";
+import ThemesLayout from "@/pages/app/themes/layout";
+import ThemesPage from "@/pages/app/themes/page";
 
 const routes = [
   {
@@ -85,6 +87,16 @@ const routes = [
               {
                 index: true,
                 element: <AuthorizationPage />,
+              },
+            ],
+          },
+          {
+            path: "themes",
+            element: <ThemesLayout />,
+            children: [
+              {
+                index: true,
+                element: <ThemesPage />,
               },
             ],
           },
