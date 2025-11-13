@@ -21,7 +21,9 @@ export type TSettingThemeTab = "global" | "project";
 
 interface SettingThemeContext {
   activeThemeId: string;
-  handleChangeActiveTheme: (id: string) => void;
+  globalThemeId: string;
+  localThemeId: string | null;
+  handleChangeActiveTheme: (id?: string | null) => void;
 }
 
 // const SettingThemeContext = createContext<SettingThemeContext | null>(null);
@@ -61,10 +63,10 @@ const SettingThemeProvider = ({ children }: SettingThemeProviderProps) => {
   );
 
   const handleChangeActiveTheme = useCallback(
-    (id: string) => {
+    (id?: string | null) => {
       dispatch(
         changeActiveThemeId({
-          activeTheme: id,
+          activeTheme: id ?? null,
           projectId: activeTab === "project" ? projectId : null,
         })
       );
@@ -83,6 +85,8 @@ const SettingThemeProvider = ({ children }: SettingThemeProviderProps) => {
       value={{
         activeThemeId,
         handleChangeActiveTheme,
+        globalThemeId,
+        localThemeId,
       }}
     >
       {children}

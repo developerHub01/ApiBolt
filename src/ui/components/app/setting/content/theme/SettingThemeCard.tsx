@@ -7,46 +7,39 @@ import {
   ArrowUpRight as LinkArrowIcon,
   User as UserIcon,
 } from "lucide-react";
-import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { useSettingTheme } from "@/context/setting/theme/SettingThemeProvider";
+import SettingThemeCardWrapper from "@/components/app/setting/content/theme/SettingThemeCardWrapper";
 
 const SettingThemeCard = memo(
   ({ id, thumbnail, name, type, author }: ThemeMetaInterface) => {
-    const { activeThemeId, handleChangeActiveTheme } = useSettingTheme();
+    const { activeThemeId, localThemeId, handleChangeActiveTheme } =
+      useSettingTheme();
     const isActive = activeThemeId === id;
+    /**
+     * if the active theme coming from global because of non-existing of local active theme
+     */
+    const isSemiActive = isActive && !localThemeId;
 
-    const handleClick = () => !isActive && handleChangeActiveTheme(id);
+    const handleClick = () => {
+      if (isActive !== isSemiActive) return;
+      handleChangeActiveTheme(id);
+    };
 
     return (
-      <motion.div
+      <SettingThemeCardWrapper
+        isActive={isActive}
         key={id}
-        whileHover={{
-          padding: 15,
-        }}
-        animate={{
-          padding: isActive ? 15 : 0,
-          scale: isActive ? 0.98 : 1,
-        }}
-        transition={{
-          type: "spring",
-          stiffness: 260,
-          damping: 20,
-        }}
-        className={cn(
-          "w-full flex flex-col gap-2 rounded-xl bg-transparent hover:bg-secondary/30 transition-all duration-100",
-          {
-            "bg-secondary/30 ring-1 ring-offset-1": isActive,
-          }
-        )}
+        className={cn({
+          "bg-secondary/30 ring-1": isActive,
+          "ring-ring": isActive,
+          "ring-ring/5": isSemiActive,
+        })}
         onClick={handleClick}
       >
         <div
           className={cn(
-            "w-full aspect-square bg-accent rounded-xl overflow-hidden border",
-            {
-              border: !thumbnail,
-            }
+            "w-full aspect-square bg-accent rounded-xl overflow-hidden border"
           )}
         >
           {thumbnail ? (
@@ -75,7 +68,7 @@ const SettingThemeCard = memo(
             <LinkArrowIcon />
           </Button>
         </div>
-      </motion.div>
+      </SettingThemeCardWrapper>
     );
   }
 );

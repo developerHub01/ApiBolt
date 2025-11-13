@@ -90,7 +90,12 @@ export const getActiveThemePalette = async () => {
 export const changeActiveTheme = async (payload = {}) => {
   try {
     if (!("projectId" in payload)) payload.projectId = null;
-    if (!payload.activeTheme) return false;
+    /**
+     * if projectId is null means global theme else local
+     * if global theme then activeTheme can't be null so use default activeThemeId
+     */
+    if (!payload.projectId && !payload.activeTheme)
+      payload.activeTheme = defaultActiveThemeId;
 
     const isAlreadyExist = Boolean(
       (

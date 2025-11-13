@@ -1,15 +1,23 @@
 const { contextBridge, ipcRenderer, webFrame } = require("electron");
 
-window.addEventListener("DOMContentLoaded", async () => {
-  const activeTheme = await ipcRenderer.invoke("getActiveThemePalette");
-  const theme = {
-    ...(activeTheme.global ?? {}),
-    ...(activeTheme.local ?? {}),
-  };
+const handleApplyTheme = async () => {
+  try {
+    const activeTheme = await ipcRenderer.invoke("getActiveThemePalette");
+    const theme = {
+      ...(activeTheme.global ?? {}),
+      ...(activeTheme.local ?? {}),
+    };
 
-  Object.entries(theme).forEach(([key, value]) => {
-    document.documentElement.style.setProperty(`--${key}`, value);
-  });
+    Object.entries(theme).forEach(([key, value]) => {
+      document.documentElement.style.setProperty(`--${key}`, value);
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+window.addEventListener("DOMContentLoaded", async () => {
+  await handleApplyTheme();
 });
 
 contextBridge.exposeInMainWorld("electronAPI", {
@@ -47,6 +55,13 @@ contextBridge.exposeInMainWorld("electronAPI", {
 
   generateJWTToken: async (data) => {
     return await ipcRenderer.invoke("generateJWTToken", data);
+  },
+
+  /**
+   * trigger when theme changed
+   */
+  applyTheme: async () => {
+    return await handleApplyTheme();
   },
 });
 

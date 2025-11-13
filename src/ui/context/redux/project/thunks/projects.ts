@@ -11,6 +11,7 @@ import {
   handleLoadProjectsList,
 } from "@/context/redux/project/project-slice";
 import { loadKeyboardShortcuts } from "@/context/redux/keyboard-shortcuts/thunks/keyboard-shortcuts";
+import { applyThemeInApp } from "@/context/redux/theme/thunks/theme";
 
 /* ==============================
 ========== Projects start =========
@@ -67,6 +68,7 @@ export const changeActiveProject = createAsyncThunk<
 
       dispatch(handleChangeIsRequestListLoaded(false));
       await Promise.all([
+        dispatch(applyThemeInApp()),
         dispatch(loadEnvironmentsList()),
         dispatch(loadTabsData()),
         dispatch(loadEnvironmentsList()),

@@ -35,6 +35,11 @@ export interface ActiveThemeInterface {
   projectId: string | null;
 }
 
+export interface ChangeActiveThemePayloadInterface
+  extends Omit<ActiveThemeInterface, "activeTheme"> {
+  activeTheme: string | null;
+}
+
 export type ThemeCreatePayloadInterface = Required<
   Pick<ThemeInterface, "name" | "palette">
 > &

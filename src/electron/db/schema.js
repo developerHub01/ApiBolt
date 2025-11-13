@@ -457,11 +457,9 @@ export const activeThemeTable = sqliteTable(
     projectId: text().references(() => projectTable.id, {
       onDelete: "cascade",
     }),
-    activeTheme: text()
-      .notNull()
-      .references(() => themeTable.id, {
-        onDelete: "cascade",
-      }),
+    activeTheme: text().references(() => themeTable.id, {
+      onDelete: "cascade",
+    }),
   },
   (table) => [
     unique({

@@ -51,8 +51,8 @@ import type {
 } from "@/types/history.types";
 import type {
   ActiveThemeIdInterface,
-  ActiveThemeInterface,
   ActiveThemePaletteInterface,
+  ChangeActiveThemePayloadInterface,
   ThemeCreatePayloadInterface,
   ThemeInterface,
   ThemeMetaInterface,
@@ -86,6 +86,11 @@ declare global {
           algorithm: string;
         }
       ): Promise<string>;
+
+      /***
+       * trigger when theme changed
+       */
+      applyTheme(): Promise<void>;
     };
 
     electronFileSystem: {
@@ -110,7 +115,9 @@ declare global {
     electronAPIActiveTheme: {
       getActiveThemeId(): Promise<ActiveThemeIdInterface>;
       getActiveThemePalette(): Promise<ActiveThemePaletteInterface>;
-      changeActiveTheme(payload: ActiveThemeInterface): Promise<boolean>;
+      changeActiveTheme(
+        payload: ChangeActiveThemePayloadInterface
+      ): Promise<boolean>;
     };
 
     electronAPIHttpStatusDB: {
