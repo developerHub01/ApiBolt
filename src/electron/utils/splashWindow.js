@@ -10,6 +10,13 @@ export const createSplashWindow = () => {
     resizable: false,
     titleBarStyle: "hidden",
     title: "splash",
+
+    webPreferences: {
+      preload: path.join(app.getAppPath(), "src", "electron", "preload.js"),
+      contextIsolation: true,
+      nodeIntegration: false,
+      spellcheck: false,
+    },
   });
   win.isSplash = true;
 

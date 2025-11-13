@@ -1,25 +1,10 @@
 const { contextBridge, ipcRenderer, webFrame } = require("electron");
 
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", async () => {
+  const activeTheme = await ipcRenderer.invoke("getActiveThemePalette");
   const theme = {
-    background: "#000e14",
-    foreground: "#fafafa",
-    card: "#001a2c",
-    "card-foreground": "#fafafa",
-    popover: "#001a2c",
-    "popover-foreground": "#fafafa",
-    primary: "#e4e4e7",
-    "primary-foreground": "#001a2c",
-    secondary: "#003d5c",
-    "secondary-foreground": "#fafafa",
-    muted: "#003d5ce5",
-    "muted-foreground": "#9f9fa9",
-    accent: "#003d5c",
-    "accent-foreground": "#fafafa",
-    destructive: "#cb1b16",
-    border: "#295a7e",
-    input: "#001b29",
-    ring: "#295a7e",
+    ...(activeTheme.global ?? {}),
+    ...(activeTheme.local ?? {}),
   };
 
   Object.entries(theme).forEach(([key, value]) => {
@@ -74,21 +59,41 @@ contextBridge.exposeInMainWorld("electronAPIZoom", {
   getZoom: () => webFrame.getZoomFactor(),
 });
 
+contextBridge.exposeInMainWorld("electronAPITheme", {
+  getThemeById: async (...payload) =>
+    await ipcRenderer.invoke("getThemeById", ...payload),
+  createTheme: async (...payload) =>
+    await ipcRenderer.invoke("createTheme", ...payload),
+  updateTheme: async (...payload) =>
+    await ipcRenderer.invoke("updateTheme", ...payload),
+  deleteThemeById: async (...payload) =>
+    await ipcRenderer.invoke("deleteThemeById", ...payload),
+});
+
+contextBridge.exposeInMainWorld("electronAPIActiveTheme", {
+  getActiveThemeId: async (...payload) =>
+    await ipcRenderer.invoke("getActiveThemeId", ...payload),
+  getActiveThemePalette: async (...payload) =>
+    await ipcRenderer.invoke("getActiveThemePalette", ...payload),
+  changeActiveTheme: async (...payload) =>
+    await ipcRenderer.invoke("changeActiveTheme", ...payload),
+});
+
 contextBridge.exposeInMainWorld("electronAPIHttpStatusDB", {
   getHttpStatus: async () => await ipcRenderer.invoke("getHttpStatus"),
   getHttpStatusByCode: async () =>
     await ipcRenderer.invoke("getHttpStatusByCode"),
-  updateHttpStatus: async (payload) =>
-    await ipcRenderer.invoke("updateHttpStatus", payload),
+  updateHttpStatus: async (...payload) =>
+    await ipcRenderer.invoke("updateHttpStatus", ...payload),
 });
 
 contextBridge.exposeInMainWorld("electronAPIActiveSidebarTabDB", {
   getActiveSidebarTab: async () =>
     await ipcRenderer.invoke("getActiveSidebarTab"),
-  createActiveSidebarTab: async (payload) =>
-    await ipcRenderer.invoke("createActiveSidebarTab", payload),
-  updateActiveSidebarTab: async (payload) =>
-    await ipcRenderer.invoke("updateActiveSidebarTab", payload),
+  createActiveSidebarTab: async (...payload) =>
+    await ipcRenderer.invoke("createActiveSidebarTab", ...payload),
+  updateActiveSidebarTab: async (...payload) =>
+    await ipcRenderer.invoke("updateActiveSidebarTab", ...payload),
   deleteActiveSidebarTab: async () =>
     await ipcRenderer.invoke("deleteActiveSidebarTab"),
 });
@@ -96,10 +101,10 @@ contextBridge.exposeInMainWorld("electronAPIActiveSidebarTabDB", {
 contextBridge.exposeInMainWorld("electronAPIActiveCodeSnippitTypeDB", {
   getActiveCodeSnippitType: async () =>
     await ipcRenderer.invoke("getActiveCodeSnippitType"),
-  createActiveCodeSnippitType: async (payload) =>
-    await ipcRenderer.invoke("createActiveCodeSnippitType", payload),
-  updateActiveCodeSnippitType: async (payload) =>
-    await ipcRenderer.invoke("updateActiveCodeSnippitType", payload),
+  createActiveCodeSnippitType: async (...payload) =>
+    await ipcRenderer.invoke("createActiveCodeSnippitType", ...payload),
+  updateActiveCodeSnippitType: async (...payload) =>
+    await ipcRenderer.invoke("updateActiveCodeSnippitType", ...payload),
   deleteActiveCodeSnippitType: async () =>
     await ipcRenderer.invoke("deleteActiveCodeSnippitType"),
 });
@@ -123,10 +128,10 @@ contextBridge.exposeInMainWorld("electronAPICookiesDB", {
 
 contextBridge.exposeInMainWorld("electronAPIProjectsDB", {
   getProjects: async () => await ipcRenderer.invoke("getProjects"),
-  createProjects: async (payload) =>
-    await ipcRenderer.invoke("createProjects", payload),
-  updateProjects: async (id, payload) =>
-    await ipcRenderer.invoke("updateProjects", id, payload),
+  createProjects: async (...payload) =>
+    await ipcRenderer.invoke("createProjects", ...payload),
+  updateProjects: async (id, ...payload) =>
+    await ipcRenderer.invoke("updateProjects", id, ...payload),
   deleteProjects: async (id) => await ipcRenderer.invoke("deleteProjects", id),
   changeActiveProject: async (id) =>
     await ipcRenderer.invoke("changeActiveProject", id),
@@ -145,10 +150,10 @@ contextBridge.exposeInMainWorld("electronAPIEnvironmentsDB", {
   getAllEnvironments: async () =>
     await ipcRenderer.invoke("getAllEnvironments"),
   getEnvironments: async () => await ipcRenderer.invoke("getEnvironments"),
-  createEnvironments: async (payload) =>
-    await ipcRenderer.invoke("createEnvironments", payload),
-  updateEnvironments: async (payload) =>
-    await ipcRenderer.invoke("updateEnvironments", payload),
+  createEnvironments: async (...payload) =>
+    await ipcRenderer.invoke("createEnvironments", ...payload),
+  updateEnvironments: async (...payload) =>
+    await ipcRenderer.invoke("updateEnvironments", ...payload),
   deleteAllEnvironments: async () =>
     await ipcRenderer.invoke("deleteAllEnvironments"),
   deleteEnvironments: async (id) =>

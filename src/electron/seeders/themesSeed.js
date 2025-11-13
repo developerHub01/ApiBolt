@@ -3,7 +3,6 @@ import { defaultThemeList } from "../../data/themes.js";
 import { db } from "../db/index.js";
 import {
   activeThemeTable,
-  DEFAULT_THEME_ID,
   themeTable,
 } from "../db/schema.js";
 
@@ -27,7 +26,7 @@ export const generateThemesSeed = async () => {
       await db
         .insert(activeThemeTable)
         .values({
-          activeTheme: DEFAULT_THEME_ID,
+          activeTheme: defaultThemeList[0].id,
           projectId: null,
         })
         .onConflictDoNothing();

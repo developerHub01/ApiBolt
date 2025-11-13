@@ -1,15 +1,11 @@
-import { DEFAULT_THEME_ID } from "../electron/db/schema.js";
-
 export const defaultThemeList = [
   {
-    id: DEFAULT_THEME_ID,
+    id: "polar_night",
     name: "Polar Night",
     type: "dark",
     palette: {
       background: "#000e14",
       foreground: "#fafafa",
-      card: "#001a2c",
-      "card-foreground": "#fafafa",
       popover: "#001a2c",
       "popover-foreground": "#fafafa",
       primary: "#e4e4e7",
@@ -21,9 +17,36 @@ export const defaultThemeList = [
       accent: "#003d5c",
       "accent-foreground": "#fafafa",
       destructive: "#cb1b16",
-      border: "#295a7e",
-      input: "#001b29",
+      border: "#002233",
+      input: "#00406c",
       ring: "#295a7e",
+      line: "#00416cb3",
+    },
+  },
+  {
+    id: "mid-night",
+    name: "mid night",
+    type: "dark",
+    palette: {
+      background: "#000e14",
+      foreground: "#fafafa",
+      popover: "#1C3139",
+      "popover-foreground": "#fafafa",
+      primary: "#e4e4e7",
+      "primary-foreground": "#1C3139",
+      secondary: "#21373F",
+      "secondary-foreground": "#fafafa",
+      muted: "#2A454B",
+      "muted-foreground": "#9f9fa9",
+      accent: "#253E45",
+      "accent-foreground": "#fafafa",
+      destructive: "#cb1b16",
+      border: "#52796f",
+      input: "#52796f",
+      ring: "#84a98c",
+      line: "#1C3139",
     },
   },
 ];
+
+export const defaultActiveThemePalette = defaultThemeList[0].palette;

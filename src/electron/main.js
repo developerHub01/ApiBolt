@@ -38,6 +38,8 @@ import { generateKeyboardBindingsSeed } from "./seeders/keyboardShortcutSeed.js"
 import { keyboardShortcutHandler } from "./ipc/keyboardShortcutHandler.js";
 import { historyHandler } from "./ipc/historyHandler.js";
 import { generateThemesSeed } from "./seeders/themesSeed.js";
+import { themeHandler } from "./ipc/themeHandler.js";
+import { activeThemeHandler } from "./ipc/activeThemeHandler.js";
 
 export const userDataDir = app.getPath("userData");
 
@@ -92,6 +94,8 @@ app.whenReady().then(async () => {
   activeSidebarTabHandler();
   activeCodeSnippitTypeHandler();
   projectsHandlers();
+  themeHandler();
+  activeThemeHandler();
   cookiesHandler();
   enviromentsHandlers();
   authorizationHandler();
