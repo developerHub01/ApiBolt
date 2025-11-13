@@ -75,7 +75,7 @@ const PortToken = memo(() => {
     >
       <input
         placeholder="Port eg. 3000"
-        className="w-full border-0 border-b font-normal"
+        className="w-full border-0 border-b border-b-input font-normal"
         value={portState}
         onChange={handleChangePort}
         onKeyDown={handleKeydown}

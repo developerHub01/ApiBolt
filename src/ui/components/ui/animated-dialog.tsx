@@ -86,7 +86,7 @@ const AnimatedDialogContentWrapper = memo(
       <motion.section
         className={cn(
           "relative z-1 w-full h-full max-w-2xl backdrop-blur-lg rounded-lg flex flex-col overflow-hidden shadow-2xl",
-          "border bg-background/60",
+          "border bg-background/70",
           className
         )}
         onClick={(e) => e.stopPropagation()}

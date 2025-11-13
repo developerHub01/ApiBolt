@@ -25,10 +25,13 @@ const SmallDeviceListWrapper = memo(
         })}
       >
         <motion.div
-          className={cn("w-full backdrop-blur-lg h-full border-r-2", {
-            "border-r-2": layoutTypes === "ltr",
-            "border-l-2": layoutTypes === "rtl",
-          })}
+          className={cn(
+            "w-full backdrop-blur-lg h-full border-r-2 bg-background/70",
+            {
+              "border-r-2": layoutTypes === "ltr",
+              "border-l-2": layoutTypes === "rtl",
+            }
+          )}
           onClick={(e) => e.stopPropagation()}
           style={{
             maxWidth: "60vw",

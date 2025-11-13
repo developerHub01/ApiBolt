@@ -76,7 +76,7 @@ const Horizontal = ({
 
   return (
     <span
-      className="inline-block absolute w-5 h-0.5 bg-input -left-1 top-1/2 -translate-x-full -translate-y-1/2"
+      className="inline-block absolute w-5 h-0.5 bg-line -left-1 top-1/2 -translate-x-full -translate-y-1/2"
       style={{
         width,
       }}
@@ -93,7 +93,7 @@ const Vertical = ({ index, isFullHeight }: VerticalProps) => {
   const spaceSize = leftSpace + leftSpace * 2 * index + 4;
   return (
     <span
-      className={cn("inline-block absolute w-0.5 h-full bg-input top-0", {
+      className={cn("inline-block absolute w-0.5 h-full bg-line top-0", {
         "h-1/2": isFullHeight,
       })}
       style={{

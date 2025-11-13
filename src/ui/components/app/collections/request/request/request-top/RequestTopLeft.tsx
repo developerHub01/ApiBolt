@@ -61,13 +61,13 @@ const RequestTopLeft = () => {
   );
 
   return (
-    <div className="flex items-center gap-1">
-      <span className="bg-muted rounded-md px-3 py-1.5 select-none border-2 text-sm">
+    <div className="flex items-stretch gap-1">
+      <span className="bg-muted rounded-md px-3 py-1.5 select-none text-sm flex justify-center items-center">
         HTTP
       </span>
       <Input
-        className={cn("w-fit max-w-full", {
-          "border-transparent bg-transparent": !isFocused,
+        className={cn("w-fit h-auto max-w-full border-0", {
+          "bg-transparent": !isFocused,
         })}
         value={requestNameState}
         onChange={handleChange}

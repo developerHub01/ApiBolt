@@ -26,6 +26,7 @@ const initialState: ThemeInterface = {
     border: "#295a7e",
     input: "#001b29",
     ring: "#295a7e",
+    line: "#00416cb3",
   },
 };
 

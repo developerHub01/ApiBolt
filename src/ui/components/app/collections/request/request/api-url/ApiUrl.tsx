@@ -65,7 +65,7 @@ const ApiUrl = memo(() => {
     <form
       onSubmit={handleSubmit}
       className={cn(
-        "w-full flex p-2 rounded-md bg-accent/50 hover:bg-accent/60 focus-within:bg-accent/70 gap-1.5 border",
+        "w-full flex p-2 rounded-md bg-accent/50 hover:bg-accent/60 focus-within:bg-accent/70 gap-1.5",
         {
           "border-destructive/80": isError,
           "border-input/80": !isError,

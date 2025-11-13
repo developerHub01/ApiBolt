@@ -16,4 +16,5 @@ export type ThemeColorId =
   | "destructive"
   | "border"
   | "input"
-  | "ring";
+  | "ring"
+  | "line";
