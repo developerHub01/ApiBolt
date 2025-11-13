@@ -1,8 +1,6 @@
 export type ThemeColorId =
   | "background"
   | "foreground"
-  | "card"
-  | "card-foreground"
   | "popover"
   | "popover-foreground"
   | "primary"

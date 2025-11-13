@@ -10,8 +10,6 @@ const initialState: ThemeInterface = {
   palette: {
     background: "#000e14",
     foreground: "#fafafa",
-    card: "#001a2c",
-    "card-foreground": "#fafafa",
     popover: "#001a2c",
     "popover-foreground": "#fafafa",
     primary: "#e4e4e7",

@@ -20,7 +20,7 @@ const ActionButton = ({
 }: ActionButtonProps) => {
   const innerContent = () => (
     <Button
-      className={cn("w-full rounded-none justify-start", className)}
+      className={cn("w-full justify-start", className)}
       variant={"ghost"}
       onClick={onClick}
     >
