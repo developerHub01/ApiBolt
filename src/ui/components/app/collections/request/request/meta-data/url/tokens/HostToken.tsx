@@ -104,7 +104,7 @@ const HostToken = memo(({ hostType }: HostTokenProps) => {
       })}
     >
       <FlexibleHightButtonLikeDiv
-        className="flex-1 rounded-none"
+        className="flex-1 rounded-none justify-start"
         onClick={handleOutterClick}
       >
         {hostType !== "custom" ? (
