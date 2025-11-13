@@ -26,7 +26,7 @@ const Redirector = () => {
     let route = "";
     if (!activeProjectId) {
       route =
-        SIDEBAR_MENU_LIST.find((entry) => entry.id === "navigate_projects")
+        SIDEBAR_MENU_LIST.find((entry) => entry.id === sidebarActiveTab)
           ?.path ?? "/projects";
     } else if (
       sidebarActiveTab === "navigate_collections" &&

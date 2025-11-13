@@ -56,3 +56,8 @@ export const LOCAL_STORAGE_SIDEBAR_ACTIVE_TAB_KEY = "sidebar-active-tab";
 
 export const LOCAL_STORAGE_SIDEBAR_LAST_ACTIVE_TAB_KEY =
   "sidebar-last-active-tab";
+
+export const ALLOWED_TABS_WHEN_NO_ACTIVE_PROJECT = new Set<TSidebarTab>([
+  "navigate_projects",
+  "navigate_themes",
+]);

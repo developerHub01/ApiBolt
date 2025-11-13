@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import { handleChangeActiveTab } from "@/context/redux/sidebar/sidebar-slice";
 import type { TSidebarTab } from "@/types/sidebar.types";
+import { ALLOWED_TABS_WHEN_NO_ACTIVE_PROJECT } from "@/constant/sidebar.constant";
 
 export const loadActiveTab = createAsyncThunk<
   void,
@@ -36,13 +37,16 @@ export const changeActiveTab = createAsyncThunk<
 >("sidebar/changeActiveTab", async (tabId, { dispatch, getState }) => {
   try {
     const state = getState() as RootState;
+
     /**
      * =============== SAFTY POURPOSE MOSTLY NOT TRIGGER ================
      * - when no active project and if tab is other then projects then dont allow to set.
      */
     if (
       state.sidebar.activeTab === tabId ||
-      (!state.project.activeProjectId && tabId !== "navigate_projects")
+      /* when no project active then only allow allowedTabsWhenNoActiveProject */
+      (!state.project.activeProjectId &&
+        !ALLOWED_TABS_WHEN_NO_ACTIVE_PROJECT.has(tabId))
     )
       return;
 

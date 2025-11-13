@@ -39,7 +39,7 @@ const SidebarMenu = memo(() => {
 
   const handleClick = useCallback(
     async (id: TSidebarTab) => {
-      if (id === "navigate_collections" && activeTab === id) {
+      if ([id, activeTab].every((item) => item === "navigate_collections")) {
         dispatch(handleToggleRequestList());
         return;
       }
