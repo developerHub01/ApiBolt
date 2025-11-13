@@ -37,6 +37,7 @@ import { cookiesHandler } from "./ipc/cookiesHandler.js";
 import { generateKeyboardBindingsSeed } from "./seeders/keyboardShortcutSeed.js";
 import { keyboardShortcutHandler } from "./ipc/keyboardShortcutHandler.js";
 import { historyHandler } from "./ipc/historyHandler.js";
+import { generateThemesSeed } from "./seeders/themesSeed.js";
 
 export const userDataDir = app.getPath("userData");
 
@@ -115,6 +116,7 @@ app.whenReady().then(async () => {
   historyHandler();
   await generateHttpStatusSeed();
   await generateKeyboardBindingsSeed();
+  await generateThemesSeed();
 });
 
 app.on("window-all-closed", () => {

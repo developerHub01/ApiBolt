@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { boolean, uuid } from "drizzle-orm/gel-core";
+import { boolean } from "drizzle-orm/gel-core";
 import {
   int,
   integer,
@@ -14,6 +14,7 @@ export const ACTIVE_PROJECT_ID = "singleton";
 export const ACTIVE_SIDEBAR_TAB_ID = "singleton";
 export const ACTIVE_CODE_SNIPPIT_TYPE_ID = "singleton";
 export const API_URL_DEFAULT_VALUE = "http://localhost:3000";
+export const DEFAULT_THEME_ID = "polar_night";
 
 export const projectTable = sqliteTable("projects_table", {
   id: text("id")
@@ -435,3 +436,37 @@ export const historyTable = sqliteTable("history_table", {
     .notNull()
     .default(sql`(current_timestamp)`),
 });
+
+export const themeTable = sqliteTable("theme_table", {
+  id: text()
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  name: text(),
+  type: text() /* light | dark | custom */,
+  url: text().default(""),
+  author: text().default("system"),
+  thumbnail: text(),
+  palette: text().notNull(),
+  createdAt: text()
+    .notNull()
+    .default(sql`(current_timestamp)`),
+});
+
+export const activeThemeTable = sqliteTable(
+  "active_theme_table",
+  {
+    projectId: text().references(() => projectTable.id, {
+      onDelete: "cascade",
+    }),
+    activeTheme: text()
+      .notNull()
+      .references(() => themeTable.id, {
+        onDelete: "cascade",
+      }),
+  },
+  (table) => [
+    primaryKey({
+      columns: [table.projectId, table.activeTheme],
+    }),
+  ]
+);

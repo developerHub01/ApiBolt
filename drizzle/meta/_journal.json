@@ -64,6 +64,20 @@
       "when": 1762702448693,
       "tag": "0008_wild_blue_marvel",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1763031665017,
+      "tag": "0009_complex_stryfe",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1763034201246,
+      "tag": "0010_even_rhino",
+      "breakpoints": true
     }
   ]
 }
