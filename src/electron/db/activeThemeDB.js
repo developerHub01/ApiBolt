@@ -2,7 +2,10 @@ import { eq, isNull } from "drizzle-orm";
 import { db } from "./index.js";
 import { activeThemeTable, themeTable } from "./schema.js";
 import { getActiveProject } from "./projectsDB.js";
-import { defaultActiveThemePalette } from "../../data/themes.js";
+import {
+  defaultActiveThemeId,
+  defaultActiveThemePalette,
+} from "../../data/themes.js";
 
 export const getActiveThemeId = async () => {
   try {
@@ -15,12 +18,12 @@ export const getActiveThemeId = async () => {
       (
         await db
           .select({
-            id: activeThemeTable.id,
+            id: activeThemeTable.activeTheme,
           })
           .from(activeThemeTable)
           .where(isNull(activeThemeTable.projectId))
           .limit(1)
-      )?.[0]?.id ?? DEFAULT_THEME_ID;
+      )?.[0]?.id ?? defaultActiveThemeId;
 
     const activeProjectId = await getActiveProject();
 
@@ -28,7 +31,7 @@ export const getActiveThemeId = async () => {
       (
         await db
           .select({
-            id: activeThemeTable.id,
+            id: activeThemeTable.activeTheme,
           })
           .from(activeThemeTable)
           .where(eq(activeThemeTable.projectId, activeProjectId))
@@ -88,6 +91,35 @@ export const changeActiveTheme = async (payload = {}) => {
   try {
     if (!("projectId" in payload)) payload.projectId = null;
     if (!payload.activeTheme) return false;
+
+    const isAlreadyExist = Boolean(
+      (
+        await db
+          .select({
+            id: activeThemeTable.projectId,
+          })
+          .from(activeThemeTable)
+          .where(
+            payload.projectId
+              ? eq(activeThemeTable.projectId, payload.projectId)
+              : isNull(activeThemeTable.projectId)
+          )
+          .limit(1)
+      )?.[0]
+    );
+
+    if (isAlreadyExist) {
+      const updatePayload = { ...payload };
+      delete updatePayload["projectId"];
+      return await db
+        .update(activeThemeTable)
+        .set({ ...updatePayload })
+        .where(
+          payload.projectId
+            ? eq(activeThemeTable.projectId, payload.projectId)
+            : isNull(activeThemeTable.projectId)
+        );
+    }
 
     const result = await db.insert(activeThemeTable).values(payload);
     return result.changes > 0;

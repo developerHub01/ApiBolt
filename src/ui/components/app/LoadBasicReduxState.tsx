@@ -7,6 +7,7 @@ import { loadActiveTab } from "@/context/redux/sidebar/thunks/sidebar";
 import { loadCodeSnippitType } from "@/context/redux/request-response/thunks/code-snippit";
 import { loadProjectList } from "@/context/redux/project/thunks/projects";
 import { loadKeyboardShortcuts } from "@/context/redux/keyboard-shortcuts/thunks/keyboard-shortcuts";
+import { loadActiveThemeId } from "@/context/redux/theme/thunks/theme";
 
 const LoadBasicReduxState = () => {
   const dispatch = useAppDispatch();
@@ -14,6 +15,7 @@ const LoadBasicReduxState = () => {
   useEffect(() => {
     (async () => {
       await Promise.all([
+        dispatch(loadActiveThemeId()),
         dispatch(loadKeyboardShortcuts()),
         dispatch(loadCodeSnippitType()),
         dispatch(loadActiveTab()),

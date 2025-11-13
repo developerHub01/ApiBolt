@@ -2,6 +2,26 @@ import { eq } from "drizzle-orm";
 import { db } from "./index.js";
 import { themeTable } from "./schema.js";
 
+export const getThemeListMeta = async () => {
+  try {
+    const result = await db
+      .select({
+        id: themeTable.id,
+        name: themeTable.name,
+        type: themeTable.type,
+        url: themeTable.url,
+        author: themeTable.author,
+        thumbnail: themeTable.thumbnail,
+        createdAt: themeTable.createdAt,
+      })
+      .from(themeTable);
+
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const getThemeById = async (id) => {
   try {
     const result = (

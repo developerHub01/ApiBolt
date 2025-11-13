@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { boolean } from "drizzle-orm/gel-core";
+import { boolean, unique } from "drizzle-orm/gel-core";
 import {
   int,
   integer,
@@ -464,8 +464,8 @@ export const activeThemeTable = sqliteTable(
       }),
   },
   (table) => [
-    primaryKey({
-      columns: [table.projectId, table.activeTheme],
+    unique({
+      columns: [table.type, table.activeTheme],
     }),
   ]
 );

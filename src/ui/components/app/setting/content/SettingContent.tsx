@@ -11,6 +11,7 @@ import SettingLayout from "@/components/app/setting/content/layout/SettingLayout
 import SettingCode from "@/components/app/setting/content/code/SettingCode";
 import SettingBackground from "@/components/app/setting/content/background/SettingBackground";
 import SettingHttpStatus from "@/components/app/setting/content/http-status/SettingHttpStatus";
+import SettingTheme from "@/components/app/setting/content/theme/SettingTheme";
 
 const SettingContent = memo(() => {
   const { activeTab } = useSetting();
@@ -44,6 +45,7 @@ const SettingContent = memo(() => {
             <SettingLayout />
             <SettingCode />
             <SettingHttpStatus />
+            <SettingTheme />
           </Accordion>
         </motion.section>
       </AnimatedDialogContentScroll>

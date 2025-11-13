@@ -1,12 +1,20 @@
-import type { ThemeColorId } from "@/types/theme.types";
+import type {
+  ActiveThemeIdInterface,
+  ThemeColorId,
+  ThemeInterface,
+  ThemeMetaInterface,
+} from "@/types/theme.types";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-interface ThemeInterface {
+interface ThemeInitialInterface
+  extends Pick<ThemeInterface, "name" | "type" | "thumbnail"> {
   palette: Record<ThemeColorId, string>;
+  themeMetaList: Array<ThemeMetaInterface>;
+  activeThemeId: ActiveThemeIdInterface;
 }
 
 // Define the initial state using that type
-const initialState: ThemeInterface = {
+const initialState: ThemeInitialInterface = {
   palette: {
     background: "#000e14",
     foreground: "#fafafa",
@@ -26,6 +34,14 @@ const initialState: ThemeInterface = {
     ring: "#295a7e",
     line: "#00416cb3",
   },
+  name: "",
+  type: "dark",
+  thumbnail: "",
+  themeMetaList: [],
+  activeThemeId: {
+    global: "",
+    local: null,
+  },
 };
 
 export const themeSlice = createSlice({
@@ -41,12 +57,37 @@ export const themeSlice = createSlice({
       }>
     ) => {
       const { key, value } = action.payload;
-
       state.palette[key] = value;
+    },
+    handleLoadThemeMetaList: (
+      state,
+      action: PayloadAction<Array<ThemeMetaInterface>>
+    ) => {
+      state.themeMetaList = action.payload;
+    },
+    handleLoadActiveThemeId: (
+      state,
+      action: PayloadAction<ActiveThemeIdInterface>
+    ) => {
+      state.activeThemeId = action.payload;
+    },
+    handleUpdateActiveThemeId: (
+      state,
+      action: PayloadAction<Partial<ActiveThemeIdInterface>>
+    ) => {
+      state.activeThemeId = {
+        ...state.activeThemeId,
+        ...action.payload,
+      };
     },
   },
 });
 
-export const { handleChangeThemePalette } = themeSlice.actions;
+export const {
+  handleChangeThemePalette,
+  handleLoadThemeMetaList,
+  handleLoadActiveThemeId,
+  handleUpdateActiveThemeId,
+} = themeSlice.actions;
 
 export default themeSlice.reducer;

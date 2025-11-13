@@ -60,6 +60,8 @@ contextBridge.exposeInMainWorld("electronAPIZoom", {
 });
 
 contextBridge.exposeInMainWorld("electronAPITheme", {
+  getThemeListMeta: async (...payload) =>
+    await ipcRenderer.invoke("getThemeListMeta", ...payload),
   getThemeById: async (...payload) =>
     await ipcRenderer.invoke("getThemeById", ...payload),
   createTheme: async (...payload) =>

@@ -3,6 +3,7 @@ export const defaultThemeList = [
     id: "polar_night",
     name: "Polar Night",
     type: "dark",
+    thumbnail: "./theme-thumbnail/polar_night.png",
     palette: {
       background: "#000e14",
       foreground: "#fafafa",
@@ -24,9 +25,10 @@ export const defaultThemeList = [
     },
   },
   {
-    id: "mid-night",
+    id: "mid_night",
     name: "mid night",
     type: "dark",
+    thumbnail: "./theme-thumbnail/mid_night.png",
     palette: {
       background: "#000e14",
       foreground: "#fafafa",
@@ -48,5 +50,7 @@ export const defaultThemeList = [
     },
   },
 ];
+
+export const defaultActiveThemeId = defaultThemeList[0].id;
 
 export const defaultActiveThemePalette = defaultThemeList[0].palette;

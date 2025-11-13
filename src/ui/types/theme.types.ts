@@ -16,3 +16,36 @@ export type ThemeColorId =
   | "input"
   | "ring"
   | "line";
+
+export interface ThemeInterface {
+  id: string;
+  name: string;
+  type: "light" | "dark" | "custom";
+  url?: string;
+  author?: string;
+  thumbnail?: string;
+  palette: Record<ThemeColorId, string>;
+  createdAt?: string;
+}
+
+export type ThemeMetaInterface = Omit<ThemeInterface, "palette" | "createdAt">;
+
+export interface ActiveThemeInterface {
+  activeTheme: string;
+  projectId: string | null;
+}
+
+export type ThemeCreatePayloadInterface = Required<
+  Pick<ThemeInterface, "name" | "palette">
+> &
+  Partial<Pick<ThemeInterface, "type" | "thumbnail">>;
+
+export interface ActiveThemeIdInterface {
+  global: string;
+  local: string | null;
+}
+
+export interface ActiveThemePaletteInterface {
+  global: ThemeInterface;
+  local: ThemeInterface | null;
+}

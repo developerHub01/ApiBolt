@@ -49,6 +49,14 @@ import type {
   HistoryItemInterface,
   HistoryItemMetaInterface,
 } from "@/types/history.types";
+import type {
+  ActiveThemeIdInterface,
+  ActiveThemeInterface,
+  ActiveThemePaletteInterface,
+  ThemeCreatePayloadInterface,
+  ThemeInterface,
+  ThemeMetaInterface,
+} from "@/types/theme.types";
 
 declare global {
   interface Window {
@@ -87,6 +95,22 @@ declare global {
     electronAPIZoom: {
       setZoom: (factor: number) => Promise<void>;
       getZoom: () => Promise<number>;
+    };
+
+    electronAPITheme: {
+      getThemeListMeta(): Promise<Array<ThemeMetaInterface>>;
+      getThemeById(id: string): Promise<ThemeInterface>;
+      createTheme(payload: ThemeCreatePayloadInterface): Promise<boolean>;
+      updateTheme(
+        payload: Partial<ThemeCreatePayloadInterface>
+      ): Promise<boolean>;
+      deleteThemeById(id: string): Promise<boolean>;
+    };
+
+    electronAPIActiveTheme: {
+      getActiveThemeId(): Promise<ActiveThemeIdInterface>;
+      getActiveThemePalette(): Promise<ActiveThemePaletteInterface>;
+      changeActiveTheme(payload: ActiveThemeInterface): Promise<boolean>;
     };
 
     electronAPIHttpStatusDB: {
