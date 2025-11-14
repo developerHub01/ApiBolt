@@ -50,7 +50,7 @@ const CookieEditor = memo(
                   key={key}
                   className={cn(
                     "[&>td]:border-r [&>td]:last:border-r-0",
-                    "focus-within:bg-accent/60 duration-75 transition-colors"
+                    "focus-within:bg-accent/60 hover:bg-accent/60 duration-75 transition-colors"
                   )}
                 >
                   <TableCell className="font-bold whitespace-normal wrap-break-word break-all capitalize p-3">

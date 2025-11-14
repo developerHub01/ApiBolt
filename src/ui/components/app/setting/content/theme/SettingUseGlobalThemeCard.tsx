@@ -7,7 +7,6 @@ const SettingUseGlobalThemeCard = memo(() => {
   const { localThemeId, handleChangeActiveTheme } = useSettingTheme();
 
   const isActive = !localThemeId;
-  console.log({ isActive, localThemeId });
 
   const handleClick = () => {
     if (isActive) return;

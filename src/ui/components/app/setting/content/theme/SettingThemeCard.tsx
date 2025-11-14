@@ -64,7 +64,12 @@ const SettingThemeCard = memo(
           <Badge variant={"outline"} className="capitalize">
             {type}
           </Badge>
-          <Button size="iconXs" variant={"ghost"} className="rounded-full">
+          <Button
+            size="iconXs"
+            variant={"ghost"}
+            className="rounded-full"
+            onClick={(e) => e.stopPropagation()}
+          >
             <LinkArrowIcon />
           </Button>
         </div>
