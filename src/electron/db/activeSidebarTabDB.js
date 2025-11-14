@@ -1,6 +1,10 @@
 import { eq } from "drizzle-orm";
 import { db } from "./index.js";
-import { ACTIVE_SIDEBAR_TAB_ID, activeSidebarTabTable } from "./schema.js";
+import {
+  ACTIVE_SIDEBAR_TAB_ID,
+  activeSidebarTabTable,
+  DEFAULT_ACTIVE_SIDEBAR_TAB,
+} from "./schema.js";
 
 export const getActiveSidebarTab = async () => {
   try {
@@ -13,7 +17,7 @@ export const getActiveSidebarTab = async () => {
     if (tab) return tab;
 
     await createActiveSidebarTab();
-    return "project";
+    return DEFAULT_ACTIVE_SIDEBAR_TAB;
   } catch (error) {
     console.error(error);
   }

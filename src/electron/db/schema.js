@@ -14,6 +14,7 @@ export const ACTIVE_PROJECT_ID = "singleton";
 export const ACTIVE_SIDEBAR_TAB_ID = "singleton";
 export const ACTIVE_CODE_SNIPPIT_TYPE_ID = "singleton";
 export const API_URL_DEFAULT_VALUE = "http://localhost:3000";
+export const DEFAULT_ACTIVE_SIDEBAR_TAB = "navigate_projects";
 
 export const projectTable = sqliteTable("projects_table", {
   id: text("id")
@@ -43,13 +44,10 @@ export const cookiesTable = sqliteTable("cookies_table", {
   cookies: text(),
 });
 
-export const activeSidebarTabTable = sqliteTable(
-  "active_active_sidebar_tab_table",
-  {
-    id: text().primaryKey().default(ACTIVE_SIDEBAR_TAB_ID),
-    tab: text().default("project"),
-  }
-);
+export const activeSidebarTabTable = sqliteTable("active_sidebar_tab_table", {
+  id: text().primaryKey().default(ACTIVE_SIDEBAR_TAB_ID),
+  tab: text().default(DEFAULT_ACTIVE_SIDEBAR_TAB),
+});
 
 export const activeCodeSnippitTypeTable = sqliteTable(
   "active_code_snippit_type_table",
