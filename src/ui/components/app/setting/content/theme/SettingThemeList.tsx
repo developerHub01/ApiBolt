@@ -15,7 +15,7 @@ const SettingThemeList = () => {
   if (!isLoaded) return <h1>loading....</h1>;
 
   return (
-    <section className="w-full h-full grid grid-cols-2 md:grid-cols-3 gap-2.5">
+    <section className="w-full h-full grid grid-cols-2 md:grid-cols-3 gap-5">
       {activeTab === "project" && <SettingUseGlobalThemeCard />}
       {metaList.map((meta) => (
         <SettingThemeCard key={meta.id} {...meta} />

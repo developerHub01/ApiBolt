@@ -27,10 +27,11 @@ const SettingThemeCardWrapper = ({
         damping: 20,
       }}
       className={cn(
-        "w-full flex flex-col gap-2 rounded-xl bg-transparent hover:bg-secondary/30 transition-all duration-100 cursor-pointer",
+        "w-full flex flex-col gap-2 rounded-xl bg-transparent cursor-pointer",
+        "hover:bg-secondary/30 transition-all duration-100",
         "ring-offset-1",
         {
-          "bg-secondary/40 ring-1": isActive,
+          "bg-secondary/60 shadow-2xl": isActive,
         },
         className
       )}

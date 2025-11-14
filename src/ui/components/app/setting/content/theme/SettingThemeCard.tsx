@@ -10,19 +10,22 @@ import {
 import { cn } from "@/lib/utils";
 import { useSettingTheme } from "@/context/setting/theme/SettingThemeProvider";
 import SettingThemeCardWrapper from "@/components/app/setting/content/theme/SettingThemeCardWrapper";
+import { useSetting } from "@/context/setting/SettingProvider";
 
 const SettingThemeCard = memo(
   ({ id, thumbnail, name, type, author }: ThemeMetaInterface) => {
     const { activeThemeId, localThemeId, handleChangeActiveTheme } =
       useSettingTheme();
+    const { activeTab } = useSetting();
     const isActive = activeThemeId === id;
     /**
      * if the active theme coming from global because of non-existing of local active theme
      */
-    const isSemiActive = isActive && !localThemeId;
+    const isInheritedFrom =
+      isActive && !localThemeId && activeTab === "project";
 
     const handleClick = () => {
-      if (isActive !== isSemiActive) return;
+      if (isActive && !isInheritedFrom) return;
       handleChangeActiveTheme(id);
     };
 
@@ -31,9 +34,8 @@ const SettingThemeCard = memo(
         isActive={isActive}
         key={id}
         className={cn({
-          "bg-secondary/30 ring-1": isActive,
-          "ring-ring": isActive,
-          "ring-ring/5": isSemiActive,
+          "bg-secondary/30": isActive,
+          "ring-1 ring-ring": isActive && !isInheritedFrom,
         })}
         onClick={handleClick}
       >
@@ -55,9 +57,9 @@ const SettingThemeCard = memo(
           )}
         </div>
         <h4 className="capitalize text-base font-medium">{name}</h4>
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1.5 capitalize text-muted-foreground text-sm">
           {Boolean(author) && (
-            <p className="inline-flex items-center gap-1 mr-auto text-sm">
+            <p className="inline-flex items-center gap-1 mr-auto">
               <UserIcon size={14} /> {author}
             </p>
           )}
