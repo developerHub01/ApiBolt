@@ -28,7 +28,7 @@ const KeyboardKeyCellContent = memo(
     ];
 
     return (
-      <div className="w-full flex items-center">
+      <div className="w-full flex items-center gap-1">
         <KeyboardKeyList keyMap={keyMap} />
         {actionList.map(({ id, Icon, label, onClick }) => (
           <Button

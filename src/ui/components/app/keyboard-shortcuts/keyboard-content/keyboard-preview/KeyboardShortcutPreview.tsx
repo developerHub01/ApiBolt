@@ -16,26 +16,28 @@ const KeyboardShortcutPreview = () => {
   return (
     <>
       {searchResultCount ? (
-        <Table className="w-full border table-fixed overflow-hidden relative">
-          <TableHeader className="bg-accentbg-secondary/80 font-bold sticky">
-            <TableRow className="[&>th]:border-r [&>th]:last:border-r-0">
-              {["Action", "Keyboard Shortcut"].map((label) => (
-                <TableHead className="whitespace-normal p-3 capitalize">
-                  {label}
-                </TableHead>
+        <div className="w-full h-full border rounded-lg">
+          <Table className="w-full table-fixed overflow-hidden relative">
+            <TableHeader className="bg-accentbg-secondary/80 font-bold sticky">
+              <TableRow className="[&>th]:border-r [&>th]:last:border-r-0">
+                {["Action", "Keyboard Shortcut"].map((label) => (
+                  <TableHead className="whitespace-normal p-3 capitalize">
+                    {label}
+                  </TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {(
+                Object.entries(searchResult) as Array<
+                  [string, KeybaordShortCutInterface]
+                >
+              ).map(([id, { key, ...rest }]) => (
+                <KeyboardShortcutsRow key={id} {...rest} keyMap={key} />
               ))}
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {(
-              Object.entries(searchResult) as Array<
-                [string, KeybaordShortCutInterface]
-              >
-            ).map(([id, { key, ...rest }]) => (
-              <KeyboardShortcutsRow key={id} {...rest} keyMap={key} />
-            ))}
-          </TableBody>
-        </Table>
+            </TableBody>
+          </Table>
+        </div>
       ) : (
         <Empty
           className="min-h-60"

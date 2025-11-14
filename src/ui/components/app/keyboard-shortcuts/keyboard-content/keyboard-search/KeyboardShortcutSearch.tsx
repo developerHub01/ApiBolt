@@ -89,7 +89,7 @@ const KeyboardShortcutSearch = () => {
 
   return (
     <div className="w-full px-3 py-2">
-      <div className="w-full rounded-md flex items-center border-2 border-secondary focus-within:border-primary/50 transition-colors duration-100">
+      <div className="w-full rounded-lg flex items-center border-2 border-secondary focus-within:border-primary/50 transition-colors duration-100">
         <div className="flex-1 h-full items-center">
           {searchByType === "keyboard" ? (
             <KeyboardKeyboardSearchBar />
