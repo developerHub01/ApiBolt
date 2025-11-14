@@ -124,6 +124,31 @@ export const defaultThemeList = [
       line: "#485265",
     },
   },
+  {
+    id: "carbon_frost",
+    name: "carbon frost",
+    type: "dark",
+    thumbnail: "./theme-thumbnail/carbon_frost.png",
+    palette: {
+      background: "#111111",
+      foreground: "#fafafa",
+      popover: "#1c1c21",
+      "popover-foreground": "#fafafa",
+      primary: "#e4e4e7",
+      "primary-foreground": "#111111",
+      secondary: "#232323",
+      "secondary-foreground": "#fafafa",
+      muted: "#343434",
+      "muted-foreground": "#9f9fa9",
+      accent: "#1c1c21",
+      "accent-foreground": "#fafafa",
+      destructive: "#cb1b16",
+      border: "#2f3037",
+      input: "#575757",
+      ring: "#575757",
+      line: "#464646",
+    },
+  },
 ];
 
 export const defaultActiveThemeId = defaultThemeList[0].id;
