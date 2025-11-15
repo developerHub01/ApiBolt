@@ -1,4 +1,4 @@
-import { app } from "electron";
+import { app, shell } from "electron";
 import { createMainWindow } from "./utils/mainWindow.js";
 import { createSplashWindow } from "./utils/splashWindow.js";
 import { wrapper } from "axios-cookiejar-support";
@@ -40,6 +40,7 @@ import { historyHandler } from "./ipc/historyHandler.js";
 import { generateThemesSeed } from "./seeders/themesSeed.js";
 import { themeHandler } from "./ipc/themeHandler.js";
 import { activeThemeHandler } from "./ipc/activeThemeHandler.js";
+import { handleExternalUrl } from "./utils/externalUrl.js";
 
 export const userDataDir = app.getPath("userData");
 
@@ -53,8 +54,8 @@ if (electronSquirrelStartup) {
   app.quit();
 }
 
-let splashWindow = null;
-let mainWindow = null;
+export let splashWindow = null;
+export let mainWindow = null;
 
 app.whenReady().then(async () => {
   splashWindow = createSplashWindow();
@@ -85,6 +86,11 @@ app.whenReady().then(async () => {
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0)
       mainWindow = createMainWindow();
+  });
+
+  mainWindow?.webContents.setWindowOpenHandler((details) => {
+    handleExternalUrl(details.url); // Open the URL in the user's default browser
+    return { action: "deny" }; // Prevent the Electron app from opening the URL
   });
 
   httpStatusHandler();

@@ -11,9 +11,10 @@ import { cn } from "@/lib/utils";
 import { useSettingTheme } from "@/context/setting/theme/SettingThemeProvider";
 import SettingThemeCardWrapper from "@/components/app/setting/content/theme/SettingThemeCardWrapper";
 import { useSetting } from "@/context/setting/SettingProvider";
+import { Link } from "react-router-dom";
 
 const SettingThemeCard = memo(
-  ({ id, thumbnail, name, type, author }: ThemeMetaInterface) => {
+  ({ id, thumbnail, name, type, author, url }: ThemeMetaInterface) => {
     const { activeThemeId, localThemeId, handleChangeActiveTheme } =
       useSettingTheme();
     const { activeTab } = useSetting();
@@ -66,14 +67,18 @@ const SettingThemeCard = memo(
           <Badge variant={"outline"} className="capitalize">
             {type}
           </Badge>
-          <Button
-            size="iconXs"
-            variant={"ghost"}
-            className="rounded-full"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <LinkArrowIcon />
-          </Button>
+          {Boolean(url) && (
+            <Link rel="noopener" title="link" to={url!} target="_blank">
+              <Button
+                size="iconXs"
+                variant={"ghost"}
+                className="rounded-full"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <LinkArrowIcon />
+              </Button>
+            </Link>
+          )}
         </div>
       </SettingThemeCardWrapper>
     );
