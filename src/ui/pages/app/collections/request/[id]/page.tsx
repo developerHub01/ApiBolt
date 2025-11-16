@@ -2,7 +2,7 @@ import ApiUrl from "@/components/app/collections/request/request/api-url/ApiUrl"
 import MetaDataTab from "@/components/app/collections/request/request/meta-data/MetaDataTab";
 import RequestTop from "@/components/app/collections/request/request/request-top/RequestTop";
 import RequestPanel from "@/components/app/collections/request/request/RequestPanel";
-import ResizableWrapper from "@/components/app/collections/request/ResizableWrapper";
+import RequestResizableWrapper from "@/components/app/collections/request/RequestResizableWrapper";
 import ResponsePanel from "@/components/app/collections/request/response/ResponsePanel";
 import { ResizableHandle } from "@/components/ui/resizable";
 
@@ -14,11 +14,11 @@ const RequestPage = () => {
         <ApiUrl />
         <MetaDataTab />
       </div>
-      <ResizableWrapper>
+      <RequestResizableWrapper>
         <RequestPanel />
         <ResizableHandle />
         <ResponsePanel />
-      </ResizableWrapper>
+      </RequestResizableWrapper>
     </div>
   );
 };

@@ -5,11 +5,13 @@ import { useAppSelector } from "@/context/redux/hooks";
 import { useRequestResponse } from "@/context/collections/request/RequestResponseProvider";
 import { selectIsResponseCollapsed } from "@/context/redux/request-response/selectors/response";
 
-interface ResizableWrapperProps {
+interface RequestResizableWrapperProps {
   children: React.ReactNode;
 }
 
-const ResizableWrapper = ({ children }: ResizableWrapperProps) => {
+const RequestResizableWrapper = ({
+  children,
+}: RequestResizableWrapperProps) => {
   const panelGroupRef = useRef<ImperativePanelGroupHandle>(null);
   const isResponseCollapsed = useAppSelector(selectIsResponseCollapsed);
   const { forceCollapse, handleForceCollapse } = useRequestResponse();
@@ -40,4 +42,4 @@ const ResizableWrapper = ({ children }: ResizableWrapperProps) => {
   );
 };
 
-export default ResizableWrapper;
+export default RequestResizableWrapper;
