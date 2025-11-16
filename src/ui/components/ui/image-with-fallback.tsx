@@ -13,8 +13,8 @@ const ImageWithFallback = ({
   fallback,
   ...props
 }: Props) => {
-  const [srcState, setSrcState] = useState<string>(src);
   const defaultImage = fallback ?? DEFAULT_PLACEHOLDER_URL;
+  const [srcState, setSrcState] = useState<string>(src || defaultImage);
 
   const handleError = () => {
     if (srcState === defaultImage) return;

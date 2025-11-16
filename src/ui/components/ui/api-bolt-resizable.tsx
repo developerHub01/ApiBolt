@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef } from "react";
+import { memo, useEffect, useRef, type CSSProperties } from "react";
 import type {
   ImperativePanelGroupHandle,
   ImperativePanelHandle,
@@ -47,6 +47,10 @@ interface ApiBoltResizableLeftPanelProps {
   isCollapsed: boolean;
   handleCollapse: () => void;
   children: React.ReactNode;
+  style?: CSSProperties;
+  defaultSize?: number;
+  minSize?: number;
+  maxSize?: number;
 }
 
 const ApiBoltResizableLeftPanel = memo(
@@ -54,6 +58,10 @@ const ApiBoltResizableLeftPanel = memo(
     isCollapsed,
     handleCollapse,
     children,
+    style = {},
+    defaultSize = 30,
+    minSize = 20,
+    maxSize = 50,
   }: ApiBoltResizableLeftPanelProps) => {
     const isSmallDevice = useIsSmallDevice(951);
     const resizablePanelRef = useRef<ImperativePanelHandle>(null);
@@ -80,15 +88,16 @@ const ApiBoltResizableLeftPanel = memo(
     return (
       <ResizablePanel
         collapsible
-        defaultSize={30}
-        minSize={20}
-        maxSize={40}
+        defaultSize={defaultSize}
+        minSize={minSize}
+        maxSize={maxSize}
         className={cn("backdrop-blur-xs w-full bg-background/30 border-r-4", {
           // "border-r-4 border-l-0": layoutTypes === "ltr",
           // "border-l-4 border-r-0": layoutTypes === "rtl",
         })}
         style={{
-          maxWidth: "40vw",
+          maxWidth: "50vw",
+          ...style,
         }}
         ref={resizablePanelRef}
       >

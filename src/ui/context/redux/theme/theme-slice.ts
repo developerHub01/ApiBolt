@@ -8,6 +8,7 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 interface ThemeInitialInterface
   extends Pick<ThemeInterface, "name" | "type" | "thumbnail"> {
+  isThemeListCollapsed: boolean;
   palette: Record<ThemeColorId, string>;
   themeMetaList: Array<ThemeMetaInterface>;
   activeThemeId: ActiveThemeIdInterface;
@@ -15,6 +16,7 @@ interface ThemeInitialInterface
 
 // Define the initial state using that type
 const initialState: ThemeInitialInterface = {
+  isThemeListCollapsed: false,
   palette: {
     background: "#000e14",
     foreground: "#fafafa",
@@ -49,6 +51,13 @@ export const themeSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
+    handleToggleThemeListCollapsed: (
+      state,
+      action: PayloadAction<boolean | undefined>
+    ) => {
+      state.isThemeListCollapsed =
+        action.payload ?? !state.isThemeListCollapsed;
+    },
     handleChangeThemePalette: (
       state,
       action: PayloadAction<{
@@ -84,6 +93,7 @@ export const themeSlice = createSlice({
 });
 
 export const {
+  handleToggleThemeListCollapsed,
   handleChangeThemePalette,
   handleLoadThemeMetaList,
   handleLoadActiveThemeId,
