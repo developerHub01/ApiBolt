@@ -7,11 +7,14 @@ import {
   ArrowUpRight as LinkArrowIcon,
   User as UserIcon,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { useSettingTheme } from "@/context/setting/theme/SettingThemeProvider";
 import SettingThemeCardWrapper from "@/components/app/setting/content/theme/SettingThemeCardWrapper";
 import { useSetting } from "@/context/setting/SettingProvider";
 import { Link } from "react-router-dom";
+import ImageWithFallback from "@/components/ui/image-with-fallback";
+
+const DEFAULT_THUMBNAIL_FALLBACK =
+  "./theme-thumbnail/theme_thumbnail_placeholder.png";
 
 const SettingThemeCard = memo(
   ({ id, thumbnail, name, type, author, url }: ThemeMetaInterface) => {
@@ -32,23 +35,17 @@ const SettingThemeCard = memo(
 
     return (
       <SettingThemeCardWrapper
-        isActive={isActive}
         key={id}
-        className={cn({
-          "bg-secondary/30": isActive,
-          "ring-1 ring-ring": isActive && !isInheritedFrom,
-        })}
+        isActive={isActive}
+        isInheritedFrom={isInheritedFrom}
         onClick={handleClick}
       >
-        <div
-          className={cn(
-            "w-full aspect-square bg-accent rounded-xl overflow-hidden border"
-          )}
-        >
+        <div className="w-full aspect-square bg-accent rounded-xl overflow-hidden border">
           {thumbnail ? (
-            <img
+            <ImageWithFallback
               src={thumbnail}
               alt={`${name}_thumbnail`}
+              fallback={DEFAULT_THUMBNAIL_FALLBACK}
               className="w-full h-full object-cover"
             />
           ) : (

@@ -1,8 +1,9 @@
-import { cn } from "@/lib/utils";
 import { motion, type HTMLMotionProps } from "motion/react";
+import { cn } from "@/lib/utils";
 
 interface Props extends HTMLMotionProps<"div"> {
   isActive: boolean;
+  isInheritedFrom?: boolean;
   children: React.ReactNode;
 }
 
@@ -10,6 +11,7 @@ const SettingThemeCardWrapper = ({
   isActive,
   children,
   className,
+  isInheritedFrom = false,
   ...props
 }: Props) => {
   return (
@@ -28,10 +30,10 @@ const SettingThemeCardWrapper = ({
       }}
       className={cn(
         "w-full flex flex-col gap-2 rounded-xl bg-transparent cursor-pointer",
-        "hover:bg-secondary/30 transition-all duration-100",
-        "ring-offset-1",
+        "hover:bg-secondary/40 transition-all duration-100",
         {
-          "bg-secondary/60 shadow-2xl": isActive,
+          "bg-secondary/80 shadow-2xl": isActive,
+          "ring-ring ring-offset-2 ring-0": isActive && !isInheritedFrom,
         },
         className
       )}
