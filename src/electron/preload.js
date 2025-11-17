@@ -1,5 +1,11 @@
 const { contextBridge, ipcRenderer, webFrame } = require("electron");
 
+const handleApplyThemeInDocument = (theme) => {
+  Object.entries(theme).forEach(([key, value]) => {
+    document.documentElement.style.setProperty(`--${key}`, value);
+  });
+};
+
 const handleApplyTheme = async () => {
   try {
     const activeTheme = await ipcRenderer.invoke("getActiveThemePalette");
@@ -8,9 +14,7 @@ const handleApplyTheme = async () => {
       ...(activeTheme.local ?? {}),
     };
 
-    Object.entries(theme).forEach(([key, value]) => {
-      document.documentElement.style.setProperty(`--${key}`, value);
-    });
+    handleApplyThemeInDocument(theme);
   } catch (error) {
     console.error(error);
   }
@@ -62,6 +66,9 @@ contextBridge.exposeInMainWorld("electronAPI", {
    */
   applyTheme: async () => {
     return await handleApplyTheme();
+  },
+  applyTestTheme: (theme) => {
+    return handleApplyThemeInDocument(theme);
   },
 });
 

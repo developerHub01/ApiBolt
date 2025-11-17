@@ -91,6 +91,7 @@ declare global {
        * trigger when theme changed
        */
       applyTheme(): Promise<void>;
+      applyTestTheme(palette: ThemeInterface["palette"]): Promise<void>;
     };
 
     electronFileSystem: {

@@ -118,10 +118,7 @@ export const pasteThemePalette = createAsyncThunk<
 >("theme/pasteThemePalette", async (_, { dispatch, getState }) => {
   try {
     const payloadString = await window.navigator.clipboard.readText();
-    console.log({ payloadString });
     const payload = JSON.parse(payloadString);
-
-    console.log({ payload });
 
     if (Object.values(payload).some((item) => !isValidColor(item as string))) {
       return {
@@ -147,12 +144,40 @@ export const pasteThemePalette = createAsyncThunk<
       updatePayload[item] = color;
     });
 
-    console.log({ updatePayload });
-
     dispatch(handleReplaceThemePalette(updatePayload));
     return {
       success: true,
       message: "Theme palette pasted successfully.",
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: "Not valid palette.",
+    };
+  }
+});
+
+export const applyTestTheme = createAsyncThunk<
+  {
+    success: boolean;
+    message?: string;
+  },
+  void,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("theme/applyTestTheme", async (_, { getState }) => {
+  try {
+    const state = getState() as RootState;
+    const palette = state.theme.palette;
+
+    window.electronAPI.applyTestTheme(palette);
+
+    return {
+      success: true,
+      message: "Theme palette applied.",
     };
   } catch (error) {
     console.error(error);
