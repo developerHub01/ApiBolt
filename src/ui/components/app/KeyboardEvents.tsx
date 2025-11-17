@@ -17,6 +17,8 @@ import { handleChangeIsKeyboardShortcutPanelOpen } from "@/context/redux/keyboar
 import { changeHeaderIsOpen as changeHeaderSearchIsOpen } from "@/context/redux/header/thunks/header";
 import type { TKeyboardShortcutKey } from "@/types/setting.types";
 import { MODIFIER_KEY_TRACK_ORDER } from "@/constant/keyboard-shortcut.constant";
+import { selectSidebarActiveTab } from "@/context/redux/sidebar/selectors/sidebar";
+import { handleToggleThemeListCollapsed } from "@/context/redux/theme/theme-slice";
 
 const KeyboardEvents = () => {
   const dispatch = useAppDispatch();
@@ -26,6 +28,7 @@ const KeyboardEvents = () => {
     selectApplyingKeyboardShortcutsStrFormated
   );
   const isActivityBarVisible = useCheckApplyingLayoutActivityBarVisible();
+  const activeSidebarTab = useAppSelector(selectSidebarActiveTab);
 
   useEffect(() => {
     const handler = async (e: KeyboardEvent) => {
@@ -64,6 +67,14 @@ const KeyboardEvents = () => {
         }
         case "toggle_sidebar": {
           e.preventDefault();
+          switch (activeSidebarTab) {
+            case "navigate_collections":
+              dispatch(handleToggleRequestList());
+              return;
+            case "navigate_themes":
+              dispatch(handleToggleThemeListCollapsed());
+              return;
+          }
           return dispatch(handleToggleRequestList());
         }
         case "toggle_fullscreen": {
@@ -115,6 +126,7 @@ const KeyboardEvents = () => {
     isActivityBarVisible,
     toggleFullscreen,
     keybindingMap,
+    activeSidebarTab,
   ]);
 
   return null;

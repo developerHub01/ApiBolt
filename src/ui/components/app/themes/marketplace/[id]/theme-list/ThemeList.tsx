@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { ScrollAreaInnerFlexView } from "@/components/ui/scroll-area";
-import ThemeCard from "@/components/app/themes/marketplace/[id]/ThemeCard";
+import ThemeCard from "@/components/app/themes/marketplace/[id]/theme-list/ThemeCard";
 
 const ThemeList = memo(() => {
   return (

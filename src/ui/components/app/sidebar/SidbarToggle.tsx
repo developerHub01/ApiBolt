@@ -12,9 +12,11 @@ import {
 } from "@/components/ui/tooltip-custom";
 import { selectApplyingKeyboardShortcutsById } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
 import { keyListStringify } from "@/utils/keyboard-shortcut.utils";
+import { handleToggleThemeListCollapsed } from "@/context/redux/theme/theme-slice";
+import { SIDEBAR_TOGGLE_BUTTON_ALLOWED_IDS } from "@/constant/sidebar.constant";
 
 const SidbarToggle = memo(() => {
-  const dispath = useAppDispatch();
+  const dispatch = useAppDispatch();
   const activeTab = useAppSelector(selectSidebarActiveTab);
   const shortcut = useAppSelector((state) =>
     selectApplyingKeyboardShortcutsById(state, "toggle_sidebar")
@@ -25,14 +27,20 @@ const SidbarToggle = memo(() => {
       ? ` (${keyListStringify(shortcut)})`
       : "";
 
-  const handleCollapse = useCallback(
-    () => dispath(handleToggleRequestList()),
-    [dispath]
-  );
+  const handleCollapse = useCallback(() => {
+    switch (activeTab) {
+      case "navigate_collections":
+        dispatch(handleToggleRequestList());
+        return;
+      case "navigate_themes":
+        dispatch(handleToggleThemeListCollapsed());
+        return;
+    }
+  }, [activeTab, dispatch]);
 
   return (
     <AnimatePresence>
-      {activeTab === "navigate_collections" && (
+      {SIDEBAR_TOGGLE_BUTTON_ALLOWED_IDS.has(activeTab) && (
         <motion.span
           key="toggle-collection-list"
           initial={{

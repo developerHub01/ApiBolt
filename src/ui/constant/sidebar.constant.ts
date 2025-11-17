@@ -61,3 +61,9 @@ export const ALLOWED_TABS_WHEN_NO_ACTIVE_PROJECT = new Set<TSidebarTab>([
   "navigate_projects",
   "navigate_themes",
 ]);
+
+
+export const SIDEBAR_TOGGLE_BUTTON_ALLOWED_IDS = new Set<TSidebarTab>([
+  "navigate_collections",
+  "navigate_themes",
+]);

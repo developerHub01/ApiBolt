@@ -29,9 +29,7 @@ const ThemeCard = memo(({ id }: Props) => {
         </div>
         <div className="w-full flex-1 flex-col gap-1.5">
           <div className="w-full flex gap-1">
-            <p className="flex-1 line-clamp-1 font-medium">
-              Theme name
-            </p>
+            <p className="flex-1 line-clamp-1 font-medium">Theme name</p>
             <span className="flex items-center gap-0.5 text-xs">
               <DownloadIcon size={12} /> 50
             </span>
@@ -42,12 +40,7 @@ const ThemeCard = memo(({ id }: Props) => {
             expedita velit? Illum expedita quod veniam neque ratione quisquam
             molestias quam consequatur minus!
           </p>
-          <Link
-            to={"https://jsonplaceholder.typicode.com/"}
-            className="font-semibold text-xs py-0.5"
-          >
-            author
-          </Link>
+          <p className="font-semibold text-xs py-0.5">author</p>
         </div>
       </div>
     </Link>
