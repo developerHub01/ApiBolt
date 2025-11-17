@@ -22,6 +22,7 @@ const ThemeListPanelWrapper = memo(() => {
       style={{
         maxWidth: "50vw",
       }}
+      minSize={25}
       defaultSize={45}
     >
       <div className="w-full flex flex-col h-full gap-1">

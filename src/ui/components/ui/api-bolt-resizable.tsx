@@ -65,7 +65,6 @@ const ApiBoltResizableLeftPanel = memo(
   }: ApiBoltResizableLeftPanelProps) => {
     const isSmallDevice = useIsSmallDevice(951);
     const resizablePanelRef = useRef<ImperativePanelHandle>(null);
-    // const layoutTypes: TLayoutSetting = useCheckApplyingLayoutDirection();
 
     useEffect(() => {
       const panel = resizablePanelRef.current;
