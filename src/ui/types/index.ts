@@ -110,6 +110,8 @@ declare global {
         payload: Partial<ThemeCreatePayloadInterface>
       ): Promise<boolean>;
       deleteThemeById(id: string): Promise<boolean>;
+
+      saveThemePalette(palette: ThemeInterface["palette"]): Promise<boolean>;
     };
 
     electronAPIActiveTheme: {

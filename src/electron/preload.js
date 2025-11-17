@@ -85,6 +85,8 @@ contextBridge.exposeInMainWorld("electronAPITheme", {
     await ipcRenderer.invoke("updateTheme", ...payload),
   deleteThemeById: async (...payload) =>
     await ipcRenderer.invoke("deleteThemeById", ...payload),
+  saveThemePalette: async (...payload) =>
+    await ipcRenderer.invoke("saveThemePalette", ...payload),
 });
 
 contextBridge.exposeInMainWorld("electronAPIActiveTheme", {

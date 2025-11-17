@@ -1,4 +1,4 @@
-import ThemeEditorPanel from "@/components/app/themes/editor/ThemeEditorPanel";
+import ThemeEditorPanel from "@/components/app/themes/editor/editor-panel/ThemeEditorPanel";
 import ThemeEditorTop from "@/components/app/themes/editor/ThemeEditorTop";
 import ThemeEditorBottom from "@/components/app/themes/editor/ThemeEditorBottom";
 

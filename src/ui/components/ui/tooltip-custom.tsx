@@ -18,6 +18,8 @@ const tooltipVariants = cva(tooltipBaseClass, {
       outline:
         "border bg-background shadow-xs dark:bg-input/30 dark:border-input",
       secondary: "bg-secondary text-secondary-foreground shadow-xs",
+      background: "bg-background text-background-foreground shadow-xs",
+      accent: "bg-accent text-accent-foreground shadow-xs",
       warningSecondary:
         "bg-amber-500/30 border border-amber-500/50 text-secondary-foreground shadow-xs",
       destructiveSecondary:
@@ -41,6 +43,9 @@ const tooltipArrowVariants = cva(tooltipArrowBaseClass, {
       outline: "bg-background fill-background",
       secondary:
         "bg-secondary fill-secondary text-secondary-foreground shadow-xs",
+      background:
+        "bg-background fill-background text-background-foreground shadow-xs",
+      accent: "bg-accent fill-accent text-accent-foreground shadow-xs",
       warningSecondary: "bg-amber-500/30 fill-bg-amber-500/30",
       destructiveSecondary: "bg-destructive/30 fill-destructive/30",
     },

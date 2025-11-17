@@ -68,6 +68,12 @@ export const themeSlice = createSlice({
       const { key, value } = action.payload;
       state.palette[key] = value;
     },
+    handleReplaceThemePalette: (
+      state,
+      action: PayloadAction<ThemeInitialInterface["palette"]>
+    ) => {
+      state.palette = action.payload;
+    },
     handleLoadThemeMetaList: (
       state,
       action: PayloadAction<Array<ThemeMetaInterface>>
@@ -95,6 +101,7 @@ export const themeSlice = createSlice({
 export const {
   handleToggleThemeListCollapsed,
   handleChangeThemePalette,
+  handleReplaceThemePalette,
   handleLoadThemeMetaList,
   handleLoadActiveThemeId,
   handleUpdateActiveThemeId,

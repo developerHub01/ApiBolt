@@ -6,6 +6,7 @@ import {
   getThemeListMeta,
   updateTheme,
 } from "../db/themeDB.js";
+import { saveThemePaletteLocal } from "../utils/theme.js";
 
 export const themeHandler = () => {
   ipcMain.handle(
@@ -27,5 +28,10 @@ export const themeHandler = () => {
   ipcMain.handle(
     "deleteThemeById",
     async (_, ...rest) => await deleteThemeById(...rest)
+  );
+  ipcMain.handle(
+    "saveThemePalette",
+    async (_, ...rest) =>
+      await saveThemePaletteLocal(JSON.stringify(rest[0], null, 2))
   );
 };

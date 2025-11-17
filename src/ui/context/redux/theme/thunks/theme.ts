@@ -3,9 +3,15 @@ import type { AppDispatch, RootState } from "@/context/redux/store";
 import {
   handleLoadActiveThemeId,
   handleLoadThemeMetaList,
+  handleReplaceThemePalette,
   handleUpdateActiveThemeId,
 } from "@/context/redux/theme/theme-slice";
-import type { ChangeActiveThemePayloadInterface } from "@/types/theme.types";
+import type {
+  ChangeActiveThemePayloadInterface,
+  ThemeColorId,
+} from "@/types/theme.types";
+import { isValidColor } from "@/utils/color.utils";
+import Color from "color";
 
 export const loadThemeMetaList = createAsyncThunk<
   void,
@@ -77,5 +83,82 @@ export const applyThemeInApp = createAsyncThunk<
     await window.electronAPI.applyTheme();
   } catch (error) {
     console.error(error);
+  }
+});
+
+export const saveThemePalette = createAsyncThunk<
+  void,
+  void,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("theme/saveThemePalette", async (_, { getState }) => {
+  try {
+    const state = getState() as RootState;
+    const palette = state.theme.palette;
+    if (!palette) return;
+
+    await window.electronAPITheme.saveThemePalette(palette);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+export const pasteThemePalette = createAsyncThunk<
+  {
+    success: boolean;
+    message?: string;
+  },
+  void,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("theme/pasteThemePalette", async (_, { dispatch, getState }) => {
+  try {
+    const payloadString = await window.navigator.clipboard.readText();
+    console.log({ payloadString });
+    const payload = JSON.parse(payloadString);
+
+    console.log({ payload });
+
+    if (Object.values(payload).some((item) => !isValidColor(item as string))) {
+      return {
+        success: false,
+        message: "Not valid color in theme",
+      };
+    }
+
+    const state = getState() as RootState;
+    const palette = state.theme.palette;
+
+    const expectedKeyList = Object.keys(palette) as Array<ThemeColorId>;
+    if (expectedKeyList.some((item) => !payload[item])) {
+      return {
+        success: false,
+        message: "Some color are missings",
+      };
+    }
+
+    const updatePayload = structuredClone(palette);
+    expectedKeyList.forEach((item) => {
+      const color = Color(payload[item]).hexa();
+      updatePayload[item] = color;
+    });
+
+    console.log({ updatePayload });
+
+    dispatch(handleReplaceThemePalette(updatePayload));
+    return {
+      success: true,
+      message: "Theme palette pasted successfully.",
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: "Not valid palette.",
+    };
   }
 });
