@@ -1,4 +1,10 @@
-import { useEffect, useState, type ChangeEvent, type FocusEvent } from "react";
+import {
+  useEffect,
+  useState,
+  type ChangeEvent,
+  type ComponentProps,
+  type FocusEvent,
+} from "react";
 import {
   Popover,
   PopoverContent,
@@ -12,12 +18,12 @@ import type { ThemeColorId } from "@/types/theme.types";
 import { getRgbToHex, isValidColor } from "@/utils/color.utils";
 import { cn } from "@/lib/utils";
 
-interface Props {
+interface Props extends ComponentProps<"div"> {
   id: ThemeColorId;
   color: string;
 }
 
-const ThemeEditorColor = ({ id, color }: Props) => {
+const ThemeEditorColor = ({ id, color, className = "", ...props }: Props) => {
   const dispatch = useAppDispatch();
   const [colorState, setColorState] = useState<string>(color);
   const [isError, setIsError] = useState<boolean>(false);
@@ -63,7 +69,11 @@ const ThemeEditorColor = ({ id, color }: Props) => {
   };
 
   return (
-    <div key={id} className="w-full flex items-center gap-2">
+    <div
+      key={id}
+      className={cn("w-full flex items-center gap-2 p-3", className)}
+      {...props}
+    >
       <p className="flex-1 capitalize text-sm">{id.replaceAll("-", " ")}</p>
       <div
         className={cn(
