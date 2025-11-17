@@ -12,6 +12,7 @@ import {
   loadRequestHistoryMeta,
   replaceCurrentByHistory,
 } from "@/context/redux/history/thunks/history";
+import { loadCurrentTheme } from "@/context/redux/theme/thunks/theme";
 
 interface StatusInterface {
   isProjectLoading: boolean;
@@ -24,6 +25,7 @@ interface StatusInterface {
   isHistoryMetaLoading: boolean;
   isHistoryDetailsLoading: boolean;
   isHistoryReplacingLoading: boolean;
+  isThemeEditingPaletteLoading: boolean;
 }
 
 // Define the initial state using that type
@@ -38,6 +40,7 @@ const initialState: StatusInterface = {
   isHistoryMetaLoading: false,
   isHistoryDetailsLoading: false,
   isHistoryReplacingLoading: false,
+  isThemeEditingPaletteLoading: false,
 };
 
 export const statusSlice = createSlice({
@@ -199,6 +202,21 @@ export const statusSlice = createSlice({
       })
       .addCase(replaceCurrentByHistory.rejected, (state) => {
         state.isHistoryReplacingLoading = false;
+      })
+
+      /**
+       * =======================
+       * theme editing palette
+       * =======================
+       */
+      .addCase(loadCurrentTheme.pending, (state) => {
+        state.isThemeEditingPaletteLoading = true;
+      })
+      .addCase(loadCurrentTheme.fulfilled, (state) => {
+        state.isThemeEditingPaletteLoading = false;
+      })
+      .addCase(loadCurrentTheme.rejected, (state) => {
+        state.isThemeEditingPaletteLoading = false;
       });
   },
 });

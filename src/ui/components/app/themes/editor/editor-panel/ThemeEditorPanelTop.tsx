@@ -1,3 +1,4 @@
+import type { MouseEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
 import {
@@ -7,6 +8,7 @@ import {
 } from "@/components/ui/tooltip-custom";
 import { useAppDispatch } from "@/context/redux/hooks";
 import {
+  loadCurrentTheme,
   pasteThemePalette,
   saveThemePalette,
 } from "@/context/redux/theme/thunks/theme";
@@ -15,12 +17,12 @@ import {
   Copy as CopyIcon,
   ClipboardPaste as PasteIcon,
   CloudDownload as DownloadIcon,
+  RotateCcw as ResetIcon,
   type LucideIcon,
 } from "lucide-react";
-import type { MouseEvent } from "react";
 import { toast } from "sonner";
 
-type TAction = "copy" | "paste" | "download";
+type TAction = "copy" | "paste" | "download" | "reset";
 
 const ACTION_BUTTON_LIST: Array<{
   id: TAction;
@@ -42,12 +44,16 @@ const ACTION_BUTTON_LIST: Array<{
     Icon: DownloadIcon,
     label: "Download Clipboard as JSON",
   },
+  {
+    id: "reset",
+    Icon: ResetIcon,
+    label: "Reset palette to current theme",
+  },
 ];
 
 const ThemeEditorPanelTop = () => {
   const dispatch = useAppDispatch();
   const handleCopy = useCopyThemePalette();
-  // saveThemePalette;
 
   const handleClick = async (e: MouseEvent<HTMLButtonElement>) => {
     const id = e.currentTarget.id as TAction;
@@ -65,6 +71,12 @@ const ThemeEditorPanelTop = () => {
       }
       case "download":
         return await dispatch(saveThemePalette());
+      case "reset": {
+        const response = await dispatch(loadCurrentTheme()).unwrap();
+        if (response) toast.success("Theme palette reset successfully.");
+        else toast.error("Something went wrong. Can't reset.");
+        return;
+      }
     }
   };
 

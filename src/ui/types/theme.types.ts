@@ -51,6 +51,6 @@ export interface ActiveThemeIdInterface {
 }
 
 export interface ActiveThemePaletteInterface {
-  global: ThemeInterface;
-  local: ThemeInterface | null;
+  global: ThemeInterface["palette"];
+  local: ThemeInterface["palette"] | null;
 }

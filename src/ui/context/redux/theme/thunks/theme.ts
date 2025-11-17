@@ -29,6 +29,32 @@ export const loadThemeMetaList = createAsyncThunk<
   }
 });
 
+export const loadCurrentTheme = createAsyncThunk<
+  boolean,
+  void,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("theme/loadCurrentTheme", async (_, { dispatch }) => {
+  try {
+    const response =
+      await window.electronAPIActiveTheme.getActiveThemePalette();
+    if (!response) return false;
+
+    dispatch(
+      handleReplaceThemePalette({
+        ...response.global,
+        ...(response.local ?? {}),
+      })
+    );
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+});
+
 export const loadActiveThemeId = createAsyncThunk<
   void,
   void,
