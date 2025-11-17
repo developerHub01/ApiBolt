@@ -6,7 +6,6 @@ import {
   updateSettingsZoomByKeyboard,
 } from "@/context/redux/setting/thunks/setting";
 import { useGlobal } from "@/context/global/GlobalProvider";
-import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
 import { changeActiveTab } from "@/context/redux/sidebar/thunks/sidebar";
 import { handleChangeIsCookiesOpen } from "@/context/redux/cookies/cookies-slice";
 import { removeTab } from "@/context/redux/request-response/thunks/tab-list";
@@ -17,8 +16,7 @@ import { handleChangeIsKeyboardShortcutPanelOpen } from "@/context/redux/keyboar
 import { changeHeaderIsOpen as changeHeaderSearchIsOpen } from "@/context/redux/header/thunks/header";
 import type { TKeyboardShortcutKey } from "@/types/setting.types";
 import { MODIFIER_KEY_TRACK_ORDER } from "@/constant/keyboard-shortcut.constant";
-import { selectSidebarActiveTab } from "@/context/redux/sidebar/selectors/sidebar";
-import { handleToggleThemeListCollapsed } from "@/context/redux/theme/theme-slice";
+import useToggleSidebar from "@/hooks/sidebar/use-toggle-sidebar";
 
 const KeyboardEvents = () => {
   const dispatch = useAppDispatch();
@@ -28,7 +26,7 @@ const KeyboardEvents = () => {
     selectApplyingKeyboardShortcutsStrFormated
   );
   const isActivityBarVisible = useCheckApplyingLayoutActivityBarVisible();
-  const activeSidebarTab = useAppSelector(selectSidebarActiveTab);
+  const handleToggleSidebar = useToggleSidebar();
 
   useEffect(() => {
     const handler = async (e: KeyboardEvent) => {
@@ -67,15 +65,7 @@ const KeyboardEvents = () => {
         }
         case "toggle_sidebar": {
           e.preventDefault();
-          switch (activeSidebarTab) {
-            case "navigate_collections":
-              dispatch(handleToggleRequestList());
-              return;
-            case "navigate_themes":
-              dispatch(handleToggleThemeListCollapsed());
-              return;
-          }
-          return dispatch(handleToggleRequestList());
+          return handleToggleSidebar();
         }
         case "toggle_fullscreen": {
           e.preventDefault();
@@ -126,7 +116,7 @@ const KeyboardEvents = () => {
     isActivityBarVisible,
     toggleFullscreen,
     keybindingMap,
-    activeSidebarTab,
+    handleToggleSidebar,
   ]);
 
   return null;
