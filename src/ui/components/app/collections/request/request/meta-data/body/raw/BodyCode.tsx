@@ -10,16 +10,9 @@ import {
   selectRawData,
   selectRawRequestBodyType,
 } from "@/context/redux/request-response/selectors/body-raw";
-import { TriangleAlert as AlertIcon } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip-custom";
-import { Button } from "@/components/ui/button";
-import { AnimatePresence, motion } from "motion/react";
 import { codeFormatter } from "@/utils/code";
 import useCheckApplyingCodeIndentationSize from "@/hooks/setting/use-check-applying-code-indentation-size";
+import ErrorAlert1 from "@/components/ui/error-alert1";
 
 const bodyTypeLabel = (type: TContentType) =>
   type === "html"
@@ -116,64 +109,11 @@ const BodyCode = memo(() => {
         placeholder={placeholderLabel(rawRequestBodyType)}
         className="static"
       />
-      <ErrorAlert isError={isError} />
+      <ErrorAlert1 isError={isError} message="Request body have some errors." />
       <ScrollBar orientation="horizontal" />
     </ScrollArea>
   );
 });
 BodyCode.displayName = "Request data code area";
-
-interface ErrorAlertProps {
-  isError: boolean;
-}
-
-const ErrorAlert = memo(({ isError }: ErrorAlertProps) => {
-  return (
-    <AnimatePresence>
-      {isError && (
-        <motion.div
-          initial={{
-            scale: 0.5,
-            opacity: 0,
-          }}
-          animate={{
-            scale: 1,
-            opacity: 1,
-          }}
-          exit={{
-            scale: 0.5,
-            opacity: 0,
-          }}
-          transition={{
-            duration: 0.5,
-            ease: "anticipate",
-          }}
-          className="absolute bottom-2 right-2 origin-center"
-        >
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="destructiveSecondary"
-                size={"iconXs"}
-                className="rounded-full"
-              >
-                <AlertIcon />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent
-              className="w-52 p-2 bg-accent [&>span>svg]:bg-accent [&>span>svg]:fill-accent text-accent-foreground"
-              side="top"
-              align="end"
-              alignOffset={5}
-              variant={"secondary"}
-            >
-              <p>Request body have some errors.</p>
-            </TooltipContent>
-          </Tooltip>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-});
 
 export default BodyCode;
