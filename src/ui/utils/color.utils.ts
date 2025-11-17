@@ -12,3 +12,13 @@ export const getRgbToHex = (color: {
     b: color.b,
     alpha: color.a,
   }).hexa();
+
+export const isValidColor = (color: string) => {
+  try {
+    Color(color);
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};

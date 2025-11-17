@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ChangeEvent, type FocusEvent } from "react";
 import {
   Popover,
   PopoverContent,
@@ -9,7 +9,8 @@ import { SketchPicker, type ColorResult } from "react-color";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { handleChangeThemePalette } from "@/context/redux/theme/theme-slice";
 import type { ThemeColorId } from "@/types/theme.types";
-import { getRgbToHex } from "@/utils/color.utils";
+import { getRgbToHex, isValidColor } from "@/utils/color.utils";
+import { cn } from "@/lib/utils";
 
 interface Props {
   id: ThemeColorId;
@@ -19,9 +20,11 @@ interface Props {
 const ThemeEditorColor = ({ id, color }: Props) => {
   const dispatch = useAppDispatch();
   const [colorState, setColorState] = useState<string>(color);
+  const [isError, setIsError] = useState<boolean>(false);
 
   useEffect(() => {
     setColorState(color);
+    setIsError(!isValidColor(color));
   }, [color]);
 
   const handlePickerChange = (color: ColorResult) => {
@@ -41,16 +44,43 @@ const ThemeEditorColor = ({ id, color }: Props) => {
     );
   };
 
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.trim();
+    setIsError(!isValidColor(value));
+    setColorState(value);
+  };
+
+  const handleInputBlur = (e: FocusEvent<HTMLInputElement>) => {
+    const value = e.target.value.trim();
+    setColorState(value);
+
+    dispatch(
+      handleChangeThemePalette({
+        key: id,
+        value,
+      })
+    );
+  };
+
   return (
-    <div key={id} className="w-full flex items-center gap-2 pr-4">
+    <div key={id} className="w-full flex items-center gap-2">
       <p className="flex-1 capitalize text-sm">{id.replaceAll("-", " ")}</p>
-      <div className="flex items-center gap-2 p-0.5 rounded-md bg-input w-29 grow-0">
+      <div
+        className={cn(
+          "flex items-center gap-2 p-1 rounded-md bg-input w-30 grow-0 pr-2.5",
+          {
+            "border-destructive/50 ring-1 ring-destructive/50": isError,
+          }
+        )}
+      >
         <Popover>
           <PopoverTrigger asChild>
             <Button
               variant="outline"
               size={"iconXs"}
-              className="border shadow-2xl border-white/50 bg-red-500"
+              className={cn("border shadow-2xl border-white/50 bg-red-500", {
+                "ring ring-destructive": isError,
+              })}
               style={{
                 background: colorState,
               }}
@@ -69,10 +99,11 @@ const ThemeEditorColor = ({ id, color }: Props) => {
           </PopoverContent>
         </Popover>
         <input
-          readOnly
           type="text"
-          className="flex-1 text-sm w-full"
+          className="flex-1 text-sm w-full border-b"
           value={colorState}
+          onChange={handleInputChange}
+          onBlur={handleInputBlur}
         />
       </div>
     </div>

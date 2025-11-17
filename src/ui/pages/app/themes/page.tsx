@@ -6,13 +6,15 @@ import { Link } from "react-router-dom";
 const ThemesPage = () => {
   return (
     <section className="w-full h-full max-w-7xl flex justify-center items-center">
-      <div className="w-4/5 h-4/5 max-w-2xl max-h-[500px] grid grid-cols-2 rounded-xl shadow-2xl divide-x divide-primary/50">
-        <ActionButton variant={"secondary"} link="marketplace">
-          Theme marketplace
-        </ActionButton>
-        <ActionButton variant={"accent"} link="editor">
-          Theme Editor
-        </ActionButton>
+      <div className="w-4/5 h-4/5 max-w-2xl max-h-[500px] shadow-2xl">
+        <div className="w-full h-full grid grid-cols-2 rounded-xl divide-x divide-border/50 overflow-hidden">
+          <ActionButton variant={"secondary"} link="marketplace">
+            Theme marketplace
+          </ActionButton>
+          <ActionButton variant={"accent"} link="editor">
+            Theme Editor
+          </ActionButton>
+        </div>
       </div>
     </section>
   );
@@ -33,7 +35,10 @@ const ActionButton = ({
   return (
     <Link to={`/themes/${link}`}>
       <Button
-        className={cn("w-full h-full flex-1 capitalize text-xl", className)}
+        className={cn(
+          "w-full h-full flex-1 capitalize text-xl rounded-none",
+          className
+        )}
         variant={variant}
       >
         {children}
