@@ -5,8 +5,9 @@ const ThemeEditorTop = () => {
     <section className="flex flex-col">
       <PageHeader>Theme Builder</PageHeader>
       <p className="text-muted-foreground text-sm leading-relaxed">
-        This is just for configuring theme palette and you can copy the pallete
-        and upload in theme market. Once app quite it wont save. Session only.
+        This tool lets you configure the theme palette. You can copy the palette
+        and upload it to the theme marketplace. Changes are not saved
+        permanently — they will reset when you close the app.
       </p>
     </section>
   );
