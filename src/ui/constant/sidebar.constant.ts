@@ -57,7 +57,7 @@ export const SIDEBAR_THEME_MENU_ITEMS: Array<
   },
   {
     id: "navigate_themes_editor",
-    label: "Theme Editor",
+    label: "Theme editor",
     path: "/themes/editor",
     Icon: ThemeEditorIcon,
   },

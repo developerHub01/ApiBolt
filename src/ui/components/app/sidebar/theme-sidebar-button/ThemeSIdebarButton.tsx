@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { Fragment, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -69,18 +69,21 @@ const ThemeSIdebarButton = ({ label, Icon, onClick }: Props) => {
       <DropdownMenuContent className="w-fit" align="start" side="right">
         <DropdownMenuGroup>
           {menuList.map(({ id, label, path, Icon, shortcut }) => (
-            <DropdownMenuItem
-              key={id}
-              className={cn({
-                "bg-accent text-accent-foreground": localtion.pathname === path,
-              })}
-              onClick={() => onClick(id)}
-            >
-              <Icon size={14} /> {label}
-              {shortcut && (
-                <DropdownMenuShortcut>{shortcut}</DropdownMenuShortcut>
-              )}
-            </DropdownMenuItem>
+            <Fragment key={id}>
+              <DropdownMenuItem
+                id={id}
+                className={cn("cursor-pointer capitalize focus:bg-accent/70", {
+                  "bg-accent text-accent-foreground":
+                    localtion.pathname === path,
+                })}
+                onClick={() => onClick(id)}
+              >
+                <Icon size={14} /> {label}
+                {shortcut && (
+                  <DropdownMenuShortcut>{shortcut}</DropdownMenuShortcut>
+                )}
+              </DropdownMenuItem>
+            </Fragment>
           ))}
         </DropdownMenuGroup>
       </DropdownMenuContent>
