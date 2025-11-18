@@ -1,15 +1,17 @@
+import { SIDEBAR_THEME_MENU_ITEMS } from "@/constant/sidebar.constant";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectSidebarActiveTab } from "@/context/redux/sidebar/selectors/sidebar";
-import { useLocation } from "react-router-dom";
+
+const THEM_MARKETPLACE_MENU_DETAILS = SIDEBAR_THEME_MENU_ITEMS.find(
+  (item) => item.id === "navigate_themes_marketplace"
+);
 
 const useShowSidebarToggler = () => {
   const activeTab = useAppSelector(selectSidebarActiveTab);
-  const location = useLocation();
 
   if (
     activeTab === "navigate_collections" ||
-    (activeTab === "navigate_themes" &&
-      location.pathname === "/themes/marketplace")
+    activeTab === THEM_MARKETPLACE_MENU_DETAILS?.id
   )
     return true;
 

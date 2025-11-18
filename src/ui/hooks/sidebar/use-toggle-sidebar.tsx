@@ -11,7 +11,7 @@ const useToggleSidebar = () => {
     switch (activeSidebarTab) {
       case "navigate_collections":
         return dispatch(handleToggleRequestList());
-      case "navigate_themes":
+      case "navigate_themes_marketplace":
         return dispatch(handleToggleThemeListCollapsed());
     }
   };
