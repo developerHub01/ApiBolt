@@ -35,7 +35,7 @@ const Sidebar = () => {
             <TooltipProvider>
               <div
                 className={cn(
-                  "w-16 shrink-0 py-2.5 px-2 flex flex-col gap-2.5 justify-between items-center h-full bg-accent/50 backdrop-blur-sm",
+                  "max-w-16 shrink-0 py-2.5 px-2 flex flex-col gap-2.5 justify-between items-center h-full bg-accent/50 backdrop-blur-sm",
                   {
                     "border-r-2": layoutTypes !== "rtl",
                     "border-l-2": layoutTypes === "rtl",
