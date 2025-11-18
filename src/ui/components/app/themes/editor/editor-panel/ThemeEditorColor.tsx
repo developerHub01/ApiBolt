@@ -77,7 +77,7 @@ const ThemeEditorColor = ({ id, color, className = "", ...props }: Props) => {
       <p className="flex-1 capitalize text-sm">{id.replaceAll("-", " ")}</p>
       <div
         className={cn(
-          "flex items-center gap-2 p-1 rounded-md bg-input w-30 grow-0 pr-2.5",
+          "flex gap-2 p-1 rounded-md bg-input w-30 grow-0 pr-2.5",
           {
             "border-destructive/50 ring-1 ring-destructive/50": isError,
           }

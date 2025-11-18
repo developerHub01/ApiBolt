@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { cn } from "@/lib/utils";
 import type { ThemeColorId } from "@/types/theme.types";
-import ThemeEditorColor from "@/components/app/themes/editor/ThemeEditorColor";
+import ThemeEditorColor from "@/components/app/themes/editor/editor-panel/ThemeEditorColor";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectThemePalette } from "@/context/redux/theme/selectors/theme";
 import ThemePaletteWrapper from "@/components/app/themes/editor/editor-panel/ThemePaletteWrapper";
