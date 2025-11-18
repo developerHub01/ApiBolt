@@ -27,7 +27,7 @@ const ApiBoltResizableWrapper = memo(
     return (
       <ResizablePanelGroup
         direction="horizontal"
-        className="w-full h-full md:min-w-[450px] relative"
+        className="w-full h-full md:min-w-[450px] relative flex-1"
         style={{
           height: "auto",
         }}
