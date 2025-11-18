@@ -22,7 +22,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { toast } from "sonner";
-import ThemeList from "@/components/app/themes/editor/editor-panel/theme-palette-top/ThemeList";
+import ThemeList from "@/components/app/themes/editor/editor-panel/theme-palette-top/theme-list/ThemeList";
 
 type TAction =
   | "copy"

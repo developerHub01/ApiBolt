@@ -4,7 +4,7 @@ import {
   AnimatedDialogContentWrapper,
   AnimatedDialogTop,
 } from "@/components/ui/animated-dialog";
-import ThemeListContent from "@/components/app/themes/editor/editor-panel/theme-palette-top/ThemeListContent";
+import ThemeListContent from "@/components/app/themes/editor/editor-panel/theme-palette-top/theme-list/ThemeListContent";
 
 interface Props {
   isOpen: boolean;

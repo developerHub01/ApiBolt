@@ -4,7 +4,7 @@ import ThemeEditorProvider from "@/context/theme/theme-editor/ThemeEditorProvide
 const ThemeEditorPage = () => {
   return (
     <ThemeEditorProvider>
-      <section className="w-full h-full max-w-7xl flex justify-center items-center">
+      <section className="w-full h-full max-w-6xl flex justify-center items-center">
         <ThemeEditor />
       </section>
     </ThemeEditorProvider>
