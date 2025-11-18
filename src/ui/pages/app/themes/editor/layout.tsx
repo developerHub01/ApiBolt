@@ -6,7 +6,11 @@ import { Outlet } from "react-router-dom";
 const ThemeEditorLayout = () => {
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(loadCurrentTheme());
+    dispatch(
+      loadCurrentTheme({
+        once: true,
+      })
+    );
   }, [dispatch]);
 
   return (

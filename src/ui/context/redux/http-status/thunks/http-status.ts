@@ -22,7 +22,6 @@ export const loadHttpStatus = createAsyncThunk<
     if (Object.keys(state.httpStatus.httpStatus).length && once) return;
 
     const response = await window.electronAPIHttpStatusDB.getHttpStatus();
-
     if (!response) return;
 
     dispatch(handleLoadHttpStatus(response));

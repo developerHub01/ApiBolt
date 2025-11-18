@@ -1,6 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit";
 import type { RootState } from "@/context/redux/store";
 import { isValidColor } from "@/utils/color.utils";
+import { DEFAULT_THEME_PALETTE } from "@/constant/theme.constant";
 
 export const selectIsThemeListCollapsed = createSelector(
   [(state: RootState) => state.theme.isThemeListCollapsed],
@@ -9,7 +10,7 @@ export const selectIsThemeListCollapsed = createSelector(
 
 export const selectThemePalette = createSelector(
   [(state: RootState) => state.theme.palette],
-  (palette) => palette
+  (palette) => palette ?? DEFAULT_THEME_PALETTE
 );
 
 export const selectThemeMetaLoaded = createSelector(
@@ -29,5 +30,8 @@ export const selectThemeActiveId = createSelector(
 
 export const selectThemeHaveError = createSelector(
   [(state: RootState) => state.theme.palette],
-  (palette) => Object.values(palette).some((item) => !isValidColor(item))
+  (palette) =>
+    Object.values(palette ?? DEFAULT_THEME_PALETTE).some(
+      (item) => !isValidColor(item)
+    )
 );

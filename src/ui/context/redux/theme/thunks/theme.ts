@@ -12,6 +12,7 @@ import type {
 } from "@/types/theme.types";
 import { isValidColor } from "@/utils/color.utils";
 import Color from "color";
+import { DEFAULT_THEME_PALETTE } from "@/constant/theme.constant";
 
 export const loadThemeMetaList = createAsyncThunk<
   void,
@@ -31,16 +32,24 @@ export const loadThemeMetaList = createAsyncThunk<
 
 export const loadCurrentTheme = createAsyncThunk<
   boolean,
-  void,
+  void | { once?: boolean },
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->("theme/loadCurrentTheme", async (_, { dispatch }) => {
+>("theme/loadCurrentTheme", async (payload, { dispatch, getState }) => {
   try {
+    const once = payload?.once ?? false;
+    const state = getState() as RootState;
+    if (state.theme.palette && once) return true;
+
     const response =
       await window.electronAPIActiveTheme.getActiveThemePalette();
-    if (!response) return false;
+    if (!response) {
+      if (!state.theme.palette)
+        dispatch(handleReplaceThemePalette(DEFAULT_THEME_PALETTE));
+      return false;
+    }
 
     dispatch(
       handleReplaceThemePalette({
@@ -82,7 +91,6 @@ export const changeActiveThemeId = createAsyncThunk<
   try {
     const response =
       await window.electronAPIActiveTheme.changeActiveTheme(payload);
-
     if (!response) return;
 
     dispatch(
@@ -154,7 +162,7 @@ export const pasteThemePalette = createAsyncThunk<
     }
 
     const state = getState() as RootState;
-    const palette = state.theme.palette;
+    const palette = state.theme.palette ?? DEFAULT_THEME_PALETTE;
 
     const expectedKeyList = Object.keys(palette) as Array<ThemeColorId>;
     if (expectedKeyList.some((item) => !payload[item])) {
@@ -197,7 +205,7 @@ export const applyTestTheme = createAsyncThunk<
 >("theme/applyTestTheme", async (_, { getState }) => {
   try {
     const state = getState() as RootState;
-    const palette = state.theme.palette;
+    const palette = state.theme.palette ?? DEFAULT_THEME_PALETTE;
 
     window.electronAPI.applyTestTheme(palette);
 
