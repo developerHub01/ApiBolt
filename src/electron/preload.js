@@ -86,6 +86,8 @@ contextBridge.exposeInMainWorld("electronAPITheme", {
     await ipcRenderer.invoke("getThemeListMeta", ...payload),
   getThemeById: async (...payload) =>
     await ipcRenderer.invoke("getThemeById", ...payload),
+  getThemePaletteById: async (...payload) =>
+    await ipcRenderer.invoke("getThemePaletteById", ...payload),
   createTheme: async (...payload) =>
     await ipcRenderer.invoke("createTheme", ...payload),
   updateTheme: async (...payload) =>

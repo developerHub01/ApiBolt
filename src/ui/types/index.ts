@@ -106,6 +106,7 @@ declare global {
     electronAPITheme: {
       getThemeListMeta(): Promise<Array<ThemeMetaInterface>>;
       getThemeById(id: string): Promise<ThemeInterface>;
+      getThemePaletteById(id: string): Promise<ThemeInterface["palette"]>;
       createTheme(payload: ThemeCreatePayloadInterface): Promise<boolean>;
       updateTheme(
         payload: Partial<ThemeCreatePayloadInterface>

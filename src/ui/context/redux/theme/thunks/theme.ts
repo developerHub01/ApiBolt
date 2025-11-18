@@ -30,33 +30,42 @@ export const loadThemeMetaList = createAsyncThunk<
   }
 });
 
-export const loadCurrentTheme = createAsyncThunk<
+export const loadThemePalette = createAsyncThunk<
   boolean,
-  void | { once?: boolean },
+  void | { once?: boolean; themeId?: string },
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->("theme/loadCurrentTheme", async (payload, { dispatch, getState }) => {
+>("theme/loadThemePalette", async (payload, { dispatch, getState }) => {
   try {
     const once = payload?.once ?? false;
+    const themeId = payload?.themeId ?? null;
     const state = getState() as RootState;
     if (state.theme.palette && once) return true;
 
-    const response =
-      await window.electronAPIActiveTheme.getActiveThemePalette();
-    if (!response) {
+    let replacePayload: Record<ThemeColorId, string> | null = null;
+
+    if (themeId) {
+      replacePayload =
+        await window.electronAPITheme.getThemePaletteById(themeId);
+    } else {
+      const response =
+        await window.electronAPIActiveTheme.getActiveThemePalette();
+      if (response)
+        replacePayload = {
+          ...response.global,
+          ...(response.local ?? {}),
+        };
+    }
+
+    if (!replacePayload) {
       if (!state.theme.palette)
         dispatch(handleReplaceThemePalette(DEFAULT_THEME_PALETTE));
       return false;
     }
 
-    dispatch(
-      handleReplaceThemePalette({
-        ...response.global,
-        ...(response.local ?? {}),
-      })
-    );
+    dispatch(handleReplaceThemePalette(replacePayload));
     return true;
   } catch (error) {
     console.error(error);
@@ -106,7 +115,10 @@ export const changeActiveThemeId = createAsyncThunk<
 });
 
 export const applyThemeInApp = createAsyncThunk<
-  void,
+  {
+    success: boolean;
+    message: string;
+  },
   void,
   {
     dispatch: AppDispatch;
@@ -115,8 +127,17 @@ export const applyThemeInApp = createAsyncThunk<
 >("theme/applyThemeInApp", async () => {
   try {
     await window.electronAPI.applyTheme();
+
+    return {
+      success: true,
+      message: "Restored applying theme.",
+    };
   } catch (error) {
     console.error(error);
+    return {
+      success: false,
+      message: "Something went wrong.",
+    };
   }
 });
 
@@ -195,7 +216,7 @@ export const pasteThemePalette = createAsyncThunk<
 export const applyTestTheme = createAsyncThunk<
   {
     success: boolean;
-    message?: string;
+    message: string;
   },
   void,
   {
@@ -207,7 +228,7 @@ export const applyTestTheme = createAsyncThunk<
     const state = getState() as RootState;
     const palette = state.theme.palette ?? DEFAULT_THEME_PALETTE;
 
-    window.electronAPI.applyTestTheme(palette);
+    await window.electronAPI.applyTestTheme(palette);
 
     return {
       success: true,

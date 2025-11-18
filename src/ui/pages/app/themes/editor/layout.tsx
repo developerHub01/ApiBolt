@@ -1,5 +1,5 @@
 import { useAppDispatch } from "@/context/redux/hooks";
-import { loadCurrentTheme } from "@/context/redux/theme/thunks/theme";
+import { loadThemePalette } from "@/context/redux/theme/thunks/theme";
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 
@@ -7,7 +7,7 @@ const ThemeEditorLayout = () => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(
-      loadCurrentTheme({
+      loadThemePalette({
         once: true,
       })
     );

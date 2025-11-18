@@ -89,8 +89,8 @@ app.whenReady().then(async () => {
   });
 
   mainWindow?.webContents.setWindowOpenHandler((details) => {
-    handleExternalUrl(details.url); // Open the URL in the user's default browser
-    return { action: "deny" }; // Prevent the Electron app from opening the URL
+    handleExternalUrl(details.url);
+    return { action: "deny" };
   });
 
   httpStatusHandler();

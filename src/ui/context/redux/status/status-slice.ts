@@ -12,7 +12,7 @@ import {
   loadRequestHistoryMeta,
   replaceCurrentByHistory,
 } from "@/context/redux/history/thunks/history";
-import { loadCurrentTheme } from "@/context/redux/theme/thunks/theme";
+import { loadThemePalette } from "@/context/redux/theme/thunks/theme";
 
 interface StatusInterface {
   isProjectLoading: boolean;
@@ -209,13 +209,13 @@ export const statusSlice = createSlice({
        * theme editing palette
        * =======================
        */
-      .addCase(loadCurrentTheme.pending, (state) => {
+      .addCase(loadThemePalette.pending, (state) => {
         state.isThemeEditingPaletteLoading = true;
       })
-      .addCase(loadCurrentTheme.fulfilled, (state) => {
+      .addCase(loadThemePalette.fulfilled, (state) => {
         state.isThemeEditingPaletteLoading = false;
       })
-      .addCase(loadCurrentTheme.rejected, (state) => {
+      .addCase(loadThemePalette.rejected, (state) => {
         state.isThemeEditingPaletteLoading = false;
       });
   },

@@ -19,3 +19,6 @@ export const DEFAULT_THEME_PALETTE: Record<ThemeColorId, string> = {
   ring: "#295a7e",
   line: "#00416cb3",
 };
+
+export const DEFAULT_THUMBNAIL_FALLBACK =
+  "./theme-thumbnail/theme_thumbnail_placeholder.png";

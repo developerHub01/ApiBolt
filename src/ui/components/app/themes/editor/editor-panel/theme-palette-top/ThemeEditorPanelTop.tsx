@@ -1,4 +1,4 @@
-import type { MouseEvent } from "react";
+import { useState, type MouseEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
 import {
@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/tooltip-custom";
 import { useAppDispatch } from "@/context/redux/hooks";
 import {
-  loadCurrentTheme,
+  loadThemePalette,
   pasteThemePalette,
   saveThemePalette,
 } from "@/context/redux/theme/thunks/theme";
@@ -18,17 +18,26 @@ import {
   ClipboardPaste as PasteIcon,
   CloudDownload as DownloadIcon,
   RotateCcw as ResetIcon,
+  ListEnd as IneritFromThemeIcon,
   type LucideIcon,
 } from "lucide-react";
 import { toast } from "sonner";
+import ThemeList from "@/components/app/themes/editor/editor-panel/theme-palette-top/ThemeList";
 
-type TAction = "copy" | "paste" | "download" | "reset";
+type TAction =
+  | "copy"
+  | "paste"
+  | "download"
+  | "reset"
+  | "inherit-palette-from-theme";
 
-const ACTION_BUTTON_LIST: Array<{
+interface ActionButtonInterface {
   id: TAction;
   Icon: LucideIcon;
   label: string;
-}> = [
+}
+
+const ACTION_BUTTON_LIST: Array<ActionButtonInterface> = [
   {
     id: "copy",
     Icon: CopyIcon,
@@ -42,7 +51,7 @@ const ACTION_BUTTON_LIST: Array<{
   {
     id: "download",
     Icon: DownloadIcon,
-    label: "Download Clipboard as JSON",
+    label: "Download clipboard as JSON",
   },
   {
     id: "reset",
@@ -50,6 +59,12 @@ const ACTION_BUTTON_LIST: Array<{
     label: "Reset palette to current theme",
   },
 ];
+
+const INHERIT_FROM_INSTALLED_THEME: ActionButtonInterface = {
+  id: "inherit-palette-from-theme",
+  Icon: IneritFromThemeIcon,
+  label: "Inherit palette from installed them",
+};
 
 const ThemeEditorPanelTop = () => {
   const dispatch = useAppDispatch();
@@ -72,7 +87,7 @@ const ThemeEditorPanelTop = () => {
       case "download":
         return await dispatch(saveThemePalette());
       case "reset": {
-        const response = await dispatch(loadCurrentTheme()).unwrap();
+        const response = await dispatch(loadThemePalette()).unwrap();
         if (response) toast.success("Theme palette reset successfully.");
         else toast.error("Something went wrong. Can't reset.");
         return;
@@ -103,8 +118,35 @@ const ThemeEditorPanelTop = () => {
             </TooltipContent>
           </Tooltip>
         ))}
+        <InheritPaletteButton />
       </ButtonGroup>
     </div>
+  );
+};
+
+const InheritPaletteButton = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(Boolean);
+  const handleClick = () => setIsOpen((prev) => !prev);
+
+  return (
+    <>
+      <Tooltip key={INHERIT_FROM_INSTALLED_THEME.id}>
+        <TooltipTrigger asChild>
+          <Button
+            key={INHERIT_FROM_INSTALLED_THEME.id}
+            id={INHERIT_FROM_INSTALLED_THEME.id}
+            variant={"background"}
+            onClick={handleClick}
+          >
+            <INHERIT_FROM_INSTALLED_THEME.Icon />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side="bottom" align="end" variant={"background"}>
+          <p>{INHERIT_FROM_INSTALLED_THEME.label}</p>
+        </TooltipContent>
+      </Tooltip>
+      <ThemeList isOpen={isOpen} onClose={handleClick} />
+    </>
   );
 };
 

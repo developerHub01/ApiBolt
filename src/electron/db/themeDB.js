@@ -35,6 +35,24 @@ export const getThemeById = async (id) => {
   }
 };
 
+export const getThemePaletteById = async (id) => {
+  try {
+    let result = (
+      await db
+        .select({
+          palette: themeTable.palette,
+        })
+        .from(themeTable)
+        .where(eq(themeTable.id, id))
+    )?.[0]?.palette;
+
+    if (result) result = JSON.parse(result);
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const createTheme = async (payload = {}) => {
   try {
     if ("palette" in payload && typeof payload.palette === "object")
