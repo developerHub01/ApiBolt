@@ -17,6 +17,9 @@ import { changeHeaderIsOpen as changeHeaderSearchIsOpen } from "@/context/redux/
 import type { TKeyboardShortcutKey } from "@/types/setting.types";
 import { MODIFIER_KEY_TRACK_ORDER } from "@/constant/keyboard-shortcut.constant";
 import useToggleSidebar from "@/hooks/sidebar/use-toggle-sidebar";
+import { useNavigate } from "react-router-dom";
+import { SIDEBAR_THEME_MENU_ITEMS } from "@/constant/sidebar.constant";
+import type { TSidebarTab } from "@/types/sidebar.types";
 
 const KeyboardEvents = () => {
   const dispatch = useAppDispatch();
@@ -27,6 +30,7 @@ const KeyboardEvents = () => {
   );
   const isActivityBarVisible = useCheckApplyingLayoutActivityBarVisible();
   const handleToggleSidebar = useToggleSidebar();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handler = async (e: KeyboardEvent) => {
@@ -49,10 +53,19 @@ const KeyboardEvents = () => {
         case "navigate_projects":
         case "navigate_collections":
         case "navigate_environments":
-        case "navigate_authorization":
-        case "navigate_themes": {
+        case "navigate_authorization": {
           e.preventDefault();
           return await dispatch(changeActiveTab(actionId));
+        }
+        case "navigate_themes_marketplace":
+        case "navigate_themes_editor": {
+          e.preventDefault();
+          await dispatch(changeActiveTab(actionId as TSidebarTab));
+          const path = SIDEBAR_THEME_MENU_ITEMS.find(
+            (item) => item.id === actionId
+          )?.path;
+          if (path) navigate(path);
+          return;
         }
         case "toggle_activitybar": {
           e.preventDefault();
@@ -117,6 +130,7 @@ const KeyboardEvents = () => {
     toggleFullscreen,
     keybindingMap,
     handleToggleSidebar,
+    navigate,
   ]);
 
   return null;

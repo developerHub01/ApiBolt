@@ -17,10 +17,9 @@ export const saveThemePaletteLocal = async (palette) => {
     });
 
     if (!canceled && filePath) {
-      const response = await writeFile(filePath, palette);
-      console.log(response);
+      writeFile(filePath, palette);
     } else {
-      console.log("Save dialog cancelled.");
+      console.warn("Save dialog cancelled.");
     }
   } catch (error) {
     console.error(error);

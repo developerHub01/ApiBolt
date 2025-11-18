@@ -6,10 +6,7 @@ const useCopyThemePalette = () => {
   const palette = useAppSelector(selectThemePalette);
 
   return async () => {
-    const response = await navigator.clipboard.writeText(
-      JSON.stringify(palette, null, 2)
-    );
-    console.log(response);
+    await navigator.clipboard.writeText(JSON.stringify(palette, null, 2));
     toast.success("Palette copied to clipboard");
   };
 };

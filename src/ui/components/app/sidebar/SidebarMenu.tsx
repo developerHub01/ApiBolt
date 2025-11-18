@@ -18,6 +18,7 @@ import { selectSidebarActiveTab } from "@/context/redux/sidebar/selectors/sideba
 import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 import { selectApplyingKeyboardShortcuts } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
 import { keyListStringify } from "@/utils/keyboard-shortcut.utils";
+import ThemeSIdebarButton from "@/components/app/sidebar/theme-sidebar-button/ThemeSIdebarButton";
 
 const SidebarMenu = memo(() => {
   const dispatch = useAppDispatch();
@@ -50,18 +51,27 @@ const SidebarMenu = memo(() => {
   const activeProjectId = useAppSelector(selectActiveProjectId);
 
   return (
-    <>
-      {menuList.map(({ id, Icon, label, path }) => {
+    <div className="flex flex-col gap-2 items-center">
+      {menuList.map((props) => {
+        const { id, Icon, label, path } = props;
         if (
           !activeProjectId &&
           HIDDEN_TABS_WHEN_NOT_PROJECT_SELECTED.includes(id)
         )
           return null;
 
+        if (id === "navigate_themes")
+          return (
+            <ThemeSIdebarButton
+              {...props}
+              onClick={handleClick}
+            />
+          );
+
         return (
           <Tooltip key={id}>
             <TooltipTrigger asChild>
-              <Link to={path}>
+              <Link to={path!}>
                 <Button
                   size={"icon"}
                   variant={activeTab === id ? "default" : "background"}
@@ -78,7 +88,7 @@ const SidebarMenu = memo(() => {
           </Tooltip>
         );
       })}
-    </>
+    </div>
   );
 });
 

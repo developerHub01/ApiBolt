@@ -19,7 +19,6 @@ import AuthorizationPage from "@/pages/app/authorization/page";
 import CollectionsLayout from "@/pages/app/collections/layout";
 import CollectionPage from "@/pages/app/collections/page";
 import ThemesLayout from "@/pages/app/themes/layout";
-import ThemesPage from "@/pages/app/themes/page";
 import ThemeEditorLayout from "@/pages/app/themes/editor/layout";
 import ThemeEditorPage from "@/pages/app/themes/editor/page";
 import ThemeMarketPlaceLayout from "@/pages/app/themes/marketplace/[id]/layout";
@@ -98,10 +97,6 @@ const routes = [
             path: "themes",
             element: <ThemesLayout />,
             children: [
-              {
-                index: true,
-                element: <ThemesPage />,
-              },
               {
                 path: "marketplace/:id?",
                 element: <ThemeMarketPlaceLayout />,

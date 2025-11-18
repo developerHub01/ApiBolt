@@ -17,8 +17,12 @@ export const keyboardBindings = {
     label: "Navigate to authorization",
     key: ["ctrl", "shift", "a"],
   },
-  navigate_themes: {
-    label: "Navigate to themes",
+  navigate_themes_marketplace: {
+    label: "Navigate to theme marketplace",
+    key: ["ctrl", "shift", "m"],
+  },
+  navigate_themes_editor: {
+    label: "Navigate to theme editor",
     key: ["ctrl", "shift", "t"],
   },
   toggle_activitybar: {

@@ -1,19 +1,18 @@
-import type { TSidebarTab } from "@/types/sidebar.types";
+import type {
+  SidebarMenuItemInterface,
+  TSidebarTab,
+} from "@/types/sidebar.types";
 import {
   Boxes as CollectionsIcon,
   Container as EnvironmentsIcon,
-  type LucideIcon,
   Layers as ProjectsIcon,
   KeyRound as AuthorizationIcon,
   Palette as ThemeIcon,
+  Store as ThemeMarketIcon,
+  PencilRuler as ThemeEditorIcon,
 } from "lucide-react";
 
-export const SIDEBAR_MENU_LIST: Array<{
-  id: Exclude<TSidebarTab, null>;
-  Icon: LucideIcon;
-  label: string;
-  path: string;
-}> = [
+export const SIDEBAR_MENU_LIST: Array<SidebarMenuItemInterface> = [
   {
     id: "navigate_projects",
     Icon: ProjectsIcon,
@@ -42,9 +41,31 @@ export const SIDEBAR_MENU_LIST: Array<{
     id: "navigate_themes",
     Icon: ThemeIcon,
     label: "Themes",
-    path: "/themes",
   },
 ];
+
+export const SIDEBAR_THEME_MENU_ITEMS: Array<
+  SidebarMenuItemInterface & {
+    shortcut?: string;
+  }
+> = [
+  {
+    id: "navigate_themes_marketplace",
+    label: "Theme marketplace",
+    path: "/themes/marketplace",
+    Icon: ThemeMarketIcon,
+  },
+  {
+    id: "navigate_themes_editor",
+    label: "Theme Editor",
+    path: "/themes/editor",
+    Icon: ThemeEditorIcon,
+  },
+];
+
+export const SIDEBAR_THEME_MENU_IDS = new Set<TSidebarTab>(
+  SIDEBAR_THEME_MENU_ITEMS.map((item) => item.id)
+);
 
 export const HIDDEN_TABS_WHEN_NOT_PROJECT_SELECTED: Array<TSidebarTab> = [
   "navigate_collections",
@@ -61,7 +82,6 @@ export const ALLOWED_TABS_WHEN_NO_ACTIVE_PROJECT = new Set<TSidebarTab>([
   "navigate_projects",
   "navigate_themes",
 ]);
-
 
 export const SIDEBAR_TOGGLE_BUTTON_ALLOWED_IDS = new Set<TSidebarTab>([
   "navigate_collections",

@@ -1,13 +1,19 @@
 import { useEffect } from "react";
 import { useAppSelector } from "@/context/redux/hooks";
 import { useNavigate } from "react-router-dom";
-import { SIDEBAR_MENU_LIST } from "@/constant/sidebar.constant";
+import {
+  SIDEBAR_MENU_LIST,
+  SIDEBAR_THEME_MENU_IDS,
+  SIDEBAR_THEME_MENU_ITEMS,
+} from "@/constant/sidebar.constant";
 import { selectSidebarActiveTab } from "@/context/redux/sidebar/selectors/sidebar";
 import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
 import { selectActiveRequestOrFolder } from "@/context/redux/request-response/selectors/request-list";
 import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 import { selectIsPorjectLoading } from "@/context/redux/status/selectors/projects";
 import { selectSidebarActiveTabIsLoading } from "@/context/redux/status/selectors/sidebar";
+
+const DEFAULT_ROUTE = "/projects";
 
 const Redirector = () => {
   const navigate = useNavigate();
@@ -27,7 +33,11 @@ const Redirector = () => {
     if (!activeProjectId) {
       route =
         SIDEBAR_MENU_LIST.find((entry) => entry.id === sidebarActiveTab)
-          ?.path ?? "/projects";
+          ?.path ?? DEFAULT_ROUTE;
+    } else if (SIDEBAR_THEME_MENU_IDS.has(sidebarActiveTab)) {
+      route =
+        SIDEBAR_THEME_MENU_ITEMS.find((item) => item.id === sidebarActiveTab)
+          ?.path ?? DEFAULT_ROUTE;
     } else if (
       sidebarActiveTab === "navigate_collections" &&
       activeRequestOrFolder
