@@ -63,7 +63,7 @@ const ApiBoltResizableLeftPanel = memo(
     minSize = 20,
     maxSize = 50,
   }: ApiBoltResizableLeftPanelProps) => {
-    const isSmallDevice = useIsSmallDevice(951);
+    const isSmallDevice = useIsSmallDevice(1100);
     const resizablePanelRef = useRef<ImperativePanelHandle>(null);
 
     useEffect(() => {
