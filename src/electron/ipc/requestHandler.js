@@ -13,6 +13,7 @@ import { getBodyFormData } from "../db/bodyFormDataDB.js";
 import path from "path";
 import { writeFile } from "fs/promises";
 import { mainWindow } from "../main.js";
+import { getInheritedAuthFromId } from "../db/authorizationDB.js";
 
 export const requestHandler = () => {
   ipcMain.handle(
@@ -71,6 +72,13 @@ export const requestHandler = () => {
         })
       );
 
+      const authorization = await getInheritedAuthFromId(id);
+      if (authorization) {
+        delete authorization["id"];
+        delete authorization["projectId"];
+        delete authorization["requestOrFolderMetaId"];
+      }
+
       const payload = {
         name,
         method,
@@ -83,6 +91,7 @@ export const requestHandler = () => {
         bodyBinary,
         bodyXWWWFormUrlencoded,
         bodyFormData,
+        authorization,
       };
 
       const { canceled, filePath } = await dialog.showSaveDialog(mainWindow, {

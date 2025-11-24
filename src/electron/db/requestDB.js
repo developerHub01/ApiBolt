@@ -37,7 +37,7 @@ export const clearRequestDB = async (id) => {
     /* clear request or folder meta data */
     await updateRequestOrFolderMeta({
       id,
-      name: "",
+      name: "Request",
       method: "get",
     });
     /* clear hidden headers check data */
