@@ -240,6 +240,8 @@ contextBridge.exposeInMainWorld("electronAPIEnvironmentsDB", {
     await ipcRenderer.invoke("deleteAllEnvironments"),
   deleteEnvironments: async (id) =>
     await ipcRenderer.invoke("deleteEnvironments", id),
+  exportEnvironments: async (id) =>
+    await ipcRenderer.invoke("exportEnvironments", id),
 });
 
 /**

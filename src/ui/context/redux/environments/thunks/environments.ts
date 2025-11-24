@@ -109,6 +109,27 @@ export const deleteAllEnvironments = createAsyncThunk<
   }
 });
 
+export const exportEnvironments = createAsyncThunk<
+  boolean,
+  void,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("environments/exportEnvironments", async (_, { dispatch }) => {
+  try {
+    const response =
+      await window.electronAPIEnvironmentsDB.exportEnvironments();
+
+    // update the environment list after deletion
+    if (response) dispatch(loadEnvironmentsList());
+    return response;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+});
+
 export const deleteEnvironments = createAsyncThunk<
   boolean,
   string,

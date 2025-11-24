@@ -1,12 +1,10 @@
-import { memo, useCallback, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { deleteAllEnvironments } from "@/context/redux/environments/thunks/environments";
+import {
+  deleteAllEnvironments,
+  exportEnvironments,
+} from "@/context/redux/environments/thunks/environments";
 import {
   EllipsisVertical as ThreeDotIcon,
   Upload as ExportIcon,
@@ -15,6 +13,14 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { selectEnvironmentsList } from "@/context/redux/environments/selectors/environments";
+import { toast } from "sonner";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const listItemToHide = new Set(["export", "delete"]);
 
@@ -24,8 +30,16 @@ const ThreeeDotAction = () => {
     Boolean(Object.keys(selectEnvironmentsList(state) ?? {}).length)
   );
 
-  const handleDeleteAll = useCallback(() => {
-    dispatch(deleteAllEnvironments());
+  const handleExport = useCallback(async () => {
+    const response = await dispatch(exportEnvironments()).unwrap();
+    if (response) toast.success("Environment variables exported successfully!");
+    else toast.error("Something went wrong while exporting list.");
+  }, [dispatch]);
+
+  const handleDeleteAll = useCallback(async () => {
+    const response = await dispatch(deleteAllEnvironments()).unwrap();
+    if (response) toast.success("Environment variables deleted successfully!");
+    else toast.error("Something went wrong while exporting list.");
   }, [dispatch]);
 
   const actionButtonList: Array<{
@@ -45,6 +59,7 @@ const ThreeeDotAction = () => {
           id: "export",
           label: "Export",
           Icon: ExportIcon,
+          onClick: handleExport,
         },
         {
           id: "delete",
@@ -55,46 +70,36 @@ const ThreeeDotAction = () => {
       ].filter((item /* if no list item then dont hide listItemToHides */) =>
         haveListItem ? true : !listItemToHide.has(item.id)
       ),
-    [handleDeleteAll, haveListItem]
+    [handleDeleteAll, handleExport, haveListItem]
   );
 
   return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button variant="ghost">
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size={"icon"}>
           <ThreeDotIcon />
         </Button>
-      </PopoverTrigger>
-      <PopoverContent
-        className="w-full p-0 flex flex-col gap-1 min-w-40 [&>button]:w-full [&>button]:justify-start"
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
         align="end"
+        className="p-0 w-fit min-w-40 flex flex-col [&>button]:justify-start"
       >
-        {actionButtonList.map((item) => (
-          <ActionButton key={item.id} {...item} />
-        ))}
-      </PopoverContent>
-    </Popover>
+        <DropdownMenuGroup>
+          {actionButtonList.map(({ id, onClick, label, Icon }) => (
+            <DropdownMenuItem asChild key={id}>
+              <Button
+                variant={"ghost"}
+                onClick={onClick}
+                className="w-full justify-start"
+              >
+                <Icon /> {label}
+              </Button>
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
-
-interface ActionButtonProps extends React.ComponentProps<"button"> {
-  Icon: LucideIcon;
-  label: string;
-  onClick?: () => void;
-}
-
-const ActionButton = memo(({ Icon, label, onClick }: ActionButtonProps) => {
-  return (
-    <Button
-      variant={"ghost"}
-      {...{
-        onClick: onClick,
-      }}
-      className="w-full justify-start"
-    >
-      <Icon /> {label}
-    </Button>
-  );
-});
 
 export default ThreeeDotAction;

@@ -107,3 +107,21 @@ export const getActiveProject = async () => {
     console.error(error);
   }
 };
+
+export const getActiveProjectDetails = async () => {
+  try {
+    const result = await db
+      .select()
+      .from(activeProjectTable)
+      .leftJoin(
+        projectTable,
+        eq(activeProjectTable.activeProjectId, projectTable.id)
+      )
+      .where(eq(activeProjectTable.id, ACTIVE_PROJECT_ID))
+      .limit(1);
+
+    return result[0] ?? null;
+  } catch (error) {
+    console.error(error);
+  }
+};
