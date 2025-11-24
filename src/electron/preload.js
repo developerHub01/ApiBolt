@@ -24,6 +24,11 @@ window.addEventListener("DOMContentLoaded", async () => {
   await handleApplyTheme();
 });
 
+/**
+ * ====================
+ * Basic apis
+ * ====================
+ */
 contextBridge.exposeInMainWorld("electronAPI", {
   getCookiesFromUrl: async (url) => {
     const cookieURL = new URL(url).origin;
@@ -57,6 +62,10 @@ contextBridge.exposeInMainWorld("electronAPI", {
     ipcRenderer.removeAllListeners("windowMaximizeChange");
   },
 
+  /* zoom handler */
+  setZoom: (factor) => webFrame.setZoomFactor(factor),
+  getZoom: () => webFrame.getZoomFactor(),
+
   generateJWTToken: async (data) => {
     return await ipcRenderer.invoke("generateJWTToken", data);
   },
@@ -72,15 +81,20 @@ contextBridge.exposeInMainWorld("electronAPI", {
   },
 });
 
+/**
+ * ====================
+ * File system handling
+ * ====================
+ */
 contextBridge.exposeInMainWorld("electronFileSystem", {
   openFolder: async (path) => await ipcRenderer.invoke("openFolder", path),
 });
 
-contextBridge.exposeInMainWorld("electronAPIZoom", {
-  setZoom: (factor) => webFrame.setZoomFactor(factor),
-  getZoom: () => webFrame.getZoomFactor(),
-});
-
+/**
+ * ====================
+ * Theme
+ * ====================
+ */
 contextBridge.exposeInMainWorld("electronAPITheme", {
   getThemeListMeta: async (...payload) =>
     await ipcRenderer.invoke("getThemeListMeta", ...payload),
@@ -98,6 +112,11 @@ contextBridge.exposeInMainWorld("electronAPITheme", {
     await ipcRenderer.invoke("saveThemePalette", ...payload),
 });
 
+/**
+ * ====================
+ * Active theme
+ * ====================
+ */
 contextBridge.exposeInMainWorld("electronAPIActiveTheme", {
   getActiveThemeId: async (...payload) =>
     await ipcRenderer.invoke("getActiveThemeId", ...payload),
@@ -107,6 +126,11 @@ contextBridge.exposeInMainWorld("electronAPIActiveTheme", {
     await ipcRenderer.invoke("changeActiveTheme", ...payload),
 });
 
+/**
+ * ====================
+ * Http status
+ * ====================
+ */
 contextBridge.exposeInMainWorld("electronAPIHttpStatusDB", {
   getHttpStatus: async () => await ipcRenderer.invoke("getHttpStatus"),
   getHttpStatusByCode: async () =>
@@ -115,6 +139,11 @@ contextBridge.exposeInMainWorld("electronAPIHttpStatusDB", {
     await ipcRenderer.invoke("updateHttpStatus", ...payload),
 });
 
+/**
+ * ====================
+ * Active sidebar tab
+ * ====================
+ */
 contextBridge.exposeInMainWorld("electronAPIActiveSidebarTabDB", {
   getActiveSidebarTab: async () =>
     await ipcRenderer.invoke("getActiveSidebarTab"),
@@ -126,6 +155,11 @@ contextBridge.exposeInMainWorld("electronAPIActiveSidebarTabDB", {
     await ipcRenderer.invoke("deleteActiveSidebarTab"),
 });
 
+/**
+ * ====================
+ * Code snippit
+ * ====================
+ */
 contextBridge.exposeInMainWorld("electronAPIActiveCodeSnippitTypeDB", {
   getActiveCodeSnippitType: async () =>
     await ipcRenderer.invoke("getActiveCodeSnippitType"),
@@ -137,6 +171,11 @@ contextBridge.exposeInMainWorld("electronAPIActiveCodeSnippitTypeDB", {
     await ipcRenderer.invoke("deleteActiveCodeSnippitType"),
 });
 
+/**
+ * ====================
+ * Cookies
+ * ====================
+ */
 contextBridge.exposeInMainWorld("electronAPICookiesDB", {
   getCookiesByProject: async (...payload) =>
     await ipcRenderer.invoke("getCookiesByProject", ...payload),
@@ -154,6 +193,11 @@ contextBridge.exposeInMainWorld("electronAPICookiesDB", {
     await ipcRenderer.invoke("clearCookiesByProject", ...payload),
 });
 
+/**
+ * ====================
+ * Projects
+ * ====================
+ */
 contextBridge.exposeInMainWorld("electronAPIProjectsDB", {
   getProjects: async () => await ipcRenderer.invoke("getProjects"),
   createProjects: async (...payload) =>
@@ -166,6 +210,11 @@ contextBridge.exposeInMainWorld("electronAPIProjectsDB", {
   getActiveProject: async () => await ipcRenderer.invoke("getActiveProject"),
 });
 
+/**
+ * ====================
+ * Settings
+ * ====================
+ */
 contextBridge.exposeInMainWorld("electronAPISettingsDB", {
   getSettings: async () => await ipcRenderer.invoke("getSettings"),
   updateSettings: async (...payload) =>
@@ -174,6 +223,11 @@ contextBridge.exposeInMainWorld("electronAPISettingsDB", {
     await ipcRenderer.invoke("updateSettingsBackgroundImages", ...payload),
 });
 
+/**
+ * ====================
+ * Environments
+ * ====================
+ */
 contextBridge.exposeInMainWorld("electronAPIEnvironmentsDB", {
   getAllEnvironments: async () =>
     await ipcRenderer.invoke("getAllEnvironments"),
@@ -188,6 +242,11 @@ contextBridge.exposeInMainWorld("electronAPIEnvironmentsDB", {
     await ipcRenderer.invoke("deleteEnvironments", id),
 });
 
+/**
+ * ====================
+ * Authorization
+ * ====================
+ */
 contextBridge.exposeInMainWorld("electronAPIAuthorizationDB", {
   getAuth: async (...payload) =>
     await ipcRenderer.invoke("getAuth", ...payload),
@@ -203,6 +262,11 @@ contextBridge.exposeInMainWorld("electronAPIAuthorizationDB", {
     await ipcRenderer.invoke("duplicateAuth", ...payload),
 });
 
+/**
+ * ====================
+ * Request or folder meta
+ * ====================
+ */
 contextBridge.exposeInMainWorld("electronAPIRequestOrFolderMetaDB", {
   getRequestOrFolderMeta: async () =>
     await ipcRenderer.invoke("getRequestOrFolderMeta"),
@@ -232,6 +296,11 @@ contextBridge.exposeInMainWorld("electronAPIRequestOrFolderMetaDB", {
     ),
 });
 
+/**
+ * ====================
+ * Tabs
+ * ====================
+ */
 contextBridge.exposeInMainWorld("electronAPITabsDB", {
   getTabList: async () => await ipcRenderer.invoke("getTabList"),
   updateTabList: async (...payload) =>
@@ -241,6 +310,11 @@ contextBridge.exposeInMainWorld("electronAPITabsDB", {
     await ipcRenderer.invoke("deleteTabListByProjectId", ...payload),
 });
 
+/**
+ * ====================
+ * Folder
+ * ====================
+ */
 contextBridge.exposeInMainWorld("electronAPIFolderDB", {
   getFolder: async (...payload) =>
     await ipcRenderer.invoke("getFolder", ...payload),
@@ -250,6 +324,11 @@ contextBridge.exposeInMainWorld("electronAPIFolderDB", {
     await ipcRenderer.invoke("duplicateFolder", ...payload),
 });
 
+/**
+ * ====================
+ * Params
+ * ====================
+ */
 contextBridge.exposeInMainWorld("electronAPIParamsDB", {
   getParams: async (...payload) =>
     await ipcRenderer.invoke("getParams", ...payload),
@@ -269,6 +348,11 @@ contextBridge.exposeInMainWorld("electronAPIParamsDB", {
     await ipcRenderer.invoke("duplicateParams", ...payload),
 });
 
+/**
+ * ====================
+ * Headers
+ * ====================
+ */
 contextBridge.exposeInMainWorld("electronAPIHeadersDB", {
   getHeaders: async (...payload) =>
     await ipcRenderer.invoke("getHeaders", ...payload),
@@ -288,6 +372,11 @@ contextBridge.exposeInMainWorld("electronAPIHeadersDB", {
     await ipcRenderer.invoke("duplicateHeaders", ...payload),
 });
 
+/**
+ * ====================
+ * Hidden headers
+ * ====================
+ */
 contextBridge.exposeInMainWorld("electronAPIHiddenHeadersCheckDB", {
   getHiddenHeadersCheck: async (...payload) =>
     await ipcRenderer.invoke("getHiddenHeadersCheck", ...payload),
@@ -299,6 +388,11 @@ contextBridge.exposeInMainWorld("electronAPIHiddenHeadersCheckDB", {
     await ipcRenderer.invoke("duplicateHiddenHeadersCheck", ...payload),
 });
 
+/**
+ * ====================
+ * Show hidden meta data
+ * ====================
+ */
 contextBridge.exposeInMainWorld("electronAPIShowHiddenMetaDataDB", {
   getShowHiddenMetaData: async (...payload) =>
     await ipcRenderer.invoke("getShowHiddenMetaData", ...payload),
@@ -310,6 +404,11 @@ contextBridge.exposeInMainWorld("electronAPIShowHiddenMetaDataDB", {
     await ipcRenderer.invoke("duplicateShowHiddenMetaData", ...payload),
 });
 
+/**
+ * ====================
+ * Body raw data
+ * ====================
+ */
 contextBridge.exposeInMainWorld("electronAPIBodyRawDB", {
   getBodyRaw: async (...payload) =>
     await ipcRenderer.invoke("getBodyRaw", ...payload),
@@ -323,6 +422,11 @@ contextBridge.exposeInMainWorld("electronAPIBodyRawDB", {
     await ipcRenderer.invoke("replaceBodyRaw", ...payload),
 });
 
+/**
+ * ====================
+ * Body binary data
+ * ====================
+ */
 contextBridge.exposeInMainWorld("electronAPIBodyBinaryDB", {
   getBodyBinary: async (...payload) =>
     await ipcRenderer.invoke("getBodyBinary", ...payload),
@@ -338,6 +442,11 @@ contextBridge.exposeInMainWorld("electronAPIBodyBinaryDB", {
     await ipcRenderer.invoke("replaceBodyBinary", ...payload),
 });
 
+/**
+ * ====================
+ * Request meta tab
+ * ====================
+ */
 contextBridge.exposeInMainWorld("electronAPIRequestMetaTabDB", {
   getRequestMetaTab: async (...payload) =>
     await ipcRenderer.invoke("getRequestMetaTab", ...payload),
@@ -353,6 +462,11 @@ contextBridge.exposeInMainWorld("electronAPIRequestMetaTabDB", {
     await ipcRenderer.invoke("replaceRequestMetaTab", ...payload),
 });
 
+/**
+ * ====================
+ * body xwww-form-urlencoded
+ * ====================
+ */
 contextBridge.exposeInMainWorld("electronAPIBodyXWWWFormUrlencodedDB", {
   getBodyXWWWFormUrlencoded: async (...payload) =>
     await ipcRenderer.invoke("getBodyXWWWFormUrlencoded", ...payload),
@@ -378,6 +492,11 @@ contextBridge.exposeInMainWorld("electronAPIBodyXWWWFormUrlencodedDB", {
     await ipcRenderer.invoke("duplicateBodyXWWWFormUrlencoded", ...payload),
 });
 
+/**
+ * ====================
+ * body form-data
+ * ====================
+ */
 contextBridge.exposeInMainWorld("electronAPIBodyFormDataDB", {
   getBodyFormData: async (...payload) =>
     await ipcRenderer.invoke("getBodyFormData", ...payload),
@@ -403,6 +522,11 @@ contextBridge.exposeInMainWorld("electronAPIBodyFormDataDB", {
     await ipcRenderer.invoke("duplicateBodyFormData", ...payload),
 });
 
+/**
+ * ====================
+ * Meta show column
+ * ====================
+ */
 contextBridge.exposeInMainWorld("electronAPIMetaShowColumnDB", {
   getMetaShowColumn: async (...payload) =>
     await ipcRenderer.invoke("getMetaShowColumn", ...payload),
@@ -416,6 +540,11 @@ contextBridge.exposeInMainWorld("electronAPIMetaShowColumnDB", {
     await ipcRenderer.invoke("duplicateMetaShowColumn", ...payload),
 });
 
+/**
+ * ====================
+ * Api url
+ * ====================
+ */
 contextBridge.exposeInMainWorld("electronAPIApiUrl", {
   getApiUrlDB: async (...payload) =>
     await ipcRenderer.invoke("getApiUrlDB", ...payload),
@@ -427,11 +556,21 @@ contextBridge.exposeInMainWorld("electronAPIApiUrl", {
     await ipcRenderer.invoke("updateApiUrl", ...payload),
 });
 
+/**
+ * ====================
+ * Request
+ * ====================
+ */
 contextBridge.exposeInMainWorld("electronAPIRequest", {
   clearRequestDB: async (...payload) =>
     await ipcRenderer.invoke("clearRequestDB", ...payload),
 });
 
+/**
+ * ====================
+ * Keyboard shortcut
+ * ====================
+ */
 contextBridge.exposeInMainWorld("electronAPIKeyboardShortcut", {
   getKeyboardShortcuts: async (...payload) =>
     await ipcRenderer.invoke("getKeyboardShortcuts", ...payload),
@@ -443,6 +582,11 @@ contextBridge.exposeInMainWorld("electronAPIKeyboardShortcut", {
     await ipcRenderer.invoke("resetKeyboardShortcuts", ...payload),
 });
 
+/**
+ * ====================
+ * History
+ * ====================
+ */
 contextBridge.exposeInMainWorld("electronAPIHistory", {
   getHistoryById: async (...payload) =>
     await ipcRenderer.invoke("getHistoryById", ...payload),

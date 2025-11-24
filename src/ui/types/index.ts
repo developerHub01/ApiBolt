@@ -75,6 +75,10 @@ declare global {
       windowClose(): Promise<void>;
       isWindowMaximized(): Promise<boolean>;
 
+      /* basic zoom handler */
+      setZoom: (factor: number) => Promise<void>;
+      getZoom: () => Promise<number>;
+
       onWindowMaximizeChange(cb: (isMaximized: boolean) => void): void;
       removeWindowMaximizeChange(): void;
 
@@ -96,11 +100,6 @@ declare global {
 
     electronFileSystem: {
       openFolder: (factor: string) => Promise<boolean>;
-    };
-
-    electronAPIZoom: {
-      setZoom: (factor: number) => Promise<void>;
-      getZoom: () => Promise<number>;
     };
 
     electronAPITheme: {
