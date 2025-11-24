@@ -7,7 +7,7 @@ import { getTabList } from "./tabsDB.js";
 export const getApiUrlDB = async (id) => {
   try {
     if (!id) id = (await getTabList())?.selectedTab;
-    if (!id) return [];
+    if (!id) return null;
 
     return (
       (

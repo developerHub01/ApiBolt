@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -7,17 +8,26 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-  Download as ExportIcon,
+  Upload as ExportIcon,
   EllipsisVertical as ThreeDotIcon,
-  FileDown as ImportIcon,
+  Download as ImportIcon,
   BrushCleaning as ClearIcon,
 } from "lucide-react";
-// import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import { exportRequest } from "@/context/redux/request-response/thunks/request";
+import { toast } from "sonner";
+import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
 // import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
 
 const RequestTopRight = () => {
-  // const dispatch = useAppDispatch();
-  // const selectedTab = useAppSelector(selectSelectedTab);
+  const dispatch = useAppDispatch();
+  const selectedTab = useAppSelector(selectSelectedTab);
+
+  const handleExport = useCallback(async () => {
+    const { success, message } = await dispatch(exportRequest()).unwrap();
+    if (success) toast.success(message);
+    else toast.error(message);
+  }, [dispatch]);
 
   const actionList = [
     {
@@ -30,7 +40,7 @@ const RequestTopRight = () => {
       id: "export",
       label: "Export",
       Icon: ExportIcon,
-      onClick: () => {},
+      onClick: handleExport,
     },
     {
       id: "clear",
@@ -39,6 +49,8 @@ const RequestTopRight = () => {
       onClick: () => {},
     },
   ];
+
+  if (!selectedTab) return null;
 
   return (
     <div className="flex items-center">

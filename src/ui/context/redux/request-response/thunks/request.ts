@@ -13,6 +13,7 @@ import {
 } from "@/context/redux/request-response/request-response-slice";
 import { handleRequestUrlClearTokens } from "@/context/redux/request-url/request-url-slice";
 import { loadAuthorization } from "@/context/redux/request-response/thunks/auth";
+import type { ElectronResponseInterface } from "@/types";
 
 export const clearRequest = createAsyncThunk<
   void,
@@ -79,5 +80,34 @@ export const clearRequest = createAsyncThunk<
     );
   } catch (error) {
     console.error(error);
+  }
+});
+
+export const exportRequest = createAsyncThunk<
+  ElectronResponseInterface,
+  void | string,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("request-response/exportRequest", async (id, { getState }) => {
+  try {
+    const state = getState() as RootState;
+    const requestId = id ?? state.requestResponse.selectedTab;
+    if (!requestId || !state.requestResponse.requestList[requestId].method)
+      return {
+        success: false,
+        message: "No request active",
+      };
+
+    const response = await window.electronAPIRequest.exportRequest(requestId);
+
+    return response;
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: "Something went wrong while exporting request.",
+    };
   }
 });

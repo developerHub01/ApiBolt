@@ -481,6 +481,9 @@ declare global {
 
     electronAPIRequest: {
       clearRequestDB(requestOrFolderMetaId?: string): Promise<boolean>;
+      exportRequest(
+        requestOrFolderMetaId?: string
+      ): Promise<ElectronResponseInterface>;
     };
 
     electronAPIKeyboardShortcut: {
