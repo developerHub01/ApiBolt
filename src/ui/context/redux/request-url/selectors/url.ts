@@ -34,7 +34,7 @@ export const selectParsedRequestUrl = createSelector(
   (state: RootState) =>
     state.requestResponse.params[state.requestResponse.selectedTab ?? ""],
   (state: RootState) => selectAuthorizationParamData(state),
-  (state: RootState) => state.requestResponse.environmentsList,
+  (state: RootState) => state.environments.environmentsList,
   (
     tokens: Array<UrlTokenInterface>,
     params: Array<ParamInterface>,

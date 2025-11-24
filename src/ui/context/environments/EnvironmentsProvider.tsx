@@ -56,7 +56,7 @@ const EnvironmentsProvider = ({ children }: EnvironmentsProviderProps) => {
     Record<string, EnvironmentInterface>
   >({});
   const environmentsList = useAppSelector(
-    (state) => state.requestResponse.environmentsList ?? {}
+    (state) => state.environments.environmentsList ?? {}
   );
   const [searchQuery, setSearchQuery] = useState<string>("");
 

@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import { v4 as uuidv4 } from "uuid";
-import { handleLoadEnvironmentsList } from "@/context/redux/request-response/request-response-slice";
+import { handleLoadEnvironmentsList } from "@/context/redux/environments/environments-slice";
 import type {
   EnvironmentInterface,
   EnvironmentPayloadInterface,
@@ -17,7 +17,7 @@ export const loadEnvironmentsList = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->("request-response/loadEnvironmentsList", async (_, { dispatch }) => {
+>("environments/loadEnvironmentsList", async (_, { dispatch }) => {
   try {
     const list = (
       (await window.electronAPIEnvironmentsDB.getEnvironments()) ?? []
@@ -46,7 +46,7 @@ export const createEnvironments = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->("request-response/createEnvironments", async (_, { dispatch }) => {
+>("environments/createEnvironments", async (_, { dispatch }) => {
   try {
     const payload = {
       id: uuidv4(),
@@ -73,24 +73,20 @@ export const updateEnvironments = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->(
-  "request-response/updateEnvironments",
-  async ({ id, payload }, { dispatch }) => {
-    try {
-      const response =
-        await window.electronAPIEnvironmentsDB.updateEnvironments({
-          id,
-          ...payload,
-        });
+>("environments/updateEnvironments", async ({ id, payload }, { dispatch }) => {
+  try {
+    const response = await window.electronAPIEnvironmentsDB.updateEnvironments({
+      id,
+      ...payload,
+    });
 
-      if (response) dispatch(loadEnvironmentsList());
-      return response;
-    } catch (error) {
-      console.error(error);
-      return false;
-    }
+    if (response) dispatch(loadEnvironmentsList());
+    return response;
+  } catch (error) {
+    console.error(error);
+    return false;
   }
-);
+});
 
 export const deleteAllEnvironments = createAsyncThunk<
   boolean,
@@ -99,7 +95,7 @@ export const deleteAllEnvironments = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->("request-response/deleteAllEnvironments", async (_, { dispatch }) => {
+>("environments/deleteAllEnvironments", async (_, { dispatch }) => {
   try {
     const response =
       await window.electronAPIEnvironmentsDB.deleteAllEnvironments();
@@ -120,7 +116,7 @@ export const deleteEnvironments = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->("request-response/deleteEnvironments", async (id, { dispatch }) => {
+>("environments/deleteEnvironments", async (id, { dispatch }) => {
   try {
     const response =
       await window.electronAPIEnvironmentsDB.deleteEnvironments(id);

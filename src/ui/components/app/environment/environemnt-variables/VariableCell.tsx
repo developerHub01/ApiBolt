@@ -138,7 +138,7 @@ const VariableCell = memo(
           )}
           {type === "select" && (
             <Select value={value} onValueChange={handleValueChange}>
-              <SelectTrigger size="sm" className="min-w-28 w-full capitalize">
+              <SelectTrigger size="xs" className="min-w-28 w-full capitalize">
                 <SelectValue
                   className="capitalize"
                   placeholder="Select Type"

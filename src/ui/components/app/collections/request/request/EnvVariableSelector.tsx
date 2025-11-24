@@ -16,7 +16,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectEnvironmentsVariableListUnique } from "@/context/redux/request-response/selectors/environment";
+import { selectEnvironmentsVariableListUnique } from "@/context/redux/environments/selectors/environments";
 
 interface EnvVariableSelectorProps {
   value: string;

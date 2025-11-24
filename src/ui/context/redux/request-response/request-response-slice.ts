@@ -46,7 +46,6 @@ import type {
   TAuthType,
   TBearerToken,
 } from "@/types/authorization.types";
-import type { EnvironmentInterface } from "@/types/environment.types";
 import {
   DEFAULT_FOLDER_DESCRIPTION,
   DEFAULT_FOLDER_TITLE,
@@ -55,9 +54,6 @@ import type { TRequestCodeType } from "@/types/code-snippit.types";
 
 interface RequestResponseState {
   codeSnippitType: TRequestCodeType | null;
-
-  environmentsList: Record<string, EnvironmentInterface>;
-
   requestList: RequestListInterface;
   loadedRequestList: Record<string, boolean>;
   isRequestListLoaded: boolean;
@@ -139,8 +135,6 @@ interface RequestResponseState {
 const initialState: RequestResponseState = {
   codeSnippitType: null,
 
-  environmentsList: {},
-
   requestList: {},
   loadedRequestList: {},
   isRequestListLoaded: false,
@@ -213,15 +207,6 @@ export const requestResponseSlice = createSlice({
       state.codeSnippitType = action.payload;
     },
     /* =============== CodeSnippit reducers end ============= */
-
-    /* =============== Environment reducers start ============= */
-    handleLoadEnvironmentsList: (
-      state,
-      action: PayloadAction<Record<string, EnvironmentInterface>>
-    ) => {
-      state.environmentsList = action.payload;
-    },
-    /* =============== Environment reducers end ============= */
 
     /* =============== Authorization reducers start ============= */
     handleAuthorizationsInheritedId: (
@@ -1353,7 +1338,6 @@ export const selectRequestNameById =
 
 export const {
   handleChangeCodeSnippitType,
-  handleLoadEnvironmentsList,
 
   handleAuthorizationsInheritedId,
   handleAuthorizations,

@@ -8,13 +8,13 @@ import Empty from "@/components/ui/empty";
 import {
   deleteEnvironments,
   updateEnvironments,
-} from "@/context/redux/request-response/thunks/environment";
+} from "@/context/redux/environments/thunks/environments";
 
 const VariableList = memo(() => {
   const dispatch = useAppDispatch();
   const { environmentsListState, searchQuery } = useEnvironments();
   const environmentsList = useAppSelector(
-    (state) => state.requestResponse.environmentsList ?? {}
+    (state) => state.environments.environmentsList ?? {}
   );
 
   const list = useMemo(() => {

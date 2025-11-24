@@ -200,6 +200,7 @@ declare global {
       ): Promise<boolean>;
       deleteAllEnvironments(): Promise<boolean>;
       deleteEnvironments(id: string): Promise<boolean>;
+      exportEnvironments(id?: string): Promise<boolean>;
     };
 
     electronAPIAuthorizationDB: {

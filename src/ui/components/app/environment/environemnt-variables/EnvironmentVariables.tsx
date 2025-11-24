@@ -1,7 +1,7 @@
 import AddNewData from "@/components/add-new-data";
 import VariableList from "@/components/app/environment/environemnt-variables/VariableList";
 import { useAppDispatch } from "@/context/redux/hooks";
-import { createEnvironments } from "@/context/redux/request-response/thunks/environment";
+import { createEnvironments } from "@/context/redux/environments/thunks/environments";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 const EnvironmentVariables = () => {

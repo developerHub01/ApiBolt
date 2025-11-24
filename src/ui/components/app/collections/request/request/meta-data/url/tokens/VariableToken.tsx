@@ -11,7 +11,7 @@ import {
   requestUrlUpdateToken,
 } from "@/context/redux/request-url/thunks/request-url";
 import EnvVariableSelector from "@/components/app/collections/request/request/EnvVariableSelector";
-import { selectEnvironmentsVariableList } from "@/context/redux/request-response/selectors/environment";
+import { selectEnvironmentsVariableList } from "@/context/redux/environments/selectors/environments";
 
 interface VariableTokenProps {
   id: string;

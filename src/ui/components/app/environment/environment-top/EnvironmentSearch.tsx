@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { useEnvironments } from "@/context/environments/EnvironmentsProvider";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectEnvironmentsList } from "@/context/redux/request-response/selectors/environment";
+import { selectEnvironmentsList } from "@/context/redux/environments/selectors/environments";
 import Searchbar from "@/components/ui/searchbar";
 
 const EnvironmentSearch = memo(() => {

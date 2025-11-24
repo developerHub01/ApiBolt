@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import projectReducer from "@/context/redux/project/project-slice";
+import environmentsReducer from "@/context/redux/environments/environments-slice";
 import themeReducer from "@/context/redux/theme/theme-slice";
 import keyboardShortcutsReducer from "@/context/redux/keyboard-shortcuts/keyboard-shortcuts-slice";
 import requestResponseReducer from "@/context/redux/request-response/request-response-slice";
@@ -15,6 +16,7 @@ import historyReducer from "@/context/redux/history/history-slice";
 export const store = configureStore({
   reducer: {
     project: projectReducer,
+    environments: environmentsReducer,
     theme: themeReducer,
     keyboardShortcuts: keyboardShortcutsReducer,
     requestResponse: requestResponseReducer,

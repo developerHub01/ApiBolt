@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectEnvironmentsVariableListUnique } from "@/context/redux/request-response/selectors/environment";
+import { selectEnvironmentsVariableListUnique } from "@/context/redux/environments/selectors/environments";
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 import type { TParamContentType } from "@/types/request-response.types";
 import { cn } from "@/lib/utils";

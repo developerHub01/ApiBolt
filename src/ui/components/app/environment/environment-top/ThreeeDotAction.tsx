@@ -6,7 +6,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { deleteAllEnvironments } from "@/context/redux/request-response/thunks/environment";
+import { deleteAllEnvironments } from "@/context/redux/environments/thunks/environments";
 import {
   EllipsisVertical as ThreeDotIcon,
   Upload as ExportIcon,
@@ -14,7 +14,7 @@ import {
   Trash2 as DeleteIcon,
   type LucideIcon,
 } from "lucide-react";
-import { selectEnvironmentsList } from "@/context/redux/request-response/selectors/environment";
+import { selectEnvironmentsList } from "@/context/redux/environments/selectors/environments";
 
 const listItemToHide = new Set(["export", "delete"]);
 
