@@ -5,7 +5,16 @@ import { getActiveProject } from "./projectsDB.js";
 
 export const getAllEnvironments = async () => {
   try {
-    return await db.select().from(environmentTable);
+    const response = await db.select().from(environmentTable);
+
+    if (Array.isArray(response)) {
+      response.map(
+        (_, index) =>
+          (response[index].isCheck = Boolean(response[index]?.isCheck))
+      );
+    }
+
+    return response;
   } catch (error) {
     console.error(error);
   }
@@ -15,10 +24,19 @@ export const getAllEnvironments = async () => {
 export const getEnvironments = async (id) => {
   try {
     if (!id) id = await getActiveProject();
-    return await db
+    const response = await db
       .select()
       .from(environmentTable)
       .where(eq(environmentTable.projectId, id));
+
+    if (Array.isArray(response)) {
+      response.map(
+        (_, index) =>
+          (response[index].isCheck = Boolean(response[index]?.isCheck))
+      );
+    }
+    
+    return response;
   } catch (error) {
     console.error(error);
   }
@@ -26,18 +44,19 @@ export const getEnvironments = async (id) => {
 
 export const createEnvironments = async (payload = {}) => {
   try {
-    if ("isCheck" in payload) payload["isCheck"] = Number(payload["isCheck"]);
+    const activeProjectId = await getActiveProject();
 
-    if (!payload.projectId) {
-      const activeProjectId = await getActiveProject();
-      payload.projectId = activeProjectId;
+    if (!Array.isArray(payload)) {
+      payload = [payload];
     }
 
-    if (!payload.projectId) return false;
+    for (const item of payload) {
+      if ("isCheck" in item) item["isCheck"] = Number(item["isCheck"]);
+      if (!item.projectId) item.projectId = activeProjectId;
+      if (!item.projectId) return false;
+    }
 
-    const result = await db.insert(environmentTable).values({
-      ...payload,
-    });
+    const result = await db.insert(environmentTable).values(payload);
 
     return result.changes > 0;
   } catch (error) {

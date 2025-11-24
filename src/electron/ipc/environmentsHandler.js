@@ -10,7 +10,8 @@ import {
 } from "../db/environmentsDB.js";
 import { mainWindow } from "../main.js";
 import { getActiveProjectDetails } from "../db/projectsDB.js";
-import { writeFile } from "fs/promises";
+import { readFile, writeFile } from "fs/promises";
+import { filterValidEnvironments } from "../utils/environments.js";
 
 export const enviromentsHandlers = () => {
   ipcMain.handle(
@@ -65,13 +66,66 @@ export const enviromentsHandlers = () => {
 
       if (!canceled && filePath) {
         await writeFile(filePath, JSON.stringify(envs, null, 2));
-        return true;
+        return {
+          success: true,
+          message: "Environment variables exported successfully!",
+        };
       } else {
         throw new Error("Save dialog cancelled.");
       }
     } catch (error) {
       console.error(error);
-      return false;
+      return {
+        success: false,
+        message: error.message ?? "Something went wrong while exporting list.",
+      };
+    }
+  });
+  ipcMain.handle("importEnvironments", async (_, ...rest) => {
+    try {
+      const activeProject = await getActiveProjectDetails();
+
+      const projectName = activeProject?.projects_table?.name;
+      if (!projectName) throw new Error("no active project");
+
+      const { filePaths } = await dialog.showOpenDialog(mainWindow, {
+        title: "Import environment variable list",
+        defaultPath: app.getPath("downloads"),
+        filters: [
+          {
+            name: "JSON file",
+            extensions: ["json"],
+          },
+        ],
+      });
+
+      const filePath = filePaths?.[0];
+      if (!filePath) throw new Error("No file selected");
+
+      let fileData = await readFile(filePath, "utf-8");
+
+      try {
+        fileData = JSON.parse(fileData);
+      } catch (error) {
+        throw new Error("Not valid JSON data");
+      }
+
+      const cleanedData = filterValidEnvironments(fileData);
+      if (!cleanedData) throw new Error("Not valid environment data");
+
+      const response = await createEnvironments(cleanedData);
+      if (!response) throw new Error();
+
+      return {
+        success: true,
+        message: "Environments variable imported successfully!",
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        success: false,
+        message: error.message ?? "Something went wrong while exporting list.",
+      };
     }
   });
 };

@@ -58,6 +58,11 @@ import type {
   ThemeMetaInterface,
 } from "@/types/theme.types";
 
+export interface ElectronResponseInterface {
+  success: boolean;
+  message: string;
+}
+
 declare global {
   interface Window {
     electronAPI: {
@@ -200,7 +205,8 @@ declare global {
       ): Promise<boolean>;
       deleteAllEnvironments(): Promise<boolean>;
       deleteEnvironments(id: string): Promise<boolean>;
-      exportEnvironments(id?: string): Promise<boolean>;
+      exportEnvironments(id?: string): Promise<ElectronResponseInterface>;
+      importEnvironments(id?: string): Promise<ElectronResponseInterface>;
     };
 
     electronAPIAuthorizationDB: {

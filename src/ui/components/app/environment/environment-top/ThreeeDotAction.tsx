@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
   deleteAllEnvironments,
   exportEnvironments,
+  importEnvironments,
 } from "@/context/redux/environments/thunks/environments";
 import {
   EllipsisVertical as ThreeDotIcon,
@@ -30,10 +31,16 @@ const ThreeeDotAction = () => {
     Boolean(Object.keys(selectEnvironmentsList(state) ?? {}).length)
   );
 
+  const handleImport = useCallback(async () => {
+    const response = await dispatch(importEnvironments()).unwrap();
+    if (response?.success) toast.success(response.message);
+    else toast.error(response.message);
+  }, [dispatch]);
+
   const handleExport = useCallback(async () => {
     const response = await dispatch(exportEnvironments()).unwrap();
-    if (response) toast.success("Environment variables exported successfully!");
-    else toast.error("Something went wrong while exporting list.");
+    if (response?.success) toast.success(response.message);
+    else toast.error(response.message);
   }, [dispatch]);
 
   const handleDeleteAll = useCallback(async () => {
@@ -54,6 +61,7 @@ const ThreeeDotAction = () => {
           id: "import",
           label: "Import",
           Icon: ImportIcon,
+          onClick: handleImport,
         },
         {
           id: "export",
@@ -70,7 +78,7 @@ const ThreeeDotAction = () => {
       ].filter((item /* if no list item then dont hide listItemToHides */) =>
         haveListItem ? true : !listItemToHide.has(item.id)
       ),
-    [handleDeleteAll, handleExport, haveListItem]
+    [handleDeleteAll, handleExport, handleImport, haveListItem]
   );
 
   return (

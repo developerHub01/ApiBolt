@@ -70,7 +70,7 @@ export const environmentTable = sqliteTable("environments_table", {
     .primaryKey()
     .$defaultFn(() => uuidv4()),
   variable: text(),
-  type: text().default("default"),
+  type: text().default("default") /* "default" | "secret" */,
   value: text(),
   isCheck: int().notNull().default(1),
   projectId: text()
