@@ -3,7 +3,6 @@ import React, { createContext, useCallback, useContext, useState } from "react";
 interface RequestResponseContext {
   forceCollapse: boolean;
   handleForceCollapse: (value?: boolean) => void;
-  handleDownloadRequest: (id: string) => Promise<void>;
 }
 
 const RequestResponseContext = createContext<RequestResponseContext | null>(
@@ -35,30 +34,11 @@ const RequestResponseProvider = ({
     setForceCollapse((prev) => value ?? !prev);
   }, []);
 
-  const handleDownloadRequest = useCallback(async () =>
-    // id: string
-    {
-      // const downloadableData = await dispatch(
-      //   getDownloadableRequestData(id)
-      // ).unwrap();
-      // if (!downloadableData) return;
-      // const blob = new Blob([JSON.stringify(downloadableData)], {
-      //   type: "application/json",
-      // });
-      // const url = URL.createObjectURL(blob);
-      // const link = document.createElement("a");
-      // link.href = url;
-      // link.download = `${downloadableData.name || "request"}.json`;
-      // link.click();
-      // URL.revokeObjectURL(url);
-    }, []);
-
   return (
     <RequestResponseContext.Provider
       value={{
         forceCollapse,
         handleForceCollapse,
-        handleDownloadRequest,
       }}
     >
       {children}
