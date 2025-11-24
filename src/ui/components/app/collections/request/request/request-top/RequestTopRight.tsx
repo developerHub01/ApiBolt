@@ -14,7 +14,11 @@ import {
   BrushCleaning as ClearIcon,
 } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { exportRequest } from "@/context/redux/request-response/thunks/request";
+import {
+  clearRequest,
+  exportRequest,
+  importRequest,
+} from "@/context/redux/request-response/thunks/request";
 import { toast } from "sonner";
 import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
 // import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
@@ -23,10 +27,23 @@ const RequestTopRight = () => {
   const dispatch = useAppDispatch();
   const selectedTab = useAppSelector(selectSelectedTab);
 
+  const handleImport = useCallback(async () => {
+    const { success, message } = await dispatch(importRequest()).unwrap();
+    if (success) toast.success(message);
+    else toast.error(message);
+  }, [dispatch]);
+
   const handleExport = useCallback(async () => {
     const { success, message } = await dispatch(exportRequest()).unwrap();
     if (success) toast.success(message);
     else toast.error(message);
+  }, [dispatch]);
+
+  const handleClear = useCallback(async () => {
+    // const { success, message } =
+    await dispatch(clearRequest()).unwrap();
+    // if (success) toast.success(message);
+    // else toast.error(message);
   }, [dispatch]);
 
   const actionList = [
@@ -34,7 +51,7 @@ const RequestTopRight = () => {
       id: "import",
       label: "Import",
       Icon: ImportIcon,
-      onClick: () => {},
+      onClick: handleImport,
     },
     {
       id: "export",
@@ -46,7 +63,7 @@ const RequestTopRight = () => {
       id: "clear",
       label: "clear all",
       Icon: ClearIcon,
-      onClick: () => {},
+      onClick: handleClear,
     },
   ];
 

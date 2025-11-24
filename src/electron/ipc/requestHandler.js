@@ -11,7 +11,7 @@ import { getBodyBinary } from "../db/bodyBinaryDB.js";
 import { getBodyXWWWFormUrlencoded } from "../db/bodyXWWWFormUrlencodedDB.js";
 import { getBodyFormData } from "../db/bodyFormDataDB.js";
 import path from "path";
-import { writeFile } from "fs/promises";
+import { readFile, writeFile } from "fs/promises";
 import { mainWindow } from "../main.js";
 import { getInheritedAuthFromId } from "../db/authorizationDB.js";
 
@@ -117,6 +117,65 @@ export const requestHandler = () => {
       } else {
         throw new Error("Save dialog cancelled.");
       }
+    } catch (error) {
+      console.error(error);
+      return {
+        success: false,
+        message:
+          error.message ?? "Something went wrong while exporting request.",
+      };
+    }
+  });
+  ipcMain.handle("importRequest", async (_, id) => {
+    try {
+      const { filePaths } = await dialog.showOpenDialog(mainWindow, {
+        title: "Open request data",
+        defaultPath: app.getPath("downloads"),
+        filters: [
+          {
+            name: "JSON file",
+            extensions: ["json"],
+          },
+        ],
+      });
+
+      const filePath = filePaths?.[0];
+      if (!filePath) throw new Error("No file selected.");
+
+      let fileData = await readFile(filePath, "utf-8");
+      try {
+        fileData = JSON.parse(fileData);
+      } catch (error) {
+        throw new Error("Not valid JSON data");
+      }
+
+      const {
+        name,
+        url,
+        method,
+        params,
+        headers,
+        hiddenHeadersCheck,
+        requestMetaTab,
+        bodyRaw,
+        bodyBinary,
+        bodyXWWWFormUrlencoded,
+        bodyFormData,
+      } = fileData;
+
+      console.log({
+        name,
+        url,
+        method,
+        params,
+        headers,
+        hiddenHeadersCheck,
+        requestMetaTab,
+        bodyRaw,
+        bodyBinary,
+        bodyXWWWFormUrlencoded,
+        bodyFormData,
+      });
     } catch (error) {
       console.error(error);
       return {

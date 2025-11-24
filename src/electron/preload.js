@@ -570,6 +570,8 @@ contextBridge.exposeInMainWorld("electronAPIRequest", {
     await ipcRenderer.invoke("clearRequestDB", ...payload),
   exportRequest: async (...payload) =>
     await ipcRenderer.invoke("exportRequest", ...payload),
+  importRequest: async (...payload) =>
+    await ipcRenderer.invoke("importRequest", ...payload),
 });
 
 /**
