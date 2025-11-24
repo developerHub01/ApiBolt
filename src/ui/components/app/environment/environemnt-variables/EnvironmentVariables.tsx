@@ -10,7 +10,7 @@ const EnvironmentVariables = () => {
   return (
     <>
       <section className="w-full min-h-0 h-full flex-1">
-        <ScrollArea className="w-full min-h-0 h-full [&>div>div]:h-full rounded-lg">
+        <ScrollArea className="w-full min-h-0 h-full [&>div>div]:h-full rounded-lg border border-t-0">
           <div className="w-full h-full flex flex-col items-center gap-5">
             <VariableList />
           </div>
