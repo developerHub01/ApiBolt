@@ -113,11 +113,13 @@ export const updateParams = async (paramId, payload) => {
 
 export const replaceParams = async (requestOrFolderMetaId, payload) => {
   if (payload)
-    payload.map((param) => {
+    payload = payload.map((param) => {
       delete param["requestOrFolderMetaId"];
       delete param["createdAt"];
       if ("isCheck" in param) param["isCheck"] = Number(param["isCheck"]);
       param["requestOrFolderMetaId"] = requestOrFolderMetaId;
+
+      return param;
     });
 
   try {
