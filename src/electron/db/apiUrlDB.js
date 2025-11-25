@@ -94,20 +94,20 @@ export const updateApiUrl = async (payload) => {
     )?.[0];
 
     if (!isExist) {
-      const result = await createApiUrl({
+      await createApiUrl({
         requestOrFolderMetaId,
         ...payload,
       });
-      return result.rowsAffected > 0;
+      return true;
     }
 
-    const updated = await db
+    await db
       .update(apiUrlTable)
       .set({
         ...payload,
       })
       .where(eq(apiUrlTable.requestOrFolderMetaId, requestOrFolderMetaId));
-    return updated?.rowsAffected > 0;
+    return true;
   } catch (error) {
     console.error(error);
     return false;

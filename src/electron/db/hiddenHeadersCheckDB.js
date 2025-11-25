@@ -93,7 +93,7 @@ export const updateHiddenHeadersCheck = async (payload) => {
         ...payload,
       })
       .where(eq(hiddenHeadersCheckTable.requestOrFolderMetaId, selectedTab));
-    return updated?.rowsAffected > 0;
+    return true;
   } catch (error) {
     console.error(error);
   }

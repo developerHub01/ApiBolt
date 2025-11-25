@@ -85,13 +85,15 @@ export const updateRequestOrFolderMeta = async (payload) => {
     delete payload["children"];
     delete payload["createdAt"];
 
-    if (!Object.keys(payload).length) return false;
+    if (!Object.keys(payload)?.length) return false;
 
-    const updated = await db
+    console.log({ payload });
+
+    await db
       .update(requestOrFolderMetaTable)
       .set(payload)
       .where(eq(requestOrFolderMetaTable.id, id));
-    return updated?.rowsAffected > 0;
+    return true;
   } catch (error) {
     console.error(error);
   }

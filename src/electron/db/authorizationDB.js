@@ -188,6 +188,82 @@ export const updateAuth = async ({ requestOrFolderId, payload = {} } = {}) => {
   }
 };
 
+export const replaceAuth = async ({ requestOrFolderId, payload = {} } = {}) => {
+  try {
+    const activeProjectId = await getActiveProject();
+    if (!activeProjectId) return false;
+
+    delete payload["id"];
+    delete payload["projectId"];
+    delete payload["requestOrFolderMetaId"];
+
+    payload = {
+      type: "no-auth",
+      /* API Key Auth =========== */
+      apiKeyKey: "",
+      apiKeyValue: "",
+      apiKeyAddTo: "header",
+      /* Bearer Token Auth ============ */
+      bearerToken: "",
+      /* Basic Auth =========== */
+      basicAuthUsername: "",
+      basicAuthPassword: "",
+      /* Jwt Auth ========== */
+      jwtAlgo: "HS256",
+      jwtSecret: "",
+      jwtPayload: "",
+      jwtHeaderPrefix: "Bearer",
+      jwtAddTo: "header",
+      basicAuthToken: "",
+      jwtAuthToken: "",
+      ...payload,
+    };
+
+    const isExist = (
+      await db
+        .select({
+          id: authorizationTable.id,
+        })
+        .from(authorizationTable)
+        .where(
+          and(
+            eq(authorizationTable.projectId, activeProjectId),
+            requestOrFolderId
+              ? eq(authorizationTable.requestOrFolderMetaId, requestOrFolderId)
+              : isNull(authorizationTable.requestOrFolderMetaId)
+          )
+        )
+        .limit(1)
+    )?.[0]?.id;
+
+    if (isExist) {
+      await db
+        .update(authorizationTable)
+        .set({
+          ...payload,
+        })
+        .where(
+          and(
+            eq(authorizationTable.projectId, activeProjectId),
+            requestOrFolderId
+              ? eq(authorizationTable.requestOrFolderMetaId, requestOrFolderId)
+              : isNull(authorizationTable.requestOrFolderMetaId)
+          )
+        );
+    } else {
+      await db.insert(authorizationTable).values({
+        ...payload,
+        requestOrFolderMetaId: requestOrFolderId,
+        projectId: activeProjectId,
+      });
+    }
+
+    return true;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const deleteAuth = async (id) => {
   try {
     if (!id) id = (await getTabList())?.selectedTab;

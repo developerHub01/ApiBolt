@@ -136,19 +136,22 @@ export const duplicateBodyBinary = async (payload) => {
 
 export const replaceBodyBinary = async (payload = {}) => {
   try {
-    const result = await db
-      .insert(bodyBinaryTable)
-      .values({
+    const updatePayload = { ...payload };
+    delete updatePayload["id"];
+    delete updatePayload["requestOrFolderMetaId"];
+
+    await db
+      .delete(bodyBinaryTable)
+      .where(
+        eq(bodyBinaryTable.requestOrFolderMetaId, payload.requestOrFolderMetaId)
+      );
+
+    if (Object.keys(updatePayload || {}).length)
+      await db.insert(bodyBinaryTable).values({
         ...payload,
-      })
-      .onConflictDoUpdate({
-        target: bodyBinaryTable.requestOrFolderMetaId,
-        set: {
-          path: payload.path,
-        },
       });
 
-    return result.rowsAffected > 0;
+    return true;
   } catch (error) {
     console.error(error);
   }

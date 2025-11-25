@@ -1,19 +1,33 @@
 import { app, dialog, ipcMain } from "electron";
 import { clearRequestDB } from "../db/requestDB.js";
-import { getRequestOrFolderMetaById } from "../db/requestOrFolderMetaDB.js";
-import { getApiUrlDB } from "../db/apiUrlDB.js";
-import { getParams } from "../db/paramsDB.js";
-import { getHeaders } from "../db/headersDB.js";
-import { getHiddenHeadersCheck } from "../db/hiddenHeadersCheckDB.js";
-import { getRequestMetaTab } from "../db/requestMetaTabDB.js";
-import { getBodyRaw } from "../db/bodyRawDB.js";
-import { getBodyBinary } from "../db/bodyBinaryDB.js";
-import { getBodyXWWWFormUrlencoded } from "../db/bodyXWWWFormUrlencodedDB.js";
-import { getBodyFormData } from "../db/bodyFormDataDB.js";
+import {
+  getRequestOrFolderMetaById,
+  updateRequestOrFolderMeta,
+} from "../db/requestOrFolderMetaDB.js";
+import { getApiUrlDB, updateApiUrl } from "../db/apiUrlDB.js";
+import { getParams, replaceParams } from "../db/paramsDB.js";
+import { getHeaders, replaceHeaders } from "../db/headersDB.js";
+import {
+  getHiddenHeadersCheck,
+  updateHiddenHeadersCheck,
+} from "../db/hiddenHeadersCheckDB.js";
+import {
+  getRequestMetaTab,
+  updateRequestMetaTab,
+} from "../db/requestMetaTabDB.js";
+import { getBodyRaw, replaceBodyRaw } from "../db/bodyRawDB.js";
+import { getBodyBinary, replaceBodyBinary } from "../db/bodyBinaryDB.js";
+import {
+  getBodyXWWWFormUrlencoded,
+  replaceBodyXWWWFormUrlencoded,
+} from "../db/bodyXWWWFormUrlencodedDB.js";
+import { getBodyFormData, replaceBodyFormData } from "../db/bodyFormDataDB.js";
 import path from "path";
 import { readFile, writeFile } from "fs/promises";
 import { mainWindow } from "../main.js";
-import { getInheritedAuthFromId } from "../db/authorizationDB.js";
+import { getInheritedAuthFromId, replaceAuth } from "../db/authorizationDB.js";
+import { getSelectedTab } from "../db/tabsDB.js";
+import { runInTransaction } from "../utils/db.js";
 
 export const requestHandler = () => {
   ipcMain.handle(
@@ -126,8 +140,11 @@ export const requestHandler = () => {
       };
     }
   });
-  ipcMain.handle("importRequest", async (_, id) => {
+  ipcMain.handle("importRequest", async (_, requestId) => {
     try {
+      requestId = requestId ?? (await getSelectedTab());
+      if (!requestId) throw new Error("no request selected");
+
       const { filePaths } = await dialog.showOpenDialog(mainWindow, {
         title: "Open request data",
         defaultPath: app.getPath("downloads"),
@@ -161,23 +178,123 @@ export const requestHandler = () => {
         bodyBinary,
         bodyXWWWFormUrlencoded,
         bodyFormData,
+        authorization,
       } = fileData;
 
-      console.log({
-        name,
-        url,
-        method,
-        params,
-        headers,
-        hiddenHeadersCheck,
-        requestMetaTab,
-        bodyRaw,
-        bodyBinary,
-        bodyXWWWFormUrlencoded,
-        bodyFormData,
+      if (Array.isArray(bodyFormData)) {
+        bodyFormData.map((form, index) => {
+          if (Array.isArray(form.value)) {
+            bodyFormData[index].value = JSON.stringify(
+              bodyFormData[index].value
+            );
+          }
+        });
+      }
+
+      await runInTransaction(async () => {
+        if (
+          /**
+           * ===================
+           * request-meta-data
+           * ===================
+           */
+          !(await updateRequestOrFolderMeta({
+            id: requestId,
+            name,
+            method,
+          })) ||
+          /**
+           * ===================
+           * api-url
+           * ===================
+           */
+          !(await updateApiUrl({
+            requestOrFolderMetaId: requestId,
+            url,
+          })) ||
+          /**
+           * ===================
+           * Params
+           * ===================
+           */
+          !(await replaceParams(requestId, params)) ||
+          /**
+           * ===================
+           * Headers
+           * ===================
+           */
+          !(await replaceHeaders(requestId, headers)) ||
+          /**
+           * ===================
+           * Hidden headers check
+           * ===================
+           */
+          !(await updateHiddenHeadersCheck({
+            requestOrFolderMetaId: requestId,
+            ...hiddenHeadersCheck,
+          })) ||
+          /**
+           * ===================
+           * Request meta-tab
+           * ===================
+           */
+          !(await updateRequestMetaTab({
+            requestOrFolderMetaId: requestId,
+            ...requestMetaTab,
+          })) ||
+          /**
+           * ===================
+           * body x-www-formurlencoded
+           * ===================
+           */
+          !(await replaceBodyXWWWFormUrlencoded(
+            requestId,
+            bodyXWWWFormUrlencoded
+          )) ||
+          /**
+           * ===================
+           * body form-data
+           * ===================
+           */
+          !(await replaceBodyFormData(requestId, bodyFormData)) ||
+          /**
+           * ===================
+           * body binary-data
+           * ===================
+           */
+          !(await replaceBodyBinary({
+            requestOrFolderMetaId: requestId,
+            ...bodyBinary,
+          })) ||
+          /**
+           * ===================
+           * body raw-data
+           * ===================
+           */
+          !(await replaceBodyRaw({
+            requestOrFolderMetaId: requestId,
+            ...bodyRaw,
+          })) ||
+          /**
+           * ===================
+           * Authorization
+           * ===================
+           */
+          !(await replaceAuth({
+            requestOrFolderId: requestId,
+            payload: authorization,
+          }))
+        ) {
+          throw new Error("Not valid request-file.");
+        }
       });
+
+      return {
+        success: true,
+        message: "Request imported successfully!",
+      };
     } catch (error) {
-      console.error(error);
+      console.error("error ======================\n", error);
       return {
         success: false,
         message:

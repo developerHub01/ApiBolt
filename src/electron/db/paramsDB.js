@@ -131,9 +131,9 @@ export const replaceParams = async (requestOrFolderMetaId, payload) => {
       return true;
 
     if (!payload.length) return true;
-    const created = await db.insert(paramsTable).values(payload);
+    await db.insert(paramsTable).values(payload);
 
-    return created?.rowsAffected > 0;
+    return true;
   } catch (error) {
     console.error(error);
   }

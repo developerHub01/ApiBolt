@@ -14,6 +14,20 @@ import {
 import { handleRequestUrlClearTokens } from "@/context/redux/request-url/request-url-slice";
 import { loadAuthorization } from "@/context/redux/request-response/thunks/auth";
 import type { ElectronResponseInterface } from "@/types";
+import { loadParams } from "@/context/redux/request-response/thunks/params";
+import {
+  loadHeaders,
+  loadHiddenHeaders,
+} from "@/context/redux/request-response/thunks/headers";
+import { loadRequestMetaTab } from "@/context/redux/request-response/thunks/request-meta-tab";
+import { loadMetaShowColumn } from "@/context/redux/request-response/thunks/meta-show-column";
+import { loadShowHiddenMetaData } from "@/context/redux/request-response/thunks/show-hidden-meta-data";
+import { loadBodyFormData } from "@/context/redux/request-response/thunks/body-form-data";
+import { loadBodyXWWWFormUrlencoded } from "@/context/redux/request-response/thunks/body-x-www-form-urlencoded";
+import { loadRequestBodyRaw } from "@/context/redux/request-response/thunks/body-raw";
+import { loadRequestBodyBinary } from "@/context/redux/request-response/thunks/body-binary";
+import { loadApiUrl } from "@/context/redux/request-url/thunks/request-url";
+import { loadSingleRequestMeta } from "@/context/redux/request-response/thunks/request-list";
 
 export const clearRequest = createAsyncThunk<
   void,
@@ -119,7 +133,7 @@ export const importRequest = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->("request-response/importRequest", async (id, { getState }) => {
+>("request-response/importRequest", async (id, { getState, dispatch }) => {
   try {
     const state = getState() as RootState;
     const requestId = id ?? state.requestResponse.selectedTab;
@@ -130,6 +144,27 @@ export const importRequest = createAsyncThunk<
       };
 
     const response = await window.electronAPIRequest.importRequest(requestId);
+
+    if (!response.success) return response;
+
+    /**
+     * if success then reload data in frontend
+     * ***/
+    await Promise.all([
+      dispatch(loadSingleRequestMeta(requestId)),
+      dispatch(loadAuthorization()),
+      dispatch(loadParams()),
+      dispatch(loadHeaders()),
+      dispatch(loadHiddenHeaders()),
+      dispatch(loadRequestMetaTab()),
+      dispatch(loadMetaShowColumn()),
+      dispatch(loadShowHiddenMetaData()),
+      dispatch(loadBodyFormData()),
+      dispatch(loadBodyXWWWFormUrlencoded()),
+      dispatch(loadRequestBodyRaw()),
+      dispatch(loadRequestBodyBinary()),
+      dispatch(loadApiUrl()),
+    ]);
 
     return response;
   } catch (error) {

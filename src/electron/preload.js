@@ -274,6 +274,8 @@ contextBridge.exposeInMainWorld("electronAPIAuthorizationDB", {
 contextBridge.exposeInMainWorld("electronAPIRequestOrFolderMetaDB", {
   getRequestOrFolderMeta: async () =>
     await ipcRenderer.invoke("getRequestOrFolderMeta"),
+  getRequestOrFolderMetaById: async (...payload) =>
+    await ipcRenderer.invoke("getRequestOrFolderMetaById", ...payload),
   createRequestOrFolderMeta: async (...payload) =>
     await ipcRenderer.invoke("createRequestOrFolderMeta", ...payload),
   updateRequestOrFolderMeta: async (...payload) =>

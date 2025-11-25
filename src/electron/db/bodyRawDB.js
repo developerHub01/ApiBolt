@@ -144,23 +144,20 @@ export const duplicateBodyRaw = async (payload) => {
 
 export const replaceBodyRaw = async (payload = {}) => {
   try {
-    const updatPayload = { ...payload };
-    delete updatPayload["id"];
-    delete updatPayload["requestOrFolderMetaId"];
+    const updatePayload = { ...payload };
+    delete updatePayload["id"];
+    delete updatePayload["requestOrFolderMetaId"];
 
-    const result = await db
-      .insert(bodyRawTable)
-      .values({
-        ...payload,
-      })
-      .onConflictDoUpdate({
-        target: bodyRawTable.requestOrFolderMetaId,
-        set: {
-          ...updatPayload,
-        },
-      });
+    await db
+      .delete(bodyRawTable)
+      .where(
+        eq(bodyRawTable.requestOrFolderMetaId, payload.requestOrFolderMetaId)
+      );
 
-    return result.rowsAffected > 0;
+    if (Object.keys(updatePayload || {}).length)
+      await db.insert(bodyRawTable).values(payload);
+
+    return true;
   } catch (error) {
     console.error(error);
   }

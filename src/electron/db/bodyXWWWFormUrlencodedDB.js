@@ -136,11 +136,9 @@ export const replaceBodyXWWWFormUrlencoded = async (
       );
 
     if (!payload.length) return true;
-    const created = await db
-      .insert(bodyXWWWFormUrlencodedTable)
-      .values(payload);
+    await db.insert(bodyXWWWFormUrlencodedTable).values(payload);
 
-    return created?.rowsAffected > 0;
+    return true;
   } catch (error) {
     console.error(error);
   }

@@ -14,6 +14,7 @@ import {
   handleDeleteAllRequestOrFolder,
   handleLoadRequestList,
   handleUpdateRequestOrFolder,
+  handleUpdateRequestOrFolderMeta,
 } from "@/context/redux/request-response/request-response-slice";
 import { v4 as uuidv4 } from "uuid";
 import {
@@ -62,6 +63,32 @@ export const loadRequestList = createAsyncThunk<
     console.error(error);
   }
 });
+
+export const loadSingleRequestMeta = createAsyncThunk<
+  void,
+  string,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>(
+  "request-response/loadSingleRequestMeta",
+  async (id, { getState, dispatch }) => {
+    try {
+      const state = getState() as RootState;
+      id = id ?? state.requestResponse.selectedTab;
+
+      const requestMeta =
+        await window.electronAPIRequestOrFolderMetaDB.getRequestOrFolderMetaById(
+          id
+        );
+
+      dispatch(handleUpdateRequestOrFolderMeta(requestMeta));
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
 
 export const createSingleRequest = createAsyncThunk<
   void,

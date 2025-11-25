@@ -1,22 +1,3 @@
-/* 
-id: text("id")
-    .primaryKey()
-    .$defaultFn(() => uuidv4()),
-  variable: text(),
-  type: text().default("default"),
-  value: text(),
-  isCheck: int().notNull().default(1),
-  projectId: text()
-    .notNull()
-    .references(() => projectTable.id, {
-      onDelete: "cascade",
-    }),
-  createdAt: text()
-    .notNull()
-    .default(sql`(current_timestamp)`),
-
-*/
-
 const typeList = new Set(["default", "secret"]);
 
 export const filterValidEnvironments = (payload = {}) => {

@@ -139,9 +139,9 @@ export const replaceHeaders = async (requestOrFolderMetaId, payload) => {
     )
       return true;
 
-    const created = await db.insert(headersTable).values(payload);
+    await db.insert(headersTable).values(payload);
 
-    return created?.rowsAffected > 0;
+    return true;
   } catch (error) {
     console.error(error);
   }

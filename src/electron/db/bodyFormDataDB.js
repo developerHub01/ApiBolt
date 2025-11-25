@@ -193,9 +193,9 @@ export const replaceBodyFormData = async (requestOrFolderMetaId, payload) => {
     );
 
     if (!payload?.length) return true;
-    const created = await db.insert(bodyFormDataTable).values(payload);
+    await db.insert(bodyFormDataTable).values(payload);
 
-    return created?.rowsAffected > 0;
+    return true;
   } catch (error) {
     console.error(error);
   }

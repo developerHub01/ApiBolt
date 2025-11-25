@@ -77,7 +77,7 @@ export const updateRequestMetaTab = async (payload = {}) => {
         );
     }
 
-    return updated?.rowsAffected > 0;
+    return true;
   } catch (error) {
     console.error(error);
   }

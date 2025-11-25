@@ -227,6 +227,7 @@ declare global {
       getRequestOrFolderMeta(): Promise<
         Record<string, RequestListItemInterface>
       >;
+      getRequestOrFolderMetaById(id: string): Promise<RequestListItemInterface>;
       createRequestOrFolderMeta(
         payload: RequestListItemInterface | Array<RequestListItemInterface>
       ): Promise<boolean>;
