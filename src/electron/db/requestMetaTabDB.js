@@ -88,15 +88,15 @@ export const deleteRequestMetaTab = async (requestOrFolderMetaId) => {
     if (!requestOrFolderMetaId)
       requestOrFolderMetaId = (await getTabList())?.selectedTab;
 
-    if (!requestOrFolderMetaId) return null;
+    if (!requestOrFolderMetaId) return false;
 
-    const deleted = await db
+    await db
       .delete(requestMetaTabTable)
       .where(
         eq(requestMetaTabTable.requestOrFolderMetaId, requestOrFolderMetaId)
       );
 
-    return deleted.rowsAffected > 0;
+    return true;
   } catch (error) {
     console.error(error);
   }

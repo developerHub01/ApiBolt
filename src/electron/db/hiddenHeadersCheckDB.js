@@ -87,7 +87,7 @@ export const updateHiddenHeadersCheck = async (payload) => {
         selectedTab,
       });
 
-    const updated = await db
+    await db
       .update(hiddenHeadersCheckTable)
       .set({
         ...payload,

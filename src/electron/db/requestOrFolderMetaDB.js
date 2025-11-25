@@ -76,18 +76,15 @@ export const createRequestOrFolderMeta = async (payload) => {
 
 export const updateRequestOrFolderMeta = async (payload) => {
   try {
-    if (!payload || typeof payload !== "object") return;
+    if (!payload || typeof payload !== "object") return false;
 
     const { id } = payload;
-
     delete payload["id"];
     delete payload["projectId"];
     delete payload["children"];
     delete payload["createdAt"];
 
     if (!Object.keys(payload)?.length) return false;
-
-    console.log({ payload });
 
     await db
       .update(requestOrFolderMetaTable)

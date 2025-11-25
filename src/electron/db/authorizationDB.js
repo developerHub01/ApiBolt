@@ -306,12 +306,12 @@ export const deleteAuthByRequestMetaId = async (requestOrFolderMetaId) => {
       requestOrFolderMetaId = (await getTabList())?.selectedTab;
     if (!requestOrFolderMetaId) return false;
 
-    const deleted = await db
+    await db
       .delete(authorizationTable)
       .where(
         eq(authorizationTable.requestOrFolderMetaId, requestOrFolderMetaId)
       );
-    return deleted.rowsAffected > 0;
+    return true;
   } catch (error) {
     console.error(error);
     return false;

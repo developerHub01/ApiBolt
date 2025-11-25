@@ -49,7 +49,7 @@ export const deleteBodyXWWWFormUrlencodedByRequestMetaId = async (
       requestOrFolderMetaId = (await getTabList())?.selectedTab;
     if (!requestOrFolderMetaId) return false;
 
-    const deleted = await db
+    await db
       .delete(bodyXWWWFormUrlencodedTable)
       .where(
         eq(
@@ -57,7 +57,7 @@ export const deleteBodyXWWWFormUrlencodedByRequestMetaId = async (
           requestOrFolderMetaId
         )
       );
-    return deleted?.rowsAffected > 0;
+    return true;
   } catch (error) {
     console.error(error);
   }
