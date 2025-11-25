@@ -80,8 +80,10 @@ const SettingButton = () => {
             <SettingIcon />
           </Button>
         </MenubarTrigger>
-
-        <MenubarContent align="end">
+        <MenubarContent
+          align="end"
+          className="p-0 w-fit min-w-40 flex flex-col [&>button]:justify-start"
+        >
           {menuItems.map(({ id, label, onClick, isSeparatorAbove }) => {
             const shortcutString = getShortcutString(id);
             return (

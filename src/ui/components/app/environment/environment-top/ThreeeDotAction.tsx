@@ -9,7 +9,7 @@ import {
 import {
   EllipsisVertical as ThreeDotIcon,
   Upload as ExportIcon,
-  FileDown as ImportIcon,
+  Download as ImportIcon,
   Trash2 as DeleteIcon,
   type LucideIcon,
 } from "lucide-react";

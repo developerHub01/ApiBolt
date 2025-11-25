@@ -56,7 +56,11 @@ const AddAction = memo(() => {
           <PlusIcon />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-40" align="end" sideOffset={10}>
+      <DropdownMenuContent
+        className="p-0 w-fit min-w-40 flex flex-col [&>button]:justify-start"
+        align="end"
+        sideOffset={10}
+      >
         <DropdownMenuGroup>
           {actionsList.map(({ id, label }) => (
             <DropdownMenuItem

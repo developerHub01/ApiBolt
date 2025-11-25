@@ -34,7 +34,7 @@ const SettingTypeSelector = memo(({ value = "default", onChange }: Props) => {
       <SelectTrigger className="w-full max-w-32 capitalize" size="sm">
         <SelectValue placeholder="Setting Type" />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent align="end">
         <SelectGroup>
           {list.map((id) => (
             <SelectItem key={id} value={id} className="capitalize">

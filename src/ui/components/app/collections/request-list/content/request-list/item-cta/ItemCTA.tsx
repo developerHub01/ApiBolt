@@ -169,7 +169,7 @@ const ItemCTA = memo(() => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          className="w-40 [&>div]:cursor-pointer"
+          className="p-0 w-fit min-w-40 flex flex-col [&>button]:justify-start [&>div]:cursor-pointer"
           align={layoutTypes === "rtl" ? "start" : "end"}
           onClick={handlePreventPropagation}
         >
