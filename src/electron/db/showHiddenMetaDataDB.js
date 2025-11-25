@@ -139,7 +139,7 @@ export const duplicateShowHiddenMetaData = async (payload) => {
       .insert(showHiddenMetaDataTable)
       .values(duplicatePayload);
 
-    return result.changes > 0;
+    return result.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }

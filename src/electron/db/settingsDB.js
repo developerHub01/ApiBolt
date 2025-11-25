@@ -160,11 +160,11 @@ export const updateSettings = async (payload) => {
       );
   }
 
-  return updated.changes > 0;
+  return updated.rowsAffected > 0;
 };
 
 export const deleteSettings = async () => {
   const deleted = await db.delete(settingTable);
 
-  return deleted?.changes > 0;
+  return deleted?.rowsAffected > 0;
 };

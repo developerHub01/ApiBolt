@@ -68,7 +68,7 @@ export const updateFolder = async (payload) => {
         .where(eq(folderTable.requestOrFolderMetaId, requestOrFolderMetaId));
     }
 
-    return updated?.changes > 0;
+    return updated?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -106,7 +106,7 @@ export const duplicateFolder = async (payload) => {
 
     const result = await db.insert(folderTable).values(duplicatePayload);
 
-    return result.changes > 0;
+    return result.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }

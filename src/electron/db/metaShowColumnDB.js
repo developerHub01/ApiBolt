@@ -43,7 +43,7 @@ export const createMetaShowColumn = async (payload = {}) => {
 
     const result = await db.insert(metaShowColumnTable).values(payload);
 
-    return result?.changes > 0;
+    return result?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -89,7 +89,7 @@ export const updateMetaShowColumn = async (payload) => {
       .where(
         eq(metaShowColumnTable.requestOrFolderMetaId, requestOrFolderMetaId)
       );
-    return updated?.changes > 0;
+    return updated?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -103,7 +103,7 @@ export const deleteMetaShowColumn = async (requestOrFolderMetaId) => {
         eq(metaShowColumnTable.requestOrFolderMetaId, requestOrFolderMetaId)
       );
 
-    return deleted?.changes > 0;
+    return deleted?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -144,7 +144,7 @@ export const duplicateMetaShowColumn = async (payload) => {
       .insert(metaShowColumnTable)
       .values(duplicatePayload);
 
-    return result.changes > 0;
+    return result.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }

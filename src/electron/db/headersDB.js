@@ -33,7 +33,7 @@ export const deleteHeaders = async (paramId) => {
       .delete(headersTable)
       .where(eq(headersTable.id, paramId));
 
-    return deleted?.changes > 0;
+    return deleted?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -49,7 +49,7 @@ export const deleteHeadersByRequestMetaId = async (requestOrFolderMetaId) => {
     const deleted = await db
       .delete(headersTable)
       .where(eq(headersTable.requestOrFolderMetaId, requestOrFolderMetaId));
-    return deleted?.changes > 0;
+    return deleted?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -67,7 +67,7 @@ export const createHeaders = async (payload = {}) => {
 
     const result = await db.insert(headersTable).values(payload);
 
-    if (result?.changes) {
+    if (result?.rowsAffected) {
       const isExist = await getHiddenHeadersCheck(
         payload.requestOrFolderMetaId
       );
@@ -78,7 +78,7 @@ export const createHeaders = async (payload = {}) => {
         });
     }
 
-    return result?.changes > 0;
+    return result?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -111,7 +111,7 @@ export const updateHeaders = async (headerId, payload) => {
         ...payload,
       })
       .where(eq(headersTable.id, headerId));
-    return updated?.changes > 0;
+    return updated?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -141,7 +141,7 @@ export const replaceHeaders = async (requestOrFolderMetaId, payload) => {
 
     const created = await db.insert(headersTable).values(payload);
 
-    return created?.changes > 0;
+    return created?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -169,7 +169,7 @@ export const checkAllHeadersByRequestMetaId = async (requestOrFolderMetaId) => {
         isCheck: checkValue,
       })
       .where(eq(headersTable.requestOrFolderMetaId, requestOrFolderMetaId));
-    return updated?.changes > 0;
+    return updated?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -208,7 +208,7 @@ export const duplicateHeaders = async (payload) => {
 
     const result = await db.insert(headersTable).values(duplicatePayload);
 
-    return result.changes > 0;
+    return result.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }

@@ -62,7 +62,7 @@ export const deleteBodyFormData = async (formId) => {
       .delete(bodyFormDataTable)
       .where(eq(bodyFormDataTable.id, formId));
 
-    return deleted?.changes > 0;
+    return deleted?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -82,7 +82,7 @@ export const deleteBodyFormDataByRequestMetaId = async (
       .where(
         eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId)
       );
-    return deleted?.changes > 0;
+    return deleted?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -113,7 +113,7 @@ export const deleteBodyFormDataFile = async (formId, index = 0) => {
       })
       .where(eq(bodyFormDataTable.id, formId));
 
-    return updated?.changes > 0;
+    return updated?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -128,7 +128,7 @@ export const createBodyFormData = async (payload = {}) => {
 
     const result = await db.insert(bodyFormDataTable).values(payload);
 
-    return result?.changes > 0;
+    return result?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -161,7 +161,7 @@ export const updateBodyFormData = async (formId, payload) => {
         ...payload,
       })
       .where(eq(bodyFormDataTable.id, formId));
-    return updated?.changes > 0;
+    return updated?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -195,7 +195,7 @@ export const replaceBodyFormData = async (requestOrFolderMetaId, payload) => {
     if (!payload?.length) return true;
     const created = await db.insert(bodyFormDataTable).values(payload);
 
-    return created?.changes > 0;
+    return created?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -225,7 +225,7 @@ export const replaceFullBodyFormData = async (
     if (!payload?.length) return true;
     const created = await db.insert(bodyFormDataTable).values(payload);
 
-    return created?.changes > 0;
+    return created?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -257,7 +257,7 @@ export const checkAllBodyFormDataByRequestMetaId = async (
       .where(
         eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId)
       );
-    return updated?.changes > 0;
+    return updated?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -296,7 +296,7 @@ export const duplicateBodyFormData = async (payload) => {
 
     const result = await db.insert(bodyFormDataTable).values(duplicatePayload);
 
-    return result.changes > 0;
+    return result.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }

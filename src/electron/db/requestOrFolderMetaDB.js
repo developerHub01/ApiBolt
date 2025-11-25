@@ -68,7 +68,7 @@ export const createRequestOrFolderMeta = async (payload) => {
 
     const response = await db.insert(requestOrFolderMetaTable).values(payload);
 
-    return response?.changes > 0;
+    return response?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -85,12 +85,13 @@ export const updateRequestOrFolderMeta = async (payload) => {
     delete payload["children"];
     delete payload["createdAt"];
 
+    if (!Object.keys(payload).length) return false;
+
     const updated = await db
       .update(requestOrFolderMetaTable)
       .set(payload)
       .where(eq(requestOrFolderMetaTable.id, id));
-
-    return updated?.changes > 0;
+    return updated?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -107,7 +108,7 @@ export const collapseAllRequestOrFolderMeta = async (projectId) => {
       })
       .where(eq(requestOrFolderMetaTable.projectId, projectId));
 
-    return result.changes > 0;
+    return result.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -122,7 +123,7 @@ export const moveRequestOrFolderMeta = async ({ id, parentId = null } = {}) => {
       })
       .where(eq(requestOrFolderMetaTable.id, id));
 
-    return updated?.changes > 0;
+    return updated?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -137,10 +138,10 @@ export const deleteRequestOrFolderMetaById = async (id) => {
       .delete(requestOrFolderMetaTable)
       .where(inArray(requestOrFolderMetaTable.id, [deletionCandidates[0]]));
 
-    if (deleted?.changes)
+    if (deleted?.rowsAffected)
       await updateTablistBasedRequestOrFolderMetaDeletion(deletionCandidates);
 
-    return deleted?.changes > 0;
+    return deleted?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -151,7 +152,7 @@ export const duplicateRequestOrFolderMeta = async (payload) => {
     if (!payload || !Array.isArray(payload)) return;
     const result = await db.insert(requestOrFolderMetaTable).values(payload);
 
-    return result?.changes > 0;
+    return result?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -165,7 +166,7 @@ export const deleteRequestOrFolderMetaByProjectId = async (id) => {
       .delete(requestOrFolderMetaTable)
       .where(eq(requestOrFolderMetaTable.projectId, deletionCandidate));
 
-    return deleted.changes > 0;
+    return deleted.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -175,7 +176,7 @@ export const deleteRequestOrFolderMetaAll = async () => {
   try {
     const deleted = await db.delete(requestOrFolderMetaTable);
 
-    return deleted.changes > 0;
+    return deleted.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -195,7 +196,7 @@ export const expendOrCollapseRequestOrFolderMetaAll = async (
       })
       .where(inArray(requestOrFolderMetaTable.id, id));
 
-    return updated.changes > 0;
+    return updated.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }

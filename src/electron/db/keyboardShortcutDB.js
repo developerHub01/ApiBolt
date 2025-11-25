@@ -118,7 +118,7 @@ export const updateKeyboardShortcuts = async (payload) => {
         },
       });
 
-    return Boolean(result?.changes > 0);
+    return Boolean(result?.rowsAffected > 0);
   } catch (error) {
     console.error(error);
   }

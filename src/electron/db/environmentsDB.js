@@ -35,7 +35,7 @@ export const getEnvironments = async (id) => {
           (response[index].isCheck = Boolean(response[index]?.isCheck))
       );
     }
-    
+
     return response;
   } catch (error) {
     console.error(error);
@@ -58,7 +58,7 @@ export const createEnvironments = async (payload = {}) => {
 
     const result = await db.insert(environmentTable).values(payload);
 
-    return result.changes > 0;
+    return result.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -97,7 +97,7 @@ export const updateEnvironments = async (payload = {}) => {
         .where(eq(environmentTable.id, id));
     }
 
-    return updated?.changes > 0;
+    return updated?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -111,7 +111,7 @@ export const deleteAllEnvironments = async () => {
       .delete(environmentTable)
       .where(eq(environmentTable.projectId, activeProjectId));
 
-    return deleted.changes > 0;
+    return deleted.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -123,7 +123,7 @@ export const deleteEnvironments = async (id) => {
       .delete(environmentTable)
       .where(eq(environmentTable.id, id));
 
-    return deleted.changes > 0;
+    return deleted.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -135,7 +135,7 @@ export const deleteEnvironmentsByProjectId = async (id) => {
       .delete(environmentTable)
       .where(eq(environmentTable.projectId, id));
 
-    return deleted.changes > 0;
+    return deleted.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }

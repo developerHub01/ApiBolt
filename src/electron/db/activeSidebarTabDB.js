@@ -31,7 +31,7 @@ export const createActiveSidebarTab = async (payload = {}) => {
       id,
       ...payload,
     });
-    return Boolean(response?.changes);
+    return Boolean(response?.rowsAffected);
   } catch (error) {
     console.error(error);
   }
@@ -54,7 +54,7 @@ export const updateActiveSidebarTab = async (tab = "project") => {
       })
       .where(eq(activeSidebarTabTable.id, ACTIVE_SIDEBAR_TAB_ID));
 
-    return Boolean(updated?.changes);
+    return Boolean(updated?.rowsAffected);
   } catch (error) {
     console.error(error);
   }
@@ -65,8 +65,8 @@ export const deleteActiveSidebarTab = async () => {
     return (
       (await db
         .delete(activeSidebarTabTable)
-        .where(eq(activeSidebarTabTable.id, ACTIVE_SIDEBAR_TAB_ID))?.changes) >
-      0
+        .where(eq(activeSidebarTabTable.id, ACTIVE_SIDEBAR_TAB_ID))
+        ?.rowsAffected) > 0
     );
   } catch (error) {
     console.error(error);

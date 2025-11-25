@@ -71,7 +71,7 @@ export const createCookiesByProject = async (payload = {}) => {
       payload["projectId"] = await getActiveProject();
 
     const result = await db.insert(cookiesTable).values(payload);
-    return result.changes > 0;
+    return result.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -99,7 +99,7 @@ export const replaceCookiesByProject = async (payload) => {
         cookies: JSON.stringify(payload),
         projectId,
       });
-      return result.changes > 0;
+      return result.rowsAffected > 0;
     }
 
     const updated = await db
@@ -109,7 +109,7 @@ export const replaceCookiesByProject = async (payload) => {
       })
       .where(eq(cookiesTable.projectId, projectId));
 
-    return updated?.changes > 0;
+    return updated?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
     return false;
@@ -140,7 +140,7 @@ export const updateCookiesByProject = async (payload) => {
         }),
         projectId,
       });
-      return result.changes > 0;
+      return result.rowsAffected > 0;
     }
 
     /* getting existing cookies and updating with payload */
@@ -154,7 +154,7 @@ export const updateCookiesByProject = async (payload) => {
       })
       .where(eq(cookiesTable.projectId, projectId));
 
-    return updated?.changes > 0;
+    return updated?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
     return false;
@@ -169,7 +169,7 @@ export const deleteCookiesByProject = async (projectId) => {
     const deleted = await db
       .delete(cookiesTable)
       .where(eq(cookiesTable.projectId, projectId));
-    return deleted?.changes > 0;
+    return deleted?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
     return false;
@@ -208,7 +208,7 @@ export const deleteCookieKeyByProject = async ({ projectId, key } = {}) => {
       })
       .where(eq(cookiesTable.projectId, projectId));
 
-    return updated?.changes > 0;
+    return updated?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
     return false;
@@ -243,7 +243,7 @@ export const clearCookiesByProject = async (projectId) => {
       })
       .where(eq(cookiesTable.projectId, projectId));
 
-    return updated?.changes > 0;
+    return updated?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
     return false;

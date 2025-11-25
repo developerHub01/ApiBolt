@@ -53,7 +53,7 @@ export const createHiddenHeadersCheck = async (payload = {}) => {
 
     const result = await db.insert(hiddenHeadersCheckTable).values(payload);
 
-    return result?.changes > 0;
+    return result?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -93,7 +93,7 @@ export const updateHiddenHeadersCheck = async (payload) => {
         ...payload,
       })
       .where(eq(hiddenHeadersCheckTable.requestOrFolderMetaId, selectedTab));
-    return updated?.changes > 0;
+    return updated?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -133,7 +133,7 @@ export const duplicateHiddenHeadersCheck = async (payload) => {
       .insert(hiddenHeadersCheckTable)
       .values(duplicatePayload);
 
-    return result.changes > 0;
+    return result.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }

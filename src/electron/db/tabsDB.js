@@ -1,4 +1,4 @@
-import { tabsTable } from "./schema.js";
+import { requestOrFolderMetaTable, tabsTable } from "./schema.js";
 import { eq } from "drizzle-orm";
 import { db } from "./index.js";
 import { getActiveProject } from "./projectsDB.js";
@@ -32,6 +32,25 @@ export const getTabList = async () => {
   }
 };
 
+export const getSelectedTab = async (projectId) => {
+  try {
+    projectId = projectId ?? (await getActiveProject());
+    if (!projectId) return null;
+
+    return (
+      (
+        await db
+          .select()
+          .from(tabsTable)
+          .where(eq(tabsTable.projectId, projectId))
+          .limit(1)
+      )?.[0]?.selectedTab ?? null
+    );
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const updateTabList = async (payload) => {
   const activeProjectId = await getActiveProject();
 
@@ -45,14 +64,14 @@ export const updateTabList = async (payload) => {
     })
     .where(eq(tabsTable.projectId, activeProjectId));
 
-  return updated?.changes > 0;
+  return updated?.rowsAffected > 0;
 };
 
 export const deleteAllTabList = async () => {
   try {
     let deleted = await db.delete(tabsTable);
 
-    return deleted?.changes > 0;
+    return deleted?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -66,7 +85,7 @@ export const deleteTabListByProjectId = async (id) => {
       .delete(tabsTable)
       .where(eq(tabsTable.projectId, activeProjectId));
 
-    return deleted?.changes > 0;
+    return deleted?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }

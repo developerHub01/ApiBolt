@@ -34,7 +34,7 @@ export const deleteBodyXWWWFormUrlencoded = async (formId) => {
       .delete(bodyXWWWFormUrlencodedTable)
       .where(eq(bodyXWWWFormUrlencodedTable.id, formId));
 
-    return deleted?.changes > 0;
+    return deleted?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -57,7 +57,7 @@ export const deleteBodyXWWWFormUrlencodedByRequestMetaId = async (
           requestOrFolderMetaId
         )
       );
-    return deleted?.changes > 0;
+    return deleted?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -72,7 +72,7 @@ export const createBodyXWWWFormUrlencoded = async (payload = {}) => {
 
     const result = await db.insert(bodyXWWWFormUrlencodedTable).values(payload);
 
-    return result?.changes > 0;
+    return result?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -105,7 +105,7 @@ export const updateBodyXWWWFormUrlencoded = async (formId, payload) => {
         ...payload,
       })
       .where(eq(bodyXWWWFormUrlencodedTable.id, formId));
-    return updated?.changes > 0;
+    return updated?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -140,7 +140,7 @@ export const replaceBodyXWWWFormUrlencoded = async (
       .insert(bodyXWWWFormUrlencodedTable)
       .values(payload);
 
-    return created?.changes > 0;
+    return created?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -178,7 +178,7 @@ export const checkAllBodyXWWWFormUrlencodedByRequestMetaId = async (
           requestOrFolderMetaId
         )
       );
-    return updated?.changes > 0;
+    return updated?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -224,7 +224,7 @@ export const duplicateBodyXWWWFormUrlencoded = async (payload) => {
       .insert(bodyXWWWFormUrlencodedTable)
       .values(duplicatePayload);
 
-    return result.changes > 0;
+    return result.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }

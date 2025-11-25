@@ -36,7 +36,7 @@ export const createRequestMetaTab = async (payload) => {
       requestOrFolderMetaId,
     });
 
-    return result.changes > 0;
+    return result.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -77,7 +77,7 @@ export const updateRequestMetaTab = async (payload = {}) => {
         );
     }
 
-    return updated?.changes > 0;
+    return updated?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -96,7 +96,7 @@ export const deleteRequestMetaTab = async (requestOrFolderMetaId) => {
         eq(requestMetaTabTable.requestOrFolderMetaId, requestOrFolderMetaId)
       );
 
-    return deleted.changes > 0;
+    return deleted.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -136,7 +136,7 @@ export const duplicateRequestMetaTab = async (payload) => {
       .insert(requestMetaTabTable)
       .values(duplicatePayload);
 
-    return result.changes > 0;
+    return result.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -160,7 +160,7 @@ export const replaceRequestMetaTab = async (payload = {}) => {
         },
       });
 
-    return result.changes > 0;
+    return result.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }

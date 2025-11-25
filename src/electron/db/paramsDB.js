@@ -30,7 +30,7 @@ export const deleteParams = async (paramId) => {
       .delete(paramsTable)
       .where(eq(paramsTable.id, paramId));
 
-    return deleted?.changes > 0;
+    return deleted?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -39,7 +39,7 @@ export const deleteParams = async (paramId) => {
 export const deleteAllParams = async () => {
   try {
     const deleted = await db.delete(paramsTable);
-    return deleted?.changes > 0;
+    return deleted?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -55,7 +55,7 @@ export const deleteParamsByRequestMetaId = async (requestOrFolderMetaId) => {
     const deleted = await db
       .delete(paramsTable)
       .where(eq(paramsTable.requestOrFolderMetaId, requestOrFolderMetaId));
-    return deleted?.changes > 0;
+    return deleted?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -72,7 +72,7 @@ export const createParams = async (payload = {}) => {
       return true;
 
     const result = await db.insert(paramsTable).values(payload);
-    return result.changes > 0;
+    return result.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -105,7 +105,7 @@ export const updateParams = async (paramId, payload) => {
         ...payload,
       })
       .where(eq(paramsTable.id, paramId));
-    return updated?.changes > 0;
+    return updated?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -133,7 +133,7 @@ export const replaceParams = async (requestOrFolderMetaId, payload) => {
     if (!payload.length) return true;
     const created = await db.insert(paramsTable).values(payload);
 
-    return created?.changes > 0;
+    return created?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -162,7 +162,7 @@ export const checkAllParamsByRequestMetaId = async (requestOrFolderMetaId) => {
       })
       .where(eq(paramsTable.requestOrFolderMetaId, requestOrFolderMetaId));
 
-    return updated?.changes > 0;
+    return updated?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -201,7 +201,7 @@ export const duplicateParams = async (payload) => {
 
     const result = await db.insert(paramsTable).values(duplicatePayload);
 
-    return result.changes > 0;
+    return result.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }

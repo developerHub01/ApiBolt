@@ -127,7 +127,7 @@ export const changeActiveTheme = async (payload = {}) => {
     }
 
     const result = await db.insert(activeThemeTable).values(payload);
-    return result.changes > 0;
+    return result.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }

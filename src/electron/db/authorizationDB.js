@@ -97,7 +97,7 @@ export const createAuth = async (payload = {}) => {
       ...payload,
     });
 
-    return result.changes > 0;
+    return result.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -197,7 +197,7 @@ export const deleteAuth = async (id) => {
       deleted = await db
         .delete(authorizationTable)
         .where(eq(authorizationTable.id, id));
-      return deleted.changes > 0;
+      return deleted.rowsAffected > 0;
     }
 
     const activeProjectId = await getActiveProject();
@@ -205,7 +205,7 @@ export const deleteAuth = async (id) => {
     deleted = await db
       .delete(authorizationTable)
       .where(eq(authorizationTable.projectId, activeProjectId));
-    return deleted.changes > 0;
+    return deleted.rowsAffected > 0;
   } catch (error) {
     console.error(error);
     return false;
@@ -218,7 +218,7 @@ export const deleteAuthByProjectId = async (id) => {
       .delete(authorizationTable)
       .where(eq(authorizationTable.projectId, id));
 
-    return deleted.changes > 0;
+    return deleted.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -235,7 +235,7 @@ export const deleteAuthByRequestMetaId = async (requestOrFolderMetaId) => {
       .where(
         eq(authorizationTable.requestOrFolderMetaId, requestOrFolderMetaId)
       );
-    return deleted.changes > 0;
+    return deleted.rowsAffected > 0;
   } catch (error) {
     console.error(error);
     return false;
@@ -274,7 +274,7 @@ export const duplicateAuth = async (payload) => {
 
     const result = await db.insert(authorizationTable).values(duplicatePayload);
 
-    return result.changes > 0;
+    return result.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }

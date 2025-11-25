@@ -40,7 +40,7 @@ export const createBodyRaw = async (payload) => {
       requestOrFolderMetaId,
     });
 
-    return result.changes > 0;
+    return result.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -81,7 +81,7 @@ export const updateBodyRaw = async (payload = {}) => {
         .where(eq(bodyRawTable.requestOrFolderMetaId, requestOrFolderMetaId));
     }
 
-    return updated?.changes > 0;
+    return updated?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -97,7 +97,7 @@ export const deleteBodyRawByRequestMetaId = async (requestOrFolderMetaId) => {
       .delete(bodyRawTable)
       .where(eq(bodyRawTable.requestOrFolderMetaId, requestOrFolderMetaId));
 
-    return deleted?.changes > 0;
+    return deleted?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
     return false;
@@ -136,7 +136,7 @@ export const duplicateBodyRaw = async (payload) => {
 
     const result = await db.insert(bodyRawTable).values(duplicatePayload);
 
-    return result.changes > 0;
+    return result.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -160,7 +160,7 @@ export const replaceBodyRaw = async (payload = {}) => {
         },
       });
 
-    return result.changes > 0;
+    return result.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }

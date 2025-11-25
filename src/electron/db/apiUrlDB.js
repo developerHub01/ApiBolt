@@ -29,7 +29,7 @@ export const createApiUrl = async (payload = {}) => {
     if (!payload.requestOrFolderMetaId) return false;
 
     const result = await db.insert(apiUrlTable).values(payload);
-    return result.changes > 0;
+    return result.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -66,7 +66,7 @@ export const duplicateApiUrl = async (payload) => {
 
     const result = await db.insert(apiUrlTable).values(duplicatePayload);
 
-    return result.changes > 0;
+    return result.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -98,7 +98,7 @@ export const updateApiUrl = async (payload) => {
         requestOrFolderMetaId,
         ...payload,
       });
-      return result.changes > 0;
+      return result.rowsAffected > 0;
     }
 
     const updated = await db
@@ -107,7 +107,7 @@ export const updateApiUrl = async (payload) => {
         ...payload,
       })
       .where(eq(apiUrlTable.requestOrFolderMetaId, requestOrFolderMetaId));
-    return updated?.changes > 0;
+    return updated?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
     return false;
@@ -123,7 +123,7 @@ export const deleteApiUrlByRequestMetaId = async (requestOrFolderMetaId) => {
     const deleted = await db
       .delete(apiUrlTable)
       .where(eq(apiUrlTable.requestOrFolderMetaId, requestOrFolderMetaId));
-    return deleted?.changes > 0;
+    return deleted?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
     return false;

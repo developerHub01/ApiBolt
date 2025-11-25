@@ -38,7 +38,7 @@ export const createActiveCodeSnippitType = async (payload = {}) => {
       id,
       ...payload,
     });
-    return Boolean(response?.changes);
+    return Boolean(response?.rowsAffected);
   } catch (error) {
     console.error(error);
   }
@@ -60,7 +60,7 @@ export const updateActiveCodeSnippitType = async (languageId = null) => {
       })
       .where(eq(activeCodeSnippitTypeTable.id, ACTIVE_CODE_SNIPPIT_TYPE_ID));
 
-    return Boolean(updated?.changes);
+    return Boolean(updated?.rowsAffected);
   } catch (error) {
     console.error(error);
   }
@@ -72,7 +72,7 @@ export const deleteActiveCodeSnippitType = async () => {
       (await db
         .delete(activeCodeSnippitTypeTable)
         .where(eq(activeCodeSnippitTypeTable.id, ACTIVE_CODE_SNIPPIT_TYPE_ID))
-        ?.changes) > 0
+        ?.rowsAffected) > 0
     );
   } catch (error) {
     console.error(error);

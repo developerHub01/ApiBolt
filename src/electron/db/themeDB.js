@@ -59,7 +59,7 @@ export const createTheme = async (payload = {}) => {
       payload.palette = JSON.stringify(payload.palette);
 
     const result = await db.insert(themeTable).values(payload);
-    return result.changes > 0;
+    return result.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -84,7 +84,7 @@ export const updateTheme = async (payload) => {
         },
       });
 
-    return updated?.changes > 0;
+    return updated?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
     return false;
@@ -94,7 +94,7 @@ export const updateTheme = async (payload) => {
 export const deleteThemeById = async (id) => {
   try {
     const deleted = await db.delete(themeTable).where(eq(themeTable.id, id));
-    return deleted?.changes > 0;
+    return deleted?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
     return false;

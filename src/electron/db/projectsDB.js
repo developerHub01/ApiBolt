@@ -45,7 +45,7 @@ export const updateProjects = async (id, payload = {}) => {
       })
       .where(eq(projectTable.id, id));
 
-    return updated.changes > 0;
+    return updated.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -57,7 +57,7 @@ export const deleteProjects = async (id) => {
       .delete(projectTable)
       .where(eq(projectTable.id, id));
 
-    return deleted.changes > 0;
+    return deleted.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -88,7 +88,7 @@ export const changeActiveProject = async (id) => {
       });
     }
 
-    return result.changes > 0;
+    return result.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }

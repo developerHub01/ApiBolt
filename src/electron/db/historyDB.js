@@ -57,13 +57,7 @@ export const createHistory = async (payload = {}) => {
     if (!payload.request) return false;
 
     /* stringify all object type data */
-    const keys = [
-      "params",
-      "headers",
-      "authorization",
-      "body",
-      "responseSize",
-    ];
+    const keys = ["params", "headers", "authorization", "body", "responseSize"];
     for (const key of keys) {
       if (payload[key]) payload[key] = JSON.stringify(payload[key]);
     }
@@ -156,7 +150,7 @@ export const deleteHistoryById = async (id) => {
 
     const result = await db.delete(historyTable).where(eq(historyTable.id, id));
 
-    return result.changes > 0;
+    return result.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
@@ -170,7 +164,7 @@ export const deleteHistoryByRequestId = async (request) => {
       .delete(historyTable)
       .where(eq(historyTable.request, request));
 
-    return result.changes > 0;
+    return result.rowsAffected > 0;
   } catch (error) {
     console.error(error);
   }
