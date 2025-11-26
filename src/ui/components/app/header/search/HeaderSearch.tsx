@@ -151,7 +151,7 @@ const HeaderSearch = () => {
               <PopoverTrigger asChild>
                 <ButtonLikeDiv
                   asChild
-                  className="w-full"
+                  className="w-full focus-within:bg-background"
                   variant={"background"}
                   size={"sm"}
                   onClick={handleButtonClick}

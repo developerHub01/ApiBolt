@@ -21,6 +21,10 @@ import {
   duplicateRequestOrFolder,
 } from "@/context/redux/request-response/thunks/request-list";
 import { checkPermissionToAddFolderAsChildren } from "@/utils/request-response.utils";
+import {
+  exportFolder,
+  exportRequest,
+} from "@/context/redux/request-response/thunks/request";
 
 type TActionType =
   | "add_request"
@@ -28,7 +32,8 @@ type TActionType =
   | "add_rest_api_basics"
   | "rename"
   | "duplicate"
-  | "delete";
+  | "delete"
+  | "export";
 
 const folderAddActionList: Array<TActionType> = [
   "add_folder",
@@ -63,6 +68,10 @@ const folderCTAList: Array<{
     id: "delete",
     label: "Delete",
   },
+  {
+    id: "export",
+    label: "Export",
+  },
 ];
 
 const requestCTAList: Array<{
@@ -80,6 +89,10 @@ const requestCTAList: Array<{
   {
     id: "delete",
     label: "Delete",
+  },
+  {
+    id: "export",
+    label: "Export",
   },
 ];
 
@@ -122,9 +135,13 @@ const ItemCTA = memo(() => {
           dispatch(duplicateRequestOrFolder(id));
           break;
         }
+        case "export": {
+          dispatch(type === "request" ? exportRequest(id) : exportFolder(id));
+          break;
+        }
       }
     },
-    [dispatch, handleRenameAction, id]
+    [dispatch, handleRenameAction, id, type]
   );
 
   const handlePreventPropagation = useCallback((e: MouseEvent<HTMLElement>) => {
@@ -173,27 +190,15 @@ const ItemCTA = memo(() => {
           align={layoutTypes === "rtl" ? "start" : "end"}
           onClick={handlePreventPropagation}
         >
-          <CTAList list={menuList} onClick={handleCTAAction} />
+          {menuList.map(({ id, label }) => (
+            <DropdownMenuItem key={id} onClick={() => handleCTAAction(id)}>
+              {label}
+            </DropdownMenuItem>
+          ))}
         </DropdownMenuContent>
       </DropdownMenu>
     </motion.div>
   );
-});
-
-interface CTAListProps {
-  list: Array<{
-    id: string;
-    label: string;
-  }>;
-  onClick: (id: string) => void;
-}
-
-const CTAList = memo(({ list, onClick }: CTAListProps) => {
-  return list.map(({ id, label }) => (
-    <DropdownMenuItem key={id} onClick={() => onClick(id)}>
-      {label}
-    </DropdownMenuItem>
-  ));
 });
 
 export default ItemCTA;

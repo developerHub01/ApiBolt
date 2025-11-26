@@ -3,7 +3,7 @@ import ActionButtons from "@/components/app/projects/project-top/ActionButtons";
 
 const ProjectTop = () => {
   return (
-    <div className="flex justify-between flex-wrap gap-4 pb-3">
+    <div className="flex justify-between items-center flex-wrap gap-4 pb-3">
       <div className="w-full md:max-w-[450px] flex-1">
         <PageHeader>All Projects</PageHeader>
         <p className="text-muted-foreground text-sm">

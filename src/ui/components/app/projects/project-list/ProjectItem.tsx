@@ -1,10 +1,24 @@
-import { useCallback, type MouseEvent } from "react";
+import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useProject } from "@/context/project/ProjectProvider";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { cn } from "@/lib/utils";
-import { Trash2 as DeleteIcon } from "lucide-react";
-import { changeActiveProject } from "@/context/redux/project/thunks/projects";
+import {
+  Trash2 as DeleteIcon,
+  EllipsisVertical as ThreeDotIcon,
+  Upload as ExportIcon,
+  type LucideIcon,
+} from "lucide-react";
+import {
+  changeActiveProject,
+  exportProject,
+} from "@/context/redux/project/thunks/projects";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface ProjectItemProps {
   id: string;
@@ -12,20 +26,54 @@ interface ProjectItemProps {
   activeProjectId?: string | null;
 }
 
+type TActionType = "delete" | "export";
+
+const menuList: Array<{
+  id: TActionType;
+  label: string;
+  Icon: LucideIcon;
+}> = [
+  {
+    id: "delete",
+    label: "Delete",
+    Icon: DeleteIcon,
+  },
+  {
+    id: "export",
+    label: "Export",
+    Icon: ExportIcon,
+  },
+];
+
 const ProjectItem = ({ id, name, activeProjectId }: ProjectItemProps) => {
   const dispatch = useAppDispatch();
   const { handleChangeDeletionCandidate } = useProject();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleChangeActiveProject = useCallback(() => {
     dispatch(changeActiveProject(id));
   }, [dispatch, id]);
 
-  const handleDeleteActiveProject = useCallback(
-    (e: MouseEvent<HTMLButtonElement>) => {
-      e.stopPropagation();
-      handleChangeDeletionCandidate(id);
+  const handleDeleteProject = useCallback(() => {
+    handleChangeDeletionCandidate(id);
+  }, [handleChangeDeletionCandidate, id]);
+
+  const handleExportProject = useCallback(() => {
+    dispatch(exportProject(id));
+  }, [dispatch, id]);
+
+  const handleAction = useCallback(
+    (type: TActionType) => {
+      switch (type) {
+        case "delete": {
+          return handleDeleteProject();
+        }
+        case "export": {
+          return handleExportProject();
+        }
+      }
     },
-    [handleChangeDeletionCandidate, id]
+    [handleDeleteProject, handleExportProject]
   );
 
   return (
@@ -44,17 +92,34 @@ const ProjectItem = ({ id, name, activeProjectId }: ProjectItemProps) => {
       <h3 className="capitalize text-lg font-semibold line-clamp-2 leading-relaxed">
         {name}
       </h3>
-      <Button
-        size={"iconXs"}
-        variant={"destructive"}
-        className={cn(
-          "opacity-0 pointer-events-none",
-          "transition-opacity duration-100 ease-in group-hover:opacity-100 group-hover:pointer-events-auto"
-        )}
-        onClick={handleDeleteActiveProject}
-      >
-        <DeleteIcon />
-      </Button>
+      <DropdownMenu open={isOpen} onOpenChange={(val) => setIsOpen(val)}>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            size={"iconXs"}
+            className={cn(
+              "opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto",
+              {
+                "opacity-100": isOpen,
+              }
+            )}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <ThreeDotIcon />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          className="p-0 w-fit min-w-40 flex flex-col [&>button]:justify-start [&>div]:cursor-pointer"
+          align="end"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {menuList.map(({ id, label, Icon }) => (
+            <DropdownMenuItem key={id} onClick={() => handleAction(id)}>
+              <Icon /> {label}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };
