@@ -87,7 +87,7 @@ const ActiveProject = memo(() => {
   return (
     <div
       className={cn(
-        "w-full border-2 border-dotted border-primary/50 rounded-md p-4 flex gap-2 bg-accent/50",
+        "w-full border-2 border-dotted border-border rounded-md p-4 flex gap-2 bg-accent/50",
         "backdrop-blur-xs",
         "group hover:bg-accent/80 focus-within:bg-accent/80 transition-all duration-200"
       )}

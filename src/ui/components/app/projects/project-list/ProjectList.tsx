@@ -7,6 +7,7 @@ import {
   selectActiveProjectId,
   selectProjectList,
 } from "@/context/redux/project/selectors/project";
+import AutoScrollActiveWrapper from "@/components/ui/auto-scroll-active-wrapper";
 
 const ProjectList = () => {
   const projectListFromStore = useAppSelector(selectProjectList);
@@ -34,15 +35,17 @@ const ProjectList = () => {
           />
         ) : (
           /* else where show the list */
-          <div className="h-full flex flex-col gap-3 p-0.5">
-            {projectList.map((project) => (
-              <ProjectItem
-                key={project.id}
-                {...project}
-                activeProjectId={activeProjectId}
-              />
-            ))}
-          </div>
+          <AutoScrollActiveWrapper>
+            <div className="h-full flex flex-col gap-3 p-0.5">
+              {projectList.map((project) => (
+                <ProjectItem
+                  key={project.id}
+                  {...project}
+                  activeProjectId={activeProjectId}
+                />
+              ))}
+            </div>
+          </AutoScrollActiveWrapper>
         )}
       </ScrollArea>
     </div>
