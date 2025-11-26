@@ -1,21 +1,26 @@
-import { eq, inArray } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { db } from "./index.js";
 import { bodyXWWWFormUrlencodedTable } from "./schema.js";
 import { getTabList } from "./tabsDB.js";
+import { getActiveProject } from "./projectsDB.js";
 
 export const getBodyXWWWFormUrlencoded = async (requestOrFolderMetaId) => {
   try {
     if (!requestOrFolderMetaId)
       requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!requestOrFolderMetaId) return [];
+    const projectId = await getActiveProject();
+    if (!requestOrFolderMetaId || !projectId) return [];
 
     const result = await db
       .select()
       .from(bodyXWWWFormUrlencodedTable)
       .where(
-        eq(
-          bodyXWWWFormUrlencodedTable.requestOrFolderMetaId,
-          requestOrFolderMetaId
+        and(
+          eq(
+            bodyXWWWFormUrlencodedTable.requestOrFolderMetaId,
+            requestOrFolderMetaId
+          ),
+          eq(bodyXWWWFormUrlencodedTable.projectId, projectId)
         )
       );
 
@@ -47,14 +52,18 @@ export const deleteBodyXWWWFormUrlencodedByRequestMetaId = async (
   try {
     if (!requestOrFolderMetaId)
       requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!requestOrFolderMetaId) return false;
+    const projectId = await getActiveProject();
+    if (!requestOrFolderMetaId || !projectId) return false;
 
     await db
       .delete(bodyXWWWFormUrlencodedTable)
       .where(
-        eq(
-          bodyXWWWFormUrlencodedTable.requestOrFolderMetaId,
-          requestOrFolderMetaId
+        and(
+          eq(
+            bodyXWWWFormUrlencodedTable.requestOrFolderMetaId,
+            requestOrFolderMetaId
+          ),
+          eq(bodyXWWWFormUrlencodedTable.projectId, projectId)
         )
       );
     return true;
@@ -67,7 +76,10 @@ export const createBodyXWWWFormUrlencoded = async (payload = {}) => {
   try {
     if (!("requestOrFolderMetaId" in payload))
       payload["requestOrFolderMetaId"] = (await getTabList())?.selectedTab;
-    if (!payload.requestOrFolderMetaId) return false;
+    if (!("projectId" in payload))
+      payload["projectId"] = await getActiveProject();
+    if (!payload.requestOrFolderMetaId || !payload.projectId) return false;
+
     if ("isCheck" in payload) payload["isCheck"] = Number(payload["isCheck"]);
 
     const result = await db.insert(bodyXWWWFormUrlencodedTable).values(payload);
@@ -83,6 +95,7 @@ export const updateBodyXWWWFormUrlencoded = async (formId, payload) => {
 
   delete payload["id"];
   delete payload["requestOrFolderMetaId"];
+  delete payload["projectId"];
   delete payload["createdAt"];
   if ("isCheck" in payload) payload["isCheck"] = Number(payload["isCheck"]);
 
@@ -115,23 +128,31 @@ export const replaceBodyXWWWFormUrlencoded = async (
   requestOrFolderMetaId,
   payload
 ) => {
+  const projectId = await getActiveProject();
+  if (!projectId) return false;
+
   if (payload)
     payload.map((XWWFormUrlencoded) => {
       delete XWWFormUrlencoded["id"];
       delete XWWFormUrlencoded["requestOrFolderMetaId"];
+      delete XWWFormUrlencoded["projectId"];
       delete XWWFormUrlencoded["createdAt"];
       if ("isCheck" in XWWFormUrlencoded)
         XWWFormUrlencoded["isCheck"] = Number(XWWFormUrlencoded["isCheck"]);
       XWWFormUrlencoded["requestOrFolderMetaId"] = requestOrFolderMetaId;
+      XWWFormUrlencoded["projectId"] = projectId;
     });
 
   try {
     await db
       .delete(bodyXWWWFormUrlencodedTable)
       .where(
-        eq(
-          bodyXWWWFormUrlencodedTable.requestOrFolderMetaId,
-          requestOrFolderMetaId
+        and(
+          eq(
+            bodyXWWWFormUrlencodedTable.requestOrFolderMetaId,
+            requestOrFolderMetaId
+          ),
+          eq(bodyXWWWFormUrlencodedTable.projectId, projectId)
         )
       );
 
@@ -150,16 +171,20 @@ export const checkAllBodyXWWWFormUrlencodedByRequestMetaId = async (
   try {
     if (!requestOrFolderMetaId)
       requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!requestOrFolderMetaId) return false;
+    const projectId = await getActiveProject();
+    if (!requestOrFolderMetaId || !projectId) return false;
 
     const rows =
       (await db
         .select()
         .from(bodyXWWWFormUrlencodedTable)
         .where(
-          eq(
-            bodyXWWWFormUrlencodedTable.requestOrFolderMetaId,
-            requestOrFolderMetaId
+          and(
+            eq(
+              bodyXWWWFormUrlencodedTable.requestOrFolderMetaId,
+              requestOrFolderMetaId
+            ),
+            eq(bodyXWWWFormUrlencodedTable.projectId, projectId)
           )
         )) ?? [];
 
@@ -171,9 +196,12 @@ export const checkAllBodyXWWWFormUrlencodedByRequestMetaId = async (
         isCheck: checkValue,
       })
       .where(
-        eq(
-          bodyXWWWFormUrlencodedTable.requestOrFolderMetaId,
-          requestOrFolderMetaId
+        and(
+          eq(
+            bodyXWWWFormUrlencodedTable.requestOrFolderMetaId,
+            requestOrFolderMetaId
+          ),
+          eq(bodyXWWWFormUrlencodedTable.projectId, projectId)
         )
       );
     return updated?.rowsAffected > 0;
@@ -191,13 +219,17 @@ export const duplicateBodyXWWWFormUrlencoded = async (payload) => {
   try {
     if (!payload) return;
     const oldIds = Object.keys(payload);
-    if (!oldIds.length) return;
+    const projectId = await getActiveProject();
+    if (!oldIds.length || !projectId) return;
 
     const existingBodyXWWWFormUrlencodedData = await db
       .select()
       .from(bodyXWWWFormUrlencodedTable)
       .where(
-        inArray(bodyXWWWFormUrlencodedTable.requestOrFolderMetaId, oldIds)
+        and(
+          inArray(bodyXWWWFormUrlencodedTable.requestOrFolderMetaId, oldIds),
+          eq(bodyXWWWFormUrlencodedTable.projectId, projectId)
+        )
       );
 
     if (!existingBodyXWWWFormUrlencodedData.length) return true;
@@ -214,6 +246,7 @@ export const duplicateBodyXWWWFormUrlencoded = async (payload) => {
           ...bodyXWWWFormUrlencoded,
           requestOrFolderMetaId:
             payload[bodyXWWWFormUrlencoded.requestOrFolderMetaId],
+          projectId,
         };
       }
     );

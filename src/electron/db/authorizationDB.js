@@ -7,7 +7,7 @@ import { generateJWT, hasValue } from "../utils/utils.js";
 /* id === active project id */
 export const getAuth = async (requestId) => {
   try {
-    const activeProjectId = await getActiveProject();
+    const projectId = await getActiveProject();
 
     return (
       await db
@@ -15,7 +15,7 @@ export const getAuth = async (requestId) => {
         .from(authorizationTable)
         .where(
           and(
-            eq(authorizationTable.projectId, activeProjectId),
+            eq(authorizationTable.projectId, projectId),
             requestId
               ? eq(authorizationTable.requestOrFolderMetaId, requestId)
               : isNull(authorizationTable.requestOrFolderMetaId)
@@ -29,6 +29,7 @@ export const getAuth = async (requestId) => {
 
 export const getInheritedAuthFromId = async (requestId) => {
   try {
+    const projectId = await getActiveProject();
     let currentId = requestId;
 
     while (currentId) {
@@ -36,7 +37,12 @@ export const getInheritedAuthFromId = async (requestId) => {
         await db
           .select()
           .from(requestOrFolderMetaTable)
-          .where(eq(requestOrFolderMetaTable.id, currentId))
+          .where(
+            and(
+              eq(requestOrFolderMetaTable.id, currentId),
+              eq(requestOrFolderMetaTable.projectId, projectId)
+            )
+          )
           .limit(1)
       )?.[0];
       if (!requestData) return;
@@ -45,7 +51,12 @@ export const getInheritedAuthFromId = async (requestId) => {
         await db
           .select()
           .from(authorizationTable)
-          .where(eq(authorizationTable.requestOrFolderMetaId, currentId))
+          .where(
+            and(
+              eq(authorizationTable.requestOrFolderMetaId, currentId),
+              eq(authorizationTable.projectId, projectId)
+            )
+          )
           .limit(1)
       )?.[0];
 
@@ -68,7 +79,6 @@ export const getInheritedAuthFromId = async (requestId) => {
 export const createAuth = async (payload = {}) => {
   try {
     if (!payload.projectId) payload.projectId = await getActiveProject();
-
     if (!payload.projectId) return false;
 
     /* checking if requestOrFolderMetaId is null and for that project is there allready a requestOrFolderMetaId with null */
@@ -105,8 +115,8 @@ export const createAuth = async (payload = {}) => {
 
 export const updateAuth = async ({ requestOrFolderId, payload = {} } = {}) => {
   try {
-    const activeProjectId = await getActiveProject();
-    if (!activeProjectId) return false;
+    const projectId = await getActiveProject();
+    if (!projectId) return false;
 
     const authData = (
       await db
@@ -114,7 +124,7 @@ export const updateAuth = async ({ requestOrFolderId, payload = {} } = {}) => {
         .from(authorizationTable)
         .where(
           and(
-            eq(authorizationTable.projectId, activeProjectId),
+            eq(authorizationTable.projectId, projectId),
             requestOrFolderId
               ? eq(authorizationTable.requestOrFolderMetaId, requestOrFolderId)
               : isNull(authorizationTable.requestOrFolderMetaId)
@@ -126,7 +136,7 @@ export const updateAuth = async ({ requestOrFolderId, payload = {} } = {}) => {
 
     if (!authData)
       await createAuth({
-        projectId: activeProjectId,
+        projectId,
         requestOrFolderMetaId: requestOrFolderId,
       });
 
@@ -174,7 +184,7 @@ export const updateAuth = async ({ requestOrFolderId, payload = {} } = {}) => {
       })
       .where(
         and(
-          eq(authorizationTable.projectId, activeProjectId),
+          eq(authorizationTable.projectId, projectId),
           requestOrFolderId
             ? eq(authorizationTable.requestOrFolderMetaId, requestOrFolderId)
             : isNull(authorizationTable.requestOrFolderMetaId)
@@ -190,8 +200,8 @@ export const updateAuth = async ({ requestOrFolderId, payload = {} } = {}) => {
 
 export const replaceAuth = async ({ requestOrFolderId, payload = {} } = {}) => {
   try {
-    const activeProjectId = await getActiveProject();
-    if (!activeProjectId) return false;
+    const projectId = await getActiveProject();
+    if (!projectId) return false;
 
     delete payload["id"];
     delete payload["projectId"];
@@ -227,7 +237,7 @@ export const replaceAuth = async ({ requestOrFolderId, payload = {} } = {}) => {
         .from(authorizationTable)
         .where(
           and(
-            eq(authorizationTable.projectId, activeProjectId),
+            eq(authorizationTable.projectId, projectId),
             requestOrFolderId
               ? eq(authorizationTable.requestOrFolderMetaId, requestOrFolderId)
               : isNull(authorizationTable.requestOrFolderMetaId)
@@ -244,7 +254,7 @@ export const replaceAuth = async ({ requestOrFolderId, payload = {} } = {}) => {
         })
         .where(
           and(
-            eq(authorizationTable.projectId, activeProjectId),
+            eq(authorizationTable.projectId, projectId),
             requestOrFolderId
               ? eq(authorizationTable.requestOrFolderMetaId, requestOrFolderId)
               : isNull(authorizationTable.requestOrFolderMetaId)
@@ -254,7 +264,7 @@ export const replaceAuth = async ({ requestOrFolderId, payload = {} } = {}) => {
       await db.insert(authorizationTable).values({
         ...payload,
         requestOrFolderMetaId: requestOrFolderId,
-        projectId: activeProjectId,
+        projectId,
       });
     }
 
@@ -276,11 +286,11 @@ export const deleteAuth = async (id) => {
       return deleted.rowsAffected > 0;
     }
 
-    const activeProjectId = await getActiveProject();
+    const projectId = await getActiveProject();
 
     deleted = await db
       .delete(authorizationTable)
-      .where(eq(authorizationTable.projectId, activeProjectId));
+      .where(eq(authorizationTable.projectId, projectId));
     return deleted.rowsAffected > 0;
   } catch (error) {
     console.error(error);
@@ -304,12 +314,16 @@ export const deleteAuthByRequestMetaId = async (requestOrFolderMetaId) => {
   try {
     if (!requestOrFolderMetaId)
       requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!requestOrFolderMetaId) return false;
+    const projectId = await getActiveProject();
+    if (!requestOrFolderMetaId || !projectId) return false;
 
     await db
       .delete(authorizationTable)
       .where(
-        eq(authorizationTable.requestOrFolderMetaId, requestOrFolderMetaId)
+        and(
+          eq(authorizationTable.requestOrFolderMetaId, requestOrFolderMetaId),
+          eq(authorizationTable.projectId, projectId)
+        )
       );
     return true;
   } catch (error) {
@@ -327,12 +341,18 @@ export const duplicateAuth = async (payload) => {
   try {
     if (!payload) return;
     const oldIds = Object.keys(payload);
-    if (!oldIds.length) return;
+    const projectId = await getActiveProject();
+    if (!oldIds.length || !projectId) return;
 
     const existingAuthData = await db
       .select()
       .from(authorizationTable)
-      .where(inArray(authorizationTable.requestOrFolderMetaId, oldIds));
+      .where(
+        and(
+          inArray(authorizationTable.requestOrFolderMetaId, oldIds),
+          eq(authorizationTable.projectId, projectId)
+        )
+      );
 
     if (!existingAuthData.length) return true;
 
@@ -345,6 +365,7 @@ export const duplicateAuth = async (payload) => {
       return {
         ...auth,
         requestOrFolderMetaId: payload[auth.requestOrFolderMetaId],
+        projectId,
       };
     });
 

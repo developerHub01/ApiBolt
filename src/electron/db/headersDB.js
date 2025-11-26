@@ -1,22 +1,29 @@
-import { eq, inArray } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { db } from "./index.js";
-import { headersTable } from "./schema.js";
+import { headersTable, projectTable } from "./schema.js";
 import { getTabList } from "./tabsDB.js";
 import {
   createHiddenHeadersCheck,
   getHiddenHeadersCheck,
 } from "./hiddenHeadersCheckDB.js";
+import { getActiveProject } from "./projectsDB.js";
 
 /* id === requestOrFolderMetaId */
 export const getHeaders = async (id) => {
   try {
     if (!id) id = (await getTabList())?.selectedTab;
-    if (!id) return [];
+    const projectId = await getActiveProject();
+    if (!id || !projectId) return [];
 
     const result = await db
       .select()
       .from(headersTable)
-      .where(eq(headersTable.requestOrFolderMetaId, id));
+      .where(
+        and(
+          eq(headersTable.requestOrFolderMetaId, id),
+          eq(headersTable.projectId, projectId)
+        )
+      );
 
     return result.map((item) => ({
       ...item,
@@ -44,11 +51,17 @@ export const deleteHeadersByRequestMetaId = async (requestOrFolderMetaId) => {
   try {
     if (!requestOrFolderMetaId)
       requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!requestOrFolderMetaId) return false;
+    const projectId = await getActiveProject();
+    if (!requestOrFolderMetaId || !projectId) return false;
 
     await db
       .delete(headersTable)
-      .where(eq(headersTable.requestOrFolderMetaId, requestOrFolderMetaId));
+      .where(
+        and(
+          eq(headersTable.requestOrFolderMetaId, requestOrFolderMetaId),
+          eq(headersTable.projectId, projectId)
+        )
+      );
     return true;
   } catch (error) {
     console.error(error);
@@ -59,7 +72,10 @@ export const createHeaders = async (payload = {}) => {
   try {
     if (!("requestOrFolderMetaId" in payload))
       payload["requestOrFolderMetaId"] = (await getTabList())?.selectedTab;
-    if (!payload.requestOrFolderMetaId) return false;
+    if (!("projectId" in payload))
+      payload["projectId"] = await getActiveProject();
+    if (!payload.requestOrFolderMetaId || !payload.projectId) return false;
+
     if ("isCheck" in payload) payload["isCheck"] = Number(payload["isCheck"]);
 
     if (typeof payload === "object" && !Object.keys(payload).length)
@@ -72,9 +88,10 @@ export const createHeaders = async (payload = {}) => {
         payload.requestOrFolderMetaId
       );
 
-      if (isExist)
+      if (!isExist)
         await createHiddenHeadersCheck({
           requestOrFolderMetaId: payload.requestOrFolderMetaId,
+          projectId: payload.projectId,
         });
     }
 
@@ -89,6 +106,7 @@ export const updateHeaders = async (headerId, payload) => {
 
   delete payload["id"];
   delete payload["requestOrFolderMetaId"];
+  delete payload["projectId"];
   delete payload["createdAt"];
   if ("isCheck" in payload) payload["isCheck"] = Number(payload["isCheck"]);
 
@@ -118,19 +136,29 @@ export const updateHeaders = async (headerId, payload) => {
 };
 
 export const replaceHeaders = async (requestOrFolderMetaId, payload) => {
+  const projectId = await getActiveProject();
+  if (!projectId) return false;
+
   if (payload)
     payload.map((header) => {
       delete header["id"];
       delete header["requestOrFolderMetaId"];
+      delete header["projectId"];
       delete header["createdAt"];
       if ("isCheck" in header) header["isCheck"] = Number(header["isCheck"]);
       header["requestOrFolderMetaId"] = requestOrFolderMetaId;
+      header["projectId"] = projectId;
     });
 
   try {
     await db
       .delete(headersTable)
-      .where(eq(headersTable.requestOrFolderMetaId, requestOrFolderMetaId));
+      .where(
+        and(
+          eq(headersTable.requestOrFolderMetaId, requestOrFolderMetaId),
+          eq(headersTable.projectId, projectId)
+        )
+      );
 
     if (
       typeof payload === "object" &&
@@ -151,14 +179,18 @@ export const checkAllHeadersByRequestMetaId = async (requestOrFolderMetaId) => {
   try {
     if (!requestOrFolderMetaId)
       requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!requestOrFolderMetaId) return false;
+    const projectId = await getActiveProject();
+    if (!requestOrFolderMetaId || !projectId) return false;
 
     const rows =
       (await db
         .select()
         .from(headersTable)
         .where(
-          eq(headersTable.requestOrFolderMetaId, requestOrFolderMetaId)
+          and(
+            eq(headersTable.requestOrFolderMetaId, requestOrFolderMetaId),
+            eq(headersTable.projectId, projectId)
+          )
         )) ?? [];
 
     const checkValue = Number(!rows.every((row) => row.isCheck));
@@ -168,7 +200,12 @@ export const checkAllHeadersByRequestMetaId = async (requestOrFolderMetaId) => {
       .set({
         isCheck: checkValue,
       })
-      .where(eq(headersTable.requestOrFolderMetaId, requestOrFolderMetaId));
+      .where(
+        and(
+          eq(headersTable.requestOrFolderMetaId, requestOrFolderMetaId),
+          eq(headersTable.projectId, projectId)
+        )
+      );
     return updated?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
@@ -184,12 +221,18 @@ export const duplicateHeaders = async (payload) => {
   try {
     if (!payload) return;
     const oldIds = Object.keys(payload);
-    if (!oldIds.length) return;
+    const projectId = await getActiveProject();
+    if (!oldIds.length || !projectId) return;
 
     const existingHeadersData = await db
       .select()
       .from(headersTable)
-      .where(inArray(headersTable.requestOrFolderMetaId, oldIds));
+      .where(
+        and(
+          inArray(headersTable.requestOrFolderMetaId, oldIds),
+          eq(headersTable.projectId, projectId)
+        )
+      );
 
     if (!existingHeadersData.length) return true;
 
@@ -203,6 +246,7 @@ export const duplicateHeaders = async (payload) => {
       return {
         ...header,
         requestOrFolderMetaId: payload[header.requestOrFolderMetaId],
+        projectId,
       };
     });
 

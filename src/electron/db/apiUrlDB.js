@@ -1,20 +1,27 @@
-import { eq, inArray } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { db } from "./index.js";
 import { API_URL_DEFAULT_VALUE, apiUrlTable } from "./schema.js";
 import { getTabList } from "./tabsDB.js";
+import { getActiveProject } from "./projectsDB.js";
 
 /* id === requestOrFolderMetaId */
 export const getApiUrlDB = async (id) => {
   try {
     if (!id) id = (await getTabList())?.selectedTab;
     if (!id) return null;
+    const projectId = await getActiveProject();
 
     return (
       (
         await db
           .select()
           .from(apiUrlTable)
-          .where(eq(apiUrlTable.requestOrFolderMetaId, id))
+          .where(
+            and(
+              eq(apiUrlTable.requestOrFolderMetaId, id),
+              eq(apiUrlTable.projectId, projectId)
+            )
+          )
       )?.[0] ?? { url: API_URL_DEFAULT_VALUE }
     );
   } catch (error) {
@@ -26,7 +33,9 @@ export const createApiUrl = async (payload = {}) => {
   try {
     if (!("requestOrFolderMetaId" in payload))
       payload["requestOrFolderMetaId"] = (await getTabList())?.selectedTab;
-    if (!payload.requestOrFolderMetaId) return false;
+    if (!("projectId" in payload))
+      payload["projectId"] = await getActiveProject();
+    if (!payload.requestOrFolderMetaId || !payload.projectId) return false;
 
     const result = await db.insert(apiUrlTable).values(payload);
     return result.rowsAffected > 0;
@@ -42,14 +51,21 @@ payload = {
 */
 export const duplicateApiUrl = async (payload) => {
   try {
+    const projectId = await getActiveProject();
+
     if (!payload) return;
     const oldIds = Object.keys(payload);
-    if (!oldIds.length) return;
+    if (!oldIds.length || !projectId) return;
 
     const existingUrlData = await db
       .select()
       .from(apiUrlTable)
-      .where(inArray(apiUrlTable.requestOrFolderMetaId, oldIds));
+      .where(
+        and(
+          inArray(apiUrlTable.requestOrFolderMetaId, oldIds),
+          eq(apiUrlTable.projectId, projectId)
+        )
+      );
 
     if (!existingUrlData.length) return true;
 
@@ -60,6 +76,7 @@ export const duplicateApiUrl = async (payload) => {
     const duplicatePayload = existingUrlData.map(
       ({ url, requestOrFolderMetaId }) => ({
         requestOrFolderMetaId: payload[requestOrFolderMetaId],
+        projectId,
         url,
       })
     );
@@ -75,12 +92,13 @@ export const duplicateApiUrl = async (payload) => {
 export const updateApiUrl = async (payload) => {
   if (!payload) return false;
 
-  let { requestOrFolderMetaId, ...other } = payload;
+  let { requestOrFolderMetaId, projectId, ...other } = payload;
   payload = other;
 
   if (!requestOrFolderMetaId)
     requestOrFolderMetaId = (await getTabList())?.selectedTab;
-  if (!requestOrFolderMetaId) return false;
+  if (!projectId) projectId = await getActiveProject();
+  if (!requestOrFolderMetaId || !projectId) return false;
 
   delete payload["id"];
   delete payload["createdAt"];
@@ -90,12 +108,18 @@ export const updateApiUrl = async (payload) => {
       await db
         .select()
         .from(apiUrlTable)
-        .where(eq(apiUrlTable.requestOrFolderMetaId, requestOrFolderMetaId))
+        .where(
+          and(
+            eq(apiUrlTable.requestOrFolderMetaId, requestOrFolderMetaId),
+            eq(apiUrlTable.projectId, projectId)
+          )
+        )
     )?.[0];
 
     if (!isExist) {
       await createApiUrl({
         requestOrFolderMetaId,
+        projectId,
         ...payload,
       });
       return true;
@@ -106,7 +130,12 @@ export const updateApiUrl = async (payload) => {
       .set({
         ...payload,
       })
-      .where(eq(apiUrlTable.requestOrFolderMetaId, requestOrFolderMetaId));
+      .where(
+        and(
+          eq(apiUrlTable.requestOrFolderMetaId, requestOrFolderMetaId),
+          eq(apiUrlTable.projectId, projectId)
+        )
+      );
     return true;
   } catch (error) {
     console.error(error);
@@ -116,13 +145,20 @@ export const updateApiUrl = async (payload) => {
 
 export const deleteApiUrlByRequestMetaId = async (requestOrFolderMetaId) => {
   try {
+    const projectId = await getActiveProject();
+
     if (!requestOrFolderMetaId)
       requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!requestOrFolderMetaId) return false;
+    if (!requestOrFolderMetaId || !projectId) return false;
 
     await db
       .delete(apiUrlTable)
-      .where(eq(apiUrlTable.requestOrFolderMetaId, requestOrFolderMetaId));
+      .where(
+        and(
+          eq(apiUrlTable.requestOrFolderMetaId, requestOrFolderMetaId),
+          eq(apiUrlTable.projectId, projectId)
+        )
+      );
     return true;
   } catch (error) {
     console.error(error);

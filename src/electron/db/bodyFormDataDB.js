@@ -1,7 +1,8 @@
 import { and, eq, inArray, like, not } from "drizzle-orm";
 import { db } from "./index.js";
-import { bodyFormDataTable } from "./schema.js";
+import { bodyFormDataTable, projectTable } from "./schema.js";
 import { getTabList } from "./tabsDB.js";
+import { getActiveProject } from "./projectsDB.js";
 
 export const getBodyFormDataByFormId = async (id) => {
   try {
@@ -28,13 +29,17 @@ export const getBodyFormData = async (requestOrFolderMetaId) => {
   try {
     if (!requestOrFolderMetaId)
       requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!requestOrFolderMetaId) return [];
+    const projectId = await getActiveProject();
+    if (!requestOrFolderMetaId || !projectId) return [];
 
     let result = await db
       .select()
       .from(bodyFormDataTable)
       .where(
-        eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId)
+        and(
+          eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId),
+          eq(bodyFormDataTable.projectId, projectId)
+        )
       );
 
     result = result.map((item) => {
@@ -75,12 +80,16 @@ export const deleteBodyFormDataByRequestMetaId = async (
   try {
     if (!requestOrFolderMetaId)
       requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!requestOrFolderMetaId) return false;
+    const projectId = await getActiveProject();
+    if (!requestOrFolderMetaId || !projectId) return false;
 
     await db
       .delete(bodyFormDataTable)
       .where(
-        eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId)
+        and(
+          eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId),
+          eq(bodyFormDataTable.projectId, projectId)
+        )
       );
     return true;
   } catch (error) {
@@ -123,6 +132,8 @@ export const createBodyFormData = async (payload = {}) => {
   try {
     if (!("requestOrFolderMetaId" in payload))
       payload["requestOrFolderMetaId"] = (await getTabList())?.selectedTab;
+    if (!("projectId" in payload))
+      payload["projectId"] = await getActiveProject();
     if (!payload.requestOrFolderMetaId) return false;
     if ("isCheck" in payload) payload["isCheck"] = Number(payload["isCheck"]);
 
@@ -139,6 +150,7 @@ export const updateBodyFormData = async (formId, payload) => {
 
   delete payload["id"];
   delete payload["requestOrFolderMetaId"];
+  delete payload["projectId"];
   delete payload["createdAt"];
   if ("isCheck" in payload) payload["isCheck"] = Number(payload["isCheck"]);
 
@@ -168,20 +180,26 @@ export const updateBodyFormData = async (formId, payload) => {
 };
 
 export const replaceBodyFormData = async (requestOrFolderMetaId, payload) => {
+  const projectId = await getActiveProject();
+  if (!projectId) return false;
+
   if (payload)
     payload.map((formData) => {
       delete formData["id"];
       delete formData["requestOrFolderMetaId"];
+      delete formData["projectId"];
       delete formData["createdAt"];
       if ("isCheck" in formData)
         formData["isCheck"] = Number(formData["isCheck"]);
       formData["requestOrFolderMetaId"] = requestOrFolderMetaId;
+      formData["projectId"] = projectId;
     });
 
   try {
     await db.delete(bodyFormDataTable).where(
       and(
         eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId),
+        eq(bodyFormDataTable.projectId, projectId),
         /* it only remove valued value not file */
         not(
           and(
@@ -205,21 +223,29 @@ export const replaceFullBodyFormData = async (
   requestOrFolderMetaId,
   payload
 ) => {
+  const projectId = await getActiveProject();
+  if (!projectId) return false;
+
   if (payload)
     payload.map((formData) => {
       delete formData["id"];
       delete formData["requestOrFolderMetaId"];
+      delete formData["projectId"];
       delete formData["createdAt"];
       if ("isCheck" in formData)
         formData["isCheck"] = Number(formData["isCheck"]);
       formData["requestOrFolderMetaId"] = requestOrFolderMetaId;
+      formData["projectId"] = projectId;
     });
 
   try {
     await db
       .delete(bodyFormDataTable)
       .where(
-        eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId)
+        and(
+          eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId),
+          eq(bodyFormDataTable.projectId, projectId)
+        )
       );
 
     if (!payload?.length) return true;
@@ -237,14 +263,18 @@ export const checkAllBodyFormDataByRequestMetaId = async (
   try {
     if (!requestOrFolderMetaId)
       requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!requestOrFolderMetaId) return false;
+    const projectId = await getActiveProject();
+    if (!requestOrFolderMetaId || !projectId) return false;
 
     const rows =
       (await db
         .select()
         .from(bodyFormDataTable)
         .where(
-          eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId)
+          and(
+            eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId),
+            eq(bodyFormDataTable.projectId, projectId)
+          )
         )) ?? [];
 
     const checkValue = Number(!rows.every((row) => row.isCheck));
@@ -255,7 +285,10 @@ export const checkAllBodyFormDataByRequestMetaId = async (
         isCheck: checkValue,
       })
       .where(
-        eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId)
+        and(
+          eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId),
+          eq(bodyFormDataTable.projectId, projectId)
+        )
       );
     return updated?.rowsAffected > 0;
   } catch (error) {
@@ -272,12 +305,18 @@ export const duplicateBodyFormData = async (payload) => {
   try {
     if (!payload) return;
     const oldIds = Object.keys(payload);
-    if (!oldIds.length) return;
+    const projectId = await getActiveProject();
+    if (!oldIds.length || !projectId) return;
 
     const existingBodyFormData = await db
       .select()
       .from(bodyFormDataTable)
-      .where(inArray(bodyFormDataTable.requestOrFolderMetaId, oldIds));
+      .where(
+        and(
+          inArray(bodyFormDataTable.requestOrFolderMetaId, oldIds),
+          eq(bodyFormDataTable.projectId, projectId)
+        )
+      );
 
     if (!existingBodyFormData.length) return true;
 
@@ -291,6 +330,7 @@ export const duplicateBodyFormData = async (payload) => {
       return {
         ...formData,
         requestOrFolderMetaId: payload[formData.requestOrFolderMetaId],
+        projectId,
       };
     });
 

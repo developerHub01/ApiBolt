@@ -1,18 +1,21 @@
-import { eq, inArray } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { db } from "./index.js";
 import { requestOrFolderMetaTable } from "./schema.js";
 import { getActiveProject } from "./projectsDB.js";
-import { updateTablistBasedRequestOrFolderMetaDeletion } from "./tabsDB.js";
+import {
+  getTabList,
+  updateTablistBasedRequestOrFolderMetaDeletion,
+} from "./tabsDB.js";
 
 /* id === active project id */
 export const getRequestOrFolderMeta = async () => {
   try {
-    const activeProjectId = await getActiveProject();
+    const projectId = await getActiveProject();
 
     const dataList = await db
       .select()
       .from(requestOrFolderMetaTable)
-      .where(eq(requestOrFolderMetaTable.projectId, activeProjectId));
+      .where(eq(requestOrFolderMetaTable.projectId, projectId));
 
     // Make the map first
     const map = {};
@@ -36,11 +39,18 @@ export const getRequestOrFolderMeta = async () => {
 
 export const getRequestOrFolderMetaById = async (id) => {
   try {
+    const projectId = await getActiveProject();
+
     return (
       await db
         .select()
         .from(requestOrFolderMetaTable)
-        .where(eq(requestOrFolderMetaTable.id, id))
+        .where(
+          and(
+            eq(requestOrFolderMetaTable.id, id),
+            eq(requestOrFolderMetaTable.projectId, projectId)
+          )
+        )
     )?.[0];
   } catch (error) {
     console.error(error);
@@ -50,19 +60,18 @@ export const getRequestOrFolderMetaById = async (id) => {
 export const createRequestOrFolderMeta = async (payload) => {
   try {
     if (!payload || typeof payload !== "object") return;
-
-    const activeProjectId = await getActiveProject();
+    const projectId = await getActiveProject();
 
     if (Array.isArray(payload)) {
       payload.forEach((item, index, arr) => {
         arr[index] = {
           ...item,
-          projectId: activeProjectId,
+          projectId,
         };
         delete arr[index]["createdAt"];
       });
     } else {
-      payload.projectId = activeProjectId;
+      payload.projectId = projectId;
       delete payload["createdAt"];
     }
 
@@ -77,8 +86,10 @@ export const createRequestOrFolderMeta = async (payload) => {
 export const updateRequestOrFolderMeta = async (payload) => {
   try {
     if (!payload || typeof payload !== "object") return false;
+    if (!("id" in payload)) payload["id"] = (await getTabList())?.selectedTab;
+    if (!payload["projectId"]) payload["projectId"] = await getActiveProject();
 
-    const { id } = payload;
+    const { id, projectId } = payload;
     delete payload["id"];
     delete payload["projectId"];
     delete payload["children"];
@@ -89,7 +100,12 @@ export const updateRequestOrFolderMeta = async (payload) => {
     await db
       .update(requestOrFolderMetaTable)
       .set(payload)
-      .where(eq(requestOrFolderMetaTable.id, id));
+      .where(
+        and(
+          eq(requestOrFolderMetaTable.id, id),
+          eq(requestOrFolderMetaTable.projectId, projectId)
+        )
+      );
     return true;
   } catch (error) {
     console.error(error);
@@ -115,12 +131,19 @@ export const collapseAllRequestOrFolderMeta = async (projectId) => {
 
 export const moveRequestOrFolderMeta = async ({ id, parentId = null } = {}) => {
   try {
+    const projectId = await getActiveProject();
+
     const updated = await db
       .update(requestOrFolderMetaTable)
       .set({
         parentId,
       })
-      .where(eq(requestOrFolderMetaTable.id, id));
+      .where(
+        and(
+          eq(requestOrFolderMetaTable.id, id),
+          eq(requestOrFolderMetaTable.projectId, projectId)
+        )
+      );
 
     return updated?.rowsAffected > 0;
   } catch (error) {
@@ -131,11 +154,17 @@ export const moveRequestOrFolderMeta = async ({ id, parentId = null } = {}) => {
 export const deleteRequestOrFolderMetaById = async (id) => {
   try {
     const deletionCandidates = Array.isArray(id) ? id : [id];
-    if (deletionCandidates.length === 0) return false;
+    const projectId = await getActiveProject();
+    if (deletionCandidates.length === 0 || !projectId) return false;
 
     const deleted = await db
       .delete(requestOrFolderMetaTable)
-      .where(inArray(requestOrFolderMetaTable.id, [deletionCandidates[0]]));
+      .where(
+        and(
+          inArray(requestOrFolderMetaTable.id, [deletionCandidates[0]]),
+          eq(requestOrFolderMetaTable.projectId, projectId)
+        )
+      );
 
     if (deleted?.rowsAffected)
       await updateTablistBasedRequestOrFolderMetaDeletion(deletionCandidates);
@@ -187,13 +216,20 @@ export const expendOrCollapseRequestOrFolderMetaAll = async (
 ) => {
   try {
     if (Array.isArray(id)) id = [id];
+    const projectId = await getActiveProject();
+    if (!projectId) return false;
 
     const updated = await db
       .update(requestOrFolderMetaTable)
       .set({
         isExpended,
       })
-      .where(inArray(requestOrFolderMetaTable.id, id));
+      .where(
+        and(
+          inArray(requestOrFolderMetaTable.id, id),
+          eq(requestOrFolderMetaTable.projectId, projectId)
+        )
+      );
 
     return updated.rowsAffected > 0;
   } catch (error) {

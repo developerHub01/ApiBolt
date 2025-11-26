@@ -1,19 +1,26 @@
-import { eq, inArray } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { db } from "./index.js";
 import { paramsTable } from "./schema.js";
 import { getTabList } from "./tabsDB.js";
+import { getActiveProject } from "./projectsDB.js";
 
 /* id === requestOrFolderMetaId */
 export const getParams = async (id) => {
   try {
     if (!id) id = (await getTabList())?.selectedTab;
-    if (!id) return [];
+    const projectId = await getActiveProject();
+    if (!id || !projectId) return [];
 
     const result =
       (await db
         .select()
         .from(paramsTable)
-        .where(eq(paramsTable.requestOrFolderMetaId, id))) ?? [];
+        .where(
+          and(
+            eq(paramsTable.requestOrFolderMetaId, id),
+            eq(paramsTable.projectId, projectId)
+          )
+        )) ?? [];
 
     return result.map((item) => ({
       ...item,
@@ -50,11 +57,17 @@ export const deleteParamsByRequestMetaId = async (requestOrFolderMetaId) => {
   try {
     if (!requestOrFolderMetaId)
       requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!requestOrFolderMetaId) return false;
+    const projectId = await getActiveProject();
+    if (!requestOrFolderMetaId || !projectId) return false;
 
     await db
       .delete(paramsTable)
-      .where(eq(paramsTable.requestOrFolderMetaId, requestOrFolderMetaId));
+      .where(
+        and(
+          eq(paramsTable.requestOrFolderMetaId, requestOrFolderMetaId),
+          eq(paramsTable.projectId, projectId)
+        )
+      );
     return true;
   } catch (error) {
     console.error(error);
@@ -65,7 +78,10 @@ export const createParams = async (payload = {}) => {
   try {
     if (!("requestOrFolderMetaId" in payload))
       payload["requestOrFolderMetaId"] = (await getTabList())?.selectedTab;
-    if (!payload.requestOrFolderMetaId) return false;
+    if (!("projectId" in payload))
+      payload["projectId"] = await getActiveProject();
+    if (!payload.requestOrFolderMetaId || !payload.projectId) return false;
+
     if ("isCheck" in payload) payload["isCheck"] = Number(payload["isCheck"]);
 
     if (typeof payload === "object" && !Object.keys(payload).length)
@@ -83,6 +99,7 @@ export const updateParams = async (paramId, payload) => {
 
   delete payload["id"];
   delete payload["requestOrFolderMetaId"];
+  delete payload["projectId"];
   delete payload["createdAt"];
   if ("isCheck" in payload) payload["isCheck"] = Number(payload["isCheck"]);
 
@@ -112,12 +129,17 @@ export const updateParams = async (paramId, payload) => {
 };
 
 export const replaceParams = async (requestOrFolderMetaId, payload) => {
+  const projectId = await getActiveProject();
+  if (!projectId) return false;
+
   if (payload)
     payload = payload.map((param) => {
       delete param["requestOrFolderMetaId"];
+      delete param["projectId"];
       delete param["createdAt"];
       if ("isCheck" in param) param["isCheck"] = Number(param["isCheck"]);
       param["requestOrFolderMetaId"] = requestOrFolderMetaId;
+      param["projectId"] = projectId;
 
       return param;
     });
@@ -125,7 +147,12 @@ export const replaceParams = async (requestOrFolderMetaId, payload) => {
   try {
     await db
       .delete(paramsTable)
-      .where(eq(paramsTable.requestOrFolderMetaId, requestOrFolderMetaId));
+      .where(
+        and(
+          eq(paramsTable.requestOrFolderMetaId, requestOrFolderMetaId),
+          eq(paramsTable.projectId, projectId)
+        )
+      );
 
     if (typeof payload === "object" && !Object.keys(payload).length)
       return true;
@@ -143,14 +170,19 @@ export const checkAllParamsByRequestMetaId = async (requestOrFolderMetaId) => {
   try {
     if (!requestOrFolderMetaId)
       requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!requestOrFolderMetaId) return false;
+    const projectId = await getActiveProject();
+    if (!requestOrFolderMetaId || !projectId) return false;
 
     const rows =
       (await db
         .select()
         .from(paramsTable)
-        .where(eq(paramsTable.requestOrFolderMetaId, requestOrFolderMetaId))) ??
-      [];
+        .where(
+          and(
+            eq(paramsTable.requestOrFolderMetaId, requestOrFolderMetaId),
+            eq(paramsTable.projectId, projectId)
+          )
+        )) ?? [];
     if (rows.length === 0) return false;
 
     const checkValue = Number(!rows.every((row) => row.isCheck));
@@ -160,7 +192,12 @@ export const checkAllParamsByRequestMetaId = async (requestOrFolderMetaId) => {
       .set({
         isCheck: checkValue,
       })
-      .where(eq(paramsTable.requestOrFolderMetaId, requestOrFolderMetaId));
+      .where(
+        and(
+          eq(paramsTable.requestOrFolderMetaId, requestOrFolderMetaId),
+          eq(paramsTable.projectId, projectId)
+        )
+      );
 
     return updated?.rowsAffected > 0;
   } catch (error) {
@@ -177,12 +214,18 @@ export const duplicateParams = async (payload) => {
   try {
     if (!payload) return;
     const oldIds = Object.keys(payload);
-    if (!oldIds.length) return;
+    const projectId = await getActiveProject();
+    if (!oldIds.length || !projectId) return;
 
     const existingParamsData = await db
       .select()
       .from(paramsTable)
-      .where(inArray(paramsTable.requestOrFolderMetaId, oldIds));
+      .where(
+        and(
+          inArray(paramsTable.requestOrFolderMetaId, oldIds),
+          eq(paramsTable.projectId, projectId)
+        )
+      );
 
     if (!existingParamsData.length) return true;
 
@@ -196,6 +239,7 @@ export const duplicateParams = async (payload) => {
       return {
         ...param,
         requestOrFolderMetaId: payload[param.requestOrFolderMetaId],
+        projectId,
       };
     });
 
