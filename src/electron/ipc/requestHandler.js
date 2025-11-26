@@ -294,7 +294,7 @@ export const requestHandler = () => {
         message: "Request imported successfully!",
       };
     } catch (error) {
-      console.error("error ======================\n", error);
+      console.error(error);
       return {
         success: false,
         message:
