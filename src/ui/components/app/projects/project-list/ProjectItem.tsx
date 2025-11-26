@@ -20,6 +20,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
+import { AnimatePresence, motion } from "motion/react";
 
 interface ProjectItemProps {
   id: string;
@@ -50,6 +51,7 @@ const ProjectItem = ({ id, name, activeProjectId }: ProjectItemProps) => {
   const dispatch = useAppDispatch();
   const { handleChangeDeletionCandidate } = useProject();
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const isActive = activeProjectId === id;
 
   const handleChangeActiveProject = useCallback(() => {
     dispatch(changeActiveProject(id));
@@ -84,47 +86,90 @@ const ProjectItem = ({ id, name, activeProjectId }: ProjectItemProps) => {
       onClick={handleChangeActiveProject}
       id={id}
       className={cn(
-        "group w-full flex justify-between p-5 rounded-md bg-accent/50 cursor-pointer",
-        "hover:bg-accent/80 transition-all duration-200",
+        "group w-full flex rounded-lg bg-accent/50 cursor-pointer",
+        "hover:bg-accent/80 transition-all duration-200 border border-transparent overflow-hidden",
         {
-          "ring-2 ring-primary/50 backdrop-blur-xs": activeProjectId === id,
-          "ring-0": activeProjectId !== id,
+          "border-border backdrop-blur-xs": isActive,
         }
       )}
+      data-active={isActive}
     >
-      <h3 className="capitalize text-lg font-semibold line-clamp-2 leading-relaxed">
-        {name}
-      </h3>
-      <DropdownMenu open={isOpen} onOpenChange={(val) => setIsOpen(val)}>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            size={"iconXs"}
-            className={cn(
-              "opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto",
-              {
-                "opacity-100": isOpen,
-              }
-            )}
+      <Bar isOpen={isActive} side="left" />
+      <div
+        className={cn(
+          "flex-1 flex justify-between p-5 border-y border-transparent transition-all duration-100 ease-linear",
+          {
+            "border-primary": isActive,
+          }
+        )}
+      >
+        <h3 className="capitalize text-lg font-semibold line-clamp-2 leading-relaxed">
+          {name}
+        </h3>
+        <DropdownMenu open={isOpen} onOpenChange={(val) => setIsOpen(val)}>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size={"iconXs"}
+              className={cn(
+                "opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto",
+                {
+                  "opacity-100": isOpen,
+                }
+              )}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <ThreeDotIcon />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            className="p-0 w-fit min-w-40 flex flex-col [&>button]:justify-start [&>div]:cursor-pointer"
+            align="end"
+            sideOffset={10}
             onClick={(e) => e.stopPropagation()}
           >
-            <ThreeDotIcon />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent
-          className="p-0 w-fit min-w-40 flex flex-col [&>button]:justify-start [&>div]:cursor-pointer"
-          align="end"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {menuList.map(({ id, label, Icon }) => (
-            <DropdownMenuItem key={id} onClick={() => handleAction(id)}>
-              <Icon /> {label}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
+            {menuList.map(({ id, label, Icon }) => (
+              <DropdownMenuItem key={id} onClick={() => handleAction(id)}>
+                <Icon /> {label}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+      <Bar isOpen={isActive} side="right" />
     </div>
   );
 };
+
+interface BarProps {
+  isOpen: boolean;
+  side: "left" | "right";
+}
+
+const Bar = ({ isOpen, side }: BarProps) => (
+  <AnimatePresence>
+    {isOpen && (
+      <motion.div
+        initial={{
+          scaleX: 0,
+        }}
+        animate={{
+          scaleX: 1,
+        }}
+        exit={{
+          scaleX: 0,
+        }}
+        transition={{
+          duration: 0.15,
+          ease: "linear",
+        }}
+        className="w-1.5 bg-primary"
+        style={{
+          originX: side === "left" ? 0 : 1,
+        }}
+      />
+    )}
+  </AnimatePresence>
+);
 
 export default ProjectItem;
