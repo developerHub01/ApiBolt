@@ -1,5 +1,5 @@
-import CreateNewProject from "@/components/app/projects/project-top/CreateNewProject";
 import PageHeader from "@/components/ui/page-header";
+import ActionButtons from "@/components/app/projects/project-top/ActionButtons";
 
 const ProjectTop = () => {
   return (
@@ -11,7 +11,7 @@ const ProjectTop = () => {
           manage
         </p>
       </div>
-      <CreateNewProject />
+      <ActionButtons />
     </div>
   );
 };
