@@ -46,6 +46,7 @@ export const getPayloadSize = (data) => {
     return 0;
   }
 };
+
 export const requestDataSize = ({
   bodyType,
   formData,

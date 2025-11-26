@@ -12,6 +12,7 @@ import {
 } from "@/context/redux/project/project-slice";
 import { loadKeyboardShortcuts } from "@/context/redux/keyboard-shortcuts/thunks/keyboard-shortcuts";
 import { applyThemeInApp } from "@/context/redux/theme/thunks/theme";
+import type { ElectronResponseInterface } from "@/types";
 
 /* ==============================
 ========== Projects start =========
@@ -26,7 +27,7 @@ export const loadProjectList = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->("request-response/loadProjectList", async (_, { dispatch }) => {
+>("project/loadProjectList", async (_, { dispatch }) => {
   try {
     const list = await window.electronAPIProjectsDB.getProjects();
     const activeProject = await window.electronAPIProjectsDB.getActiveProject();
@@ -50,43 +51,40 @@ export const changeActiveProject = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->(
-  "request-response/changeActiveProject",
-  async (id, { dispatch, getState }) => {
-    try {
-      const state = getState() as RootState;
-      const activeProjectId = state.project.activeProjectId;
-      const newActiveProjectId = activeProjectId === id ? null : id;
+>("project/changeActiveProject", async (id, { dispatch, getState }) => {
+  try {
+    const state = getState() as RootState;
+    const activeProjectId = state.project.activeProjectId;
+    const newActiveProjectId = activeProjectId === id ? null : id;
 
-      dispatch(handleChangeActiveProject(newActiveProjectId));
-      const response =
-        await window.electronAPIProjectsDB.changeActiveProject(
-          newActiveProjectId
-        );
+    dispatch(handleChangeActiveProject(newActiveProjectId));
+    const response =
+      await window.electronAPIProjectsDB.changeActiveProject(
+        newActiveProjectId
+      );
 
-      if (!response) return response;
+    if (!response) return response;
 
-      dispatch(handleChangeIsRequestListLoaded(false));
-      await Promise.all([
-        dispatch(applyThemeInApp()),
-        dispatch(loadEnvironmentsList()),
-        dispatch(loadTabsData()),
-        dispatch(loadEnvironmentsList()),
-        dispatch(
-          loadAuthorization({
-            requestOrFolderId: DEFAULT_AUTHORIZATION_ID,
-          })
-        ),
-        dispatch(loadKeyboardShortcuts()),
-      ]);
+    dispatch(handleChangeIsRequestListLoaded(false));
+    await Promise.all([
+      dispatch(applyThemeInApp()),
+      dispatch(loadEnvironmentsList()),
+      dispatch(loadTabsData()),
+      dispatch(loadEnvironmentsList()),
+      dispatch(
+        loadAuthorization({
+          requestOrFolderId: DEFAULT_AUTHORIZATION_ID,
+        })
+      ),
+      dispatch(loadKeyboardShortcuts()),
+    ]);
 
-      return response;
-    } catch (error) {
-      console.error(error);
-      return false;
-    }
+    return response;
+  } catch (error) {
+    console.error(error);
+    return false;
   }
-);
+});
 
 export const createProject = createAsyncThunk<
   boolean,
@@ -95,7 +93,7 @@ export const createProject = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->("request-response/changeActiveProject", async (name, { dispatch }) => {
+>("project/changeActiveProject", async (name, { dispatch }) => {
   try {
     const response = await window.electronAPIProjectsDB.createProjects({
       name,
@@ -116,7 +114,7 @@ export const deleteProject = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->("request-response/deleteProject", async (id, { dispatch }) => {
+>("project/deleteProject", async (id, { dispatch }) => {
   try {
     const response = await window.electronAPIProjectsDB.deleteProjects(id);
 
@@ -150,7 +148,7 @@ export const updateProject = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->("request-response/updateProject", async ({ id, name }, { dispatch }) => {
+>("project/updateProject", async ({ id, name }, { dispatch }) => {
   try {
     const response = await window.electronAPIProjectsDB.updateProjects(id, {
       name,
@@ -163,6 +161,28 @@ export const updateProject = createAsyncThunk<
   } catch (error) {
     console.error(error);
     return false;
+  }
+});
+
+export const exportProject = createAsyncThunk<
+  ElectronResponseInterface,
+  string,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("project/exportProject", async (id, { dispatch }) => {
+  try {
+    const response = await window.electronAPIProjectsDB.exportProject(id);
+    if (response) dispatch(loadProjectList());
+
+    return response;
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: "Something went wrong while exporting the project.",
+    };
   }
 });
 /* ==============================

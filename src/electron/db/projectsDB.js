@@ -1,9 +1,20 @@
-import { eq, count } from "drizzle-orm";
+import { eq, count, inArray, getTableColumns } from "drizzle-orm";
 import { db } from "./index.js";
 import {
   projectTable,
   activeProjectTable,
   ACTIVE_PROJECT_ID,
+  environmentTable,
+  requestOrFolderMetaTable,
+  apiUrlTable,
+  paramsTable,
+  headersTable,
+  bodyFormDataTable,
+  bodyXWWWFormUrlencodedTable,
+  bodyBinaryTable,
+  bodyRawTable,
+  hiddenHeadersCheckTable,
+  requestMetaTabTable,
 } from "./schema.js";
 import { createAuth } from "./authorizationDB.js";
 
@@ -121,6 +132,187 @@ export const getActiveProjectDetails = async () => {
       .limit(1);
 
     return result[0] ?? null;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const exportProject = async (id) => {
+  id = id ?? (await getActiveProject());
+
+  try {
+    const project =
+      (
+        await db
+          .select({
+            name: projectTable.name,
+          })
+          .from(projectTable)
+          .where(eq(projectTable.id, id))
+          .limit(1)
+      )?.[0] ?? null;
+
+    const environments = await db
+      .select(
+        (() => {
+          const { id, projectId, createdAt, ...rest } =
+            getTableColumns(environmentTable);
+          return rest;
+        })()
+      )
+      .from(environmentTable)
+      .where(eq(environmentTable.projectId, id));
+
+    const requestList = (
+      (await db
+        .select(
+          (() => {
+            const { projectId, createdAt, ...rest } = getTableColumns(
+              requestOrFolderMetaTable
+            );
+            return rest;
+          })()
+        )
+        .from(requestOrFolderMetaTable)
+        .where(eq(requestOrFolderMetaTable.projectId, id))) ?? []
+    ).reduce((acc, curr) => {
+      acc[curr.id] = curr;
+      return acc;
+    }, {});
+
+    const requestIdList = [...new Set(Object.keys(requestList ?? {}))];
+
+    const apiUrlList =
+      (await db
+        .select(
+          (() => {
+            const { projectId, createdAt, ...rest } =
+              getTableColumns(apiUrlTable);
+            return rest;
+          })()
+        )
+        .from(apiUrlTable)
+        .where(inArray(apiUrlTable.requestOrFolderMetaId, requestIdList))) ??
+      [];
+
+    const paramsList = await db
+      .select(
+        (() => {
+          const { id, projectId, createdAt, ...rest } =
+            getTableColumns(paramsTable);
+          return rest;
+        })()
+      )
+      .from(paramsTable)
+      .where(inArray(paramsTable.requestOrFolderMetaId, requestIdList));
+
+    const headersList = await db
+      .select(
+        (() => {
+          const { id, projectId, createdAt, ...rest } =
+            getTableColumns(headersTable);
+          return rest;
+        })()
+      )
+      .from(headersTable)
+      .where(inArray(headersTable.requestOrFolderMetaId, requestIdList));
+
+    const hiddenHeadersCheckList = await db
+      .select(
+        (() => {
+          const { id, projectId, ...rest } = getTableColumns(
+            hiddenHeadersCheckTable
+          );
+          return rest;
+        })()
+      )
+      .from(hiddenHeadersCheckTable)
+      .where(
+        inArray(hiddenHeadersCheckTable.requestOrFolderMetaId, requestIdList)
+      );
+
+    const formDataList = await db
+      .select(
+        (() => {
+          const { id, projectId, createdAt, ...rest } =
+            getTableColumns(bodyFormDataTable);
+          return rest;
+        })()
+      )
+      .from(bodyFormDataTable)
+      .where(inArray(bodyFormDataTable.requestOrFolderMetaId, requestIdList));
+
+    const xWWWFormUrlencodedList = await db
+      .select(
+        (() => {
+          const { id, projectId, createdAt, ...rest } = getTableColumns(
+            bodyXWWWFormUrlencodedTable
+          );
+          return rest;
+        })()
+      )
+      .from(bodyXWWWFormUrlencodedTable)
+      .where(
+        inArray(
+          bodyXWWWFormUrlencodedTable.requestOrFolderMetaId,
+          requestIdList
+        )
+      );
+
+    const binaryDataList =
+      (await db
+        .select(
+          (() => {
+            const { id, projectId, ...rest } = getTableColumns(bodyBinaryTable);
+            return rest;
+          })()
+        )
+        .from(bodyBinaryTable)
+        .where(
+          inArray(bodyBinaryTable.requestOrFolderMetaId, requestIdList)
+        )) ?? [];
+
+    const rawDataList =
+      (await db
+        .select(
+          (() => {
+            const { id, projectId, lineWrap, ...rest } =
+              getTableColumns(bodyRawTable);
+            return rest;
+          })()
+        )
+        .from(bodyRawTable)
+        .where(inArray(bodyRawTable.requestOrFolderMetaId, requestIdList))) ??
+      [];
+
+    const requestMetaTabList =
+      (await db
+        .select(
+          (() => {
+            const { id, projectId, ...rest } =
+              getTableColumns(requestMetaTabTable);
+            return rest;
+          })()
+        )
+        .from(requestMetaTabTable)
+        .where(
+          inArray(requestMetaTabTable.requestOrFolderMetaId, requestIdList)
+        )) ?? [];
+
+    return {
+      project,
+      environments,
+      requestList,
+      apiUrlList,
+      paramsList,
+      headersList,
+      hiddenHeadersCheckList,
+      formDataList,
+      xWWWFormUrlencodedList,
+      binaryDataList,
+      rawDataList,
+      requestMetaTabList,
+    };
   } catch (error) {
     console.error(error);
   }

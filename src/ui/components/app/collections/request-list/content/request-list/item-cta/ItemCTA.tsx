@@ -21,10 +21,7 @@ import {
   duplicateRequestOrFolder,
 } from "@/context/redux/request-response/thunks/request-list";
 import { checkPermissionToAddFolderAsChildren } from "@/utils/request-response.utils";
-import {
-  exportFolder,
-  exportRequest,
-} from "@/context/redux/request-response/thunks/request";
+import { exportRequest } from "@/context/redux/request-response/thunks/request";
 
 type TActionType =
   | "add_request"
@@ -67,10 +64,6 @@ const folderCTAList: Array<{
   {
     id: "delete",
     label: "Delete",
-  },
-  {
-    id: "export",
-    label: "Export",
   },
 ];
 
@@ -136,7 +129,8 @@ const ItemCTA = memo(() => {
           break;
         }
         case "export": {
-          dispatch(type === "request" ? exportRequest(id) : exportFolder(id));
+          if (type !== "request") return;
+          dispatch(exportRequest(id));
           break;
         }
       }

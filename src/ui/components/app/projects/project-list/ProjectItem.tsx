@@ -19,6 +19,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { toast } from "sonner";
 
 interface ProjectItemProps {
   id: string;
@@ -58,8 +59,10 @@ const ProjectItem = ({ id, name, activeProjectId }: ProjectItemProps) => {
     handleChangeDeletionCandidate(id);
   }, [handleChangeDeletionCandidate, id]);
 
-  const handleExportProject = useCallback(() => {
-    dispatch(exportProject(id));
+  const handleExportProject = useCallback(async () => {
+    const { success, message } = await dispatch(exportProject(id)).unwrap();
+    if (success) toast.success(message);
+    else toast.error(message);
   }, [dispatch, id]);
 
   const handleAction = useCallback(
