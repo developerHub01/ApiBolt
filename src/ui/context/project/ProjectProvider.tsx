@@ -85,7 +85,6 @@ const ProjectProvider = ({ children }: ProjectProviderProps) => {
 
   const handleDeleteProject = useCallback(async (): Promise<boolean> => {
     if (!deletionCandidate) return false;
-
     return await dispatch(deleteProject(deletionCandidate)).unwrap();
   }, [deletionCandidate, dispatch]);
 

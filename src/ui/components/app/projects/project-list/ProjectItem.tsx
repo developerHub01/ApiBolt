@@ -97,10 +97,7 @@ const ProjectItem = ({ id, name, activeProjectId }: ProjectItemProps) => {
       <Bar isOpen={isActive} side="left" />
       <div
         className={cn(
-          "flex-1 flex justify-between p-5 border-y border-transparent transition-all duration-100 ease-linear",
-          {
-            "border-primary": isActive,
-          }
+          "flex-1 flex justify-between p-5 transition-all duration-100 ease-linear"
         )}
       >
         <h3 className="capitalize text-lg font-semibold line-clamp-2 leading-relaxed">

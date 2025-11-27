@@ -129,7 +129,7 @@ const DeleteProjectDialog = memo(() => {
                 onKeyDown={handleKeyDown}
                 disabled={isLoading}
               />
-              <PasteButton handleChange={handleChangeName} />
+              <PasteButton handleChange={handleChangeName} align="end" />
             </div>
           </div>
         </AnimatedDialogContent>

@@ -9,13 +9,27 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip-custom";
+import { cn } from "@/lib/utils";
 
 interface PasteButtonProps {
   className?: string;
   label?: string;
   Icon?: LucideIcon;
   handleChange: (value: string) => void;
+  align?: "center" | "end" | "start";
+  side?: "bottom" | "top" | "right" | "left";
   children?: React.ReactNode;
+  size?: "default" | "xs" | "sm" | "lg" | "icon" | "iconSm" | "iconXs";
+  variant?:
+    | "default"
+    | "link"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "warningSecondary"
+    | "destructiveSecondary"
+    | "ghost"
+    | "transparent";
 }
 
 const PasteButton = memo(
@@ -25,6 +39,10 @@ const PasteButton = memo(
     Icon,
     handleChange,
     children,
+    align = "center",
+    side = "bottom",
+    size = "default",
+    variant = "secondary",
   }: PasteButtonProps & React.ComponentProps<"button">) => {
     const [isActive, setIsActive] = useState<boolean>(false);
 
@@ -58,19 +76,25 @@ const PasteButton = memo(
       <Tooltip>
         <TooltipTrigger asChild>
           {children ? (
-            <span onClick={handleClick}>{children}</span>
+            <span
+              onClick={handleClick}
+              className={cn("cursor-pointer", className)}
+            >
+              {children}
+            </span>
           ) : (
             <Button
-              variant={"secondary"}
+              variant={variant}
               onClick={handleClick}
               disabled={!isActive}
               className={className}
+              size={size}
             >
               {Icon ? <Icon /> : <ClipboardPasteIcon />}
             </Button>
           )}
         </TooltipTrigger>
-        <TooltipContent side="bottom" variant={"secondary"}>
+        <TooltipContent side={side} align={align} variant={"secondary"}>
           <p>{label || "Paste copied"}</p>
         </TooltipContent>
       </Tooltip>
