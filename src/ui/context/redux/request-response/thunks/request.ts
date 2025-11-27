@@ -27,7 +27,10 @@ import { loadBodyXWWWFormUrlencoded } from "@/context/redux/request-response/thu
 import { loadRequestBodyRaw } from "@/context/redux/request-response/thunks/body-raw";
 import { loadRequestBodyBinary } from "@/context/redux/request-response/thunks/body-binary";
 import { loadApiUrl } from "@/context/redux/request-url/thunks/request-url";
-import { loadSingleRequestMeta } from "@/context/redux/request-response/thunks/request-list";
+import {
+  forceLoadRequestList,
+  loadSingleRequestMeta,
+} from "@/context/redux/request-response/thunks/request-list";
 
 export const clearRequest = createAsyncThunk<
   void,
@@ -178,7 +181,7 @@ export const importRequest = createAsyncThunk<
 
 export const exportFolder = createAsyncThunk<
   ElectronResponseInterface,
-  void | string,
+  string,
   {
     dispatch: AppDispatch;
     state: RootState;
@@ -201,6 +204,37 @@ export const exportFolder = createAsyncThunk<
     return {
       success: false,
       message: "Something went wrong while exporting request.",
+    };
+  }
+});
+
+export const importFolder = createAsyncThunk<
+  ElectronResponseInterface,
+  string | undefined | null,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("request-response/importFolder", async (id, { dispatch, getState }) => {
+  try {
+    const state = getState() as RootState;
+    /* if pass any request id and if it is not folder then exit */
+    if (id && state.requestResponse.requestList[id].method)
+      return {
+        success: false,
+        message: "No request active",
+      };
+
+    const response = await window.electronAPIRequest.importFolder(id ?? null);
+    if (!response.success) return response;
+
+    await dispatch(forceLoadRequestList());
+    return response;
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: "Something went wrong while importing request folder.",
     };
   }
 });

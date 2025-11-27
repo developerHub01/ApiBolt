@@ -64,6 +64,24 @@ export const loadRequestList = createAsyncThunk<
   }
 });
 
+export const forceLoadRequestList = createAsyncThunk<
+  void,
+  void,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("request-response/forceLoadRequestList", async (_, { dispatch }) => {
+  try {
+    const list =
+      await window.electronAPIRequestOrFolderMetaDB.getRequestOrFolderMeta();
+
+    dispatch(handleLoadRequestList(list));
+  } catch (error) {
+    console.error(error);
+  }
+});
+
 export const loadSingleRequestMeta = createAsyncThunk<
   void,
   string,

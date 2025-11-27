@@ -494,7 +494,7 @@ declare global {
         requestOrFolderMetaId?: string
       ): Promise<ElectronResponseInterface>;
       importFolder(
-        requestOrFolderMetaId?: string
+        requestOrFolderMetaId?: string | null
       ): Promise<ElectronResponseInterface>;
     };
 
