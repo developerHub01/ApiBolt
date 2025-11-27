@@ -1,8 +1,7 @@
-import { and, eq, inArray } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { db } from "./index.js";
 import { hiddenHeadersCheckTable } from "./schema.js";
 import { getTabList } from "./tabsDB.js";
-import { getActiveProject } from "./projectsDB.js";
 
 const booleanFields = new Set([
   "authorization",
@@ -17,19 +16,13 @@ const booleanFields = new Set([
 export const getHiddenHeadersCheck = async (id) => {
   try {
     if (!id) id = (await getTabList())?.selectedTab;
-    const projectId = await getActiveProject();
-    if (!id || !projectId) return null;
+    if (!id) return null;
 
     const result = (
       await db
         .select()
         .from(hiddenHeadersCheckTable)
-        .where(
-          and(
-            eq(hiddenHeadersCheckTable.requestOrFolderMetaId, id),
-            eq(hiddenHeadersCheckTable.projectId, projectId)
-          )
-        )
+        .where(eq(hiddenHeadersCheckTable.requestOrFolderMetaId, id))
     )?.[0];
 
     if (result)
@@ -48,9 +41,7 @@ export const createHiddenHeadersCheck = async (payload = {}) => {
   try {
     if (!("requestOrFolderMetaId" in payload))
       payload["requestOrFolderMetaId"] = (await getTabList())?.selectedTab;
-    if (!("projectId" in payload))
-      payload["projectId"] = await getActiveProject();
-    if (!payload.requestOrFolderMetaId || !payload.projectId) return false;
+    if (!payload.requestOrFolderMetaId) return false;
 
     if (typeof payload === "object" && !Object.keys(payload).length)
       return true;
@@ -73,12 +64,10 @@ export const updateHiddenHeadersCheck = async (payload) => {
 
   const selectedTab =
     payload.requestOrFolderMetaId ?? (await getTabList()).selectedTab;
-  const projectId = await getActiveProject();
   if (!selectedTab) return false;
 
   delete payload["id"];
   delete payload["requestOrFolderMetaId"];
-  delete payload["projectId"];
 
   for (const key in payload)
     if (typeof payload[key] === "boolean") payload[key] = Number(payload[key]);
@@ -90,17 +79,12 @@ export const updateHiddenHeadersCheck = async (payload) => {
       await db
         .select()
         .from(hiddenHeadersCheckTable)
-        .where(
-          and(
-            eq(hiddenHeadersCheckTable.requestOrFolderMetaId, selectedTab),
-            eq(hiddenHeadersCheckTable.projectId, projectId)
-          )
-        )
+        .where(eq(hiddenHeadersCheckTable.requestOrFolderMetaId, selectedTab))
     )?.[0];
 
     if (!isExist)
       await createHiddenHeadersCheck({
-        requestOrFolderMetaId: selectedTab,
+        selectedTab,
       });
 
     await db
@@ -108,12 +92,7 @@ export const updateHiddenHeadersCheck = async (payload) => {
       .set({
         ...payload,
       })
-      .where(
-        and(
-          eq(hiddenHeadersCheckTable.requestOrFolderMetaId, selectedTab),
-          eq(hiddenHeadersCheckTable.projectId, projectId)
-        )
-      );
+      .where(eq(hiddenHeadersCheckTable.requestOrFolderMetaId, selectedTab));
     return true;
   } catch (error) {
     console.error(error);
@@ -129,18 +108,12 @@ export const duplicateHiddenHeadersCheck = async (payload) => {
   try {
     if (!payload) return;
     const oldIds = Object.keys(payload);
-    const projectId = await getActiveProject();
-    if (!oldIds.length || !projectId) return;
+    if (!oldIds.length) return;
 
     const existingHeadersCheckData = await db
       .select()
       .from(hiddenHeadersCheckTable)
-      .where(
-        and(
-          inArray(hiddenHeadersCheckTable.requestOrFolderMetaId, oldIds),
-          eq(hiddenHeadersCheckTable.projectId, projectId)
-        )
-      );
+      .where(inArray(hiddenHeadersCheckTable.requestOrFolderMetaId, oldIds));
 
     if (!existingHeadersCheckData.length) return true;
 
@@ -153,7 +126,6 @@ export const duplicateHiddenHeadersCheck = async (payload) => {
       return {
         ...headersCheck,
         requestOrFolderMetaId: payload[headersCheck.requestOrFolderMetaId],
-        projectId,
       };
     });
 

@@ -1,15 +1,13 @@
-import { and, eq, inArray } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { db } from "./index.js";
 import { requestMetaTabTable } from "./schema.js";
 import { getTabList } from "./tabsDB.js";
-import { getActiveProject } from "./projectsDB.js";
 
 export const getRequestMetaTab = async (requestOrFolderMetaId) => {
   if (!requestOrFolderMetaId)
     requestOrFolderMetaId = (await getTabList())?.selectedTab;
-  const projectId = await getActiveProject();
 
-  if (!requestOrFolderMetaId || !projectId) return null;
+  if (!requestOrFolderMetaId) return null;
 
   try {
     const result = (
@@ -17,13 +15,7 @@ export const getRequestMetaTab = async (requestOrFolderMetaId) => {
         .select()
         .from(requestMetaTabTable)
         .where(
-          and(
-            eq(
-              requestMetaTabTable.requestOrFolderMetaId,
-              requestOrFolderMetaId
-            ),
-            eq(requestMetaTabTable.projectId, projectId)
-          )
+          eq(requestMetaTabTable.requestOrFolderMetaId, requestOrFolderMetaId)
         )
     )?.[0];
 
@@ -37,13 +29,11 @@ export const createRequestMetaTab = async (payload) => {
   try {
     if (!payload.requestOrFolderMetaId)
       payload.requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!payload.projectId) payload.projectId = await getActiveProject();
-    if (!payload.requestOrFolderMetaId || !payload.projectId) return false;
+    if (!payload.requestOrFolderMetaId) return false;
 
     const result = await db.insert(requestMetaTabTable).values({
       ...payload,
       requestOrFolderMetaId,
-      projectId: payload.projectId,
     });
 
     return result.rowsAffected > 0;
@@ -54,12 +44,11 @@ export const createRequestMetaTab = async (payload) => {
 
 export const updateRequestMetaTab = async (payload = {}) => {
   try {
-    let { requestOrFolderMetaId, projectId, ...rest } = payload;
+    let { requestOrFolderMetaId, ...rest } = payload;
 
     if (!requestOrFolderMetaId)
       requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!projectId) projectId = await getActiveProject();
-    if (!requestOrFolderMetaId || !projectId) return false;
+    if (!requestOrFolderMetaId) return false;
 
     payload = rest;
 
@@ -67,10 +56,7 @@ export const updateRequestMetaTab = async (payload = {}) => {
       .select()
       .from(requestMetaTabTable)
       .where(
-        and(
-          eq(requestMetaTabTable.requestOrFolderMetaId, requestOrFolderMetaId),
-          eq(requestMetaTabTable.projectId, projectId)
-        )
+        eq(requestMetaTabTable.requestOrFolderMetaId, requestOrFolderMetaId)
       );
 
     let updated;
@@ -79,7 +65,6 @@ export const updateRequestMetaTab = async (payload = {}) => {
       updated = await db.insert(requestMetaTabTable).values({
         ...rest,
         requestOrFolderMetaId,
-        projectId,
       });
     } else {
       updated = await db
@@ -88,13 +73,7 @@ export const updateRequestMetaTab = async (payload = {}) => {
           ...rest,
         })
         .where(
-          and(
-            eq(
-              requestMetaTabTable.requestOrFolderMetaId,
-              requestOrFolderMetaId
-            ),
-            eq(requestMetaTabTable.projectId, projectId)
-          )
+          eq(requestMetaTabTable.requestOrFolderMetaId, requestOrFolderMetaId)
         );
     }
 
@@ -108,17 +87,13 @@ export const deleteRequestMetaTab = async (requestOrFolderMetaId) => {
   try {
     if (!requestOrFolderMetaId)
       requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    const projectId = await getActiveProject();
 
-    if (!requestOrFolderMetaId || !projectId) return false;
+    if (!requestOrFolderMetaId) return false;
 
     await db
       .delete(requestMetaTabTable)
       .where(
-        and(
-          eq(requestMetaTabTable.requestOrFolderMetaId, requestOrFolderMetaId),
-          eq(requestMetaTabTable.projectId, projectId)
-        )
+        eq(requestMetaTabTable.requestOrFolderMetaId, requestOrFolderMetaId)
       );
 
     return true;
@@ -136,18 +111,12 @@ export const duplicateRequestMetaTab = async (payload) => {
   try {
     if (!payload) return;
     const oldIds = Object.keys(payload);
-    const projectId = await getActiveProject();
-    if (!oldIds.length || !projectId) return;
+    if (!oldIds.length) return;
 
     const existingRequestMetaTabData = await db
       .select()
       .from(requestMetaTabTable)
-      .where(
-        and(
-          inArray(requestMetaTabTable.requestOrFolderMetaId, oldIds),
-          eq(requestMetaTabTable.projectId, projectId)
-        )
-      );
+      .where(inArray(requestMetaTabTable.requestOrFolderMetaId, oldIds));
 
     if (!existingRequestMetaTabData.length) return true;
 
@@ -160,7 +129,6 @@ export const duplicateRequestMetaTab = async (payload) => {
       return {
         ...tab,
         requestOrFolderMetaId: payload[tab.requestOrFolderMetaId],
-        projectId,
       };
     });
 
@@ -179,7 +147,6 @@ export const replaceRequestMetaTab = async (payload = {}) => {
     const updatPayload = { ...payload };
     delete updatPayload["id"];
     delete updatPayload["requestOrFolderMetaId"];
-    delete updatPayload["projectId"];
 
     const result = await db
       .insert(requestMetaTabTable)
@@ -187,10 +154,7 @@ export const replaceRequestMetaTab = async (payload = {}) => {
         ...payload,
       })
       .onConflictDoUpdate({
-        target: [
-          requestMetaTabTable.requestOrFolderMetaId,
-          requestMetaTabTable.projectId,
-        ],
+        target: requestMetaTabTable.requestOrFolderMetaId,
         set: {
           ...updatPayload,
         },

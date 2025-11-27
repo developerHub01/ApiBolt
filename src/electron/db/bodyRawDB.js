@@ -1,27 +1,20 @@
-import { and, eq, inArray } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { db } from "./index.js";
 import { bodyRawTable } from "./schema.js";
 import { getTabList } from "./tabsDB.js";
-import { getActiveProject } from "./projectsDB.js";
 
 export const getBodyRaw = async (requestOrFolderMetaId) => {
   if (!requestOrFolderMetaId)
     requestOrFolderMetaId = (await getTabList())?.selectedTab;
-  const projectId = await getActiveProject();
 
-  if (!requestOrFolderMetaId || !projectId) return null;
+  if (!requestOrFolderMetaId) return null;
 
   try {
     const result = (
       await db
         .select()
         .from(bodyRawTable)
-        .where(
-          and(
-            eq(bodyRawTable.requestOrFolderMetaId, requestOrFolderMetaId),
-            eq(bodyRawTable.projectId, projectId)
-          )
-        )
+        .where(eq(bodyRawTable.requestOrFolderMetaId, requestOrFolderMetaId))
     )?.[0];
 
     if (result) result["lineWrap"] = Boolean(result["lineWrap"]);
@@ -36,8 +29,7 @@ export const createBodyRaw = async (payload) => {
   try {
     if (!payload.requestOrFolderMetaId)
       payload.requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!payload.projectId) payload.projectId = await getActiveProject();
-    if (!payload.requestOrFolderMetaId || !payload.projectId) return false;
+    if (!payload.requestOrFolderMetaId) return false;
 
     for (const key in payload)
       if (typeof payload[key] === "boolean")
@@ -56,12 +48,11 @@ export const createBodyRaw = async (payload) => {
 
 export const updateBodyRaw = async (payload = {}) => {
   try {
-    let { requestOrFolderMetaId, projectId, ...rest } = payload;
+    let { requestOrFolderMetaId, ...rest } = payload;
 
     if (!requestOrFolderMetaId)
       requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!projectId) projectId = await getActiveProject();
-    if (!requestOrFolderMetaId || !projectId) return false;
+    if (!requestOrFolderMetaId) return false;
 
     payload = rest;
 
@@ -72,12 +63,7 @@ export const updateBodyRaw = async (payload = {}) => {
     const bodyRawData = await db
       .select()
       .from(bodyRawTable)
-      .where(
-        and(
-          eq(bodyRawTable.requestOrFolderMetaId, requestOrFolderMetaId),
-          eq(bodyRawTable.projectId, projectId)
-        )
-      );
+      .where(eq(bodyRawTable.requestOrFolderMetaId, requestOrFolderMetaId));
 
     let updated;
 
@@ -85,7 +71,6 @@ export const updateBodyRaw = async (payload = {}) => {
       updated = await db.insert(bodyRawTable).values({
         ...rest,
         requestOrFolderMetaId,
-        projectId,
       });
     } else {
       updated = await db
@@ -93,12 +78,7 @@ export const updateBodyRaw = async (payload = {}) => {
         .set({
           ...rest,
         })
-        .where(
-          and(
-            eq(bodyRawTable.requestOrFolderMetaId, requestOrFolderMetaId),
-            eq(bodyRawData.projectId, projectId)
-          )
-        );
+        .where(eq(bodyRawTable.requestOrFolderMetaId, requestOrFolderMetaId));
     }
 
     return updated?.rowsAffected > 0;
@@ -111,17 +91,11 @@ export const deleteBodyRawByRequestMetaId = async (requestOrFolderMetaId) => {
   try {
     if (!requestOrFolderMetaId)
       requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    const projectId = await getActiveProject();
-    if (!requestOrFolderMetaId || !projectId) return false;
+    if (!requestOrFolderMetaId) return false;
 
     await db
       .delete(bodyRawTable)
-      .where(
-        and(
-          eq(bodyRawTable.requestOrFolderMetaId, requestOrFolderMetaId),
-          eq(bodyRawTable.projectId, projectId)
-        )
-      );
+      .where(eq(bodyRawTable.requestOrFolderMetaId, requestOrFolderMetaId));
 
     return true;
   } catch (error) {
@@ -139,18 +113,12 @@ export const duplicateBodyRaw = async (payload) => {
   try {
     if (!payload) return;
     const oldIds = Object.keys(payload);
-    const projectId = await getActiveProject();
-    if (!oldIds.length || !projectId) return;
+    if (!oldIds.length) return;
 
     const existingBodyRawData = await db
       .select()
       .from(bodyRawTable)
-      .where(
-        and(
-          inArray(bodyRawTable.requestOrFolderMetaId, oldIds),
-          eq(bodyRawTable.projectId, projectId)
-        )
-      );
+      .where(inArray(bodyRawTable.requestOrFolderMetaId, oldIds));
 
     if (!existingBodyRawData.length) return true;
 
@@ -163,7 +131,6 @@ export const duplicateBodyRaw = async (payload) => {
       return {
         ...raw,
         requestOrFolderMetaId: payload[raw.requestOrFolderMetaId],
-        projectId,
       };
     });
 
@@ -177,22 +144,17 @@ export const duplicateBodyRaw = async (payload) => {
 
 export const replaceBodyRaw = async (payload = {}) => {
   try {
-    delete payload["id"];
-    if (!payload["requestOrFolderMetaId"])
-      payload["requestOrFolderMetaId"] = (await getTabList())?.selectedTab;
-    if (!payload["projectId"]) payload["projectId"] = await getActiveProject();
-    if (!payload["projectId"]) return false;
+    const updatePayload = { ...payload };
+    delete updatePayload["id"];
+    delete updatePayload["requestOrFolderMetaId"];
 
     await db
       .delete(bodyRawTable)
       .where(
-        and(
-          eq(bodyRawTable.requestOrFolderMetaId, payload.requestOrFolderMetaId),
-          eq(bodyRawTable.projectId, payload.projectId)
-        )
+        eq(bodyRawTable.requestOrFolderMetaId, payload.requestOrFolderMetaId)
       );
 
-    if (Object.keys(payload || {}).length)
+    if (Object.keys(updatePayload || {}).length)
       await db.insert(bodyRawTable).values(payload);
 
     return true;

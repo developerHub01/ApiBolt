@@ -1,26 +1,20 @@
-import { and, eq, inArray } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { db } from "./index.js";
 import { bodyBinaryTable } from "./schema.js";
 import { getTabList } from "./tabsDB.js";
-import { getActiveProject } from "./projectsDB.js";
 
 export const getBodyBinary = async (requestOrFolderMetaId) => {
   if (!requestOrFolderMetaId)
     requestOrFolderMetaId = (await getTabList())?.selectedTab;
-  const projectId = await getActiveProject();
-  if (!requestOrFolderMetaId || !projectId) return null;
+
+  if (!requestOrFolderMetaId) return null;
 
   try {
     const result = (
       await db
         .select()
         .from(bodyBinaryTable)
-        .where(
-          and(
-            eq(bodyBinaryTable.requestOrFolderMetaId, requestOrFolderMetaId),
-            eq(bodyBinaryTable.projectId, projectId)
-          )
-        )
+        .where(eq(bodyBinaryTable.requestOrFolderMetaId, requestOrFolderMetaId))
     )?.[0];
 
     return result;
@@ -33,8 +27,7 @@ export const createBodyBinary = async (payload) => {
   try {
     if (!payload.requestOrFolderMetaId)
       payload.requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!payload.projectId) payload.projectId = await getActiveProject();
-    if (!payload.requestOrFolderMetaId || !payload.projectId) return false;
+    if (!payload.requestOrFolderMetaId) return false;
 
     const result = await db.insert(bodyBinaryTable).values({
       ...payload,
@@ -49,24 +42,18 @@ export const createBodyBinary = async (payload) => {
 
 export const updateBodyBinary = async (payload = {}) => {
   try {
-    let { requestOrFolderMetaId, projectId, ...rest } = payload;
+    let { requestOrFolderMetaId, ...rest } = payload;
 
     if (!requestOrFolderMetaId)
       requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!projectId) projectId = await getActiveProject();
-    if (!requestOrFolderMetaId || !projectId) return false;
+    if (!requestOrFolderMetaId) return false;
 
     payload = rest;
 
     const bodyRawData = await db
       .select()
       .from(bodyBinaryTable)
-      .where(
-        and(
-          eq(bodyBinaryTable.requestOrFolderMetaId, requestOrFolderMetaId),
-          eq(bodyBinaryTable.projectId, projectId)
-        )
-      );
+      .where(eq(bodyBinaryTable.requestOrFolderMetaId, requestOrFolderMetaId));
 
     let updated;
 
@@ -74,7 +61,6 @@ export const updateBodyBinary = async (payload = {}) => {
       updated = await db.insert(bodyBinaryTable).values({
         ...rest,
         requestOrFolderMetaId,
-        projectId,
       });
     } else {
       updated = await db
@@ -83,10 +69,7 @@ export const updateBodyBinary = async (payload = {}) => {
           ...rest,
         })
         .where(
-          and(
-            eq(bodyBinaryTable.requestOrFolderMetaId, requestOrFolderMetaId),
-            eq(bodyBinaryTable.projectId, projectId)
-          )
+          eq(bodyBinaryTable.requestOrFolderMetaId, requestOrFolderMetaId)
         );
     }
 
@@ -100,17 +83,12 @@ export const deleteBodyBinary = async (requestOrFolderMetaId) => {
   try {
     if (!requestOrFolderMetaId)
       requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    const projectId = await getActiveProject();
-    if (!requestOrFolderMetaId || !projectId) return false;
+
+    if (!requestOrFolderMetaId) return false;
 
     await db
       .delete(bodyBinaryTable)
-      .where(
-        and(
-          eq(bodyBinaryTable.requestOrFolderMetaId, requestOrFolderMetaId),
-          eq(bodyBinaryTable.projectId, projectId)
-        )
-      );
+      .where(eq(bodyBinaryTable.requestOrFolderMetaId, requestOrFolderMetaId));
 
     return true;
   } catch (error) {
@@ -126,19 +104,13 @@ payload = {
 export const duplicateBodyBinary = async (payload) => {
   try {
     if (!payload) return;
-    const projectId = await getActiveProject();
     const oldIds = Object.keys(payload);
-    if (!oldIds.length || !projectId) return;
+    if (!oldIds.length) return;
 
     const existingBodyBinaryData = await db
       .select()
       .from(bodyBinaryTable)
-      .where(
-        and(
-          inArray(bodyBinaryTable.requestOrFolderMetaId, oldIds),
-          eq(bodyBinaryTable.projectId, projectId)
-        )
-      );
+      .where(inArray(bodyBinaryTable.requestOrFolderMetaId, oldIds));
 
     if (!existingBodyBinaryData.length) return true;
 
@@ -151,7 +123,6 @@ export const duplicateBodyBinary = async (payload) => {
       return {
         ...binary,
         requestOrFolderMetaId: payload[binary.requestOrFolderMetaId],
-        projectId,
       };
     });
 
@@ -165,25 +136,17 @@ export const duplicateBodyBinary = async (payload) => {
 
 export const replaceBodyBinary = async (payload = {}) => {
   try {
-    delete payload["id"];
-    if (!payload["requestOrFolderMetaId"])
-      payload["requestOrFolderMetaId"] = (await getTabList())?.selectedTab;
-    if (!payload["projectId"]) payload["projectId"] = await getActiveProject();
-    if (!payload["projectId"]) return false;
+    const updatePayload = { ...payload };
+    delete updatePayload["id"];
+    delete updatePayload["requestOrFolderMetaId"];
 
     await db
       .delete(bodyBinaryTable)
       .where(
-        and(
-          eq(
-            bodyBinaryTable.requestOrFolderMetaId,
-            payload.requestOrFolderMetaId
-          ),
-          eq(bodyBinaryTable.projectId, payload.projectId)
-        )
+        eq(bodyBinaryTable.requestOrFolderMetaId, payload.requestOrFolderMetaId)
       );
 
-    if (Object.keys(payload || {}).length)
+    if (Object.keys(updatePayload || {}).length)
       await db.insert(bodyBinaryTable).values({
         ...payload,
       });
