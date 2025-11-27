@@ -578,6 +578,10 @@ contextBridge.exposeInMainWorld("electronAPIRequest", {
     await ipcRenderer.invoke("exportRequest", ...payload),
   importRequest: async (...payload) =>
     await ipcRenderer.invoke("importRequest", ...payload),
+  exportFolder: async (...payload) =>
+    await ipcRenderer.invoke("exportFolder", ...payload),
+  importFolder: async (...payload) =>
+    await ipcRenderer.invoke("importFolder", ...payload),
 });
 
 /**

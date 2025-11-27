@@ -21,7 +21,10 @@ import {
   duplicateRequestOrFolder,
 } from "@/context/redux/request-response/thunks/request-list";
 import { checkPermissionToAddFolderAsChildren } from "@/utils/request-response.utils";
-import { exportRequest } from "@/context/redux/request-response/thunks/request";
+import {
+  exportFolder,
+  exportRequest,
+} from "@/context/redux/request-response/thunks/request";
 
 type TActionType =
   | "add_request"
@@ -65,6 +68,10 @@ const folderCTAList: Array<{
     id: "delete",
     label: "Delete",
   },
+  {
+    id: "export",
+    label: "Export",
+  },
 ];
 
 const requestCTAList: Array<{
@@ -105,33 +112,27 @@ const ItemCTA = memo(() => {
     (actionType: string) => {
       switch (actionType as TActionType) {
         case "delete": {
-          dispatch(handleChangeDeleteFolderOrRequestId(id));
-          break;
+          return dispatch(handleChangeDeleteFolderOrRequestId(id));
         }
         case "add_folder": {
-          dispatch(createCollection(id));
-          break;
+          return dispatch(createCollection(id));
         }
         case "add_rest_api_basics": {
-          dispatch(createRestApiBasic(id));
-          break;
+          return dispatch(createRestApiBasic(id));
         }
         case "add_request": {
-          dispatch(createSingleRequest(id));
-          break;
+          return dispatch(createSingleRequest(id));
         }
         case "rename": {
-          handleRenameAction();
-          break;
+          return handleRenameAction();
         }
         case "duplicate": {
-          dispatch(duplicateRequestOrFolder(id));
-          break;
+          return dispatch(duplicateRequestOrFolder(id));
         }
         case "export": {
-          if (type !== "request") return;
-          dispatch(exportRequest(id));
-          break;
+          return dispatch(
+            type === "request" ? exportRequest(id) : exportFolder(id)
+          );
         }
       }
     },

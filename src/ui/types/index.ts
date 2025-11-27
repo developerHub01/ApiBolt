@@ -490,6 +490,12 @@ declare global {
       importRequest(
         requestOrFolderMetaId?: string
       ): Promise<ElectronResponseInterface>;
+      exportFolder(
+        requestOrFolderMetaId?: string
+      ): Promise<ElectronResponseInterface>;
+      importFolder(
+        requestOrFolderMetaId?: string
+      ): Promise<ElectronResponseInterface>;
     };
 
     electronAPIKeyboardShortcut: {

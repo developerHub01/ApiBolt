@@ -175,3 +175,32 @@ export const importRequest = createAsyncThunk<
     };
   }
 });
+
+export const exportFolder = createAsyncThunk<
+  ElectronResponseInterface,
+  void | string,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("request-response/exportFolder", async (id, { getState }) => {
+  try {
+    const state = getState() as RootState;
+    const requestId = id ?? state.requestResponse.selectedTab;
+    if (!requestId || state.requestResponse.requestList[requestId].method)
+      return {
+        success: false,
+        message: "No request active",
+      };
+
+    const response = await window.electronAPIRequest.exportFolder(requestId);
+
+    return response;
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: "Something went wrong while exporting request.",
+    };
+  }
+});

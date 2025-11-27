@@ -89,3 +89,21 @@ export const validateRequest = async ({
     return null;
   }
 };
+
+export const findSelectedRequestIds = (id, requestTree) => {
+  const selectedRequestIds = new Set([]);
+
+  const trackChildren = (id) => {
+    const request = requestTree[id];
+    if (!request) return;
+    selectedRequestIds.add(id);
+    if (!request.children || !Array.isArray(request.children)) return;
+    for (const childId of request.children) {
+      trackChildren(childId);
+    }
+  };
+
+  trackChildren(id);
+
+  return selectedRequestIds;
+};

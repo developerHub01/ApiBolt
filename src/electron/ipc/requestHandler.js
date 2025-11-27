@@ -1,5 +1,5 @@
 import { app, dialog, ipcMain } from "electron";
-import { clearRequestDB } from "../db/requestDB.js";
+import { clearRequestDB, exportFolder } from "../db/requestDB.js";
 import {
   getRequestOrFolderMetaById,
   updateRequestOrFolderMeta,
@@ -299,6 +299,42 @@ export const requestHandler = () => {
         success: false,
         message:
           error.message ?? "Something went wrong while exporting request.",
+      };
+    }
+  });
+  ipcMain.handle("exportFolder", async (_, id) => {
+    try {
+      const payload = await exportFolder(id);
+
+      const folderName =
+        (await getRequestOrFolderMetaById(id))?.name ?? "folder";
+      const exportFileName = `${folderName.replaceAll(" ", "_")}_request_folder.json`;
+
+      const { canceled, filePath } = await dialog.showSaveDialog(mainWindow, {
+        title: "Save request folder data",
+        defaultPath: path.join(app.getPath("downloads"), exportFileName),
+        filters: [
+          {
+            name: "JSON file",
+            extensions: ["json"],
+          },
+        ],
+      });
+      if (!canceled && filePath) {
+        await writeFile(filePath, JSON.stringify(payload, null, 2));
+        return {
+          success: true,
+          message: "Request folder exported successfully!",
+        };
+      } else {
+        throw new Error("Save dialog cancelled.");
+      }
+    } catch (error) {
+      console.error(error);
+      return {
+        success: false,
+        message:
+          error.message ?? "Something went wrong while exporting the folder.",
       };
     }
   });
