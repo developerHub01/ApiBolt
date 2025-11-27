@@ -1,4 +1,4 @@
-import { eq, count, inArray, getTableColumns } from "drizzle-orm";
+import { eq, count, getTableColumns, inArray } from "drizzle-orm";
 import { db } from "./index.js";
 import {
   projectTable,
@@ -9,14 +9,16 @@ import {
   apiUrlTable,
   paramsTable,
   headersTable,
+  hiddenHeadersCheckTable,
   bodyFormDataTable,
   bodyXWWWFormUrlencodedTable,
   bodyBinaryTable,
   bodyRawTable,
-  hiddenHeadersCheckTable,
   requestMetaTabTable,
+  authorizationTable,
 } from "./schema.js";
 import { createAuth } from "./authorizationDB.js";
+import { v4 as uuidv4 } from "uuid";
 
 export const getProjects = async () => {
   try {
@@ -138,9 +140,9 @@ export const getActiveProjectDetails = async () => {
 };
 
 export const exportProject = async (id) => {
-  id = id ?? (await getActiveProject());
-
   try {
+    id = id ?? (await getActiveProject());
+
     const project =
       (
         await db
@@ -182,84 +184,133 @@ export const exportProject = async (id) => {
 
     const requestIdList = [...new Set(Object.keys(requestList ?? {}))];
 
-    const apiUrlList =
+    const apiUrlList = (
       (await db
         .select(
           (() => {
-            const { projectId, createdAt, ...rest } =
+            const { id, projectId, createdAt, ...rest } =
               getTableColumns(apiUrlTable);
             return rest;
           })()
         )
         .from(apiUrlTable)
-        .where(inArray(apiUrlTable.requestOrFolderMetaId, requestIdList))) ??
-      [];
+        .where(inArray(apiUrlTable.requestOrFolderMetaId, requestIdList))) ?? []
+    )?.reduce((acc, curr) => {
+      if (!acc[curr.requestOrFolderMetaId])
+        acc[curr.requestOrFolderMetaId] = [];
+      acc[curr.requestOrFolderMetaId].push(curr);
 
-    const paramsList = await db
-      .select(
-        (() => {
-          const { id, projectId, createdAt, ...rest } =
-            getTableColumns(paramsTable);
-          return rest;
-        })()
-      )
-      .from(paramsTable)
-      .where(inArray(paramsTable.requestOrFolderMetaId, requestIdList));
+      return acc;
+    }, {});
 
-    const headersList = await db
-      .select(
-        (() => {
-          const { id, projectId, createdAt, ...rest } =
-            getTableColumns(headersTable);
-          return rest;
-        })()
-      )
-      .from(headersTable)
-      .where(inArray(headersTable.requestOrFolderMetaId, requestIdList));
-
-    const hiddenHeadersCheckList = await db
-      .select(
-        (() => {
-          const { id, projectId, ...rest } = getTableColumns(
-            hiddenHeadersCheckTable
-          );
-          return rest;
-        })()
-      )
-      .from(hiddenHeadersCheckTable)
-      .where(
-        inArray(hiddenHeadersCheckTable.requestOrFolderMetaId, requestIdList)
-      );
-
-    const formDataList = await db
-      .select(
-        (() => {
-          const { id, projectId, createdAt, ...rest } =
-            getTableColumns(bodyFormDataTable);
-          return rest;
-        })()
-      )
-      .from(bodyFormDataTable)
-      .where(inArray(bodyFormDataTable.requestOrFolderMetaId, requestIdList));
-
-    const xWWWFormUrlencodedList = await db
-      .select(
-        (() => {
-          const { id, projectId, createdAt, ...rest } = getTableColumns(
-            bodyXWWWFormUrlencodedTable
-          );
-          return rest;
-        })()
-      )
-      .from(bodyXWWWFormUrlencodedTable)
-      .where(
-        inArray(
-          bodyXWWWFormUrlencodedTable.requestOrFolderMetaId,
-          requestIdList
+    const paramsList = (
+      (await db
+        .select(
+          (() => {
+            const { id, projectId, createdAt, ...rest } =
+              getTableColumns(paramsTable);
+            return rest;
+          })()
         )
-      );
+        .from(paramsTable)
+        .where(inArray(paramsTable.requestOrFolderMetaId, requestIdList))) ?? []
+    )?.reduce((acc, curr) => {
+      if (!acc[curr.requestOrFolderMetaId])
+        acc[curr.requestOrFolderMetaId] = [];
+      acc[curr.requestOrFolderMetaId].push(curr);
 
-    const binaryDataList =
+      return acc;
+    }, {});
+
+    const headersList = (
+      (await db
+        .select(
+          (() => {
+            const { id, projectId, createdAt, ...rest } =
+              getTableColumns(headersTable);
+            return rest;
+          })()
+        )
+        .from(headersTable)
+        .where(inArray(headersTable.requestOrFolderMetaId, requestIdList))) ??
+      []
+    )?.reduce((acc, curr) => {
+      if (!acc[curr.requestOrFolderMetaId])
+        acc[curr.requestOrFolderMetaId] = [];
+      acc[curr.requestOrFolderMetaId].push(curr);
+
+      return acc;
+    }, {});
+
+    const hiddenHeadersCheckList = (
+      (await db
+        .select(
+          (() => {
+            const { id, projectId, ...rest } = getTableColumns(
+              hiddenHeadersCheckTable
+            );
+            return rest;
+          })()
+        )
+        .from(hiddenHeadersCheckTable)
+        .where(
+          inArray(hiddenHeadersCheckTable.requestOrFolderMetaId, requestIdList)
+        )) ?? []
+    )?.reduce((acc, curr) => {
+      if (!acc[curr.requestOrFolderMetaId])
+        acc[curr.requestOrFolderMetaId] = [];
+      acc[curr.requestOrFolderMetaId].push(curr);
+
+      return acc;
+    }, {});
+
+    const formDataList = (
+      (await db
+        .select(
+          (() => {
+            const { id, projectId, createdAt, ...rest } =
+              getTableColumns(bodyFormDataTable);
+            return rest;
+          })()
+        )
+        .from(bodyFormDataTable)
+        .where(
+          inArray(bodyFormDataTable.requestOrFolderMetaId, requestIdList)
+        )) ?? []
+    )?.reduce((acc, curr) => {
+      if (!acc[curr.requestOrFolderMetaId])
+        acc[curr.requestOrFolderMetaId] = [];
+      acc[curr.requestOrFolderMetaId].push(curr);
+
+      return acc;
+    }, {});
+
+    const xWWWFormUrlencodedList = (
+      (await db
+        .select(
+          (() => {
+            const { id, projectId, createdAt, ...rest } = getTableColumns(
+              bodyXWWWFormUrlencodedTable
+            );
+            return rest;
+          })()
+        )
+        .from(bodyXWWWFormUrlencodedTable)
+        .where(
+          inArray(
+            bodyXWWWFormUrlencodedTable.requestOrFolderMetaId,
+            requestIdList
+          )
+        )) ?? []
+    )?.reduce((acc, curr) => {
+      if (!acc[curr.requestOrFolderMetaId])
+        acc[curr.requestOrFolderMetaId] = [];
+      acc[curr.requestOrFolderMetaId].push(curr);
+
+      return acc;
+    }, {});
+
+    const binaryDataList = (
       (await db
         .select(
           (() => {
@@ -270,9 +321,16 @@ export const exportProject = async (id) => {
         .from(bodyBinaryTable)
         .where(
           inArray(bodyBinaryTable.requestOrFolderMetaId, requestIdList)
-        )) ?? [];
+        )) ?? []
+    )?.reduce((acc, curr) => {
+      if (!acc[curr.requestOrFolderMetaId])
+        acc[curr.requestOrFolderMetaId] = [];
+      acc[curr.requestOrFolderMetaId].push(curr);
 
-    const rawDataList =
+      return acc;
+    }, {});
+
+    const rawDataList = (
       (await db
         .select(
           (() => {
@@ -283,9 +341,16 @@ export const exportProject = async (id) => {
         )
         .from(bodyRawTable)
         .where(inArray(bodyRawTable.requestOrFolderMetaId, requestIdList))) ??
-      [];
+      []
+    )?.reduce((acc, curr) => {
+      if (!acc[curr.requestOrFolderMetaId])
+        acc[curr.requestOrFolderMetaId] = [];
+      acc[curr.requestOrFolderMetaId].push(curr);
 
-    const requestMetaTabList =
+      return acc;
+    }, {});
+
+    const requestMetaTabList = (
       (await db
         .select(
           (() => {
@@ -297,7 +362,33 @@ export const exportProject = async (id) => {
         .from(requestMetaTabTable)
         .where(
           inArray(requestMetaTabTable.requestOrFolderMetaId, requestIdList)
-        )) ?? [];
+        )) ?? []
+    )?.reduce((acc, curr) => {
+      if (!acc[curr.requestOrFolderMetaId])
+        acc[curr.requestOrFolderMetaId] = [];
+      acc[curr.requestOrFolderMetaId].push(curr);
+
+      return acc;
+    }, {});
+
+    const authorization = (
+      (await db
+        .select(
+          (() => {
+            const { id, projectId, ...rest } =
+              getTableColumns(authorizationTable);
+            return rest;
+          })()
+        )
+        .from(authorizationTable)
+        .where(eq(authorizationTable.projectId, id))) ?? []
+    )?.reduce((acc, curr) => {
+      if (!acc[curr.requestOrFolderMetaId])
+        acc[curr.requestOrFolderMetaId] = [];
+      acc[curr.requestOrFolderMetaId].push(curr);
+
+      return acc;
+    }, {});
 
     return {
       project,
@@ -312,8 +403,197 @@ export const exportProject = async (id) => {
       binaryDataList,
       rawDataList,
       requestMetaTabList,
+      authorization,
     };
   } catch (error) {
     console.error(error);
   }
+};
+
+export const importProject = async ({
+  project,
+  environments = [],
+  requestList = {},
+  apiUrlList = {},
+  paramsList = {},
+  headersList = {},
+  hiddenHeadersCheckList = {},
+  formDataList = {},
+  xWWWFormUrlencodedList = {},
+  binaryDataList = {},
+  rawDataList = {},
+  requestMetaTabList = {},
+  authorization = {},
+}) => {
+  return await db.transaction(async (tsx) => {
+    const projectId = (
+      await tsx
+        .insert(projectTable)
+        .values({ ...project })
+        .returning({ id: projectTable.id })
+    )?.[0]?.id;
+
+    const newApiUrlList = [];
+    const newParamsList = [];
+    const newHeadersList = [];
+    const newHiddenHeadersList = [];
+    const newRequestMetaTabList = [];
+    const newFormDataList = [];
+    const newXWWWList = [];
+    const newBinaryList = [];
+    const newRawList = [];
+    const newAuthorization = [];
+
+    const idMapping = {};
+    Object.keys(requestList).forEach((oldId) => {
+      const newId = uuidv4();
+      idMapping[oldId] = newId;
+    });
+
+    if (authorization["null"]?.[0]) {
+      newAuthorization.push({
+        ...authorization["null"][0],
+        projectId,
+      });
+    }
+
+    Object.keys(requestList).forEach((oldId) => {
+      const newId = idMapping[oldId];
+      const request = {
+        ...requestList[oldId],
+        id: newId,
+        projectId,
+      };
+
+      if (request.parentId) {
+        request.parentId = idMapping[request.parentId] || null;
+      }
+
+      requestList[newId] = request;
+      delete requestList[oldId];
+
+      if (apiUrlList[oldId]) {
+        newApiUrlList.push(
+          ...apiUrlList[oldId].map((url) => ({
+            ...url,
+            requestOrFolderMetaId: newId,
+          }))
+        );
+      }
+
+      if (paramsList[oldId]) {
+        newParamsList.push(
+          ...paramsList[oldId].map((param) => ({
+            ...param,
+            requestOrFolderMetaId: newId,
+          }))
+        );
+      }
+
+      if (headersList[oldId]) {
+        newHeadersList.push(
+          ...headersList[oldId].map((header) => ({
+            ...header,
+            requestOrFolderMetaId: newId,
+          }))
+        );
+      }
+
+      if (hiddenHeadersCheckList[oldId]) {
+        newHiddenHeadersList.push(
+          ...hiddenHeadersCheckList[oldId].map((header) => ({
+            ...header,
+            requestOrFolderMetaId: newId,
+          }))
+        );
+      }
+
+      if (requestMetaTabList[oldId]) {
+        newRequestMetaTabList.push(
+          ...requestMetaTabList[oldId].map((meta) => ({
+            ...meta,
+            requestOrFolderMetaId: newId,
+          }))
+        );
+      }
+
+      if (formDataList[oldId]) {
+        newFormDataList.push(
+          ...formDataList[oldId].map((form) => ({
+            ...form,
+            requestOrFolderMetaId: newId,
+          }))
+        );
+      }
+
+      if (xWWWFormUrlencodedList[oldId]) {
+        newXWWWList.push(
+          ...xWWWFormUrlencodedList[oldId].map((form) => ({
+            ...form,
+            requestOrFolderMetaId: newId,
+          }))
+        );
+      }
+
+      if (binaryDataList[oldId]) {
+        newBinaryList.push(
+          ...binaryDataList[oldId].map((form) => ({
+            ...form,
+            requestOrFolderMetaId: newId,
+          }))
+        );
+      }
+
+      if (rawDataList[oldId]) {
+        newRawList.push(
+          ...rawDataList[oldId].map((form) => ({
+            ...form,
+            requestOrFolderMetaId: newId,
+          }))
+        );
+      }
+
+      if (authorization[oldId]) {
+        newAuthorization.push(
+          ...authorization[oldId].map((auth) => ({
+            ...auth,
+            requestOrFolderMetaId: newId,
+            projectId,
+          }))
+        );
+      }
+    });
+
+    const finalEnvironments = environments.map((env) => ({
+      ...env,
+      projectId,
+    }));
+    const finalRequests = Object.values(requestList);
+
+    if (finalRequests.length)
+      await tsx.insert(requestOrFolderMetaTable).values(finalRequests);
+    if (finalEnvironments.length)
+      await tsx.insert(environmentTable).values(finalEnvironments);
+    if (newApiUrlList.length)
+      await tsx.insert(apiUrlTable).values(newApiUrlList);
+    if (newParamsList.length)
+      await tsx.insert(paramsTable).values(newParamsList);
+    if (newHeadersList.length)
+      await tsx.insert(headersTable).values(newHeadersList);
+    if (newHiddenHeadersList.length)
+      await tsx.insert(hiddenHeadersCheckTable).values(newHiddenHeadersList);
+    if (newRequestMetaTabList.length)
+      await tsx.insert(requestMetaTabTable).values(newRequestMetaTabList);
+    if (newFormDataList.length)
+      await tsx.insert(bodyFormDataTable).values(newFormDataList);
+    if (newXWWWList.length)
+      await tsx.insert(bodyXWWWFormUrlencodedTable).values(newXWWWList);
+    if (newBinaryList.length)
+      await tsx.insert(bodyBinaryTable).values(newBinaryList);
+    if (newRawList.length) await tsx.insert(bodyRawTable).values(newRawList);
+    if (newAuthorization.length)
+      await tsx.insert(authorizationTable).values(newAuthorization);
+
+    return true;
+  });
 };

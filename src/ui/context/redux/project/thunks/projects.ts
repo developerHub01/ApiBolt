@@ -185,6 +185,29 @@ export const exportProject = createAsyncThunk<
     };
   }
 });
+
+export const importProject = createAsyncThunk<
+  ElectronResponseInterface,
+  void,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("project/importProject", async (_, { dispatch }) => {
+  try {
+    const response = await window.electronAPIProjectsDB.importProject();
+    if (!response?.success) return response;
+
+    dispatch(loadProjectList());
+    return response;
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: "Something went wrong while exporting the project.",
+    };
+  }
+});
 /* ==============================
 ========== Projects end =========
 ================================= */

@@ -8,13 +8,23 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip-custom";
+import { importProject } from "@/context/redux/project/thunks/projects";
+import { useAppDispatch } from "@/context/redux/hooks";
+import { toast } from "sonner";
 
 const ActionButtons = () => {
+  const dispatch = useAppDispatch();
   const { handleChangeIsCreateDialogOpen } = useProject();
 
   const handleCreate = useCallback(() => {
     handleChangeIsCreateDialogOpen(true);
   }, [handleChangeIsCreateDialogOpen]);
+
+  const handleImport = useCallback(async () => {
+    const { success, message } = await dispatch(importProject()).unwrap();
+    if (success) toast.success(message);
+    else toast.error(message);
+  }, [dispatch]);
 
   const menuList = useMemo(
     () => [
@@ -28,10 +38,10 @@ const ActionButtons = () => {
         id: "import",
         label: "Import New Project",
         Icon: ImportIcon,
-        onClick: () => {},
+        onClick: handleImport,
       },
     ],
-    [handleCreate]
+    [handleCreate, handleImport]
   );
 
   return (

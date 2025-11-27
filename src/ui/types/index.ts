@@ -165,6 +165,7 @@ declare global {
       changeActiveProject(id?: string | null): Promise<boolean>;
       getActiveProject(): Promise<string | null>;
       exportProject(id?: string | null): Promise<ElectronResponseInterface>;
+      importProject(): Promise<ElectronResponseInterface>;
     };
 
     electronAPICookiesDB: {
