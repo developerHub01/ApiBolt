@@ -83,7 +83,7 @@ const useCustomToast = () =>
         );
 
         return (
-          <div className="bg-background border-background/50 text-foreground min-w-90 min-h-16 rounded-lg shadow-lg flex overflow-hidden">
+          <div className="bg-background text-foreground min-w-90 min-h-16 rounded-lg shadow-lg flex overflow-hidden border border-border/50">
             {/* Side bar */}
             <Bar />
             <div className="flex-1 flex items-center gap-2.5 px-3 py-4">

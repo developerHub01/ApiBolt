@@ -29,32 +29,34 @@ const ProjectSearch = () => {
   if (!totalProjectsCnt) return null;
 
   return (
-    <div className="w-full flex items-center gap-2 px-2 py-1 border-2 border-border/50 focus-within:border-border duration-75 transition-colors rounded-md min-h-10 my-1">
-      <input
-        placeholder="Search projects..."
-        className="flex-1 outline-none border-none"
-        value={searchTerm}
-        onChange={handleChange}
-      />
+    <div className="flex gap-2 py-1 my-1">
+      <div className="flex-1 flex items-center gap-2 px-2  border-2 border-border/50 focus-within:border-border duration-75 transition-colors rounded-md min-h-10">
+        <input
+          placeholder="Search projects..."
+          className="flex-1 outline-none border-none text-sm"
+          value={searchTerm}
+          onChange={handleChange}
+        />
+        {searchTerm && (
+          <Button
+            size="iconXs"
+            className="rounded-full"
+            variant={"ghost"}
+            onClick={handleClear}
+          >
+            <CloseIcon size={12} />
+          </Button>
+        )}
+      </div>
       <Badge
-        variant={"secondary"}
-        className="xs text-accent-foreground tracking-wider"
+        variant={"outline"}
+        className="text-xs text-accent-foreground tracking-wider min-w-10"
       >
         {searchResultProjectsCnt !== totalProjectsCnt
           ? `${searchResultProjectsCnt}/`
           : ``}
         {totalProjectsCnt}
       </Badge>
-      {searchTerm && (
-        <Button
-          size="iconXs"
-          className="rounded-full"
-          variant={"ghost"}
-          onClick={handleClear}
-        >
-          <CloseIcon size={12} />
-        </Button>
-      )}
     </div>
   );
 };

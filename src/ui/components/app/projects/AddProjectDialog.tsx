@@ -41,7 +41,7 @@ const AddProjectDialog = memo(() => {
     if (response) handleChangeIsCreateDialogOpen();
     toast({
       type: response ? "success" : "error",
-      title: response ? "Paste success" : "Paste error",
+      title: response ? "Create success" : "Create error",
       description: response
         ? "Project created successfully"
         : "Failed to create project. Please try again.",
