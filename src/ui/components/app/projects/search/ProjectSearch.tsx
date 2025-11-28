@@ -1,4 +1,4 @@
-import { useCallback, useState, type ChangeEvent } from "react";
+import { useCallback, useRef, useState, type ChangeEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { X as CloseIcon } from "lucide-react";
 import { useAppSelector } from "@/context/redux/hooks";
@@ -6,17 +6,31 @@ import { useProject } from "@/context/project/ProjectProvider";
 import { selectProjectList } from "@/context/redux/project/selectors/project";
 import { Badge } from "@/components/ui/badge";
 
+const DEBOUNCE_DELAY = 300;
+
 const ProjectSearch = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const { projectList, handleSearchProjects } = useProject();
   const projectListFromStore = useAppSelector(selectProjectList);
+  const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const handleSearch = useCallback(
+    (value: string) => {
+      if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
+
+      debounceTimeout.current = setTimeout(() => {
+        handleSearchProjects(value);
+      }, DEBOUNCE_DELAY);
+    },
+    [handleSearchProjects]
+  );
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       setSearchTerm(e.target.value);
-      handleSearchProjects(e.target.value);
+      handleSearch(e.target.value.trim());
     },
-    [handleSearchProjects]
+    [handleSearch]
   );
 
   const handleClear = useCallback(() => {
