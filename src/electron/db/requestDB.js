@@ -1,61 +1,6 @@
-import { getTabList } from "./tabsDB.js";
-import {
-  deleteApiUrlByRequestMetaId,
-  getApiUrlDB,
-  updateApiUrl,
-} from "./apiUrlDB.js";
-import {
-  deleteParamsByRequestMetaId,
-  getParams,
-  replaceParams,
-} from "./paramsDB.js";
-import {
-  deleteHeadersByRequestMetaId,
-  getHeaders,
-  replaceHeaders,
-} from "./headersDB.js";
-import {
-  deleteBodyBinary,
-  getBodyBinary,
-  replaceBodyBinary,
-} from "./bodyBinaryDB.js";
-import {
-  getRequestOrFolderMeta,
-  getRequestOrFolderMetaById,
-  updateRequestOrFolderMeta,
-} from "./requestOrFolderMetaDB.js";
-import {
-  getHiddenHeadersCheck,
-  updateHiddenHeadersCheck,
-} from "./hiddenHeadersCheckDB.js";
-import {
-  deleteBodyFormDataByRequestMetaId,
-  getBodyFormData,
-  replaceBodyFormData,
-} from "./bodyFormDataDB.js";
-import {
-  deleteBodyXWWWFormUrlencodedByRequestMetaId,
-  getBodyXWWWFormUrlencoded,
-  replaceBodyXWWWFormUrlencoded,
-} from "./bodyXWWWFormUrlencodedDB.js";
-import {
-  deleteBodyRawByRequestMetaId,
-  getBodyRaw,
-  replaceBodyRaw,
-} from "./bodyRawDB.js";
-import {
-  deleteRequestMetaTab,
-  getRequestMetaTab,
-  updateRequestMetaTab,
-} from "./requestMetaTabDB.js";
-import {
-  deleteAuthByRequestMetaId,
-  getInheritedAuthFromId,
-  replaceAuth,
-} from "./authorizationDB.js";
-import { runInTransaction } from "../utils/db.js";
+import { getRequestOrFolderMeta } from "./requestOrFolderMetaDB.js";
 import { findSelectedRequestIds } from "../utils/request.js";
-import { getTableColumns, inArray } from "drizzle-orm";
+import { eq, getTableColumns, inArray } from "drizzle-orm";
 import {
   apiUrlTable,
   authorizationTable,
@@ -74,59 +19,80 @@ import { getActiveProject } from "./projectsDB.js";
 import { v4 as uuidv4 } from "uuid";
 
 /* id === active project id */
-export const clearRequestDB = async (id) => {
-  try {
-    if (!id) id = (await getTabList())?.selectedTab;
+export const clearRequest = async (id) => {
+  return await db.transaction(async (tsx) => {
+    /* clear api-url */
+    await tsx
+      .delete(apiUrlTable)
+      .where(eq(apiUrlTable.requestOrFolderMetaId, id));
 
-    await runInTransaction(async () => {
-      if (
-        /* clear api-url */
-        !(await deleteApiUrlByRequestMetaId(id)) ||
-        /* clear auth */
-        !(await deleteAuthByRequestMetaId(id)) ||
-        /* clear params */
-        !(await deleteParamsByRequestMetaId(id)) ||
-        /* clear header */
-        !(await deleteHeadersByRequestMetaId(id)) ||
-        /* clear binary data */
-        !(await deleteBodyBinary(id)) ||
-        /* clear form-data data */
-        !(await deleteBodyFormDataByRequestMetaId(id)) ||
-        /* clear xwww-form-urlencoded data */
-        !(await deleteBodyXWWWFormUrlencodedByRequestMetaId(id)) ||
-        /* clear raw data data */
-        !(await deleteBodyRawByRequestMetaId(id)) ||
-        /* clear request meta tab data */
-        !(await deleteRequestMetaTab(id)) ||
-        /* clear request or folder meta data */
-        !(await updateRequestOrFolderMeta({
-          id,
-          name: "Request",
-          method: "get",
-        })) ||
-        /* clear hidden headers check data */
-        !(await updateHiddenHeadersCheck({
-          requestOrFolderMetaId: id,
-          userAgent: 1,
-          contentLength: 1,
-          accept: 1,
-          acceptEncoding: 1,
-          connection: 1,
-        }))
-      ) {
-        throw new Error("Can't clear the request.");
-      }
-    });
+    /* clear auth */
+    await tsx
+      .delete(authorizationTable)
+      .where(eq(authorizationTable.requestOrFolderMetaId, id));
+
+    /* clear params */
+    await tsx
+      .delete(paramsTable)
+      .where(eq(paramsTable.requestOrFolderMetaId, id));
+
+    /* clear header */
+    await tsx
+      .delete(headersTable)
+      .where(eq(headersTable.requestOrFolderMetaId, id));
+
+    /* clear binary data */
+    await tsx
+      .delete(bodyBinaryTable)
+      .where(eq(bodyBinaryTable.requestOrFolderMetaId, id));
+
+    /* clear form-data data */
+    await tsx
+      .delete(bodyFormDataTable)
+      .where(eq(bodyFormDataTable.requestOrFolderMetaId, id));
+
+    /* clear xwww-form-urlencoded data */
+    await tsx
+      .delete(bodyXWWWFormUrlencodedTable)
+      .where(eq(bodyXWWWFormUrlencodedTable.requestOrFolderMetaId, id));
+
+    /* clear raw data data */
+    await tsx
+      .delete(bodyRawTable)
+      .where(eq(bodyRawTable.requestOrFolderMetaId, id));
+
+    /* clear request meta tab data */
+    await tsx
+      .delete(requestMetaTabTable)
+      .where(eq(requestMetaTabTable.requestOrFolderMetaId, id));
+
+    /* clear request or folder meta data */
+    await tsx
+      .update(requestOrFolderMetaTable)
+      .set({
+        name: "Request",
+        method: "get",
+      })
+      .where(eq(requestOrFolderMetaTable.id, id));
+
+    /* clear hidden headers check data */
+    await tsx
+      .update(hiddenHeadersCheckTable)
+      .set({
+        userAgent: 1,
+        contentLength: 1,
+        accept: 1,
+        acceptEncoding: 1,
+        connection: 1,
+      })
+      .where(eq(hiddenHeadersCheckTable.requestOrFolderMetaId, id));
 
     return true;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
+  });
 };
 
 export const importRequest = async ({
-  requestId,
+  requestId: id,
   name,
   url,
   method,
@@ -140,417 +106,653 @@ export const importRequest = async ({
   bodyFormData,
   authorization,
 }) => {
-  return await runInTransaction(async () => {
+  return await db.transaction(async (tsx) => {
+    const projectId = await getActiveProject();
+
     /**
      * ===================
      * request-meta-data
      * ===================
      */
-
-    await updateRequestOrFolderMeta({
-      id: requestId,
-      name,
-      method,
-    });
+    await tsx
+      .update(requestOrFolderMetaTable)
+      .set({
+        name,
+        method,
+      })
+      .where(eq(requestOrFolderMetaTable.id, id));
 
     /**
      * ===================
      * api-url
      * ===================
      */
-    await updateApiUrl({
-      requestOrFolderMetaId: requestId,
-      url,
-    });
+    await tsx
+      .insert(apiUrlTable)
+      .values({
+        requestOrFolderMetaId: id,
+        url,
+      })
+      .onConflictDoUpdate({
+        target: [apiUrlTable.requestOrFolderMetaId],
+        set: {
+          url,
+          /* this extra requestOrFolderMetaId so that it not remain empty so not fail the query */
+          requestOrFolderMetaId: id,
+        },
+      });
 
     /**
      * ===================
      * Params
      * ===================
      */
-    await replaceParams(requestId, params);
+    await tsx
+      .delete(paramsTable)
+      .where(eq(paramsTable.requestOrFolderMetaId, id));
+
+    if (Array.isArray(params) && params.length)
+      await tsx.insert(paramsTable).values(
+        params.map((param) => ({
+          ...param,
+          requestOrFolderMetaId: id,
+        }))
+      );
 
     /**
      * ===================
      * Headers
      * ===================
      */
-    await replaceHeaders(requestId, headers);
+    await tsx
+      .delete(headersTable)
+      .where(eq(headersTable.requestOrFolderMetaId, id));
+
+    if (Array.isArray(headers) && headers.length)
+      await tsx.insert(headersTable).values(
+        headers.map((header) => ({
+          ...header,
+          requestOrFolderMetaId: id,
+        }))
+      );
 
     /**
      * ===================
      * Hidden headers check
      * ===================
      */
-    await updateHiddenHeadersCheck({
-      requestOrFolderMetaId: requestId,
-      ...hiddenHeadersCheck,
-    });
+    await tsx
+      .insert(hiddenHeadersCheckTable)
+      .values({
+        ...hiddenHeadersCheck,
+        requestOrFolderMetaId: id,
+      })
+      .onConflictDoUpdate({
+        target: [hiddenHeadersCheckTable.requestOrFolderMetaId],
+        set: {
+          ...hiddenHeadersCheck,
+          /* this extra requestOrFolderMetaId so that it not remain empty so not fail the query */
+          requestOrFolderMetaId: id,
+        },
+      });
 
     /**
      * ===================
      * Request meta-tab
      * ===================
      */
-    await updateRequestMetaTab({
-      requestOrFolderMetaId: requestId,
-      ...requestMetaTab,
-    });
+    await tsx
+      .insert(requestMetaTabTable)
+      .values({
+        ...requestMetaTab,
+        requestOrFolderMetaId: id,
+      })
+      .onConflictDoUpdate({
+        target: [requestMetaTabTable.requestOrFolderMetaId],
+        set: {
+          ...requestMetaTab,
+          /* this extra requestOrFolderMetaId so that it not remain empty so not fail the query */
+          requestOrFolderMetaId: id,
+        },
+      });
 
     /**
      * ===================
      * body x-www-formurlencoded
      * ===================
      */
-    await replaceBodyXWWWFormUrlencoded(requestId, bodyXWWWFormUrlencoded);
+    await tsx
+      .delete(bodyXWWWFormUrlencodedTable)
+      .where(eq(bodyXWWWFormUrlencodedTable.requestOrFolderMetaId, id));
+
+    if (Array.isArray(bodyXWWWFormUrlencoded) && bodyXWWWFormUrlencoded.length)
+      await tsx.insert(bodyXWWWFormUrlencodedTable).values(
+        bodyXWWWFormUrlencoded.map((form) => ({
+          ...form,
+          requestOrFolderMetaId: id,
+        }))
+      );
 
     /**
      * ===================
      * body form-data
      * ===================
      */
-    await replaceBodyFormData(requestId, bodyFormData);
+    await tsx
+      .delete(bodyFormDataTable)
+      .where(eq(bodyFormDataTable.requestOrFolderMetaId, id));
+
+    if (Array.isArray(bodyFormData) && bodyFormData.length)
+      await tsx.insert(bodyFormDataTable).values(
+        bodyFormData.map((form) => ({
+          ...form,
+          requestOrFolderMetaId: id,
+        }))
+      );
 
     /**
      * ===================
      * body binary-data
      * ===================
      */
-    await replaceBodyBinary({
-      requestOrFolderMetaId: requestId,
-      ...bodyBinary,
-    });
+    await tsx
+      .insert(bodyBinaryTable)
+      .values({
+        ...bodyBinary,
+        requestOrFolderMetaId: id,
+      })
+      .onConflictDoUpdate({
+        target: [bodyBinaryTable.requestOrFolderMetaId],
+        set: {
+          ...bodyBinary,
+          /* this extra requestOrFolderMetaId so that it not remain empty so not fail the query */
+          requestOrFolderMetaId: id,
+        },
+      });
 
     /**
      * ===================
      * body raw-data
      * ===================
      */
-    await replaceBodyRaw({
-      requestOrFolderMetaId: requestId,
-      ...bodyRaw,
-    });
+    await tsx
+      .insert(bodyRawTable)
+      .values({
+        ...bodyRaw,
+        requestOrFolderMetaId: id,
+      })
+      .onConflictDoUpdate({
+        target: [bodyRawTable.requestOrFolderMetaId],
+        set: {
+          ...bodyRaw,
+          /* this extra requestOrFolderMetaId so that it not remain empty so not fail the query */
+          requestOrFolderMetaId: id,
+        },
+      });
 
     /**
      * ===================
      * Authorization
      * ===================
      */
-    await replaceAuth({
-      requestOrFolderId: requestId,
-      payload: authorization,
-    });
+    await tsx
+      .insert(authorizationTable)
+      .values({
+        ...authorization,
+        requestOrFolderMetaId: id,
+        projectId,
+      })
+      .onConflictDoUpdate({
+        target: [authorizationTable.requestOrFolderMetaId],
+        set: {
+          ...authorization,
+          /* this extra requestOrFolderMetaId so that it not remain empty so not fail the query */
+          requestOrFolderMetaId: id,
+        },
+      });
 
     return true;
   });
 };
 
 export const exportRequest = async (id) => {
-  const metaResponse = await getRequestOrFolderMetaById(id);
-  if (!metaResponse?.method) return false;
-  const { name, method } = metaResponse;
+  return await db.transaction(async (tsx) => {
+    const { name, method } =
+      (
+        await tsx
+          .select(
+            (() => {
+              const { method, name } = getTableColumns(
+                requestOrFolderMetaTable
+              );
+              return {
+                method,
+                name,
+              };
+            })()
+          )
+          .from(requestOrFolderMetaTable)
+          .where(eq(requestOrFolderMetaTable.id, id))
+          .limit(1)
+      )?.[0] ?? {};
+    if (!method) return false;
 
-  const apiUrlResponse = await getApiUrlDB(id);
-  if (!apiUrlResponse?.url) return false;
-  const { url } = apiUrlResponse;
+    const { url } =
+      (
+        await tsx
+          .select(
+            (() => {
+              const { id, createdAt, requestOrFolderMetaId, ...rest } =
+                getTableColumns(apiUrlTable);
+              return rest;
+            })()
+          )
+          .from(apiUrlTable)
+          .where(eq(apiUrlTable.requestOrFolderMetaId, id))
+          .limit(1)
+      )?.[0] ?? {};
 
-  const params = ((await getParams(id)) ?? []).map(
-    ({ id, createdAt, requestOrFolderMetaId, ...other }) => ({
-      ...other,
-    })
-  );
-  const headers = ((await getHeaders(id)) ?? []).map(
-    ({ id, createdAt, requestOrFolderMetaId, ...other }) => ({
-      ...other,
-    })
-  );
-  const hiddenHeadersCheck = await getHiddenHeadersCheck(id);
-  if (hiddenHeadersCheck) {
-    delete hiddenHeadersCheck["id"];
-    delete hiddenHeadersCheck["requestOrFolderMetaId"];
-  }
-  const requestMetaTab = await getRequestMetaTab(id);
-  if (requestMetaTab) {
-    delete requestMetaTab["id"];
-    delete requestMetaTab["requestOrFolderMetaId"];
-  }
-  const bodyRaw = await getBodyRaw(id);
-  if (bodyRaw) {
-    delete bodyRaw["id"];
-    delete bodyRaw["requestOrFolderMetaId"];
-    delete bodyRaw["lineWrap"];
-  }
-  const bodyBinary = await getBodyBinary(id);
-  if (bodyBinary) {
-    delete bodyBinary["id"];
-    delete bodyBinary["requestOrFolderMetaId"];
-  }
-  const bodyXWWWFormUrlencoded = (
-    (await getBodyXWWWFormUrlencoded(id)) ?? []
-  ).map(({ id, createdAt, requestOrFolderMetaId, ...other }) => ({
-    ...other,
-  }));
-  const bodyFormData = ((await getBodyFormData(id)) ?? []).map(
-    ({ id, createdAt, requestOrFolderMetaId, ...other }) => ({
-      ...other,
-    })
-  );
+    const params =
+      (await tsx
+        .select(
+          (() => {
+            const { id, createdAt, requestOrFolderMetaId, ...rest } =
+              getTableColumns(paramsTable);
+            return rest;
+          })()
+        )
+        .from(paramsTable)
+        .where(eq(paramsTable.requestOrFolderMetaId, id))) ?? [];
 
-  const authorization = await getInheritedAuthFromId(id);
-  if (authorization) {
-    delete authorization["id"];
-    delete authorization["projectId"];
-    delete authorization["requestOrFolderMetaId"];
-  }
+    const headers =
+      (await tsx
+        .select(
+          (() => {
+            const { id, createdAt, requestOrFolderMetaId, ...rest } =
+              getTableColumns(headersTable);
+            return rest;
+          })()
+        )
+        .from(headersTable)
+        .where(eq(headersTable.requestOrFolderMetaId, id))) ?? [];
 
-  return {
-    name,
-    method,
-    url,
-    params,
-    headers,
-    hiddenHeadersCheck,
-    requestMetaTab,
-    bodyRaw,
-    bodyBinary,
-    bodyXWWWFormUrlencoded,
-    bodyFormData,
-    authorization,
-  };
+    const hiddenHeadersCheck =
+      (
+        await tsx
+          .select(
+            (() => {
+              const {
+                id,
+                createdAt,
+                requestOrFolderMetaId,
+                lineWrap,
+                ...rest
+              } = getTableColumns(hiddenHeadersCheckTable);
+              return rest;
+            })()
+          )
+          .from(hiddenHeadersCheckTable)
+          .where(eq(hiddenHeadersCheckTable.requestOrFolderMetaId, id))
+          .limit(1)
+      )?.[0] ?? {};
+
+    const requestMetaTab =
+      (
+        await tsx
+          .select(
+            (() => {
+              const {
+                id,
+                createdAt,
+                requestOrFolderMetaId,
+                lineWrap,
+                ...rest
+              } = getTableColumns(requestMetaTabTable);
+              return rest;
+            })()
+          )
+          .from(requestMetaTabTable)
+          .where(eq(requestMetaTabTable.requestOrFolderMetaId, id))
+          .limit(1)
+      )?.[0] ?? {};
+
+    const bodyRaw =
+      (
+        await tsx
+          .select(
+            (() => {
+              const {
+                id,
+                createdAt,
+                requestOrFolderMetaId,
+                lineWrap,
+                ...rest
+              } = getTableColumns(bodyRawTable);
+              return rest;
+            })()
+          )
+          .from(bodyRawTable)
+          .where(eq(bodyRawTable.requestOrFolderMetaId, id))
+          .limit(1)
+      )?.[0] ?? {};
+
+    const bodyBinary =
+      (
+        await tsx
+          .select(
+            (() => {
+              const { id, createdAt, requestOrFolderMetaId, ...rest } =
+                getTableColumns(bodyBinaryTable);
+              return rest;
+            })()
+          )
+          .from(bodyBinaryTable)
+          .where(eq(bodyBinaryTable.requestOrFolderMetaId, id))
+          .limit(1)
+      )?.[0] ?? {};
+
+    const bodyXWWWFormUrlencoded =
+      (await tsx
+        .select(
+          (() => {
+            const { id, createdAt, requestOrFolderMetaId, ...rest } =
+              getTableColumns(bodyXWWWFormUrlencodedTable);
+            return rest;
+          })()
+        )
+        .from(bodyXWWWFormUrlencodedTable)
+        .where(eq(bodyXWWWFormUrlencodedTable.requestOrFolderMetaId, id))) ??
+      [];
+
+    const bodyFormData =
+      (await tsx
+        .select(
+          (() => {
+            const { id, createdAt, requestOrFolderMetaId, ...rest } =
+              getTableColumns(bodyFormDataTable);
+            return rest;
+          })()
+        )
+        .from(bodyFormDataTable)
+        .where(eq(bodyFormDataTable.requestOrFolderMetaId, id))) ?? [];
+
+    const authorization =
+      (
+        await tsx
+          .select(
+            (() => {
+              const {
+                id,
+                createdAt,
+                projectId,
+                requestOrFolderMetaId,
+                ...rest
+              } = getTableColumns(authorizationTable);
+              return rest;
+            })()
+          )
+          .from(authorizationTable)
+          .where(eq(authorizationTable.requestOrFolderMetaId, id))
+          .limit(1)
+      )?.[0] ?? {};
+
+    return {
+      name,
+      method,
+      url,
+      params,
+      headers,
+      hiddenHeadersCheck,
+      requestMetaTab,
+      bodyRaw,
+      bodyBinary,
+      bodyXWWWFormUrlencoded,
+      bodyFormData,
+      authorization,
+    };
+  });
 };
 
 export const exportFolder = async (id) => {
-  const projectId = await getActiveProject();
-  const requestTree = await getRequestOrFolderMeta();
-  if (!projectId || !requestTree[id]) return false;
+  return await db.transaction(async (tsx) => {
+    const projectId = await getActiveProject();
+    const requestTree = await getRequestOrFolderMeta();
+    if (!projectId || !requestTree[id]) return false;
 
-  const selectedReuestIds = findSelectedRequestIds(id, requestTree);
+    const selectedReuestIds = findSelectedRequestIds(id, requestTree);
 
-  /**
-   * =========================
-   * Find out request-list
-   * =========================
-   */
-  const requestList = {};
-  Object.keys(requestTree ?? {}).forEach((requestId) => {
-    if (!selectedReuestIds.has(requestId)) return;
-    requestList[requestId] = requestTree[requestId];
-    delete requestList[requestId].children;
-    delete requestList[requestId].projectId;
-    delete requestList[requestId].createdAt;
-  });
-  requestList[id].parentId = null;
+    /**
+     * =========================
+     * Find out request-list
+     * =========================
+     */
+    const requestList = {};
+    Object.keys(requestTree ?? {}).forEach((requestId) => {
+      if (!selectedReuestIds.has(requestId)) return;
+      requestList[requestId] = requestTree[requestId];
+      delete requestList[requestId].children;
+      delete requestList[requestId].projectId;
+      delete requestList[requestId].createdAt;
+    });
+    requestList[id].parentId = null;
 
-  const requestIdList = [...selectedReuestIds];
+    const requestIdList = [...selectedReuestIds];
 
-  const apiUrlList = (
-    (await db
-      .select(
-        (() => {
-          const { id, projectId, createdAt, ...rest } =
-            getTableColumns(apiUrlTable);
-          return rest;
-        })()
-      )
-      .from(apiUrlTable)
-      .where(inArray(apiUrlTable.requestOrFolderMetaId, requestIdList))) ?? []
-  )?.reduce((acc, curr) => {
-    if (!acc[curr.requestOrFolderMetaId]) acc[curr.requestOrFolderMetaId] = [];
-    acc[curr.requestOrFolderMetaId].push(curr);
-
-    return acc;
-  }, {});
-
-  const paramsList = (
-    (await db
-      .select(
-        (() => {
-          const { id, projectId, createdAt, ...rest } =
-            getTableColumns(paramsTable);
-          return rest;
-        })()
-      )
-      .from(paramsTable)
-      .where(inArray(paramsTable.requestOrFolderMetaId, requestIdList))) ?? []
-  )?.reduce((acc, curr) => {
-    if (!acc[curr.requestOrFolderMetaId]) acc[curr.requestOrFolderMetaId] = [];
-    acc[curr.requestOrFolderMetaId].push(curr);
-
-    return acc;
-  }, {});
-
-  const headersList = (
-    (await db
-      .select(
-        (() => {
-          const { id, projectId, createdAt, ...rest } =
-            getTableColumns(headersTable);
-          return rest;
-        })()
-      )
-      .from(headersTable)
-      .where(inArray(headersTable.requestOrFolderMetaId, requestIdList))) ?? []
-  )?.reduce((acc, curr) => {
-    if (!acc[curr.requestOrFolderMetaId]) acc[curr.requestOrFolderMetaId] = [];
-    acc[curr.requestOrFolderMetaId].push(curr);
-
-    return acc;
-  }, {});
-
-  const hiddenHeadersCheckList = (
-    (await db
-      .select(
-        (() => {
-          const { id, projectId, ...rest } = getTableColumns(
-            hiddenHeadersCheckTable
-          );
-          return rest;
-        })()
-      )
-      .from(hiddenHeadersCheckTable)
-      .where(
-        inArray(hiddenHeadersCheckTable.requestOrFolderMetaId, requestIdList)
-      )) ?? []
-  )?.reduce((acc, curr) => {
-    if (!acc[curr.requestOrFolderMetaId]) acc[curr.requestOrFolderMetaId] = [];
-    acc[curr.requestOrFolderMetaId].push(curr);
-
-    return acc;
-  }, {});
-
-  const formDataList = (
-    (await db
-      .select(
-        (() => {
-          const { id, projectId, createdAt, ...rest } =
-            getTableColumns(bodyFormDataTable);
-          return rest;
-        })()
-      )
-      .from(bodyFormDataTable)
-      .where(
-        inArray(bodyFormDataTable.requestOrFolderMetaId, requestIdList)
-      )) ?? []
-  )?.reduce((acc, curr) => {
-    if (!acc[curr.requestOrFolderMetaId]) acc[curr.requestOrFolderMetaId] = [];
-    acc[curr.requestOrFolderMetaId].push(curr);
-
-    return acc;
-  }, {});
-
-  const xWWWFormUrlencodedList = (
-    (await db
-      .select(
-        (() => {
-          const { id, projectId, createdAt, ...rest } = getTableColumns(
-            bodyXWWWFormUrlencodedTable
-          );
-          return rest;
-        })()
-      )
-      .from(bodyXWWWFormUrlencodedTable)
-      .where(
-        inArray(
-          bodyXWWWFormUrlencodedTable.requestOrFolderMetaId,
-          requestIdList
+    const apiUrlList = (
+      (await tsx
+        .select(
+          (() => {
+            const { id, createdAt, ...rest } = getTableColumns(apiUrlTable);
+            return rest;
+          })()
         )
-      )) ?? []
-  )?.reduce((acc, curr) => {
-    if (!acc[curr.requestOrFolderMetaId]) acc[curr.requestOrFolderMetaId] = [];
-    acc[curr.requestOrFolderMetaId].push(curr);
+        .from(apiUrlTable)
+        .where(inArray(apiUrlTable.requestOrFolderMetaId, requestIdList))) ?? []
+    )?.reduce((acc, curr) => {
+      if (!acc[curr.requestOrFolderMetaId])
+        acc[curr.requestOrFolderMetaId] = [];
+      acc[curr.requestOrFolderMetaId].push(curr);
 
-    return acc;
-  }, {});
+      return acc;
+    }, {});
 
-  const binaryDataList = (
-    (await db
-      .select(
-        (() => {
-          const { id, projectId, ...rest } = getTableColumns(bodyBinaryTable);
-          return rest;
-        })()
-      )
-      .from(bodyBinaryTable)
-      .where(inArray(bodyBinaryTable.requestOrFolderMetaId, requestIdList))) ??
-    []
-  )?.reduce((acc, curr) => {
-    if (!acc[curr.requestOrFolderMetaId]) acc[curr.requestOrFolderMetaId] = [];
-    acc[curr.requestOrFolderMetaId].push(curr);
+    const paramsList = (
+      (await tsx
+        .select(
+          (() => {
+            const { id, createdAt, ...rest } = getTableColumns(paramsTable);
+            return rest;
+          })()
+        )
+        .from(paramsTable)
+        .where(inArray(paramsTable.requestOrFolderMetaId, requestIdList))) ?? []
+    )?.reduce((acc, curr) => {
+      if (!acc[curr.requestOrFolderMetaId])
+        acc[curr.requestOrFolderMetaId] = [];
+      acc[curr.requestOrFolderMetaId].push(curr);
 
-    return acc;
-  }, {});
+      return acc;
+    }, {});
 
-  const rawDataList = (
-    (await db
-      .select(
-        (() => {
-          const { id, projectId, lineWrap, ...rest } =
-            getTableColumns(bodyRawTable);
-          return rest;
-        })()
-      )
-      .from(bodyRawTable)
-      .where(inArray(bodyRawTable.requestOrFolderMetaId, requestIdList))) ?? []
-  )?.reduce((acc, curr) => {
-    if (!acc[curr.requestOrFolderMetaId]) acc[curr.requestOrFolderMetaId] = [];
-    acc[curr.requestOrFolderMetaId].push(curr);
+    const headersList = (
+      (await tsx
+        .select(
+          (() => {
+            const { id, createdAt, ...rest } = getTableColumns(headersTable);
+            return rest;
+          })()
+        )
+        .from(headersTable)
+        .where(inArray(headersTable.requestOrFolderMetaId, requestIdList))) ??
+      []
+    )?.reduce((acc, curr) => {
+      if (!acc[curr.requestOrFolderMetaId])
+        acc[curr.requestOrFolderMetaId] = [];
+      acc[curr.requestOrFolderMetaId].push(curr);
 
-    return acc;
-  }, {});
+      return acc;
+    }, {});
 
-  const requestMetaTabList = (
-    (await db
-      .select(
-        (() => {
-          const { id, projectId, ...rest } =
-            getTableColumns(requestMetaTabTable);
-          return rest;
-        })()
-      )
-      .from(requestMetaTabTable)
-      .where(
-        inArray(requestMetaTabTable.requestOrFolderMetaId, requestIdList)
-      )) ?? []
-  )?.reduce((acc, curr) => {
-    if (!acc[curr.requestOrFolderMetaId]) acc[curr.requestOrFolderMetaId] = [];
-    acc[curr.requestOrFolderMetaId].push(curr);
+    const hiddenHeadersCheckList = (
+      (await tsx
+        .select(
+          (() => {
+            const { id, ...rest } = getTableColumns(hiddenHeadersCheckTable);
+            return rest;
+          })()
+        )
+        .from(hiddenHeadersCheckTable)
+        .where(
+          inArray(hiddenHeadersCheckTable.requestOrFolderMetaId, requestIdList)
+        )) ?? []
+    )?.reduce((acc, curr) => {
+      if (!acc[curr.requestOrFolderMetaId])
+        acc[curr.requestOrFolderMetaId] = [];
+      acc[curr.requestOrFolderMetaId].push(curr);
 
-    return acc;
-  }, {});
+      return acc;
+    }, {});
 
-  const authorization = (
-    (await db
-      .select(
-        (() => {
-          const { id, projectId, ...rest } =
-            getTableColumns(authorizationTable);
-          return rest;
-        })()
-      )
-      .from(authorizationTable)
-      .where(
-        inArray(authorizationTable.requestOrFolderMetaId, requestIdList)
-      )) ?? []
-  )?.reduce((acc, curr) => {
-    if (!acc[curr.requestOrFolderMetaId]) acc[curr.requestOrFolderMetaId] = [];
-    acc[curr.requestOrFolderMetaId].push(curr);
+    const formDataList = (
+      (await tsx
+        .select(
+          (() => {
+            const { id, createdAt, ...rest } =
+              getTableColumns(bodyFormDataTable);
+            return rest;
+          })()
+        )
+        .from(bodyFormDataTable)
+        .where(
+          inArray(bodyFormDataTable.requestOrFolderMetaId, requestIdList)
+        )) ?? []
+    )?.reduce((acc, curr) => {
+      if (!acc[curr.requestOrFolderMetaId])
+        acc[curr.requestOrFolderMetaId] = [];
+      acc[curr.requestOrFolderMetaId].push(curr);
 
-    return acc;
-  }, {});
+      return acc;
+    }, {});
 
-  return {
-    requestList,
-    apiUrlList,
-    paramsList,
-    headersList,
-    hiddenHeadersCheckList,
-    formDataList,
-    xWWWFormUrlencodedList,
-    binaryDataList,
-    rawDataList,
-    requestMetaTabList,
-    authorization,
-  };
+    const xWWWFormUrlencodedList = (
+      (await tsx
+        .select(
+          (() => {
+            const { id, createdAt, ...rest } = getTableColumns(
+              bodyXWWWFormUrlencodedTable
+            );
+            return rest;
+          })()
+        )
+        .from(bodyXWWWFormUrlencodedTable)
+        .where(
+          inArray(
+            bodyXWWWFormUrlencodedTable.requestOrFolderMetaId,
+            requestIdList
+          )
+        )) ?? []
+    )?.reduce((acc, curr) => {
+      if (!acc[curr.requestOrFolderMetaId])
+        acc[curr.requestOrFolderMetaId] = [];
+      acc[curr.requestOrFolderMetaId].push(curr);
+
+      return acc;
+    }, {});
+
+    const binaryDataList = (
+      (await tsx
+        .select(
+          (() => {
+            const { id, ...rest } = getTableColumns(bodyBinaryTable);
+            return rest;
+          })()
+        )
+        .from(bodyBinaryTable)
+        .where(
+          inArray(bodyBinaryTable.requestOrFolderMetaId, requestIdList)
+        )) ?? []
+    )?.reduce((acc, curr) => {
+      if (!acc[curr.requestOrFolderMetaId])
+        acc[curr.requestOrFolderMetaId] = [];
+      acc[curr.requestOrFolderMetaId].push(curr);
+
+      return acc;
+    }, {});
+
+    const rawDataList = (
+      (await tsx
+        .select(
+          (() => {
+            const { id, lineWrap, ...rest } = getTableColumns(bodyRawTable);
+            return rest;
+          })()
+        )
+        .from(bodyRawTable)
+        .where(inArray(bodyRawTable.requestOrFolderMetaId, requestIdList))) ??
+      []
+    )?.reduce((acc, curr) => {
+      if (!acc[curr.requestOrFolderMetaId])
+        acc[curr.requestOrFolderMetaId] = [];
+      acc[curr.requestOrFolderMetaId].push(curr);
+
+      return acc;
+    }, {});
+
+    const requestMetaTabList = (
+      (await tsx
+        .select(
+          (() => {
+            const { id, ...rest } = getTableColumns(requestMetaTabTable);
+            return rest;
+          })()
+        )
+        .from(requestMetaTabTable)
+        .where(
+          inArray(requestMetaTabTable.requestOrFolderMetaId, requestIdList)
+        )) ?? []
+    )?.reduce((acc, curr) => {
+      if (!acc[curr.requestOrFolderMetaId])
+        acc[curr.requestOrFolderMetaId] = [];
+      acc[curr.requestOrFolderMetaId].push(curr);
+
+      return acc;
+    }, {});
+
+    const authorization = (
+      (await tsx
+        .select(
+          (() => {
+            const { id, projectId, ...rest } =
+              getTableColumns(authorizationTable);
+            return rest;
+          })()
+        )
+        .from(authorizationTable)
+        .where(
+          inArray(authorizationTable.requestOrFolderMetaId, requestIdList)
+        )) ?? []
+    )?.reduce((acc, curr) => {
+      if (!acc[curr.requestOrFolderMetaId])
+        acc[curr.requestOrFolderMetaId] = [];
+      acc[curr.requestOrFolderMetaId].push(curr);
+
+      return acc;
+    }, {});
+
+    return {
+      requestList,
+      apiUrlList,
+      paramsList,
+      headersList,
+      hiddenHeadersCheckList,
+      formDataList,
+      xWWWFormUrlencodedList,
+      binaryDataList,
+      rawDataList,
+      requestMetaTabList,
+      authorization,
+    };
+  });
 };
 
 export const importFolder = async ({

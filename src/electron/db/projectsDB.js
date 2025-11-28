@@ -140,12 +140,12 @@ export const getActiveProjectDetails = async () => {
 };
 
 export const exportProject = async (id) => {
-  try {
+  return await db.transaction(async (tsx) => {
     id = id ?? (await getActiveProject());
 
     const project =
       (
-        await db
+        await tsx
           .select({
             name: projectTable.name,
           })
@@ -154,7 +154,7 @@ export const exportProject = async (id) => {
           .limit(1)
       )?.[0] ?? null;
 
-    const environments = await db
+    const environments = await tsx
       .select(
         (() => {
           const { id, projectId, createdAt, ...rest } =
@@ -166,7 +166,7 @@ export const exportProject = async (id) => {
       .where(eq(environmentTable.projectId, id));
 
     const requestList = (
-      (await db
+      (await tsx
         .select(
           (() => {
             const { projectId, createdAt, ...rest } = getTableColumns(
@@ -185,7 +185,7 @@ export const exportProject = async (id) => {
     const requestIdList = [...new Set(Object.keys(requestList ?? {}))];
 
     const apiUrlList = (
-      (await db
+      (await tsx
         .select(
           (() => {
             const { id, projectId, createdAt, ...rest } =
@@ -204,7 +204,7 @@ export const exportProject = async (id) => {
     }, {});
 
     const paramsList = (
-      (await db
+      (await tsx
         .select(
           (() => {
             const { id, projectId, createdAt, ...rest } =
@@ -223,7 +223,7 @@ export const exportProject = async (id) => {
     }, {});
 
     const headersList = (
-      (await db
+      (await tsx
         .select(
           (() => {
             const { id, projectId, createdAt, ...rest } =
@@ -243,7 +243,7 @@ export const exportProject = async (id) => {
     }, {});
 
     const hiddenHeadersCheckList = (
-      (await db
+      (await tsx
         .select(
           (() => {
             const { id, projectId, ...rest } = getTableColumns(
@@ -265,7 +265,7 @@ export const exportProject = async (id) => {
     }, {});
 
     const formDataList = (
-      (await db
+      (await tsx
         .select(
           (() => {
             const { id, projectId, createdAt, ...rest } =
@@ -286,7 +286,7 @@ export const exportProject = async (id) => {
     }, {});
 
     const xWWWFormUrlencodedList = (
-      (await db
+      (await tsx
         .select(
           (() => {
             const { id, projectId, createdAt, ...rest } = getTableColumns(
@@ -311,7 +311,7 @@ export const exportProject = async (id) => {
     }, {});
 
     const binaryDataList = (
-      (await db
+      (await tsx
         .select(
           (() => {
             const { id, projectId, ...rest } = getTableColumns(bodyBinaryTable);
@@ -331,7 +331,7 @@ export const exportProject = async (id) => {
     }, {});
 
     const rawDataList = (
-      (await db
+      (await tsx
         .select(
           (() => {
             const { id, projectId, lineWrap, ...rest } =
@@ -351,7 +351,7 @@ export const exportProject = async (id) => {
     }, {});
 
     const requestMetaTabList = (
-      (await db
+      (await tsx
         .select(
           (() => {
             const { id, projectId, ...rest } =
@@ -372,7 +372,7 @@ export const exportProject = async (id) => {
     }, {});
 
     const authorization = (
-      (await db
+      (await tsx
         .select(
           (() => {
             const { id, projectId, ...rest } =
@@ -405,9 +405,7 @@ export const exportProject = async (id) => {
       requestMetaTabList,
       authorization,
     };
-  } catch (error) {
-    console.error(error);
-  }
+  });
 };
 
 export const importProject = async ({

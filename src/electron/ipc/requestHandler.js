@@ -1,6 +1,6 @@
 import { app, dialog, ipcMain } from "electron";
 import {
-  clearRequestDB,
+  clearRequest,
   exportFolder,
   exportRequest,
   importFolder,
@@ -14,10 +14,32 @@ import { getSelectedTab } from "../db/tabsDB.js";
 import { getActiveProject } from "../db/projectsDB.js";
 
 export const requestHandler = () => {
-  ipcMain.handle(
-    "clearRequestDB",
-    async (_, ...rest) => await clearRequestDB(...rest)
-  );
+  ipcMain.handle("clearRequest", async (_, ...rest) => {
+    try {
+      const projectId = await getActiveProject();
+      if (!rest[0] || !projectId) throw new Error("no request selected");
+
+      try {
+        const response = await clearRequest(...rest);
+        if (!response) throw new Error();
+      } catch (error) {
+        console.error(error);
+        throw new Error();
+      }
+
+      return {
+        success: true,
+        message: "Request cleared successfully!",
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        success: false,
+        message:
+          error.message ?? "Something went wrong while clearing the request.",
+      };
+    }
+  });
   ipcMain.handle("importRequest", async (_, requestId) => {
     try {
       requestId = requestId ?? (await getSelectedTab());
@@ -86,6 +108,7 @@ export const requestHandler = () => {
       const fileName = payload.name
         ? `${payload.name.replaceAll(" ", "_")}_request.json`
         : "request.json";
+      console.log({ fileName });
 
       const { canceled, filePath } = await dialog.showSaveDialog(mainWindow, {
         title: "Save request data",
@@ -120,7 +143,7 @@ export const requestHandler = () => {
     try {
       id = id ?? null;
       const projectId = await getActiveProject();
-      if (!id || !projectId) throw new Error("no request selected");
+      if (!projectId) throw new Error("no request selected");
 
       const { filePaths } = await dialog.showOpenDialog(mainWindow, {
         title: "Open request data",
