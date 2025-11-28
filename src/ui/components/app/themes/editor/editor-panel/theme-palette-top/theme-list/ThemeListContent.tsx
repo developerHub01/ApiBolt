@@ -13,9 +13,9 @@ import useActiveThemeId from "@/hooks/theme/use-active-theme-id";
 import { AnimatePresence, motion } from "motion/react";
 import { Loader as LoaderIcon } from "lucide-react";
 import { loadThemePalette } from "@/context/redux/theme/thunks/theme";
-import { toast } from "sonner";
 import ThemeListSkeleton from "@/components/app/themes/editor/editor-panel/theme-palette-top/theme-list/ThemeListSkeleton";
 import ThemeCard from "@/components/app/themes/editor/editor-panel/theme-palette-top/theme-list/ThemeCard";
+import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 interface Props {
   onClose: () => void;
@@ -23,6 +23,7 @@ interface Props {
 
 const ThemeListContent = ({ onClose }: Props) => {
   const dispatch = useAppDispatch();
+  const toast = useCustomToast();
   const activeTheme = useActiveThemeId();
   const [selectedId, setSelectedId] = useState<string | null>(
     activeTheme ?? null
@@ -49,7 +50,11 @@ const ThemeListContent = ({ onClose }: Props) => {
     setIsProcessing(false);
     if (!response) return;
 
-    toast.success("Selected theme palette replaced in theme edior palette.");
+    toast({
+      type: "success",
+      title: "Inherited",
+      description: "Selected theme palette replaced in theme edior palette.",
+    });
     onClose();
   };
 

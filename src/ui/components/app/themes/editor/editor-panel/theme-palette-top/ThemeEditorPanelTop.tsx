@@ -21,8 +21,8 @@ import {
   ListEnd as IneritFromThemeIcon,
   type LucideIcon,
 } from "lucide-react";
-import { toast } from "sonner";
 import ThemeList from "@/components/app/themes/editor/editor-panel/theme-palette-top/theme-list/ThemeList";
+import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 type TAction =
   | "copy"
@@ -68,6 +68,7 @@ const INHERIT_FROM_INSTALLED_THEME: ActionButtonInterface = {
 
 const ThemeEditorPanelTop = () => {
   const dispatch = useAppDispatch();
+  const toast = useCustomToast();
   const handleCopy = useCopyThemePalette();
 
   const handleClick = async (e: MouseEvent<HTMLButtonElement>) => {
@@ -79,17 +80,24 @@ const ThemeEditorPanelTop = () => {
       case "paste": {
         const { success, message } =
           await dispatch(pasteThemePalette()).unwrap();
-
-        if (success) toast.success(message);
-        else toast.error(message);
+        toast({
+          type: success ? "success" : "error",
+          title: success ? "Paste success" : "Paste error",
+          description: message,
+        });
         return;
       }
       case "download":
         return await dispatch(saveThemePalette());
       case "reset": {
         const response = await dispatch(loadThemePalette()).unwrap();
-        if (response) toast.success("Theme palette reset successfully.");
-        else toast.error("Something went wrong. Can't reset.");
+        toast({
+          type: response ? "success" : "error",
+          title: response ? "Paste success" : "Paste error",
+          description: response
+            ? "Theme palette reset successfully."
+            : "Something went wrong. Can't reset.",
+        });
         return;
       }
     }

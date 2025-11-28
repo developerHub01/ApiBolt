@@ -5,22 +5,30 @@ import {
   applyThemeInApp,
 } from "@/context/redux/theme/thunks/theme";
 import { useThemeEditor } from "@/context/theme/theme-editor/ThemeEditorProvider";
+import useCustomToast from "@/hooks/ui/use-custom-toast";
 import { Link } from "react-router-dom";
-import { toast } from "sonner";
 
 const ThemeEditorBottom = () => {
   const dispatch = useAppDispatch();
+  const toast = useCustomToast();
   const { haveError } = useThemeEditor();
 
   const handleApplyTest = async () => {
     const { success, message } = await dispatch(applyTestTheme()).unwrap();
-    if (success) toast.success(message);
-    else toast.error(message);
+    toast({
+      type: success ? "success" : "error",
+      title: success ? "Apply success" : "Appy error",
+      description: message,
+    });
   };
+  
   const handleApplyMain = async () => {
     const { success, message } = await dispatch(applyThemeInApp()).unwrap();
-    if (success) toast.success(message);
-    else toast.error(message);
+    toast({
+      type: success ? "success" : "error",
+      title: success ? "Main Apply success" : "Main Apply error",
+      description: message,
+    });
   };
 
   return (

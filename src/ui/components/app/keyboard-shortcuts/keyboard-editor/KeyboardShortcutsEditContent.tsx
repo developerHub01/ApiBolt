@@ -14,7 +14,7 @@ import { handleChangeEditingId } from "@/context/redux/keyboard-shortcuts/keyboa
 import { cn } from "@/lib/utils";
 import MatchWarning from "@/components/app/keyboard-shortcuts/keyboard-editor/MatchWarning";
 import useTrackKeyTyped from "@/hooks/keyboard-shortcut/use-track-key-typed";
-import { toast } from "sonner";
+import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 interface Props {
   shortcutId: string;
@@ -22,6 +22,7 @@ interface Props {
 
 const KeyboardShortcutsEditContent = memo(({ shortcutId }: Props) => {
   const dispatch = useAppDispatch();
+  const toast = useCustomToast();
   const { activeTab, applyingKeybindingMap } = useKeyboardShortcuts();
   const keyboardShortcutPanelRef = useRef<HTMLDivElement>(null);
   const [isExisting, setIsExisting] = useState<boolean>(false);
@@ -42,12 +43,14 @@ const KeyboardShortcutsEditContent = memo(({ shortcutId }: Props) => {
       })
     ).unwrap();
 
-    if (response) {
-      toast.success("Keyboard shortcut updated successfully");
-    } else {
-      toast.error("Failed to update keyboard shortcut. Please try again.");
-    }
-  }, [activeTab, dispatch, isExisting, keyList]);
+    toast({
+      type: response ? "success" : "error",
+      title: response ? "Update success" : "Update error",
+      description: response
+        ? "Keyboard shortcut updated successfully"
+        : "Failed to update keyboard shortcut. Please try again.",
+    });
+  }, [activeTab, dispatch, isExisting, keyList, toast]);
 
   const handleKeyDown = useTrackKeyTyped<HTMLDivElement>({
     onEnter: handleUpdate,

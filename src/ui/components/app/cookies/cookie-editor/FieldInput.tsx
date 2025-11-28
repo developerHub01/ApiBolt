@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import type { CookieInterface } from "@/types/cookies.types";
 import { normalizePath } from "@/utils/helper";
-import { toast } from "sonner";
+import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 const debounceDelay = 300;
 
@@ -25,6 +25,7 @@ interface Props {
 
 const FieldInput = memo(
   ({ placeholder, value, className = "", onChange, fieldKey }: Props) => {
+    const toast = useCustomToast();
     const [fieldValue, setFieldValue] = useState<string>(value);
 
     useEffect(() => {
@@ -66,7 +67,9 @@ const FieldInput = memo(
 
       /* Show toast if cleaned */
       if (cleaned !== value) {
-        toast.info("Value cleaned", {
+        toast({
+          type: "info",
+          title: "Clean Success",
           description: "Invalid characters were removed automatically.",
         });
       }
@@ -139,12 +142,16 @@ const FieldInput = memo(
         /* Cleaned paste */
         setFieldValue(cleaned);
         onChange(cleaned);
-        toast.info("Pasted content cleaned", {
+        toast({
+          type: "info",
+          title: "Clean Success",
           description: "Some invalid characters were removed automatically.",
         });
       } else {
         /* Entire paste invalid */
-        toast.error("Invalid paste", {
+        toast({
+          type: "error",
+          title: "Invalid paste",
           description: "Pasted content contains only invalid characters.",
         });
       }

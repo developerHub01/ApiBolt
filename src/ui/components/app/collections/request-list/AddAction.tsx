@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus as PlusIcon } from "lucide-react";
 import {
@@ -15,8 +15,8 @@ import {
   createRestApiBasic,
   createSingleRequest,
 } from "@/context/redux/request-response/thunks/request-list";
-import { toast } from "sonner";
 import { importRequest } from "@/context/redux/request-response/thunks/request";
+import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 type TAction =
   | "blank_collection"
@@ -55,23 +55,54 @@ const actionsList: Record<
 
 const AddAction = memo(() => {
   const dispatch = useAppDispatch();
+  const toast = useCustomToast();
 
-  const handleAction = async (id: TAction) => {
-    switch (id) {
-      case "single_request":
-        return dispatch(createSingleRequest());
-      case "blank_collection":
-        return dispatch(createCollection());
-      case "rest_api_basics":
-        return dispatch(createRestApiBasic());
-      case "import_folder": {
-        const { success, message } = await dispatch(importRequest()).unwrap();
-        if (success) toast.success(message);
-        else toast.error(message);
-        return;
+  const handleAction = useCallback(
+    async (id: TAction) => {
+      switch (id) {
+        case "single_request": {
+          const response = await dispatch(createSingleRequest()).unwrap();
+          return toast({
+            type: response ? "success" : "error",
+            title: response ? "Add success" : "Add error",
+            description: response
+              ? "Request added successfully"
+              : "Couldn't add request, something went wrong.",
+          });
+        }
+        case "blank_collection": {
+          const response = await dispatch(createCollection()).unwrap();
+          return toast({
+            type: response ? "success" : "error",
+            title: response ? "Add success" : "Add error",
+            description: response
+              ? "Request collection added successfully"
+              : "Couldn't add request, collection something went wrong.",
+          });
+        }
+        case "rest_api_basics": {
+          const response = await dispatch(createRestApiBasic()).unwrap();
+          return toast({
+            type: response ? "success" : "error",
+            title: response ? "Add success" : "Add error",
+            description: response
+              ? "Request folder added successfully"
+              : "Couldn't add request folder, something went wrong.",
+          });
+        }
+        case "import_folder": {
+          const { success, message } = await dispatch(importRequest()).unwrap();
+          toast({
+            type: success ? "success" : "error",
+            title: success ? "Import success" : "Import error",
+            description: message,
+          });
+          return;
+        }
       }
-    }
-  };
+    },
+    [dispatch, toast]
+  );
 
   return (
     <DropdownMenu>

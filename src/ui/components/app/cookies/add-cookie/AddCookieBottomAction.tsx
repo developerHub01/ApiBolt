@@ -9,21 +9,24 @@ import {
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import CookieEditorBottomAction from "@/components/app/cookies/cookie-editor/CookieEditorBottomAction";
 import { addCookie } from "@/context/redux/cookies/thunks/cookies";
-import { toast } from "sonner";
+import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 const AddCookieBottomAction = () => {
   const dispatch = useAppDispatch();
+  const toast = useCustomToast();
   const isEnabled = useAppSelector(selectAddCookieEnabled);
   const haveChanges = useAppSelector(selectAddCookieHaveChanges);
   const handleCancel = () => dispatch(handleChangeIsAddCookieOption(false));
   const handleReset = () => dispatch(handleResetAddCookieDetails());
   const handleAdd = async () => {
     const response = await dispatch(addCookie()).unwrap();
-    if (response) {
-      toast.success("Cookie added successfully");
-    } else {
-      toast.error("Failed to add cookie. Please try again.");
-    }
+    toast({
+      type: response ? "success" : "error",
+      title: response ? "Add success" : "Add error",
+      description: response
+        ? "Cookie added successfully"
+        : "Failed to add cookie. Please try again.",
+    });
   };
 
   return (

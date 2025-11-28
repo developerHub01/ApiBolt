@@ -8,12 +8,12 @@ import useMounted from "@/hooks/use-mounted";
 import { Button } from "@/components/ui/button";
 import { Copy as CopyIcon } from "lucide-react";
 import type { TContentType } from "@/types/request-response.types";
-import { toast } from "sonner";
 import useCodeKeybaordShortcut from "@/hooks/code/use-code-keybaord-shortcut";
 import useCheckApplyingCodeFontSize from "@/hooks/setting/use-check-applying-code-font-size";
 import useCheckApplyingCodeIndentationSize from "@/hooks/setting/use-check-applying-code-indentation-size";
 import { indentUnit } from "@codemirror/language";
 import { getLangExtension } from "@/utils/code";
+import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 export type TLanguageType =
   | TContentType
@@ -104,6 +104,7 @@ const Code = ({
   beforeComp = null,
   ...props
 }: CodeProps) => {
+  const toast = useCustomToast();
   const fontSize = useCheckApplyingCodeFontSize();
   const indentationSize = useCheckApplyingCodeIndentationSize();
   const [fontSizeState, setFontSizeState] = useState(fontSize);
@@ -132,15 +133,21 @@ const Code = ({
       const cleanCode =
         typeof code === "object" ? JSON.stringify(code) : String(code).trim();
       await navigator.clipboard.writeText(cleanCode);
-
-      toast.success("Code copied to clipboard");
+      toast({
+        type: "success",
+        title: "Copied success",
+        description: "Code copied to clipboard",
+      });
     } catch (error) {
-      toast.error(
-        "Failed to copy code. " +
-          (error instanceof Error ? error.message : "Please try again.")
-      );
+      toast({
+        type: "error",
+        title: "Copy error",
+        description:
+          "Failed to copy code. " +
+          (error instanceof Error ? error.message : "Please try again."),
+      });
     }
-  }, [code]);
+  }, [code, toast]);
 
   if (!isMounted) return null;
 

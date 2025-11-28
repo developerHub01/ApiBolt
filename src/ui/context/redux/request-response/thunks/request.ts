@@ -33,7 +33,7 @@ import {
 } from "@/context/redux/request-response/thunks/request-list";
 
 export const clearRequest = createAsyncThunk<
-  void,
+  ElectronResponseInterface,
   void | string,
   {
     dispatch: AppDispatch;
@@ -44,11 +44,14 @@ export const clearRequest = createAsyncThunk<
     const state = getState() as RootState;
     const requestId = id ?? state.requestResponse.selectedTab;
     if (!requestId || !state.requestResponse.requestList[requestId].method)
-      return;
+      return {
+        success: false,
+        message: "No request active",
+      };
 
-    const response = await window.electronAPIRequest.clearRequestDB(requestId);
+    const response = await window.electronAPIRequest.clearRequest(requestId);
+    if (!response) return response;
 
-    if (!response) return;
     dispatch(
       handleSetParams({
         id: requestId,
@@ -95,8 +98,14 @@ export const clearRequest = createAsyncThunk<
         requestOrFolderId: requestId,
       })
     );
+
+    return response;
   } catch (error) {
     console.error(error);
+    return {
+      success: false,
+      message: "Something went wrong while clearing the request.",
+    };
   }
 });
 

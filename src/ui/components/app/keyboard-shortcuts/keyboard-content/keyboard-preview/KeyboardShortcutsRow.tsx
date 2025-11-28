@@ -8,7 +8,7 @@ import KeyboardCell from "@/components/app/keyboard-shortcuts/keyboard-content/k
 import type { TShortcutKey } from "@/types/keyboard-shortcut.types";
 import { useKeyboardShortcuts } from "@/context/keyboard-shortcuts/KeyboardShortcutsProvider";
 import { resetKeyboardShortcuts } from "@/context/redux/keyboard-shortcuts/thunks/keyboard-shortcuts";
-import { toast } from "sonner";
+import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 interface KeyboardShortcutsRowProps {
   id: string;
@@ -19,6 +19,7 @@ interface KeyboardShortcutsRowProps {
 const KeyboardShortcutsRow = memo(
   ({ id, label, keyMap }: KeyboardShortcutsRowProps) => {
     const dispatch = useAppDispatch();
+    const toast = useCustomToast();
     const { activeTab } = useKeyboardShortcuts();
     const handleEdit = useCallback(
       () => dispatch(handleChangeEditingId(id)),
@@ -33,12 +34,14 @@ const KeyboardShortcutsRow = memo(
         })
       ).unwrap();
 
-      if (response) {
-        toast.success("Keyboard shortcut reset successfully");
-      } else {
-        toast.error("Failed to reset keyboard shortcut. Please try again.");
-      }
-    }, [activeTab, dispatch, id]);
+      toast({
+        type: response ? "success" : "error",
+        title: response ? "Reset success" : "Reset error",
+        description: response
+          ? "Keyboard shortcut reset successfully"
+          : "Failed to reset keyboard shortcut. Please try again.",
+      });
+    }, [activeTab, dispatch, id, toast]);
 
     return (
       <TableRow

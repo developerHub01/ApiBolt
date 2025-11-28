@@ -2,20 +2,26 @@ import { memo, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Copy as CopyIcon } from "lucide-react";
 import CopyButton from "@/components/ui/copy-button";
-import { toast } from "sonner";
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 import { Input } from "@/components/ui/input";
+import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 interface Props {
   path?: string | null;
 }
 
 const SettingBackgroundImagesFolderPath = memo(({ path = "" }: Props) => {
+  const toast = useCustomToast();
   const inuptRef = useRef<HTMLInputElement | null>(null);
 
   const handleOpenFileExplorer = async () => {
     const success = await window.electronFileSystem.openFolder(path!);
-    if (!success) toast.warning("Failed to open folder.");
+    if (!success)
+      toast({
+        type: "warning",
+        title: "Explorer open",
+        description: "Failed to open folder.",
+      });
   };
 
   const handleFocus = () => inuptRef.current?.select();

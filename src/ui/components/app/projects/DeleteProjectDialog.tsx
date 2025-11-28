@@ -8,7 +8,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
 import LoaderV1 from "@/components/loader-v1";
 import { useAppSelector } from "@/context/redux/hooks";
 import {
@@ -24,10 +23,12 @@ import CopyButton from "@/components/ui/copy-button";
 import { ClipboardCopy as ClipboardCopyIcon } from "lucide-react";
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 import { selectProjectById } from "@/context/redux/project/selectors/project";
+import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 const defaultName = "";
 
 const DeleteProjectDialog = memo(() => {
+  const toast = useCustomToast();
   const {
     deletionCandidate,
     handleChangeDeletionCandidate,
@@ -55,12 +56,14 @@ const DeleteProjectDialog = memo(() => {
     setName(defaultName);
 
     if (response) handleClose();
-    if (response) {
-      toast.success("Project deleted successfully");
-    } else {
-      toast.error("Failed to delete project. Please try again.");
-    }
-  }, [handleClose, handleDeleteProject, name, projectName]);
+    toast({
+      type: response ? "success" : "error",
+      title: response ? "Paste success" : "Paste error",
+      description: response
+        ? "Project deleted successfully"
+        : "Failed to delete project. Please try again.",
+    });
+  }, [handleClose, handleDeleteProject, name, projectName, toast]);
 
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);

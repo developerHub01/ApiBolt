@@ -8,7 +8,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
 import LoaderV1 from "@/components/loader-v1";
 import { useAppDispatch } from "@/context/redux/hooks";
 import {
@@ -24,9 +23,11 @@ import {
   MAX_PROJECT_NAME_LENGTH,
 } from "@/constant/project.constant";
 import { createProject } from "@/context/redux/project/thunks/projects";
+import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 const AddProjectDialog = memo(() => {
   const dispatch = useAppDispatch();
+  const toast = useCustomToast();
   const { isCreateDialogOpen, handleChangeIsCreateDialogOpen } = useProject();
   const [name, setName] = useState<string>(DEFAULT_PROJECT_NAME);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -38,12 +39,14 @@ const AddProjectDialog = memo(() => {
     setName(DEFAULT_PROJECT_NAME);
 
     if (response) handleChangeIsCreateDialogOpen();
-    if (response) {
-      toast.success("Project created successfully");
-    } else {
-      toast.error("Failed to create project. Please try again.");
-    }
-  }, [dispatch, handleChangeIsCreateDialogOpen, name]);
+    toast({
+      type: response ? "success" : "error",
+      title: response ? "Paste success" : "Paste error",
+      description: response
+        ? "Project created successfully"
+        : "Failed to create project. Please try again.",
+    });
+  }, [dispatch, handleChangeIsCreateDialogOpen, name, toast]);
 
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value;

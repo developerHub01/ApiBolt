@@ -9,8 +9,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip-custom";
-import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 interface CopyButtonProps {
   value: string;
@@ -45,10 +45,16 @@ const CopyButton = memo(
     size = "default",
     variant = "secondary",
   }: CopyButtonProps & React.ComponentProps<"button">) => {
+    const toast = useCustomToast();
+
     const handleClick = async () => {
       try {
         await window.navigator.clipboard.writeText(value);
-        toast.success("Copied to clipboard");
+        toast({
+          type: "success",
+          title: "Copied success",
+          description: "Copied to clipboard",
+        });
       } catch (error) {
         console.error(error);
       }

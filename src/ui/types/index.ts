@@ -483,7 +483,9 @@ declare global {
     };
 
     electronAPIRequest: {
-      clearRequestDB(requestOrFolderMetaId?: string): Promise<boolean>;
+      clearRequest(
+        requestOrFolderMetaId?: string
+      ): Promise<ElectronResponseInterface>;
       exportRequest(
         requestOrFolderMetaId?: string
       ): Promise<ElectronResponseInterface>;

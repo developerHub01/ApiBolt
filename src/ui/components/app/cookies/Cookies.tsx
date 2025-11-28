@@ -17,20 +17,25 @@ import {
   selectCookiesError,
   selectCookiesIsLoading,
 } from "@/context/redux/status/selectors/cookies";
-import { toast } from "sonner";
 import { handleChangeIsCookiesError } from "@/context/redux/status/status-slice";
+import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 const Cookies = memo(() => {
   const dispatch = useAppDispatch();
+  const toast = useCustomToast();
   const isCookiesOpen = useAppSelector(selectIsCookiesOpen);
   const isLoading = useAppSelector(selectCookiesIsLoading);
   const cookiesError = useAppSelector(selectCookiesError);
 
   useEffect(() => {
     if (!cookiesError) return;
-    toast.error(cookiesError);
+    toast({
+      type: "error",
+      title: "Cookie error",
+      description: cookiesError,
+    });
     dispatch(handleChangeIsCookiesError());
-  }, [cookiesError, dispatch]);
+  }, [cookiesError, dispatch, toast]);
 
   const handleClose = useCallback(
     () => dispatch(handleChangeIsCookiesOpen(false)),

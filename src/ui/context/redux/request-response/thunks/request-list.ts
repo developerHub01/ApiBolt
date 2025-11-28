@@ -109,7 +109,7 @@ export const loadSingleRequestMeta = createAsyncThunk<
 );
 
 export const createSingleRequest = createAsyncThunk<
-  void,
+  boolean,
   string | undefined,
   {
     dispatch: AppDispatch;
@@ -130,13 +130,15 @@ export const createSingleRequest = createAsyncThunk<
         payload
       );
     if (response) await dispatch(expendRequestOrFolder(parentId));
+    return response;
   } catch (error) {
     console.error(error);
+    return false;
   }
 });
 
 export const createCollection = createAsyncThunk<
-  void,
+  boolean,
   string | undefined,
   {
     dispatch: AppDispatch;
@@ -158,13 +160,15 @@ export const createCollection = createAsyncThunk<
         children: [],
       });
     if (response) await dispatch(expendRequestOrFolder(parentId));
+    return response;
   } catch (error) {
     console.error(error);
+    return false;
   }
 });
 
 export const createRestApiBasic = createAsyncThunk<
-  void,
+  boolean,
   string | undefined,
   {
     dispatch: AppDispatch;
@@ -207,14 +211,16 @@ export const createRestApiBasic = createAsyncThunk<
       );
 
     if (response) await dispatch(expendRequestOrFolder(parentId));
+    return response;
   } catch (error) {
     console.error(error);
+    return false;
   }
 });
 
 /* action by selected tab start =============== */
 export const createSingleRequestBySelectedTab = createAsyncThunk<
-  void,
+  boolean,
   void,
   {
     dispatch: AppDispatch;
@@ -248,14 +254,16 @@ export const createSingleRequestBySelectedTab = createAsyncThunk<
           payload
         );
       if (response) await dispatch(expendRequestOrFolder(parentId));
+      return response;
     } catch (error) {
       console.error(error);
+      return false;
     }
   }
 );
 
 export const createCollectionBySelectedTab = createAsyncThunk<
-  void,
+  boolean,
   void,
   {
     dispatch: AppDispatch;
@@ -292,14 +300,16 @@ export const createCollectionBySelectedTab = createAsyncThunk<
           }
         );
       if (response) await dispatch(expendRequestOrFolder(parentId));
+      return response;
     } catch (error) {
       console.error(error);
+      return false;
     }
   }
 );
 
 export const createRestApiBasicBySelectedTab = createAsyncThunk<
-  void,
+  boolean,
   void,
   {
     dispatch: AppDispatch;
@@ -355,8 +365,10 @@ export const createRestApiBasicBySelectedTab = createAsyncThunk<
         );
 
       if (response) await dispatch(expendRequestOrFolder(parentId));
+      return response;
     } catch (error) {
       console.error(error);
+      return false;
     }
   }
 );
@@ -413,7 +425,7 @@ export const expendRequestOrFolder = createAsyncThunk<
 );
 
 export const moveRequestOrFolder = createAsyncThunk<
-  void,
+  boolean,
   { requestId: string; parentId?: string },
   {
     dispatch: AppDispatch;
@@ -437,11 +449,11 @@ export const moveRequestOrFolder = createAsyncThunk<
         source: state.requestResponse.requestList,
         id: requestId,
       });
-      if (parentId && requestAllChildrenList.includes(parentId)) return;
+      if (parentId && requestAllChildrenList.includes(parentId)) return false;
 
       if (parentDetails && getRequestType(parentDetails) === "request")
         parentId = parentDetails.parentId;
-      if (parentId === requestDetails.parentId) return;
+      if (parentId === requestDetails.parentId) return false;
 
       const response =
         await window.electronAPIRequestOrFolderMetaDB.moveRequestOrFolderMeta({
@@ -450,8 +462,11 @@ export const moveRequestOrFolder = createAsyncThunk<
         });
       if (response) await dispatch(expendRequestOrFolder(parentId));
       dispatch(handleChangeIsRequestListLoaded(false));
+
+      return response;
     } catch (error) {
       console.error(error);
+      return false;
     }
   }
 );
@@ -475,7 +490,7 @@ export const deleteAllRequestOrFolder = createAsyncThunk<
 });
 
 export const deleteRequestOrFolder = createAsyncThunk<
-  void,
+  boolean,
   boolean | string,
   {
     state: RootState;
@@ -490,7 +505,7 @@ export const deleteRequestOrFolder = createAsyncThunk<
       /* if false then cancel the deletion */
       if (!payload) {
         dispatch(handleChangeDeleteFolderOrRequestId(""));
-        return;
+        return false;
       }
 
       /* if true then get the id else take passed id as payload */
@@ -509,19 +524,20 @@ export const deleteRequestOrFolder = createAsyncThunk<
         await window.electronAPIRequestOrFolderMetaDB.deleteRequestOrFolderMetaById(
           idsToDelete
         );
-
       if (response) {
         dispatch(handleChangeIsRequestListLoaded(false));
         dispatch(loadTabsData());
       }
+      return response;
     } catch (error) {
       console.error(error);
+      return false;
     }
   }
 );
 
 export const duplicateRequestOrFolder = createAsyncThunk<
-  void,
+  boolean,
   string,
   {
     state: RootState;
@@ -535,7 +551,7 @@ export const duplicateRequestOrFolder = createAsyncThunk<
       const projectId = state.project.activeProjectId;
       const requestList = state.requestResponse.requestList;
 
-      if (!projectId) return;
+      if (!projectId) return false;
 
       const { newParentId, nodes: duplicatedNodes } =
         duplicateRequestOrFolderNode({
@@ -573,7 +589,7 @@ export const duplicateRequestOrFolder = createAsyncThunk<
           duplicatedDataFiltered
         );
 
-      if (!response) return;
+      if (!response) return false;
 
       await Promise.all([
         /* duplicate urls */
@@ -605,14 +621,17 @@ export const duplicateRequestOrFolder = createAsyncThunk<
       ]);
 
       dispatch(handleChangeIsRequestListLoaded(false));
+
+      return response;
     } catch (error) {
       console.error(error);
+      return false;
     }
   }
 );
 
 export const collapseAllRequestOrFolder = createAsyncThunk<
-  void,
+  boolean,
   void,
   {
     state: RootState;
@@ -624,8 +643,10 @@ export const collapseAllRequestOrFolder = createAsyncThunk<
       await window.electronAPIRequestOrFolderMetaDB.collapseAllRequestOrFolderMeta();
 
     if (response) dispatch(handleChangeCollapseAllRequestOrFolder());
+    return response;
   } catch (error) {
     console.error(error);
+    return false;
   }
 });
 /* ==============================

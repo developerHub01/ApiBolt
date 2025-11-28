@@ -19,32 +19,40 @@ import {
   exportRequest,
   importRequest,
 } from "@/context/redux/request-response/thunks/request";
-import { toast } from "sonner";
 import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
-// import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
+import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 const RequestTopRight = () => {
   const dispatch = useAppDispatch();
   const selectedTab = useAppSelector(selectSelectedTab);
+  const toast = useCustomToast();
 
   const handleImport = useCallback(async () => {
     const { success, message } = await dispatch(importRequest()).unwrap();
-    if (success) toast.success(message);
-    else toast.error(message);
-  }, [dispatch]);
+    toast({
+      type: success ? "success" : "error",
+      title: success ? "Import Success" : "Import Error",
+      description: message,
+    });
+  }, [dispatch, toast]);
 
   const handleExport = useCallback(async () => {
     const { success, message } = await dispatch(exportRequest()).unwrap();
-    if (success) toast.success(message);
-    else toast.error(message);
-  }, [dispatch]);
+    toast({
+      type: success ? "success" : "error",
+      title: success ? "Export Success" : "Export Error",
+      description: message,
+    });
+  }, [dispatch, toast]);
 
   const handleClear = useCallback(async () => {
-    // const { success, message } =
-    await dispatch(clearRequest()).unwrap();
-    // if (success) toast.success(message);
-    // else toast.error(message);
-  }, [dispatch]);
+    const { success, message } = await dispatch(clearRequest()).unwrap();
+    toast({
+      type: success ? "success" : "error",
+      title: success ? "Cleared" : "Clear Error",
+      description: message,
+    });
+  }, [dispatch, toast]);
 
   const actionList = [
     {

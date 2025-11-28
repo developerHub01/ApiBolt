@@ -14,7 +14,6 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { selectEnvironmentsList } from "@/context/redux/environments/selectors/environments";
-import { toast } from "sonner";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,32 +21,45 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 const listItemToHide = new Set(["export", "delete"]);
 
 const ThreeeDotAction = () => {
   const dispatch = useAppDispatch();
+  const toast = useCustomToast();
   const haveListItem = useAppSelector((state) =>
     Boolean(Object.keys(selectEnvironmentsList(state) ?? {}).length)
   );
 
   const handleImport = useCallback(async () => {
-    const response = await dispatch(importEnvironments()).unwrap();
-    if (response?.success) toast.success(response.message);
-    else toast.error(response.message);
-  }, [dispatch]);
+    const { success, message } = await dispatch(importEnvironments()).unwrap();
+    toast({
+      type: success ? "success" : "error",
+      title: success ? "Import success" : "Import error",
+      description: message,
+    });
+  }, [dispatch, toast]);
 
   const handleExport = useCallback(async () => {
-    const response = await dispatch(exportEnvironments()).unwrap();
-    if (response?.success) toast.success(response.message);
-    else toast.error(response.message);
-  }, [dispatch]);
+    const { success, message } = await dispatch(exportEnvironments()).unwrap();
+    toast({
+      type: success ? "success" : "error",
+      title: success ? "Export success" : "Export error",
+      description: message,
+    });
+  }, [dispatch, toast]);
 
   const handleDeleteAll = useCallback(async () => {
     const response = await dispatch(deleteAllEnvironments()).unwrap();
-    if (response) toast.success("Environment variables deleted successfully!");
-    else toast.error("Something went wrong while exporting list.");
-  }, [dispatch]);
+    toast({
+      type: response ? "success" : "error",
+      title: response ? "Delete success" : "Delete error",
+      description: response
+        ? "Environment variables deleted successfully!"
+        : "Something went wrong while exporting list.",
+    });
+  }, [dispatch, toast]);
 
   const actionButtonList: Array<{
     id: string;

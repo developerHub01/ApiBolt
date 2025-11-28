@@ -19,8 +19,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { toast } from "sonner";
 import { AnimatePresence, motion } from "motion/react";
+import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 interface ProjectItemProps {
   id: string;
@@ -49,6 +49,7 @@ const menuList: Array<{
 
 const ProjectItem = ({ id, name, activeProjectId }: ProjectItemProps) => {
   const dispatch = useAppDispatch();
+  const toast = useCustomToast();
   const { handleChangeDeletionCandidate } = useProject();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const isActive = activeProjectId === id;
@@ -63,9 +64,12 @@ const ProjectItem = ({ id, name, activeProjectId }: ProjectItemProps) => {
 
   const handleExportProject = useCallback(async () => {
     const { success, message } = await dispatch(exportProject(id)).unwrap();
-    if (success) toast.success(message);
-    else toast.error(message);
-  }, [dispatch, id]);
+    toast({
+      type: success ? "success" : "error",
+      title: success ? "Export success" : "Export error",
+      description: message,
+    });
+  }, [dispatch, id, toast]);
 
   const handleAction = useCallback(
     (type: TActionType) => {

@@ -11,7 +11,6 @@ import { EllipsisVertical as ThreeDotIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 import { useAppDispatch } from "@/context/redux/hooks";
-import { handleChangeDeleteFolderOrRequestId } from "@/context/redux/request-response/request-response-slice";
 import { useRequestListItem } from "@/context/collections/request-list/RequestListItemProvider";
 import useCheckApplyingLayoutDirection from "@/hooks/setting/use-check-applying-layout-direction";
 import type { TLayoutSetting } from "@/types/setting.types";
@@ -19,6 +18,7 @@ import {
   createCollection,
   createRestApiBasic,
   createSingleRequest,
+  deleteRequestOrFolder,
   duplicateRequestOrFolder,
 } from "@/context/redux/request-response/thunks/request-list";
 import { checkPermissionToAddFolderAsChildren } from "@/utils/request-response.utils";
@@ -28,7 +28,7 @@ import {
   importFolder,
   importRequest,
 } from "@/context/redux/request-response/thunks/request";
-import { toast } from "sonner";
+import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 type TActionType =
   | "add_request"
@@ -126,6 +126,7 @@ const requestCTAList: TMenuListType = {
 
 const ItemCTA = memo(() => {
   const dispatch = useAppDispatch();
+  const toast = useCustomToast();
   const {
     id,
     lavel,
@@ -140,29 +141,69 @@ const ItemCTA = memo(() => {
     async (actionType: string) => {
       switch (actionType as TActionType) {
         case "delete": {
-          return dispatch(handleChangeDeleteFolderOrRequestId(id));
+          const response = await dispatch(deleteRequestOrFolder(id)).unwrap();
+          return toast({
+            type: response ? "success" : "error",
+            title: response ? "Delete success" : "Delete error",
+            description: response
+              ? "Request deleted successfully"
+              : "Couldn't delete request, something went wrong.",
+          });
         }
         case "add_folder": {
-          return dispatch(createCollection(id));
+          const response = await dispatch(createCollection(id)).unwrap();
+          return toast({
+            type: response ? "success" : "error",
+            title: response ? "Add success" : "Add error",
+            description: response
+              ? "Request folder added successfully"
+              : "Couldn't add request, folder something went wrong.",
+          });
         }
         case "add_rest_api_basics": {
-          return dispatch(createRestApiBasic(id));
+          const response = await dispatch(createRestApiBasic(id)).unwrap();
+          return toast({
+            type: response ? "success" : "error",
+            title: response ? "Add success" : "Add error",
+            description: response
+              ? "Request folder added successfully"
+              : "Couldn't add request folder, something went wrong.",
+          });
         }
         case "add_request": {
-          return dispatch(createSingleRequest(id));
+          const response = await dispatch(createSingleRequest(id)).unwrap();
+          return toast({
+            type: response ? "success" : "error",
+            title: response ? "Add success" : "Add error",
+            description: response
+              ? "Request added successfully"
+              : "Couldn't add request, something went wrong.",
+          });
         }
         case "rename": {
           return handleRenameAction();
         }
         case "duplicate": {
-          return dispatch(duplicateRequestOrFolder(id));
+          const response = await dispatch(
+            duplicateRequestOrFolder(id)
+          ).unwrap();
+          return toast({
+            type: response ? "success" : "error",
+            title: response ? "Duplicate success" : "Duplicate error",
+            description: response
+              ? "Duplicated successfully"
+              : "Couldn't duplicate, something went wrong.",
+          });
         }
         case "export": {
           const { success, message } = await dispatch(
             type === "request" ? exportRequest(id) : exportFolder(id)
           ).unwrap();
-          if (success) toast.success(message);
-          else toast.error(message);
+          toast({
+            type: success ? "success" : "error",
+            title: success ? "Export success" : "Export error",
+            description: message,
+          });
           return;
         }
         case "import": {
@@ -171,12 +212,15 @@ const ItemCTA = memo(() => {
               ? dispatch(importRequest(id))
               : dispatch(importFolder(id))
           ).unwrap();
-          if (success) toast.success(message);
-          else toast.error(message);
+          toast({
+            type: success ? "success" : "error",
+            title: success ? "Import success" : "Import error",
+            description: message,
+          });
         }
       }
     },
-    [dispatch, handleRenameAction, id, type]
+    [dispatch, handleRenameAction, id, toast, type]
   );
 
   const handlePreventPropagation = useCallback((e: MouseEvent<HTMLElement>) => {

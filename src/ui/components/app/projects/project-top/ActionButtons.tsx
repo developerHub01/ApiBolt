@@ -10,10 +10,11 @@ import {
 } from "@/components/ui/tooltip-custom";
 import { importProject } from "@/context/redux/project/thunks/projects";
 import { useAppDispatch } from "@/context/redux/hooks";
-import { toast } from "sonner";
+import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 const ActionButtons = () => {
   const dispatch = useAppDispatch();
+  const toast = useCustomToast();
   const { handleChangeIsCreateDialogOpen } = useProject();
 
   const handleCreate = useCallback(() => {
@@ -22,9 +23,13 @@ const ActionButtons = () => {
 
   const handleImport = useCallback(async () => {
     const { success, message } = await dispatch(importProject()).unwrap();
-    if (success) toast.success(message);
-    else toast.error(message);
-  }, [dispatch]);
+
+    toast({
+      type: success ? "success" : "error",
+      title: success ? "Import success" : "Import error",
+      description: message,
+    });
+  }, [dispatch, toast]);
 
   const menuList = useMemo(
     () => [

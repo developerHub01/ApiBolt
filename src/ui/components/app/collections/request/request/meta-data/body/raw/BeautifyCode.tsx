@@ -1,6 +1,5 @@
 import { memo, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
 import {
   Tooltip,
   TooltipContent,
@@ -17,8 +16,10 @@ import {
 } from "@/context/redux/request-response/selectors/body-raw";
 import { selectApplyingKeyboardShortcutsById } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
 import { keyListStringify } from "@/utils/keyboard-shortcut.utils";
+import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 const BeautifyCode = memo(() => {
+  const toast = useCustomToast();
   const { handleChangeRawData } = useRequestBody();
   const requestBodyType = useAppSelector(selectRequestBodyType);
   const rawRequestBodyType = useAppSelector(selectRawRequestBodyType);
@@ -40,10 +41,18 @@ const BeautifyCode = memo(() => {
   const handleClick = useCallback(async () => {
     const { success, data, message } = await formatCode(code, parser);
 
-    if (!success || !data) return message && toast(message);
+    if (!success || !data)
+      return (
+        message &&
+        toast({
+          type: "success",
+          title: "Formatted",
+          description: message,
+        })
+      );
 
     handleChangeRawData(data);
-  }, [code, parser, handleChangeRawData]);
+  }, [code, parser, toast, handleChangeRawData]);
 
   if (requestBodyType !== "raw" || rawRequestBodyType === "text") return null;
 

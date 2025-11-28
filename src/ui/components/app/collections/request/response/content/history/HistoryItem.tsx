@@ -10,7 +10,7 @@ import {
   changeOpenedHistory,
   deleteRequestHistoryById,
 } from "@/context/redux/history/thunks/history";
-import { toast } from "sonner";
+import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 interface Props extends HistoryItemMetaInterface {
   index: number;
@@ -18,6 +18,7 @@ interface Props extends HistoryItemMetaInterface {
 
 const HistoryItem = memo(({ id, method, createdAt, responseStatus }: Props) => {
   const dispatch = useAppDispatch();
+  const toast = useCustomToast();
   const [isHovered, setIsHovered] = useState<boolean>(false);
 
   const statusCode = Number(responseStatus?.split(" ")?.[0]);
@@ -26,7 +27,11 @@ const HistoryItem = memo(({ id, method, createdAt, responseStatus }: Props) => {
   const handleDelete = async () => {
     const response = await dispatch(deleteRequestHistoryById(id)).unwrap();
     if (response) {
-      toast.success("History item deleted successfully");
+      toast({
+        type: "success",
+        title: "Deleted",
+        description: "History item deleted successfully",
+      });
     }
   };
 

@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -15,8 +15,8 @@ import {
 } from "@/context/redux/history/thunks/history";
 import { useAppDispatch } from "@/context/redux/hooks";
 import type { THistoryFilter } from "@/types/history.types";
-import { toast } from "sonner";
 import { useHistoryMetaList } from "@/context/history/HistoryMetaListProvider";
+import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 const methodList: Array<{
   id: THistoryFilter;
@@ -49,21 +49,29 @@ const methodList: Array<{
 ];
 
 const HistoryTop = memo(() => {
+  const toast = useCustomToast();
   const dispatch = useAppDispatch();
   const { method, metaCount } = useHistoryMetaList();
-  const handleClear = async () => {
+  const handleClear = useCallback(async () => {
     const response = await dispatch(deleteRequestHistoryByRequestId()).unwrap();
     if (response) {
-      toast.success("History cleared successfully");
+      toast({
+        type: "success",
+        title: "Cleared",
+        description: "History cleared successfully",
+      });
     }
-  };
+  }, [dispatch, toast]);
 
-  const handleChangeFilter = (value: string) =>
-    dispatch(
-      changeHistoryFilterMethod({
-        method: value as THistoryFilter,
-      })
-    );
+  const handleChangeFilter = useCallback(
+    (value: string) =>
+      dispatch(
+        changeHistoryFilterMethod({
+          method: value as THistoryFilter,
+        })
+      ),
+    [dispatch]
+  );
 
   return (
     <div className="flex items-center gap-2 justify-between">

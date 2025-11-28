@@ -12,18 +12,23 @@ import { Button } from "@/components/ui/button";
 import { useHistoryDetails } from "@/context/history/HistoryDetailsProvider";
 import { replaceCurrentByHistory } from "@/context/redux/history/thunks/history";
 import { useAppDispatch } from "@/context/redux/hooks";
-import { toast } from "sonner";
+import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 const ReplaceCurrentAlert = () => {
   const dispatch = useAppDispatch();
+  const toast = useCustomToast();
   const { isReplaceAlertOpen, handleToggleReplaceAlert } = useHistoryDetails();
 
   const handleReplace = async () => {
     const response = await dispatch(replaceCurrentByHistory()).unwrap();
-    if (response) {
-      handleToggleReplaceAlert(false);
-      toast.success("Request replaced with selected history");
-    } else toast.error("Current request data has been updated.");
+    if (response) handleToggleReplaceAlert(false);
+    toast({
+      type: response ? "success" : "error",
+      title: response ? "Paste success" : "Paste error",
+      description: response
+        ? "Request replaced with selected history"
+        : "Current request data has been updated.",
+    });
   };
 
   return (
