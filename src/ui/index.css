@@ -156,6 +156,23 @@
   * {
     @apply border-border outline-ring/50;
   }
+
+  /* Scrollbar width */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /* Thumb */
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--border);
+    border-radius: var(--radius);
+  }
+
   p::selection,
   h1::selection,
   h2::selection,
