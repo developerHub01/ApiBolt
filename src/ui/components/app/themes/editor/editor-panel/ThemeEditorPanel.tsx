@@ -5,16 +5,18 @@ import { selectThemeEditingPaletteLoading } from "@/context/redux/status/selecto
 import SkeletonLoader from "@/components/app/themes/editor/editor-panel/SkeletonLoader";
 import ThemePalette from "@/components/app/themes/editor/editor-panel/ThemePalette";
 import { AnimatePresence } from "motion/react";
+import useShowSkeleton from "@/hooks/ui/use-show-skeleton";
 
 const ThemeEditorPanel = () => {
   const isLoading = useAppSelector(selectThemeEditingPaletteLoading);
+  const showSkeleton = useShowSkeleton(isLoading);
 
   return (
     <section className="flex-1 min-h-0 bg-secondary p-4 rounded-lg shadow-2xl flex flex-col gap-3">
       <ThemeEditorPanelTop />
       <ThemeEditorWrapper>
         <AnimatePresence>
-          {isLoading ? <SkeletonLoader /> : <ThemePalette />}
+          {showSkeleton ? <SkeletonLoader /> : <ThemePalette />}
         </AnimatePresence>
       </ThemeEditorWrapper>
     </section>

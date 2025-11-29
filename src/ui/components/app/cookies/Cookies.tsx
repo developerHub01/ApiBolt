@@ -19,12 +19,14 @@ import {
 } from "@/context/redux/status/selectors/cookies";
 import { handleChangeIsCookiesError } from "@/context/redux/status/status-slice";
 import useCustomToast from "@/hooks/ui/use-custom-toast";
+import useShowSkeleton from "@/hooks/ui/use-show-skeleton";
 
 const Cookies = memo(() => {
   const dispatch = useAppDispatch();
   const toast = useCustomToast();
   const isCookiesOpen = useAppSelector(selectIsCookiesOpen);
   const isLoading = useAppSelector(selectCookiesIsLoading);
+  const showSkeleton = useShowSkeleton(isLoading);
   const cookiesError = useAppSelector(selectCookiesError);
 
   useEffect(() => {
@@ -50,7 +52,7 @@ const Cookies = memo(() => {
         </AnimatedDialogTop>
         <AnimatedDialogContent>
           <AnimatedDialogContentScroll>
-            {isLoading ? <CookiesSkeleton /> : <CookiesContent />}
+            {showSkeleton ? <CookiesSkeleton /> : <CookiesContent />}
           </AnimatedDialogContentScroll>
         </AnimatedDialogContent>
         <AnimatedDialogBottom>

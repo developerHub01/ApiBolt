@@ -4,10 +4,12 @@ import RequestList from "@/components/app/collections/request-list/content/reque
 import { loadRequestList } from "@/context/redux/request-response/thunks/request-list";
 import { selectRequestListIsLoading } from "@/context/redux/status/selectors/request-list";
 import RequestListSkeleton from "@/components/app/collections/request-list/content/skeleton/RequestListSkeleton";
+import useShowSkeleton from "@/hooks/ui/use-show-skeleton";
 
 const RequestListWrapper = memo(() => {
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(selectRequestListIsLoading);
+  const showSkeleton = useShowSkeleton(isLoading);
   const isRequestListLoaded = useAppSelector(
     (state) => state.requestResponse.isRequestListLoaded
   );
@@ -18,7 +20,7 @@ const RequestListWrapper = memo(() => {
     dispatch(loadRequestList());
   }, [dispatch, isRequestListLoaded]);
 
-  return isLoading ? <RequestListSkeleton /> : <RequestList />;
+  return showSkeleton ? <RequestListSkeleton /> : <RequestList />;
 });
 
 export default RequestListWrapper;

@@ -5,14 +5,16 @@ import { motion, AnimatePresence } from "motion/react";
 import { useCollection } from "@/context/collections/CollectionProvider";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectAuthInheritedId } from "@/context/redux/request-response/selectors/auth";
+import useShowSkeleton from "@/hooks/ui/use-show-skeleton";
 
 const InheritParent = memo(() => {
   const { isLoading } = useCollection();
   const inheritAuthId = useAppSelector(selectAuthInheritedId);
+  const showSkeleton = useShowSkeleton(isLoading || !inheritAuthId);
 
   return (
     <AnimatePresence>
-      {isLoading || !inheritAuthId ? (
+      {showSkeleton ? (
         <motion.div
           key="inherit-parent-skeleton"
           layout="position"
@@ -58,7 +60,7 @@ const InheritParent = memo(() => {
             duration: 0.3,
           }}
         >
-          <InheritParentContent id={inheritAuthId} />
+          <InheritParentContent id={inheritAuthId!} />
         </motion.div>
       )}
     </AnimatePresence>

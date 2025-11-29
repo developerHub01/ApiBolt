@@ -13,11 +13,13 @@ import KeyboardShortcutsProvider from "@/context/keyboard-shortcuts/KeyboardShor
 import { selectIsKeyboardShortcutPanelOpen } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
 import KeyboardShortcutsEdit from "@/components/app/keyboard-shortcuts/keyboard-editor/KeyboardShortcutsEdit";
 import { selectKeyboardShortcutsIsLoading } from "@/context/redux/status/selectors/keyboard-shortcuts";
+import useShowSkeleton from "@/hooks/ui/use-show-skeleton";
 
 const KeyboardShortcuts = memo(() => {
   const dispatch = useAppDispatch();
   const isOpen = useAppSelector(selectIsKeyboardShortcutPanelOpen);
   const isLoading = useAppSelector(selectKeyboardShortcutsIsLoading);
+  const showSkeleton = useShowSkeleton(isLoading);
 
   const handleClose = useCallback(
     () => dispatch(handleChangeIsKeyboardShortcutPanelOpen(false)),
@@ -35,7 +37,7 @@ const KeyboardShortcuts = memo(() => {
               List of all keyboard shortcuts in the app
             </p>
           </AnimatedDialogBottom>
-          <AnimatedDialogLoader isLoading={isLoading} />
+          <AnimatedDialogLoader isLoading={showSkeleton} />
           <KeyboardShortcutsEdit />
         </AnimatedDialogContentWrapper>
       </AnimatedDialog>

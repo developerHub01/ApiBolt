@@ -7,13 +7,15 @@ import HistoryTop from "@/components/app/collections/request/response/content/hi
 import Empty from "@/components/ui/empty";
 import { useHistoryMetaList } from "@/context/history/HistoryMetaListProvider";
 import { selectHistoryMetaListIsLoading } from "@/context/redux/status/selectors/history";
+import useShowSkeleton from "@/hooks/ui/use-show-skeleton";
 
 const HistoryContent = () => {
   const isLoading = useAppSelector(selectHistoryMetaListIsLoading);
   const metaCount = useAppSelector(selectHistoryMetaCount);
   const { metaList } = useHistoryMetaList();
+  const showSkeleton = useShowSkeleton(isLoading);
 
-  if (isLoading) return <HistorySkeleton />;
+  if (showSkeleton) return <HistorySkeleton />;
 
   return (
     <section className="flex-1 flex flex-col gap-2">

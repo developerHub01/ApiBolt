@@ -8,13 +8,15 @@ import ResponseMetaInfo from "@/components/app/history-details/content/ResponseM
 import MetaDataContent from "@/components/app/history-details/content/meta/MetaDataContent";
 import { AnimatedDialogContent } from "@/components/ui/animated-dialog";
 import MetaDataTop from "@/components/app/history-details/content/meta/meta-top/MetaDataTop";
+import useShowSkeleton from "@/hooks/ui/use-show-skeleton";
 
 const HistoryContent = memo(() => {
   const isLoading = useAppSelector(selectHistoryDetailsLoading);
+  const showSkeleton = useShowSkeleton(isLoading);
 
   return (
     <AnimatePresence>
-      {isLoading ? (
+      {showSkeleton ? (
         <HistorySkeleton />
       ) : (
         <section className="min-h-0 flex-1 py-4 flex flex-col gap-3">
