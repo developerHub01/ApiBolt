@@ -14,12 +14,6 @@ import {
 } from "@/context/redux/history/thunks/history";
 import { loadThemePalette } from "@/context/redux/theme/thunks/theme";
 import { loadRequestList } from "@/context/redux/request-response/thunks/request-list";
-import { loadParams } from "@/context/redux/request-response/thunks/params";
-import { loadHeaders } from "@/context/redux/request-response/thunks/headers";
-import { loadRequestBodyBinary } from "@/context/redux/request-response/thunks/body-binary";
-import { loadBodyFormData } from "@/context/redux/request-response/thunks/body-form-data";
-import { loadRequestBodyRaw } from "@/context/redux/request-response/thunks/body-raw";
-import { loadBodyXWWWFormUrlencoded } from "@/context/redux/request-response/thunks/body-x-www-form-urlencoded";
 
 interface StatusInterface {
   isProjectLoading: boolean;
@@ -29,9 +23,6 @@ interface StatusInterface {
   isCookiesError: null | string;
   isKeyboardShortcutLoading: boolean;
   isKeyboardShortcutError: null | string;
-  isParamsLoading: boolean;
-  isHeadersLoading: boolean;
-  isMetaBodyLoading: boolean;
   isFetchApiLoading: Record<string, boolean>;
   isHistoryMetaLoading: boolean;
   isHistoryDetailsLoading: boolean;
@@ -48,9 +39,6 @@ const initialState: StatusInterface = {
   isCookiesError: null,
   isKeyboardShortcutLoading: false,
   isKeyboardShortcutError: null,
-  isParamsLoading: true,
-  isHeadersLoading: true,
-  isMetaBodyLoading: true,
   isFetchApiLoading: {},
   isHistoryMetaLoading: false,
   isHistoryDetailsLoading: false,
@@ -187,81 +175,6 @@ export const statusSlice = createSlice({
       .addCase(resetKeyboardShortcuts.rejected, (state, action) => {
         state.isKeyboardShortcutLoading = false;
         state.isKeyboardShortcutError = action.error?.message ?? null;
-      })
-
-      /**
-       * =======================
-       * load params
-       * =======================
-       */
-      .addCase(loadParams.pending, (state) => {
-        state.isParamsLoading = true;
-      })
-      .addCase(loadParams.fulfilled, (state) => {
-        state.isParamsLoading = false;
-      })
-      .addCase(loadParams.rejected, (state) => {
-        state.isParamsLoading = false;
-      })
-
-      /**
-       * =======================
-       * load headers
-       * =======================
-       */
-      .addCase(loadHeaders.pending, (state) => {
-        state.isHeadersLoading = true;
-      })
-      .addCase(loadHeaders.fulfilled, (state) => {
-        state.isHeadersLoading = false;
-      })
-      .addCase(loadHeaders.rejected, (state) => {
-        state.isHeadersLoading = false;
-      })
-
-      /**
-       * =======================
-       * load meta body
-       * =======================
-       */
-      .addCase(loadRequestBodyBinary.pending, (state) => {
-        state.isMetaBodyLoading = true;
-      })
-      .addCase(loadRequestBodyBinary.fulfilled, (state) => {
-        state.isMetaBodyLoading = false;
-      })
-      .addCase(loadRequestBodyBinary.rejected, (state) => {
-        state.isMetaBodyLoading = false;
-      })
-
-      .addCase(loadBodyFormData.pending, (state) => {
-        state.isMetaBodyLoading = true;
-      })
-      .addCase(loadBodyFormData.fulfilled, (state) => {
-        state.isMetaBodyLoading = false;
-      })
-      .addCase(loadBodyFormData.rejected, (state) => {
-        state.isMetaBodyLoading = false;
-      })
-
-      .addCase(loadRequestBodyRaw.pending, (state) => {
-        state.isMetaBodyLoading = true;
-      })
-      .addCase(loadRequestBodyRaw.fulfilled, (state) => {
-        state.isMetaBodyLoading = false;
-      })
-      .addCase(loadRequestBodyRaw.rejected, (state) => {
-        state.isMetaBodyLoading = false;
-      })
-
-      .addCase(loadBodyXWWWFormUrlencoded.pending, (state) => {
-        state.isMetaBodyLoading = true;
-      })
-      .addCase(loadBodyXWWWFormUrlencoded.fulfilled, (state) => {
-        state.isMetaBodyLoading = false;
-      })
-      .addCase(loadBodyXWWWFormUrlencoded.rejected, (state) => {
-        state.isMetaBodyLoading = false;
       })
 
       /**
