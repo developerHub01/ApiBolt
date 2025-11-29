@@ -11,7 +11,7 @@ import FolderLayout from "@/pages/app/collections/folder/[id]/layout";
 import FolderPage from "@/pages/app/collections/folder/[id]/page";
 import RequestLayout from "@/pages/app/collections/request/[id]/layout";
 import RequestPage from "@/pages/app/collections/request/[id]/page";
-// const EnvironmentLayout = lazy(() => import("@/pages/app/environment/layout"));
+const EnvironmentLayout = lazy(() => import("@/pages/app/environment/layout"));
 const EnvironmentPage = lazy(() => import("@/pages/app/environment/page"));
 const ProjectsLayout = lazy(() => import("@/pages/app/projects/layout"));
 const ProjectsPage = lazy(() => import("@/pages/app/projects/page"));
@@ -81,12 +81,9 @@ const routes = [
           {
             path: "environments",
             element: (
-              <>
-                <EnvironmentFallback />
-                {/* <Suspense fallback={<EnvironmentFallback />}>
-                  <EnvironmentLayout />
-                </Suspense> */}
-              </>
+              <Suspense fallback={<EnvironmentFallback />}>
+                <EnvironmentLayout />
+              </Suspense>
             ),
             children: [
               {

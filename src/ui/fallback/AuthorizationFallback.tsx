@@ -1,4 +1,3 @@
-import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -9,10 +8,8 @@ const AuthorizationFallback = () => {
         <div className="flex flex-col gap-1.5">
           <Skeleton className="w-72 h-12 mb-3.5" />
           <div className="flex justify-between">
-            <Skeleton className="w-19 h-6" />
-            <ButtonLikeDiv variant={"transparent"}>
-              <Skeleton className="w-full h-full" />
-            </ButtonLikeDiv>
+            <Skeleton className="w-19 h-7" />
+            <Skeleton className="w-28 h-7" />
           </div>
         </div>
         <Separator className="w-full" />
