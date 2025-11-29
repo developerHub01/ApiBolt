@@ -13,9 +13,11 @@ import {
   replaceCurrentByHistory,
 } from "@/context/redux/history/thunks/history";
 import { loadThemePalette } from "@/context/redux/theme/thunks/theme";
+import { loadRequestList } from "@/context/redux/request-response/thunks/request-list";
 
 interface StatusInterface {
   isProjectLoading: boolean;
+  isRequestListLoading: boolean;
   isSidebarActiiveTabLoading: boolean;
   isCookiesLoading: boolean;
   isCookiesError: null | string;
@@ -31,6 +33,7 @@ interface StatusInterface {
 // Define the initial state using that type
 const initialState: StatusInterface = {
   isProjectLoading: true,
+  isRequestListLoading: true,
   isSidebarActiiveTabLoading: true,
   isCookiesLoading: false,
   isCookiesError: null,
@@ -82,6 +85,21 @@ export const statusSlice = createSlice({
       })
       .addCase(loadProjectList.rejected, (state) => {
         state.isProjectLoading = false;
+      })
+
+      /**
+       * =======================
+       * Request-list
+       * =======================
+       */
+      .addCase(loadRequestList.pending, (state) => {
+        state.isRequestListLoading = true;
+      })
+      .addCase(loadRequestList.fulfilled, (state) => {
+        state.isRequestListLoading = false;
+      })
+      .addCase(loadRequestList.rejected, (state) => {
+        state.isRequestListLoading = false;
       })
 
       /**

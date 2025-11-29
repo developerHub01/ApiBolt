@@ -108,7 +108,6 @@ export const requestHandler = () => {
       const fileName = payload.name
         ? `${payload.name.replaceAll(" ", "_")}_request.json`
         : "request.json";
-      console.log({ fileName });
 
       const { canceled, filePath } = await dialog.showSaveDialog(mainWindow, {
         title: "Save request data",
