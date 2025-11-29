@@ -1,9 +1,7 @@
-import { useCallback, useEffect } from "react";
+import { lazy, Suspense, useCallback, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { handleChangeIsSettingOpen } from "@/context/redux/setting/setting-slice";
-import SettingTop from "@/components/app/setting/content/SettingTop";
-import SettingContent from "@/components/app/setting/content/SettingContent";
-import SettingBottom from "@/components/app/setting/content/SettingBottom";
+const SettingRoot = lazy(() => import("@/components/app/setting/SettingRoot"));
 import { AnimatedDialogContentWrapper } from "@/components/ui/animated-dialog";
 import { AnimatedDialog } from "@/components/ui/animated-dialog";
 import { loadSettings } from "@/context/redux/setting/thunks/setting";
@@ -11,6 +9,7 @@ import SettingProvider from "@/context/setting/SettingProvider";
 import { selectIsSettingOpen } from "@/context/redux/setting/selectors/setting";
 import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 import SettingThemeProvider from "@/context/setting/theme/SettingThemeProvider";
+import SettingFallback from "@/fallback/SettingFallback";
 
 const Setting = () => {
   const dispatch = useAppDispatch();
@@ -25,9 +24,9 @@ const Setting = () => {
     <SettingProviderStack>
       <AnimatedDialog isOpen={isSettingOpen} onClose={handleClose}>
         <AnimatedDialogContentWrapper className="max-w-3xl">
-          <SettingTop />
-          <SettingContent />
-          <SettingBottom />
+          <Suspense fallback={<SettingFallback />}>
+            <SettingRoot />
+          </Suspense>
         </AnimatedDialogContentWrapper>
       </AnimatedDialog>
       <SettingLoader />

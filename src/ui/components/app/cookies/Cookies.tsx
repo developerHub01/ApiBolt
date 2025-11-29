@@ -1,32 +1,19 @@
-import { memo, useCallback, useEffect } from "react";
+import { memo, lazy, Suspense, useCallback, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import {
-  AnimatedDialogBottom,
-  AnimatedDialogContent,
-  AnimatedDialogContentScroll,
-  AnimatedDialogContentWrapper,
-  AnimatedDialogTop,
-} from "@/components/ui/animated-dialog";
+import { AnimatedDialogContentWrapper } from "@/components/ui/animated-dialog";
 import { AnimatedDialog } from "@/components/ui/animated-dialog";
 import { selectIsCookiesOpen } from "@/context/redux/cookies/selectors/cookies";
 import { handleChangeIsCookiesOpen } from "@/context/redux/cookies/cookies-slice";
-import LoadCookies from "@/components/app/cookies/LoadCookies";
-import CookiesContent from "@/components/app/cookies/CookiesContent";
-import CookiesSkeleton from "@/components/app/cookies/CookiesSkeleton";
-import {
-  selectCookiesError,
-  selectCookiesIsLoading,
-} from "@/context/redux/status/selectors/cookies";
+import { selectCookiesError } from "@/context/redux/status/selectors/cookies";
 import { handleChangeIsCookiesError } from "@/context/redux/status/status-slice";
 import useCustomToast from "@/hooks/ui/use-custom-toast";
-import useShowSkeleton from "@/hooks/ui/use-show-skeleton";
+import CookiesFallback from "@/fallback/CookiesFallback";
+const CookiesRoot = lazy(() => import("@/components/app/cookies/CookiesRoot"));
 
 const Cookies = memo(() => {
   const dispatch = useAppDispatch();
   const toast = useCustomToast();
   const isCookiesOpen = useAppSelector(selectIsCookiesOpen);
-  const isLoading = useAppSelector(selectCookiesIsLoading);
-  const showSkeleton = useShowSkeleton(isLoading);
   const cookiesError = useAppSelector(selectCookiesError);
 
   useEffect(() => {
@@ -47,20 +34,9 @@ const Cookies = memo(() => {
   return (
     <AnimatedDialog isOpen={isCookiesOpen} onClose={handleClose}>
       <AnimatedDialogContentWrapper className="max-w-3xl">
-        <AnimatedDialogTop>
-          <div className="p-2 text-lg font-medium">Cookies</div>
-        </AnimatedDialogTop>
-        <AnimatedDialogContent>
-          <AnimatedDialogContentScroll>
-            {showSkeleton ? <CookiesSkeleton /> : <CookiesContent />}
-          </AnimatedDialogContentScroll>
-        </AnimatedDialogContent>
-        <AnimatedDialogBottom>
-          <p className="line-clamp-1 text-center max-w-lg text-sm">
-            Cookies saved in the current project
-          </p>
-        </AnimatedDialogBottom>
-        <LoadCookies />
+        <Suspense fallback={<CookiesFallback />}>
+          <CookiesRoot />
+        </Suspense>
       </AnimatedDialogContentWrapper>
     </AnimatedDialog>
   );
