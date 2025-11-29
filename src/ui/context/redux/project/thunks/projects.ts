@@ -1,6 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
-import { handleChangeIsRequestListLoaded } from "@/context/redux/request-response/request-response-slice";
+import {
+  handleChangeIsRequestListLoaded,
+  handleClearRequestResponse,
+} from "@/context/redux/request-response/request-response-slice";
 import { loadTabsData } from "@/context/redux/request-response/thunks/tab-list";
 import type { ProjectInterface } from "@/types/project.types";
 import { DEFAULT_AUTHORIZATION_ID } from "@/constant/authorization.constant";
@@ -66,6 +69,7 @@ export const changeActiveProject = createAsyncThunk<
     if (!response) return response;
 
     dispatch(handleChangeIsRequestListLoaded(false));
+    dispatch(handleClearRequestResponse());
     await Promise.all([
       dispatch(applyThemeInApp()),
       dispatch(loadEnvironmentsList()),

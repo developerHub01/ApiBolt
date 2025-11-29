@@ -1185,39 +1185,6 @@ export const requestResponseSlice = createSlice({
         action.payload ?? !state.responseCodeWrap[selectedTab];
     },
 
-    handleClearRequestResponse: () =>
-      // state,
-      // action: PayloadAction<
-      //   | {
-      //       id?: string;
-      //     }
-      //   | undefined
-      // >
-      {
-        // const id = action?.payload?.id ?? state.selectedTab;
-        // if (!id) return;
-        // delete state.isLoading[id];
-        // delete state.isResposneError[id];
-        // state.apiUrl[id] = "";
-        // state.params[id] = [];
-        // state.headers[id] = [];
-        // state.headers[id] = [];
-        // // delete state.basicAuth[id];
-        // // delete state.bearerTokenAuth[id];
-        // // delete state.jwtBearerAuth[id];
-        // // delete state.apiKeyAuth[id];
-        // state.requestBodyType[id] = "none";
-        // state.rawRequestBodyType[id] = "json";
-        // state.formData[id] = [];
-        // delete state.binaryData[id];
-        // state.xWWWFormUrlencodedData[id] = [];
-        // delete state.response[id];
-        // delete state.requestSize[id];
-        // delete state.responseSize[id];
-        // state.hiddenParams[id] = [];
-        // state.hiddenHeaders[id] = [];
-      },
-
     /* ================ Request Folder start =================== */
     handleLoadFolder: (
       state,
@@ -1309,6 +1276,63 @@ export const requestResponseSlice = createSlice({
         !state.folderDescriptionLineWrap[id];
     },
     /* ================ Request Folder end =================== */
+
+    handleClearRequestResponse: (state) => {
+      state.codeSnippitType = null;
+
+      state.requestList = {};
+      state.loadedRequestList = {};
+      state.isRequestListLoaded = false;
+      state.deleteFolderOrRequestId = "";
+      state.requestListCollapsed = false;
+
+      state.tabList = [];
+
+      state.selectedTab = null;
+      state.isResponseCollapsed = {};
+      state.activeMetaTab = {};
+
+      state.metaShowColumn = {};
+      state.paramsBulkEditOpen = {};
+      state.headersBulkEditOpen = {};
+      state.formDataBulkEditOpen = {};
+      state.xWWWFormEncodedBulkEditOpen = {};
+
+      state.rawData = {};
+      state.rawDataLineWrap = {};
+      state.response = {};
+      state.isResposneError = {};
+      state.requestBodyType = {};
+      state.rawRequestBodyType = {};
+      state.params = {};
+      state.showHiddenParams = {};
+      state.headers = {};
+      state.hiddenCookie = initialHiddenCookie();
+      state.hiddenHeaders = {};
+      state.authorizationHeader = {};
+      state.authorizationParam = {};
+      state.showHiddenHeaders = {};
+      state.binaryData = {};
+      state.formData = {};
+      state.xWWWFormUrlencodedData = {};
+      state.isDownloadRequestWithBase64 = {};
+
+      state.authType = {};
+      state.authInheritedId = {};
+      state.apiKeyAuth = {};
+      state.basicAuth = {};
+      state.bearerTokenAuth = {};
+      state.jwtBearerAuth = {};
+
+      state.activeResponseMetaTab = {};
+      state.activeResponseDataTab = {};
+      state.responseCodeWrap = {};
+      
+      state.folderTitle = {};
+      state.folderDescription = {};
+      state.folderDescriptionActiveTab = {};
+      state.folderDescriptionLineWrap = {};
+    },
   },
 });
 
@@ -1399,7 +1423,6 @@ export const {
   handleChangeRawRequestBodyType,
   handleChangeAuthType,
   handleIsDownloadRequestWithBase64,
-  handleClearRequestResponse,
 
   handleActiveResponseMetaTab,
   handleActiveResponseDataTab,
@@ -1409,6 +1432,7 @@ export const {
   handleUpdateFolder,
   handleChangeFolderDescriptionActiveTab,
   handleToggleFolderDescriptionLineWrap,
+  handleClearRequestResponse,
 } = requestResponseSlice.actions;
 
 export default requestResponseSlice.reducer;
