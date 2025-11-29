@@ -5,9 +5,14 @@ import AddNewMetaData from "@/components/app/collections/request/request/meta-da
 import LabelPrefixHidden from "@/components/app/collections/request/request/meta-data/meta-table/LabelPrefixHidden";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectShowHiddenParams } from "@/context/redux/request-response/selectors/params";
+import ParamsSkeleton from "@/components/app/collections/request/request/meta-data/params/skeleton/ParamsSkeleton";
+import { selectParamsIsLoading } from "@/context/redux/status/selectors/params";
 
 const Params = memo(() => {
   const showHiddenParams = useAppSelector(selectShowHiddenParams);
+  const isLoading = useAppSelector(selectParamsIsLoading);
+
+  if (isLoading) return <ParamsSkeleton />;
 
   return (
     <MetaDataWrapper

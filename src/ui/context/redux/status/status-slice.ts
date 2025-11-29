@@ -14,6 +14,7 @@ import {
 } from "@/context/redux/history/thunks/history";
 import { loadThemePalette } from "@/context/redux/theme/thunks/theme";
 import { loadRequestList } from "@/context/redux/request-response/thunks/request-list";
+import { loadParams } from "@/context/redux/request-response/thunks/params";
 
 interface StatusInterface {
   isProjectLoading: boolean;
@@ -23,6 +24,7 @@ interface StatusInterface {
   isCookiesError: null | string;
   isKeyboardShortcutLoading: boolean;
   isKeyboardShortcutError: null | string;
+  isParamsLoading: boolean;
   isFetchApiLoading: Record<string, boolean>;
   isHistoryMetaLoading: boolean;
   isHistoryDetailsLoading: boolean;
@@ -39,6 +41,7 @@ const initialState: StatusInterface = {
   isCookiesError: null,
   isKeyboardShortcutLoading: false,
   isKeyboardShortcutError: null,
+  isParamsLoading: true,
   isFetchApiLoading: {},
   isHistoryMetaLoading: false,
   isHistoryDetailsLoading: false,
@@ -175,6 +178,21 @@ export const statusSlice = createSlice({
       .addCase(resetKeyboardShortcuts.rejected, (state, action) => {
         state.isKeyboardShortcutLoading = false;
         state.isKeyboardShortcutError = action.error?.message ?? null;
+      })
+
+      /**
+       * =======================
+       * load params
+       * =======================
+       */
+      .addCase(loadParams.pending, (state) => {
+        state.isParamsLoading = true;
+      })
+      .addCase(loadParams.fulfilled, (state) => {
+        state.isParamsLoading = false;
+      })
+      .addCase(loadParams.rejected, (state) => {
+        state.isParamsLoading = false;
       })
 
       /**
