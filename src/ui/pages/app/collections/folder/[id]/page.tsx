@@ -1,20 +1,15 @@
 import FolderDescription from "@/components/app/collections/folder/description/FolderDescription";
 import FolderTitle from "@/components/app/collections/folder/FolderTitle";
-import { useAppSelector } from "@/context/redux/hooks";
-import { selectIsFolderLoading } from "@/context/redux/request-response/selectors/folder";
+import FolderSkeletonWrapper from "@/components/app/collections/folder/skeleton/FolderSkeletonWrapper";
 
 const FolderPage = () => {
-  const isLoading = useAppSelector(selectIsFolderLoading);
-
-  if (isLoading) return <p>loading....</p>;
-
   return (
-    <section className="w-full h-full p-3">
+    <FolderSkeletonWrapper>
       <div className="flex flex-col gap-4 w-full h-full max-w-5xl mx-auto">
         <FolderTitle />
         <FolderDescription />
       </div>
-    </section>
+    </FolderSkeletonWrapper>
   );
 };
 

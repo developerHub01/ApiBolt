@@ -37,7 +37,6 @@ import type {
 } from "@/types/request-response.types";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
-import { loadFolder } from "@/context/redux/request-response/thunks/folder";
 import type {
   APIKeyInterface,
   AuthorizationPayloadInterface,
@@ -125,10 +124,6 @@ interface RequestResponseState {
   folderDescription: Record<string, string>;
   folderDescriptionActiveTab: Record<string, TRequestFolderDescriptionTab>;
   folderDescriptionLineWrap: Record<string, boolean>;
-
-  /* loaders start ================ */
-  isLoadingFolder: Record<string, boolean>;
-  /* loaders end ================ */
 }
 
 // Define the initial state using that type
@@ -187,10 +182,6 @@ const initialState: RequestResponseState = {
   folderDescription: {},
   folderDescriptionActiveTab: {},
   folderDescriptionLineWrap: {},
-
-  /* loaders start ================ */
-  isLoadingFolder: {},
-  /* loaders end ================ */
 };
 
 export const requestResponseSlice = createSlice({
@@ -1318,17 +1309,6 @@ export const requestResponseSlice = createSlice({
         !state.folderDescriptionLineWrap[id];
     },
     /* ================ Request Folder end =================== */
-  },
-  extraReducers(builder) {
-    /* loadFolder */
-    builder.addCase(loadFolder.pending, (state) => {
-      if (!state.selectedTab) return;
-      state.isLoadingFolder[state.selectedTab] = true;
-    });
-    builder.addCase(loadFolder.fulfilled, (state) => {
-      if (!state.selectedTab) return;
-      state.isLoadingFolder[state.selectedTab] = false;
-    });
   },
 });
 

@@ -14,6 +14,7 @@ import {
 } from "@/context/redux/history/thunks/history";
 import { loadThemePalette } from "@/context/redux/theme/thunks/theme";
 import { loadRequestList } from "@/context/redux/request-response/thunks/request-list";
+import { loadFolder } from "@/context/redux/request-response/thunks/folder";
 
 interface StatusInterface {
   isProjectLoading: boolean;
@@ -28,6 +29,7 @@ interface StatusInterface {
   isHistoryDetailsLoading: boolean;
   isHistoryReplacingLoading: boolean;
   isThemeEditingPaletteLoading: boolean;
+  isFolderLoading: boolean;
 }
 
 // Define the initial state using that type
@@ -44,6 +46,7 @@ const initialState: StatusInterface = {
   isHistoryDetailsLoading: false,
   isHistoryReplacingLoading: false,
   isThemeEditingPaletteLoading: false,
+  isFolderLoading: true,
 };
 
 export const statusSlice = createSlice({
@@ -236,6 +239,21 @@ export const statusSlice = createSlice({
       .addCase(loadThemePalette.rejected, (state) => {
         state.isThemeEditingPaletteLoading = false;
       });
+
+    /**
+     * =======================
+     * load folder
+     * =======================
+     */
+    builder.addCase(loadFolder.pending, (state) => {
+      state.isFolderLoading = true;
+    });
+    builder.addCase(loadFolder.fulfilled, (state) => {
+      state.isFolderLoading = false;
+    });
+    builder.addCase(loadFolder.rejected, (state) => {
+      state.isFolderLoading = false;
+    });
   },
 });
 
