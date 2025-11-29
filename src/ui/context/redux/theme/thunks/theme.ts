@@ -142,7 +142,7 @@ export const applyThemeInApp = createAsyncThunk<
 });
 
 export const saveThemePalette = createAsyncThunk<
-  void,
+  boolean,
   void,
   {
     dispatch: AppDispatch;
@@ -152,11 +152,12 @@ export const saveThemePalette = createAsyncThunk<
   try {
     const state = getState() as RootState;
     const palette = state.theme.palette;
-    if (!palette) return;
+    if (!palette) return false;
 
-    await window.electronAPITheme.saveThemePalette(palette);
+    return await window.electronAPITheme.saveThemePalette(palette);
   } catch (error) {
     console.error(error);
+    return false;
   }
 });
 

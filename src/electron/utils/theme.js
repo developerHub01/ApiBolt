@@ -18,10 +18,13 @@ export const saveThemePaletteLocal = async (palette) => {
 
     if (!canceled && filePath) {
       writeFile(filePath, palette);
+      return true;
     } else {
       console.warn("Save dialog cancelled.");
+      return false;
     }
   } catch (error) {
     console.error(error);
+    return false;
   }
 };

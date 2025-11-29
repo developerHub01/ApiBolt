@@ -87,13 +87,22 @@ const ThemeEditorPanelTop = () => {
         });
         return;
       }
-      case "download":
-        return await dispatch(saveThemePalette());
+      case "download": {
+        const response = await dispatch(saveThemePalette()).unwrap();
+        toast({
+          type: response ? "success" : "error",
+          title: response ? "Download success" : "Download error",
+          description: response
+            ? "Theme palette downloaded successfully."
+            : "Something went wrong. Can't download.",
+        });
+        return;
+      }
       case "reset": {
         const response = await dispatch(loadThemePalette()).unwrap();
         toast({
           type: response ? "success" : "error",
-          title: response ? "Paste success" : "Paste error",
+          title: response ? "Reset success" : "Reset error",
           description: response
             ? "Theme palette reset successfully."
             : "Something went wrong. Can't reset.",
