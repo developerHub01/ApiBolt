@@ -2,11 +2,18 @@ import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const ParamsSkeleton = () => {
+const HeadersSkeleton = () => {
   return (
     <>
       <div className="w-full flex gap-3">
         <Skeleton className="w-22 grow-0" />
+        <ButtonLikeDiv
+          variant={"transparent"}
+          size={"xs"}
+          className="grow-0 shrink-0 w-21 px-0 rounded-full"
+        >
+          <Skeleton className="w-full h-full" />
+        </ButtonLikeDiv>
         <ButtonLikeDiv
           variant={"transparent"}
           size={"xs"}
@@ -40,4 +47,4 @@ const ParamsSkeleton = () => {
   );
 };
 
-export default ParamsSkeleton;
+export default HeadersSkeleton;

@@ -15,6 +15,7 @@ import {
 import { loadThemePalette } from "@/context/redux/theme/thunks/theme";
 import { loadRequestList } from "@/context/redux/request-response/thunks/request-list";
 import { loadParams } from "@/context/redux/request-response/thunks/params";
+import { loadHeaders } from "@/context/redux/request-response/thunks/headers";
 
 interface StatusInterface {
   isProjectLoading: boolean;
@@ -25,6 +26,7 @@ interface StatusInterface {
   isKeyboardShortcutLoading: boolean;
   isKeyboardShortcutError: null | string;
   isParamsLoading: boolean;
+  isHeadersLoading: boolean;
   isFetchApiLoading: Record<string, boolean>;
   isHistoryMetaLoading: boolean;
   isHistoryDetailsLoading: boolean;
@@ -42,6 +44,7 @@ const initialState: StatusInterface = {
   isKeyboardShortcutLoading: false,
   isKeyboardShortcutError: null,
   isParamsLoading: true,
+  isHeadersLoading: true,
   isFetchApiLoading: {},
   isHistoryMetaLoading: false,
   isHistoryDetailsLoading: false,
@@ -193,6 +196,21 @@ export const statusSlice = createSlice({
       })
       .addCase(loadParams.rejected, (state) => {
         state.isParamsLoading = false;
+      })
+
+      /**
+       * =======================
+       * load headers
+       * =======================
+       */
+      .addCase(loadHeaders.pending, (state) => {
+        state.isHeadersLoading = true;
+      })
+      .addCase(loadHeaders.fulfilled, (state) => {
+        state.isHeadersLoading = false;
+      })
+      .addCase(loadHeaders.rejected, (state) => {
+        state.isHeadersLoading = false;
       })
 
       /**
