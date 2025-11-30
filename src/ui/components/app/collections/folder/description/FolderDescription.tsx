@@ -16,8 +16,8 @@ const FolderAuthorization = lazy(
     import("@/components/app/collections/folder/description/FolderAuthorization")
 );
 import { selectRequestFolderDescriptionActiveTab } from "@/context/redux/request-response/selectors/folder";
-import FolderAuthorizationFallback from "@/fallback/folder/FolderAuthorizationFallback";
-import FolderEditorFallback from "@/fallback/folder/FolderEditorFallback";
+import FolderAuthorizationFallback from "@/fallback/collection/folder/FolderAuthorizationFallback";
+import FolderEditorFallback from "@/fallback/collection/folder/FolderEditorFallback";
 
 const FolderDescription = memo(() => {
   const activeTab = useAppSelector(selectRequestFolderDescriptionActiveTab);

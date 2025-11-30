@@ -13,7 +13,7 @@ const DescriptionPreview = lazy(
     import("@/components/app/collections/folder/description/DescriptionPreview")
 );
 import DescriptionWrapper from "@/components/app/collections/folder/description/DescriptionWrapper";
-import FolderEditorFallback from "@/fallback/folder/FolderEditorFallback";
+import FolderEditorFallback from "@/fallback/collection/folder/FolderEditorFallback";
 
 const SplitLayout = () => {
   return (

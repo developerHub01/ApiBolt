@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import RequestFallback from "@/fallback/collection/request/RequestFallback";
+import RequestFallback from "@/fallback/collection/request/request/RequestFallback";
 const RequestRoot = lazy(
   () => import("@/components/app/collections/request/RequestRoot")
 );
