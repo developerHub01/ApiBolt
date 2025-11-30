@@ -1,23 +1,17 @@
-import CookiesSkeleton from "@/components/app/cookies/CookiesSkeleton";
+import HistorySkeleton from "@/components/app/history-details/HistorySkeleton";
 import {
   AnimatedDialogBottom,
-  AnimatedDialogContent,
-  AnimatedDialogContentScroll,
   AnimatedDialogTop,
 } from "@/components/ui/animated-dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const CookiesFallback = () => {
+const HistoryDetailsFallback = () => {
   return (
     <>
       <AnimatedDialogTop className="w-full flex gap-2 justify-start">
         <Skeleton className="w-28 h-9" />
       </AnimatedDialogTop>
-      <AnimatedDialogContent>
-        <AnimatedDialogContentScroll>
-          <CookiesSkeleton />
-        </AnimatedDialogContentScroll>
-      </AnimatedDialogContent>
+      <HistorySkeleton />
       <AnimatedDialogBottom className="w-full">
         <Skeleton className="w-full max-w-64 h-5 mx-auto" />
       </AnimatedDialogBottom>
@@ -25,4 +19,4 @@ const CookiesFallback = () => {
   );
 };
 
-export default CookiesFallback;
+export default HistoryDetailsFallback;
