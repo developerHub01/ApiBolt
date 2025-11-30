@@ -1,11 +1,19 @@
+import { lazy, Suspense } from "react";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import DescriptionEditor from "@/components/app/collections/folder/description/DescriptionEditor";
-import DescriptionPreview from "@/components/app/collections/folder/description/DescriptionPreview";
+const DescriptionEditor = lazy(
+  () =>
+    import("@/components/app/collections/folder/description/DescriptionEditor")
+);
+const DescriptionPreview = lazy(
+  () =>
+    import("@/components/app/collections/folder/description/DescriptionPreview")
+);
 import DescriptionWrapper from "@/components/app/collections/folder/description/DescriptionWrapper";
+import FolderEditorFallback from "@/fallback/folder/FolderEditorFallback";
 
 const SplitLayout = () => {
   return (
@@ -14,11 +22,15 @@ const SplitLayout = () => {
       className="rounded-lg border w-full"
     >
       <ResizablePanelWrapper>
-        <DescriptionEditor />
+        <Suspense fallback={<FolderEditorFallback />}>
+          <DescriptionEditor />
+        </Suspense>
       </ResizablePanelWrapper>
       <ResizableHandle />
       <ResizablePanelWrapper>
-        <DescriptionPreview />
+        <Suspense fallback={<FolderEditorFallback />}>
+          <DescriptionPreview />
+        </Suspense>
       </ResizablePanelWrapper>
     </ResizablePanelGroup>
   );

@@ -1,12 +1,23 @@
-import { memo } from "react";
+import { memo, lazy, Suspense } from "react";
 import { useAppSelector } from "@/context/redux/hooks";
-import DescriptionEditor from "@/components/app/collections/folder/description/DescriptionEditor";
-import DescriptionPreview from "@/components/app/collections/folder/description/DescriptionPreview";
+const DescriptionEditor = lazy(
+  () =>
+    import("@/components/app/collections/folder/description/DescriptionEditor")
+);
+const DescriptionPreview = lazy(
+  () =>
+    import("@/components/app/collections/folder/description/DescriptionPreview")
+);
 import DescriptionWrapper from "@/components/app/collections/folder/description/DescriptionWrapper";
 import SplitLayout from "@/components/app/collections/folder/description/SplitLayout";
 import DescriptionTabs from "@/components/app/collections/folder/description/DescriptionTabs";
-import FolderAuthorization from "@/components/app/collections/folder/description/FolderAuthorization";
+const FolderAuthorization = lazy(
+  () =>
+    import("@/components/app/collections/folder/description/FolderAuthorization")
+);
 import { selectRequestFolderDescriptionActiveTab } from "@/context/redux/request-response/selectors/folder";
+import FolderAuthorizationFallback from "@/fallback/folder/FolderAuthorizationFallback";
+import FolderEditorFallback from "@/fallback/folder/FolderEditorFallback";
 
 const FolderDescription = memo(() => {
   const activeTab = useAppSelector(selectRequestFolderDescriptionActiveTab);
@@ -16,15 +27,21 @@ const FolderDescription = memo(() => {
       <DescriptionTabs />
       {activeTab === "markdown" ? (
         <DescriptionWrapper>
-          <DescriptionEditor />
+          <Suspense fallback={<FolderEditorFallback />}>
+            <DescriptionEditor />
+          </Suspense>
         </DescriptionWrapper>
       ) : activeTab === "preview" ? (
         <DescriptionWrapper>
-          <DescriptionPreview />
+          <Suspense fallback={<FolderEditorFallback />}>
+            <DescriptionPreview />
+          </Suspense>
         </DescriptionWrapper>
       ) : activeTab === "authorization" ? (
         <DescriptionWrapper>
-          <FolderAuthorization />
+          <Suspense fallback={<FolderAuthorizationFallback />}>
+            <FolderAuthorization />
+          </Suspense>
         </DescriptionWrapper>
       ) : (
         <SplitLayout />
