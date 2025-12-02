@@ -1,0 +1,10 @@
+singleQuote: false
+jsxSingleQuote: false # force double quotes in JSX too
+semi: true
+printWidth: 80
+trailingComma: none
+
+# LET YOU BREAK JSX INTO MULTIPLE LINES
+arrowParens: avoid
+bracketSameLine: false
+htmlWhitespaceSensitivity: css
