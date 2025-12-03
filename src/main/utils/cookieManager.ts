@@ -3,7 +3,7 @@ import { jar } from "@/main/index.js";
 import {
   getCookiesByProject,
   replaceCookiesByProject
-} from "../db/cookiesDB.js";
+} from "@/main/db/cookiesDB.js";
 
 export const clearJar = async jar => {
   jar = new CookieJar();

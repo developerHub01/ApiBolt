@@ -7,8 +7,8 @@ import {
   duplicateBodyXWWWFormUrlencoded,
   getBodyXWWWFormUrlencoded,
   replaceBodyXWWWFormUrlencoded,
-  updateBodyXWWWFormUrlencoded,
-} from "../db/bodyXWWWFormUrlencodedDB.js";
+  updateBodyXWWWFormUrlencoded
+} from "@/main/db/bodyXWWWFormUrlencodedDB.js";
 
 export const bodyXWWWFormUrlencodedHandlers = () => {
   ipcMain.handle(

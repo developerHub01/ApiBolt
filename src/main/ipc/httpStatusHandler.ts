@@ -2,8 +2,8 @@ import { ipcMain } from "electron";
 import {
   getHttpStatus,
   getHttpStatusByCode,
-  updateHttpStatus,
-} from "../db/httpStatusDB.js";
+  updateHttpStatus
+} from "@/main/db/httpStatusDB.js";
 
 export const httpStatusHandler = () => {
   ipcMain.handle(

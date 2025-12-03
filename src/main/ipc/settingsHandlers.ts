@@ -3,8 +3,8 @@ import {
   defaultSettings,
   getApplyingZoomLevel,
   getSettings,
-  updateSettings,
-} from "../db/settingsDB.js";
+  updateSettings
+} from "@/main/db/settingsDB.js";
 import { access, readdir } from "fs/promises";
 import { constants } from "fs";
 import path from "path";

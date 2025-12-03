@@ -1,5 +1,5 @@
-import { getRequestOrFolderMeta } from "./requestOrFolderMetaDB.js";
-import { findSelectedRequestIds } from "../utils/request.js";
+import { getRequestOrFolderMeta } from "@/main/db/requestOrFolderMetaDB.js";
+import { findSelectedRequestIds } from "@/main/utils/request.js";
 import { eq, getTableColumns, inArray } from "drizzle-orm";
 import {
   apiUrlTable,
@@ -13,9 +13,9 @@ import {
   paramsTable,
   requestMetaTabTable,
   requestOrFolderMetaTable
-} from "./schema.js";
-import { db } from "./index.js";
-import { getActiveProject } from "./projectsDB.js";
+} from "@/main/db/schema.js";
+import { db } from "@/main/db/index.js";
+import { getActiveProject } from "@/main/db/projectsDB.js";
 import { v4 as uuidv4 } from "uuid";
 
 /* id === active project id */

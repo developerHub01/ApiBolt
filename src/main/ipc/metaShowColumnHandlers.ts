@@ -4,8 +4,8 @@ import {
   deleteMetaShowColumn,
   duplicateMetaShowColumn,
   getMetaShowColumn,
-  updateMetaShowColumn,
-} from "../db/metaShowColumnDB.js";
+  updateMetaShowColumn
+} from "@/main/db/metaShowColumnDB.js";
 
 export const metaShowColumnHandlers = () => {
   ipcMain.handle(

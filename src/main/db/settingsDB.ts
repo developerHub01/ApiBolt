@@ -1,7 +1,7 @@
-import { settingTable } from "./schema.js";
+import { settingTable } from "@/main/db/schema.js";
 import { eq, isNull } from "drizzle-orm";
-import { db } from "./index.js";
-import { getActiveProject } from "./projectsDB.js";
+import { db } from "@/main/db/index.js";
+import { getActiveProject } from "@/main/db/projectsDB.js";
 
 export const defaultSettings = {
   /* default == "default" | global == null */

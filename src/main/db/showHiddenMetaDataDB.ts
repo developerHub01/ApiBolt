@@ -1,8 +1,8 @@
 import { eq, inArray } from "drizzle-orm";
-import { db } from "./index.js";
-import { showHiddenMetaDataTable } from "./schema.js";
-import { getRequestOrFolderMetaById } from "./requestOrFolderMetaDB.js";
-import { getTabList } from "./tabsDB.js";
+import { db } from "@/main/db/index.js";
+import { showHiddenMetaDataTable } from "@/main/db/schema.js";
+import { getRequestOrFolderMetaById } from "@/main/db/requestOrFolderMetaDB.js";
+import { getTabList } from "@/main/db/tabsDB.js";
 
 /* id === requestOrFolderMetaId */
 export const getShowHiddenMetaData = async (id) => {

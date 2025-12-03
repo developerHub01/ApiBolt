@@ -12,8 +12,8 @@ import {
   getBodyFormDataByFormId,
   replaceBodyFormData,
   replaceFullBodyFormData,
-  updateBodyFormData,
-} from "../db/bodyFormDataDB.js";
+  updateBodyFormData
+} from "@/main/db/bodyFormDataDB.js";
 
 export const bodyFormDataHandlers = () => {
   ipcMain.handle("getBodyFormData", async (_, ...rest) => {

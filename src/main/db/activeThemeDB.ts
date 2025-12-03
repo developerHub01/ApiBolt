@@ -1,11 +1,11 @@
 import { eq, isNull } from "drizzle-orm";
-import { db } from "./index.js";
-import { activeThemeTable, themeTable } from "./schema.js";
-import { getActiveProject } from "./projectsDB.js";
+import { db } from "@/main/db/index.js";
+import { activeThemeTable, themeTable } from "@/main/db/schema.js";
+import { getActiveProject } from "@/main/db/projectsDB.js";
 import {
   defaultActiveThemeId,
-  defaultActiveThemePalette,
-} from "../../data/themes.js";
+  defaultActiveThemePalette
+} from "@/data/themes.js";
 
 export const getActiveThemeId = async () => {
   try {

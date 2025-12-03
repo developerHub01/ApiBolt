@@ -1,5 +1,9 @@
 import { ipcMain } from "electron";
-import { duplicateFolder, getFolder, updateFolder } from "../db/folderDB.js";
+import {
+  duplicateFolder,
+  getFolder,
+  updateFolder
+} from "@/main/db/folderDB.js";
 
 export const folderHandlers = () => {
   ipcMain.handle("getFolder", async (_, ...rest) => await getFolder(...rest));

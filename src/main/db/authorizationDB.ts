@@ -1,8 +1,11 @@
 import { and, eq, inArray, isNull } from "drizzle-orm";
-import { db } from "./index.js";
-import { authorizationTable, requestOrFolderMetaTable } from "./schema.js";
-import { getActiveProject } from "./projectsDB.js";
-import { generateJWT, hasValue } from "../utils/utils.js";
+import { db } from "@/main/db/index.js";
+import {
+  authorizationTable,
+  requestOrFolderMetaTable
+} from "@/main/db/schema.js";
+import { getActiveProject } from "@/main/db/projectsDB.js";
+import { generateJWT, hasValue } from "@/main/utils/utils.js";
 
 /* id === active project id */
 export const getAuth = async (requestId) => {

@@ -1,8 +1,8 @@
 import { eq, inArray } from "drizzle-orm";
-import { db } from "./index.js";
-import { folderTable } from "./schema.js";
-import { getActiveProject } from "./projectsDB.js";
-import { getTabList } from "./tabsDB.js";
+import { db } from "@/main/db/index.js";
+import { folderTable } from "@/main/db/schema.js";
+import { getActiveProject } from "@/main/db/projectsDB.js";
+import { getTabList } from "@/main/db/tabsDB.js";
 
 /* folder meta id */
 export const getFolder = async (requestOrFolderMetaId) => {

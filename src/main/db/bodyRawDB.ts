@@ -1,7 +1,7 @@
 import { eq, inArray } from "drizzle-orm";
-import { db } from "./index.js";
-import { bodyRawTable } from "./schema.js";
-import { getTabList } from "./tabsDB.js";
+import { db } from "@/main/db/index.js";
+import { bodyRawTable } from "@/main/db/schema.js";
+import { getTabList } from "@/main/db/tabsDB.js";
 
 export const getBodyRaw = async (requestOrFolderMetaId) => {
   if (!requestOrFolderMetaId)

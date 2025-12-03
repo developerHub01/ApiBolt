@@ -1,7 +1,7 @@
 import { eq, inArray } from "drizzle-orm";
-import { db } from "./index.js";
-import { API_URL_DEFAULT_VALUE, apiUrlTable } from "./schema.js";
-import { getTabList } from "./tabsDB.js";
+import { db } from "@/main/db/index.js";
+import { API_URL_DEFAULT_VALUE, apiUrlTable } from "@/main/db/schema.js";
+import { getTabList } from "@/main/db/tabsDB.js";
 
 /* id === requestOrFolderMetaId */
 export const getApiUrlDB = async (id) => {

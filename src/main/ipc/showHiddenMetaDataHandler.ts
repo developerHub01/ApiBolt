@@ -3,8 +3,8 @@ import {
   createShowHiddenMetaData,
   duplicateShowHiddenMetaData,
   getShowHiddenMetaData,
-  updateShowHiddenMetaData,
-} from "../db/showHiddenMetaDataDB.js";
+  updateShowHiddenMetaData
+} from "@/main/db/showHiddenMetaDataDB.js";
 
 export const showHiddenMetaDataHandler = () => {
   ipcMain.handle(

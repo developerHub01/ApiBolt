@@ -7,8 +7,8 @@ import {
   duplicateBodyBinary,
   getBodyBinary,
   replaceBodyBinary,
-  updateBodyBinary,
-} from "../db/bodyBinaryDB.js";
+  updateBodyBinary
+} from "@/main/db/bodyBinaryDB.js";
 
 export const bodyBinaryHandler = () => {
   ipcMain.handle("getBodyBinary", async (_, ...rest) => {

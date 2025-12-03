@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
-import { db } from "./index.js";
-import { themeTable } from "./schema.js";
+import { db } from "@/main/db/index.js";
+import { themeTable } from "@/main/db/schema.js";
 
 export const getThemeListMeta = async () => {
   try {

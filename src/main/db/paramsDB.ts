@@ -1,7 +1,7 @@
 import { eq, inArray } from "drizzle-orm";
-import { db } from "./index.js";
-import { paramsTable } from "./schema.js";
-import { getTabList } from "./tabsDB.js";
+import { db } from "@/main/db/index.js";
+import { paramsTable } from "@/main/db/schema.js";
+import { getTabList } from "@/main/db/tabsDB.js";
 
 /* id === requestOrFolderMetaId */
 export const getParams = async (id) => {

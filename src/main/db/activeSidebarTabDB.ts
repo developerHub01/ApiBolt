@@ -1,10 +1,10 @@
 import { eq } from "drizzle-orm";
-import { db } from "./index.js";
+import { db } from "@/main/db/index.js";
 import {
   ACTIVE_SIDEBAR_TAB_ID,
   activeSidebarTabTable,
   DEFAULT_ACTIVE_SIDEBAR_TAB
-} from "./schema.js";
+} from "@/main/db/schema.js";
 
 export const getActiveSidebarTab = async () => {
   try {

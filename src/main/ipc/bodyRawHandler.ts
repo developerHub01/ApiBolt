@@ -4,8 +4,8 @@ import {
   duplicateBodyRaw,
   getBodyRaw,
   replaceBodyRaw,
-  updateBodyRaw,
-} from "../db/bodyRawDB.js";
+  updateBodyRaw
+} from "@/main/db/bodyRawDB.js";
 
 export const bodyRawHandler = () => {
   ipcMain.handle("getBodyRaw", async (_, ...rest) => await getBodyRaw(...rest));

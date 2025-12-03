@@ -7,11 +7,11 @@ import {
   updateEnvironments,
   deleteAllEnvironments,
   deleteEnvironments
-} from "../db/environmentsDB.js";
+} from "@/main/db/environmentsDB.js";
 import { mainWindow } from "@/main/index.js";
-import { getActiveProjectDetails } from "../db/projectsDB.js";
+import { getActiveProjectDetails } from "@/main/db/projectsDB.js";
 import { readFile, writeFile } from "fs/promises";
-import { filterValidEnvironments } from "../utils/environments.js";
+import { filterValidEnvironments } from "@/main/utils/environments.js";
 
 export const enviromentsHandlers = () => {
   ipcMain.handle(

@@ -1,8 +1,8 @@
 import { eq, inArray } from "drizzle-orm";
-import { db } from "./index.js";
-import { requestOrFolderMetaTable } from "./schema.js";
-import { getActiveProject } from "./projectsDB.js";
-import { updateTablistBasedRequestOrFolderMetaDeletion } from "./tabsDB.js";
+import { db } from "@/main/db/index.js";
+import { requestOrFolderMetaTable } from "@/main/db/schema.js";
+import { getActiveProject } from "@/main/db/projectsDB.js";
+import { updateTablistBasedRequestOrFolderMetaDeletion } from "@/main/db/tabsDB.js";
 
 /* id === active project id */
 export const getRequestOrFolderMeta = async () => {

@@ -7,8 +7,8 @@ import {
   duplicateHeaders,
   getHeaders,
   replaceHeaders,
-  updateHeaders,
-} from "../db/headersDB.js";
+  updateHeaders
+} from "@/main/db/headersDB.js";
 
 export const headersHandlers = () => {
   ipcMain.handle("getHeaders", async (_, ...rest) => await getHeaders(...rest));

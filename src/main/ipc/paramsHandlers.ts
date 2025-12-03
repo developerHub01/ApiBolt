@@ -7,8 +7,8 @@ import {
   duplicateParams,
   getParams,
   replaceParams,
-  updateParams,
-} from "../db/paramsDB.js";
+  updateParams
+} from "@/main/db/paramsDB.js";
 
 export const paramsHandlers = () => {
   ipcMain.handle("getParams", async (_, ...rest) => await getParams(...rest));

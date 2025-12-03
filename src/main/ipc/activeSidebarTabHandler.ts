@@ -3,8 +3,8 @@ import {
   createActiveSidebarTab,
   deleteActiveSidebarTab,
   getActiveSidebarTab,
-  updateActiveSidebarTab,
-} from "../db/activeSidebarTabDB.js";
+  updateActiveSidebarTab
+} from "@/main/db/activeSidebarTabDB.js";
 
 export const activeSidebarTabHandler = () => {
   ipcMain.handle(

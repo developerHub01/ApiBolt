@@ -5,8 +5,8 @@ import {
   updateRequestMetaTab,
   deleteRequestMetaTab,
   duplicateRequestMetaTab,
-  replaceRequestMetaTab,
-} from "../db/requestMetaTabDB.js";
+  replaceRequestMetaTab
+} from "@/main/db/requestMetaTabDB.js";
 
 export const requestMetaTabHandler = () => {
   ipcMain.handle(

@@ -10,8 +10,8 @@ import {
   duplicateRequestOrFolderMeta,
   expendOrCollapseRequestOrFolderMetaAll,
   collapseAllRequestOrFolderMeta,
-  getRequestOrFolderMetaById,
-} from "../db/requestOrFolderMetaDB.js";
+  getRequestOrFolderMetaById
+} from "@/main/db/requestOrFolderMetaDB.js";
 
 export const requestOrFolderMetaHandler = () => {
   ipcMain.handle(

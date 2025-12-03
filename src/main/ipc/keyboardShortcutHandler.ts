@@ -3,8 +3,8 @@ import {
   getKeyboardShortcuts,
   getKeyboardShortcutsById,
   resetKeyboardShortcuts,
-  updateKeyboardShortcuts,
-} from "../db/keyboardShortcutDB.js";
+  updateKeyboardShortcuts
+} from "@/main/db/keyboardShortcutDB.js";
 
 export const keyboardShortcutHandler = () => {
   ipcMain.handle(

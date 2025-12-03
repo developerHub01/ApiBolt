@@ -1,6 +1,6 @@
 import { asc, desc, eq, inArray, sql } from "drizzle-orm";
-import { db } from "./index.js";
-import { historyTable } from "./schema.js";
+import { db } from "@/main/db/index.js";
+import { historyTable } from "@/main/db/schema.js";
 
 /* max limit of history track for a request */
 const MAX_LIMIT_OF_HISTORY_PER_REQUEST = 30;

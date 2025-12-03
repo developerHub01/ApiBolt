@@ -3,8 +3,8 @@ import {
   createApiUrl,
   duplicateApiUrl,
   getApiUrlDB,
-  updateApiUrl,
-} from "../db/apiUrlDB.js";
+  updateApiUrl
+} from "@/main/db/apiUrlDB.js";
 
 export const apiUrlHandler = () => {
   ipcMain.handle(

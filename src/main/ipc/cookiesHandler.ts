@@ -6,9 +6,9 @@ import {
   deleteCookiesByProject,
   getCookiesByProject,
   getParsedCookiesByProject,
-  updateCookiesByProject,
-} from "../db/cookiesDB.js";
-import { jarManager } from "../utils/cookieManager.js";
+  updateCookiesByProject
+} from "@/main/db/cookiesDB.js";
+import { jarManager } from "@/main/utils/cookieManager.js";
 
 export const cookiesHandler = () => {
   ipcMain.handle(

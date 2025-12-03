@@ -1,6 +1,6 @@
-import { ipcMain } from "electron";
+import { BrowserWindow, ipcMain } from "electron";
 
-export const windowHandler = (mainWindow) => {
+export const windowHandler = (mainWindow: BrowserWindow) => {
   ipcMain.handle("windowIsMaximized", async () => {
     return mainWindow?.isMaximized() ?? false;
   });

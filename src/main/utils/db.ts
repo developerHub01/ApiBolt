@@ -1,4 +1,4 @@
-import { db } from "../db/index.js";
+import { db } from "@/main/db/index.js";
 
 export const runInTransaction = async (fn) => {
   return await db.transaction(async (tx) => {

@@ -1,8 +1,8 @@
 import { and, eq, isNull } from "drizzle-orm";
-import { db } from "./index.js";
-import { keyboardShortcutTable } from "./schema.js";
-import { getActiveProject } from "./projectsDB.js";
-import { keyboardBindings } from "../../data/keyboard_short_cut_list.js";
+import { db } from "@/main/db/index.js";
+import { keyboardShortcutTable } from "@/main/db/schema.js";
+import { getActiveProject } from "@/main/db/projectsDB.js";
+import { keyboardBindings } from "@/data/keyboard_short_cut_list.js";
 
 /* id === projectId */
 export const getKeyboardShortcuts = async () => {

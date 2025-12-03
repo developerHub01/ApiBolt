@@ -1,10 +1,7 @@
 import { isNull } from "drizzle-orm";
-import { defaultThemeList } from "../../data/themes.js";
-import { db } from "../db/index.js";
-import {
-  activeThemeTable,
-  themeTable,
-} from "../db/schema.js";
+import { defaultThemeList } from "@/data/themes.js";
+import { db } from "@/main/db/index.js";
+import { activeThemeTable, themeTable } from "@/main/db/schema.js";
 
 export const generateThemesSeed = async () => {
   try {

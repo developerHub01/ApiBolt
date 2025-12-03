@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
-import { db } from "./index.js";
-import { cookiesTable } from "./schema.js";
-import { getActiveProject } from "./projectsDB.js";
+import { db } from "@/main/db/index.js";
+import { cookiesTable } from "@/main/db/schema.js";
+import { getActiveProject } from "@/main/db/projectsDB.js";
 
 export const getCookiesByProject = async (projectId) => {
   try {

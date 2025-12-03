@@ -5,9 +5,9 @@ import {
   getThemeById,
   getThemeListMeta,
   getThemePaletteById,
-  updateTheme,
-} from "../db/themeDB.js";
-import { saveThemePaletteLocal } from "../utils/theme.js";
+  updateTheme
+} from "@/main/db/themeDB.js";
+import { saveThemePaletteLocal } from "@/main/utils/theme.js";
 
 export const themeHandler = () => {
   ipcMain.handle(

@@ -5,8 +5,8 @@ import {
   updateAuth,
   deleteAuth,
   getInheritedAuthFromId,
-  duplicateAuth,
-} from "../db/authorizationDB.js";
+  duplicateAuth
+} from "@/main/db/authorizationDB.js";
 
 export const authorizationHandler = () => {
   ipcMain.handle("getAuth", async (_, ...rest) => await getAuth(...rest));

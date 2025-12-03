@@ -1,6 +1,6 @@
 import { ipcMain } from "electron";
-import { fetchApi } from "../utils/api.js";
-import { jarManager } from "../utils/cookieManager.js";
+import { fetchApi } from "@/main/utils/api.js";
+import { jarManager } from "@/main/utils/cookieManager.js";
 
 export const registerCookieHandlers = () => {
   ipcMain.handle("fetchApi", fetchApi);

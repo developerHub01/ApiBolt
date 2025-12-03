@@ -2,8 +2,8 @@ import { ipcMain } from "electron";
 import {
   changeActiveTheme,
   getActiveThemeId,
-  getActiveThemePalette,
-} from "../db/activeThemeDB.js";
+  getActiveThemePalette
+} from "@/main/db/activeThemeDB.js";
 
 export const activeThemeHandler = () => {
   ipcMain.handle(

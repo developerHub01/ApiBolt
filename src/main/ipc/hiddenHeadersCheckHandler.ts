@@ -3,8 +3,8 @@ import {
   createHiddenHeadersCheck,
   duplicateHiddenHeadersCheck,
   getHiddenHeadersCheck,
-  updateHiddenHeadersCheck,
-} from "../db/hiddenHeadersCheckDB.js";
+  updateHiddenHeadersCheck
+} from "@/main/db/hiddenHeadersCheckDB.js";
 
 export const hiddenHeadersCheckHandler = () => {
   ipcMain.handle(

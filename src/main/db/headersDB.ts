@@ -1,11 +1,11 @@
 import { eq, inArray } from "drizzle-orm";
-import { db } from "./index.js";
-import { headersTable } from "./schema.js";
-import { getTabList } from "./tabsDB.js";
+import { db } from "@/main/db/index.js";
+import { headersTable } from "@/main/db/schema.js";
+import { getTabList } from "@/main/db/tabsDB.js";
 import {
   createHiddenHeadersCheck,
-  getHiddenHeadersCheck,
-} from "./hiddenHeadersCheckDB.js";
+  getHiddenHeadersCheck
+} from "@/main/db/hiddenHeadersCheckDB.js";
 
 /* id === requestOrFolderMetaId */
 export const getHeaders = async (id) => {

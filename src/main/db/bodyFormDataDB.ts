@@ -1,7 +1,7 @@
 import { and, eq, inArray, like, not } from "drizzle-orm";
-import { db } from "./index.js";
-import { bodyFormDataTable } from "./schema.js";
-import { getTabList } from "./tabsDB.js";
+import { db } from "@/main/db/index.js";
+import { bodyFormDataTable } from "@/main/db/schema.js";
+import { getTabList } from "@/main/db/tabsDB.js";
 
 export const getBodyFormDataByFormId = async (id) => {
   try {

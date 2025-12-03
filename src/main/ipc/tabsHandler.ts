@@ -3,8 +3,8 @@ import {
   deleteAllTabList,
   deleteTabListByProjectId,
   getTabList,
-  updateTabList,
-} from "../db/tabsDB.js";
+  updateTabList
+} from "@/main/db/tabsDB.js";
 
 export const tabsHandler = () => {
   ipcMain.handle("getTabList", async (_, ...rest) => await getTabList(...rest));
