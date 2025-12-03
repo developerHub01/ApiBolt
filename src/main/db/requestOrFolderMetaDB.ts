@@ -1,202 +1,228 @@
-import { eq, inArray } from "drizzle-orm";
+import { eq, getTableColumns, inArray, InferSelectModel } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { requestOrFolderMetaTable } from "@/main/db/schema.js";
 import { getActiveProject } from "@/main/db/projectsDB.js";
 import { updateTablistBasedRequestOrFolderMetaDeletion } from "@/main/db/tabsDB.js";
+import { RequestListItemInterface } from "@/shared/types/request-response.types";
+import { ElectronAPIRequestOrFolderMetaInterface } from "@/shared/types/api/electron-request-or-folder-meta";
+import { RequestOrFolderMetaTableInterface } from "@/main/types";
 
 /* id === active project id */
 export const getRequestOrFolderMeta = async () => {
   try {
     const activeProjectId = await getActiveProject();
+    if (!activeProjectId) throw new Error("no project active");
 
-    const dataList = await db
+    const dataList: Array<InferSelectModel<typeof requestOrFolderMetaTable>> = await db
       .select()
       .from(requestOrFolderMetaTable)
       .where(eq(requestOrFolderMetaTable.projectId, activeProjectId));
 
     // Make the map first
-    const map = {};
+    const map: Record<string, RequestListItemInterface> = {};
 
     dataList.forEach(
-      (item) =>
-        (map[item.id] = { ...item, ...(item.method ? {} : { children: [] }) })
+      item =>
+        (map[item.id] = {
+          ...item,
+          ...(item.method ? {} : { children: [] as Array<string> })
+        })
     );
 
     // Attach child IDs
-    dataList.forEach((item) => {
-      if (item.parentId && map[item.parentId] && map[item.parentId].children)
-        map[item.parentId].children.push(item.id);
+    dataList.forEach(item => {
+      const parent = item.parentId ? map[item.parentId] : undefined;
+      if (parent?.children) parent.children.push(item.id);
     });
 
     return map;
   } catch (error) {
     console.error(error);
+    return {};
   }
 };
 
-export const getRequestOrFolderMetaById = async (id) => {
-  try {
-    return (
-      await db
-        .select()
-        .from(requestOrFolderMetaTable)
-        .where(eq(requestOrFolderMetaTable.id, id))
-    )?.[0];
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const createRequestOrFolderMeta = async (payload) => {
-  try {
-    if (!payload || typeof payload !== "object") return;
-
-    const activeProjectId = await getActiveProject();
-
-    if (Array.isArray(payload)) {
-      payload.forEach((item, index, arr) => {
-        arr[index] = {
-          ...item,
-          projectId: activeProjectId,
-        };
-        delete arr[index]["createdAt"];
-      });
-    } else {
-      payload.projectId = activeProjectId;
-      delete payload["createdAt"];
+export const getRequestOrFolderMetaById: ElectronAPIRequestOrFolderMetaInterface["getRequestOrFolderMetaById"] =
+  async id => {
+    try {
+      return (
+        await db
+          .select(getTableColumns(requestOrFolderMetaTable))
+          .from(requestOrFolderMetaTable)
+          .where(eq(requestOrFolderMetaTable.id, id))
+      )?.[0];
+    } catch (error) {
+      console.error(error);
+      return null;
     }
+  };
 
-    const response = await db.insert(requestOrFolderMetaTable).values(payload);
+export const createRequestOrFolderMeta: ElectronAPIRequestOrFolderMetaInterface["createRequestOrFolderMeta"] =
+  async payload => {
+    try {
+      if (!Array.isArray(payload)) payload = [payload];
 
-    return response?.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
+      const requestOrFolderPayload: Array<RequestOrFolderMetaTableInterface> =
+        [];
 
-export const updateRequestOrFolderMeta = async (payload) => {
-  try {
-    if (!payload || typeof payload !== "object") return false;
+      const activeProjectId = await getActiveProject();
+      if (!payload || typeof payload !== "object" || !activeProjectId)
+        return false;
 
-    const { id } = payload;
-    delete payload["id"];
-    delete payload["projectId"];
-    delete payload["children"];
-    delete payload["createdAt"];
+      payload.forEach(item => {
+        delete item.createdAt;
+        requestOrFolderPayload.push({
+          ...item,
+          projectId: activeProjectId
+        });
+      });
 
-    if (!Object.keys(payload)?.length) return false;
+      const response = await db
+        .insert(requestOrFolderMetaTable)
+        .values(requestOrFolderPayload);
 
-    await db
-      .update(requestOrFolderMetaTable)
-      .set(payload)
-      .where(eq(requestOrFolderMetaTable.id, id));
-    return true;
-  } catch (error) {
-    console.error(error);
-  }
-};
+      return response?.rowsAffected > 0;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
 
-export const collapseAllRequestOrFolderMeta = async (projectId) => {
-  try {
-    if (!projectId) projectId = await getActiveProject();
+export const updateRequestOrFolderMeta: ElectronAPIRequestOrFolderMetaInterface["updateRequestOrFolderMeta"] =
+  async payload => {
+    try {
+      if (!payload || typeof payload !== "object") return false;
 
-    const result = await db
-      .update(requestOrFolderMetaTable)
-      .set({
-        isExpended: 0,
-      })
-      .where(eq(requestOrFolderMetaTable.projectId, projectId));
+      const { id, ...updateData } = payload;
 
-    return result.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
+      if (!Object.keys(updateData)?.length) return false;
 
-export const moveRequestOrFolderMeta = async ({ id, parentId = null } = {}) => {
-  try {
-    const updated = await db
-      .update(requestOrFolderMetaTable)
-      .set({
-        parentId,
-      })
-      .where(eq(requestOrFolderMetaTable.id, id));
+      await db
+        .update(requestOrFolderMetaTable)
+        .set(updateData)
+        .where(eq(requestOrFolderMetaTable.id, id));
+      return true;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
 
-    return updated?.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
+export const collapseAllRequestOrFolderMeta: ElectronAPIRequestOrFolderMetaInterface["collapseAllRequestOrFolderMeta"] =
+  async projectId => {
+    try {
+      if (!projectId) projectId = await getActiveProject();
+      if (!projectId) return false;
 
-export const deleteRequestOrFolderMetaById = async (id) => {
-  try {
-    const deletionCandidates = Array.isArray(id) ? id : [id];
-    if (deletionCandidates.length === 0) return false;
+      const result = await db
+        .update(requestOrFolderMetaTable)
+        .set({
+          isExpended: false
+        })
+        .where(eq(requestOrFolderMetaTable.projectId, projectId));
 
-    const deleted = await db
-      .delete(requestOrFolderMetaTable)
-      .where(inArray(requestOrFolderMetaTable.id, [deletionCandidates[0]]));
+      return result.rowsAffected > 0;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
 
-    if (deleted?.rowsAffected)
-      await updateTablistBasedRequestOrFolderMetaDeletion(deletionCandidates);
+export const moveRequestOrFolderMeta: ElectronAPIRequestOrFolderMetaInterface["moveRequestOrFolderMeta"] =
+  async ({ id, parentId = null }) => {
+    try {
+      const updated = await db
+        .update(requestOrFolderMetaTable)
+        .set({
+          parentId
+        })
+        .where(eq(requestOrFolderMetaTable.id, id));
 
-    return deleted?.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
+      return updated?.rowsAffected > 0;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
 
-export const duplicateRequestOrFolderMeta = async (payload) => {
-  try {
-    if (!payload || !Array.isArray(payload)) return;
-    const result = await db.insert(requestOrFolderMetaTable).values(payload);
+export const deleteRequestOrFolderMetaById: ElectronAPIRequestOrFolderMetaInterface["deleteRequestOrFolderMetaById"] =
+  async id => {
+    try {
+      const deletionCandidates = Array.isArray(id) ? id : [id];
+      if (deletionCandidates.length === 0) return false;
 
-    return result?.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
+      const deleted = await db
+        .delete(requestOrFolderMetaTable)
+        .where(inArray(requestOrFolderMetaTable.id, [deletionCandidates[0]]));
 
-export const deleteRequestOrFolderMetaByProjectId = async (id) => {
-  try {
-    const deletionCandidate = id ?? (await getActiveProject());
+      if (deleted?.rowsAffected)
+        await updateTablistBasedRequestOrFolderMetaDeletion(deletionCandidates);
 
-    const deleted = await db
-      .delete(requestOrFolderMetaTable)
-      .where(eq(requestOrFolderMetaTable.projectId, deletionCandidate));
+      return deleted?.rowsAffected > 0;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
 
-    return deleted.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
+export const duplicateRequestOrFolderMeta: ElectronAPIRequestOrFolderMetaInterface["duplicateRequestOrFolderMeta"] =
+  async payload => {
+    try {
+      if (!payload || !Array.isArray(payload)) return false;
+      const result = await db.insert(requestOrFolderMetaTable).values(payload);
 
-export const deleteRequestOrFolderMetaAll = async () => {
-  try {
-    const deleted = await db.delete(requestOrFolderMetaTable);
+      return result?.rowsAffected > 0;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
 
-    return deleted.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
+export const deleteRequestOrFolderMetaByProjectId: ElectronAPIRequestOrFolderMetaInterface["deleteRequestOrFolderMetaByProjectId"] =
+  async id => {
+    try {
+      const deletionCandidate = id ?? (await getActiveProject());
+      if (!deletionCandidate) return false;
 
-export const expendOrCollapseRequestOrFolderMetaAll = async (
-  id,
-  isExpended = true
-) => {
-  try {
-    if (Array.isArray(id)) id = [id];
+      const deleted = await db
+        .delete(requestOrFolderMetaTable)
+        .where(eq(requestOrFolderMetaTable.projectId, deletionCandidate));
 
-    const updated = await db
-      .update(requestOrFolderMetaTable)
-      .set({
-        isExpended,
-      })
-      .where(inArray(requestOrFolderMetaTable.id, id));
+      return deleted.rowsAffected > 0;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
 
-    return updated.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
+export const deleteRequestOrFolderMetaAll: ElectronAPIRequestOrFolderMetaInterface["deleteRequestOrFolderMetaAll"] =
+  async () => {
+    try {
+      const deleted = await db.delete(requestOrFolderMetaTable);
+
+      return deleted.rowsAffected > 0;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
+export const expendOrCollapseRequestOrFolderMetaAll: ElectronAPIRequestOrFolderMetaInterface["expendOrCollapseRequestOrFolderMetaAll"] =
+  async (id, isExpended = true) => {
+    try {
+      if (!id) return false;
+      if (!Array.isArray(id)) id = [id];
+
+      const updated = await db
+        .update(requestOrFolderMetaTable)
+        .set({
+          isExpended
+        })
+        .where(inArray(requestOrFolderMetaTable.id, id));
+
+      return updated.rowsAffected > 0;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
