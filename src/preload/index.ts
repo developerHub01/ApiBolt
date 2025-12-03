@@ -72,8 +72,8 @@ if (process.contextIsolated) {
       setZoom: factor => webFrame.setZoomFactor(factor),
       getZoom: () => webFrame.getZoomFactor(),
 
-      generateJWTToken: async data => {
-        return await ipcRenderer.invoke("generateJWTToken", data);
+      generateJWTToken: data => {
+        return ipcRenderer.invoke("generateJWTToken", data);
       },
 
       /**

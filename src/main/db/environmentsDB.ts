@@ -2,141 +2,150 @@ import { eq } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { environmentTable } from "@/main/db/schema.js";
 import { getActiveProject } from "@/main/db/projectsDB.js";
+import { ElectronAPIEnvironmentsInterface } from "@/shared/types/api/electron-environments";
+import { TEnvironmentFile } from "@/shared/types/export-import/environments";
 
-export const getAllEnvironments = async () => {
-  try {
-    const response = await db.select().from(environmentTable);
-
-    if (Array.isArray(response)) {
-      response.map(
-        (_, index) =>
-          (response[index].isCheck = Boolean(response[index]?.isCheck))
-      );
+export const getAllEnvironments: ElectronAPIEnvironmentsInterface["getAllEnvironments"] =
+  async () => {
+    try {
+      return await db.select().from(environmentTable);
+    } catch (error) {
+      console.error(error);
+      return [];
     }
-
-    return response;
-  } catch (error) {
-    console.error(error);
-  }
-};
+  };
 
 /* id === active project id */
-export const getEnvironments = async (id) => {
-  try {
-    if (!id) id = await getActiveProject();
-    const response = await db
-      .select()
-      .from(environmentTable)
-      .where(eq(environmentTable.projectId, id));
+export const getEnvironments: ElectronAPIEnvironmentsInterface["getEnvironments"] =
+  async id => {
+    try {
+      id = id ?? (await getActiveProject());
+      if (!id) throw new Error();
 
-    if (Array.isArray(response)) {
-      response.map(
-        (_, index) =>
-          (response[index].isCheck = Boolean(response[index]?.isCheck))
-      );
+      return await db
+        .select()
+        .from(environmentTable)
+        .where(eq(environmentTable.projectId, id));
+    } catch (error) {
+      console.error(error);
+      return [];
     }
+  };
 
-    return response;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const createEnvironments = async (payload = {}) => {
-  try {
-    const activeProjectId = await getActiveProject();
-
-    if (!Array.isArray(payload)) {
-      payload = [payload];
-    }
-
-    for (const item of payload) {
-      if ("isCheck" in item) item["isCheck"] = Number(item["isCheck"]);
-      if (!item.projectId) item.projectId = activeProjectId;
-      if (!item.projectId) return false;
-    }
-
-    const result = await db.insert(environmentTable).values(payload);
-
-    return result.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const updateEnvironments = async (payload = {}) => {
-  try {
-    const { id, ...rest } = payload;
-
-    payload = rest;
-
-    if ("isCheck" in payload) {
-      payload["isCheck"] = Number(payload["isCheck"]);
-    }
-
-    const environmentData = await db
-      .select()
-      .from(environmentTable)
-      .where(eq(environmentTable.id, id));
-
-    let updated;
-
-    if (!environmentData.length) {
+export const createEnvironments: ElectronAPIEnvironmentsInterface["createEnvironments"] =
+  async payload => {
+    try {
       const activeProjectId = await getActiveProject();
-      updated = await db.insert(environmentTable).values({
-        id,
-        projectId: activeProjectId,
-        ...payload,
-      });
-    } else {
-      updated = await db
-        .update(environmentTable)
-        .set({
-          ...payload,
-        })
-        .where(eq(environmentTable.id, id));
+      if (!activeProjectId) throw new Error();
+
+      return (
+        (
+          await db.insert(environmentTable).values({
+            ...payload,
+            projectId: activeProjectId
+          })
+        )?.rowsAffected > 0
+      );
+    } catch (error) {
+      console.error(error);
+      return false;
     }
+  };
 
-    return updated?.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const deleteAllEnvironments = async () => {
+export const importEnvironments = async (payload: TEnvironmentFile) => {
   try {
     const activeProjectId = await getActiveProject();
+    if (!activeProjectId) throw new Error();
 
-    const deleted = await db
-      .delete(environmentTable)
-      .where(eq(environmentTable.projectId, activeProjectId));
+    const importPayload = payload.map(item => ({
+      ...item,
+      projectId: activeProjectId
+    }));
 
-    return deleted.rowsAffected > 0;
+    return (
+      (await db.insert(environmentTable).values(importPayload))?.rowsAffected >
+      0
+    );
   } catch (error) {
     console.error(error);
+    return false;
   }
 };
 
-export const deleteEnvironments = async (id) => {
-  try {
-    const deleted = await db
-      .delete(environmentTable)
-      .where(eq(environmentTable.id, id));
+export const updateEnvironments: ElectronAPIEnvironmentsInterface["updateEnvironments"] =
+  async payload => {
+    try {
+      const { id, ...updatePayload } = payload;
+      const activeProjectId = await getActiveProject();
+      if (!activeProjectId) throw new Error();
 
-    return deleted.rowsAffected > 0;
+      return (
+        (
+          await db
+            .insert(environmentTable)
+            .values({
+              ...payload,
+              projectId: activeProjectId
+            })
+            .onConflictDoUpdate({
+              target: [environmentTable.id],
+              set: {
+                ...updatePayload
+              }
+            })
+        )?.rowsAffected > 0
+      );
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
+export const deleteAllEnvironments: ElectronAPIEnvironmentsInterface["deleteAllEnvironments"] =
+  async () => {
+    try {
+      const activeProjectId = await getActiveProject();
+      if (!activeProjectId) throw new Error();
+
+      return (
+        (
+          await db
+            .delete(environmentTable)
+            .where(eq(environmentTable.projectId, activeProjectId))
+        ).rowsAffected > 0
+      );
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
+export const deleteEnvironments: ElectronAPIEnvironmentsInterface["deleteEnvironments"] =
+  async id => {
+    try {
+      return (
+        (await db.delete(environmentTable).where(eq(environmentTable.id, id)))
+          .rowsAffected > 0
+      );
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
+export const deleteEnvironmentsByProjectId = async (
+  id: string
+): Promise<boolean> => {
+  try {
+    return (
+      (
+        await db
+          .delete(environmentTable)
+          .where(eq(environmentTable.projectId, id))
+      ).rowsAffected > 0
+    );
   } catch (error) {
     console.error(error);
-  }
-};
-
-export const deleteEnvironmentsByProjectId = async (id) => {
-  try {
-    const deleted = await db
-      .delete(environmentTable)
-      .where(eq(environmentTable.projectId, id));
-
-    return deleted.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
+    return false;
   }
 };

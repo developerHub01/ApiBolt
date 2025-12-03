@@ -3,111 +3,104 @@ import { db } from "@/main/db/index.js";
 import { folderTable } from "@/main/db/schema.js";
 import { getActiveProject } from "@/main/db/projectsDB.js";
 import { getTabList } from "@/main/db/tabsDB.js";
+import { ElectronAPIFolderInterface } from "@/shared/types/api/electron-folder";
 
 /* folder meta id */
-export const getFolder = async (requestOrFolderMetaId) => {
-  try {
-    if (!requestOrFolderMetaId)
-      requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!requestOrFolderMetaId) return null;
+export const getFolder: ElectronAPIFolderInterface["getFolder"] =
+  async requestOrFolderMetaId => {
+    try {
+      if (!requestOrFolderMetaId)
+        requestOrFolderMetaId = (await getTabList())?.selectedTab;
+      if (!requestOrFolderMetaId) return null;
 
-    const result = (
-      await db
-        .select()
-        .from(folderTable)
-        .where(eq(folderTable.requestOrFolderMetaId, requestOrFolderMetaId))
-    )?.[0];
+      const result = (
+        await db
+          .select()
+          .from(folderTable)
+          .where(eq(folderTable.requestOrFolderMetaId, requestOrFolderMetaId))
+      )?.[0];
+      if (!result) throw new Error();
 
-    if (!result) return result;
-
-    return {
-      title: result.title,
-      description: result.description,
-    };
-  } catch (error) {
-    console.error(error);
-  }
-};
-/* 
-payload = {
-  title?: string,
-  description?: string,
-  requestOrFolderMetaId: string
-}
-*/
-export const updateFolder = async (payload) => {
-  try {
-    if (!payload || typeof payload !== "object") return false;
-    let requestOrFolderMetaId = payload.requestOrFolderMetaId;
-
-    if (!requestOrFolderMetaId)
-      requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!requestOrFolderMetaId) return false;
-
-    let updated;
-    const folderData = (
-      await db
-        .select()
-        .from(folderTable)
-        .where(eq(folderTable.requestOrFolderMetaId, requestOrFolderMetaId))
-    )?.[0];
-
-    if (!folderData) {
-      const activeProject = await getActiveProject();
-      updated = await db.insert(folderTable).values({
-        ...payload,
-        requestOrFolderMetaId,
-        projectId: activeProject,
-      });
-    } else {
-      updated = await db
-        .update(folderTable)
-        .set({
-          ...payload,
-        })
-        .where(eq(folderTable.requestOrFolderMetaId, requestOrFolderMetaId));
+      return {
+        title: result.title,
+        description: result.description
+      };
+    } catch (error) {
+      console.error(error);
+      return null;
     }
+  };
 
-    return updated?.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
+export const updateFolder: ElectronAPIFolderInterface["updateFolder"] =
+  async payload => {
+    try {
+      if (!payload || typeof payload !== "object") throw new Error();
+      const requestOrFolderMetaId =
+        payload.requestOrFolderMetaId ?? (await getTabList())?.selectedTab;
+      const activeProject = await getActiveProject();
+      if (!requestOrFolderMetaId || !activeProject) throw new Error();
+
+      const { requestOrFolderMetaId: _, ...updatePayload } = payload;
+
+      return (
+        (
+          await db
+            .insert(folderTable)
+            .values({
+              ...payload,
+              requestOrFolderMetaId,
+              projectId: activeProject
+            })
+            .onConflictDoUpdate({
+              target: [folderTable.requestOrFolderMetaId],
+              set: {
+                ...updatePayload
+              }
+            })
+        ).rowsAffected > 0
+      );
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
 
 /* 
 payload = {
   oldId: newId ---> newId means duplicatedId
 }
 */
-export const duplicateFolder = async (payload) => {
-  try {
-    if (!payload) return;
-    const oldIds = Object.keys(payload);
-    if (!oldIds.length) return;
+export const duplicateFolder: ElectronAPIFolderInterface["duplicateFolder"] =
+  async payload => {
+    try {
+      if (!payload) throw new Error();
+      const oldIds = Object.keys(payload);
+      if (!oldIds.length) throw new Error();
 
-    const existingFolderData = await db
-      .select()
-      .from(folderTable)
-      .where(inArray(folderTable.requestOrFolderMetaId, oldIds));
+      const existingFolderData = await db
+        .select()
+        .from(folderTable)
+        .where(inArray(folderTable.requestOrFolderMetaId, oldIds));
 
-    if (!existingFolderData.length) return true;
+      if (!existingFolderData.length) return true;
 
-    /**
-     * - Replacing oldId with duplicatedId
-     * and only keeping url so that other things automatically generate by default
-     */
-    const duplicatePayload = existingFolderData.map((folder) => {
-      delete folder["id"];
-      return {
-        ...folder,
-        requestOrFolderMetaId: payload[folder.requestOrFolderMetaId],
-      };
-    });
+      /**
+       * - Replacing oldId with duplicatedId
+       * and only keeping url so that other things automatically generate by default
+       */
+      const duplicatePayload = existingFolderData.map(folder => {
+        const { id, ...folderPayload } = folder;
+        return {
+          ...folderPayload,
+          requestOrFolderMetaId: payload[folder.requestOrFolderMetaId]
+        };
+      });
 
-    const result = await db.insert(folderTable).values(duplicatePayload);
+      const result = await db.insert(folderTable).values(duplicatePayload);
 
-    return result.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
+      return result.rowsAffected > 0;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };

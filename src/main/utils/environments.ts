@@ -1,6 +1,10 @@
+import { TEnvironmentFile } from "@/shared/types/export-import/environments";
+
 const typeList = new Set(["default", "secret"]);
 
-export const filterValidEnvironments = (payload = {}) => {
+export const filterValidEnvironments = (
+  payload: TEnvironmentFile
+): TEnvironmentFile | null => {
   try {
     if (!Array.isArray(payload)) payload = [payload];
 

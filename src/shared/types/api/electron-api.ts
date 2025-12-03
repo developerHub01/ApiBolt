@@ -32,7 +32,7 @@ export interface ElectronAPIInterface {
       algorithm: string;
     }
   ): Promise<string>;
-
+  
   /***
    * trigger when theme changed
    */

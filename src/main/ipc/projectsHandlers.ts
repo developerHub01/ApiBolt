@@ -132,14 +132,16 @@ export const projectsHandlers = () => {
         const filePath = filePaths?.[0];
         if (!filePath) throw new Error("No file selected.");
 
+        let fileData: ProjectExportFileInterface | null = null;
         try {
           const fileStringData = await readFile(filePath, "utf-8");
-          const fileData: ProjectExportFileInterface =
-            JSON.parse(fileStringData);
-          await importProject(fileData);
+          fileData = JSON.parse(fileStringData);
+          if (!fileData) throw new Error();
         } catch {
           throw new Error("Not valid JSON data");
         }
+        const response = await importProject(fileData);
+        if (!response) throw new Error();
 
         return {
           success: true,

@@ -1,4 +1,4 @@
-import { eq, getTableColumns, inArray } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { requestOrFolderMetaTable } from "@/main/db/schema.js";
 import { getActiveProject } from "@/main/db/projectsDB.js";
@@ -55,7 +55,15 @@ export const getRequestOrFolderMetaById: ElectronAPIRequestOrFolderMetaInterface
     try {
       return (
         await db
-          .select(getTableColumns(requestOrFolderMetaTable))
+          .select({
+            id: requestOrFolderMetaTable.id,
+            method: requestOrFolderMetaTable.method,
+            name: requestOrFolderMetaTable.name,
+            projectId: requestOrFolderMetaTable.projectId,
+            parentId: requestOrFolderMetaTable.parentId,
+            isExpended: requestOrFolderMetaTable.isExpended,
+            createdAt: requestOrFolderMetaTable.createdAt
+          })
           .from(requestOrFolderMetaTable)
           .where(eq(requestOrFolderMetaTable.id, id))
       )?.[0];

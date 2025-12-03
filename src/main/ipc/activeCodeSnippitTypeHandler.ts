@@ -3,24 +3,53 @@ import {
   createActiveCodeSnippitType,
   deleteActiveCodeSnippitType,
   getActiveCodeSnippitType,
-  updateActiveCodeSnippitType,
-} from "../db/activeCodeSnippitTypeDB.js";
+  updateActiveCodeSnippitType
+} from "@/main/db/activeCodeSnippitTypeDB.js";
+import { ElectronAPIActiveCodeSnippitTypeInterface } from "@/shared/types/api/electron-active-code-snippit-type.js";
 
 export const activeCodeSnippitTypeHandler = () => {
   ipcMain.handle(
     "getActiveCodeSnippitType",
-    async (_, ...rest) => await getActiveCodeSnippitType(...rest)
+    async (
+      _,
+      ...rest: Parameters<
+        ElectronAPIActiveCodeSnippitTypeInterface["getActiveCodeSnippitType"]
+      >
+    ): ReturnType<
+      ElectronAPIActiveCodeSnippitTypeInterface["getActiveCodeSnippitType"]
+    > => await getActiveCodeSnippitType(...rest)
   );
   ipcMain.handle(
     "createActiveCodeSnippitType",
-    async (_, ...rest) => await createActiveCodeSnippitType(...rest)
+    async (
+      _,
+      ...rest: Parameters<
+        ElectronAPIActiveCodeSnippitTypeInterface["createActiveCodeSnippitType"]
+      >
+    ): ReturnType<
+      ElectronAPIActiveCodeSnippitTypeInterface["createActiveCodeSnippitType"]
+    > => await createActiveCodeSnippitType(...rest)
   );
   ipcMain.handle(
     "updateActiveCodeSnippitType",
-    async (_, ...rest) => await updateActiveCodeSnippitType(...rest)
+    async (
+      _,
+      ...rest: Parameters<
+        ElectronAPIActiveCodeSnippitTypeInterface["updateActiveCodeSnippitType"]
+      >
+    ): ReturnType<
+      ElectronAPIActiveCodeSnippitTypeInterface["updateActiveCodeSnippitType"]
+    > => await updateActiveCodeSnippitType(...rest)
   );
   ipcMain.handle(
     "deleteActiveCodeSnippitType",
-    async (_, ...rest) => await deleteActiveCodeSnippitType(...rest)
+    async (
+      _,
+      ...rest: Parameters<
+        ElectronAPIActiveCodeSnippitTypeInterface["deleteActiveCodeSnippitType"]
+      >
+    ): ReturnType<
+      ElectronAPIActiveCodeSnippitTypeInterface["deleteActiveCodeSnippitType"]
+    > => await deleteActiveCodeSnippitType(...rest)
   );
 };

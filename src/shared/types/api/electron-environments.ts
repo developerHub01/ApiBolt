@@ -5,8 +5,8 @@ import {
 } from "@/shared/types/environment.types";
 
 export interface ElectronAPIEnvironmentsInterface {
-  getAllEnvironments(id?: string): Promise<Array<EnvironmentInterface>>;
-  getEnvironments(id?: string): Promise<Array<EnvironmentInterface>>;
+  getAllEnvironments(id?: string | null): Promise<Array<EnvironmentInterface>>;
+  getEnvironments(id?: string | null): Promise<Array<EnvironmentInterface>>;
   createEnvironments(
     payload: Partial<EnvironmentPayloadInterface> &
       Required<Pick<EnvironmentPayloadInterface, "id">>

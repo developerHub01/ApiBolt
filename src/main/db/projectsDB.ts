@@ -19,7 +19,10 @@ import {
 } from "@/main/db/schema.js";
 import { createAuth } from "@/main/db/authorizationDB.js";
 import { v4 as uuidv4 } from "uuid";
-import { CreateProjectPayloadInterface } from "@/shared/types/project.types.js";
+import {
+  CreateProjectPayloadInterface,
+  ProjectInterface
+} from "@/shared/types/project.types.js";
 import { ProjectExportFileInterface } from "@/shared/types/export-import/project.js";
 import { ElectronAPIProjectsInterface } from "@/shared/types/api/electron-projects";
 
@@ -140,24 +143,33 @@ export const getActiveProject: ElectronAPIProjectsInterface["getActiveProject"] 
     }
   };
 
-export const getActiveProjectDetails = async () => {
-  try {
-    const result = await db
-      .select()
-      .from(activeProjectTable)
-      .leftJoin(
-        projectTable,
-        eq(activeProjectTable.activeProjectId, projectTable.id)
-      )
-      .where(eq(activeProjectTable.id, ACTIVE_PROJECT_ID))
-      .limit(1);
+export const getActiveProjectDetails =
+  async (): Promise<ProjectInterface | null> => {
+    try {
+      const result =
+        (
+          await db
+            .select({
+              id: projectTable.id,
+              name: projectTable.name
+            })
+            .from(activeProjectTable)
+            .leftJoin(
+              projectTable,
+              eq(activeProjectTable.activeProjectId, projectTable.id)
+            )
+            .where(eq(activeProjectTable.id, ACTIVE_PROJECT_ID))
+            .limit(1)
+        )?.[0] ?? null;
 
-    return result[0] ?? null;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
-};
+      if (!result.id) throw new Error();
+
+      return result as ProjectInterface;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  };
 
 export const exportProject = async (id?: string | null) => {
   return await db.transaction(async tsx => {
@@ -178,7 +190,6 @@ export const exportProject = async (id?: string | null) => {
     const environments: ProjectExportFileInterface["environments"] = await tsx
       .select(
         (() => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { id, projectId, createdAt, ...rest } =
             getTableColumns(environmentTable);
           return rest;
@@ -191,7 +202,6 @@ export const exportProject = async (id?: string | null) => {
       (await tsx
         .select(
           (() => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { projectId, createdAt, ...rest } = getTableColumns(
               requestOrFolderMetaTable
             );
@@ -211,7 +221,6 @@ export const exportProject = async (id?: string | null) => {
       (await tsx
         .select(
           (() => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { id, createdAt, ...rest } = getTableColumns(apiUrlTable);
             return rest;
           })()
@@ -227,7 +236,6 @@ export const exportProject = async (id?: string | null) => {
       (await tsx
         .select(
           (() => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { id, createdAt, ...rest } = getTableColumns(paramsTable);
             return rest;
           })()
@@ -246,7 +254,6 @@ export const exportProject = async (id?: string | null) => {
       (await tsx
         .select(
           (() => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { id, createdAt, ...rest } = getTableColumns(headersTable);
             return rest;
           })()
@@ -267,7 +274,6 @@ export const exportProject = async (id?: string | null) => {
         (await tsx
           .select(
             (() => {
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
               const { id, ...rest } = getTableColumns(hiddenHeadersCheckTable);
               return rest;
             })()
@@ -288,7 +294,6 @@ export const exportProject = async (id?: string | null) => {
       (await tsx
         .select(
           (() => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { id, createdAt, ...rest } =
               getTableColumns(bodyFormDataTable);
             return rest;
@@ -311,7 +316,6 @@ export const exportProject = async (id?: string | null) => {
         (await tsx
           .select(
             (() => {
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
               const { id, createdAt, ...rest } = getTableColumns(
                 bodyXWWWFormUrlencodedTable
               );
@@ -337,7 +341,6 @@ export const exportProject = async (id?: string | null) => {
       (await tsx
         .select(
           (() => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { id, ...rest } = getTableColumns(bodyBinaryTable);
             return rest;
           })()
@@ -358,7 +361,6 @@ export const exportProject = async (id?: string | null) => {
       (await tsx
         .select(
           (() => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { id, lineWrap, ...rest } = getTableColumns(bodyRawTable);
             return rest;
           })()
@@ -379,7 +381,6 @@ export const exportProject = async (id?: string | null) => {
         (await tsx
           .select(
             (() => {
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
               const { id, ...rest } = getTableColumns(requestMetaTabTable);
               return rest;
             })()
@@ -397,7 +398,6 @@ export const exportProject = async (id?: string | null) => {
       (await tsx
         .select(
           (() => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { id, projectId, ...rest } =
               getTableColumns(authorizationTable);
             return rest;

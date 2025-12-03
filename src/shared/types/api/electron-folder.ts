@@ -2,11 +2,11 @@ import { ResponseFolderDataInterface } from "@/shared/types/request-response.typ
 
 export interface ElectronAPIFolderInterface {
   getFolder(
-    requestOrFolderMetaId?: string
-  ): Promise<ResponseFolderDataInterface>;
+    requestOrFolderMetaId?: string | null
+  ): Promise<ResponseFolderDataInterface | null>;
   updateFolder(
     payload: Partial<ResponseFolderDataInterface> & {
-      requestOrFolderMetaId?: string;
+      requestOrFolderMetaId?: string | null;
     }
   ): Promise<boolean>;
   duplicateFolder(payload: Record<string, string>): Promise<boolean>;
