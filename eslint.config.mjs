@@ -29,7 +29,8 @@ export default defineConfig(
       "@typescript-eslint/explicit-function-return-type": "off",
       "react-refresh/only-export-components": "off",
       "react/display-name": "off",
-      "react/prop-types": "off"
+      "react/prop-types": "off",
+      "@typescript-eslint/no-unused-vars": "off"
     }
   }
   // eslintConfigPrettie

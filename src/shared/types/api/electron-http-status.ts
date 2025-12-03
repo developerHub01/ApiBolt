@@ -5,8 +5,8 @@ import {
 } from "@/shared/types/http-status.type";
 
 export interface ElectronAPIHttpStatusInterface {
-  getHttpStatus(): Promise<HttpStatusListInterface>;
-  getHttpStatusByCode(code: string): Promise<HttpStatusSingleInterface>;
+  getHttpStatus(): Promise<HttpStatusListInterface | null>;
+  getHttpStatusByCode(code: string): Promise<HttpStatusSingleInterface | null>;
   updateHttpStatus(
     payload: HttpStatusUpdatePayloadInterface
   ): Promise<Required<HttpStatusUpdatePayloadInterface> | null>;

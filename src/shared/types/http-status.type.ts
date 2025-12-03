@@ -1,8 +1,8 @@
 export interface HttpStatusInterface {
   reason: string;
   description: string;
-  editedReason: string;
-  editedDescription: string;
+  editedReason?: string | null;
+  editedDescription?: string | null;
 }
 
 export interface HttpStatusSingleInterface extends HttpStatusInterface {
@@ -13,9 +13,8 @@ export interface HttpStatusListInterface {
   [code: string]: HttpStatusInterface;
 }
 
-export interface HttpStatusUpdatePayloadInterface
-  extends Partial<
-    Pick<HttpStatusInterface, "editedReason" | "editedDescription">
-  > {
+export interface HttpStatusUpdatePayloadInterface extends Partial<
+  Pick<HttpStatusInterface, "editedReason" | "editedDescription">
+> {
   code: string;
 }

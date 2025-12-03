@@ -17,9 +17,12 @@ import {
 import { db } from "@/main/db/index.js";
 import { getActiveProject } from "@/main/db/projectsDB.js";
 import { v4 as uuidv4 } from "uuid";
+import { RequestExportFileInterface } from "@/shared/types/export-import/request";
+import { FolderExportFileInterface } from "@/shared/types/export-import/folder";
+import { ProjectExportFileInterface } from "@/shared/types/export-import/project";
 
 /* id === active project id */
-export const clearRequest = async id => {
+export const clearRequest = async (id: string) => {
   return await db.transaction(async tsx => {
     /* clear api-url */
     await tsx
@@ -79,11 +82,11 @@ export const clearRequest = async id => {
     await tsx
       .update(hiddenHeadersCheckTable)
       .set({
-        userAgent: 1,
-        contentLength: 1,
-        accept: 1,
-        acceptEncoding: 1,
-        connection: 1
+        userAgent: true,
+        contentLength: true,
+        accept: true,
+        acceptEncoding: true,
+        connection: true
       })
       .where(eq(hiddenHeadersCheckTable.requestOrFolderMetaId, id));
 
@@ -105,9 +108,12 @@ export const importRequest = async ({
   bodyXWWWFormUrlencoded,
   bodyFormData,
   authorization
-}) => {
+}: RequestExportFileInterface & {
+  requestId: string;
+}): Promise<boolean> => {
   return await db.transaction(async tsx => {
     const projectId = await getActiveProject();
+    if (!projectId) throw new Error();
 
     /**
      * ===================
@@ -315,7 +321,9 @@ export const importRequest = async ({
   });
 };
 
-export const exportRequest = async id => {
+export const exportRequest = async (
+  id: string
+): Promise<RequestExportFileInterface | null> => {
   return await db.transaction(async tsx => {
     const { name, method } =
       (
@@ -335,14 +343,13 @@ export const exportRequest = async id => {
           .where(eq(requestOrFolderMetaTable.id, id))
           .limit(1)
       )?.[0] ?? {};
-    if (!method) return false;
+    if (!method) return null;
 
     const { url } =
       (
         await tsx
           .select(
             (() => {
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
               const { id, createdAt, requestOrFolderMetaId, ...rest } =
                 getTableColumns(apiUrlTable);
               return rest;
@@ -357,7 +364,6 @@ export const exportRequest = async id => {
       (await tsx
         .select(
           (() => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { id, createdAt, requestOrFolderMetaId, ...rest } =
               getTableColumns(paramsTable);
             return rest;
@@ -370,7 +376,6 @@ export const exportRequest = async id => {
       (await tsx
         .select(
           (() => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { id, createdAt, requestOrFolderMetaId, ...rest } =
               getTableColumns(headersTable);
             return rest;
@@ -384,13 +389,9 @@ export const exportRequest = async id => {
         await tsx
           .select(
             (() => {
-              const {
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                id,
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                requestOrFolderMetaId,
-                ...rest
-              } = getTableColumns(hiddenHeadersCheckTable);
+              const { id, requestOrFolderMetaId, ...rest } = getTableColumns(
+                hiddenHeadersCheckTable
+              );
               return rest;
             })()
           )
@@ -404,14 +405,7 @@ export const exportRequest = async id => {
         await tsx
           .select(
             (() => {
-              
-              const {
-                id,
-                createdAt,
-                requestOrFolderMetaId,
-                lineWrap,
-                ...rest
-              } = getTableColumns(requestMetaTabTable);
+              const { id, ...rest } = getTableColumns(requestMetaTabTable);
               return rest;
             })()
           )
@@ -425,13 +419,8 @@ export const exportRequest = async id => {
         await tsx
           .select(
             (() => {
-              const {
-                id,
-                createdAt,
-                requestOrFolderMetaId,
-                lineWrap,
-                ...rest
-              } = getTableColumns(bodyRawTable);
+              const { id, requestOrFolderMetaId, lineWrap, ...rest } =
+                getTableColumns(bodyRawTable);
               return rest;
             })()
           )
@@ -445,7 +434,7 @@ export const exportRequest = async id => {
         await tsx
           .select(
             (() => {
-              const { id, createdAt, requestOrFolderMetaId, ...rest } =
+              const { id, requestOrFolderMetaId, ...rest } =
                 getTableColumns(bodyBinaryTable);
               return rest;
             })()
@@ -485,13 +474,8 @@ export const exportRequest = async id => {
         await tsx
           .select(
             (() => {
-              const {
-                id,
-                createdAt,
-                projectId,
-                requestOrFolderMetaId,
-                ...rest
-              } = getTableColumns(authorizationTable);
+              const { id, projectId, requestOrFolderMetaId, ...rest } =
+                getTableColumns(authorizationTable);
               return rest;
             })()
           )
@@ -517,11 +501,13 @@ export const exportRequest = async id => {
   });
 };
 
-export const exportFolder = async id => {
+export const exportFolder = async (
+  id: string
+): Promise<FolderExportFileInterface | null> => {
   return await db.transaction(async tsx => {
     const projectId = await getActiveProject();
     const requestTree = await getRequestOrFolderMeta();
-    if (!projectId || !requestTree[id]) return false;
+    if (!projectId || !requestTree[id]) return null;
 
     const selectedReuestIds = findSelectedRequestIds(id, requestTree);
 
@@ -530,13 +516,12 @@ export const exportFolder = async id => {
      * Find out request-list
      * =========================
      */
-    const requestList = {};
+    const requestList: FolderExportFileInterface["requestList"] = {};
     Object.keys(requestTree ?? {}).forEach(requestId => {
       if (!selectedReuestIds.has(requestId)) return;
-      requestList[requestId] = requestTree[requestId];
-      delete requestList[requestId].children;
-      delete requestList[requestId].projectId;
-      delete requestList[requestId].createdAt;
+      const { children, projectId, createdAt, ...rest } =
+        requestTree[requestId];
+      requestList[requestId] = rest;
     });
     requestList[id].parentId = null;
 
@@ -736,9 +721,9 @@ export const exportFolder = async id => {
           inArray(authorizationTable.requestOrFolderMetaId, requestIdList)
         )) ?? []
     )?.reduce((acc, curr) => {
-      if (!acc[curr.requestOrFolderMetaId])
-        acc[curr.requestOrFolderMetaId] = [];
-      acc[curr.requestOrFolderMetaId].push(curr);
+      if (!acc[`${curr.requestOrFolderMetaId}`])
+        acc[`${curr.requestOrFolderMetaId}`] = [];
+      acc[`${curr.requestOrFolderMetaId}`].push(curr);
 
       return acc;
     }, {});
@@ -773,18 +758,60 @@ export const importFolder = async ({
   rawDataList = {},
   requestMetaTabList = {},
   authorization = {}
-}) => {
+}: FolderExportFileInterface & {
+  requestId: string | null;
+  projectId: string;
+}): Promise<boolean> => {
   return await db.transaction(async tsx => {
-    const newApiUrlList = [];
-    const newParamsList = [];
-    const newHeadersList = [];
-    const newHiddenHeadersList = [];
-    const newRequestMetaTabList = [];
-    const newFormDataList = [];
-    const newXWWWList = [];
-    const newBinaryList = [];
-    const newRawList = [];
-    const newAuthorization = [];
+    const newRequestList: Array<
+      ProjectExportFileInterface["requestList"][string] & {
+        projectId: string;
+      }
+    > = [];
+    const newApiUrlList: Array<
+      ProjectExportFileInterface["apiUrlList"][string]
+    > = [];
+    const newParamsList: Array<
+      ProjectExportFileInterface["paramsList"][string][number] & {
+        requestOrFolderMetaId: string;
+      }
+    > = [];
+    const newHeadersList: Array<
+      ProjectExportFileInterface["headersList"][string][number]
+    > = [];
+    const newHiddenHeadersList: Array<
+      ProjectExportFileInterface["hiddenHeadersCheckList"][string]
+    > = [];
+    const newRequestMetaTabList: Array<
+      ProjectExportFileInterface["requestMetaTabList"][string] & {
+        requestOrFolderMetaId: string;
+      }
+    > = [];
+    const newFormDataList: Array<
+      ProjectExportFileInterface["formDataList"][string][number] & {
+        requestOrFolderMetaId: string;
+      }
+    > = [];
+    const newXWWWList: Array<
+      ProjectExportFileInterface["xWWWFormUrlencodedList"][string][number] & {
+        requestOrFolderMetaId: string;
+      }
+    > = [];
+    const newBinaryList: Array<
+      ProjectExportFileInterface["binaryDataList"][string] & {
+        requestOrFolderMetaId: string;
+      }
+    > = [];
+    const newRawList: Array<
+      ProjectExportFileInterface["rawDataList"][string] & {
+        requestOrFolderMetaId: string;
+      }
+    > = [];
+    const newAuthorization: Array<
+      ProjectExportFileInterface["authorization"][string] & {
+        projectId: string;
+      }
+    > = [];
 
     const idMapping = {};
     Object.keys(requestList).forEach(oldId => {
@@ -804,16 +831,14 @@ export const importFolder = async ({
         request.parentId = idMapping[request.parentId] || null;
       }
 
-      requestList[newId] = request;
+      newRequestList[newId] = request;
       delete requestList[oldId];
 
       if (apiUrlList[oldId]) {
-        newApiUrlList.push(
-          ...apiUrlList[oldId].map(url => ({
-            ...url,
-            requestOrFolderMetaId: newId
-          }))
-        );
+        newApiUrlList.push({
+          ...apiUrlList[oldId],
+          requestOrFolderMetaId: newId
+        });
       }
 
       if (paramsList[oldId]) {
@@ -835,21 +860,17 @@ export const importFolder = async ({
       }
 
       if (hiddenHeadersCheckList[oldId]) {
-        newHiddenHeadersList.push(
-          ...hiddenHeadersCheckList[oldId].map(header => ({
-            ...header,
-            requestOrFolderMetaId: newId
-          }))
-        );
+        newHiddenHeadersList.push({
+          ...hiddenHeadersCheckList[oldId],
+          requestOrFolderMetaId: newId
+        });
       }
 
       if (requestMetaTabList[oldId]) {
-        newRequestMetaTabList.push(
-          ...requestMetaTabList[oldId].map(meta => ({
-            ...meta,
-            requestOrFolderMetaId: newId
-          }))
-        );
+        newRequestMetaTabList.push({
+          ...requestMetaTabList[oldId],
+          requestOrFolderMetaId: newId
+        });
       }
 
       if (formDataList[oldId]) {
@@ -871,31 +892,25 @@ export const importFolder = async ({
       }
 
       if (binaryDataList[oldId]) {
-        newBinaryList.push(
-          ...binaryDataList[oldId].map(form => ({
-            ...form,
-            requestOrFolderMetaId: newId
-          }))
-        );
+        newBinaryList.push({
+          ...binaryDataList[oldId],
+          requestOrFolderMetaId: newId
+        });
       }
 
       if (rawDataList[oldId]) {
-        newRawList.push(
-          ...rawDataList[oldId].map(form => ({
-            ...form,
-            requestOrFolderMetaId: newId
-          }))
-        );
+        newRawList.push({
+          ...rawDataList[oldId],
+          requestOrFolderMetaId: newId
+        });
       }
 
       if (authorization[oldId]) {
-        newAuthorization.push(
-          ...authorization[oldId].map(auth => ({
-            ...auth,
-            requestOrFolderMetaId: newId,
-            projectId
-          }))
-        );
+        newAuthorization.push({
+          ...authorization[oldId],
+          requestOrFolderMetaId: newId,
+          projectId
+        });
       }
     });
 
@@ -904,13 +919,13 @@ export const importFolder = async ({
      * update root folder with targated request-id
      * =========================
      */
-    const rootFolderId = Object.keys(requestList).find(
-      id => !requestList[id].parentId
+    const rootFolderId = Object.keys(newRequestList).find(
+      id => !newRequestList[id].parentId
     );
     if (!rootFolderId) return false;
-    requestList[rootFolderId].parentId = requestId;
+    newRequestList[rootFolderId].parentId = requestId;
 
-    const finalRequests = Object.values(requestList);
+    const finalRequests = Object.values(newRequestList);
 
     if (finalRequests.length)
       await tsx.insert(requestOrFolderMetaTable).values(finalRequests);

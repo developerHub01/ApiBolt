@@ -2,36 +2,45 @@ import { eq, inArray } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { API_URL_DEFAULT_VALUE, apiUrlTable } from "@/main/db/schema.js";
 import { getTabList } from "@/main/db/tabsDB.js";
+import { ElectronAPIApiUrlInterface } from "@/shared/types/api/electron-api-url";
 
 /* id === requestOrFolderMetaId */
-export const getApiUrlDB = async (id) => {
-  try {
-    if (!id) id = (await getTabList())?.selectedTab;
-    if (!id) return null;
+export const getApiUrlDB: ElectronAPIApiUrlInterface["getApiUrlDB"] =
+  async id => {
+    try {
+      if (!id) id = (await getTabList())?.selectedTab;
+      if (!id) throw new Error();
 
-    return (
-      (
+      const result = (
         await db
           .select()
           .from(apiUrlTable)
           .where(eq(apiUrlTable.requestOrFolderMetaId, id))
-      )?.[0] ?? { url: API_URL_DEFAULT_VALUE }
-    );
-  } catch (error) {
-    console.error(error);
-  }
-};
+      )?.[0];
 
-export const createApiUrl = async (payload = {}) => {
+      if (!result) throw new Error();
+      return result;
+    } catch (error) {
+      console.error(error);
+      return { url: API_URL_DEFAULT_VALUE };
+    }
+  };
+
+export const createApiUrl: ElectronAPIApiUrlInterface["createApiUrl"] = async (
+  payload = {}
+) => {
   try {
-    if (!("requestOrFolderMetaId" in payload))
-      payload["requestOrFolderMetaId"] = (await getTabList())?.selectedTab;
-    if (!payload.requestOrFolderMetaId) return false;
+    const tabId = (await getTabList())?.selectedTab;
+    if (!tabId) throw Error();
 
-    const result = await db.insert(apiUrlTable).values(payload);
+    const result = await db.insert(apiUrlTable).values({
+      ...payload,
+      requestOrFolderMetaId: tabId
+    });
     return result.rowsAffected > 0;
   } catch (error) {
     console.error(error);
+    return false;
   }
 };
 
@@ -40,86 +49,86 @@ payload = {
   oldId: newId ---> newId means duplicatedId
 }
 */
-export const duplicateApiUrl = async (payload) => {
-  try {
-    if (!payload) return;
-    const oldIds = Object.keys(payload);
-    if (!oldIds.length) return;
+export const duplicateApiUrl: ElectronAPIApiUrlInterface["duplicateApiUrl"] =
+  async payload => {
+    try {
+      return await db.transaction(async tsx => {
+        if (!payload) throw new Error();
+        const oldIds = Object.keys(payload);
+        if (!oldIds.length) throw new Error();
 
-    const existingUrlData = await db
-      .select()
-      .from(apiUrlTable)
-      .where(inArray(apiUrlTable.requestOrFolderMetaId, oldIds));
+        const existingUrlData = await tsx
+          .select()
+          .from(apiUrlTable)
+          .where(inArray(apiUrlTable.requestOrFolderMetaId, oldIds));
 
-    if (!existingUrlData.length) return true;
+        if (!existingUrlData.length) return true;
 
-    /**
-     * - Replacing oldId with duplicatedId
-     * and only keeping url so that other things automatically generate by default
-     */
-    const duplicatePayload = existingUrlData.map(
-      ({ url, requestOrFolderMetaId }) => ({
-        requestOrFolderMetaId: payload[requestOrFolderMetaId],
-        url,
-      })
-    );
+        /**
+         * - Replacing oldId with duplicatedId
+         * and only keeping url so that other things automatically generate by default
+         */
+        const duplicatePayload = existingUrlData.map(
+          ({ url, requestOrFolderMetaId }) => ({
+            requestOrFolderMetaId: payload[requestOrFolderMetaId],
+            url
+          })
+        );
 
-    const result = await db.insert(apiUrlTable).values(duplicatePayload);
-
-    return result.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const updateApiUrl = async (payload) => {
-  if (!payload) return false;
-
-  let { requestOrFolderMetaId, ...other } = payload;
-  payload = other;
-
-  if (!requestOrFolderMetaId)
-    requestOrFolderMetaId = (await getTabList())?.selectedTab;
-  if (!requestOrFolderMetaId) return false;
-
-  delete payload["id"];
-  delete payload["createdAt"];
-
-  try {
-    const isExist = (
-      await db
-        .select()
-        .from(apiUrlTable)
-        .where(eq(apiUrlTable.requestOrFolderMetaId, requestOrFolderMetaId))
-    )?.[0];
-
-    if (!isExist) {
-      await createApiUrl({
-        requestOrFolderMetaId,
-        ...payload,
+        return (
+          (await tsx.insert(apiUrlTable).values(duplicatePayload))
+            .rowsAffected > 0
+        );
       });
-      return true;
+    } catch (error) {
+      console.error(error);
+      return false;
     }
+  };
 
-    await db
-      .update(apiUrlTable)
-      .set({
-        ...payload,
-      })
-      .where(eq(apiUrlTable.requestOrFolderMetaId, requestOrFolderMetaId));
-    return true;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
-};
+export const updateApiUrl: ElectronAPIApiUrlInterface["updateApiUrl"] =
+  async payload => {
+    try {
+      return await db.transaction(async tsx => {
+        const tabId = (await getTabList())?.selectedTab;
+        if (!payload || !tabId) throw Error();
 
-export const deleteApiUrlByRequestMetaId = async (requestOrFolderMetaId) => {
+        delete payload["id"];
+        delete payload["createdAt"];
+
+        const isExist = (
+          await tsx
+            .select()
+            .from(apiUrlTable)
+            .where(eq(apiUrlTable.requestOrFolderMetaId, tabId))
+        )?.[0];
+
+        if (!isExist) {
+          await tsx.insert(apiUrlTable).values({
+            ...payload,
+            requestOrFolderMetaId: tabId
+          });
+          return true;
+        }
+
+        await tsx
+          .update(apiUrlTable)
+          .set({
+            ...payload
+          })
+          .where(eq(apiUrlTable.requestOrFolderMetaId, tabId));
+        return true;
+      });
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
+export const deleteApiUrlByRequestMetaId = async (
+  requestOrFolderMetaId: string
+) => {
   try {
-    if (!requestOrFolderMetaId)
-      requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!requestOrFolderMetaId) return false;
-
     await db
       .delete(apiUrlTable)
       .where(eq(apiUrlTable.requestOrFolderMetaId, requestOrFolderMetaId));

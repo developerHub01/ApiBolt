@@ -2,166 +2,174 @@ import { eq, inArray } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { requestMetaTabTable } from "@/main/db/schema.js";
 import { getTabList } from "@/main/db/tabsDB.js";
+import { ElectronAPIRequestMetaTabInterface } from "@/shared/types/api/electron-request-meta-tab";
 
-export const getRequestMetaTab = async (requestOrFolderMetaId) => {
-  if (!requestOrFolderMetaId)
-    requestOrFolderMetaId = (await getTabList())?.selectedTab;
-
-  if (!requestOrFolderMetaId) return null;
-
-  try {
-    const result = (
-      await db
-        .select()
-        .from(requestMetaTabTable)
-        .where(
-          eq(requestMetaTabTable.requestOrFolderMetaId, requestOrFolderMetaId)
-        )
-    )?.[0];
-
-    return result;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const createRequestMetaTab = async (payload) => {
-  try {
-    if (!payload.requestOrFolderMetaId)
-      payload.requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!payload.requestOrFolderMetaId) return false;
-
-    const result = await db.insert(requestMetaTabTable).values({
-      ...payload,
-      requestOrFolderMetaId,
-    });
-
-    return result.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const updateRequestMetaTab = async (payload = {}) => {
-  try {
-    let { requestOrFolderMetaId, ...rest } = payload;
-
+export const getRequestMetaTab: ElectronAPIRequestMetaTabInterface["getRequestMetaTab"] =
+  async requestOrFolderMetaId => {
     if (!requestOrFolderMetaId)
       requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!requestOrFolderMetaId) return false;
+    if (!requestOrFolderMetaId) throw Error();
 
-    payload = rest;
-
-    const requestMetaTabData = await db
-      .select()
-      .from(requestMetaTabTable)
-      .where(
-        eq(requestMetaTabTable.requestOrFolderMetaId, requestOrFolderMetaId)
+    try {
+      return (
+        (
+          await db
+            .select()
+            .from(requestMetaTabTable)
+            .where(
+              eq(
+                requestMetaTabTable.requestOrFolderMetaId,
+                requestOrFolderMetaId
+              )
+            )
+        )?.[0] ?? null
       );
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  };
 
-    let updated;
+export const createRequestMetaTab: ElectronAPIRequestMetaTabInterface["createRequestMetaTab"] =
+  async payload => {
+    try {
+      const tabId =
+        payload.requestOrFolderMetaId ?? (await getTabList())?.selectedTab;
+      if (!tabId) throw Error();
 
-    if (!requestMetaTabData.length) {
-      updated = await db.insert(requestMetaTabTable).values({
-        ...rest,
-        requestOrFolderMetaId,
-      });
-    } else {
-      updated = await db
-        .update(requestMetaTabTable)
-        .set({
-          ...rest,
-        })
+      return (
+        (
+          await db.insert(requestMetaTabTable).values({
+            ...payload,
+            requestOrFolderMetaId: tabId
+          })
+        )?.rowsAffected > 0
+      );
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
+export const updateRequestMetaTab: ElectronAPIRequestMetaTabInterface["updateRequestMetaTab"] =
+  async (payload = {}) => {
+    try {
+      const tabId =
+        payload.requestOrFolderMetaId ?? (await getTabList())?.selectedTab;
+      if (!tabId) throw Error();
+
+      const requestMetaTabData = (
+        await db
+          .select()
+          .from(requestMetaTabTable)
+          .where(eq(requestMetaTabTable.requestOrFolderMetaId, tabId))
+      )?.[0];
+
+      if (!requestMetaTabData) {
+        await db.insert(requestMetaTabTable).values({
+          ...payload,
+          requestOrFolderMetaId: tabId
+        });
+      } else {
+        const { requestOrFolderMetaId, ...updatePayload } = payload;
+        await db
+          .update(requestMetaTabTable)
+          .set({
+            ...updatePayload
+          })
+          .where(eq(requestMetaTabTable.requestOrFolderMetaId, tabId));
+      }
+
+      return true;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
+export const deleteRequestMetaTab: ElectronAPIRequestMetaTabInterface["deleteRequestMetaTab"] =
+  async requestOrFolderMetaId => {
+    try {
+      if (!requestOrFolderMetaId)
+        requestOrFolderMetaId = (await getTabList())?.selectedTab;
+      if (!requestOrFolderMetaId) throw Error();
+
+      await db
+        .delete(requestMetaTabTable)
         .where(
           eq(requestMetaTabTable.requestOrFolderMetaId, requestOrFolderMetaId)
         );
+
+      return true;
+    } catch (error) {
+      console.error(error);
+      return false;
     }
-
-    return true;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const deleteRequestMetaTab = async (requestOrFolderMetaId) => {
-  try {
-    if (!requestOrFolderMetaId)
-      requestOrFolderMetaId = (await getTabList())?.selectedTab;
-
-    if (!requestOrFolderMetaId) return false;
-
-    await db
-      .delete(requestMetaTabTable)
-      .where(
-        eq(requestMetaTabTable.requestOrFolderMetaId, requestOrFolderMetaId)
-      );
-
-    return true;
-  } catch (error) {
-    console.error(error);
-  }
-};
+  };
 
 /* 
 payload = {
   oldId: newId ---> newId means duplicatedId
 }
 */
-export const duplicateRequestMetaTab = async (payload) => {
-  try {
-    if (!payload) return;
-    const oldIds = Object.keys(payload);
-    if (!oldIds.length) return;
+export const duplicateRequestMetaTab: ElectronAPIRequestMetaTabInterface["duplicateRequestMetaTab"] =
+  async payload => {
+    try {
+      if (!payload) throw new Error();
+      const oldIds = Object.keys(payload);
+      if (!oldIds.length) throw new Error();
 
-    const existingRequestMetaTabData = await db
-      .select()
-      .from(requestMetaTabTable)
-      .where(inArray(requestMetaTabTable.requestOrFolderMetaId, oldIds));
+      const existingRequestMetaTabData = await db
+        .select()
+        .from(requestMetaTabTable)
+        .where(inArray(requestMetaTabTable.requestOrFolderMetaId, oldIds));
 
-    if (!existingRequestMetaTabData.length) return true;
+      if (!existingRequestMetaTabData.length) return true;
 
-    /**
-     * - Replacing oldId with duplicatedId
-     * and only keeping url so that other things automatically generate by default
-     */
-    const duplicatePayload = existingRequestMetaTabData.map((tab) => {
-      delete tab["id"];
-      return {
-        ...tab,
-        requestOrFolderMetaId: payload[tab.requestOrFolderMetaId],
-      };
-    });
-
-    const result = await db
-      .insert(requestMetaTabTable)
-      .values(duplicatePayload);
-
-    return result.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const replaceRequestMetaTab = async (payload = {}) => {
-  try {
-    const updatPayload = { ...payload };
-    delete updatPayload["id"];
-    delete updatPayload["requestOrFolderMetaId"];
-
-    const result = await db
-      .insert(requestMetaTabTable)
-      .values({
-        ...payload,
-      })
-      .onConflictDoUpdate({
-        target: requestMetaTabTable.requestOrFolderMetaId,
-        set: {
-          ...updatPayload,
-        },
+      /**
+       * - Replacing oldId with duplicatedId
+       * and only keeping url so that other things automatically generate by default
+       */
+      const duplicatePayload = existingRequestMetaTabData.map(tab => {
+        const { id, ...updatePayload } = tab;
+        return {
+          ...updatePayload,
+          requestOrFolderMetaId: payload[tab.requestOrFolderMetaId]
+        };
       });
 
-    return result.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
+      return (
+        (await db.insert(requestMetaTabTable).values(duplicatePayload))
+          ?.rowsAffected > 0
+      );
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
+export const replaceRequestMetaTab: ElectronAPIRequestMetaTabInterface["replaceRequestMetaTab"] =
+  async (payload = {}) => {
+    try {
+      const { requestOrFolderMetaId, ...updatPayload } = payload;
+      if (!requestOrFolderMetaId) throw new Error();
+
+      const result = await db
+        .insert(requestMetaTabTable)
+        .values({
+          ...updatPayload,
+          requestOrFolderMetaId
+        })
+        .onConflictDoUpdate({
+          target: requestMetaTabTable.requestOrFolderMetaId,
+          set: {
+            ...updatPayload
+          }
+        });
+
+      return result.rowsAffected > 0;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };

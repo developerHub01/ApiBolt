@@ -35,11 +35,12 @@ export type TMetaTableType =
 export interface RequestListItemInterface {
   id: string;
   name: string;
-  method?: THTTPMethods;
+  method?: THTTPMethods | null;
   children?: Array<string>;
-  parentId?: string;
-  createdAt?: number;
+  parentId?: string | null;
+  createdAt?: string;
   isExpended?: boolean;
+  projectId: string;
 }
 
 export type RequestListItemUpdatePayloadInterface = Required<
@@ -246,13 +247,13 @@ export type BodyRawInterface = {
 };
 
 export type BodyBinaryInterface = {
-  requestOrFolderMetaId?: string;
-  file: string;
-  path: string;
+  requestOrFolderMetaId: string;
+  file: string | null;
+  path: string | null;
 };
 
 export type RequestTabInterface = {
-  requestOrFolderMetaId?: string;
+  requestOrFolderMetaId?: string | null;
   activeMetaTab: TActiveTabType;
   requestBodyType: TRequestBodyType;
 };

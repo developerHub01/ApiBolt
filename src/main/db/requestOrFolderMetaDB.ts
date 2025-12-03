@@ -1,4 +1,4 @@
-import { eq, getTableColumns, inArray, InferSelectModel } from "drizzle-orm";
+import { eq, getTableColumns, inArray } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { requestOrFolderMetaTable } from "@/main/db/schema.js";
 import { getActiveProject } from "@/main/db/projectsDB.js";
@@ -13,8 +13,16 @@ export const getRequestOrFolderMeta = async () => {
     const activeProjectId = await getActiveProject();
     if (!activeProjectId) throw new Error("no project active");
 
-    const dataList: Array<InferSelectModel<typeof requestOrFolderMetaTable>> = await db
-      .select()
+    const dataList = await db
+      .select({
+        id: requestOrFolderMetaTable.id,
+        method: requestOrFolderMetaTable.method,
+        name: requestOrFolderMetaTable.name,
+        projectId: requestOrFolderMetaTable.projectId,
+        parentId: requestOrFolderMetaTable.parentId,
+        isExpended: requestOrFolderMetaTable.isExpended,
+        createdAt: requestOrFolderMetaTable.createdAt
+      })
       .from(requestOrFolderMetaTable)
       .where(eq(requestOrFolderMetaTable.projectId, activeProjectId));
 

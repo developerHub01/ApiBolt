@@ -14,6 +14,7 @@ import { getSelectedTab } from "@/main/db/tabsDB.js";
 import { getActiveProject } from "@/main/db/projectsDB.js";
 import { ElectronAPIRequestInterface } from "@/shared/types/api/electron-request.js";
 import { RequestExportFileInterface } from "@/shared/types/export-import/request";
+import { FolderExportFileInterface } from "@/shared/types/export-import/folder";
 
 export const requestHandler = () => {
   ipcMain.handle(
@@ -26,7 +27,7 @@ export const requestHandler = () => {
         const projectId = await getActiveProject();
         if (!rest[0] || !projectId) throw new Error("no request selected");
 
-        const response = await clearRequest(...rest);
+        const response = await clearRequest(rest[0]);
         if (!response) throw new Error();
 
         return {
@@ -121,8 +122,9 @@ export const requestHandler = () => {
     ): Promise<ReturnType<ElectronAPIRequestInterface["exportRequest"]>> => {
       try {
         if (!mainWindow) throw new Error();
+        if (!rest[0]) throw new Error("No request selected");
 
-        const payload = await exportRequest(...rest);
+        const payload = await exportRequest(rest[0]);
         if (!payload) throw new Error();
 
         const fileName = payload.name
@@ -192,7 +194,7 @@ export const requestHandler = () => {
         try {
           const fileData = JSON.parse(
             fileStringData
-          ) as RequestExportFileInterface;
+          ) as FolderExportFileInterface;
           const response = await importFolder({
             requestId: id,
             projectId,
@@ -228,6 +230,7 @@ export const requestHandler = () => {
       try {
         if (!mainWindow) throw new Error();
         const id = rest[0];
+        if (!id) throw new Error("No folder selected");
         const payload = await exportFolder(id);
 
         const folderName =

@@ -4,18 +4,31 @@ import {
   getHttpStatusByCode,
   updateHttpStatus
 } from "@/main/db/httpStatusDB.js";
+import { ElectronAPIHttpStatusInterface } from "@/shared/types/api/electron-http-status";
 
 export const httpStatusHandler = () => {
   ipcMain.handle(
     "getHttpStatus",
-    async (_, ...rest) => await getHttpStatus(...rest)
+    async (
+      _,
+      ...rest: Parameters<ElectronAPIHttpStatusInterface["getHttpStatus"]>
+    ): ReturnType<ElectronAPIHttpStatusInterface["getHttpStatus"]> =>
+      await getHttpStatus(...rest)
   );
   ipcMain.handle(
     "getHttpStatusByCode",
-    async (_, ...rest) => await getHttpStatusByCode(...rest)
+    async (
+      _,
+      ...rest: Parameters<ElectronAPIHttpStatusInterface["getHttpStatusByCode"]>
+    ): ReturnType<ElectronAPIHttpStatusInterface["getHttpStatusByCode"]> =>
+      await getHttpStatusByCode(...rest)
   );
   ipcMain.handle(
     "updateHttpStatus",
-    async (_, ...rest) => await updateHttpStatus(...rest)
+    async (
+      _,
+      ...rest: Parameters<ElectronAPIHttpStatusInterface["updateHttpStatus"]>
+    ): ReturnType<ElectronAPIHttpStatusInterface["updateHttpStatus"]> =>
+      await updateHttpStatus(...rest)
   );
 };

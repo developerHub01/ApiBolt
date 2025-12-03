@@ -11,21 +11,13 @@ import { AuthorizationPayloadInterface } from "@/shared/types/authorization.type
 
 interface Param extends Omit<
   ParamHeaderBuildPayloadInterface,
-  "id" | "requestOrFolderMetaId" | "createdAt" | "isCheck"
-> {
-  isCheck: number;
-}
+  "id" | "requestOrFolderMetaId" | "createdAt"
+> {}
 
 interface Header extends Omit<
   ParamHeaderPayloadInterface,
-  "id" | "requestOrFolderMetaId" | "createdAt" | "isCheck"
-> {
-  isCheck: number;
-}
-
-type HiddenHeaders = {
-  [K in keyof HiddenHeadersCheckInterface]: number;
-};
+  "id" | "requestOrFolderMetaId" | "createdAt"
+> {}
 
 export interface RequestExportFileInterface {
   name: string;
@@ -33,7 +25,7 @@ export interface RequestExportFileInterface {
   url: string;
   params: Array<Param>;
   headers: Array<Header>;
-  hiddenHeadersCheck: HiddenHeaders;
+  hiddenHeadersCheck: HiddenHeadersCheckInterface;
   requestMetaTab: Omit<RequestTabInterface, "requestOrFolderMetaId">;
   bodyRaw: Pick<BodyRawInterface, "type" | "rawData">;
   bodyBinary: Pick<BodyBinaryInterface, "path">;

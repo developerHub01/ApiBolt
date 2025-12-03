@@ -16,14 +16,10 @@ export type EnvironmentExportInterface = Omit<
   "id" | "projectId" | "createdAt"
 >;
 
-export interface ProjectExportFileInterface {
-  project: {
-    name: string;
-  };
-  environments: Array<EnvironmentExportInterface>;
+export interface FolderExportFileInterface {
   requestList: Record<
     string,
-    Omit<RequestListItemInterface, "createdAt" | "children">
+    Omit<RequestListItemInterface, "createdAt" | "children" | "projectId">
   >;
   apiUrlList: Record<
     string,
@@ -45,8 +41,8 @@ export interface ProjectExportFileInterface {
       requestOrFolderMetaId: string;
     }
   >;
-  formDataList: ProjectExportFileInterface["headersList"];
-  xWWWFormUrlencodedList: ProjectExportFileInterface["headersList"];
+  formDataList: FolderExportFileInterface["headersList"];
+  xWWWFormUrlencodedList: FolderExportFileInterface["headersList"];
   binaryDataList: Record<
     string,
     Pick<BodyBinaryInterface, "requestOrFolderMetaId" | "path">

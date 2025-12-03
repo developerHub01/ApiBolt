@@ -21,6 +21,7 @@ import { createAuth } from "@/main/db/authorizationDB.js";
 import { v4 as uuidv4 } from "uuid";
 import { CreateProjectPayloadInterface } from "@/shared/types/project.types.js";
 import { ProjectExportFileInterface } from "@/shared/types/export-import/project.js";
+import { ElectronAPIProjectsInterface } from "@/shared/types/api/electron-projects";
 
 export const getProjects = async () => {
   try {
@@ -55,81 +56,89 @@ export const createProjects = async (
   }
 };
 
-export const updateProjects = async (id, payload = {}) => {
-  try {
-    const updated = await db
-      .update(projectTable)
-      .set({
-        ...payload
-      })
-      .where(eq(projectTable.id, id));
-
-    return updated.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
-};
-
-export const deleteProjects = async (id: string) => {
-  try {
-    const deleted = await db
-      .delete(projectTable)
-      .where(eq(projectTable.id, id));
-
-    return deleted.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
-};
-
-export const changeActiveProject = async id => {
-  try {
-    const countResult = await db
-      .select({
-        count: count()
-      })
-      .from(activeProjectTable);
-    const rowCount = countResult?.[0]?.count ?? 0;
-
-    let result;
-
-    if (rowCount) {
-      result = await db
-        .update(activeProjectTable)
+export const updateProjects: ElectronAPIProjectsInterface["updateProjects"] =
+  async (id, payload) => {
+    try {
+      const updated = await db
+        .update(projectTable)
         .set({
-          activeProjectId: id
+          ...payload
         })
-        .where(eq(activeProjectTable.id, ACTIVE_PROJECT_ID));
-    } else {
-      result = await db.insert(activeProjectTable).values({
-        id: ACTIVE_PROJECT_ID,
-        activeProjectId: id
-      });
+        .where(eq(projectTable.id, id));
+
+      return updated.rowsAffected > 0;
+    } catch (error) {
+      console.error(error);
+      return false;
     }
+  };
 
-    return result.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
-};
+export const deleteProjects: ElectronAPIProjectsInterface["deleteProjects"] =
+  async (id: string) => {
+    try {
+      const deleted = await db
+        .delete(projectTable)
+        .where(eq(projectTable.id, id));
 
-export const getActiveProject = async () => {
-  try {
-    const result = await db
-      .select()
-      .from(activeProjectTable)
-      .where(eq(activeProjectTable.id, ACTIVE_PROJECT_ID))
-      .limit(1);
+      return deleted.rowsAffected > 0;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
 
-    return result[0]?.activeProjectId ?? null;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-};
+export const changeActiveProject: ElectronAPIProjectsInterface["changeActiveProject"] =
+  async id => {
+    try {
+      const countResult = await db
+        .select({
+          count: count()
+        })
+        .from(activeProjectTable);
+      const rowCount = countResult?.[0]?.count ?? 0;
+
+      if (rowCount) {
+        return (
+          (
+            await db
+              .update(activeProjectTable)
+              .set({
+                activeProjectId: id
+              })
+              .where(eq(activeProjectTable.id, ACTIVE_PROJECT_ID))
+          ).rowsAffected > 0
+        );
+      } else {
+        return (
+          (
+            await db.insert(activeProjectTable).values({
+              id: ACTIVE_PROJECT_ID,
+              activeProjectId: id
+            })
+          ).rowsAffected > 0
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
+export const getActiveProject: ElectronAPIProjectsInterface["getActiveProject"] =
+  async () => {
+    try {
+      const result = await db
+        .select()
+        .from(activeProjectTable)
+        .where(eq(activeProjectTable.id, ACTIVE_PROJECT_ID))
+        .limit(1);
+
+      return result[0]?.activeProjectId ?? null;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  };
 
 export const getActiveProjectDetails = async () => {
   try {
