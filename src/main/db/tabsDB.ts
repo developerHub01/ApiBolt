@@ -2,33 +2,41 @@ import { tabsTable } from "@/main/db/schema.js";
 import { eq } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { getActiveProject } from "@/main/db/projectsDB.js";
+import { ElectronAPITabsInterface } from "@/shared/types/api/electron-tabs";
+import { TabsInterface } from "@/shared/types/tabs";
 
-export const getTabList = async () => {
+export const getTabList: ElectronAPITabsInterface["getTabList"] = async () => {
   try {
     const activeProjectId = await getActiveProject();
+    if (!activeProjectId) throw Error();
 
-    if (!activeProjectId) return null;
-
-    let tabList = await db
-      .select()
-      .from(tabsTable)
-      .where(eq(tabsTable.projectId, activeProjectId));
-
-    if (!tabList || !tabList?.length) {
-      await db.insert(tabsTable).values({ projectId: activeProjectId });
-      tabList = await db
+    let tabList = (
+      await db
         .select()
         .from(tabsTable)
-        .where(eq(tabsTable.projectId, activeProjectId));
+        .where(eq(tabsTable.projectId, activeProjectId))
+    )?.[0];
+
+    if (!tabList) {
+      await db.insert(tabsTable).values({ projectId: activeProjectId });
+      tabList = (
+        await db
+          .select()
+          .from(tabsTable)
+          .where(eq(tabsTable.projectId, activeProjectId))
+      )?.[0];
     }
 
-    const result = tabList?.[0];
-    if (!result) return result;
-    result.openTabs = JSON.parse(result.openTabs);
-
-    return result;
+    return {
+      ...tabList,
+      openTabs: JSON.parse(tabList.openTabs) as Array<string>
+    };
   } catch (error) {
     console.error(error);
+    return {
+      openTabs: [],
+      selectedTab: null
+    };
   }
 };
 
@@ -52,48 +60,68 @@ export const getSelectedTab = async (projectId?: string | null) => {
   }
 };
 
-export const updateTabList = async payload => {
-  const activeProjectId = await getActiveProject();
+export const updateTabList: ElectronAPITabsInterface["updateTabList"] =
+  async payload => {
+    try {
+      const activeProjectId = await getActiveProject();
+      if (!activeProjectId) return false;
 
-  if (payload.openTabs && Array.isArray(payload.openTabs))
-    payload.openTabs = JSON.stringify(payload.openTabs);
+      const dbPayload: Partial<
+        Omit<TabsInterface, "openTabs"> & {
+          openTabs: string;
+        }
+      > = {};
 
-  const updated = await db
-    .update(tabsTable)
-    .set({
-      ...payload
-    })
-    .where(eq(tabsTable.projectId, activeProjectId));
+      if (Array.isArray(payload.openTabs))
+        dbPayload.openTabs = JSON.stringify(payload.openTabs);
+      if ("selectedTab" in payload)
+        dbPayload.selectedTab = payload.selectedTab ?? null;
 
-  return updated?.rowsAffected > 0;
-};
+      const updated = await db
+        .update(tabsTable)
+        .set({
+          ...dbPayload
+        })
+        .where(eq(tabsTable.projectId, activeProjectId));
 
-export const deleteAllTabList = async () => {
-  try {
-    let deleted = await db.delete(tabsTable);
+      return updated?.rowsAffected > 0;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
 
-    return deleted?.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
+export const deleteAllTabList: ElectronAPITabsInterface["deleteAllTabList"] =
+  async () => {
+    try {
+      return (await db.delete(tabsTable))?.rowsAffected > 0;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
 
-export const deleteTabListByProjectId = async id => {
-  try {
-    const activeProjectId = id ?? (await getActiveProject());
+export const deleteTabListByProjectId: ElectronAPITabsInterface["deleteTabListByProjectId"] =
+  async id => {
+    try {
+      const activeProjectId = id ?? (await getActiveProject());
+      if (!activeProjectId) return false;
 
-    let deleted = await db
-      .delete(tabsTable)
-      .where(eq(tabsTable.projectId, activeProjectId));
-
-    return deleted?.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
+      return (
+        (
+          await db
+            .delete(tabsTable)
+            .where(eq(tabsTable.projectId, activeProjectId))
+        )?.rowsAffected > 0
+      );
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
 
 export const updateTablistBasedRequestOrFolderMetaDeletion = async (
-  deletionCandidates = []
+  deletionCandidates: Array<string> = []
 ) => {
   try {
     const tabList = await getTabList();
@@ -102,14 +130,12 @@ export const updateTablistBasedRequestOrFolderMetaDeletion = async (
     const openTabs = tabList.openTabs.filter(
       tab => !deletionCandidates.includes(tab)
     );
-
-    const payload = { openTabs };
+    const payload: Partial<TabsInterface> = { openTabs };
 
     if (tabList.selectedTab && deletionCandidates.includes(tabList.selectedTab))
       payload.selectedTab = openTabs?.[0] ?? null;
 
-    const response = await updateTabList(payload);
-    return response;
+    return await updateTabList(payload);
   } catch (error) {
     console.error(error);
     return false;
