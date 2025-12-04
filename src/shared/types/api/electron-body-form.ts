@@ -2,15 +2,19 @@ import { FormDataPayloadInterface } from "@/shared/types/request-response.types"
 
 export interface ElectronAPIBodyFormDataInterface {
   getBodyFormData(
-    requestOrFolderMetaId?: string
+    requestOrFolderMetaId?: string | null
   ): Promise<Array<FormDataPayloadInterface>>;
   deleteBodyFormData(formId: string): Promise<boolean>;
   deleteBodyFormDataByRequestMetaId(
-    requestOrFolderMetaId?: string
+    requestOrFolderMetaId?: string | null
   ): Promise<boolean>;
   deleteBodyFormDataFile(formId: string, index: number): Promise<boolean>;
   createBodyFormData(
-    payload: Partial<FormDataPayloadInterface>
+    payload: Partial<
+      FormDataPayloadInterface & {
+        requestOrFolderMetaId?: string | null;
+      }
+    >
   ): Promise<boolean>;
   updateBodyFormData(
     formId: string,
@@ -26,7 +30,7 @@ export interface ElectronAPIBodyFormDataInterface {
     payload?: Array<Partial<FormDataPayloadInterface>>
   ): Promise<boolean>;
   checkAllBodyFormDataByRequestMetaId(
-    requestOrFolderMetaId?: string
+    requestOrFolderMetaId?: string | null
   ): Promise<boolean>;
   duplicateBodyFormData(payload: Record<string, string>): Promise<boolean>;
 }

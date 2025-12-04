@@ -14,130 +14,211 @@ import {
   replaceFullBodyFormData,
   updateBodyFormData
 } from "@/main/db/bodyFormDataDB.js";
+import { ElectronAPIBodyFormDataInterface } from "@/shared/types/api/electron-body-form";
+import {
+  FileDataInterface,
+  FormDataPayloadInterface
+} from "@/shared/types/request-response.types";
 
 export const bodyFormDataHandlers = () => {
-  ipcMain.handle("getBodyFormData", async (_, ...rest) => {
-    let result = await getBodyFormData(...rest);
-
-    /* checking file existance, if not then showing null as flag */
-    result = result.map((form) => {
-      if (!Array.isArray(form.value) || !form.value) return form;
-
-      form.value = form.value?.map((filePath) => {
-        if (!filePath || !fs.existsSync(filePath)) return null;
-        return filePath;
+  ipcMain.handle(
+    "getBodyFormData",
+    async (
+      _,
+      ...rest: Parameters<ElectronAPIBodyFormDataInterface["getBodyFormData"]>
+    ): ReturnType<ElectronAPIBodyFormDataInterface["getBodyFormData"]> => {
+      const rawResult = (await getBodyFormData(...rest)).map(form => {
+        if (!Array.isArray(form.value) || !form.value) return form;
+        return {
+          ...form,
+          /* checking file existance, if not then showing null as flag */
+          value: form.value?.map(filePath => {
+            if (!filePath || !fs.existsSync(filePath)) return null;
+            return filePath;
+          })
+        };
       });
 
-      return form;
-    });
+      /* filtering the non-existing files from db start */
 
-    /* filtering the non-existing files from db start */
-    try {
       /* extracting non-existing files */
-      const needUpdateMissingFileInDB = result
-        .filter((formData) => {
+      const needUpdateMissingFileInDB = rawResult
+        .filter(formData => {
           if (!Array.isArray(formData.value)) return false;
-
-          return formData.value?.some((item) => !item);
+          return formData.value?.some(item => !item);
         })
-        .map((formData) => ({
+        .map(formData => ({
           id: formData.id,
-          value: formData.value.filter(Boolean),
+          value: (formData.value as Array<string>).filter(Boolean)
         }));
 
       /* updating in db removing file path of non-existing */
       if (needUpdateMissingFileInDB && needUpdateMissingFileInDB?.length)
         await Promise.all(
-          needUpdateMissingFileInDB.map(async (formData) => {
+          needUpdateMissingFileInDB.map(async formData => {
             return await updateBodyFormData(formData.id, {
               value: (formData?.value ?? []).length
-                ? JSON.stringify([...formData?.value])
-                : "",
+                ? JSON.stringify([...formData.value])
+                : ""
             });
           })
         );
-    } catch {}
-    /* filtering the non-existing files from db end */
 
-    /* extracting names of files from os */
-    result = result.map((formData) => {
-      if (!Array.isArray(formData.value)) return formData;
+      /* filtering the non-existing files from db end */
 
-      try {
-        return {
-          ...formData,
-          value: formData.value.map((filePath) => ({
-            file: path.basename(filePath),
-            path: filePath,
-          })),
-        };
-      } catch (error) {
-        return formData;
-      }
-    });
+      /* extracting names of files from os */
+      const result: Array<FormDataPayloadInterface> = rawResult.map(
+        formData => {
+          if (!Array.isArray(formData.value))
+            return formData as FormDataPayloadInterface;
 
-    return result;
-  });
+          try {
+            return {
+              ...formData,
+              value: (formData.value as Array<string>).map(
+                filePath =>
+                  ({
+                    file: path.basename(filePath),
+                    path: filePath
+                  }) as FileDataInterface
+              )
+            };
+          } catch (error) {
+            return formData as FormDataPayloadInterface;
+          }
+        }
+      );
+
+      return result;
+    }
+  );
   ipcMain.handle(
     "deleteBodyFormData",
-    async (_, ...rest) => await deleteBodyFormData(...rest)
+    async (
+      _,
+      ...rest: Parameters<
+        ElectronAPIBodyFormDataInterface["deleteBodyFormData"]
+      >
+    ): ReturnType<ElectronAPIBodyFormDataInterface["deleteBodyFormData"]> =>
+      await deleteBodyFormData(...rest)
   );
   ipcMain.handle(
     "deleteBodyFormDataByRequestMetaId",
-    async (_, ...rest) => await deleteBodyFormDataByRequestMetaId(...rest)
+    async (
+      _,
+      ...rest: Parameters<
+        ElectronAPIBodyFormDataInterface["deleteBodyFormDataByRequestMetaId"]
+      >
+    ): ReturnType<
+      ElectronAPIBodyFormDataInterface["deleteBodyFormDataByRequestMetaId"]
+    > => await deleteBodyFormDataByRequestMetaId(...rest)
   );
   ipcMain.handle(
     "deleteBodyFormDataFile",
-    async (_, ...rest) => await deleteBodyFormDataFile(...rest)
+    async (
+      _,
+      ...rest: Parameters<
+        ElectronAPIBodyFormDataInterface["deleteBodyFormDataFile"]
+      >
+    ): ReturnType<ElectronAPIBodyFormDataInterface["deleteBodyFormDataFile"]> =>
+      await deleteBodyFormDataFile(...rest)
   );
   ipcMain.handle(
     "createBodyFormData",
-    async (_, ...rest) => await createBodyFormData(...rest)
+    async (
+      _,
+      ...rest: Parameters<
+        ElectronAPIBodyFormDataInterface["createBodyFormData"]
+      >
+    ): ReturnType<ElectronAPIBodyFormDataInterface["createBodyFormData"]> =>
+      await createBodyFormData(...rest)
   );
   ipcMain.handle(
     "updateBodyFormData",
-    async (_, ...rest) => await updateBodyFormData(...rest)
+    async (
+      _,
+      ...rest: Parameters<
+        ElectronAPIBodyFormDataInterface["updateBodyFormData"]
+      >
+    ): ReturnType<ElectronAPIBodyFormDataInterface["updateBodyFormData"]> =>
+      await updateBodyFormData(...rest)
   );
-  ipcMain.handle("updateBodyFormDataFile", async (_, ...rest) => {
-    try {
-      const id = rest?.[0];
-      if (!id) return false;
+  ipcMain.handle(
+    "updateBodyFormDataFile",
+    async (
+      _,
+      ...rest: Parameters<
+        ElectronAPIBodyFormDataInterface["updateBodyFormDataFile"]
+      >
+    ): ReturnType<
+      ElectronAPIBodyFormDataInterface["updateBodyFormDataFile"]
+    > => {
+      try {
+        const id = rest?.[0];
+        if (!id) throw new Error();
 
-      const formData = await getBodyFormDataByFormId(id);
-      if (!formData) return false;
+        const formData = await getBodyFormDataByFormId(id);
+        if (!formData) throw new Error();
 
-      let prevValue = Array.isArray(formData.value) ? formData.value : [];
+        const prevValue = Array.isArray(formData.value) ? formData.value : [];
 
-      let result = await dialog.showOpenDialog({
-        properties: ["openFile"],
-        title: "Select file",
-        buttonLabel: "Select",
-      });
+        const result = await dialog.showOpenDialog({
+          properties: ["openFile"],
+          title: "Select file",
+          buttonLabel: "Select"
+        });
 
-      result = result?.filePaths;
-      if (!Array.isArray(result)) return;
+        const filePath = result?.filePaths;
+        if (!Array.isArray(filePath)) throw new Error();
 
-      return await updateBodyFormData(id, {
-        value: JSON.stringify([...prevValue, ...result]),
-      });
-    } catch (error) {
-      return false;
+        return await updateBodyFormData(id, {
+          value: JSON.stringify([...prevValue, ...filePath])
+        });
+      } catch (error) {
+        return false;
+      }
     }
-  });
+  );
   ipcMain.handle(
     "replaceBodyFormData",
-    async (_, ...rest) => await replaceBodyFormData(...rest)
+    async (
+      _,
+      ...rest: Parameters<
+        ElectronAPIBodyFormDataInterface["replaceBodyFormData"]
+      >
+    ): ReturnType<ElectronAPIBodyFormDataInterface["replaceBodyFormData"]> =>
+      await replaceBodyFormData(...rest)
   );
   ipcMain.handle(
     "replaceFullBodyFormData",
-    async (_, ...rest) => await replaceFullBodyFormData(...rest)
+    async (
+      _,
+      ...rest: Parameters<
+        ElectronAPIBodyFormDataInterface["replaceFullBodyFormData"]
+      >
+    ): ReturnType<
+      ElectronAPIBodyFormDataInterface["replaceFullBodyFormData"]
+    > => await replaceFullBodyFormData(...rest)
   );
   ipcMain.handle(
     "checkAllBodyFormDataByRequestMetaId",
-    async (_, ...rest) => await checkAllBodyFormDataByRequestMetaId(...rest)
+    async (
+      _,
+      ...rest: Parameters<
+        ElectronAPIBodyFormDataInterface["checkAllBodyFormDataByRequestMetaId"]
+      >
+    ): ReturnType<
+      ElectronAPIBodyFormDataInterface["checkAllBodyFormDataByRequestMetaId"]
+    > => await checkAllBodyFormDataByRequestMetaId(...rest)
   );
   ipcMain.handle(
     "duplicateBodyFormData",
-    async (_, ...rest) => await duplicateBodyFormData(...rest)
+    async (
+      _,
+      ...rest: Parameters<
+        ElectronAPIBodyFormDataInterface["duplicateBodyFormData"]
+      >
+    ): ReturnType<ElectronAPIBodyFormDataInterface["duplicateBodyFormData"]> =>
+      await duplicateBodyFormData(...rest)
   );
 };

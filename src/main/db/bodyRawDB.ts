@@ -2,102 +2,94 @@ import { eq, inArray } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { bodyRawTable } from "@/main/db/schema.js";
 import { getTabList } from "@/main/db/tabsDB.js";
+import { ElectronAPIBodyRawInterface } from "@/shared/types/api/electron-body-raw";
 
-export const getBodyRaw = async (requestOrFolderMetaId) => {
-  if (!requestOrFolderMetaId)
-    requestOrFolderMetaId = (await getTabList())?.selectedTab;
+export const getBodyRaw: ElectronAPIBodyRawInterface["getBodyRaw"] =
+  async requestOrFolderMetaId => {
+    requestOrFolderMetaId =
+      requestOrFolderMetaId ?? (await getTabList())?.selectedTab;
+    if (!requestOrFolderMetaId) throw new Error();
 
-  if (!requestOrFolderMetaId) return null;
-
-  try {
-    const result = (
-      await db
-        .select()
-        .from(bodyRawTable)
-        .where(eq(bodyRawTable.requestOrFolderMetaId, requestOrFolderMetaId))
-    )?.[0];
-
-    if (result) result["lineWrap"] = Boolean(result["lineWrap"]);
-
-    return result;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const createBodyRaw = async (payload) => {
-  try {
-    if (!payload.requestOrFolderMetaId)
-      payload.requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!payload.requestOrFolderMetaId) return false;
-
-    for (const key in payload)
-      if (typeof payload[key] === "boolean")
-        payload[key] = Number(payload[key]);
-
-    const result = await db.insert(bodyRawTable).values({
-      ...payload,
-      requestOrFolderMetaId,
-    });
-
-    return result.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const updateBodyRaw = async (payload = {}) => {
-  try {
-    let { requestOrFolderMetaId, ...rest } = payload;
-
-    if (!requestOrFolderMetaId)
-      requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!requestOrFolderMetaId) return false;
-
-    payload = rest;
-
-    for (const key in payload)
-      if (typeof payload[key] === "boolean")
-        payload[key] = Number(payload[key]);
-
-    const bodyRawData = await db
-      .select()
-      .from(bodyRawTable)
-      .where(eq(bodyRawTable.requestOrFolderMetaId, requestOrFolderMetaId));
-
-    let updated;
-
-    if (!bodyRawData.length) {
-      updated = await db.insert(bodyRawTable).values({
-        ...rest,
-        requestOrFolderMetaId,
-      });
-    } else {
-      updated = await db
-        .update(bodyRawTable)
-        .set({
-          ...rest,
-        })
-        .where(eq(bodyRawTable.requestOrFolderMetaId, requestOrFolderMetaId));
+    try {
+      return (
+        await db
+          .select()
+          .from(bodyRawTable)
+          .where(eq(bodyRawTable.requestOrFolderMetaId, requestOrFolderMetaId))
+      )?.[0];
+    } catch (error) {
+      console.error(error);
+      return null;
     }
+  };
 
-    return updated?.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
+export const createBodyRaw: ElectronAPIBodyRawInterface["createBodyRaw"] =
+  async payload => {
+    try {
+      const requestOrFolderMetaId =
+        payload.requestOrFolderMetaId ?? (await getTabList())?.selectedTab;
+      if (!requestOrFolderMetaId) throw new Error();
 
-export const deleteBodyRawByRequestMetaId = async (requestOrFolderMetaId) => {
+      return (
+        (
+          await db.insert(bodyRawTable).values({
+            ...payload,
+            requestOrFolderMetaId
+          })
+        ).rowsAffected > 0
+      );
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
+export const updateBodyRaw: ElectronAPIBodyRawInterface["updateBodyRaw"] =
+  async payload => {
+    try {
+      const requestOrFolderMetaId =
+        payload.requestOrFolderMetaId ?? (await getTabList())?.selectedTab;
+      if (!requestOrFolderMetaId) throw new Error();
+
+      const { requestOrFolderMetaId: _, ...updatePayload } = payload;
+
+      return (
+        (
+          await db
+            .insert(bodyRawTable)
+            .values({
+              ...payload,
+              requestOrFolderMetaId
+            })
+            .onConflictDoUpdate({
+              target: [bodyRawTable.requestOrFolderMetaId],
+              set: {
+                ...updatePayload
+              }
+            })
+        ).rowsAffected > 0
+      );
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
+export const deleteBodyRawByRequestMetaId = async (
+  requestOrFolderMetaId?: string | null
+) => {
   try {
-    if (!requestOrFolderMetaId)
-      requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!requestOrFolderMetaId) return false;
+    requestOrFolderMetaId =
+      requestOrFolderMetaId ?? (await getTabList())?.selectedTab;
+    if (!requestOrFolderMetaId) throw new Error();
 
-    await db
-      .delete(bodyRawTable)
-      .where(eq(bodyRawTable.requestOrFolderMetaId, requestOrFolderMetaId));
-
-    return true;
+    return (
+      (
+        await db
+          .delete(bodyRawTable)
+          .where(eq(bodyRawTable.requestOrFolderMetaId, requestOrFolderMetaId))
+      ).rowsAffected > 0
+    );
   } catch (error) {
     console.error(error);
     return false;
@@ -109,56 +101,63 @@ payload = {
   oldId: newId ---> newId means duplicatedId
 }
 */
-export const duplicateBodyRaw = async (payload) => {
-  try {
-    if (!payload) return;
-    const oldIds = Object.keys(payload);
-    if (!oldIds.length) return;
+export const duplicateBodyRaw: ElectronAPIBodyRawInterface["duplicateBodyRaw"] =
+  async payload => {
+    try {
+      if (!payload) throw new Error();
+      const oldIds = Object.keys(payload);
+      if (!oldIds.length) throw new Error();
 
-    const existingBodyRawData = await db
-      .select()
-      .from(bodyRawTable)
-      .where(inArray(bodyRawTable.requestOrFolderMetaId, oldIds));
+      const existingBodyRawData = await db
+        .select()
+        .from(bodyRawTable)
+        .where(inArray(bodyRawTable.requestOrFolderMetaId, oldIds));
 
-    if (!existingBodyRawData.length) return true;
+      if (!existingBodyRawData.length) return true;
 
-    /**
-     * - Replacing oldId with duplicatedId
-     * and only keeping url so that other things automatically generate by default
-     */
-    const duplicatePayload = existingBodyRawData.map((raw) => {
-      delete raw["id"];
-      return {
-        ...raw,
-        requestOrFolderMetaId: payload[raw.requestOrFolderMetaId],
-      };
-    });
+      /**
+       * - Replacing oldId with duplicatedId
+       * and only keeping url so that other things automatically generate by default
+       */
+      const duplicatePayload = existingBodyRawData.map(raw => {
+        const { id, ...rest } = raw;
+        return {
+          ...rest,
+          requestOrFolderMetaId: payload[raw.requestOrFolderMetaId]
+        };
+      });
 
-    const result = await db.insert(bodyRawTable).values(duplicatePayload);
-
-    return result.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const replaceBodyRaw = async (payload = {}) => {
-  try {
-    const updatePayload = { ...payload };
-    delete updatePayload["id"];
-    delete updatePayload["requestOrFolderMetaId"];
-
-    await db
-      .delete(bodyRawTable)
-      .where(
-        eq(bodyRawTable.requestOrFolderMetaId, payload.requestOrFolderMetaId)
+      return (
+        (await db.insert(bodyRawTable).values(duplicatePayload)).rowsAffected >
+        0
       );
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
 
-    if (Object.keys(updatePayload || {}).length)
-      await db.insert(bodyRawTable).values(payload);
+export const replaceBodyRaw: ElectronAPIBodyRawInterface["replaceBodyRaw"] =
+  async payload => {
+    try {
+      return await db.transaction(async tsx => {
+        const { requestOrFolderMetaId, ...updatePayload } = payload;
+        if (!requestOrFolderMetaId) throw new Error();
 
-    return true;
-  } catch (error) {
-    console.error(error);
-  }
-};
+        await tsx
+          .delete(bodyRawTable)
+          .where(eq(bodyRawTable.requestOrFolderMetaId, requestOrFolderMetaId));
+
+        if (Object.keys(updatePayload || {}).length)
+          await tsx.insert(bodyRawTable).values({
+            ...updatePayload,
+            requestOrFolderMetaId
+          });
+
+        return true;
+      });
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };

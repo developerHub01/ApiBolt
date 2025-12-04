@@ -1,7 +1,7 @@
 import { BodyRawInterface } from "@/shared/types/request-response.types";
 
 export interface ElectronAPIBodyRawInterface {
-  getBodyRaw(requestId?: string): Promise<BodyRawInterface>;
+  getBodyRaw(requestId?: string | null): Promise<BodyRawInterface | null>;
   createBodyRaw(
     payload: Partial<BodyRawInterface> &
       Required<Pick<BodyRawInterface, "requestOrFolderMetaId">>
