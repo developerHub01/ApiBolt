@@ -8,6 +8,7 @@ import {
   TRequestBodyType
 } from "@/shared/types/request-response.types";
 import { TLayoutSetting } from "@/shared/types/setting.types";
+import { TSidebarTab } from "@/shared/types/sidebar.types";
 import { ThemeInterface } from "@/shared/types/theme.types";
 import { sql } from "drizzle-orm";
 import {
@@ -23,8 +24,9 @@ export const ACTIVE_PROJECT_ID = "singleton";
 export const ACTIVE_SIDEBAR_TAB_ID = "singleton";
 export const ACTIVE_CODE_SNIPPIT_TYPE_ID = "singleton";
 export const API_URL_DEFAULT_VALUE = "http://localhost:3000";
-export const DEFAULT_ACTIVE_SIDEBAR_TAB = "navigate_projects";
-export const DEFAULT_ACTIVE_CODE_SNIPPIT_TYPE = "javascript-fetch";
+export const DEFAULT_ACTIVE_SIDEBAR_TAB: TSidebarTab = "navigate_projects";
+export const DEFAULT_ACTIVE_CODE_SNIPPIT_TYPE: TRequestCodeType =
+  "javascript-fetch";
 
 export const projectTable = sqliteTable("projects_table", {
   id: text("id")
@@ -57,7 +59,7 @@ export const cookiesTable = sqliteTable("cookies_table", {
 
 export const activeSidebarTabTable = sqliteTable("active_sidebar_tab_table", {
   id: text().primaryKey().default(ACTIVE_SIDEBAR_TAB_ID),
-  tab: text().notNull().default(DEFAULT_ACTIVE_SIDEBAR_TAB)
+  tab: text().$type<TSidebarTab>().notNull().default(DEFAULT_ACTIVE_SIDEBAR_TAB)
 });
 
 export const activeCodeSnippitTypeTable = sqliteTable(
@@ -503,7 +505,7 @@ export const themeTable = sqliteTable("theme_table", {
 
 export const activeThemeTable = sqliteTable("active_theme_table", {
   projectId: text()
-    .primaryKey()
+    .unique()
     .references(() => projectTable.id, {
       onDelete: "cascade"
     }),

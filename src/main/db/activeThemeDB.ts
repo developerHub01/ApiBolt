@@ -6,129 +6,140 @@ import {
   defaultActiveThemeId,
   defaultActiveThemePalette
 } from "@/data/themes.js";
+import { ElectronAPIActiveThemeInterface } from "@/shared/types/api/electron-active-theme";
+import { ActiveThemePaletteInterface } from "@/shared/types/theme.types";
 
-export const getActiveThemeId = async () => {
-  try {
-    const theme = {
-      global: null,
-      local: null,
-    };
+export const getActiveThemeId: ElectronAPIActiveThemeInterface["getActiveThemeId"] =
+  async () => {
+    try {
+      const global =
+        (
+          await db
+            .select({
+              id: activeThemeTable.activeTheme
+            })
+            .from(activeThemeTable)
+            .where(isNull(activeThemeTable.projectId))
+            .limit(1)
+        )?.[0]?.id ?? defaultActiveThemeId;
 
-    theme.global =
-      (
+      const activeProjectId = await getActiveProject();
+
+      let local: string | null = null;
+      if (activeProjectId)
+        local =
+          (
+            await db
+              .select({
+                id: activeThemeTable.activeTheme
+              })
+              .from(activeThemeTable)
+              .where(eq(activeThemeTable.projectId, activeProjectId))
+              .limit(1)
+          )?.[0]?.id ?? null;
+
+      return {
+        global,
+        local
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        global: defaultActiveThemeId,
+        local: null
+      };
+    }
+  };
+
+export const getActiveThemePalette: ElectronAPIActiveThemeInterface["getActiveThemePalette"] =
+  async () => {
+    try {
+      const theme: {
+        global: string | null;
+        local: string | null;
+      } = {
+        global: null,
+        local: null
+      };
+      const result: ActiveThemePaletteInterface = {
+        global: defaultActiveThemePalette,
+        local: null
+      };
+
+      theme.global = (
         await db
           .select({
-            id: activeThemeTable.activeTheme,
+            palette: themeTable.palette
           })
           .from(activeThemeTable)
           .where(isNull(activeThemeTable.projectId))
-          .limit(1)
-      )?.[0]?.id ?? defaultActiveThemeId;
-
-    const activeProjectId = await getActiveProject();
-
-    theme.local =
-      (
-        await db
-          .select({
-            id: activeThemeTable.activeTheme,
-          })
-          .from(activeThemeTable)
-          .where(eq(activeThemeTable.projectId, activeProjectId))
-          .limit(1)
-      )?.[0]?.id ?? null;
-
-    return theme;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const getActiveThemePalette = async () => {
-  try {
-    const theme = {
-      global: null,
-      local: null,
-    };
-
-    theme.global = (
-      await db
-        .select({
-          palette: themeTable.palette,
-        })
-        .from(activeThemeTable)
-        .where(isNull(activeThemeTable.projectId))
-        .leftJoin(themeTable, eq(activeThemeTable.activeTheme, themeTable.id))
-        .limit(1)
-    )?.[0]?.palette;
-
-    if (theme.global) theme.global = JSON.parse(theme.global);
-    else theme.global = defaultActiveThemePalette;
-
-    const activeProjectId = await getActiveProject();
-
-    theme.local =
-      (
-        await db
-          .select({
-            palette: themeTable.palette,
-          })
-          .from(activeThemeTable)
-          .where(eq(activeThemeTable.projectId, activeProjectId))
           .leftJoin(themeTable, eq(activeThemeTable.activeTheme, themeTable.id))
           .limit(1)
-      )?.[0]?.palette ?? null;
+      )?.[0]?.palette;
 
-    if (theme.local) theme.local = JSON.parse(theme.local);
+      const activeProjectId = await getActiveProject();
+      if (activeProjectId)
+        theme.local =
+          (
+            await db
+              .select({
+                palette: themeTable.palette
+              })
+              .from(activeThemeTable)
+              .where(eq(activeThemeTable.projectId, activeProjectId))
+              .leftJoin(
+                themeTable,
+                eq(activeThemeTable.activeTheme, themeTable.id)
+              )
+              .limit(1)
+          )?.[0]?.palette ?? null;
 
-    return theme;
-  } catch (error) {
-    console.error(error);
-  }
-};
+      try {
+        if (theme.global) result.global = JSON.parse(theme.global);
+      } catch (error) {
+        result.global = defaultActiveThemePalette;
+      }
+      try {
+        if (theme.local) result.global = JSON.parse(theme.local);
+      } catch (error) {
+        result.local = null;
+      }
 
-export const changeActiveTheme = async (payload = {}) => {
-  try {
-    if (!("projectId" in payload)) payload.projectId = null;
-    /**
-     * if projectId is null means global theme else local
-     * if global theme then activeTheme can't be null so use default activeThemeId
-     */
-    if (!payload.projectId && !payload.activeTheme)
-      payload.activeTheme = defaultActiveThemeId;
-
-    const isAlreadyExist = Boolean(
-      (
-        await db
-          .select({
-            id: activeThemeTable.projectId,
-          })
-          .from(activeThemeTable)
-          .where(
-            payload.projectId
-              ? eq(activeThemeTable.projectId, payload.projectId)
-              : isNull(activeThemeTable.projectId)
-          )
-          .limit(1)
-      )?.[0]
-    );
-
-    if (isAlreadyExist) {
-      const updatePayload = { ...payload };
-      delete updatePayload["projectId"];
-      return await db
-        .update(activeThemeTable)
-        .set({ ...updatePayload })
-        .where(
-          payload.projectId
-            ? eq(activeThemeTable.projectId, payload.projectId)
-            : isNull(activeThemeTable.projectId)
-        );
+      return result;
+    } catch (error) {
+      console.error(error);
+      return {
+        global: defaultActiveThemePalette,
+        local: null
+      };
     }
+  };
 
-    const result = await db.insert(activeThemeTable).values(payload);
-    return result.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
+export const changeActiveTheme: ElectronAPIActiveThemeInterface["changeActiveTheme"] =
+  async payload => {
+    try {
+      /**
+       * if projectId is null means global theme else local
+       * if global theme then activeTheme can't be null so use default activeThemeId
+       */
+      if (!payload.projectId && !payload.activeTheme)
+        payload.activeTheme = defaultActiveThemeId;
+
+      return (
+        (
+          await db
+            .insert(activeThemeTable)
+            .values(payload)
+            .onConflictDoUpdate({
+              target: [activeThemeTable.projectId],
+              set: {
+                activeTheme: payload.activeTheme
+              }
+            })
+        ).rowsAffected > 0
+      );
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };

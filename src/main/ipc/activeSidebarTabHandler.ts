@@ -5,22 +5,51 @@ import {
   getActiveSidebarTab,
   updateActiveSidebarTab
 } from "@/main/db/activeSidebarTabDB.js";
+import { ElectronAPIActiveSidebarTabInterface } from "@/shared/types/api/electron-api-active-sidebar-tab";
 
 export const activeSidebarTabHandler = () => {
   ipcMain.handle(
     "getActiveSidebarTab",
-    async (_, ...rest) => await getActiveSidebarTab(...rest)
+    async (
+      _,
+      ...rest: Parameters<
+        ElectronAPIActiveSidebarTabInterface["getActiveSidebarTab"]
+      >
+    ): ReturnType<
+      ElectronAPIActiveSidebarTabInterface["getActiveSidebarTab"]
+    > => await getActiveSidebarTab(...rest)
   );
   ipcMain.handle(
     "createActiveSidebarTab",
-    async (_, ...rest) => await createActiveSidebarTab(...rest)
+    async (
+      _,
+      ...rest: Parameters<
+        ElectronAPIActiveSidebarTabInterface["createActiveSidebarTab"]
+      >
+    ): ReturnType<
+      ElectronAPIActiveSidebarTabInterface["createActiveSidebarTab"]
+    > => await createActiveSidebarTab(...rest)
   );
   ipcMain.handle(
     "updateActiveSidebarTab",
-    async (_, ...rest) => await updateActiveSidebarTab(...rest)
+    async (
+      _,
+      ...rest: Parameters<
+        ElectronAPIActiveSidebarTabInterface["updateActiveSidebarTab"]
+      >
+    ): ReturnType<
+      ElectronAPIActiveSidebarTabInterface["updateActiveSidebarTab"]
+    > => await updateActiveSidebarTab(...rest)
   );
   ipcMain.handle(
     "deleteActiveSidebarTab",
-    async (_, ...rest) => await deleteActiveSidebarTab(...rest)
+    async (
+      _,
+      ...rest: Parameters<
+        ElectronAPIActiveSidebarTabInterface["deleteActiveSidebarTab"]
+      >
+    ): ReturnType<
+      ElectronAPIActiveSidebarTabInterface["deleteActiveSidebarTab"]
+    > => await deleteActiveSidebarTab(...rest)
   );
 };
