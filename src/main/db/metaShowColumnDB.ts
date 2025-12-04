@@ -2,150 +2,167 @@ import { eq, inArray } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { metaShowColumnTable } from "@/main/db/schema.js";
 import { getTabList } from "@/main/db/tabsDB.js";
+import { ElectronAPIMetaShowColumnInterface } from "@/shared/types/api/electron-meta-show-column";
 
-const metaColumnList = [
-  "paramsValue",
-  "paramsDescription",
-  "headersValue",
-  "headersDescription",
-  "formDataValue",
-  "formDataDescription",
-  "xWWWFormUrlencodedValue",
-  "xWWWFormUrlencodedDescription",
-];
+// const metaColumnList = [
+//   "paramsValue",
+//   "paramsDescription",
+//   "headersValue",
+//   "headersDescription",
+//   "formDataValue",
+//   "formDataDescription",
+//   "xWWWFormUrlencodedValue",
+//   "xWWWFormUrlencodedDescription"
+// ];
 
-export const getMetaShowColumn = async (requestOrFolderMetaId) => {
-  try {
-    const result = (
-      await db
-        .select()
-        .from(metaShowColumnTable)
-        .where(
-          eq(metaShowColumnTable.requestOrFolderMetaId, requestOrFolderMetaId)
-        )
-    )?.[0];
+export const getMetaShowColumn: ElectronAPIMetaShowColumnInterface["getMetaShowColumn"] =
+  async requestOrFolderMetaId => {
+    try {
+      requestOrFolderMetaId =
+        requestOrFolderMetaId ?? (await getTabList())?.selectedTab;
+      if (!requestOrFolderMetaId) throw new Error();
 
-    for (const key in result) {
-      if (metaColumnList.includes(key)) result[key] = Boolean(result[key]);
+      const result = (
+        await db
+          .select()
+          .from(metaShowColumnTable)
+          .where(
+            eq(metaShowColumnTable.requestOrFolderMetaId, requestOrFolderMetaId)
+          )
+      )?.[0];
+
+      return result;
+    } catch (error) {
+      console.error(error);
+      return null;
     }
+  };
 
-    return result;
-  } catch (error) {
-    console.error(error);
-  }
-};
+export const createMetaShowColumn: ElectronAPIMetaShowColumnInterface["createMetaShowColumn"] =
+  async (payload = {}) => {
+    try {
+      const requestOrFolderMetaId =
+        payload.requestOrFolderMetaId ?? (await getTabList())?.selectedTab;
+      if (!requestOrFolderMetaId) throw new Error();
 
-export const createMetaShowColumn = async (payload = {}) => {
-  try {
-    if (!("requestOrFolderMetaId" in payload))
-      payload["requestOrFolderMetaId"] = (await getTabList())?.selectedTab;
-    if (!payload.requestOrFolderMetaId) return false;
-
-    const result = await db.insert(metaShowColumnTable).values(payload);
-
-    return result?.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const updateMetaShowColumn = async (payload) => {
-  if (!payload) return false;
-
-  let requestOrFolderMetaId = payload.requestOrFolderMetaId;
-
-  if (!requestOrFolderMetaId)
-    requestOrFolderMetaId = (await getTabList())?.selectedTab;
-  if (!requestOrFolderMetaId) return false;
-
-  delete payload["id"];
-  delete payload["requestOrFolderMetaId"];
-  delete payload["createdAt"];
-
-  for (const key in payload) {
-    if (typeof payload[key] === "boolean") payload[key] = Number(payload[key]);
-  }
-
-  try {
-    const isExist = (
-      await db
-        .select()
-        .from(metaShowColumnTable)
-        .where(
-          eq(metaShowColumnTable.requestOrFolderMetaId, requestOrFolderMetaId)
-        )
-    )?.[0];
-
-    if (!isExist)
-      await createMetaShowColumn({
-        requestOrFolderMetaId,
-      });
-
-    const updated = await db
-      .update(metaShowColumnTable)
-      .set({
-        ...payload,
-      })
-      .where(
-        eq(metaShowColumnTable.requestOrFolderMetaId, requestOrFolderMetaId)
+      return (
+        (
+          await db.insert(metaShowColumnTable).values({
+            ...payload,
+            requestOrFolderMetaId
+          })
+        )?.rowsAffected > 0
       );
-    return updated?.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
 
-export const deleteMetaShowColumn = async (requestOrFolderMetaId) => {
-  try {
-    const deleted = await db
-      .delete(metaShowColumnTable)
-      .where(
-        eq(metaShowColumnTable.requestOrFolderMetaId, requestOrFolderMetaId)
+export const updateMetaShowColumn: ElectronAPIMetaShowColumnInterface["updateMetaShowColumn"] =
+  async payload => {
+    try {
+      const requestOrFolderMetaId =
+        payload.requestOrFolderMetaId ?? (await getTabList())?.selectedTab;
+      if (!requestOrFolderMetaId) throw new Error();
+
+      const isExist = (
+        await db
+          .select()
+          .from(metaShowColumnTable)
+          .where(
+            eq(metaShowColumnTable.requestOrFolderMetaId, requestOrFolderMetaId)
+          )
+      )?.[0];
+
+      if (!isExist)
+        await createMetaShowColumn({
+          requestOrFolderMetaId
+        });
+
+      return (
+        (
+          await db
+            .update(metaShowColumnTable)
+            .set({
+              ...payload
+            })
+            .where(
+              eq(
+                metaShowColumnTable.requestOrFolderMetaId,
+                requestOrFolderMetaId
+              )
+            )
+        )?.rowsAffected > 0
       );
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
 
-    return deleted?.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
+export const deleteMetaShowColumn: ElectronAPIMetaShowColumnInterface["deleteMetaShowColumn"] =
+  async requestOrFolderMetaId => {
+    try {
+      requestOrFolderMetaId =
+        requestOrFolderMetaId ?? (await getTabList())?.selectedTab;
+      if (!requestOrFolderMetaId) throw new Error();
+
+      return (
+        (
+          await db
+            .delete(metaShowColumnTable)
+            .where(
+              eq(
+                metaShowColumnTable.requestOrFolderMetaId,
+                requestOrFolderMetaId
+              )
+            )
+        )?.rowsAffected > 0
+      );
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
 
 /* 
 payload = {
   oldId: newId ---> newId means duplicatedId
 }
 */
-export const duplicateMetaShowColumn = async (payload) => {
-  try {
-    if (!payload) return;
-    const oldIds = Object.keys(payload);
-    if (!oldIds.length) return;
+export const duplicateMetaShowColumn: ElectronAPIMetaShowColumnInterface["duplicateMetaShowColumn"] =
+  async payload => {
+    try {
+      if (!payload) throw new Error();
+      const oldIds = Object.keys(payload);
+      if (!oldIds.length) throw new Error();
 
-    const existingMetaShowColumn = await db
-      .select()
-      .from(metaShowColumnTable)
-      .where(inArray(metaShowColumnTable.requestOrFolderMetaId, oldIds));
+      const existingMetaShowColumn = await db
+        .select()
+        .from(metaShowColumnTable)
+        .where(inArray(metaShowColumnTable.requestOrFolderMetaId, oldIds));
 
-    if (!existingMetaShowColumn.length) return true;
+      if (!existingMetaShowColumn.length) return true;
 
-    /**
-     * - Replacing oldId with duplicatedId
-     * and only keeping url so that other things automatically generate by default
-     */
-    const duplicatePayload = existingMetaShowColumn.map((meta) => {
-      delete meta["id"];
-      delete meta["createdAt"];
-      return {
-        ...meta,
-        requestOrFolderMetaId: payload[meta.requestOrFolderMetaId],
-      };
-    });
+      /**
+       * - Replacing oldId with duplicatedId
+       * and only keeping url so that other things automatically generate by default
+       */
+      const duplicatePayload = existingMetaShowColumn.map(meta => {
+        const { id, createdAt, ...rest } = meta;
+        return {
+          ...rest,
+          requestOrFolderMetaId: payload[meta.requestOrFolderMetaId]
+        };
+      });
 
-    const result = await db
-      .insert(metaShowColumnTable)
-      .values(duplicatePayload);
-
-    return result.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
+      return (
+        (await db.insert(metaShowColumnTable).values(duplicatePayload))
+          .rowsAffected > 0
+      );
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };

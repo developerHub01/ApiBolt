@@ -468,9 +468,11 @@ export const historyTable = sqliteTable("history_table", {
   id: text()
     .primaryKey()
     .$defaultFn(() => uuidv4()),
-  request: text().references(() => requestOrFolderMetaTable.id, {
-    onDelete: "cascade"
-  }),
+  request: text()
+    .notNull()
+    .references(() => requestOrFolderMetaTable.id, {
+      onDelete: "cascade"
+    }),
   url: text().notNull(),
   method: text().$type<THTTPMethods>().notNull().default("get"),
   name: text().notNull(),

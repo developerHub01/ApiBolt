@@ -5,7 +5,7 @@ import {
 } from "@/shared/types/history.types";
 
 export interface ElectronAPIHistoryInterface {
-  getHistoryById(id: string): Promise<HistoryItemInterface>;
+  getHistoryById(id: string): Promise<HistoryItemInterface | null>;
   getHistoryByRequestId(
     requestId: string
   ): Promise<Array<HistoryItemMetaInterface>>;

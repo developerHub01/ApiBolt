@@ -6,26 +6,49 @@ import {
   getHistoryById,
   getHistoryByRequestId
 } from "@/main/db/historyDB";
+import { ElectronAPIHistoryInterface } from "@/shared/types/api/electron-history";
 
 export const historyHandler = () => {
   ipcMain.handle(
     "getHistoryById",
-    async (_, ...rest) => await getHistoryById(...rest)
+    async (
+      _,
+      ...rest: Parameters<ElectronAPIHistoryInterface["getHistoryById"]>
+    ): ReturnType<ElectronAPIHistoryInterface["getHistoryById"]> =>
+      await getHistoryById(...rest)
   );
   ipcMain.handle(
     "getHistoryByRequestId",
-    async (_, ...rest) => await getHistoryByRequestId(...rest)
+    async (
+      _,
+      ...rest: Parameters<ElectronAPIHistoryInterface["getHistoryByRequestId"]>
+    ): ReturnType<ElectronAPIHistoryInterface["getHistoryByRequestId"]> =>
+      await getHistoryByRequestId(...rest)
   );
   ipcMain.handle(
     "createHistory",
-    async (_, ...rest) => await createHistory(...rest)
+    async (
+      _,
+      ...rest: Parameters<ElectronAPIHistoryInterface["createHistory"]>
+    ): ReturnType<ElectronAPIHistoryInterface["createHistory"]> =>
+      await createHistory(...rest)
   );
   ipcMain.handle(
     "deleteHistoryById",
-    async (_, ...rest) => await deleteHistoryById(...rest)
+    async (
+      _,
+      ...rest: Parameters<ElectronAPIHistoryInterface["deleteHistoryById"]>
+    ): ReturnType<ElectronAPIHistoryInterface["deleteHistoryById"]> =>
+      await deleteHistoryById(...rest)
   );
   ipcMain.handle(
     "deleteHistoryByRequestId",
-    async (_, ...rest) => await deleteHistoryByRequestId(...rest)
+    async (
+      _,
+      ...rest: Parameters<
+        ElectronAPIHistoryInterface["deleteHistoryByRequestId"]
+      >
+    ): ReturnType<ElectronAPIHistoryInterface["deleteHistoryByRequestId"]> =>
+      await deleteHistoryByRequestId(...rest)
   );
 };

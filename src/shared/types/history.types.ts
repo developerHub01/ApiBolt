@@ -20,8 +20,8 @@ export interface HistoryItemInterface {
   method: THTTPMethods;
   name: string;
   request: string;
-  params?: Array<ParamInterface>;
-  headers?: Array<ParamInterface>;
+  params?: Array<ParamInterface> | null;
+  headers?: Array<ParamInterface> | null;
   authorization?: {
     type: TAuthType;
     inheritedId?: string | null;
@@ -29,7 +29,7 @@ export interface HistoryItemInterface {
     bearerAuth?: TBearerToken;
     jwtAuth?: JWTBearerAuthInterface;
     apiKeyAuth?: APIKeyInterface;
-  };
+  } | null;
   body?: {
     type: TRequestBodyType;
     formData?: Array<ParamInterface>;
@@ -37,13 +37,13 @@ export interface HistoryItemInterface {
     binaryData?: TBinaryData;
     rawType?: TContentType;
     raw?: string;
-  };
-  responseStatus?: string;
+  } | null;
+  responseStatus?: string | null;
   responseSize?: {
     requestSize: RequestResponseSizeInterface;
     responseSize: RequestResponseSizeInterface;
-  };
-  createdAt?: string;
+  } | null;
+  createdAt?: string | null;
 }
 
 export type HistoryItemMetaInterface = Pick<
