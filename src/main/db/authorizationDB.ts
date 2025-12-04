@@ -6,192 +6,221 @@ import {
 } from "@/main/db/schema.js";
 import { getActiveProject } from "@/main/db/projectsDB.js";
 import { generateJWT, hasValue } from "@/main/utils/utils.js";
+import { ElectronAPIAuthorizationInterface } from "@/shared/types/api/electron-authorization";
+import { getTabList } from "@/main/db/tabsDB";
+import { AuthorizationPayloadInterface } from "@/shared/types/authorization.types";
 
 /* id === active project id */
-export const getAuth = async (requestId) => {
-  try {
-    const activeProjectId = await getActiveProject();
+export const getAuth: ElectronAPIAuthorizationInterface["getAuth"] =
+  async requestId => {
+    try {
+      const activeProjectId = await getActiveProject();
+      if (!activeProjectId) throw new Error();
 
-    return (
-      await db
-        .select()
-        .from(authorizationTable)
-        .where(
-          and(
-            eq(authorizationTable.projectId, activeProjectId),
-            requestId
-              ? eq(authorizationTable.requestOrFolderMetaId, requestId)
-              : isNull(authorizationTable.requestOrFolderMetaId)
-          )
-        )
-    )?.[0];
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const getInheritedAuthFromId = async (requestId) => {
-  try {
-    let currentId = requestId;
-
-    while (currentId) {
-      const requestData = (
-        await db
-          .select()
-          .from(requestOrFolderMetaTable)
-          .where(eq(requestOrFolderMetaTable.id, currentId))
-          .limit(1)
-      )?.[0];
-      if (!requestData) return;
-
-      const auth = (
-        await db
-          .select()
-          .from(authorizationTable)
-          .where(eq(authorizationTable.requestOrFolderMetaId, currentId))
-          .limit(1)
-      )?.[0];
-
-      /* no auth found here */
-      const type = auth?.type ?? "inherit-parent";
-
-      /* found auth */
-      if (type !== "inherit-parent") return auth;
-
-      currentId = requestData?.parentId ?? null;
-      if (!currentId) return await getAuth();
-    }
-
-    return null;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const createAuth = async (payload = {}) => {
-  try {
-    if (!payload.projectId) payload.projectId = await getActiveProject();
-
-    if (!payload.projectId) return false;
-
-    /* checking if requestOrFolderMetaId is null and for that project is there allready a requestOrFolderMetaId with null */
-    if (!payload.requestOrFolderMetaId) {
-      const isExist = (
+      return (
         await db
           .select()
           .from(authorizationTable)
           .where(
             and(
-              eq(authorizationTable.projectId, payload.projectId),
-              isNull(authorizationTable.requestOrFolderMetaId)
+              eq(authorizationTable.projectId, activeProjectId),
+              requestId
+                ? eq(authorizationTable.requestOrFolderMetaId, requestId)
+                : isNull(authorizationTable.requestOrFolderMetaId)
+            )
+          )
+      )?.[0];
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  };
+
+export const getInheritedAuthFromId: ElectronAPIAuthorizationInterface["getInheritedAuthFromId"] =
+  async requestId => {
+    try {
+      let currentId: string | null = requestId;
+
+      while (currentId) {
+        const requestData = (
+          await db
+            .select()
+            .from(requestOrFolderMetaTable)
+            .where(eq(requestOrFolderMetaTable.id, currentId))
+            .limit(1)
+        )?.[0];
+        if (!requestData) throw new Error();
+
+        const auth = (
+          await db
+            .select()
+            .from(authorizationTable)
+            .where(eq(authorizationTable.requestOrFolderMetaId, currentId))
+            .limit(1)
+        )?.[0];
+
+        /* no auth found here */
+        const type = auth?.type ?? "inherit-parent";
+
+        /* found auth */
+        if (type !== "inherit-parent") return auth;
+
+        currentId = requestData?.parentId ?? null;
+        if (!currentId) return await getAuth();
+      }
+
+      throw new Error();
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  };
+
+export const createAuth: ElectronAPIAuthorizationInterface["createAuth"] =
+  async payload => {
+    try {
+      let projectId = payload.projectId;
+
+      if (!projectId) {
+        const activeProject = await getActiveProject();
+        if (!activeProject) throw new Error();
+        projectId = activeProject;
+      }
+
+      /* checking if requestOrFolderMetaId is null and for that project is there allready a requestOrFolderMetaId with null */
+      if (!payload.requestOrFolderMetaId) {
+        const isExist = (
+          await db
+            .select()
+            .from(authorizationTable)
+            .where(
+              and(
+                eq(authorizationTable.projectId, projectId),
+                isNull(authorizationTable.requestOrFolderMetaId)
+              )
+            )
+        )?.[0];
+
+        if (isExist) return false;
+      }
+
+      if (!payload["type"])
+        payload["type"] = payload.requestOrFolderMetaId
+          ? "inherit-parent"
+          : "no-auth";
+
+      const result = await db.insert(authorizationTable).values({
+        ...payload,
+        projectId
+      });
+
+      return result.rowsAffected > 0;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
+export const updateAuth: ElectronAPIAuthorizationInterface["updateAuth"] =
+  async ({ requestOrFolderId, payload = {} }) => {
+    try {
+      const activeProjectId = await getActiveProject();
+      if (!activeProjectId) throw new Error();
+
+      const authData = (
+        await db
+          .select()
+          .from(authorizationTable)
+          .where(
+            and(
+              eq(authorizationTable.projectId, activeProjectId),
+              requestOrFolderId
+                ? eq(
+                    authorizationTable.requestOrFolderMetaId,
+                    requestOrFolderId
+                  )
+                : isNull(authorizationTable.requestOrFolderMetaId)
             )
           )
       )?.[0];
 
-      if (isExist) return false;
-    }
+      if (!authData)
+        await createAuth({
+          projectId: activeProjectId,
+          requestOrFolderMetaId: requestOrFolderId
+        });
 
-    if (!payload["type"])
-      payload["type"] = payload.requestOrFolderMetaId
-        ? "inherit-parent"
-        : "no-auth";
+      let basicAuthToken: string | null = null;
+      let jwtAuthToken: string | null = null;
+      const previousAuthType = authData?.type;
+      const currentAuthType = payload.type;
 
-    const result = await db.insert(authorizationTable).values({
-      ...payload,
-    });
-
-    return result.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const updateAuth = async ({ requestOrFolderId, payload = {} } = {}) => {
-  try {
-    const activeProjectId = await getActiveProject();
-    if (!activeProjectId) return false;
-
-    const authData = (
-      await db
-        .select()
-        .from(authorizationTable)
-        .where(
-          and(
-            eq(authorizationTable.projectId, activeProjectId),
-            requestOrFolderId
-              ? eq(authorizationTable.requestOrFolderMetaId, requestOrFolderId)
-              : isNull(authorizationTable.requestOrFolderMetaId)
-          )
-        )
-    )?.[0];
-
-    let updatedData = null;
-
-    if (!authData)
-      await createAuth({
-        projectId: activeProjectId,
-        requestOrFolderMetaId: requestOrFolderId,
-      });
-
-    let basicAuthToken = null;
-    let jwtAuthToken = null;
-    const previousAuthType = authData?.type;
-    const currentAuthType = payload.type;
-    const previousAuthToken = authData?.jwtAuthToken;
-
-    /* if previous and current auth type not diff and previous was jwt-bearer type */
-    if (previousAuthType !== currentAuthType) {
-      if (previousAuthType === "jwt-bearer") jwtAuthToken = "";
-      else if (previousAuthType === "basic-auth") basicAuthToken = "";
-    }
-
-    const authType = payload.type ?? authData?.type;
-
-    try {
-      if (authType === "basic-auth") {
-        const username =
-          authData?.basicAuthUsername ?? payload.basicAuthUsername ?? "";
-        const password =
-          authData?.basicAuthPassword ?? payload.basicAuthPassword ?? "";
-        basicAuthToken = btoa(`${username}:${password}`);
-      } else if (authType === "jwt-bearer") {
-        jwtAuthToken =
-          generateJWT({
-            algorithm: authData?.jwtAlgo ?? payload?.jwtAlgo ?? "HS256",
-            secret: authData?.jwtSecret ?? payload?.jwtSecret ?? "",
-            payload: authData?.jwtPayload ?? payload?.jwtPayload ?? "",
-          }) ?? "";
+      /* if previous and current auth type not diff and previous was jwt-bearer type */
+      if (previousAuthType !== currentAuthType) {
+        if (previousAuthType === "jwt-bearer") jwtAuthToken = "";
+        else if (previousAuthType === "basic-auth") basicAuthToken = "";
       }
+
+      const authType = payload.type ?? authData?.type;
+
+      try {
+        if (authType === "basic-auth") {
+          const username =
+            authData?.basicAuthUsername ?? payload.basicAuthUsername ?? "";
+          const password =
+            authData?.basicAuthPassword ?? payload.basicAuthPassword ?? "";
+          basicAuthToken = btoa(`${username}:${password}`);
+        } else if (authType === "jwt-bearer") {
+          jwtAuthToken =
+            generateJWT({
+              algorithm: authData?.jwtAlgo ?? payload?.jwtAlgo ?? "HS256",
+              secret: authData?.jwtSecret ?? payload?.jwtSecret ?? "",
+              payload: authData?.jwtPayload ?? payload?.jwtPayload ?? ""
+            }) ?? "";
+        }
+      } catch (error) {
+        console.error(error);
+      }
+
+      if (!hasValue(payload.basicAuthToken))
+        payload.basicAuthToken = basicAuthToken as string | undefined;
+      if (!hasValue(payload.jwtAuthToken))
+        payload.jwtAuthToken = jwtAuthToken as string | undefined;
+
+      return (
+        (
+          await db
+            .update(authorizationTable)
+            .set({
+              ...payload
+            })
+            .where(
+              and(
+                eq(authorizationTable.projectId, activeProjectId),
+                requestOrFolderId
+                  ? eq(
+                      authorizationTable.requestOrFolderMetaId,
+                      requestOrFolderId
+                    )
+                  : isNull(authorizationTable.requestOrFolderMetaId)
+              )
+            )
+            .returning()
+        )?.[0] ?? null
+      );
     } catch (error) {
       console.error(error);
+      return null;
     }
+  };
 
-    if (!hasValue(payload.basicAuthToken))
-      payload.basicAuthToken = basicAuthToken;
-    if (!hasValue(payload.jwtAuthToken)) payload.jwtAuthToken = jwtAuthToken;
-
-    updatedData = await db
-      .update(authorizationTable)
-      .set({
-        ...payload,
-      })
-      .where(
-        and(
-          eq(authorizationTable.projectId, activeProjectId),
-          requestOrFolderId
-            ? eq(authorizationTable.requestOrFolderMetaId, requestOrFolderId)
-            : isNull(authorizationTable.requestOrFolderMetaId)
-        )
-      )
-      .returning();
-
-    return updatedData?.[0];
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const replaceAuth = async ({ requestOrFolderId, payload = {} } = {}) => {
+export const replaceAuth = async ({
+  requestOrFolderId,
+  payload
+}: {
+  requestOrFolderId?: string | null;
+  payload: Partial<AuthorizationPayloadInterface>;
+}) => {
   try {
     const activeProjectId = await getActiveProject();
     if (!activeProjectId) return false;
@@ -219,13 +248,13 @@ export const replaceAuth = async ({ requestOrFolderId, payload = {} } = {}) => {
       jwtAddTo: "header",
       basicAuthToken: "",
       jwtAuthToken: "",
-      ...payload,
+      ...payload
     };
 
     const isExist = (
       await db
         .select({
-          id: authorizationTable.id,
+          id: authorizationTable.id
         })
         .from(authorizationTable)
         .where(
@@ -243,7 +272,7 @@ export const replaceAuth = async ({ requestOrFolderId, payload = {} } = {}) => {
       await db
         .update(authorizationTable)
         .set({
-          ...payload,
+          ...payload
         })
         .where(
           and(
@@ -257,64 +286,80 @@ export const replaceAuth = async ({ requestOrFolderId, payload = {} } = {}) => {
       await db.insert(authorizationTable).values({
         ...payload,
         requestOrFolderMetaId: requestOrFolderId,
-        projectId: activeProjectId,
+        projectId: activeProjectId
       });
     }
 
     return true;
   } catch (error) {
     console.error(error);
+    return false;
   }
 };
 
-export const deleteAuth = async (id) => {
-  try {
-    if (!id) id = (await getTabList())?.selectedTab;
-    let deleted = null;
+export const deleteAuth: ElectronAPIAuthorizationInterface["deleteAuth"] =
+  async id => {
+    try {
+      if (!id) id = (await getTabList())?.selectedTab;
 
-    if (id) {
-      deleted = await db
-        .delete(authorizationTable)
-        .where(eq(authorizationTable.id, id));
-      return deleted.rowsAffected > 0;
+      if (id) {
+        return (
+          (
+            await db
+              .delete(authorizationTable)
+              .where(eq(authorizationTable.id, id))
+          )?.rowsAffected > 0
+        );
+      }
+
+      const activeProjectId = await getActiveProject();
+      if (!activeProjectId) throw new Error();
+
+      return (
+        (
+          await db
+            .delete(authorizationTable)
+            .where(eq(authorizationTable.projectId, activeProjectId))
+        ).rowsAffected > 0
+      );
+    } catch (error) {
+      console.error(error);
+      return false;
     }
+  };
 
-    const activeProjectId = await getActiveProject();
-
-    deleted = await db
-      .delete(authorizationTable)
-      .where(eq(authorizationTable.projectId, activeProjectId));
-    return deleted.rowsAffected > 0;
+export const deleteAuthByProjectId = async (id: string): Promise<boolean> => {
+  try {
+    return (
+      (
+        await db
+          .delete(authorizationTable)
+          .where(eq(authorizationTable.projectId, id))
+      ).rowsAffected > 0
+    );
   } catch (error) {
     console.error(error);
     return false;
   }
 };
 
-export const deleteAuthByProjectId = async (id) => {
-  try {
-    const deleted = await db
-      .delete(authorizationTable)
-      .where(eq(authorizationTable.projectId, id));
-
-    return deleted.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const deleteAuthByRequestMetaId = async (requestOrFolderMetaId) => {
+export const deleteAuthByRequestMetaId = async (
+  requestOrFolderMetaId?: string | null
+) => {
   try {
     if (!requestOrFolderMetaId)
       requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!requestOrFolderMetaId) return false;
+    if (!requestOrFolderMetaId) throw new Error();
 
-    await db
-      .delete(authorizationTable)
-      .where(
-        eq(authorizationTable.requestOrFolderMetaId, requestOrFolderMetaId)
-      );
-    return true;
+    return (
+      (
+        await db
+          .delete(authorizationTable)
+          .where(
+            eq(authorizationTable.requestOrFolderMetaId, requestOrFolderMetaId)
+          )
+      )?.rowsAffected > 0
+    );
   } catch (error) {
     console.error(error);
     return false;
@@ -326,35 +371,38 @@ payload = {
   oldId: newId ---> newId means duplicatedId
 }
 */
-export const duplicateAuth = async (payload) => {
-  try {
-    if (!payload) return;
-    const oldIds = Object.keys(payload);
-    if (!oldIds.length) return;
+export const duplicateAuth: ElectronAPIAuthorizationInterface["duplicateAuth"] =
+  async payload => {
+    try {
+      if (!payload) throw new Error();
+      const oldIds = Object.keys(payload);
+      if (!oldIds.length) throw new Error();
 
-    const existingAuthData = await db
-      .select()
-      .from(authorizationTable)
-      .where(inArray(authorizationTable.requestOrFolderMetaId, oldIds));
+      const existingAuthData = await db
+        .select()
+        .from(authorizationTable)
+        .where(inArray(authorizationTable.requestOrFolderMetaId, oldIds));
 
-    if (!existingAuthData.length) return true;
+      if (!existingAuthData.length) return true;
 
-    /**
-     * - Replacing oldId with duplicatedId
-     * and only keeping url so that other things automatically generate by default
-     */
-    const duplicatePayload = existingAuthData.map((auth) => {
-      delete auth["id"];
-      return {
-        ...auth,
-        requestOrFolderMetaId: payload[auth.requestOrFolderMetaId],
-      };
-    });
+      /**
+       * - Replacing oldId with duplicatedId
+       * and only keeping url so that other things automatically generate by default
+       */
+      const duplicatePayload = existingAuthData.map(auth => {
+        const { id, ...authPayload } = auth;
+        return {
+          ...authPayload,
+          requestOrFolderMetaId: payload[auth.requestOrFolderMetaId!]
+        };
+      });
 
-    const result = await db.insert(authorizationTable).values(duplicatePayload);
-
-    return result.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
+      return (
+        (await db.insert(authorizationTable).values(duplicatePayload))
+          ?.rowsAffected > 0
+      );
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };

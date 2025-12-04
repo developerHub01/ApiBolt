@@ -14,7 +14,7 @@ export interface AuthorizationPayloadInterface {
   id: string;
   type: TAuthType;
   projectId: string;
-  requestOrFolderMetaId?: string;
+  requestOrFolderMetaId?: string | null;
   apiKeyKey: string;
   apiKeyValue: string;
   apiKeyAddTo: TAuthAddTo;
