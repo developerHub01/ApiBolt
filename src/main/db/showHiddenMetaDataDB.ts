@@ -3,144 +3,154 @@ import { db } from "@/main/db/index.js";
 import { showHiddenMetaDataTable } from "@/main/db/schema.js";
 import { getRequestOrFolderMetaById } from "@/main/db/requestOrFolderMetaDB.js";
 import { getTabList } from "@/main/db/tabsDB.js";
+import { ElectronAPIShowHiddenMetaDataInterface } from "@/shared/types/api/electron-show-hidden-meta-data";
 
 /* id === requestOrFolderMetaId */
-export const getShowHiddenMetaData = async (id) => {
-  try {
-    if (!id) id = (await getTabList())?.selectedTab;
-    if (!id) return null;
-    if (!(await getRequestOrFolderMetaById(id))) return null;
+export const getShowHiddenMetaData: ElectronAPIShowHiddenMetaDataInterface["getShowHiddenMetaData"] =
+  async id => {
+    try {
+      id = id ?? (await getTabList())?.selectedTab;
+      if (!id) throw new Error();
+      if (!(await getRequestOrFolderMetaById(id))) throw new Error();
 
-    const result = (
-      await db
-        .select()
-        .from(showHiddenMetaDataTable)
-        .where(eq(showHiddenMetaDataTable.requestOrFolderMetaId, id))
-    )?.[0];
-
-    if (!result) {
-      return await createShowHiddenMetaData({
-        requestOrFolderMetaId: id,
-      });
-    }
-
-    return result;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const createShowHiddenMetaData = async (payload = {}) => {
-  try {
-    if (!("requestOrFolderMetaId" in payload))
-      payload["requestOrFolderMetaId"] = (await getTabList())?.selectedTab;
-    if (!payload.requestOrFolderMetaId) return null;
-
-    if (typeof payload === "object" && !Object.keys(payload).length)
+      return (
+        await db
+          .select()
+          .from(showHiddenMetaDataTable)
+          .where(eq(showHiddenMetaDataTable.requestOrFolderMetaId, id))
+      )?.[0];
+    } catch (error) {
+      console.error(error);
       return null;
+    }
+  };
 
-    const existingData = (
-      await db
-        .select()
-        .from(showHiddenMetaDataTable)
-        .where(
-          eq(
-            showHiddenMetaDataTable.requestOrFolderMetaId,
-            payload.requestOrFolderMetaId
+export const createShowHiddenMetaData: ElectronAPIShowHiddenMetaDataInterface["createShowHiddenMetaData"] =
+  async payload => {
+    try {
+      if (!payload) throw new Error();
+      const requestOrFolderMetaId =
+        payload.requestOrFolderMetaId ?? (await getTabList()).selectedTab;
+      if (!requestOrFolderMetaId) throw new Error();
+
+      if (typeof payload === "object" && !Object.keys(payload).length)
+        return null;
+
+      const existingData = (
+        await db
+          .select()
+          .from(showHiddenMetaDataTable)
+          .where(
+            eq(
+              showHiddenMetaDataTable.requestOrFolderMetaId,
+              requestOrFolderMetaId
+            )
           )
-        )
-    )?.[0];
+      )?.[0];
 
-    if (existingData) return await updateShowHiddenMetaData(payload);
+      if (existingData)
+        return await updateShowHiddenMetaData({
+          ...payload,
+          requestOrFolderMetaId
+        });
 
-    const result = await db
-      .insert(showHiddenMetaDataTable)
-      .values(payload)
-      .returning();
+      return (
+        await db
+          .insert(showHiddenMetaDataTable)
+          .values({
+            ...payload,
+            requestOrFolderMetaId
+          })
+          .returning()
+      )?.[0];
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  };
 
-    return result;
-  } catch (error) {
-    console.error(error);
-  }
-};
+export const updateShowHiddenMetaData: ElectronAPIShowHiddenMetaDataInterface["updateShowHiddenMetaData"] =
+  async payload => {
+    if (!payload) throw new Error();
+    const requestOrFolderMetaId =
+      payload.requestOrFolderMetaId ?? (await getTabList()).selectedTab;
+    if (!requestOrFolderMetaId) throw new Error();
 
-export const updateShowHiddenMetaData = async (payload) => {
-  if (!payload) return null;
+    try {
+      const isExist = (
+        await db
+          .select()
+          .from(showHiddenMetaDataTable)
+          .where(
+            eq(
+              showHiddenMetaDataTable.requestOrFolderMetaId,
+              requestOrFolderMetaId
+            )
+          )
+      )?.[0];
 
-  let selectedTab = payload["requestOrFolderMetaId"];
-  delete payload["id"];
-  delete payload["requestOrFolderMetaId"];
+      if (!isExist)
+        await createShowHiddenMetaData({
+          requestOrFolderMetaId
+        });
 
-  if (!selectedTab) selectedTab = (await getTabList()).selectedTab;
-  if (!selectedTab) return null;
-
-  for (const key in payload)
-    if (typeof payload[key] === "boolean") payload[key] = Number(payload[key]);
-
-  if (typeof payload === "object" && !Object.keys(payload).length) return null;
-
-  try {
-    const isExist = (
-      await db
-        .select()
-        .from(showHiddenMetaDataTable)
-        .where(eq(showHiddenMetaDataTable.requestOrFolderMetaId, selectedTab))
-    )?.[0];
-
-    if (!isExist)
-      await createShowHiddenMetaData({
-        selectedTab,
-      });
-
-    const updated = await db
-      .update(showHiddenMetaDataTable)
-      .set({
-        ...payload,
-      })
-      .where(eq(showHiddenMetaDataTable.requestOrFolderMetaId, selectedTab))
-      .returning();
-    return updated;
-  } catch (error) {
-    console.error(error);
-  }
-};
+      return (
+        await db
+          .update(showHiddenMetaDataTable)
+          .set({
+            ...payload
+          })
+          .where(
+            eq(
+              showHiddenMetaDataTable.requestOrFolderMetaId,
+              requestOrFolderMetaId
+            )
+          )
+          .returning()
+      )?.[0];
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  };
 
 /* 
 payload = {
   oldId: newId ---> newId means duplicatedId
 }
 */
-export const duplicateShowHiddenMetaData = async (payload) => {
-  try {
-    if (!payload) return;
-    const oldIds = Object.keys(payload);
-    if (!oldIds.length) return;
+export const duplicateShowHiddenMetaData: ElectronAPIShowHiddenMetaDataInterface["duplicateShowHiddenMetaData"] =
+  async payload => {
+    try {
+      if (!payload) throw new Error();
+      const oldIds = Object.keys(payload);
+      if (!oldIds.length) throw new Error();
 
-    const existingShowHiddenMetaData = await db
-      .select()
-      .from(showHiddenMetaDataTable)
-      .where(inArray(showHiddenMetaDataTable.requestOrFolderMetaId, oldIds));
+      const existingShowHiddenMetaData = await db
+        .select()
+        .from(showHiddenMetaDataTable)
+        .where(inArray(showHiddenMetaDataTable.requestOrFolderMetaId, oldIds));
 
-    if (!existingShowHiddenMetaData.length) return true;
+      if (!existingShowHiddenMetaData.length) return true;
 
-    /**
-     * - Replacing oldId with duplicatedId
-     * and only keeping url so that other things automatically generate by default
-     */
-    const duplicatePayload = existingShowHiddenMetaData.map((metaData) => {
-      delete metaData["id"];
-      return {
-        ...metaData,
-        requestOrFolderMetaId: payload[metaData.requestOrFolderMetaId],
-      };
-    });
+      /**
+       * - Replacing oldId with duplicatedId
+       * and only keeping url so that other things automatically generate by default
+       */
+      const duplicatePayload = existingShowHiddenMetaData.map(metaData => {
+        const { id, ...rest } = metaData;
+        return {
+          ...rest,
+          requestOrFolderMetaId: payload[metaData.requestOrFolderMetaId]
+        };
+      });
 
-    const result = await db
-      .insert(showHiddenMetaDataTable)
-      .values(duplicatePayload);
-
-    return result.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
+      return (
+        (await db.insert(showHiddenMetaDataTable).values(duplicatePayload))
+          .rowsAffected > 0
+      );
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };

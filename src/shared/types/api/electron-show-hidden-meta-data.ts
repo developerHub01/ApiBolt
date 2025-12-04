@@ -1,17 +1,17 @@
 import { ShowHiddenMetaInterface } from "@/shared/types/request-response.types";
 
 export interface ElectronAPIShowHiddenMetaDataInterface {
-  getShowHiddenMetaData(id?: string): Promise<ShowHiddenMetaInterface>;
+  getShowHiddenMetaData(id?: string | null): Promise<ShowHiddenMetaInterface | null>;
   createShowHiddenMetaData(
-    paramId: string
-  ): Promise<Partial<ShowHiddenMetaInterface>>;
+    payload: Partial<ShowHiddenMetaInterface>
+  ): Promise<Partial<ShowHiddenMetaInterface> | null>;
   updateShowHiddenMetaData(
     payload: Partial<
       ShowHiddenMetaInterface & {
         requestOrFolderMetaId: string;
       }
     >
-  ): Promise<Partial<ShowHiddenMetaInterface>>;
+  ): Promise<Partial<ShowHiddenMetaInterface | null>>;
   duplicateShowHiddenMetaData(
     payload: Record<string, string>
   ): Promise<boolean>;

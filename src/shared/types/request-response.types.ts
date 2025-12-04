@@ -120,6 +120,7 @@ export interface HiddenHeadersCheckInterface {
 export interface ShowHiddenMetaInterface {
   showHiddenParams: boolean;
   showHiddenHeaders: boolean;
+  requestOrFolderMetaId?: string | null;
 }
 
 export interface FileDataInterface {
