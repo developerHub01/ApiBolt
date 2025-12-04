@@ -295,15 +295,18 @@ export const checkAllBodyFormDataByRequestMetaId: ElectronAPIBodyFormDataInterfa
 
       const checkValue = !rows.every(row => row.isCheck);
 
-      const updated = await db
-        .update(bodyFormDataTable)
-        .set({
-          isCheck: checkValue
-        })
-        .where(
-          eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId)
-        );
-      return updated?.rowsAffected > 0;
+      return (
+        (
+          await db
+            .update(bodyFormDataTable)
+            .set({
+              isCheck: checkValue
+            })
+            .where(
+              eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId)
+            )
+        )?.rowsAffected > 0
+      );
     } catch (error) {
       console.error(error);
       return false;

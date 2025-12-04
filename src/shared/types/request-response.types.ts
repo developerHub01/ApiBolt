@@ -86,13 +86,14 @@ export interface ParamHeaderPayloadInterface<T = string> {
 export type TParamContentType = "text" | "env";
 
 export interface ParamHeaderBuildPayloadInterface {
+  id: string;
   isCheck?: boolean;
   key: string;
   value: string;
   keyType?: TParamContentType;
   valueType?: TParamContentType;
   description: string;
-  requestOrFolderMetaId?: string;
+  requestOrFolderMetaId?: string | null;
 }
 
 export interface ParamInterface<ValueT = string> {

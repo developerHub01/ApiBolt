@@ -6,11 +6,11 @@ import {
 
 export interface ElectronAPIBodyXWWWFormUrlencodedInterface {
   getBodyXWWWFormUrlencoded(
-    requestOrFolderMetaId?: string
+    requestOrFolderMetaId?: string | null
   ): Promise<Array<ParamHeaderPayloadInterface>>;
   deleteBodyXWWWFormUrlencoded(formId: string): Promise<boolean>;
   deleteBodyXWWWFormUrlencodedByRequestMetaId(
-    requestOrFolderMetaId?: string
+    requestOrFolderMetaId?: string | null
   ): Promise<boolean>;
   createBodyXWWWFormUrlencoded(
     payload: Partial<ParamHeaderBuildPayloadInterface>
@@ -24,7 +24,7 @@ export interface ElectronAPIBodyXWWWFormUrlencodedInterface {
     payload?: Array<Partial<FormDataPayloadInterface>>
   ): Promise<boolean>;
   checkAllBodyXWWWFormUrlencodedByRequestMetaId(
-    requestOrFolderMetaId?: string
+    requestOrFolderMetaId?: string | null
   ): Promise<boolean>;
   duplicateBodyXWWWFormUrlencoded(
     payload: Record<string, string>
