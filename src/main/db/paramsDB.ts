@@ -2,12 +2,13 @@ import { eq, inArray } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { paramsTable } from "@/main/db/schema.js";
 import { getTabList } from "@/main/db/tabsDB.js";
+import { ElectronAPIParamsInterface } from "@/shared/types/api/electron-params";
 
 /* id === requestOrFolderMetaId */
-export const getParams = async (id) => {
+export const getParams: ElectronAPIParamsInterface["getParams"] = async id => {
   try {
-    if (!id) id = (await getTabList())?.selectedTab;
-    if (!id) return [];
+    id = id ?? (await getTabList())?.selectedTab;
+    if (!id) throw new Error();
 
     const result =
       (await db
@@ -15,194 +16,215 @@ export const getParams = async (id) => {
         .from(paramsTable)
         .where(eq(paramsTable.requestOrFolderMetaId, id))) ?? [];
 
-    return result.map((item) => ({
-      ...item,
-      isCheck: Boolean(item.isCheck),
-    }));
+    return result;
   } catch (error) {
     console.error(error);
+    return [];
   }
 };
 
-export const deleteParams = async (paramId) => {
-  try {
-    const deleted = await db
-      .delete(paramsTable)
-      .where(eq(paramsTable.id, paramId));
-
-    return deleted?.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
+export const deleteParams: ElectronAPIParamsInterface["deleteParams"] =
+  async paramId => {
+    try {
+      return (
+        (await db.delete(paramsTable).where(eq(paramsTable.id, paramId)))
+          ?.rowsAffected > 0
+      );
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
 
 export const deleteAllParams = async () => {
   try {
-    const deleted = await db.delete(paramsTable);
-    return deleted?.rowsAffected > 0;
+    return (await db.delete(paramsTable))?.rowsAffected > 0;
   } catch (error) {
     console.error(error);
+    return false;
   }
 };
 
 /* id === requestOrFolderMetaId */
-export const deleteParamsByRequestMetaId = async (requestOrFolderMetaId) => {
+export const deleteParamsByRequestMetaId: ElectronAPIParamsInterface["deleteParamsByRequestMetaId"] =
+  async requestOrFolderMetaId => {
+    try {
+      requestOrFolderMetaId =
+        requestOrFolderMetaId ?? (await getTabList())?.selectedTab;
+      if (!requestOrFolderMetaId) throw new Error();
+
+      return (
+        (
+          await db
+            .delete(paramsTable)
+            .where(eq(paramsTable.requestOrFolderMetaId, requestOrFolderMetaId))
+        ).rowsAffected > 0
+      );
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
+export const createParams: ElectronAPIParamsInterface["createParams"] =
+  async payload => {
+    try {
+      const requestOrFolderMetaId =
+        payload.requestOrFolderMetaId ?? (await getTabList())?.selectedTab;
+      if (!requestOrFolderMetaId) throw new Error();
+
+      if (typeof payload === "object" && !Object.keys(payload).length)
+        return true;
+
+      const result = await db.insert(paramsTable).values({
+        ...payload,
+        requestOrFolderMetaId
+      });
+      return result.rowsAffected > 0;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
+export const updateParams: ElectronAPIParamsInterface["updateParams"] = async (
+  paramId,
+  payload
+) => {
   try {
-    if (!requestOrFolderMetaId)
-      requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!requestOrFolderMetaId) return false;
+    if (!payload) return false;
 
-    await db
-      .delete(paramsTable)
-      .where(eq(paramsTable.requestOrFolderMetaId, requestOrFolderMetaId));
-    return true;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const createParams = async (payload = {}) => {
-  try {
-    if (!("requestOrFolderMetaId" in payload))
-      payload["requestOrFolderMetaId"] = (await getTabList())?.selectedTab;
-    if (!payload.requestOrFolderMetaId) return false;
-    if ("isCheck" in payload) payload["isCheck"] = Number(payload["isCheck"]);
-
-    if (typeof payload === "object" && !Object.keys(payload).length)
-      return true;
-
-    const result = await db.insert(paramsTable).values(payload);
-    return result.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const updateParams = async (paramId, payload) => {
-  if (!payload) return false;
-
-  delete payload["id"];
-  delete payload["requestOrFolderMetaId"];
-  delete payload["createdAt"];
-  if ("isCheck" in payload) payload["isCheck"] = Number(payload["isCheck"]);
-
-  try {
     const isExist = (
       await db.select().from(paramsTable).where(eq(paramsTable.id, paramId))
     )?.[0];
 
     if (!isExist)
       await createParams({
-        id: paramId,
+        id: paramId
       });
 
     if (typeof payload === "object" && !Object.keys(payload).length)
       return true;
 
-    const updated = await db
-      .update(paramsTable)
-      .set({
-        ...payload,
-      })
-      .where(eq(paramsTable.id, paramId));
-    return updated?.rowsAffected > 0;
+    return (
+      (
+        await db
+          .update(paramsTable)
+          .set({
+            ...payload,
+            requestOrFolderMetaId: payload.requestOrFolderMetaId ?? undefined
+          })
+          .where(eq(paramsTable.id, paramId))
+      )?.rowsAffected > 0
+    );
   } catch (error) {
     console.error(error);
+    return false;
   }
 };
 
-export const replaceParams = async (requestOrFolderMetaId, payload) => {
-  if (payload)
-    payload = payload.map((param) => {
-      delete param["requestOrFolderMetaId"];
-      delete param["createdAt"];
-      if ("isCheck" in param) param["isCheck"] = Number(param["isCheck"]);
-      param["requestOrFolderMetaId"] = requestOrFolderMetaId;
+export const replaceParams: ElectronAPIParamsInterface["replaceParams"] =
+  async (requestOrFolderMetaId, payload) => {
+    try {
+      const replacePayload = payload?.map(param => {
+        const { id, ...rest } = param;
+        return {
+          ...rest,
+          requestOrFolderMetaId:
+            param["requestOrFolderMetaId"] ?? requestOrFolderMetaId,
+          value: Array.isArray(param.value)
+            ? JSON.stringify(param.value)
+            : param.value
+        };
+      });
+      return await db.transaction(async tsx => {
+        await tsx
+          .delete(paramsTable)
+          .where(eq(paramsTable.requestOrFolderMetaId, requestOrFolderMetaId));
 
-      return param;
-    });
+        if (replacePayload && !Object.keys(replacePayload).length) return true;
 
-  try {
-    await db
-      .delete(paramsTable)
-      .where(eq(paramsTable.requestOrFolderMetaId, requestOrFolderMetaId));
+        if (!replacePayload?.length) return true;
+        await tsx.insert(paramsTable).values(replacePayload);
 
-    if (typeof payload === "object" && !Object.keys(payload).length)
-      return true;
+        return true;
+      });
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
 
-    if (!payload.length) return true;
-    await db.insert(paramsTable).values(payload);
+export const checkAllParamsByRequestMetaId: ElectronAPIParamsInterface["checkAllParamsByRequestMetaId"] =
+  async requestOrFolderMetaId => {
+    try {
+      requestOrFolderMetaId =
+        requestOrFolderMetaId ?? (await getTabList())?.selectedTab;
+      if (!requestOrFolderMetaId) throw new Error();
 
-    return true;
-  } catch (error) {
-    console.error(error);
-  }
-};
+      const rows =
+        (await db
+          .select()
+          .from(paramsTable)
+          .where(
+            eq(paramsTable.requestOrFolderMetaId, requestOrFolderMetaId)
+          )) ?? [];
+      if (rows.length === 0) return false;
 
-export const checkAllParamsByRequestMetaId = async (requestOrFolderMetaId) => {
-  try {
-    if (!requestOrFolderMetaId)
-      requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!requestOrFolderMetaId) return false;
+      const checkValue = !rows.every(row => row.isCheck);
 
-    const rows =
-      (await db
-        .select()
-        .from(paramsTable)
-        .where(eq(paramsTable.requestOrFolderMetaId, requestOrFolderMetaId))) ??
-      [];
-    if (rows.length === 0) return false;
-
-    const checkValue = Number(!rows.every((row) => row.isCheck));
-
-    const updated = await db
-      .update(paramsTable)
-      .set({
-        isCheck: checkValue,
-      })
-      .where(eq(paramsTable.requestOrFolderMetaId, requestOrFolderMetaId));
-
-    return updated?.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
+      return (
+        (
+          await db
+            .update(paramsTable)
+            .set({
+              isCheck: checkValue
+            })
+            .where(eq(paramsTable.requestOrFolderMetaId, requestOrFolderMetaId))
+        )?.rowsAffected > 0
+      );
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
 
 /* 
 payload = {
   oldId: newId ---> newId means duplicatedId
 }
 */
-export const duplicateParams = async (payload) => {
-  try {
-    if (!payload) return;
-    const oldIds = Object.keys(payload);
-    if (!oldIds.length) return;
+export const duplicateParams: ElectronAPIParamsInterface["duplicateParams"] =
+  async payload => {
+    try {
+      if (!payload) throw new Error();
+      const oldIds = Object.keys(payload);
+      if (!oldIds.length) throw new Error();
 
-    const existingParamsData = await db
-      .select()
-      .from(paramsTable)
-      .where(inArray(paramsTable.requestOrFolderMetaId, oldIds));
+      const existingParamsData = await db
+        .select()
+        .from(paramsTable)
+        .where(inArray(paramsTable.requestOrFolderMetaId, oldIds));
 
-    if (!existingParamsData.length) return true;
+      if (!existingParamsData.length) return true;
 
-    /**
-     * - Replacing oldId with duplicatedId
-     * and only keeping url so that other things automatically generate by default
-     */
-    const duplicatePayload = existingParamsData.map((param) => {
-      delete param["id"];
-      delete param["createdAt"];
-      return {
-        ...param,
-        requestOrFolderMetaId: payload[param.requestOrFolderMetaId],
-      };
-    });
+      /**
+       * - Replacing oldId with duplicatedId
+       * and only keeping url so that other things automatically generate by default
+       */
+      const duplicatePayload = existingParamsData.map(param => {
+        const { id, createdAt, ...rest } = param;
+        return {
+          ...rest,
+          requestOrFolderMetaId: payload[param.requestOrFolderMetaId]
+        };
+      });
 
-    const result = await db.insert(paramsTable).values(duplicatePayload);
+      const result = await db.insert(paramsTable).values(duplicatePayload);
 
-    return result.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
+      return result.rowsAffected > 0;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };

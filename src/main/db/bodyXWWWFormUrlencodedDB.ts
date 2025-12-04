@@ -21,10 +21,7 @@ export const getBodyXWWWFormUrlencoded: ElectronAPIBodyXWWWFormUrlencodedInterfa
           )
         );
 
-      return result.map(item => ({
-        ...item,
-        isCheck: Boolean(item.isCheck)
-      }));
+      return result;
     } catch (error) {
       console.error(error);
       return [];
