@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import type { ProjectInterface } from "@/types/project.types";
+import type { ProjectInterface } from "@shared/types/project.types";
 import {
   changeActiveProject,
   deleteProject,
@@ -25,7 +25,6 @@ interface ProjectContext {
 
 const ProjectContext = createContext<ProjectContext | null>(null);
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useProject = () => {
   const context = useContext(ProjectContext);
 

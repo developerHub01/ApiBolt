@@ -1,5 +1,8 @@
 import { ElectronResponseInterface } from "@/shared/types";
-import { CreateProjectPayloadInterface, ProjectInterface } from "../project.types";
+import {
+  CreateProjectPayloadInterface,
+  ProjectInterface
+} from "@/shared/types/project.types";
 
 export interface ElectronAPIProjectsInterface {
   getProjects(): Promise<Array<ProjectInterface>>;

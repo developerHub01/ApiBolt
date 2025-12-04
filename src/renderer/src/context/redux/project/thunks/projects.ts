@@ -5,7 +5,7 @@ import {
   handleClearRequestResponse
 } from "@/context/redux/request-response/request-response-slice";
 import { loadTabsData } from "@/context/redux/request-response/thunks/tab-list";
-import type { ProjectInterface } from "@/types/project.types";
+import type { ProjectInterface } from "@shared/types/project.types";
 import { DEFAULT_AUTHORIZATION_ID } from "@/constant/authorization.constant";
 import { loadEnvironmentsList } from "@/context/redux/environments/thunks/environments";
 import { loadAuthorization } from "@/context/redux/request-response/thunks/auth";
@@ -15,7 +15,7 @@ import {
 } from "@/context/redux/project/project-slice";
 import { loadKeyboardShortcuts } from "@/context/redux/keyboard-shortcuts/thunks/keyboard-shortcuts";
 import { applyThemeInApp } from "@/context/redux/theme/thunks/theme";
-import type { ElectronResponseInterface } from "@/types";
+import type { ElectronResponseInterface } from "@shared/types";
 
 /* ==============================
 ========== Projects start =========
@@ -34,7 +34,6 @@ export const loadProjectList = createAsyncThunk<
   try {
     const list = await window.electronAPIProjects.getProjects();
     const activeProject = await window.electronAPIProjects.getActiveProject();
-
     dispatch(handleLoadProjectsList(list));
     dispatch(handleChangeActiveProject(activeProject));
 
@@ -44,6 +43,7 @@ export const loadProjectList = createAsyncThunk<
     };
   } catch (error) {
     console.error(error);
+    return;
   }
 });
 
