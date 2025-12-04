@@ -2,214 +2,224 @@ import { eq, inArray } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { headersTable } from "@/main/db/schema.js";
 import { getTabList } from "@/main/db/tabsDB.js";
-import {
-  createHiddenHeadersCheck,
-  getHiddenHeadersCheck
-} from "@/main/db/hiddenHeadersCheckDB.js";
+import { ElectronAPIHeadersInterface } from "@/shared/types/api/electron-headers";
 
 /* id === requestOrFolderMetaId */
-export const getHeaders = async (id) => {
-  try {
-    if (!id) id = (await getTabList())?.selectedTab;
-    if (!id) return [];
+export const getHeaders: ElectronAPIHeadersInterface["getHeaders"] =
+  async id => {
+    try {
+      id = id ?? (await getTabList())?.selectedTab;
+      if (!id) throw new Error();
 
-    const result = await db
-      .select()
-      .from(headersTable)
-      .where(eq(headersTable.requestOrFolderMetaId, id));
-
-    return result.map((item) => ({
-      ...item,
-      isCheck: Boolean(item.isCheck),
-    }));
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const deleteHeaders = async (paramId) => {
-  try {
-    const deleted = await db
-      .delete(headersTable)
-      .where(eq(headersTable.id, paramId));
-
-    return deleted?.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-/* id === requestOrFolderMetaId */
-export const deleteHeadersByRequestMetaId = async (requestOrFolderMetaId) => {
-  try {
-    if (!requestOrFolderMetaId)
-      requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!requestOrFolderMetaId) return false;
-
-    await db
-      .delete(headersTable)
-      .where(eq(headersTable.requestOrFolderMetaId, requestOrFolderMetaId));
-    return true;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const createHeaders = async (payload = {}) => {
-  try {
-    if (!("requestOrFolderMetaId" in payload))
-      payload["requestOrFolderMetaId"] = (await getTabList())?.selectedTab;
-    if (!payload.requestOrFolderMetaId) return false;
-    if ("isCheck" in payload) payload["isCheck"] = Number(payload["isCheck"]);
-
-    if (typeof payload === "object" && !Object.keys(payload).length)
-      return true;
-
-    const result = await db.insert(headersTable).values(payload);
-
-    if (result?.rowsAffected) {
-      const isExist = await getHiddenHeadersCheck(
-        payload.requestOrFolderMetaId
-      );
-
-      if (isExist)
-        await createHiddenHeadersCheck({
-          requestOrFolderMetaId: payload.requestOrFolderMetaId,
-        });
-    }
-
-    return result?.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const updateHeaders = async (headerId, payload) => {
-  if (!payload) return false;
-
-  delete payload["id"];
-  delete payload["requestOrFolderMetaId"];
-  delete payload["createdAt"];
-  if ("isCheck" in payload) payload["isCheck"] = Number(payload["isCheck"]);
-
-  try {
-    const isExist = (
-      await db.select().from(headersTable).where(eq(headersTable.id, headerId))
-    )?.[0];
-
-    if (!isExist)
-      await createHeaders({
-        id: headerId,
-      });
-
-    if (typeof payload === "object" && !Object.keys(payload).length)
-      return true;
-
-    const updated = await db
-      .update(headersTable)
-      .set({
-        ...payload,
-      })
-      .where(eq(headersTable.id, headerId));
-    return updated?.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const replaceHeaders = async (requestOrFolderMetaId, payload) => {
-  if (payload)
-    payload.map((header) => {
-      delete header["id"];
-      delete header["requestOrFolderMetaId"];
-      delete header["createdAt"];
-      if ("isCheck" in header) header["isCheck"] = Number(header["isCheck"]);
-      header["requestOrFolderMetaId"] = requestOrFolderMetaId;
-    });
-
-  try {
-    await db
-      .delete(headersTable)
-      .where(eq(headersTable.requestOrFolderMetaId, requestOrFolderMetaId));
-
-    if (
-      typeof payload === "object" &&
-      ((Array.isArray(payload) && !payload.length) ||
-        !Object.keys(payload).length)
-    )
-      return true;
-
-    await db.insert(headersTable).values(payload);
-
-    return true;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const checkAllHeadersByRequestMetaId = async (requestOrFolderMetaId) => {
-  try {
-    if (!requestOrFolderMetaId)
-      requestOrFolderMetaId = (await getTabList())?.selectedTab;
-    if (!requestOrFolderMetaId) return false;
-
-    const rows =
-      (await db
+      const result = await db
         .select()
         .from(headersTable)
-        .where(
-          eq(headersTable.requestOrFolderMetaId, requestOrFolderMetaId)
-        )) ?? [];
+        .where(eq(headersTable.requestOrFolderMetaId, id));
 
-    const checkValue = Number(!rows.every((row) => row.isCheck));
+      return result;
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  };
 
-    const updated = await db
-      .update(headersTable)
-      .set({
-        isCheck: checkValue,
-      })
-      .where(eq(headersTable.requestOrFolderMetaId, requestOrFolderMetaId));
-    return updated?.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
+export const deleteHeaders: ElectronAPIHeadersInterface["deleteHeaders"] =
+  async paramId => {
+    try {
+      return (
+        (await db.delete(headersTable).where(eq(headersTable.id, paramId)))
+          ?.rowsAffected > 0
+      );
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
+/* id === requestOrFolderMetaId */
+export const deleteHeadersByRequestMetaId: ElectronAPIHeadersInterface["deleteHeadersByRequestMetaId"] =
+  async requestOrFolderMetaId => {
+    try {
+      requestOrFolderMetaId =
+        requestOrFolderMetaId ?? (await getTabList())?.selectedTab;
+      if (!requestOrFolderMetaId) throw new Error();
+
+      return (
+        (
+          await db
+            .delete(headersTable)
+            .where(
+              eq(headersTable.requestOrFolderMetaId, requestOrFolderMetaId)
+            )
+        ).rowsAffected > 0
+      );
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
+export const createHeaders: ElectronAPIHeadersInterface["createHeaders"] =
+  async (payload = {}) => {
+    try {
+      const requestOrFolderMetaId =
+        payload.requestOrFolderMetaId ?? (await getTabList())?.selectedTab;
+      if (!requestOrFolderMetaId) throw new Error();
+
+      return (
+        (
+          await db.insert(headersTable).values({
+            ...payload,
+            requestOrFolderMetaId
+          })
+        )?.rowsAffected > 0
+      );
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
+export const updateHeaders: ElectronAPIHeadersInterface["updateHeaders"] =
+  async (headerId, payload) => {
+    if (!payload) throw new Error();
+
+    try {
+      const isExist = (
+        await db
+          .select()
+          .from(headersTable)
+          .where(eq(headersTable.id, headerId))
+      )?.[0];
+
+      if (!isExist)
+        await createHeaders({
+          id: headerId,
+          ...payload
+        });
+
+      return (
+        (
+          await db
+            .update(headersTable)
+            .set({
+              ...payload,
+              requestOrFolderMetaId: payload.requestOrFolderMetaId
+                ? payload.requestOrFolderMetaId
+                : undefined
+            })
+            .where(eq(headersTable.id, headerId))
+        )?.rowsAffected > 0
+      );
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
+export const replaceHeaders: ElectronAPIHeadersInterface["replaceHeaders"] =
+  async (requestOrFolderMetaId, payload) => {
+    try {
+      const replacePayload = payload.map(header => {
+        const { id, ...rest } = header;
+        return {
+          ...rest,
+          requestOrFolderMetaId:
+            header["requestOrFolderMetaId"] ?? requestOrFolderMetaId,
+          value: Array.isArray(header.value)
+            ? JSON.stringify(header.value)
+            : header.value
+        };
+      });
+
+      return await db.transaction(async tsx => {
+        await tsx
+          .delete(headersTable)
+          .where(eq(headersTable.requestOrFolderMetaId, requestOrFolderMetaId));
+
+        if (!replacePayload.length) return true;
+        await tsx.insert(headersTable).values(replacePayload);
+
+        return true;
+      });
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
+export const checkAllHeadersByRequestMetaId: ElectronAPIHeadersInterface["checkAllHeadersByRequestMetaId"] =
+  async requestOrFolderMetaId => {
+    try {
+      requestOrFolderMetaId =
+        requestOrFolderMetaId ?? (await getTabList())?.selectedTab;
+      if (!requestOrFolderMetaId) throw new Error();
+
+      const rows =
+        (await db
+          .select()
+          .from(headersTable)
+          .where(
+            eq(headersTable.requestOrFolderMetaId, requestOrFolderMetaId)
+          )) ?? [];
+
+      const checkValue = !rows.every(row => row.isCheck);
+
+      return (
+        (
+          await db
+            .update(headersTable)
+            .set({
+              isCheck: checkValue
+            })
+            .where(
+              eq(headersTable.requestOrFolderMetaId, requestOrFolderMetaId)
+            )
+        ).rowsAffected > 0
+      );
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
 
 /* 
 payload = {
   oldId: newId ---> newId means duplicatedId
 }
 */
-export const duplicateHeaders = async (payload) => {
-  try {
-    if (!payload) return;
-    const oldIds = Object.keys(payload);
-    if (!oldIds.length) return;
+export const duplicateHeaders: ElectronAPIHeadersInterface["duplicateHeaders"] =
+  async payload => {
+    try {
+      if (!payload) throw new Error();
+      const oldIds = Object.keys(payload);
+      if (!oldIds.length) throw new Error();
 
-    const existingHeadersData = await db
-      .select()
-      .from(headersTable)
-      .where(inArray(headersTable.requestOrFolderMetaId, oldIds));
+      const existingHeadersData = await db
+        .select()
+        .from(headersTable)
+        .where(inArray(headersTable.requestOrFolderMetaId, oldIds));
 
-    if (!existingHeadersData.length) return true;
+      if (!existingHeadersData.length) return true;
 
-    /**
-     * - Replacing oldId with duplicatedId
-     * and only keeping url so that other things automatically generate by default
-     */
-    const duplicatePayload = existingHeadersData.map((header) => {
-      delete header["id"];
-      delete header["createdAt"];
-      return {
-        ...header,
-        requestOrFolderMetaId: payload[header.requestOrFolderMetaId],
-      };
-    });
+      /**
+       * - Replacing oldId with duplicatedId
+       * and only keeping url so that other things automatically generate by default
+       */
+      const duplicatePayload = existingHeadersData.map(header => {
+        const { id, createdAt, ...rest } = header;
+        return {
+          ...rest,
+          requestOrFolderMetaId: payload[header.requestOrFolderMetaId]
+        };
+      });
 
-    const result = await db.insert(headersTable).values(duplicatePayload);
-
-    return result.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
+      return (
+        (await db.insert(headersTable).values(duplicatePayload)).rowsAffected >
+        0
+      );
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };

@@ -5,11 +5,11 @@ import {
 
 export interface ElectronAPIHeadersInterface {
   getHeaders(
-    requestOrFolderMetaId?: string
+    requestOrFolderMetaId?: string | null
   ): Promise<Array<ParamHeaderPayloadInterface>>;
   deleteHeaders(paramId: string): Promise<boolean>;
   deleteHeadersByRequestMetaId(
-    requestOrFolderMetaId?: string
+    requestOrFolderMetaId?: string | null
   ): Promise<boolean>;
   createHeaders(
     payload: Partial<ParamHeaderBuildPayloadInterface>
@@ -23,7 +23,7 @@ export interface ElectronAPIHeadersInterface {
     payload: Array<Partial<ParamHeaderBuildPayloadInterface>>
   ): Promise<boolean>;
   checkAllHeadersByRequestMetaId(
-    requestOrFolderMetaId?: string
+    requestOrFolderMetaId?: string | null
   ): Promise<boolean>;
   duplicateHeaders(payload: Record<string, string>): Promise<boolean>;
 }

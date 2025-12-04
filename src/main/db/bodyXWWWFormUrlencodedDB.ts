@@ -95,9 +95,6 @@ export const updateBodyXWWWFormUrlencoded: ElectronAPIBodyXWWWFormUrlencodedInte
   async (formId, payload) => {
     if (!payload) throw new Error();
 
-    delete payload["id"];
-    delete payload["requestOrFolderMetaId"];
-
     try {
       const isExist = (
         await db

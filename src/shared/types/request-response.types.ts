@@ -115,6 +115,7 @@ export interface HiddenHeadersCheckInterface {
   accept: boolean;
   acceptEncoding: boolean;
   connection: boolean;
+  requestOrFolderMetaId?: string | null;
 }
 
 export interface ShowHiddenMetaInterface {

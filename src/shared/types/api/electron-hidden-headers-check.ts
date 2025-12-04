@@ -1,13 +1,15 @@
 import { HiddenHeadersCheckInterface } from "@/shared/types/request-response.types";
 
 export interface ElectronAPIHiddenHeadersCheckInterface {
-  getHiddenHeadersCheck(id?: string): Promise<HiddenHeadersCheckInterface>;
+  getHiddenHeadersCheck(
+    id?: string | null
+  ): Promise<HiddenHeadersCheckInterface | null>;
   createHiddenHeadersCheck(
-    paramId: string
-  ): Promise<Partial<HiddenHeadersCheckInterface>>;
+    payload: Partial<HiddenHeadersCheckInterface>
+  ): Promise<Partial<HiddenHeadersCheckInterface | null>>;
   updateHiddenHeadersCheck(
     payload: Partial<HiddenHeadersCheckInterface>
-  ): Promise<Partial<HiddenHeadersCheckInterface>>;
+  ): Promise<Partial<HiddenHeadersCheckInterface> | null>;
   duplicateHiddenHeadersCheck(
     payload: Record<string, string>
   ): Promise<boolean>;
