@@ -5,7 +5,7 @@ import { writeFile } from "fs/promises";
 
 export const saveThemePaletteLocal = async (palette: string) => {
   try {
-    if (!mainWindow) return;
+    if (!mainWindow) throw new Error();
 
     const { canceled, filePath } = await dialog.showSaveDialog(mainWindow, {
       title: "Save theme palette",

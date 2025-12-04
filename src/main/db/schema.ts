@@ -489,15 +489,15 @@ export const themeTable = sqliteTable("theme_table", {
   id: text()
     .primaryKey()
     .$defaultFn(() => uuidv4()),
-  name: text(),
+  name: text().notNull().default("theme"),
   type: text()
     .$type<ThemeInterface["type"]>()
     .notNull()
     .default("dark") /* light | dark | custom */,
   url: text().notNull().default(""),
   author: text().notNull().default("system"),
-  thumbnail: text(),
-  palette: text().notNull(),
+  thumbnail: text().notNull().default(""),
+  palette: text(),
   createdAt: text()
     .notNull()
     .default(sql`(current_timestamp)`)

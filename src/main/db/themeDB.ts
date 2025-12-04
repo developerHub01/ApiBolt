@@ -1,102 +1,121 @@
 import { eq } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { themeTable } from "@/main/db/schema.js";
+import { ElectronAPIThemeInterface } from "@/shared/types/api/electron-theme";
+import { ThemeInterface } from "@/shared/types/theme.types";
 
-export const getThemeListMeta = async () => {
-  try {
-    const result = await db
-      .select({
-        id: themeTable.id,
-        name: themeTable.name,
-        type: themeTable.type,
-        url: themeTable.url,
-        author: themeTable.author,
-        thumbnail: themeTable.thumbnail,
-        createdAt: themeTable.createdAt,
-      })
-      .from(themeTable);
-
-    return result;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const getThemeById = async (id) => {
-  try {
-    const result = (
-      await db.select().from(themeTable).where(eq(themeTable.id, id))
-    )?.[0];
-
-    if (result.palette) result.palette = JSON.parse(result.palette);
-    return result;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const getThemePaletteById = async (id) => {
-  try {
-    let result = (
-      await db
+export const getThemeListMeta: ElectronAPIThemeInterface["getThemeListMeta"] =
+  async () => {
+    try {
+      return await db
         .select({
-          palette: themeTable.palette,
+          id: themeTable.id,
+          name: themeTable.name,
+          type: themeTable.type,
+          url: themeTable.url,
+          author: themeTable.author,
+          thumbnail: themeTable.thumbnail,
+          createdAt: themeTable.createdAt
         })
-        .from(themeTable)
-        .where(eq(themeTable.id, id))
-    )?.[0]?.palette;
+        .from(themeTable);
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  };
 
-    if (result) result = JSON.parse(result);
-    return result;
-  } catch (error) {
-    console.error(error);
-  }
-};
+export const getThemeById: ElectronAPIThemeInterface["getThemeById"] =
+  async id => {
+    try {
+      const result = (
+        await db.select().from(themeTable).where(eq(themeTable.id, id))
+      )?.[0];
 
-export const createTheme = async (payload = {}) => {
-  try {
-    if ("palette" in payload && typeof payload.palette === "object")
-      payload.palette = JSON.stringify(payload.palette);
+      return {
+        ...result,
+        palette: (result.palette
+          ? JSON.parse(result.palette)
+          : {}) as ThemeInterface["palette"]
+      };
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  };
 
-    const result = await db.insert(themeTable).values(payload);
-    return result.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-  }
-};
+export const getThemePaletteById: ElectronAPIThemeInterface["getThemePaletteById"] =
+  async id => {
+    try {
+      const result = (
+        await db
+          .select({
+            palette: themeTable.palette
+          })
+          .from(themeTable)
+          .where(eq(themeTable.id, id))
+      )?.[0]?.palette;
 
-export const updateTheme = async (payload) => {
-  if (!payload || !payload.id) return false;
+      if (!result) throw new Error();
+      return JSON.parse(result) as ThemeInterface["palette"];
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  };
 
-  delete payload["createdAt"];
-  const updatePayload = { ...payload };
-  delete updatePayload["id"];
-  delete updatePayload["createdAt"];
+export const createTheme: ElectronAPIThemeInterface["createTheme"] =
+  async payload => {
+    try {
+      let palette: string | null = null;
+      if ("palette" in payload && typeof payload.palette === "object")
+        palette = JSON.stringify(payload.palette);
 
-  try {
-    const updated = await db
-      .insert(themeTable)
-      .values(payload)
-      .onConflictDoUpdate({
-        target: themeTable.id,
-        set: {
-          ...updatePayload,
-        },
-      });
+      return (
+        (
+          await db.insert(themeTable).values({
+            ...payload,
+            palette
+          })
+        ).rowsAffected > 0
+      );
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
 
-    return updated?.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
-};
+export const updateTheme: ElectronAPIThemeInterface["updateTheme"] =
+  async payload => {
+    delete payload["createdAt"];
 
-export const deleteThemeById = async (id) => {
-  try {
-    const deleted = await db.delete(themeTable).where(eq(themeTable.id, id));
-    return deleted?.rowsAffected > 0;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
-};
+    const palette = payload.palette
+      ? JSON.stringify(payload.palette)
+      : undefined;
+
+    try {
+      return (
+        (
+          await db.update(themeTable).set({
+            ...payload,
+            palette
+          })
+        )?.rowsAffected > 0
+      );
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
+export const deleteThemeById: ElectronAPIThemeInterface["deleteThemeById"] =
+  async id => {
+    try {
+      return (
+        (await db.delete(themeTable).where(eq(themeTable.id, id)))
+          ?.rowsAffected > 0
+      );
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
