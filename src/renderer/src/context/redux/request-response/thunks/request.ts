@@ -13,7 +13,7 @@ import {
 } from "@/context/redux/request-response/request-response-slice";
 import { handleRequestUrlClearTokens } from "@/context/redux/request-url/request-url-slice";
 import { loadAuthorization } from "@/context/redux/request-response/thunks/auth";
-import type { ElectronResponseInterface } from "@/types";
+import type { ElectronResponseInterface } from "@shared/types";
 import { loadParams } from "@/context/redux/request-response/thunks/params";
 import {
   loadHeaders,

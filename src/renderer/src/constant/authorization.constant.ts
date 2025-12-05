@@ -4,7 +4,7 @@ import type {
   JWTBearerAuthInterface,
   TAuthContextType,
   TAuthType,
-} from "@/types/authorization.types";
+} from "@shared/types/authorization.types";
 
 export const DEFAULT_AUTHORIZATION_ID: TAuthContextType = "global";
 

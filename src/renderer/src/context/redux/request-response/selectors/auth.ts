@@ -6,7 +6,7 @@ import {
   DEFAULT_BASIC_AUTH,
   DEFAULT_JWT_BEARER_AUTH,
 } from "@/constant/authorization.constant";
-import type { TAuthType } from "@/types/authorization.types";
+import type { TAuthType } from "@shared/types/authorization.types";
 
 export const selectAuthId = createSelector(
   (state: RootState) => state.sidebar.activeTab,

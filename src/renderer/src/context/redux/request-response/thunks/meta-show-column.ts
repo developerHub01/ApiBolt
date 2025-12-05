@@ -1,4 +1,4 @@
-import { type ParamHeaderBuildPayloadInterface } from "@shared/types/request-response.types";
+import { MetaShowColumnInterface, type ParamHeaderBuildPayloadInterface } from "@shared/types/request-response.types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import { handleLoadMetaShowColumn } from "@/context/redux/request-response/request-response-slice";
@@ -33,17 +33,18 @@ export const loadMetaShowColumn = createAsyncThunk<
 
       const response =
         await window.electronAPIMetaShowColumn.getMetaShowColumn(selectedTab);
+      if (!response) return;
 
       dispatch(handleLoadMetaShowColumn(response));
     } catch (error) {
       console.error(error);
     }
-  }
+  },
 );
 
 export const updateMetaShowColumn = createAsyncThunk<
   boolean,
-  Partial<ParamHeaderBuildPayloadInterface>,
+  Partial<MetaShowColumnInterface>,
   {
     dispatch: AppDispatch;
     state: RootState;
@@ -72,7 +73,7 @@ export const duplicateMetaShowColumnByOldNewIds = createAsyncThunk<
   try {
     const response =
       await window.electronAPIMetaShowColumn.duplicateMetaShowColumn(
-        oldNewIdMap
+        oldNewIdMap,
       );
 
     return response;

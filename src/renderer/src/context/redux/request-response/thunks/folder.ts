@@ -3,7 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import {
   handleLoadFolder,
-  handleUpdateFolder
+  handleUpdateFolder,
 } from "@/context/redux/request-response/request-response-slice";
 import { areSamePayload } from "@/utils/helper";
 
@@ -40,8 +40,8 @@ export const loadFolder = createAsyncThunk<
     dispatch(
       handleLoadFolder({
         id: selectedTab,
-        payload: response
-      })
+        payload: response ?? undefined,
+      }),
     );
   } catch (error) {
     console.error(error);
@@ -68,7 +68,7 @@ export const updateFolder = createAsyncThunk<
 
     const existingData = {
       title: state.requestResponse.folderTitle[selectedTab],
-      description: state.requestResponse.folderDescription[selectedTab]
+      description: state.requestResponse.folderDescription[selectedTab],
     };
     const areSame = areSamePayload(payload, existingData);
     if (areSame) return true;
@@ -81,8 +81,8 @@ export const updateFolder = createAsyncThunk<
       dispatch(
         handleUpdateFolder({
           id: selectedTab,
-          payload
-        })
+          payload,
+        }),
       );
     }
     return response;

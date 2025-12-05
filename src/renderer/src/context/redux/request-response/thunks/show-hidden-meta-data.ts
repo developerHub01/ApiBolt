@@ -33,20 +33,20 @@ export const loadShowHiddenMetaData = createAsyncThunk<
 
       const response =
         await window.electronAPIShowHiddenMetaData.getShowHiddenMetaData(
-          selectedTab
+          selectedTab,
         );
 
       if (response)
         dispatch(
           handleSetShowHiddenMetaData({
             id: selectedTab,
-            payload: response
-          })
+            payload: response,
+          }),
         );
     } catch (error) {
       console.error(error);
     }
-  }
+  },
 );
 
 export const updateShowHiddenMetaData = createAsyncThunk<
@@ -61,21 +61,23 @@ export const updateShowHiddenMetaData = createAsyncThunk<
   async ({ id, payload }, { dispatch, getState }) => {
     try {
       const state = getState() as RootState;
-
-      const selectedTab = id ?? state.requestResponse.selectedTab ?? undefined;
+      const selectedTab = id ?? state.requestResponse.selectedTab;
+      const requestOrFolderMetaId =
+        payload.requestOrFolderMetaId ?? selectedTab;
+      if (!requestOrFolderMetaId) throw new Error();
 
       const response =
         await window.electronAPIShowHiddenMetaData.updateShowHiddenMetaData({
-          requestOrFolderMetaId: selectedTab,
-          ...payload
+          ...payload,
+          requestOrFolderMetaId,
         });
 
       if (response)
         dispatch(
           handleSetShowHiddenMetaData({
-            id: selectedTab,
-            payload: response
-          })
+            id: requestOrFolderMetaId,
+            payload: response,
+          }),
         );
 
       return Boolean(response);
@@ -83,7 +85,7 @@ export const updateShowHiddenMetaData = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const toggleShowHiddenMetaData = createAsyncThunk<
@@ -108,7 +110,7 @@ export const toggleShowHiddenMetaData = createAsyncThunk<
       const response =
         await window.electronAPIShowHiddenMetaData.updateShowHiddenMetaData({
           requestOrFolderMetaId: selectedTab,
-          [key]: newValue
+          [key]: newValue,
         });
 
       if (response)
@@ -116,9 +118,9 @@ export const toggleShowHiddenMetaData = createAsyncThunk<
           handleSetShowHiddenMetaData({
             id: selectedTab,
             payload: {
-              [key]: newValue
-            }
-          })
+              [key]: newValue,
+            },
+          }),
         );
 
       return Boolean(response);
@@ -126,7 +128,7 @@ export const toggleShowHiddenMetaData = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const duplicateShowHiddenMetaDataByOldNewIds = createAsyncThunk<
@@ -142,7 +144,7 @@ export const duplicateShowHiddenMetaDataByOldNewIds = createAsyncThunk<
     try {
       const response =
         await window.electronAPIShowHiddenMetaData.duplicateShowHiddenMetaData(
-          oldNewIdMap
+          oldNewIdMap,
         );
 
       return response;
@@ -150,7 +152,7 @@ export const duplicateShowHiddenMetaDataByOldNewIds = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 /* ==============================
 ======== show-hidden-meta-data end =============

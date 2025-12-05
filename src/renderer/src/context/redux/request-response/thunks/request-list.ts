@@ -1,7 +1,7 @@
 import {
   type RequestListItemInterface,
   type RequestListItemUpdatePayloadInterface,
-  type THTTPMethods
+  type THTTPMethods,
 } from "@shared/types/request-response.types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
@@ -14,20 +14,20 @@ import {
   handleDeleteAllRequestOrFolder,
   handleLoadRequestList,
   handleUpdateRequestOrFolder,
-  handleUpdateRequestOrFolderMeta
+  handleUpdateRequestOrFolderMeta,
 } from "@/context/redux/request-response/request-response-slice";
 import { v4 as uuidv4 } from "uuid";
 import {
   duplicateRequestOrFolderNode,
   getNestedIds,
-  getRequestType
+  getRequestType,
 } from "@/utils/request-response.utils";
 import { loadTabsData } from "@/context/redux/request-response/thunks/tab-list";
 import { duplicateRequestApiUrlsByOldNewIds } from "@/context/redux/request-url/thunks/request-url";
 import { duplicateParamsByOldNewIds } from "@/context/redux/request-response/thunks/params";
 import {
   duplicateHeadersByOldNewIds,
-  duplicateHiddenHeadersByOldNewIds
+  duplicateHiddenHeadersByOldNewIds,
 } from "@/context/redux/request-response/thunks/headers";
 import { duplicateShowHiddenMetaDataByOldNewIds } from "@/context/redux/request-response/thunks/show-hidden-meta-data";
 import { duplicateRequestMetaTabByOldNewIds } from "@/context/redux/request-response/thunks/request-meta-tab";
@@ -98,14 +98,15 @@ export const loadSingleRequestMeta = createAsyncThunk<
 
       const requestMeta =
         await window.electronAPIRequestOrFolderMeta.getRequestOrFolderMetaById(
-          id
+          id,
         );
+      if (!requestMeta) return;
 
       dispatch(handleUpdateRequestOrFolderMeta(requestMeta));
     } catch (error) {
       console.error(error);
     }
-  }
+  },
 );
 
 export const createSingleRequest = createAsyncThunk<
@@ -115,27 +116,35 @@ export const createSingleRequest = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->("request-response/createSingleRequest", async (parentId, { dispatch }) => {
-  try {
-    const payload: RequestListItemInterface = {
-      id: uuidv4(),
-      name: "Request",
-      method: "get",
-      ...(parentId ? { parentId } : {})
-    };
+>(
+  "request-response/createSingleRequest",
+  async (parentId, { getState, dispatch }) => {
+    try {
+      const state = getState() as RootState;
+      const projectId = state.project.activeProjectId;
+      if (!projectId) throw new Error();
 
-    dispatch(handleCreateSingleRequest(payload));
-    const response =
-      await window.electronAPIRequestOrFolderMeta.createRequestOrFolderMeta(
-        payload
-      );
-    if (response) await dispatch(expendRequestOrFolder(parentId));
-    return response;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
-});
+      const payload: RequestListItemInterface = {
+        id: uuidv4(),
+        name: "Request",
+        method: "get",
+        ...(parentId ? { parentId } : {}),
+        projectId,
+      };
+
+      dispatch(handleCreateSingleRequest(payload));
+      const response =
+        await window.electronAPIRequestOrFolderMeta.createRequestOrFolderMeta(
+          payload,
+        );
+      if (response) await dispatch(expendRequestOrFolder(parentId));
+      return response;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+);
 
 export const createCollection = createAsyncThunk<
   boolean,
@@ -144,28 +153,36 @@ export const createCollection = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->("request-response/createCollection", async (parentId, { dispatch }) => {
-  try {
-    const payload = {
-      id: uuidv4(),
-      name: parentId ? "Folder" : "Collection",
-      ...(parentId ? { parentId } : {})
-    };
+>(
+  "request-response/createCollection",
+  async (parentId, { getState, dispatch }) => {
+    try {
+      const state = getState() as RootState;
+      const projectId = state.project.activeProjectId;
+      if (!projectId) throw new Error();
 
-    dispatch(handleCreateSingleRequest(payload));
+      const payload = {
+        id: uuidv4(),
+        name: parentId ? "Folder" : "Collection",
+        ...(parentId ? { parentId } : {}),
+        projectId,
+      };
 
-    const response =
-      await window.electronAPIRequestOrFolderMeta.createRequestOrFolderMeta({
-        ...payload,
-        children: []
-      });
-    if (response) await dispatch(expendRequestOrFolder(parentId));
-    return response;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
-});
+      dispatch(handleCreateSingleRequest(payload));
+
+      const response =
+        await window.electronAPIRequestOrFolderMeta.createRequestOrFolderMeta({
+          ...payload,
+          children: [],
+        });
+      if (response) await dispatch(expendRequestOrFolder(parentId));
+      return response;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+);
 
 export const createRestApiBasic = createAsyncThunk<
   boolean,
@@ -174,49 +191,56 @@ export const createRestApiBasic = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->("request-response/createRestApiBasic", async (parentId, { dispatch }) => {
-  try {
-    const parentFolder: RequestListItemInterface = {
-      id: uuidv4(),
-      name: "REST API basics",
-      children: [],
-      createdAt: Date.now()
-    };
+>(
+  "request-response/createRestApiBasic",
+  async (parentId, { getState, dispatch }) => {
+    try {
+      const state = getState() as RootState;
+      const projectId = state.project.activeProjectId;
+      if (!projectId) throw new Error();
 
-    if (parentId) parentFolder["parentId"] = parentId;
+      const parentFolder: RequestListItemInterface = {
+        id: uuidv4(),
+        name: "REST API basics",
+        children: [],
+        projectId,
+      };
 
-    const payload: Array<RequestListItemInterface> = (
-      ["get", "post", "put", "patch", "delete"] as Array<THTTPMethods>
-    ).map(method => ({
-      id: uuidv4(),
-      name: `${method[0].toUpperCase()}${method.substring(1)} data`,
-      method: method as THTTPMethods,
-      createdAt: Date.now()
-    }));
+      if (parentId) parentFolder["parentId"] = parentId;
 
-    parentFolder.children = payload.map(item => item.id);
+      const payload: Array<RequestListItemInterface> = (
+        ["get", "post", "put", "patch", "delete"] as Array<THTTPMethods>
+      ).map(method => ({
+        id: uuidv4(),
+        name: `${method[0].toUpperCase()}${method.substring(1)} data`,
+        method: method as THTTPMethods,
+        projectId,
+      }));
 
-    const requestList = [
-      parentFolder,
-      ...payload.map(item => ({
-        ...item,
-        parentId: parentFolder.id
-      }))
-    ];
+      parentFolder.children = payload.map(item => item.id);
 
-    dispatch(handleCreateRestApiBasic(requestList));
-    const response =
-      await window.electronAPIRequestOrFolderMeta.createRequestOrFolderMeta(
-        requestList
-      );
+      const requestList = [
+        parentFolder,
+        ...payload.map(item => ({
+          ...item,
+          parentId: parentFolder.id,
+        })),
+      ];
 
-    if (response) await dispatch(expendRequestOrFolder(parentId));
-    return response;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
-});
+      dispatch(handleCreateRestApiBasic(requestList));
+      const response =
+        await window.electronAPIRequestOrFolderMeta.createRequestOrFolderMeta(
+          requestList,
+        );
+
+      if (response) await dispatch(expendRequestOrFolder(parentId));
+      return response;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+);
 
 /* action by selected tab start =============== */
 export const createSingleRequestBySelectedTab = createAsyncThunk<
@@ -231,35 +255,39 @@ export const createSingleRequestBySelectedTab = createAsyncThunk<
   async (_, { dispatch, getState }) => {
     try {
       const state = getState() as RootState;
+      const projectId = state.project.activeProjectId;
       const selectedTab = state.requestResponse.selectedTab;
+      if (!projectId) throw new Error();
 
-      let parentId = selectedTab ?? undefined;
+      let parentId = selectedTab;
       /* if selected tab exist then check is it a request or not. if then take it's parent else take that */
       if (selectedTab) {
         const selectedDetails = state.requestResponse.requestList[selectedTab];
         if (selectedDetails && getRequestType(selectedDetails) === "request")
-          parentId = selectedDetails.parentId;
+          parentId = selectedDetails.parentId ?? null;
       }
 
       const payload: RequestListItemInterface = {
         id: uuidv4(),
         name: "Request",
         method: "get",
-        ...(parentId ? { parentId } : {})
+        ...(parentId ? { parentId } : {}),
+        projectId,
       };
 
       dispatch(handleCreateSingleRequest(payload));
       const response =
         await window.electronAPIRequestOrFolderMeta.createRequestOrFolderMeta(
-          payload
+          payload,
         );
-      if (response) await dispatch(expendRequestOrFolder(parentId));
+      if (response)
+        await dispatch(expendRequestOrFolder(parentId ?? undefined));
       return response;
     } catch (error) {
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const createCollectionBySelectedTab = createAsyncThunk<
@@ -275,19 +303,22 @@ export const createCollectionBySelectedTab = createAsyncThunk<
     try {
       const state = getState() as RootState;
       const selectedTab = state.requestResponse.selectedTab;
+      const projectId = state.project.activeProjectId;
+      if (!projectId) throw new Error();
 
-      let parentId = selectedTab ?? undefined;
+      let parentId = selectedTab;
       /* if selected tab exist then check is it a request or not. if then take it's parent else take that */
       if (selectedTab) {
         const selectedDetails = state.requestResponse.requestList[selectedTab];
         if (selectedDetails && getRequestType(selectedDetails) === "request")
-          parentId = selectedDetails.parentId;
+          parentId = selectedDetails.parentId ?? null;
       }
 
       const payload = {
         id: uuidv4(),
         name: parentId ? "Folder" : "Collection",
-        ...(parentId ? { parentId } : {})
+        ...(parentId ? { parentId } : {}),
+        projectId,
       };
 
       dispatch(handleCreateSingleRequest(payload));
@@ -295,15 +326,16 @@ export const createCollectionBySelectedTab = createAsyncThunk<
       const response =
         await window.electronAPIRequestOrFolderMeta.createRequestOrFolderMeta({
           ...payload,
-          children: []
+          children: [],
         });
-      if (response) await dispatch(expendRequestOrFolder(parentId));
+      if (response)
+        await dispatch(expendRequestOrFolder(parentId ?? undefined));
       return response;
     } catch (error) {
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const createRestApiBasicBySelectedTab = createAsyncThunk<
@@ -319,21 +351,23 @@ export const createRestApiBasicBySelectedTab = createAsyncThunk<
     try {
       const state = getState() as RootState;
       const selectedTab = state.requestResponse.selectedTab;
+      const projectId = state.project.activeProjectId;
+      if (!projectId) throw new Error();
 
-      let parentId = selectedTab ?? undefined;
+      let parentId = selectedTab;
       /* if selected tab exist then check is it a request or not. if then take it's parent else take that */
       if (selectedTab) {
         const selectedDetails = state.requestResponse.requestList[selectedTab];
         if (selectedDetails && getRequestType(selectedDetails) === "request")
-          parentId = selectedDetails.parentId;
+          parentId = selectedDetails.parentId ?? null;
       }
 
       const newParentFolder: RequestListItemInterface = {
         id: uuidv4(),
         name: "REST API basics",
         children: [],
-        createdAt: Date.now(),
-        parentId
+        parentId,
+        projectId,
       };
 
       const payload: Array<RequestListItemInterface> = (
@@ -342,7 +376,7 @@ export const createRestApiBasicBySelectedTab = createAsyncThunk<
         id: uuidv4(),
         name: `${method[0].toUpperCase()}${method.substring(1)} data`,
         method: method as THTTPMethods,
-        createdAt: Date.now()
+        projectId,
       }));
 
       newParentFolder.children = payload.map(item => item.id);
@@ -351,24 +385,25 @@ export const createRestApiBasicBySelectedTab = createAsyncThunk<
         newParentFolder,
         ...payload.map(item => ({
           ...item,
-          parentId: newParentFolder.id
-        }))
+          parentId: newParentFolder.id,
+        })),
       ];
 
       dispatch(handleCreateRestApiBasic(requestList));
 
       const response =
         await window.electronAPIRequestOrFolderMeta.createRequestOrFolderMeta(
-          requestList
+          requestList,
         );
 
-      if (response) await dispatch(expendRequestOrFolder(parentId));
+      if (response)
+        await dispatch(expendRequestOrFolder(parentId ?? undefined));
       return response;
     } catch (error) {
       console.error(error);
       return false;
     }
-  }
+  },
 );
 /* action by selected tab end =============== */
 
@@ -383,7 +418,7 @@ export const updateRequestOrFolder = createAsyncThunk<
   try {
     dispatch(handleUpdateRequestOrFolder(payload));
     await window.electronAPIRequestOrFolderMeta.updateRequestOrFolderMeta(
-      payload
+      payload,
     );
   } catch (error) {
     console.error(error);
@@ -413,13 +448,13 @@ export const expendRequestOrFolder = createAsyncThunk<
       await dispatch(
         updateRequestOrFolder({
           id,
-          isExpended: true
-        })
+          isExpended: true,
+        }),
       );
     } catch (error) {
       console.error(error);
     }
-  }
+  },
 );
 
 export const moveRequestOrFolder = createAsyncThunk<
@@ -431,9 +466,11 @@ export const moveRequestOrFolder = createAsyncThunk<
   }
 >(
   "request-response/moveRequestOrFolder",
-  async ({ requestId, parentId }, { dispatch, getState }) => {
+  async ({ requestId, parentId = null }, { dispatch, getState }) => {
     try {
       const state = getState() as RootState;
+      const projectId = state.project.activeProjectId;
+      if (!projectId) throw new Error();
 
       const parentDetails = state.requestResponse.requestList[parentId ?? ""];
       const requestDetails = state.requestResponse.requestList[requestId];
@@ -445,20 +482,21 @@ export const moveRequestOrFolder = createAsyncThunk<
        */
       const requestAllChildrenList = getNestedIds({
         source: state.requestResponse.requestList,
-        id: requestId
+        id: requestId,
       });
       if (parentId && requestAllChildrenList.includes(parentId)) return false;
 
       if (parentDetails && getRequestType(parentDetails) === "request")
-        parentId = parentDetails.parentId;
+        parentId = parentDetails.parentId ?? null;
       if (parentId === requestDetails.parentId) return false;
 
       const response =
         await window.electronAPIRequestOrFolderMeta.moveRequestOrFolderMeta({
           id: requestId,
-          parentId
+          parentId,
         });
-      if (response) await dispatch(expendRequestOrFolder(parentId));
+      if (response)
+        await dispatch(expendRequestOrFolder(parentId ?? undefined));
       dispatch(handleChangeIsRequestListLoaded(false));
 
       return response;
@@ -466,7 +504,7 @@ export const moveRequestOrFolder = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const deleteAllRequestOrFolder = createAsyncThunk<
@@ -480,7 +518,7 @@ export const deleteAllRequestOrFolder = createAsyncThunk<
   try {
     dispatch(handleDeleteAllRequestOrFolder());
     await window.electronAPIRequestOrFolderMeta.deleteRequestOrFolderMetaByProjectId(
-      id
+      id,
     );
   } catch (error) {
     console.error(error);
@@ -515,12 +553,12 @@ export const deleteRequestOrFolder = createAsyncThunk<
 
       const idsToDelete = getNestedIds({
         source: state.requestResponse.requestList,
-        id: rootId
+        id: rootId,
       });
 
       const response =
         await window.electronAPIRequestOrFolderMeta.deleteRequestOrFolderMetaById(
-          idsToDelete
+          idsToDelete,
         );
       if (response) {
         dispatch(handleChangeIsRequestListLoaded(false));
@@ -531,7 +569,7 @@ export const deleteRequestOrFolder = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const duplicateRequestOrFolder = createAsyncThunk<
@@ -548,14 +586,13 @@ export const duplicateRequestOrFolder = createAsyncThunk<
       const state = getState() as RootState;
       const projectId = state.project.activeProjectId;
       const requestList = state.requestResponse.requestList;
-
-      if (!projectId) return false;
+      if (!projectId) throw new Error();
 
       const { newParentId, nodes: duplicatedNodes } =
         duplicateRequestOrFolderNode({
           source: requestList,
           id,
-          parentId: requestList[id]?.parentId
+          parentId: requestList[id]?.parentId ?? undefined,
         });
 
       const oldNewIdMap = Object.values(duplicatedNodes).reduce(
@@ -563,7 +600,7 @@ export const duplicateRequestOrFolder = createAsyncThunk<
           acc[curr.oldId] = curr.id;
           return acc;
         },
-        {} as Record<string, string>
+        {} as Record<string, string>,
       );
 
       if (duplicatedNodes?.[newParentId]?.name) {
@@ -575,16 +612,15 @@ export const duplicateRequestOrFolder = createAsyncThunk<
 
       const duplicatedData = Object.values(duplicatedNodes);
       const duplicatedDataFiltered = duplicatedData.map(
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         ({ children, createdAt, oldId, ...rest }) => ({
           ...rest,
-          projectId
-        })
+          projectId,
+        }),
       );
 
       const response =
         await window.electronAPIRequestOrFolderMeta.duplicateRequestOrFolderMeta(
-          duplicatedDataFiltered
+          duplicatedDataFiltered,
         );
 
       if (!response) return false;
@@ -615,7 +651,7 @@ export const duplicateRequestOrFolder = createAsyncThunk<
         /* duplicate request auth */
         dispatch(duplicateAuthorizationByOldNewIds(oldNewIdMap)),
         /* duplicate folder */
-        dispatch(duplicateFolderByOldNewIds(oldNewIdMap))
+        dispatch(duplicateFolderByOldNewIds(oldNewIdMap)),
       ]);
 
       dispatch(handleChangeIsRequestListLoaded(false));
@@ -625,7 +661,7 @@ export const duplicateRequestOrFolder = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const collapseAllRequestOrFolder = createAsyncThunk<

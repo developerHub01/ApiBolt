@@ -8,7 +8,7 @@ import {
   duplicateBodyBinary,
   getBodyBinary,
   replaceBodyBinary,
-  updateBodyBinary
+  updateBodyBinary,
 } from "@/main/db/bodyBinaryDB.js";
 
 export const bodyBinaryHandler = () => {
@@ -20,21 +20,18 @@ export const bodyBinaryHandler = () => {
     ): ReturnType<ElectronAPIBodyBinaryInterface["getBodyBinary"]> => {
       try {
         const result = await getBodyBinary(...rest);
-        if (!result) throw new Error();
-        const filePath = result?.path;
-
-        let file: string | null = null;
-        if (filePath && fs.existsSync(filePath)) file = path.basename(filePath);
+        if (!result || !result.path || !fs.existsSync(result.path)) return null;
 
         return {
           ...result,
-          file
+          path: result.path,
+          file: path.basename(result.path),
         };
       } catch (error) {
         console.error(error);
         return null;
       }
-    }
+    },
   );
   ipcMain.handle(
     "createBodyBinary",
@@ -42,7 +39,7 @@ export const bodyBinaryHandler = () => {
       _,
       ...rest: Parameters<ElectronAPIBodyBinaryInterface["createBodyBinary"]>
     ): ReturnType<ElectronAPIBodyBinaryInterface["createBodyBinary"]> =>
-      await createBodyBinary(...rest)
+      await createBodyBinary(...rest),
   );
   ipcMain.handle(
     "updateBodyBinary",
@@ -56,20 +53,20 @@ export const bodyBinaryHandler = () => {
         const result = await dialog.showOpenDialog({
           properties: ["openFile"],
           title: "Select file",
-          buttonLabel: "Select"
+          buttonLabel: "Select",
         });
 
         const path = result?.filePaths?.[0];
 
         return await updateBodyBinary({
           requestOrFolderMetaId,
-          path
+          path,
         });
       } catch (error) {
         console.error(error);
         return false;
       }
-    }
+    },
   );
   ipcMain.handle(
     "deleteBodyBinary",
@@ -77,7 +74,7 @@ export const bodyBinaryHandler = () => {
       _,
       ...rest: Parameters<ElectronAPIBodyBinaryInterface["deleteBodyBinary"]>
     ): ReturnType<ElectronAPIBodyBinaryInterface["deleteBodyBinary"]> =>
-      await deleteBodyBinary(...rest)
+      await deleteBodyBinary(...rest),
   );
   ipcMain.handle(
     "duplicateBodyBinary",
@@ -85,7 +82,7 @@ export const bodyBinaryHandler = () => {
       _,
       ...rest: Parameters<ElectronAPIBodyBinaryInterface["duplicateBodyBinary"]>
     ): ReturnType<ElectronAPIBodyBinaryInterface["duplicateBodyBinary"]> =>
-      await duplicateBodyBinary(...rest)
+      await duplicateBodyBinary(...rest),
   );
   ipcMain.handle(
     "replaceBodyBinary",
@@ -93,6 +90,6 @@ export const bodyBinaryHandler = () => {
       _,
       ...rest: Parameters<ElectronAPIBodyBinaryInterface["replaceBodyBinary"]>
     ): ReturnType<ElectronAPIBodyBinaryInterface["replaceBodyBinary"]> =>
-      await replaceBodyBinary(...rest)
+      await replaceBodyBinary(...rest),
   );
 };

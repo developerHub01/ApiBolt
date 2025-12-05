@@ -17,7 +17,7 @@ import {
   DEFAULT_BASIC_AUTH,
   DEFAULT_JWT_BEARER_AUTH
 } from "@/constant/authorization.constant";
-import type { AuthorizationPayloadInterface } from "@/types/authorization.types";
+import type { AuthorizationPayloadInterface } from "@shared/types/authorization.types";
 
 /* ==============================
 ===== Auth start =========
