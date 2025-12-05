@@ -26,7 +26,7 @@ const ThemeListContent = ({ onClose }: Props) => {
   const toast = useCustomToast();
   const activeTheme = useActiveThemeId();
   const [selectedId, setSelectedId] = useState<string | null>(
-    activeTheme ?? null
+    activeTheme ?? null,
   );
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const metaList = useAppSelector(selectThemeMetaList);
@@ -45,7 +45,7 @@ const ThemeListContent = ({ onClose }: Props) => {
     const response = await dispatch(
       loadThemePalette({
         themeId: selectedId,
-      })
+      }),
     ).unwrap();
     setIsProcessing(false);
     if (!response) return;
@@ -79,12 +79,13 @@ const ThemeListContent = ({ onClose }: Props) => {
               }}
               className="grid grid-cols-2 gap-5"
             >
-              {metaList.map((props) => {
+              {metaList.map(props => {
                 const { id } = props;
                 const isActive = id === selectedId;
 
                 return (
                   <ThemeCard
+                    key={props.id}
                     {...props}
                     isActive={isActive}
                     onClick={handleClick}

@@ -115,7 +115,7 @@ export const updateKeyboardShortcuts: ElectronAPIKeyboardShortcutInterface["upda
                 isNull(keyboardShortcutTable.projectId),
               ),
             )
-            .limit(0)
+            .limit(1)
         )?.[0] ?? keyboardBindings[id];
       if (!defaultPayload) throw new Error();
 
@@ -161,7 +161,7 @@ export const resetKeyboardShortcuts: ElectronAPIKeyboardShortcutInterface["reset
                 isNull(keyboardShortcutTable.projectId),
               ),
             )
-            .limit(0)
+            .limit(1)
         )?.[0] ?? keyboardBindings[id];
 
       if (!defaultPayload) throw new Error();

@@ -12,7 +12,7 @@ const handleApplyTheme = async () => {
     const activeTheme = await ipcRenderer.invoke("getActiveThemePalette");
     const theme = {
       ...(activeTheme.global ?? {}),
-      ...(activeTheme.local ?? {})
+      ...(activeTheme.local ?? {}),
     };
 
     handleApplyThemeInDocument(theme);
@@ -84,7 +84,7 @@ if (process.contextIsolated) {
       },
       applyTestTheme: theme => {
         return handleApplyThemeInDocument(theme);
-      }
+      },
     };
 
     /**
@@ -94,7 +94,7 @@ if (process.contextIsolated) {
      */
     const electronAPIFileSystemBridge: WindowElectronAPIInterface["electronAPIFileSystem"] =
       {
-        openFolder: async path => await ipcRenderer.invoke("openFolder", path)
+        openFolder: async path => await ipcRenderer.invoke("openFolder", path),
       };
 
     /**
@@ -117,7 +117,7 @@ if (process.contextIsolated) {
         deleteThemeById: async (...payload) =>
           await ipcRenderer.invoke("deleteThemeById", ...payload),
         saveThemePalette: async (...payload) =>
-          await ipcRenderer.invoke("saveThemePalette", ...payload)
+          await ipcRenderer.invoke("saveThemePalette", ...payload),
       };
 
     /**
@@ -132,7 +132,7 @@ if (process.contextIsolated) {
         getActiveThemePalette: async (...payload) =>
           await ipcRenderer.invoke("getActiveThemePalette", ...payload),
         changeActiveTheme: async (...payload) =>
-          await ipcRenderer.invoke("changeActiveTheme", ...payload)
+          await ipcRenderer.invoke("changeActiveTheme", ...payload),
       };
 
     /**
@@ -146,7 +146,7 @@ if (process.contextIsolated) {
         getHttpStatusByCode: async () =>
           await ipcRenderer.invoke("getHttpStatusByCode"),
         updateHttpStatus: async (...payload) =>
-          await ipcRenderer.invoke("updateHttpStatus", ...payload)
+          await ipcRenderer.invoke("updateHttpStatus", ...payload),
       };
 
     /**
@@ -163,7 +163,7 @@ if (process.contextIsolated) {
         updateActiveSidebarTab: async (...payload) =>
           await ipcRenderer.invoke("updateActiveSidebarTab", ...payload),
         deleteActiveSidebarTab: async () =>
-          await ipcRenderer.invoke("deleteActiveSidebarTab")
+          await ipcRenderer.invoke("deleteActiveSidebarTab"),
       };
 
     /**
@@ -180,7 +180,7 @@ if (process.contextIsolated) {
         updateActiveCodeSnippitType: async (...payload) =>
           await ipcRenderer.invoke("updateActiveCodeSnippitType", ...payload),
         deleteActiveCodeSnippitType: async () =>
-          await ipcRenderer.invoke("deleteActiveCodeSnippitType")
+          await ipcRenderer.invoke("deleteActiveCodeSnippitType"),
       };
 
     /**
@@ -203,7 +203,7 @@ if (process.contextIsolated) {
         deleteCookieKeyByProject: async (...payload) =>
           await ipcRenderer.invoke("deleteCookieKeyByProject", ...payload),
         clearCookiesByProject: async (...payload) =>
-          await ipcRenderer.invoke("clearCookiesByProject", ...payload)
+          await ipcRenderer.invoke("clearCookiesByProject", ...payload),
       };
 
     /**
@@ -227,7 +227,7 @@ if (process.contextIsolated) {
         exportProject: async (...payload) =>
           await ipcRenderer.invoke("exportProject", ...payload),
         importProject: async (...payload) =>
-          await ipcRenderer.invoke("importProject", ...payload)
+          await ipcRenderer.invoke("importProject", ...payload),
       };
 
     /**
@@ -241,7 +241,10 @@ if (process.contextIsolated) {
         updateSettings: async (...payload) =>
           await ipcRenderer.invoke("updateSettings", ...payload),
         updateSettingsBackgroundImages: async (...payload) =>
-          await ipcRenderer.invoke("updateSettingsBackgroundImages", ...payload)
+          await ipcRenderer.invoke(
+            "updateSettingsBackgroundImages",
+            ...payload,
+          ),
       };
 
     /**
@@ -266,7 +269,7 @@ if (process.contextIsolated) {
         exportEnvironments: async (...payload) =>
           await ipcRenderer.invoke("exportEnvironments", ...payload),
         importEnvironments: async (...payload) =>
-          await ipcRenderer.invoke("importEnvironments", ...payload)
+          await ipcRenderer.invoke("importEnvironments", ...payload),
       };
 
     /**
@@ -287,7 +290,7 @@ if (process.contextIsolated) {
         deleteAuth: async (...payload) =>
           await ipcRenderer.invoke("deleteAuth", ...payload),
         duplicateAuth: async (...payload) =>
-          await ipcRenderer.invoke("duplicateAuth", ...payload)
+          await ipcRenderer.invoke("duplicateAuth", ...payload),
       };
 
     /**
@@ -308,7 +311,7 @@ if (process.contextIsolated) {
         collapseAllRequestOrFolderMeta: async (...payload) =>
           await ipcRenderer.invoke(
             "collapseAllRequestOrFolderMeta",
-            ...payload
+            ...payload,
           ),
         moveRequestOrFolderMeta: async (...payload) =>
           await ipcRenderer.invoke("moveRequestOrFolderMeta", ...payload),
@@ -317,7 +320,7 @@ if (process.contextIsolated) {
         deleteRequestOrFolderMetaByProjectId: async (...payload) =>
           await ipcRenderer.invoke(
             "deleteRequestOrFolderMetaByProjectId",
-            ...payload
+            ...payload,
           ),
         duplicateRequestOrFolderMeta: async (...payload) =>
           await ipcRenderer.invoke("duplicateRequestOrFolderMeta", ...payload),
@@ -326,8 +329,8 @@ if (process.contextIsolated) {
         expendOrCollapseRequestOrFolderMetaAll: async (...payload) =>
           await ipcRenderer.invoke(
             "expendOrCollapseRequestOrFolderMetaAll",
-            ...payload
-          )
+            ...payload,
+          ),
       };
 
     /**
@@ -343,7 +346,7 @@ if (process.contextIsolated) {
         deleteAllTabList: async () =>
           await ipcRenderer.invoke("deleteAllTabList"),
         deleteTabListByProjectId: async (...payload) =>
-          await ipcRenderer.invoke("deleteTabListByProjectId", ...payload)
+          await ipcRenderer.invoke("deleteTabListByProjectId", ...payload),
       };
 
     /**
@@ -358,7 +361,7 @@ if (process.contextIsolated) {
         updateFolder: async (...payload) =>
           await ipcRenderer.invoke("updateFolder", ...payload),
         duplicateFolder: async (...payload) =>
-          await ipcRenderer.invoke("duplicateFolder", ...payload)
+          await ipcRenderer.invoke("duplicateFolder", ...payload),
       };
 
     /**
@@ -383,7 +386,7 @@ if (process.contextIsolated) {
         checkAllParamsByRequestMetaId: async (...payload) =>
           await ipcRenderer.invoke("checkAllParamsByRequestMetaId", ...payload),
         duplicateParams: async (...payload) =>
-          await ipcRenderer.invoke("duplicateParams", ...payload)
+          await ipcRenderer.invoke("duplicateParams", ...payload),
       };
 
     /**
@@ -408,10 +411,10 @@ if (process.contextIsolated) {
         checkAllHeadersByRequestMetaId: async (...payload) =>
           await ipcRenderer.invoke(
             "checkAllHeadersByRequestMetaId",
-            ...payload
+            ...payload,
           ),
         duplicateHeaders: async (...payload) =>
-          await ipcRenderer.invoke("duplicateHeaders", ...payload)
+          await ipcRenderer.invoke("duplicateHeaders", ...payload),
       };
 
     /**
@@ -428,7 +431,7 @@ if (process.contextIsolated) {
         updateHiddenHeadersCheck: async (...payload) =>
           await ipcRenderer.invoke("updateHiddenHeadersCheck", ...payload),
         duplicateHiddenHeadersCheck: async (...payload) =>
-          await ipcRenderer.invoke("duplicateHiddenHeadersCheck", ...payload)
+          await ipcRenderer.invoke("duplicateHiddenHeadersCheck", ...payload),
       };
 
     /**
@@ -445,11 +448,11 @@ if (process.contextIsolated) {
         updateShowHiddenMetaData: async (...payload) =>
           await ipcRenderer.invoke("updateShowHiddenMetaData", ...payload),
         duplicateShowHiddenMetaData: async (...payload) =>
-          await ipcRenderer.invoke("duplicateShowHiddenMetaData", ...payload)
+          await ipcRenderer.invoke("duplicateShowHiddenMetaData", ...payload),
       };
     contextBridge.exposeInMainWorld(
       "electronAPIShowHiddenMetaData",
-      electronAPIShowHiddenMetaDataBridge
+      electronAPIShowHiddenMetaDataBridge,
     );
 
     /**
@@ -468,7 +471,7 @@ if (process.contextIsolated) {
         duplicateBodyRaw: async (...payload) =>
           await ipcRenderer.invoke("duplicateBodyRaw", ...payload),
         replaceBodyRaw: async (...payload) =>
-          await ipcRenderer.invoke("replaceBodyRaw", ...payload)
+          await ipcRenderer.invoke("replaceBodyRaw", ...payload),
       };
 
     /**
@@ -489,7 +492,7 @@ if (process.contextIsolated) {
         duplicateBodyBinary: async (...payload) =>
           await ipcRenderer.invoke("duplicateBodyBinary", ...payload),
         replaceBodyBinary: async (...payload) =>
-          await ipcRenderer.invoke("replaceBodyBinary", ...payload)
+          await ipcRenderer.invoke("replaceBodyBinary", ...payload),
       };
 
     /**
@@ -510,7 +513,7 @@ if (process.contextIsolated) {
         duplicateRequestMetaTab: async (...payload) =>
           await ipcRenderer.invoke("duplicateRequestMetaTab", ...payload),
         replaceRequestMetaTab: async (...payload) =>
-          await ipcRenderer.invoke("replaceRequestMetaTab", ...payload)
+          await ipcRenderer.invoke("replaceRequestMetaTab", ...payload),
       };
 
     /**
@@ -527,7 +530,7 @@ if (process.contextIsolated) {
         deleteBodyXWWWFormUrlencodedByRequestMetaId: async (...payload) =>
           await ipcRenderer.invoke(
             "deleteBodyXWWWFormUrlencodedByRequestMetaId",
-            ...payload
+            ...payload,
           ),
         createBodyXWWWFormUrlencoded: async (...payload) =>
           await ipcRenderer.invoke("createBodyXWWWFormUrlencoded", ...payload),
@@ -538,13 +541,13 @@ if (process.contextIsolated) {
         checkAllBodyXWWWFormUrlencodedByRequestMetaId: async (...payload) =>
           await ipcRenderer.invoke(
             "checkAllBodyXWWWFormUrlencodedByRequestMetaId",
-            ...payload
+            ...payload,
           ),
         duplicateBodyXWWWFormUrlencoded: async (...payload) =>
           await ipcRenderer.invoke(
             "duplicateBodyXWWWFormUrlencoded",
-            ...payload
-          )
+            ...payload,
+          ),
       };
 
     /**
@@ -561,7 +564,7 @@ if (process.contextIsolated) {
         deleteBodyFormDataByRequestMetaId: async (...payload) =>
           await ipcRenderer.invoke(
             "deleteBodyFormDataByRequestMetaId",
-            ...payload
+            ...payload,
           ),
         deleteBodyFormDataFile: async (...payload) =>
           await ipcRenderer.invoke("deleteBodyFormDataFile", ...payload),
@@ -578,10 +581,10 @@ if (process.contextIsolated) {
         checkAllBodyFormDataByRequestMetaId: async (...payload) =>
           await ipcRenderer.invoke(
             "checkAllBodyFormDataByRequestMetaId",
-            ...payload
+            ...payload,
           ),
         duplicateBodyFormData: async (...payload) =>
-          await ipcRenderer.invoke("duplicateBodyFormData", ...payload)
+          await ipcRenderer.invoke("duplicateBodyFormData", ...payload),
       };
 
     /**
@@ -600,7 +603,7 @@ if (process.contextIsolated) {
         deleteMetaShowColumn: async (...payload) =>
           await ipcRenderer.invoke("deleteMetaShowColumn", ...payload),
         duplicateMetaShowColumn: async (...payload) =>
-          await ipcRenderer.invoke("duplicateMetaShowColumn", ...payload)
+          await ipcRenderer.invoke("duplicateMetaShowColumn", ...payload),
       };
 
     /**
@@ -617,7 +620,7 @@ if (process.contextIsolated) {
         duplicateApiUrl: async (...payload) =>
           await ipcRenderer.invoke("duplicateApiUrl", ...payload),
         updateApiUrl: async (...payload) =>
-          await ipcRenderer.invoke("updateApiUrl", ...payload)
+          await ipcRenderer.invoke("updateApiUrl", ...payload),
       };
 
     /**
@@ -636,7 +639,7 @@ if (process.contextIsolated) {
         exportFolder: async (...payload) =>
           await ipcRenderer.invoke("exportFolder", ...payload),
         importFolder: async (...payload) =>
-          await ipcRenderer.invoke("importFolder", ...payload)
+          await ipcRenderer.invoke("importFolder", ...payload),
       };
 
     /**
@@ -653,7 +656,7 @@ if (process.contextIsolated) {
         updateKeyboardShortcuts: async (...payload) =>
           await ipcRenderer.invoke("updateKeyboardShortcuts", ...payload),
         resetKeyboardShortcuts: async (...payload) =>
-          await ipcRenderer.invoke("resetKeyboardShortcuts", ...payload)
+          await ipcRenderer.invoke("resetKeyboardShortcuts", ...payload),
       };
 
     /**
@@ -672,7 +675,7 @@ if (process.contextIsolated) {
         deleteHistoryById: async (...payload) =>
           await ipcRenderer.invoke("deleteHistoryById", ...payload),
         deleteHistoryByRequestId: async (...payload) =>
-          await ipcRenderer.invoke("deleteHistoryByRequestId", ...payload)
+          await ipcRenderer.invoke("deleteHistoryByRequestId", ...payload),
       };
 
     /**
@@ -683,106 +686,106 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld("electronAPI", basicAPIBridge);
     contextBridge.exposeInMainWorld(
       "electronAPIFileSystem",
-      electronAPIFileSystemBridge
+      electronAPIFileSystemBridge,
     );
     contextBridge.exposeInMainWorld("electronAPITheme", electronAPIThemeBridge);
     contextBridge.exposeInMainWorld(
       "electronAPIActiveTheme",
-      electronAPIActiveThemeBridge
+      electronAPIActiveThemeBridge,
     );
     contextBridge.exposeInMainWorld(
       "electronAPIHttpStatus",
-      electronAPIHttpStatusBridge
+      electronAPIHttpStatusBridge,
     );
     contextBridge.exposeInMainWorld(
       "electronAPIActiveSidebarTab",
-      electronAPIActiveSidebarTabBridge
+      electronAPIActiveSidebarTabBridge,
     );
     contextBridge.exposeInMainWorld(
       "electronAPIActiveCodeSnippitType",
-      electronAPIActiveCodeSnippitTypeBridge
+      electronAPIActiveCodeSnippitTypeBridge,
     );
     contextBridge.exposeInMainWorld(
       "electronAPICookies",
-      electronAPICookiesBridge
+      electronAPICookiesBridge,
     );
     contextBridge.exposeInMainWorld(
       "electronAPIProjects",
-      electronAPIProjectsBridge
+      electronAPIProjectsBridge,
     );
     contextBridge.exposeInMainWorld(
       "electronAPISettings",
-      electronAPISettingsBridge
+      electronAPISettingsBridge,
     );
     contextBridge.exposeInMainWorld(
       "electronAPIEnvironments",
-      electronAPIEnvironmentsBridge
+      electronAPIEnvironmentsBridge,
     );
     contextBridge.exposeInMainWorld(
       "electronAPIAuthorization",
-      electronAPIAuthorizationBridge
+      electronAPIAuthorizationBridge,
     );
     contextBridge.exposeInMainWorld(
       "electronAPIRequestOrFolderMeta",
-      electronAPIRequestOrFolderMetaBridge
+      electronAPIRequestOrFolderMetaBridge,
     );
     contextBridge.exposeInMainWorld("electronAPITabs", electronAPITabsBridge);
     contextBridge.exposeInMainWorld(
       "electronAPIFolder",
-      electronAPIFolderBridge
+      electronAPIFolderBridge,
     );
     contextBridge.exposeInMainWorld(
       "electronAPIParams",
-      electronAPIParamsBridge
+      electronAPIParamsBridge,
     );
     contextBridge.exposeInMainWorld(
       "electronAPIHeaders",
-      electronAPIHeadersBridge
+      electronAPIHeadersBridge,
     );
     contextBridge.exposeInMainWorld(
       "electronAPIHiddenHeadersCheck",
-      electronAPIHiddenHeadersCheckBridge
+      electronAPIHiddenHeadersCheckBridge,
     );
     contextBridge.exposeInMainWorld(
       "electronAPIBodyRaw",
-      electronAPIBodyRawBridge
+      electronAPIBodyRawBridge,
     );
     contextBridge.exposeInMainWorld(
       "electronAPIBodyBinary",
-      electronAPIBodyBinaryBridge
+      electronAPIBodyBinaryBridge,
     );
     contextBridge.exposeInMainWorld(
       "electronAPIRequestMetaTab",
-      electronAPIRequestMetaTabBridge
+      electronAPIRequestMetaTabBridge,
     );
     contextBridge.exposeInMainWorld(
       "electronAPIBodyXWWWFormUrlencoded",
-      electronAPIBodyXWWWFormUrlencodedBridge
+      electronAPIBodyXWWWFormUrlencodedBridge,
     );
     contextBridge.exposeInMainWorld(
       "electronAPIBodyFormData",
-      electronAPIBodyFormDataBridge
+      electronAPIBodyFormDataBridge,
     );
     contextBridge.exposeInMainWorld(
       "electronAPIMetaShowColumn",
-      electronAPIMetaShowColumnBridge
+      electronAPIMetaShowColumnBridge,
     );
     contextBridge.exposeInMainWorld(
       "electronAPIApiUrl",
-      electronAPIApiUrlBridge
+      electronAPIApiUrlBridge,
     );
     contextBridge.exposeInMainWorld(
       "electronAPIRequest",
-      electronAPIRequestBridge
+      electronAPIRequestBridge,
     );
 
     contextBridge.exposeInMainWorld(
       "electronAPIKeyboardShortcut",
-      electronAPIKeyboardShortcutBridge
+      electronAPIKeyboardShortcutBridge,
     );
     contextBridge.exposeInMainWorld(
       "electronAPIHistory",
-      electronAPIHistoryBridge
+      electronAPIHistoryBridge,
     );
   } catch (error) {
     console.error(error);

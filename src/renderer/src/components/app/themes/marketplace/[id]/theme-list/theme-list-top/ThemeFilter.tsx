@@ -47,7 +47,7 @@ const ThemeFilter = memo(() => {
       <SelectContent align="end" sideOffset={10}>
         <SelectGroup>
           {MENU_LIST.map(({ id, label }) => (
-            <SelectItem value={id} className="text-sm!">
+            <SelectItem key={id} value={id} className="text-sm!">
               {label}
             </SelectItem>
           ))}

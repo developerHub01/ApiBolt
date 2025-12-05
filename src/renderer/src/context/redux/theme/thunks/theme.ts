@@ -4,11 +4,11 @@ import {
   handleLoadActiveThemeId,
   handleLoadThemeMetaList,
   handleReplaceThemePalette,
-  handleUpdateActiveThemeId
+  handleUpdateActiveThemeId,
 } from "@/context/redux/theme/theme-slice";
 import type {
   ChangeActiveThemePayloadInterface,
-  ThemeColorId
+  ThemeColorId,
 } from "@shared/types/theme.types";
 import { isValidColor } from "@/utils/color.utils";
 import Color from "color";
@@ -55,7 +55,7 @@ export const loadThemePalette = createAsyncThunk<
       if (response)
         replacePayload = {
           ...response.global,
-          ...(response.local ?? {})
+          ...(response.local ?? {}),
         };
     }
 
@@ -104,8 +104,8 @@ export const changeActiveThemeId = createAsyncThunk<
 
     dispatch(
       handleUpdateActiveThemeId({
-        [payload.projectId ? "local" : "global"]: payload.activeTheme
-      })
+        [payload.projectId ? "local" : "global"]: payload.activeTheme,
+      }),
     );
 
     await dispatch(applyThemeInApp());
@@ -130,13 +130,13 @@ export const applyThemeInApp = createAsyncThunk<
 
     return {
       success: true,
-      message: "Restored applying theme."
+      message: "Restored applying theme.",
     };
   } catch (error) {
     console.error(error);
     return {
       success: false,
-      message: "Something went wrong."
+      message: "Something went wrong.",
     };
   }
 });
@@ -179,7 +179,7 @@ export const pasteThemePalette = createAsyncThunk<
     if (Object.values(payload).some(item => !isValidColor(item as string))) {
       return {
         success: false,
-        message: "Not valid color in theme"
+        message: "Not valid color in theme",
       };
     }
 
@@ -190,7 +190,7 @@ export const pasteThemePalette = createAsyncThunk<
     if (expectedKeyList.some(item => !payload[item])) {
       return {
         success: false,
-        message: "Some color are missings"
+        message: "Some color are missings",
       };
     }
 
@@ -203,13 +203,13 @@ export const pasteThemePalette = createAsyncThunk<
     dispatch(handleReplaceThemePalette(updatePayload));
     return {
       success: true,
-      message: "Theme palette pasted successfully."
+      message: "Theme palette pasted successfully.",
     };
   } catch (error) {
     console.error(error);
     return {
       success: false,
-      message: "Not valid palette."
+      message: "Not valid palette.",
     };
   }
 });
@@ -233,13 +233,13 @@ export const applyTestTheme = createAsyncThunk<
 
     return {
       success: true,
-      message: "Theme palette applied."
+      message: "Theme palette applied.",
     };
   } catch (error) {
     console.error(error);
     return {
       success: false,
-      message: "Not valid palette."
+      message: "Not valid palette.",
     };
   }
 });

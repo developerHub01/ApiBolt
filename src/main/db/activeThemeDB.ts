@@ -4,7 +4,7 @@ import { activeThemeTable, themeTable } from "@/main/db/schema.js";
 import { getActiveProject } from "@/main/db/projectsDB.js";
 import {
   defaultActiveThemeId,
-  defaultActiveThemePalette
+  defaultActiveThemePalette,
 } from "@/data/themes.js";
 import { ElectronAPIActiveThemeInterface } from "@shared/types/api/electron-active-theme";
 import { ActiveThemePaletteInterface } from "@shared/types/theme.types";
@@ -16,7 +16,7 @@ export const getActiveThemeId: ElectronAPIActiveThemeInterface["getActiveThemeId
         (
           await db
             .select({
-              id: activeThemeTable.activeTheme
+              id: activeThemeTable.activeTheme,
             })
             .from(activeThemeTable)
             .where(isNull(activeThemeTable.projectId))
@@ -31,7 +31,7 @@ export const getActiveThemeId: ElectronAPIActiveThemeInterface["getActiveThemeId
           (
             await db
               .select({
-                id: activeThemeTable.activeTheme
+                id: activeThemeTable.activeTheme,
               })
               .from(activeThemeTable)
               .where(eq(activeThemeTable.projectId, activeProjectId))
@@ -40,13 +40,13 @@ export const getActiveThemeId: ElectronAPIActiveThemeInterface["getActiveThemeId
 
       return {
         global,
-        local
+        local,
       };
     } catch (error) {
       console.error(error);
       return {
         global: defaultActiveThemeId,
-        local: null
+        local: null,
       };
     }
   };
@@ -59,17 +59,17 @@ export const getActiveThemePalette: ElectronAPIActiveThemeInterface["getActiveTh
         local: string | null;
       } = {
         global: null,
-        local: null
+        local: null,
       };
       const result: ActiveThemePaletteInterface = {
         global: defaultActiveThemePalette,
-        local: null
+        local: null,
       };
 
       theme.global = (
         await db
           .select({
-            palette: themeTable.palette
+            palette: themeTable.palette,
           })
           .from(activeThemeTable)
           .where(isNull(activeThemeTable.projectId))
@@ -83,13 +83,13 @@ export const getActiveThemePalette: ElectronAPIActiveThemeInterface["getActiveTh
           (
             await db
               .select({
-                palette: themeTable.palette
+                palette: themeTable.palette,
               })
               .from(activeThemeTable)
               .where(eq(activeThemeTable.projectId, activeProjectId))
               .leftJoin(
                 themeTable,
-                eq(activeThemeTable.activeTheme, themeTable.id)
+                eq(activeThemeTable.activeTheme, themeTable.id),
               )
               .limit(1)
           )?.[0]?.palette ?? null;
@@ -110,7 +110,7 @@ export const getActiveThemePalette: ElectronAPIActiveThemeInterface["getActiveTh
       console.error(error);
       return {
         global: defaultActiveThemePalette,
-        local: null
+        local: null,
       };
     }
   };
@@ -125,17 +125,35 @@ export const changeActiveTheme: ElectronAPIActiveThemeInterface["changeActiveThe
       if (!payload.projectId && !payload.activeTheme)
         payload.activeTheme = defaultActiveThemeId;
 
+      const isExist = (
+        await db
+          .select()
+          .from(activeThemeTable)
+          .where(
+            payload.projectId
+              ? eq(activeThemeTable.projectId, payload.projectId)
+              : isNull(activeThemeTable.projectId),
+          )
+          .limit(1)
+      )?.[0];
+
+      if (!isExist)
+        return (
+          (await db.insert(activeThemeTable).values(payload)).rowsAffected > 0
+        );
+
       return (
         (
           await db
-            .insert(activeThemeTable)
-            .values(payload)
-            .onConflictDoUpdate({
-              target: [activeThemeTable.projectId],
-              set: {
-                activeTheme: payload.activeTheme
-              }
+            .update(activeThemeTable)
+            .set({
+              activeTheme: payload.activeTheme,
             })
+            .where(
+              payload.projectId
+                ? eq(activeThemeTable.projectId, payload.projectId)
+                : isNull(activeThemeTable.projectId),
+            )
         ).rowsAffected > 0
       );
     } catch (error) {

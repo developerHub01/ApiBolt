@@ -2,20 +2,20 @@ import type {
   ProjectSettingsInterface,
   SettingsInterface,
   TKeyboardShortcutKey,
-  UpdateBackgroundImagePayloadInterface
+  UpdateBackgroundImagePayloadInterface,
 } from "@shared/types/setting.types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import {
   handleLoadSettings,
-  handleUpdateSettings
+  handleUpdateSettings,
 } from "@/context/redux/setting/setting-slice";
 import {
   DEFAULT_SETTINGS,
   DEFAULT_ZOOM_LEVEL,
   MAX_ZOOM_LEVEL,
   MIN_ZOOM_LEVEL,
-  STEP_AMOUNT_ZOOM_LEVEL
+  STEP_AMOUNT_ZOOM_LEVEL,
 } from "@/constant/settings.constant";
 import { calculateIntoFixedPoint } from "@/utils";
 import { checkApplyingZoomable } from "@/utils/settings.utils";
@@ -30,7 +30,6 @@ export const loadSettings = createAsyncThunk<
 >("setting/loadSettings", async (_, { dispatch }) => {
   try {
     const response = await window.electronAPISettings.getSettings();
-
     dispatch(handleLoadSettings(response));
   } catch (error) {
     console.error(error);
@@ -51,8 +50,8 @@ export const updateSettings = createAsyncThunk<
     dispatch(
       handleUpdateSettings({
         type: payload.projectId ? "project" : "global",
-        payload
-      })
+        payload,
+      }),
     );
 
     return response;
@@ -82,7 +81,7 @@ export const updateSettingsZoomByKeyboard = createAsyncThunk<
         activeProjectId,
         isZoomableLocal: state.setting.settings?.isZoomable,
         isZoomableGlobal: state.setting.globalSetting?.isZoomable,
-        defaultZoomable: DEFAULT_SETTINGS.isZoomable
+        defaultZoomable: DEFAULT_SETTINGS.isZoomable,
       });
 
       if (!isZoomable) return false;
@@ -98,28 +97,28 @@ export const updateSettingsZoomByKeyboard = createAsyncThunk<
             : type === "-"
               ? calculateIntoFixedPoint(
                   oldZoomLevel - STEP_AMOUNT_ZOOM_LEVEL,
-                  1
+                  1,
                 )
               : DEFAULT_ZOOM_LEVEL,
-          MAX_ZOOM_LEVEL
+          MAX_ZOOM_LEVEL,
         ),
-        MIN_ZOOM_LEVEL
+        MIN_ZOOM_LEVEL,
       );
 
       if (oldZoomLevel === newZoomLevel) return false;
 
       const response = await window.electronAPISettings.updateSettings({
         zoomLevel: newZoomLevel,
-        projectId: activeProjectId
+        projectId: activeProjectId,
       });
 
       dispatch(
         handleUpdateSettings({
           type: activeProjectId ? "project" : "global",
           payload: {
-            zoomLevel: newZoomLevel
-          }
-        })
+            zoomLevel: newZoomLevel,
+          },
+        }),
       );
 
       return response;
@@ -127,7 +126,7 @@ export const updateSettingsZoomByKeyboard = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const updateSettingsBackgroundImages = createAsyncThunk<
@@ -150,7 +149,7 @@ export const updateSettingsBackgroundImages = createAsyncThunk<
       const response =
         await window.electronAPISettings.updateSettingsBackgroundImages({
           projectId: type === "global" ? null : activeProjectId,
-          method
+          method,
         });
 
       if (response) await dispatch(loadSettings());
@@ -160,5 +159,5 @@ export const updateSettingsBackgroundImages = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );

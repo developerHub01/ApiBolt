@@ -5,7 +5,7 @@ import {
   TActiveTabType,
   TContentType,
   THTTPMethods,
-  TRequestBodyType
+  TRequestBodyType,
 } from "@shared/types/request-response.types";
 import { TLayoutSetting } from "@shared/types/setting.types";
 import { TSidebarTab } from "@shared/types/sidebar.types";
@@ -16,7 +16,8 @@ import {
   primaryKey,
   real,
   sqliteTable,
-  text
+  text,
+  uniqueIndex,
 } from "drizzle-orm/sqlite-core";
 import { v4 as uuidv4 } from "uuid";
 
@@ -32,7 +33,7 @@ export const projectTable = sqliteTable("projects_table", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => uuidv4()),
-  name: text().notNull().default("Project")
+  name: text().notNull().default("Project"),
 });
 
 export const activeProjectTable = sqliteTable("active_project_table", {
@@ -40,8 +41,8 @@ export const activeProjectTable = sqliteTable("active_project_table", {
   activeProjectId: text("active_project_id")
     .unique()
     .references(() => projectTable.id, {
-      onDelete: "cascade"
-    })
+      onDelete: "cascade",
+    }),
 });
 
 export const cookiesTable = sqliteTable("cookies_table", {
@@ -52,14 +53,17 @@ export const cookiesTable = sqliteTable("cookies_table", {
     .unique()
     .notNull()
     .references(() => projectTable.id, {
-      onDelete: "cascade"
+      onDelete: "cascade",
     }),
-  cookies: text()
+  cookies: text(),
 });
 
 export const activeSidebarTabTable = sqliteTable("active_sidebar_tab_table", {
   id: text().primaryKey().default(ACTIVE_SIDEBAR_TAB_ID),
-  tab: text().$type<TSidebarTab>().notNull().default(DEFAULT_ACTIVE_SIDEBAR_TAB)
+  tab: text()
+    .$type<TSidebarTab>()
+    .notNull()
+    .default(DEFAULT_ACTIVE_SIDEBAR_TAB),
 });
 
 export const activeCodeSnippitTypeTable = sqliteTable(
@@ -69,8 +73,8 @@ export const activeCodeSnippitTypeTable = sqliteTable(
     languageId: text()
       .$type<TRequestCodeType>()
       .notNull()
-      .default(DEFAULT_ACTIVE_CODE_SNIPPIT_TYPE)
-  }
+      .default(DEFAULT_ACTIVE_CODE_SNIPPIT_TYPE),
+  },
 );
 
 export const httpStatusTable = sqliteTable("http_status_table", {
@@ -78,7 +82,7 @@ export const httpStatusTable = sqliteTable("http_status_table", {
   reason: text().notNull().default(""),
   description: text().notNull().default(""),
   editedReason: text(),
-  editedDescription: text()
+  editedDescription: text(),
 });
 
 export const environmentTable = sqliteTable("environments_table", {
@@ -95,11 +99,11 @@ export const environmentTable = sqliteTable("environments_table", {
   projectId: text()
     .notNull()
     .references(() => projectTable.id, {
-      onDelete: "cascade"
+      onDelete: "cascade",
     }),
   createdAt: text()
     .notNull()
-    .default(sql`(current_timestamp)`)
+    .default(sql`(current_timestamp)`),
 });
 
 export const authorizationTable = sqliteTable("authorization_table", {
@@ -110,17 +114,17 @@ export const authorizationTable = sqliteTable("authorization_table", {
     .$type<TAuthType>()
     .notNull()
     .default(
-      "no-auth"
+      "no-auth",
     ) /* "no-auth" | "inherit-parent" | "basic-auth" | "bearer-token" | "jwt-bearer" | "api-key"; */,
   projectId: text()
     .notNull()
     .references(() => projectTable.id, {
-      onDelete: "cascade"
+      onDelete: "cascade",
     }),
   requestOrFolderMetaId: text()
     .unique()
     .references(() => requestOrFolderMetaTable.id, {
-      onDelete: "cascade"
+      onDelete: "cascade",
     }),
   /* API Key Auth =========== */
   apiKeyKey: text().notNull().default(""),
@@ -145,7 +149,7 @@ export const authorizationTable = sqliteTable("authorization_table", {
     .default("header") /* "header" | "query" */,
   /* Tokens =================== */
   basicAuthToken: text().notNull().default(""),
-  jwtAuthToken: text().notNull().default("")
+  jwtAuthToken: text().notNull().default(""),
 });
 
 export const requestOrFolderMetaTable = sqliteTable(
@@ -162,16 +166,16 @@ export const requestOrFolderMetaTable = sqliteTable(
     projectId: text()
       .notNull()
       .references(() => projectTable.id, {
-        onDelete: "cascade"
+        onDelete: "cascade",
       }),
     parentId: text().references(() => requestOrFolderMetaTable.id, {
-      onDelete: "cascade"
+      onDelete: "cascade",
     }),
     isExpended: int({ mode: "boolean" }).notNull().default(false),
     createdAt: text()
       .notNull()
-      .default(sql`(current_timestamp)`)
-  }
+      .default(sql`(current_timestamp)`),
+  },
 );
 
 export const tabsTable = sqliteTable("tabs_table", {
@@ -184,11 +188,11 @@ export const tabsTable = sqliteTable("tabs_table", {
     .notNull()
     .unique()
     .references(() => projectTable.id, {
-      onDelete: "cascade"
+      onDelete: "cascade",
     }),
   createdAt: text()
     .notNull()
-    .default(sql`(current_timestamp)`)
+    .default(sql`(current_timestamp)`),
 });
 
 export const settingTable = sqliteTable("setting_table", {
@@ -212,8 +216,8 @@ export const settingTable = sqliteTable("setting_table", {
   projectId: text()
     .unique()
     .references(() => projectTable.id, {
-      onDelete: "cascade"
-    })
+      onDelete: "cascade",
+    }),
 });
 
 export const folderTable = sqliteTable("folder_table", {
@@ -225,14 +229,14 @@ export const folderTable = sqliteTable("folder_table", {
   projectId: text()
     .notNull()
     .references(() => projectTable.id, {
-      onDelete: "cascade"
+      onDelete: "cascade",
     }),
   requestOrFolderMetaId: text()
     .notNull()
     .unique()
     .references(() => requestOrFolderMetaTable.id, {
-      onDelete: "cascade"
-    })
+      onDelete: "cascade",
+    }),
 });
 
 export const apiUrlTable = sqliteTable("api_url_table", {
@@ -243,12 +247,12 @@ export const apiUrlTable = sqliteTable("api_url_table", {
     .notNull()
     .unique()
     .references(() => requestOrFolderMetaTable.id, {
-      onDelete: "cascade"
+      onDelete: "cascade",
     }),
   url: text().notNull().default(API_URL_DEFAULT_VALUE),
   createdAt: text()
     .notNull()
-    .default(sql`(current_timestamp)`)
+    .default(sql`(current_timestamp)`),
 });
 
 export const paramsTable = sqliteTable("params_table", {
@@ -267,11 +271,11 @@ export const paramsTable = sqliteTable("params_table", {
   requestOrFolderMetaId: text()
     .notNull()
     .references(() => requestOrFolderMetaTable.id, {
-      onDelete: "cascade"
+      onDelete: "cascade",
     }),
   createdAt: text()
     .notNull()
-    .default(sql`(current_timestamp)`)
+    .default(sql`(current_timestamp)`),
 });
 
 export const headersTable = sqliteTable("headers_table", {
@@ -285,11 +289,11 @@ export const headersTable = sqliteTable("headers_table", {
   requestOrFolderMetaId: text()
     .notNull()
     .references(() => requestOrFolderMetaTable.id, {
-      onDelete: "cascade"
+      onDelete: "cascade",
     }),
   createdAt: text()
     .notNull()
-    .default(sql`(current_timestamp)`)
+    .default(sql`(current_timestamp)`),
 });
 
 export const hiddenHeadersCheckTable = sqliteTable(
@@ -302,15 +306,15 @@ export const hiddenHeadersCheckTable = sqliteTable(
       .notNull()
       .unique()
       .references(() => requestOrFolderMetaTable.id, {
-        onDelete: "cascade"
+        onDelete: "cascade",
       }),
     authorization: int({ mode: "boolean" }).notNull().default(true),
     userAgent: int({ mode: "boolean" }).notNull().default(true),
     contentLength: int({ mode: "boolean" }).notNull().default(true),
     accept: int({ mode: "boolean" }).notNull().default(true),
     acceptEncoding: int({ mode: "boolean" }).notNull().default(true),
-    connection: int({ mode: "boolean" }).notNull().default(true)
-  }
+    connection: int({ mode: "boolean" }).notNull().default(true),
+  },
 );
 
 export const showHiddenMetaDataTable = sqliteTable(
@@ -323,11 +327,11 @@ export const showHiddenMetaDataTable = sqliteTable(
       .notNull()
       .unique()
       .references(() => requestOrFolderMetaTable.id, {
-        onDelete: "cascade"
+        onDelete: "cascade",
       }),
     showHiddenParams: int({ mode: "boolean" }).notNull().default(false),
-    showHiddenHeaders: int({ mode: "boolean" }).notNull().default(false)
-  }
+    showHiddenHeaders: int({ mode: "boolean" }).notNull().default(false),
+  },
 );
 
 export const requestMetaTabTable = sqliteTable("request_meta_tab_table", {
@@ -338,7 +342,7 @@ export const requestMetaTabTable = sqliteTable("request_meta_tab_table", {
     .notNull()
     .unique()
     .references(() => requestOrFolderMetaTable.id, {
-      onDelete: "cascade"
+      onDelete: "cascade",
     }),
   activeMetaTab: text()
     .$type<TActiveTabType>()
@@ -348,8 +352,8 @@ export const requestMetaTabTable = sqliteTable("request_meta_tab_table", {
     .$type<TRequestBodyType>()
     .notNull()
     .default(
-      "none"
-    ) /* "none" | "form-data" | "x-www-form-urlencoded" | "raw" | "binary" */
+      "none",
+    ) /* "none" | "form-data" | "x-www-form-urlencoded" | "raw" | "binary" */,
 });
 
 export const bodyRawTable = sqliteTable("body_raw_table", {
@@ -360,14 +364,14 @@ export const bodyRawTable = sqliteTable("body_raw_table", {
     .notNull()
     .unique()
     .references(() => requestOrFolderMetaTable.id, {
-      onDelete: "cascade"
+      onDelete: "cascade",
     }),
   type: text()
     .$type<TContentType>()
     .notNull()
     .default("json") /* text, javascript, json, html, xml */,
   rawData: text().notNull().default(""),
-  lineWrap: int({ mode: "boolean" }).notNull().default(true)
+  lineWrap: int({ mode: "boolean" }).notNull().default(true),
 });
 
 export const bodyBinaryTable = sqliteTable("body_binary_table", {
@@ -378,9 +382,9 @@ export const bodyBinaryTable = sqliteTable("body_binary_table", {
     .notNull()
     .unique()
     .references(() => requestOrFolderMetaTable.id, {
-      onDelete: "cascade"
+      onDelete: "cascade",
     }),
-  path: text()
+  path: text(),
 });
 
 export const bodyXWWWFormUrlencodedTable = sqliteTable(
@@ -396,12 +400,12 @@ export const bodyXWWWFormUrlencodedTable = sqliteTable(
     requestOrFolderMetaId: text()
       .notNull()
       .references(() => requestOrFolderMetaTable.id, {
-        onDelete: "cascade"
+        onDelete: "cascade",
       }),
     createdAt: text()
       .notNull()
-      .default(sql`(current_timestamp)`)
-  }
+      .default(sql`(current_timestamp)`),
+  },
 );
 
 export const bodyFormDataTable = sqliteTable("body_form_data_table", {
@@ -415,11 +419,11 @@ export const bodyFormDataTable = sqliteTable("body_form_data_table", {
   requestOrFolderMetaId: text()
     .notNull()
     .references(() => requestOrFolderMetaTable.id, {
-      onDelete: "cascade"
+      onDelete: "cascade",
     }),
   createdAt: text()
     .notNull()
-    .default(sql`(current_timestamp)`)
+    .default(sql`(current_timestamp)`),
 });
 
 export const metaShowColumnTable = sqliteTable("meta_show_column_table", {
@@ -430,7 +434,7 @@ export const metaShowColumnTable = sqliteTable("meta_show_column_table", {
     .notNull()
     .unique()
     .references(() => requestOrFolderMetaTable.id, {
-      onDelete: "cascade"
+      onDelete: "cascade",
     }),
   paramsValue: int({ mode: "boolean" }).notNull().default(true),
   paramsDescription: int({ mode: "boolean" }).notNull().default(false),
@@ -444,7 +448,7 @@ export const metaShowColumnTable = sqliteTable("meta_show_column_table", {
     .default(false),
   createdAt: text()
     .notNull()
-    .default(sql`(current_timestamp)`)
+    .default(sql`(current_timestamp)`),
 });
 
 export const keyboardShortcutTable = sqliteTable(
@@ -454,14 +458,14 @@ export const keyboardShortcutTable = sqliteTable(
     label: text().notNull().default(""),
     key: text().notNull(),
     projectId: text().references(() => projectTable.id, {
-      onDelete: "cascade"
-    })
+      onDelete: "cascade",
+    }),
   },
   table => [
     primaryKey({
-      columns: [table.id, table.projectId]
-    })
-  ]
+      columns: [table.id, table.projectId],
+    }),
+  ],
 );
 
 export const historyTable = sqliteTable("history_table", {
@@ -471,7 +475,7 @@ export const historyTable = sqliteTable("history_table", {
   request: text()
     .notNull()
     .references(() => requestOrFolderMetaTable.id, {
-      onDelete: "cascade"
+      onDelete: "cascade",
     }),
   url: text().notNull(),
   method: text().$type<THTTPMethods>().notNull().default("get"),
@@ -484,7 +488,7 @@ export const historyTable = sqliteTable("history_table", {
   responseSize: text(),
   createdAt: text()
     .notNull()
-    .default(sql`(current_timestamp)`)
+    .default(sql`(current_timestamp)`),
 });
 
 export const themeTable = sqliteTable("theme_table", {
@@ -502,16 +506,18 @@ export const themeTable = sqliteTable("theme_table", {
   palette: text(),
   createdAt: text()
     .notNull()
-    .default(sql`(current_timestamp)`)
+    .default(sql`(current_timestamp)`),
 });
 
-export const activeThemeTable = sqliteTable("active_theme_table", {
-  projectId: text()
-    .unique()
-    .references(() => projectTable.id, {
-      onDelete: "cascade"
+export const activeThemeTable = sqliteTable(
+  "active_theme_table",
+  {
+    projectId: text().references(() => projectTable.id, {
+      onDelete: "cascade",
     }),
-  activeTheme: text().references(() => themeTable.id, {
-    onDelete: "cascade"
-  })
-});
+    activeTheme: text().references(() => themeTable.id, {
+      onDelete: "cascade",
+    }),
+  },
+  table => [uniqueIndex("unique_project").on(table.projectId)],
+);

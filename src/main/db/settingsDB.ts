@@ -26,26 +26,35 @@ export const getSettings = async () => {
     let settings = null;
 
     if (activeProjectId)
-      settings = await db
+      settings = (
+        await db
+          .select()
+          .from(settingTable)
+          .where(eq(settingTable.projectId, activeProjectId))
+          .limit(1)
+      )?.[0];
+
+    let globalSetting = (
+      await db
         .select()
         .from(settingTable)
-        .where(eq(settingTable.projectId, activeProjectId));
+        .where(isNull(settingTable.projectId))
+        .limit(1)
+    )?.[0];
 
-    let globalSetting = await db
-      .select()
-      .from(settingTable)
-      .where(isNull(settingTable.projectId));
-
-    if (!globalSetting || !globalSetting?.length) {
+    if (!globalSetting) {
       await db.insert(settingTable).values(defaultSettings);
-      globalSetting = await db
-        .select()
-        .from(settingTable)
-        .where(isNull(settingTable.projectId));
+      globalSetting = (
+        await db
+          .select()
+          .from(settingTable)
+          .where(isNull(settingTable.projectId))
+          .limit(1)
+      )?.[0];
     }
 
-    settings = settings?.[0] ?? null;
-    globalSetting = globalSetting?.[0] ?? null;
+    settings = settings ?? null;
+    globalSetting = globalSetting ?? null;
 
     return {
       settings,
@@ -118,7 +127,7 @@ export const getApplyingZoomLevel = async () => {
 };
 
 /* must contain projectId */
-export const updateSettings = async (payload) => {
+export const updateSettings = async payload => {
   const { projectId = null, ...updatePayload } = payload;
 
   for (const key in updatePayload) {
@@ -138,7 +147,7 @@ export const updateSettings = async (payload) => {
     .where(
       projectId
         ? eq(settingTable.projectId, projectId)
-        : isNull(settingTable.projectId)
+        : isNull(settingTable.projectId),
     );
 
   let updated;
@@ -156,7 +165,7 @@ export const updateSettings = async (payload) => {
       .where(
         projectId
           ? eq(settingTable.projectId, projectId)
-          : isNull(settingTable.projectId)
+          : isNull(settingTable.projectId),
       );
   }
 

@@ -75,7 +75,7 @@ app.whenReady().then(async () => {
   });
 
   // IPC test
-  ipcMain.on("ping", () => console.log("pong"));
+  ipcMain.on("ping", () => console.info("pong"));
 
   mainWindow.once("ready-to-show", () => {
     const elapsed = Date.now() - splashShownAt;
