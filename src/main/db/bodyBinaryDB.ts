@@ -2,8 +2,8 @@ import { eq, inArray } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { bodyBinaryTable } from "@/main/db/schema.js";
 import { getTabList } from "@/main/db/tabsDB.js";
-import { ElectronAPIBodyBinaryInterface } from "@/shared/types/api/electron-body-binary";
-import { BodyBinaryInterface } from "@/shared/types/request-response.types";
+import { ElectronAPIBodyBinaryInterface } from "@shared/types/api/electron-body-binary";
+import { BodyBinaryInterface } from "@shared/types/request-response.types";
 
 export const getBodyBinary = async (
   ...[requestOrFolderMetaId]: Parameters<

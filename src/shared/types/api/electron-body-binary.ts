@@ -1,4 +1,4 @@
-import { BodyBinaryInterface } from "@/shared/types/request-response.types";
+import { BodyBinaryInterface } from "@shared/types/request-response.types";
 
 export interface ElectronAPIBodyBinaryInterface {
   getBodyBinary(requestId?: string | null): Promise<BodyBinaryInterface | null>;

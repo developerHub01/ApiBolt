@@ -9,7 +9,7 @@ import {
   replaceHeaders,
   updateHeaders
 } from "@/main/db/headersDB.js";
-import { ElectronAPIHeadersInterface } from "@/shared/types/api/electron-headers";
+import { ElectronAPIHeadersInterface } from "@shared/types/api/electron-headers";
 
 export const headersHandlers = () => {
   ipcMain.handle(

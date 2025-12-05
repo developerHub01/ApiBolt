@@ -2,7 +2,7 @@ import { eq, inArray } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { API_URL_DEFAULT_VALUE, apiUrlTable } from "@/main/db/schema.js";
 import { getTabList } from "@/main/db/tabsDB.js";
-import { ElectronAPIApiUrlInterface } from "@/shared/types/api/electron-api-url";
+import { ElectronAPIApiUrlInterface } from "@shared/types/api/electron-api-url";
 
 /* id === requestOrFolderMetaId */
 export const getApiUrlDB: ElectronAPIApiUrlInterface["getApiUrlDB"] =

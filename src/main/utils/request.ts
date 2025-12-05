@@ -1,4 +1,4 @@
-import { RequestListItemInterface } from "@/shared/types/request-response.types";
+import { RequestListItemInterface } from "@shared/types/request-response.types";
 
 export const findSelectedRequestIds = (
   id: string,

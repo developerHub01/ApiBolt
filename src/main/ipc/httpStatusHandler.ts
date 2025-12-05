@@ -4,7 +4,7 @@ import {
   getHttpStatusByCode,
   updateHttpStatus
 } from "@/main/db/httpStatusDB.js";
-import { ElectronAPIHttpStatusInterface } from "@/shared/types/api/electron-http-status";
+import { ElectronAPIHttpStatusInterface } from "@shared/types/api/electron-http-status";
 
 export const httpStatusHandler = () => {
   ipcMain.handle(

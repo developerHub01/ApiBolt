@@ -1,8 +1,8 @@
-import { JWTBearerAuthInterface } from "@/shared/types/authorization.types";
+import { JWTBearerAuthInterface } from "@shared/types/authorization.types";
 import {
   APIPayloadBody,
   TContentType
-} from "@/shared/types/request-response.types";
+} from "@shared/types/request-response.types";
 import jwt, { Algorithm } from "jsonwebtoken";
 
 export const hasValue = (value: unknown) =>

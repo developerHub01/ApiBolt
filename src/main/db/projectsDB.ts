@@ -22,9 +22,9 @@ import { v4 as uuidv4 } from "uuid";
 import {
   CreateProjectPayloadInterface,
   ProjectInterface
-} from "@/shared/types/project.types.js";
-import { ProjectExportFileInterface } from "@/shared/types/export-import/project.js";
-import { ElectronAPIProjectsInterface } from "@/shared/types/api/electron-projects";
+} from "@shared/types/project.types.js";
+import { ProjectExportFileInterface } from "@shared/types/export-import/project.js";
+import { ElectronAPIProjectsInterface } from "@shared/types/api/electron-projects";
 
 export const getProjects = async () => {
   try {

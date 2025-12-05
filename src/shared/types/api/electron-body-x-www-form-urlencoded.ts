@@ -2,7 +2,7 @@ import {
   FormDataPayloadInterface,
   ParamHeaderBuildPayloadInterface,
   ParamHeaderPayloadInterface
-} from "@/shared/types/request-response.types";
+} from "@shared/types/request-response.types";
 
 export interface ElectronAPIBodyXWWWFormUrlencodedInterface {
   getBodyXWWWFormUrlencoded(

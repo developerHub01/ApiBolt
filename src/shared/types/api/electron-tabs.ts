@@ -1,4 +1,4 @@
-import { TabsInterface } from "@/shared/types/tabs";
+import { TabsInterface } from "@shared/types/tabs";
 
 export interface ElectronAPITabsInterface {
   getTabList(): Promise<TabsInterface>;

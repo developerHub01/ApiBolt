@@ -6,7 +6,7 @@ import {
   getMetaShowColumn,
   updateMetaShowColumn
 } from "@/main/db/metaShowColumnDB.js";
-import { ElectronAPIMetaShowColumnInterface } from "@/shared/types/api/electron-meta-show-column";
+import { ElectronAPIMetaShowColumnInterface } from "@shared/types/api/electron-meta-show-column";
 
 export const metaShowColumnHandlers = () => {
   ipcMain.handle(

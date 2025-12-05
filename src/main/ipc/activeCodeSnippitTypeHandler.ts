@@ -5,7 +5,7 @@ import {
   getActiveCodeSnippitType,
   updateActiveCodeSnippitType
 } from "@/main/db/activeCodeSnippitTypeDB.js";
-import { ElectronAPIActiveCodeSnippitTypeInterface } from "@/shared/types/api/electron-active-code-snippit-type.js";
+import { ElectronAPIActiveCodeSnippitTypeInterface } from "@shared/types/api/electron-active-code-snippit-type.js";
 
 export const activeCodeSnippitTypeHandler = () => {
   ipcMain.handle(

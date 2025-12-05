@@ -1,4 +1,4 @@
-import { EnvironmentInterface } from "@/shared/types/environment.types";
+import { EnvironmentInterface } from "@shared/types/environment.types";
 
 export type EnvironmentExportInterface = Omit<
   EnvironmentInterface,

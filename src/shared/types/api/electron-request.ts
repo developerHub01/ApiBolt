@@ -1,4 +1,4 @@
-import { ElectronResponseInterface } from "@/shared/types";
+import { ElectronResponseInterface } from "@shared/types";
 
 export interface ElectronAPIRequestInterface {
   clearRequest(

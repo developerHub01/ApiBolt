@@ -12,9 +12,9 @@ import { readFile, writeFile } from "fs/promises";
 import { mainWindow } from "@/main/index.js";
 import { getSelectedTab } from "@/main/db/tabsDB.js";
 import { getActiveProject } from "@/main/db/projectsDB.js";
-import { ElectronAPIRequestInterface } from "@/shared/types/api/electron-request.js";
-import { RequestExportFileInterface } from "@/shared/types/export-import/request";
-import { FolderExportFileInterface } from "@/shared/types/export-import/folder";
+import { ElectronAPIRequestInterface } from "@shared/types/api/electron-request.js";
+import { RequestExportFileInterface } from "@shared/types/export-import/request";
+import { FolderExportFileInterface } from "@shared/types/export-import/folder";
 
 export const requestHandler = () => {
   ipcMain.handle(

@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer, webFrame } from "electron";
-import { WindowElectronAPIInterface } from "@/shared/types";
+import { WindowElectronAPIInterface } from "@shared/types";
 
 const handleApplyThemeInDocument = (theme: Record<string, string>) => {
   Object.entries(theme).forEach(([key, value]) => {

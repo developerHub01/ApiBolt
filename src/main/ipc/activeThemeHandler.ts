@@ -4,7 +4,7 @@ import {
   getActiveThemeId,
   getActiveThemePalette
 } from "@/main/db/activeThemeDB.js";
-import { ElectronAPIActiveThemeInterface } from "@/shared/types/api/electron-active-theme";
+import { ElectronAPIActiveThemeInterface } from "@shared/types/api/electron-active-theme";
 
 export const activeThemeHandler = () => {
   ipcMain.handle(

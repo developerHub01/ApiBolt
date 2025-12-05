@@ -1,15 +1,15 @@
-import { TAuthAddTo, TAuthType } from "@/shared/types/authorization.types";
-import { TRequestCodeType } from "@/shared/types/code-snippit.types";
+import { TAuthAddTo, TAuthType } from "@shared/types/authorization.types";
+import { TRequestCodeType } from "@shared/types/code-snippit.types";
 import {
   ParamInterface,
   TActiveTabType,
   TContentType,
   THTTPMethods,
   TRequestBodyType
-} from "@/shared/types/request-response.types";
-import { TLayoutSetting } from "@/shared/types/setting.types";
-import { TSidebarTab } from "@/shared/types/sidebar.types";
-import { ThemeInterface } from "@/shared/types/theme.types";
+} from "@shared/types/request-response.types";
+import { TLayoutSetting } from "@shared/types/setting.types";
+import { TSidebarTab } from "@shared/types/sidebar.types";
+import { ThemeInterface } from "@shared/types/theme.types";
 import { sql } from "drizzle-orm";
 import {
   int,

@@ -1,4 +1,4 @@
-import { AuthorizationPayloadInterface } from "@/shared/types/authorization.types";
+import { AuthorizationPayloadInterface } from "@shared/types/authorization.types";
 
 export interface ElectronAPIAuthorizationInterface {
   getAuth(

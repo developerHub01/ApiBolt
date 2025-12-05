@@ -2,7 +2,7 @@ import {
   ActiveThemeIdInterface,
   ActiveThemePaletteInterface,
   ChangeActiveThemePayloadInterface
-} from "@/shared/types/theme.types";
+} from "@shared/types/theme.types";
 
 export interface ElectronAPIActiveThemeInterface {
   getActiveThemeId(): Promise<ActiveThemeIdInterface>;

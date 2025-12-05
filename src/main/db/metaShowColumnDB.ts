@@ -2,7 +2,7 @@ import { eq, inArray } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { metaShowColumnTable } from "@/main/db/schema.js";
 import { getTabList } from "@/main/db/tabsDB.js";
-import { ElectronAPIMetaShowColumnInterface } from "@/shared/types/api/electron-meta-show-column";
+import { ElectronAPIMetaShowColumnInterface } from "@shared/types/api/electron-meta-show-column";
 
 // const metaColumnList = [
 //   "paramsValue",

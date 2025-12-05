@@ -3,7 +3,7 @@ import { db } from "@/main/db/index.js";
 import { folderTable } from "@/main/db/schema.js";
 import { getActiveProject } from "@/main/db/projectsDB.js";
 import { getTabList } from "@/main/db/tabsDB.js";
-import { ElectronAPIFolderInterface } from "@/shared/types/api/electron-folder";
+import { ElectronAPIFolderInterface } from "@shared/types/api/electron-folder";
 
 /* folder meta id */
 export const getFolder: ElectronAPIFolderInterface["getFolder"] =

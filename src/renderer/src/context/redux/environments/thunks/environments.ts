@@ -6,7 +6,7 @@ import type {
   EnvironmentInterface,
   EnvironmentPayloadInterface
 } from "@shared/types/environment.types";
-import type { ElectronResponseInterface } from "@/types";
+import type { ElectronResponseInterface } from "@shared/types";
 
 /* ==============================
 ===== Environment start =========

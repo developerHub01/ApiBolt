@@ -1,4 +1,4 @@
-import { MetaShowColumnInterface } from "@/shared/types/request-response.types";
+import { MetaShowColumnInterface } from "@shared/types/request-response.types";
 
 export interface ElectronAPIMetaShowColumnInterface {
   getMetaShowColumn(

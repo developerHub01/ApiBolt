@@ -4,7 +4,7 @@ import {
   getFolder,
   updateFolder
 } from "@/main/db/folderDB.js";
-import { ElectronAPIFolderInterface } from "@/shared/types/api/electron-folder";
+import { ElectronAPIFolderInterface } from "@shared/types/api/electron-folder";
 
 export const folderHandlers = () => {
   ipcMain.handle(

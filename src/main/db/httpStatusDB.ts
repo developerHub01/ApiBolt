@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { httpStatusTable } from "@/main/db/schema.js";
-import { ElectronAPIHttpStatusInterface } from "@/shared/types/api/electron-http-status";
+import { ElectronAPIHttpStatusInterface } from "@shared/types/api/electron-http-status";
 
 export const getHttpStatus: ElectronAPIHttpStatusInterface["getHttpStatus"] =
   async () => {

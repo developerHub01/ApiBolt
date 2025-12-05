@@ -1,11 +1,11 @@
 import { asc, desc, eq, inArray, sql } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { historyTable } from "@/main/db/schema.js";
-import { ElectronAPIHistoryInterface } from "@/shared/types/api/electron-history";
+import { ElectronAPIHistoryInterface } from "@shared/types/api/electron-history";
 import {
   HistoryItemInterface,
   HistoryItemMetaInterface
-} from "@/shared/types/history.types";
+} from "@shared/types/history.types";
 
 /* max limit of history track for a request */
 const MAX_LIMIT_OF_HISTORY_PER_REQUEST = 30;

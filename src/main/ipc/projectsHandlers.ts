@@ -13,9 +13,9 @@ import { jarManager } from "@/main/utils/cookieManager";
 import path from "path";
 import { mainWindow } from "@/main/index.js";
 import { readFile, writeFile } from "fs/promises";
-import { CreateProjectPayloadInterface } from "@/shared/types/project.types";
-import { ElectronAPIProjectsInterface } from "@/shared/types/api/electron-projects";
-import { ProjectExportFileInterface } from "@/shared/types/export-import/project";
+import { CreateProjectPayloadInterface } from "@shared/types/project.types";
+import { ElectronAPIProjectsInterface } from "@shared/types/api/electron-projects";
+import { ProjectExportFileInterface } from "@shared/types/export-import/project";
 
 export const projectsHandlers = () => {
   ipcMain.handle(

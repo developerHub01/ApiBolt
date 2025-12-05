@@ -9,7 +9,7 @@ import {
   replaceParams,
   updateParams
 } from "@/main/db/paramsDB.js";
-import { ElectronAPIParamsInterface } from "@/shared/types/api/electron-params";
+import { ElectronAPIParamsInterface } from "@shared/types/api/electron-params";
 
 export const paramsHandlers = () => {
   ipcMain.handle(

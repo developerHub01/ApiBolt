@@ -22,7 +22,7 @@
       "@/data/*": [
         "src/data/*"
       ],
-      "@/shared/*": [
+      "@shared/*": [
         "src/shared/*"
       ],
     }

@@ -1,4 +1,4 @@
-import { FormDataPayloadInterface } from "@/shared/types/request-response.types";
+import { FormDataPayloadInterface } from "@shared/types/request-response.types";
 
 export interface ElectronAPIBodyFormDataInterface {
   getBodyFormData(

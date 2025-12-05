@@ -2,7 +2,7 @@ import {
   ThemeCreatePayloadInterface,
   ThemeInterface,
   ThemeMetaInterface
-} from "@/shared/types/theme.types";
+} from "@shared/types/theme.types";
 
 export interface ElectronAPIThemeInterface {
   getThemeListMeta(): Promise<Array<ThemeMetaInterface>>;

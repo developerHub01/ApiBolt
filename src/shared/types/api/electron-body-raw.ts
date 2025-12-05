@@ -1,4 +1,4 @@
-import { BodyRawInterface } from "@/shared/types/request-response.types";
+import { BodyRawInterface } from "@shared/types/request-response.types";
 
 export interface ElectronAPIBodyRawInterface {
   getBodyRaw(requestId?: string | null): Promise<BodyRawInterface | null>;

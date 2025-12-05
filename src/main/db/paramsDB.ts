@@ -2,7 +2,7 @@ import { eq, inArray } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { paramsTable } from "@/main/db/schema.js";
 import { getTabList } from "@/main/db/tabsDB.js";
-import { ElectronAPIParamsInterface } from "@/shared/types/api/electron-params";
+import { ElectronAPIParamsInterface } from "@shared/types/api/electron-params";
 
 /* id === requestOrFolderMetaId */
 export const getParams: ElectronAPIParamsInterface["getParams"] = async id => {

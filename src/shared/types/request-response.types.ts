@@ -4,8 +4,8 @@ import type {
   JWTBearerAuthInterface,
   TAuthType,
   TBearerToken
-} from "@/shared/types/authorization.types";
-import type { CookieInterface } from "@/shared/types/cookies.types";
+} from "@shared/types/authorization.types";
+import type { CookieInterface } from "@shared/types/cookies.types";
 
 export type TRequestFolderDescriptionTab =
   | "markdown"

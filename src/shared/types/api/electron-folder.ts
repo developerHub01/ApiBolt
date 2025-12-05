@@ -1,4 +1,4 @@
-import { ResponseFolderDataInterface } from "@/shared/types/request-response.types";
+import { ResponseFolderDataInterface } from "@shared/types/request-response.types";
 
 export interface ElectronAPIFolderInterface {
   getFolder(

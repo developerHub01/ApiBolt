@@ -1,8 +1,8 @@
 import { eq } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { themeTable } from "@/main/db/schema.js";
-import { ElectronAPIThemeInterface } from "@/shared/types/api/electron-theme";
-import { ThemeInterface } from "@/shared/types/theme.types";
+import { ElectronAPIThemeInterface } from "@shared/types/api/electron-theme";
+import { ThemeInterface } from "@shared/types/theme.types";
 
 export const getThemeListMeta: ElectronAPIThemeInterface["getThemeListMeta"] =
   async () => {

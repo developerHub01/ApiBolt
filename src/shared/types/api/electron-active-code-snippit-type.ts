@@ -1,4 +1,4 @@
-import { TRequestCodeType } from "@/shared/types/code-snippit.types";
+import { TRequestCodeType } from "@shared/types/code-snippit.types";
 
 export interface ElectronAPIActiveCodeSnippitTypeInterface {
   getActiveCodeSnippitType(): Promise<TRequestCodeType>;

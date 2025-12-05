@@ -1,4 +1,4 @@
-import { ElectronAPIInterface } from "@/shared/types/api/electron-api";
+import { ElectronAPIInterface } from "@shared/types/api/electron-api";
 import { BrowserWindow, ipcMain } from "electron";
 
 export const windowHandler = (mainWindow: BrowserWindow) => {

@@ -3,8 +3,8 @@ import { db } from "@/main/db/index.js";
 import { requestOrFolderMetaTable } from "@/main/db/schema.js";
 import { getActiveProject } from "@/main/db/projectsDB.js";
 import { updateTablistBasedRequestOrFolderMetaDeletion } from "@/main/db/tabsDB.js";
-import { RequestListItemInterface } from "@/shared/types/request-response.types";
-import { ElectronAPIRequestOrFolderMetaInterface } from "@/shared/types/api/electron-request-or-folder-meta";
+import { RequestListItemInterface } from "@shared/types/request-response.types";
+import { ElectronAPIRequestOrFolderMetaInterface } from "@shared/types/api/electron-request-or-folder-meta";
 import { RequestOrFolderMetaTableInterface } from "@/main/types";
 
 /* id === active project id */

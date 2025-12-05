@@ -1,4 +1,4 @@
-import { TEnvironmentFile } from "@/shared/types/export-import/environments";
+import { TEnvironmentFile } from "@shared/types/export-import/environments";
 
 const typeList = new Set(["default", "secret"]);
 

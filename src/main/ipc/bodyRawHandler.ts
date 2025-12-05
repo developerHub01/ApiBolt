@@ -6,7 +6,7 @@ import {
   replaceBodyRaw,
   updateBodyRaw
 } from "@/main/db/bodyRawDB.js";
-import { ElectronAPIBodyRawInterface } from "@/shared/types/api/electron-body-raw";
+import { ElectronAPIBodyRawInterface } from "@shared/types/api/electron-body-raw";
 
 export const bodyRawHandler = () => {
   ipcMain.handle(

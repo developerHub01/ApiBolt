@@ -1,4 +1,4 @@
-import { HiddenHeadersCheckInterface } from "@/shared/types/request-response.types";
+import { HiddenHeadersCheckInterface } from "@shared/types/request-response.types";
 
 export interface ElectronAPIHiddenHeadersCheckInterface {
   getHiddenHeadersCheck(

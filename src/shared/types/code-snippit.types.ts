@@ -2,7 +2,7 @@ import {
   TContentType,
   THTTPMethods,
   TRequestBodyType
-} from "@/shared/types/request-response.types";
+} from "@shared/types/request-response.types";
 
 export type TRequestCodeType =
   // JavaScript

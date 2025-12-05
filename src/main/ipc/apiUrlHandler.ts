@@ -5,7 +5,7 @@ import {
   getApiUrlDB,
   updateApiUrl
 } from "@/main/db/apiUrlDB.js";
-import { ElectronAPIApiUrlInterface } from "@/shared/types/api/electron-api-url";
+import { ElectronAPIApiUrlInterface } from "@shared/types/api/electron-api-url";
 
 export const apiUrlHandler = () => {
   ipcMain.handle(

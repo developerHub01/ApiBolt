@@ -3,7 +3,7 @@ import {
   SettingsInterface,
   SettingsTotalInterface,
   UpdateBackgroundImagePayloadInterface
-} from "@/shared/types/setting.types";
+} from "@shared/types/setting.types";
 
 export interface ElectronAPISettingsInterface {
   getSettings(): Promise<SettingsTotalInterface>;

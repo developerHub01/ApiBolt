@@ -8,7 +8,7 @@ import {
   updateTheme
 } from "@/main/db/themeDB.js";
 import { saveThemePaletteLocal } from "@/main/utils/theme.js";
-import { ElectronAPIThemeInterface } from "@/shared/types/api/electron-theme";
+import { ElectronAPIThemeInterface } from "@shared/types/api/electron-theme";
 
 export const themeHandler = () => {
   ipcMain.handle(

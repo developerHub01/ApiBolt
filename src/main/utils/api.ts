@@ -15,7 +15,7 @@ import FormData from "form-data";
 import mime from "mime-types";
 import { getBodyFormDataByFormId } from "@/main/db/bodyFormDataDB.js";
 import { getHttpStatusByCode } from "@/main/db/httpStatusDB.js";
-import { APIPayloadBody } from "@/shared/types/request-response.types.js";
+import { APIPayloadBody } from "@shared/types/request-response.types.js";
 
 /* 
 

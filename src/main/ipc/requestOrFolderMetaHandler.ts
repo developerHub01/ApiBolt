@@ -12,7 +12,7 @@ import {
   collapseAllRequestOrFolderMeta,
   getRequestOrFolderMetaById
 } from "@/main/db/requestOrFolderMetaDB.js";
-import { ElectronAPIRequestOrFolderMetaInterface } from "@/shared/types/api/electron-request-or-folder-meta";
+import { ElectronAPIRequestOrFolderMetaInterface } from "@shared/types/api/electron-request-or-folder-meta";
 
 export const requestOrFolderMetaHandler = () => {
   ipcMain.handle(

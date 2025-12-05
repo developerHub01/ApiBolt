@@ -2,7 +2,7 @@ import {
   HttpStatusListInterface,
   HttpStatusSingleInterface,
   HttpStatusUpdatePayloadInterface
-} from "@/shared/types/http-status.type";
+} from "@shared/types/http-status.type";
 
 export interface ElectronAPIHttpStatusInterface {
   getHttpStatus(): Promise<HttpStatusListInterface | null>;

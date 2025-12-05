@@ -1,4 +1,4 @@
-import { AuthorizationPayloadInterface } from "@/shared/types/authorization.types";
+import { AuthorizationPayloadInterface } from "@shared/types/authorization.types";
 import {
   BodyBinaryInterface,
   BodyRawInterface,
@@ -7,9 +7,9 @@ import {
   ParamHeaderPayloadInterface,
   RequestListItemInterface,
   RequestTabInterface
-} from "@/shared/types/request-response.types";
-import { ApiUrlPayload } from "@/shared/types/request-url.types";
-import { EnvironmentInterface } from "@/shared/types/environment.types";
+} from "@shared/types/request-response.types";
+import { ApiUrlPayload } from "@shared/types/request-url.types";
+import { EnvironmentInterface } from "@shared/types/environment.types";
 
 export type EnvironmentExportInterface = Omit<
   EnvironmentInterface,

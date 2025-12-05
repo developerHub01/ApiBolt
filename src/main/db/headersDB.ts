@@ -2,7 +2,7 @@ import { eq, inArray } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { headersTable } from "@/main/db/schema.js";
 import { getTabList } from "@/main/db/tabsDB.js";
-import { ElectronAPIHeadersInterface } from "@/shared/types/api/electron-headers";
+import { ElectronAPIHeadersInterface } from "@shared/types/api/electron-headers";
 
 /* id === requestOrFolderMetaId */
 export const getHeaders: ElectronAPIHeadersInterface["getHeaders"] =

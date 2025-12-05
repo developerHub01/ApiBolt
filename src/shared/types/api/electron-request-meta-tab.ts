@@ -1,4 +1,4 @@
-import { RequestTabInterface } from "@/shared/types/request-response.types";
+import { RequestTabInterface } from "@shared/types/request-response.types";
 
 export interface ElectronAPIRequestMetaTabInterface {
   getRequestMetaTab(

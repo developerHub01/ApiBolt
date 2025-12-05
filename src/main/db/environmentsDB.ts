@@ -2,8 +2,8 @@ import { eq } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { environmentTable } from "@/main/db/schema.js";
 import { getActiveProject } from "@/main/db/projectsDB.js";
-import { ElectronAPIEnvironmentsInterface } from "@/shared/types/api/electron-environments";
-import { TEnvironmentFile } from "@/shared/types/export-import/environments";
+import { ElectronAPIEnvironmentsInterface } from "@shared/types/api/electron-environments";
+import { TEnvironmentFile } from "@shared/types/export-import/environments";
 
 export const getAllEnvironments: ElectronAPIEnvironmentsInterface["getAllEnvironments"] =
   async () => {

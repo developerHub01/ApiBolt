@@ -6,7 +6,7 @@ import {
   getHistoryById,
   getHistoryByRequestId
 } from "@/main/db/historyDB";
-import { ElectronAPIHistoryInterface } from "@/shared/types/api/electron-history";
+import { ElectronAPIHistoryInterface } from "@shared/types/api/electron-history";
 
 export const historyHandler = () => {
   ipcMain.handle(

@@ -2,7 +2,7 @@ import {
   KeybaordShortCutInterface,
   KeybaordShortCutReceivePayloadInterface,
   KeybaordShortCutUpdatePayloadInterface
-} from "@/shared/types/keyboard-shortcut.types";
+} from "@shared/types/keyboard-shortcut.types";
 
 export interface ElectronAPIKeyboardShortcutInterface {
   getKeyboardShortcuts(

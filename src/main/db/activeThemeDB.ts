@@ -6,8 +6,8 @@ import {
   defaultActiveThemeId,
   defaultActiveThemePalette
 } from "@/data/themes.js";
-import { ElectronAPIActiveThemeInterface } from "@/shared/types/api/electron-active-theme";
-import { ActiveThemePaletteInterface } from "@/shared/types/theme.types";
+import { ElectronAPIActiveThemeInterface } from "@shared/types/api/electron-active-theme";
+import { ActiveThemePaletteInterface } from "@shared/types/theme.types";
 
 export const getActiveThemeId: ElectronAPIActiveThemeInterface["getActiveThemeId"] =
   async () => {

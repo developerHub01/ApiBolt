@@ -2,7 +2,7 @@ import {
   RequestListItemInterface,
   RequestListItemMovePayloadInterface,
   RequestListItemUpdatePayloadInterface
-} from "@/shared/types/request-response.types";
+} from "@shared/types/request-response.types";
 
 export interface ElectronAPIRequestOrFolderMetaInterface {
   getRequestOrFolderMeta(): Promise<Record<string, RequestListItemInterface>>;

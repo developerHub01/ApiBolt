@@ -1,4 +1,4 @@
-import { ApiUrlPayload } from "@/shared/types/request-url.types";
+import { ApiUrlPayload } from "@shared/types/request-url.types";
 
 export interface ElectronAPIApiUrlInterface {
   getApiUrlDB(requestOrFolderMetaId?: string | null): Promise<ApiUrlPayload>;

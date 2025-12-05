@@ -6,9 +6,9 @@ import {
 } from "@/main/db/schema.js";
 import { getActiveProject } from "@/main/db/projectsDB.js";
 import { generateJWT, hasValue } from "@/main/utils/utils.js";
-import { ElectronAPIAuthorizationInterface } from "@/shared/types/api/electron-authorization";
+import { ElectronAPIAuthorizationInterface } from "@shared/types/api/electron-authorization";
 import { getTabList } from "@/main/db/tabsDB";
-import { AuthorizationPayloadInterface } from "@/shared/types/authorization.types";
+import { AuthorizationPayloadInterface } from "@shared/types/authorization.types";
 
 /* id === active project id */
 export const getAuth: ElectronAPIAuthorizationInterface["getAuth"] =

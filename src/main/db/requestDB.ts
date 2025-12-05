@@ -17,9 +17,9 @@ import {
 import { db } from "@/main/db/index.js";
 import { getActiveProject } from "@/main/db/projectsDB.js";
 import { v4 as uuidv4 } from "uuid";
-import { RequestExportFileInterface } from "@/shared/types/export-import/request";
-import { FolderExportFileInterface } from "@/shared/types/export-import/folder";
-import { ProjectExportFileInterface } from "@/shared/types/export-import/project";
+import { RequestExportFileInterface } from "@shared/types/export-import/request";
+import { FolderExportFileInterface } from "@shared/types/export-import/folder";
+import { ProjectExportFileInterface } from "@shared/types/export-import/project";
 
 /* id === active project id */
 export const clearRequest = async (id: string) => {

@@ -1,8 +1,8 @@
-import { ElectronResponseInterface } from "@/shared/types";
+import { ElectronResponseInterface } from "@shared/types";
 import {
   EnvironmentInterface,
   EnvironmentPayloadInterface
-} from "@/shared/types/environment.types";
+} from "@shared/types/environment.types";
 
 export interface ElectronAPIEnvironmentsInterface {
   getAllEnvironments(id?: string | null): Promise<Array<EnvironmentInterface>>;

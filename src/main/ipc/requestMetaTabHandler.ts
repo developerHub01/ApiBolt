@@ -7,7 +7,7 @@ import {
   duplicateRequestMetaTab,
   replaceRequestMetaTab
 } from "@/main/db/requestMetaTabDB.js";
-import { ElectronAPIRequestMetaTabInterface } from "@/shared/types/api/electron-request-meta-tab";
+import { ElectronAPIRequestMetaTabInterface } from "@shared/types/api/electron-request-meta-tab";
 
 export const requestMetaTabHandler = () => {
   ipcMain.handle(

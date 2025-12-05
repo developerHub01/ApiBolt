@@ -14,11 +14,11 @@ import {
   replaceFullBodyFormData,
   updateBodyFormData
 } from "@/main/db/bodyFormDataDB.js";
-import { ElectronAPIBodyFormDataInterface } from "@/shared/types/api/electron-body-form";
+import { ElectronAPIBodyFormDataInterface } from "@shared/types/api/electron-body-form";
 import {
   FileDataInterface,
   FormDataPayloadInterface
-} from "@/shared/types/request-response.types";
+} from "@shared/types/request-response.types";
 
 export const bodyFormDataHandlers = () => {
   ipcMain.handle(

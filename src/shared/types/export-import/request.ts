@@ -6,8 +6,8 @@ import {
   ParamHeaderPayloadInterface,
   RequestTabInterface,
   THTTPMethods
-} from "@/shared/types/request-response.types";
-import { AuthorizationPayloadInterface } from "@/shared/types/authorization.types";
+} from "@shared/types/request-response.types";
+import { AuthorizationPayloadInterface } from "@shared/types/authorization.types";
 
 interface Param extends Omit<
   ParamHeaderBuildPayloadInterface,

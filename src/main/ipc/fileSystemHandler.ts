@@ -1,4 +1,4 @@
-import { electronAPIFileSystemInterface } from "@/shared/types/api/electron-filesystem";
+import { electronAPIFileSystemInterface } from "@shared/types/api/electron-filesystem";
 import { ipcMain, shell } from "electron";
 import { constants } from "fs";
 import { access } from "fs/promises";

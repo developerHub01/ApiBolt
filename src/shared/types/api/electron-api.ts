@@ -1,9 +1,9 @@
-import { JWTBearerAuthInterface } from "@/shared/types/authorization.types";
+import { JWTBearerAuthInterface } from "@shared/types/authorization.types";
 import {
   APIPayloadBody,
   ResponseInterface
-} from "@/shared/types/request-response.types";
-import { ThemeInterface } from "@/shared/types/theme.types";
+} from "@shared/types/request-response.types";
+import { ThemeInterface } from "@shared/types/theme.types";
 
 export interface ElectronAPIInterface {
   getCookiesFromUrl(url: string): Promise<string>;
@@ -32,7 +32,7 @@ export interface ElectronAPIInterface {
       algorithm: string;
     }
   ): Promise<string>;
-  
+
   /***
    * trigger when theme changed
    */

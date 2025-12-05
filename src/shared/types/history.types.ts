@@ -5,14 +5,14 @@ import type {
   TContentType,
   THTTPMethods,
   TRequestBodyType
-} from "@/shared/types/request-response.types";
+} from "@shared/types/request-response.types";
 import type {
   APIKeyInterface,
   BasicAuthInterface,
   JWTBearerAuthInterface,
   TAuthType,
   TBearerToken
-} from "@/shared/types/authorization.types";
+} from "@shared/types/authorization.types";
 
 export interface HistoryItemInterface {
   id: string;

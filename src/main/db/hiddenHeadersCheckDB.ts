@@ -2,7 +2,7 @@ import { eq, inArray } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { hiddenHeadersCheckTable } from "@/main/db/schema.js";
 import { getTabList } from "@/main/db/tabsDB.js";
-import { ElectronAPIHiddenHeadersCheckInterface } from "@/shared/types/api/electron-hidden-headers-check";
+import { ElectronAPIHiddenHeadersCheckInterface } from "@shared/types/api/electron-hidden-headers-check";
 
 /* id === requestOrFolderMetaId */
 export const getHiddenHeadersCheck: ElectronAPIHiddenHeadersCheckInterface["getHiddenHeadersCheck"] =

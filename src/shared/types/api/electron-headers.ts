@@ -1,7 +1,7 @@
 import {
   ParamHeaderBuildPayloadInterface,
   ParamHeaderPayloadInterface
-} from "@/shared/types/request-response.types";
+} from "@shared/types/request-response.types";
 
 export interface ElectronAPIHeadersInterface {
   getHeaders(

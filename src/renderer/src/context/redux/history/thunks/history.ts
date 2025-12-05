@@ -215,7 +215,7 @@ export const replaceCurrentByHistory = createAsyncThunk<
       const checkList = headers
         .filter(header => header.prevent || HEADERS_HIDDEN_IDS.has(header.id))
         .reduce((acc, curr) => {
-          acc[curr.id as keyof HiddenHeadersCheckInterface] = curr.isCheck;
+          acc[curr.id] = curr.isCheck;
           return acc;
         }, {} as Partial<HiddenHeadersCheckInterface>);
 
@@ -236,7 +236,7 @@ export const replaceCurrentByHistory = createAsyncThunk<
     {
       const paramsResponse = await window.electronAPIParams.replaceParams(
         requestId,
-        params
+        params ?? []
       );
       if (paramsResponse)
         dispatch(

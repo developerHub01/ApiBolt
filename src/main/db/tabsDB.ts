@@ -2,8 +2,8 @@ import { tabsTable } from "@/main/db/schema.js";
 import { eq } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { getActiveProject } from "@/main/db/projectsDB.js";
-import { ElectronAPITabsInterface } from "@/shared/types/api/electron-tabs";
-import { TabsInterface } from "@/shared/types/tabs";
+import { ElectronAPITabsInterface } from "@shared/types/api/electron-tabs";
+import { TabsInterface } from "@shared/types/tabs";
 
 export const getTabList: ElectronAPITabsInterface["getTabList"] = async () => {
   try {

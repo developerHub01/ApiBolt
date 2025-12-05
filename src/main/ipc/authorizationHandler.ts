@@ -7,7 +7,7 @@ import {
   getInheritedAuthFromId,
   duplicateAuth
 } from "@/main/db/authorizationDB.js";
-import { ElectronAPIAuthorizationInterface } from "@/shared/types/api/electron-authorization";
+import { ElectronAPIAuthorizationInterface } from "@shared/types/api/electron-authorization";
 
 export const authorizationHandler = () => {
   ipcMain.handle(

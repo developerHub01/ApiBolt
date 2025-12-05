@@ -3,7 +3,7 @@ import { db } from "@/main/db/index.js";
 import { showHiddenMetaDataTable } from "@/main/db/schema.js";
 import { getRequestOrFolderMetaById } from "@/main/db/requestOrFolderMetaDB.js";
 import { getTabList } from "@/main/db/tabsDB.js";
-import { ElectronAPIShowHiddenMetaDataInterface } from "@/shared/types/api/electron-show-hidden-meta-data";
+import { ElectronAPIShowHiddenMetaDataInterface } from "@shared/types/api/electron-show-hidden-meta-data";
 
 /* id === requestOrFolderMetaId */
 export const getShowHiddenMetaData: ElectronAPIShowHiddenMetaDataInterface["getShowHiddenMetaData"] =

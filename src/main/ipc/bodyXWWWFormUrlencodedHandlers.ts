@@ -9,7 +9,7 @@ import {
   replaceBodyXWWWFormUrlencoded,
   updateBodyXWWWFormUrlencoded
 } from "@/main/db/bodyXWWWFormUrlencodedDB.js";
-import { ElectronAPIBodyXWWWFormUrlencodedInterface } from "@/shared/types/api/electron-body-x-www-form-urlencoded";
+import { ElectronAPIBodyXWWWFormUrlencodedInterface } from "@shared/types/api/electron-body-x-www-form-urlencoded";
 
 export const bodyXWWWFormUrlencodedHandlers = () => {
   ipcMain.handle(

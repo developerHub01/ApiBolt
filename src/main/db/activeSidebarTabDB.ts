@@ -5,7 +5,7 @@ import {
   activeSidebarTabTable,
   DEFAULT_ACTIVE_SIDEBAR_TAB
 } from "@/main/db/schema.js";
-import { ElectronAPIActiveSidebarTabInterface } from "@/shared/types/api/electron-api-active-sidebar-tab";
+import { ElectronAPIActiveSidebarTabInterface } from "@shared/types/api/electron-api-active-sidebar-tab";
 
 export const getActiveSidebarTab: ElectronAPIActiveSidebarTabInterface["getActiveSidebarTab"] =
   async () => {

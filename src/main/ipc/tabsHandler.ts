@@ -5,7 +5,7 @@ import {
   getTabList,
   updateTabList
 } from "@/main/db/tabsDB.js";
-import { ElectronAPITabsInterface } from "@/shared/types/api/electron-tabs";
+import { ElectronAPITabsInterface } from "@shared/types/api/electron-tabs";
 
 export const tabsHandler = () => {
   ipcMain.handle(

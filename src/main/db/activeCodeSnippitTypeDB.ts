@@ -5,7 +5,7 @@ import {
   activeCodeSnippitTypeTable,
   DEFAULT_ACTIVE_CODE_SNIPPIT_TYPE
 } from "@/main/db/schema";
-import { ElectronAPIActiveCodeSnippitTypeInterface } from "@/shared/types/api/electron-active-code-snippit-type";
+import { ElectronAPIActiveCodeSnippitTypeInterface } from "@shared/types/api/electron-active-code-snippit-type";
 
 export const isExistActiveCodeSnippitType = async () =>
   (

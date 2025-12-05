@@ -1,4 +1,4 @@
-import { TSidebarTab } from "@/shared/types/sidebar.types";
+import { TSidebarTab } from "@shared/types/sidebar.types";
 
 export interface ElectronAPIActiveSidebarTabInterface {
   getActiveSidebarTab(): Promise<TSidebarTab>;

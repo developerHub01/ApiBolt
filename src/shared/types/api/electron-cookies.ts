@@ -1,4 +1,4 @@
-import { CookiesInterface } from "@/shared/types/cookies.types";
+import { CookiesInterface } from "@shared/types/cookies.types";
 
 export interface ElectronAPICookiesInterface {
   getCookiesByProject(projectId?: string | null): Promise<string | null>;

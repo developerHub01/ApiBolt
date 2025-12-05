@@ -1,6 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit";
 import type { RootState } from "@/context/redux/store";
-import type { ProjectInterface } from "@/types/project.types";
+import type { ProjectInterface } from "@shared/types/project.types";
 
 export const selectActiveProjectId = createSelector(
   [(state: RootState) => state.project.activeProjectId],

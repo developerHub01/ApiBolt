@@ -1,7 +1,9 @@
-import { ShowHiddenMetaInterface } from "@/shared/types/request-response.types";
+import { ShowHiddenMetaInterface } from "@shared/types/request-response.types";
 
 export interface ElectronAPIShowHiddenMetaDataInterface {
-  getShowHiddenMetaData(id?: string | null): Promise<ShowHiddenMetaInterface | null>;
+  getShowHiddenMetaData(
+    id?: string | null
+  ): Promise<ShowHiddenMetaInterface | null>;
   createShowHiddenMetaData(
     payload: Partial<ShowHiddenMetaInterface>
   ): Promise<Partial<ShowHiddenMetaInterface> | null>;
