@@ -5,13 +5,15 @@ export const getRgbToHex = (color: {
   g: number;
   b: number;
   a?: number;
-}) =>
-  Color({
+}) => {
+  const c = Color({
     r: color.r,
     g: color.g,
     b: color.b,
     alpha: color.a,
-  }).hexa();
+  });
+  return c.alpha() === 1 ? c.hex() : c.hexa();
+};
 
 export const isValidColor = (color: string) => {
   try {

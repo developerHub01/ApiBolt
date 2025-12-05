@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/tooltip-custom";
 import { useAppDispatch } from "@/context/redux/hooks";
 import {
+  importThemePaletteInEditor,
   loadThemePalette,
   pasteThemePalette,
   saveThemePalette,
@@ -19,6 +20,7 @@ import {
   CloudDownload as DownloadIcon,
   RotateCcw as ResetIcon,
   ListEnd as IneritFromThemeIcon,
+  Import as ImportIcon,
   type LucideIcon,
 } from "lucide-react";
 import ThemeList from "@/components/app/themes/editor/editor-panel/theme-palette-top/theme-list/ThemeList";
@@ -28,6 +30,7 @@ type TAction =
   | "copy"
   | "paste"
   | "download"
+  | "import"
   | "reset"
   | "inherit-palette-from-theme";
 
@@ -52,6 +55,11 @@ const ACTION_BUTTON_LIST: Array<ActionButtonInterface> = [
     id: "download",
     Icon: DownloadIcon,
     label: "Download clipboard as JSON",
+  },
+  {
+    id: "import",
+    Icon: ImportIcon,
+    label: "Import JSON palette into editor",
   },
   {
     id: "reset",
@@ -95,6 +103,17 @@ const ThemeEditorPanelTop = () => {
           description: response
             ? "Theme palette downloaded successfully."
             : "Something went wrong. Can't download.",
+        });
+        return;
+      }
+      case "import": {
+        const response = await dispatch(importThemePaletteInEditor()).unwrap();
+        toast({
+          type: response ? "success" : "error",
+          title: response ? "Import success" : "Import error",
+          description: response
+            ? "Theme palette imported successfully."
+            : "Something went wrong. Can't import. Maybe not valid palette.",
         });
         return;
       }
@@ -143,7 +162,7 @@ const ThemeEditorPanelTop = () => {
 
 const InheritPaletteButton = () => {
   const [isOpen, setIsOpen] = useState<boolean>(Boolean);
-  const handleClick = () => setIsOpen((prev) => !prev);
+  const handleClick = () => setIsOpen(prev => !prev);
 
   return (
     <>

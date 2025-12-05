@@ -9,10 +9,12 @@ import {
 import type {
   ChangeActiveThemePayloadInterface,
   ThemeColorId,
+  ThemeInterface,
 } from "@shared/types/theme.types";
 import { isValidColor } from "@/utils/color.utils";
 import Color from "color";
 import { DEFAULT_THEME_PALETTE } from "@/constant/theme.constant";
+import { THEME_PALETTE_PROPERTIES } from "@shared/constant/theme";
 
 export const loadThemeMetaList = createAsyncThunk<
   void,
@@ -155,6 +157,45 @@ export const saveThemePalette = createAsyncThunk<
     if (!palette) return false;
 
     return await window.electronAPITheme.saveThemePalette(palette);
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+});
+
+export const importThemePaletteInEditor = createAsyncThunk<
+  boolean,
+  void,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("theme/importThemePaletteInEditor", async (_, { dispatch }) => {
+  try {
+    const palette = await window.electronAPITheme.importThemePaletteInEditor();
+    if (!palette) throw new Error();
+
+    if (
+      !(
+        Object.entries(palette) as Array<
+          [keyof ThemeInterface["palette"], string]
+        >
+      ).every(([key, color]) => {
+        if (!THEME_PALETTE_PROPERTIES.has(key)) return false;
+        try {
+          const c = Color(color);
+          palette[key] = c.alpha() === 1 ? c.hex() : c.hexa();
+        } catch (error) {
+          return false;
+        }
+        return true;
+      })
+    ) {
+      throw new Error();
+    }
+
+    dispatch(handleReplaceThemePalette(palette));
+    return true;
   } catch (error) {
     console.error(error);
     return false;

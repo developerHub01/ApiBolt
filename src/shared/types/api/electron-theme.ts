@@ -1,7 +1,7 @@
 import {
   ThemeCreatePayloadInterface,
   ThemeInterface,
-  ThemeMetaInterface
+  ThemeMetaInterface,
 } from "@shared/types/theme.types";
 
 export interface ElectronAPIThemeInterface {
@@ -12,4 +12,5 @@ export interface ElectronAPIThemeInterface {
   updateTheme(payload: Partial<ThemeCreatePayloadInterface>): Promise<boolean>;
   deleteThemeById(id: string): Promise<boolean>;
   saveThemePalette(palette: ThemeInterface["palette"]): Promise<boolean>;
+  importThemePaletteInEditor(): Promise<ThemeInterface["palette"] | null>;
 }

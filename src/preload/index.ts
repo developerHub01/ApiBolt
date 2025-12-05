@@ -118,6 +118,8 @@ if (process.contextIsolated) {
           await ipcRenderer.invoke("deleteThemeById", ...payload),
         saveThemePalette: async (...payload) =>
           await ipcRenderer.invoke("saveThemePalette", ...payload),
+        importThemePaletteInEditor: async (...payload) =>
+          await ipcRenderer.invoke("importThemePaletteInEditor", ...payload),
       };
 
     /**

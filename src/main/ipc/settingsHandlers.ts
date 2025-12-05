@@ -63,7 +63,6 @@ export const settingsHandlers = () => {
     "getSettings",
     async (_): ReturnType<ElectronAPISettingsInterface["getSettings"]> => {
       const result = await getSettings();
-      console.log(result);
 
       if (
         result?.globalSetting?.backgroundImages &&

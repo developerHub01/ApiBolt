@@ -5,9 +5,9 @@ import {
   getThemeById,
   getThemeListMeta,
   getThemePaletteById,
-  updateTheme
+  updateTheme,
 } from "@/main/db/themeDB.js";
-import { saveThemePaletteLocal } from "@/main/utils/theme.js";
+import { importThemePaletteInEditor, saveThemePaletteLocal } from "@/main/utils/theme.js";
 import { ElectronAPIThemeInterface } from "@shared/types/api/electron-theme";
 
 export const themeHandler = () => {
@@ -17,7 +17,7 @@ export const themeHandler = () => {
       _,
       ...rest: Parameters<ElectronAPIThemeInterface["getThemeListMeta"]>
     ): ReturnType<ElectronAPIThemeInterface["getThemeListMeta"]> =>
-      await getThemeListMeta(...rest)
+      await getThemeListMeta(...rest),
   );
   ipcMain.handle(
     "getThemeById",
@@ -25,7 +25,7 @@ export const themeHandler = () => {
       _,
       ...rest: Parameters<ElectronAPIThemeInterface["getThemeById"]>
     ): ReturnType<ElectronAPIThemeInterface["getThemeById"]> =>
-      await getThemeById(...rest)
+      await getThemeById(...rest),
   );
   ipcMain.handle(
     "getThemePaletteById",
@@ -33,7 +33,7 @@ export const themeHandler = () => {
       _,
       ...rest: Parameters<ElectronAPIThemeInterface["getThemePaletteById"]>
     ): ReturnType<ElectronAPIThemeInterface["getThemePaletteById"]> =>
-      await getThemePaletteById(...rest)
+      await getThemePaletteById(...rest),
   );
   ipcMain.handle(
     "createTheme",
@@ -41,7 +41,7 @@ export const themeHandler = () => {
       _,
       ...rest: Parameters<ElectronAPIThemeInterface["createTheme"]>
     ): ReturnType<ElectronAPIThemeInterface["createTheme"]> =>
-      await createTheme(...rest)
+      await createTheme(...rest),
   );
   ipcMain.handle(
     "updateTheme",
@@ -49,7 +49,7 @@ export const themeHandler = () => {
       _,
       ...rest: Parameters<ElectronAPIThemeInterface["updateTheme"]>
     ): ReturnType<ElectronAPIThemeInterface["updateTheme"]> =>
-      await updateTheme(...rest)
+      await updateTheme(...rest),
   );
   ipcMain.handle(
     "deleteThemeById",
@@ -57,7 +57,7 @@ export const themeHandler = () => {
       _,
       ...rest: Parameters<ElectronAPIThemeInterface["deleteThemeById"]>
     ): ReturnType<ElectronAPIThemeInterface["deleteThemeById"]> =>
-      await deleteThemeById(...rest)
+      await deleteThemeById(...rest),
   );
   ipcMain.handle(
     "saveThemePalette",
@@ -65,6 +65,11 @@ export const themeHandler = () => {
       _,
       ...rest: Parameters<ElectronAPIThemeInterface["saveThemePalette"]>
     ): ReturnType<ElectronAPIThemeInterface["saveThemePalette"]> =>
-      await saveThemePaletteLocal(JSON.stringify(rest[0], null, 2))
+      await saveThemePaletteLocal(JSON.stringify(rest[0], null, 2)),
+  );
+  ipcMain.handle(
+    "importThemePaletteInEditor",
+    async (): ReturnType<ElectronAPIThemeInterface["importThemePaletteInEditor"]> =>
+      await importThemePaletteInEditor(),
   );
 };

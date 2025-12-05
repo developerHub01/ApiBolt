@@ -1,7 +1,8 @@
 import { app, dialog } from "electron";
 import { mainWindow } from "@/main/index.js";
 import path from "path";
-import { writeFile } from "fs/promises";
+import { readFile, writeFile } from "fs/promises";
+import { ThemeInterface } from "@shared/types/theme.types";
 
 export const saveThemePaletteLocal = async (palette: string) => {
   try {
@@ -13,9 +14,9 @@ export const saveThemePaletteLocal = async (palette: string) => {
       filters: [
         {
           name: "JSON file",
-          extensions: ["json"]
-        }
-      ]
+          extensions: ["json"],
+        },
+      ],
     });
 
     if (!canceled && filePath) {
@@ -28,5 +29,31 @@ export const saveThemePaletteLocal = async (palette: string) => {
   } catch (error) {
     console.error(error);
     return false;
+  }
+};
+
+export const importThemePaletteInEditor = async () => {
+  try {
+    if (!mainWindow) throw new Error();
+
+    const { filePaths } = await dialog.showOpenDialog(mainWindow, {
+      title: "Import theme palette in editor",
+      defaultPath: app.getPath("downloads"),
+      filters: [
+        {
+          name: "JSON file",
+          extensions: ["json"],
+        },
+      ],
+    });
+    const filePath = filePaths?.[0];
+    if (!filePath) throw new Error("No file selected.");
+    const fileStringData = await readFile(filePath, "utf-8");
+    const fileData = JSON.parse(fileStringData) as ThemeInterface["palette"];
+
+    return fileData;
+  } catch (error) {
+    console.error(error);
+    return null;
   }
 };
