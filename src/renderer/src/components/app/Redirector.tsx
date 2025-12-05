@@ -2,7 +2,9 @@ import { useEffect } from "react";
 import { useAppSelector } from "@/context/redux/hooks";
 import { useNavigate } from "react-router-dom";
 import {
+  SIDEBAR_MENU_ID_PATH_MAP,
   SIDEBAR_MENU_LIST,
+  SIDEBAR_THEME_MENU_ID_PATH_MAP,
   SIDEBAR_THEME_MENU_IDS,
   SIDEBAR_THEME_MENU_ITEMS,
 } from "@/constant/sidebar.constant";
@@ -20,35 +22,27 @@ const Redirector = () => {
   const activeProjectId = useAppSelector(selectActiveProjectId);
   const isProjectsLoading = useAppSelector(selectIsPorjectLoading);
   const isSidebarActiveTabIsLoading = useAppSelector(
-    selectSidebarActiveTabIsLoading
+    selectSidebarActiveTabIsLoading,
   );
   const selectedTab = useAppSelector(selectSelectedTab);
   const activeRequestOrFolder = useAppSelector(selectActiveRequestOrFolder);
-  const sidebarActiveTab = useAppSelector(selectSidebarActiveTab);
+  const sidebarActiveTab =
+    useAppSelector(selectSidebarActiveTab) ?? "navigate_projects";
 
   useEffect(() => {
     if (isProjectsLoading || isSidebarActiveTabIsLoading) return;
 
     let route = "";
     if (!activeProjectId) {
-      route =
-        SIDEBAR_MENU_LIST.find((entry) => entry.id === sidebarActiveTab)
-          ?.path ?? DEFAULT_ROUTE;
+      route = SIDEBAR_MENU_ID_PATH_MAP[sidebarActiveTab] ?? DEFAULT_ROUTE;
     } else if (SIDEBAR_THEME_MENU_IDS.has(sidebarActiveTab)) {
-      route =
-        SIDEBAR_THEME_MENU_ITEMS.find((item) => item.id === sidebarActiveTab)
-          ?.path ?? DEFAULT_ROUTE;
+      route = SIDEBAR_THEME_MENU_ID_PATH_MAP[sidebarActiveTab] ?? DEFAULT_ROUTE;
     } else if (
       sidebarActiveTab === "navigate_collections" &&
       activeRequestOrFolder
     ) {
-      route = `${route}/${activeRequestOrFolder.method ? "request" : "folder"}/${activeRequestOrFolder.id}`;
-    } else {
-      route =
-        SIDEBAR_MENU_LIST.find(
-          (item) => item.id === sidebarActiveTab?.toLowerCase()
-        )?.path ?? "/";
-    }
+      route = `${route}${SIDEBAR_MENU_ID_PATH_MAP["navigate_collections"]}/${activeRequestOrFolder.method ? "request" : "folder"}/${activeRequestOrFolder.id}`;
+    } else route = SIDEBAR_MENU_ID_PATH_MAP[sidebarActiveTab] ?? "/";
 
     /* find the path from the list */
     if (location.pathname === route) return;

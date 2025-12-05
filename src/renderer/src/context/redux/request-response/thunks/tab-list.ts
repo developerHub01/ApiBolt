@@ -7,7 +7,7 @@ import {
   handleChangeSelectedTab,
   handleChangeTabList,
   handleCreateSingleRequest,
-  handleRemoveTab
+  handleRemoveTab,
 } from "@/context/redux/request-response/request-response-slice";
 import { v4 as uuidv4 } from "uuid";
 import { getNodeParentsIdList } from "@/utils/request-response.utils";
@@ -68,7 +68,7 @@ export const changeTabsData = createAsyncThunk<
   try {
     await window.electronAPITabs.updateTabList({
       openTabs: state.requestResponse.tabList,
-      selectedTab: state.requestResponse.selectedTab
+      selectedTab: state.requestResponse.selectedTab,
     });
   } catch (error) {
     console.error(error);
@@ -82,21 +82,25 @@ export const addNewTabsData = createAsyncThunk<
     state: RootState;
     dispatch: AppDispatch;
   }
->("request-response/addNewTabsData", async (_, { dispatch }) => {
+>("request-response/addNewTabsData", async (_, { getState, dispatch }) => {
   try {
+    const state = getState() as RootState;
+    const projectId = state.project.activeProjectId;
+    if (!projectId) throw new Error();
     const newTabId = uuidv4();
 
     const payload: RequestListItemInterface = {
       id: newTabId,
       name: "Request",
-      method: "get"
+      method: "get",
+      projectId,
     };
 
     dispatch(handleAddTab(newTabId));
     dispatch(handleChangeSelectedTab(newTabId));
     dispatch(handleCreateSingleRequest(payload));
     await window.electronAPIRequestOrFolderMeta.createRequestOrFolderMeta(
-      payload
+      payload,
     );
   } catch (error) {
     console.error(error);
@@ -119,7 +123,7 @@ export const expendParentsOnSelectedChangeTabsData = createAsyncThunk<
 
       const payload = getNodeParentsIdList({
         source: requestList,
-        id
+        id,
       });
 
       if (!payload?.length) return;
@@ -127,14 +131,14 @@ export const expendParentsOnSelectedChangeTabsData = createAsyncThunk<
       const response =
         await window.electronAPIRequestOrFolderMeta.expendOrCollapseRequestOrFolderMetaAll(
           payload,
-          true
+          true,
         );
 
       if (response) dispatch(handleChangeIsRequestListLoaded(false));
     } catch (error) {
       console.error(error);
     }
-  }
+  },
 );
 
 export const removeTab = createAsyncThunk<

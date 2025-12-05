@@ -6,12 +6,9 @@ import Redirector from "@/components/app/Redirector";
 const RootLayout = () => {
   return (
     <section
-      className={cn(
-        "bg-background",
-        {
-          "select-none": isElectron(),
-        }
-      )}
+      className={cn("bg-background", {
+        "select-none": isElectron(),
+      })}
     >
       <Outlet />
       <Redirector />

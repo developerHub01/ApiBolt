@@ -4,12 +4,12 @@ import {
   DEFAULT_AUTHORIZATION_ID,
   DEFAULT_BASIC_AUTH,
   DEFAULT_JWT_BEARER_AUTH,
-  INITIAL_HIDDEN_HEADER_AUTHORIZATION_DATA
+  INITIAL_HIDDEN_HEADER_AUTHORIZATION_DATA,
 } from "@/constant/authorization.constant";
 import {
   initialHiddenCookie,
   INITIAL_HIDDEN_HEADERS_DATA,
-  RESPONSE_PANEL_MIN_LIMIT
+  RESPONSE_PANEL_MIN_LIMIT,
 } from "@/constant/request-response.constant";
 import type {
   FormDataInterface,
@@ -33,7 +33,7 @@ import type {
   TResponseDataTab,
   TResponseMetaTab,
   TBinaryData,
-  HiddenHeadersCheckInterface
+  HiddenHeadersCheckInterface,
 } from "@shared/types/request-response.types";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
@@ -43,11 +43,11 @@ import type {
   BasicAuthInterface,
   JWTBearerAuthInterface,
   TAuthType,
-  TBearerToken
+  TBearerToken,
 } from "@shared/types/authorization.types";
 import {
   DEFAULT_FOLDER_DESCRIPTION,
-  DEFAULT_FOLDER_TITLE
+  DEFAULT_FOLDER_TITLE,
 } from "@/constant/folder.constant";
 import type { TRequestCodeType } from "@shared/types/code-snippit.types";
 
@@ -181,7 +181,7 @@ const initialState: RequestResponseState = {
   folderTitle: {},
   folderDescription: {},
   folderDescriptionActiveTab: {},
-  folderDescriptionLineWrap: {}
+  folderDescriptionLineWrap: {},
 };
 
 export const requestResponseSlice = createSlice({
@@ -192,7 +192,7 @@ export const requestResponseSlice = createSlice({
     /* =============== CodeSnippit reducers start ============= */
     handleChangeCodeSnippitType: (
       state,
-      action: PayloadAction<TRequestCodeType | null>
+      action: PayloadAction<TRequestCodeType | null>,
     ) => {
       if (state.codeSnippitType === action.payload) return;
       state.codeSnippitType = action.payload;
@@ -205,7 +205,7 @@ export const requestResponseSlice = createSlice({
       action: PayloadAction<{
         requestId: string;
         inheritedId: string;
-      }>
+      }>,
     ) => {
       const { requestId, inheritedId = DEFAULT_AUTHORIZATION_ID } =
         action.payload;
@@ -218,7 +218,7 @@ export const requestResponseSlice = createSlice({
       action: PayloadAction<{
         id?: string;
         payload: Partial<AuthorizationPayloadInterface>;
-      }>
+      }>,
     ) => {
       const { id = DEFAULT_AUTHORIZATION_ID, payload } = action.payload;
 
@@ -237,7 +237,7 @@ export const requestResponseSlice = createSlice({
         jwtSecret,
         jwtPayload,
         jwtHeaderPrefix,
-        jwtAddTo
+        jwtAddTo,
       } = payload;
 
       /* auth type start =========== */
@@ -250,7 +250,7 @@ export const requestResponseSlice = createSlice({
       /* api key start =========== */
       if (!state.apiKeyAuth[id])
         state.apiKeyAuth[id] = {
-          ...DEFAULT_API_KEY
+          ...DEFAULT_API_KEY,
         };
 
       if (apiKeyKey !== undefined && state.apiKeyAuth[id].key !== apiKeyKey)
@@ -283,7 +283,7 @@ export const requestResponseSlice = createSlice({
       /* basic auth start =========== */
       if (state.basicAuth[id] === undefined || state.basicAuth[id] === null)
         state.basicAuth[id] = {
-          ...DEFAULT_BASIC_AUTH
+          ...DEFAULT_BASIC_AUTH,
         };
       if (
         basicAuthUsername !== undefined &&
@@ -303,7 +303,7 @@ export const requestResponseSlice = createSlice({
         state.jwtBearerAuth[id] === null
       )
         state.jwtBearerAuth[id] = {
-          ...DEFAULT_JWT_BEARER_AUTH
+          ...DEFAULT_JWT_BEARER_AUTH,
         };
 
       if (jwtAlgo !== undefined && state.jwtBearerAuth[id].algo !== jwtAlgo)
@@ -339,7 +339,7 @@ export const requestResponseSlice = createSlice({
 
       /* api key start =========== */
       state.apiKeyAuth[id] = {
-        ...DEFAULT_API_KEY
+        ...DEFAULT_API_KEY,
       };
       /* api key end =========== */
 
@@ -349,14 +349,14 @@ export const requestResponseSlice = createSlice({
 
       /* basic auth start =========== */
       state.basicAuth[id] = {
-        ...DEFAULT_BASIC_AUTH
+        ...DEFAULT_BASIC_AUTH,
       };
       /* basic auth end =========== */
 
       /* jwt auth start =========== */
 
       state.jwtBearerAuth[id] = {
-        ...DEFAULT_JWT_BEARER_AUTH
+        ...DEFAULT_JWT_BEARER_AUTH,
       };
       /* jwt auth end =========== */
     },
@@ -365,7 +365,7 @@ export const requestResponseSlice = createSlice({
     /* ================ Requestlist start =================== */
     handleLoadRequestList: (
       state,
-      action: PayloadAction<RequestListInterface>
+      action: PayloadAction<RequestListInterface>,
     ) => {
       state.requestList = action.payload;
     },
@@ -373,24 +373,24 @@ export const requestResponseSlice = createSlice({
       state,
       action: PayloadAction<
         Partial<RequestListItemInterface> & Pick<RequestListItemInterface, "id">
-      >
+      >,
     ) => {
       const id = action.payload.id;
 
       state.requestList[id] = {
         ...(state.requestList[id] ?? {}),
-        ...action.payload
+        ...action.payload,
       };
     },
     handleChangeIsRequestListLoaded: (
       state,
-      action: PayloadAction<boolean | undefined>
+      action: PayloadAction<boolean | undefined>,
     ) => {
       state.isRequestListLoaded = action.payload ?? !state.isRequestListLoaded;
     },
     handleToggleRequestList: (
       state,
-      action: PayloadAction<boolean | undefined>
+      action: PayloadAction<boolean | undefined>,
     ) => {
       if (action.payload === state.requestListCollapsed) return;
 
@@ -399,7 +399,7 @@ export const requestResponseSlice = createSlice({
     },
     handleCreateSingleRequest: (
       state,
-      action: PayloadAction<RequestListItemInterface>
+      action: PayloadAction<RequestListItemInterface>,
     ) => {
       const payload = action.payload;
 
@@ -417,14 +417,14 @@ export const requestResponseSlice = createSlice({
     },
     handleCreateRestApiBasic: (
       state,
-      action: PayloadAction<Array<RequestListItemInterface>>
+      action: PayloadAction<Array<RequestListItemInterface>>,
     ) => {
       const payload = (action.payload ?? [])?.reduce(
         (acc, curr) => {
           acc[curr.id] = curr;
           return acc;
         },
-        {} as Record<string, RequestListItemInterface>
+        {} as Record<string, RequestListItemInterface>,
       );
 
       Object.assign(state.requestList, payload);
@@ -443,16 +443,16 @@ export const requestResponseSlice = createSlice({
       /* if children exist in parent then add the payload folder id in children list  */
       if (!state.requestList[action.payload[0].parentId].children)
         state.requestList[action.payload[0].parentId].children = [
-          action.payload[0].id
+          action.payload[0].id,
         ];
       else
         state.requestList[action.payload[0].parentId].children?.push(
-          action.payload[0].id
+          action.payload[0].id,
         );
     },
     handleUpdateRequestOrFolder: (
       state,
-      action: PayloadAction<RequestListItemUpdatePayloadInterface>
+      action: PayloadAction<RequestListItemUpdatePayloadInterface>,
     ) => {
       const { id } = action.payload;
 
@@ -460,7 +460,7 @@ export const requestResponseSlice = createSlice({
 
       state.requestList[id] = {
         ...state.requestList[id],
-        ...action.payload
+        ...action.payload,
       };
     },
     handleDeleteAllRequestOrFolder: state => {
@@ -468,7 +468,7 @@ export const requestResponseSlice = createSlice({
     },
     handleChangeDeleteFolderOrRequestId: (
       state,
-      action: PayloadAction<string>
+      action: PayloadAction<string>,
     ) => {
       state.deleteFolderOrRequestId = action.payload;
     },
@@ -493,7 +493,7 @@ export const requestResponseSlice = createSlice({
       let addIndex = state.tabList.length;
 
       const selectedIdIndex = state.tabList.findIndex(
-        tabId => tabId === state.selectedTab
+        tabId => tabId === state.selectedTab,
       );
 
       if (selectedIdIndex >= 0) addIndex = selectedIdIndex + 1;
@@ -518,7 +518,7 @@ export const requestResponseSlice = createSlice({
 
       const nextSelectedTabIndex = Math.max(
         Math.min(idIndex, newTabList.length - 1),
-        0
+        0,
       );
 
       // If no tabs left, set to null
@@ -530,7 +530,7 @@ export const requestResponseSlice = createSlice({
       action: PayloadAction<{
         id: string;
         index?: number;
-      }>
+      }>,
     ) => {
       const { id, index } = action.payload;
 
@@ -544,7 +544,7 @@ export const requestResponseSlice = createSlice({
     },
     handleChangeSelectedTab: (
       state,
-      action: PayloadAction<string | undefined | null>
+      action: PayloadAction<string | undefined | null>,
     ) => {
       const id = action.payload;
 
@@ -554,10 +554,10 @@ export const requestResponseSlice = createSlice({
       }
 
       const newSelectedTabIndex = state.tabList.findIndex(
-        tabId => tabId === id
+        tabId => tabId === id,
       );
       const oldSelectedTabIndex = state.tabList.findIndex(
-        tabId => tabId === state.selectedTab
+        tabId => tabId === state.selectedTab,
       );
 
       /* if new selected tab index doesnt exist in tabList (in open tabs) then add it next to old selected tab if old exist else last */
@@ -568,7 +568,7 @@ export const requestResponseSlice = createSlice({
             ? state.tabList.length
             : oldSelectedTabIndex + 1,
           0,
-          id
+          id,
         );
         state.tabList = newTabList;
       }
@@ -606,7 +606,7 @@ export const requestResponseSlice = createSlice({
     /* ================ MetaShowColumn start =================== */
     handleLoadMetaShowColumn: (
       state,
-      action: PayloadAction<MetaShowColumnInterface>
+      action: PayloadAction<MetaShowColumnInterface>,
     ) => {
       if (!state.selectedTab) return;
 
@@ -617,7 +617,7 @@ export const requestResponseSlice = createSlice({
       action: PayloadAction<{
         id?: string;
         payload: Partial<MetaShowColumnInterface>;
-      }>
+      }>,
     ) => {
       const { payload } = action.payload;
       const id = action.payload.id ?? state.selectedTab;
@@ -625,7 +625,7 @@ export const requestResponseSlice = createSlice({
 
       state.params[id] = {
         ...(state.params[id] ?? {}),
-        ...payload
+        ...payload,
       };
     },
     /* ================ MetaShowColumn end =================== */
@@ -636,7 +636,7 @@ export const requestResponseSlice = createSlice({
       action: PayloadAction<{
         id?: string;
         payload: ShowHiddenMetaInterface;
-      }>
+      }>,
     ) => {
       const id = action.payload.id ?? state.selectedTab;
       if (!id) return;
@@ -649,7 +649,7 @@ export const requestResponseSlice = createSlice({
       action: PayloadAction<{
         id?: string;
         payload: Partial<ShowHiddenMetaInterface>;
-      }>
+      }>,
     ) => {
       const id = action.payload.id ?? state.selectedTab;
       if (!id) return;
@@ -665,7 +665,9 @@ export const requestResponseSlice = createSlice({
     /* ================ Params start =================== */
     handleLoadParams: (
       state,
-      action: PayloadAction<Array<ParamHeaderPayloadInterface | ParamInterface>>
+      action: PayloadAction<
+        Array<ParamHeaderPayloadInterface | ParamInterface>
+      >,
     ) => {
       if (!state.selectedTab) return;
 
@@ -676,7 +678,7 @@ export const requestResponseSlice = createSlice({
       action: PayloadAction<{
         id?: string;
         params: Array<ParamInterface>;
-      }>
+      }>,
     ) => {
       const { params } = action.payload;
       const id = action.payload.id ?? state.selectedTab;
@@ -690,7 +692,7 @@ export const requestResponseSlice = createSlice({
         id?: string;
         key?: string;
         value: string;
-      }>
+      }>,
     ) => {
       const selectedTab = action.payload.id ?? state.selectedTab;
       if (!selectedTab) return;
@@ -701,12 +703,12 @@ export const requestResponseSlice = createSlice({
       state.authorizationParam[selectedTab] = {
         ...INITIAL_HIDDEN_HEADER_AUTHORIZATION_DATA,
         key,
-        value
+        value,
       };
     },
     handleClearHiddenAuthorizationParams: (
       state,
-      action: PayloadAction<string>
+      action: PayloadAction<string>,
     ) => {
       const selectedTab = action.payload ?? state.selectedTab;
       if (!selectedTab) return;
@@ -717,7 +719,7 @@ export const requestResponseSlice = createSlice({
     /* ================ Headers start =================== */
     handleLoadHeaders: (
       state,
-      action: PayloadAction<Array<ParamHeaderPayloadInterface>>
+      action: PayloadAction<Array<ParamHeaderPayloadInterface>>,
     ) => {
       const selectedTab = state.selectedTab;
       if (!selectedTab) return;
@@ -732,7 +734,7 @@ export const requestResponseSlice = createSlice({
       action: PayloadAction<{
         id?: string;
         headers: Array<ParamInterface>;
-      }>
+      }>,
     ) => {
       const { headers } = action.payload;
       const id = action.payload.id ?? state.selectedTab;
@@ -746,7 +748,7 @@ export const requestResponseSlice = createSlice({
         id?: string;
         key?: string;
         value: string;
-      }>
+      }>,
     ) => {
       const selectedTab = action.payload.id ?? state.selectedTab;
       if (!selectedTab) return;
@@ -757,12 +759,12 @@ export const requestResponseSlice = createSlice({
       state.authorizationHeader[selectedTab] = {
         ...INITIAL_HIDDEN_HEADER_AUTHORIZATION_DATA,
         key,
-        value
+        value,
       };
     },
     handleClearHiddenAuthorizationHeaders: (
       state,
-      action: PayloadAction<string>
+      action: PayloadAction<string>,
     ) => {
       const selectedTab = action.payload ?? state.selectedTab;
       if (!selectedTab) return;
@@ -773,7 +775,7 @@ export const requestResponseSlice = createSlice({
       state,
       action: PayloadAction<{
         keyName: string;
-      }>
+      }>,
     ) => {
       const { keyName } = action.payload;
       const selectedTab = state.selectedTab;
@@ -790,7 +792,7 @@ export const requestResponseSlice = createSlice({
     },
     handleLoadHiddenHeadersIsCheck: (
       state,
-      action: PayloadAction<HiddenHeadersCheckInterface>
+      action: PayloadAction<HiddenHeadersCheckInterface>,
     ) => {
       const selectedTab = state.selectedTab;
       if (!selectedTab || !state.hiddenHeaders[selectedTab]) return;
@@ -799,8 +801,7 @@ export const requestResponseSlice = createSlice({
         state.hiddenHeaders[selectedTab] ?? []
       ).map((header: ParamInterface) => {
         if (header.id in action.payload)
-          header["isCheck"] =
-            action.payload[header.id as keyof HiddenHeadersCheckInterface];
+          header["isCheck"] = action.payload[header.id];
 
         return header;
       });
@@ -814,7 +815,7 @@ export const requestResponseSlice = createSlice({
         requestId?: string;
         id?: string;
         type: TMetaTableType;
-      }>
+      }>,
     ) => {
       const requestId = action.payload.requestId ?? state.selectedTab;
       if (!requestId) return;
@@ -851,17 +852,17 @@ export const requestResponseSlice = createSlice({
           if (item.id !== id) return item;
           return {
             ...item,
-            hide: item.isCheck ? undefined : true
+            hide: item.isCheck ? undefined : true,
           };
         });
       } else {
         const isAllChecked = Boolean(
-          (targetList[requestId] ?? [])?.every(item => !item.isCheck)
+          (targetList[requestId] ?? [])?.every(item => !item.isCheck),
         );
 
         targetList[requestId] = targetList[requestId].map(item => ({
           ...item,
-          hide: isAllChecked ? true : undefined
+          hide: isAllChecked ? true : undefined,
         }));
       }
     },
@@ -870,7 +871,7 @@ export const requestResponseSlice = createSlice({
     /* ================ BodyFormData start =================== */
     handleLoadBodyFormData: (
       state,
-      action: PayloadAction<Array<FormDataPayloadInterface>>
+      action: PayloadAction<Array<FormDataPayloadInterface>>,
     ) => {
       const selectedTab = state.selectedTab;
       if (!selectedTab) return;
@@ -882,7 +883,7 @@ export const requestResponseSlice = createSlice({
       action: PayloadAction<{
         id?: string;
         formData: Array<ParamInterface>;
-      }>
+      }>,
     ) => {
       const { formData } = action.payload;
       const id = action.payload.id ?? state.selectedTab;
@@ -895,7 +896,7 @@ export const requestResponseSlice = createSlice({
     /* ================ BodyXWWWFormUrlencoded start =================== */
     handleLoadBodyXWWWFormUrlencoded: (
       state,
-      action: PayloadAction<Array<ParamHeaderPayloadInterface>>
+      action: PayloadAction<Array<ParamHeaderPayloadInterface>>,
     ) => {
       const selectedTab = state.selectedTab;
       if (!selectedTab) return;
@@ -907,7 +908,7 @@ export const requestResponseSlice = createSlice({
       action: PayloadAction<{
         id?: string;
         bodyXWWWFormUrlencoded: Array<ParamInterface>;
-      }>
+      }>,
     ) => {
       const { bodyXWWWFormUrlencoded } = action.payload;
       const id = action.payload.id ?? state.selectedTab;
@@ -946,7 +947,7 @@ export const requestResponseSlice = createSlice({
           }
         | null
         | undefined
-      >
+      >,
     ) => {
       const selectedTab = state.selectedTab;
       if (!selectedTab) return;
@@ -959,7 +960,7 @@ export const requestResponseSlice = createSlice({
     },
     handleClearBodyBinary: (
       state,
-      action: PayloadAction<string | undefined>
+      action: PayloadAction<string | undefined>,
     ) => {
       const selectedTab = action.payload ?? state.selectedTab;
       if (!selectedTab) return;
@@ -970,7 +971,7 @@ export const requestResponseSlice = createSlice({
     /* ================ ReqestMetaTab start =================== */
     handleLoadReqestMetaTab: (
       state,
-      action: PayloadAction<RequestTabInterface | undefined | null>
+      action: PayloadAction<RequestTabInterface | undefined | null>,
     ) => {
       const { activeMetaTab = "url", requestBodyType = "none" } =
         action.payload ?? {};
@@ -986,7 +987,7 @@ export const requestResponseSlice = createSlice({
     },
     handleClearReqestMetaTab: (
       state,
-      action: PayloadAction<string | undefined>
+      action: PayloadAction<string | undefined>,
     ) => {
       const selectedTab = action.payload ?? state.selectedTab;
       if (!selectedTab) return;
@@ -995,7 +996,7 @@ export const requestResponseSlice = createSlice({
     },
     handleUpdateReqestMetaTab: (
       state,
-      action: PayloadAction<Partial<RequestTabInterface>>
+      action: PayloadAction<Partial<RequestTabInterface>>,
     ) => {
       const payload = action.payload ?? {};
       const selectedTab = state.selectedTab;
@@ -1018,7 +1019,7 @@ export const requestResponseSlice = createSlice({
             size?: number;
           }
         | undefined
-      >
+      >,
     ) => {
       const id = action.payload?.id ?? state.selectedTab;
       if (!id) return;
@@ -1037,7 +1038,7 @@ export const requestResponseSlice = createSlice({
     },
     handleUpdateRequestResponseSelectedTab: (
       state,
-      action: PayloadAction<string | null>
+      action: PayloadAction<string | null>,
     ) => {
       state.selectedTab = action.payload;
     },
@@ -1046,7 +1047,7 @@ export const requestResponseSlice = createSlice({
       action: PayloadAction<{
         id?: string;
         type: TActiveTabType;
-      }>
+      }>,
     ) => {
       const { type } = action.payload;
       const id = action.payload.id ?? state.selectedTab;
@@ -1060,7 +1061,7 @@ export const requestResponseSlice = createSlice({
       action: PayloadAction<{
         id?: string;
         response: ResponseInterface | null;
-      }>
+      }>,
     ) => {
       const { response } = action.payload;
       const id = action.payload.id ?? state.selectedTab;
@@ -1074,7 +1075,7 @@ export const requestResponseSlice = createSlice({
       action: PayloadAction<{
         id?: string;
         formData: Array<FormDataInterface>;
-      }>
+      }>,
     ) => {
       const { formData } = action.payload;
       const id = action.payload.id ?? state.selectedTab;
@@ -1087,7 +1088,7 @@ export const requestResponseSlice = createSlice({
       action: PayloadAction<{
         id?: string;
         xWWWFormUrlencoded: Array<ParamInterface>;
-      }>
+      }>,
     ) => {
       const { xWWWFormUrlencoded } = action.payload;
       const id = action.payload.id ?? state.selectedTab;
@@ -1100,7 +1101,7 @@ export const requestResponseSlice = createSlice({
       action: PayloadAction<{
         id?: string;
         type: TRequestBodyType;
-      }>
+      }>,
     ) => {
       const { type } = action.payload;
       const id = action.payload.id ?? state.selectedTab;
@@ -1112,7 +1113,7 @@ export const requestResponseSlice = createSlice({
       action: PayloadAction<{
         id?: string;
         raw: string;
-      }>
+      }>,
     ) => {
       const { raw } = action.payload;
       const id = action.payload.id ?? state.selectedTab;
@@ -1125,7 +1126,7 @@ export const requestResponseSlice = createSlice({
       action: PayloadAction<{
         id?: string;
         type: TContentType;
-      }>
+      }>,
     ) => {
       const { type } = action.payload;
       const id = action.payload.id ?? state.selectedTab;
@@ -1138,7 +1139,7 @@ export const requestResponseSlice = createSlice({
       action: PayloadAction<{
         id?: string;
         type: TAuthType;
-      }>
+      }>,
     ) => {
       const { id = DEFAULT_AUTHORIZATION_ID, type } = action.payload;
 
@@ -1147,7 +1148,7 @@ export const requestResponseSlice = createSlice({
 
     handleIsDownloadRequestWithBase64: (
       state,
-      action: PayloadAction<boolean>
+      action: PayloadAction<boolean>,
     ) => {
       const selectedTab = state.selectedTab;
       if (!selectedTab) return;
@@ -1157,7 +1158,7 @@ export const requestResponseSlice = createSlice({
 
     handleActiveResponseMetaTab: (
       state,
-      action: PayloadAction<TResponseMetaTab | undefined>
+      action: PayloadAction<TResponseMetaTab | undefined>,
     ) => {
       const selectedTab = state.selectedTab;
       if (!selectedTab) return;
@@ -1168,7 +1169,7 @@ export const requestResponseSlice = createSlice({
 
     handleActiveResponseDataTab: (
       state,
-      action: PayloadAction<TResponseDataTab>
+      action: PayloadAction<TResponseDataTab>,
     ) => {
       const selectedTab = state.selectedTab;
       if (!selectedTab) return;
@@ -1177,7 +1178,7 @@ export const requestResponseSlice = createSlice({
 
     handleToggleResponseCodeWrap: (
       state,
-      action: PayloadAction<boolean | undefined>
+      action: PayloadAction<boolean | undefined>,
     ) => {
       const selectedTab = state.selectedTab;
       if (!selectedTab) return;
@@ -1191,7 +1192,7 @@ export const requestResponseSlice = createSlice({
       action: PayloadAction<{
         id?: string;
         payload?: ResponseFolderDataInterface;
-      }>
+      }>,
     ) => {
       const id = action.payload.id ?? state.selectedTab;
       if (!id) return;
@@ -1229,7 +1230,7 @@ export const requestResponseSlice = createSlice({
       action: PayloadAction<{
         id?: string;
         payload?: Partial<ResponseFolderDataInterface>;
-      }>
+      }>,
     ) => {
       const id = action.payload.id ?? state.selectedTab;
       if (!id) return;
@@ -1256,7 +1257,7 @@ export const requestResponseSlice = createSlice({
       action: PayloadAction<{
         id?: string;
         value: TRequestFolderDescriptionTab;
-      }>
+      }>,
     ) => {
       const id = action.payload.id ?? state.selectedTab;
       if (!id) return;
@@ -1267,7 +1268,7 @@ export const requestResponseSlice = createSlice({
     },
     handleToggleFolderDescriptionLineWrap: (
       state,
-      action: PayloadAction<string | undefined>
+      action: PayloadAction<string | undefined>,
     ) => {
       const id = action.payload ?? state.selectedTab;
       if (!id) return;
@@ -1332,8 +1333,8 @@ export const requestResponseSlice = createSlice({
       state.folderDescription = {};
       state.folderDescriptionActiveTab = {};
       state.folderDescriptionLineWrap = {};
-    }
-  }
+    },
+  },
 });
 
 export const selectRequestNameById =
@@ -1432,7 +1433,7 @@ export const {
   handleUpdateFolder,
   handleChangeFolderDescriptionActiveTab,
   handleToggleFolderDescriptionLineWrap,
-  handleClearRequestResponse
+  handleClearRequestResponse,
 } = requestResponseSlice.actions;
 
 export default requestResponseSlice.reducer;

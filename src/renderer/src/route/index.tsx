@@ -7,6 +7,7 @@ import {
 import { isElectron } from "@/utils/electron";
 import RootLayout from "@/pages/layout";
 import AppLayout from "@/pages/app/layout";
+import AppPage from "@/pages/app/page";
 import FolderLayout from "@/pages/app/collections/folder/[id]/layout";
 import FolderPage from "@/pages/app/collections/folder/[id]/page";
 import RequestLayout from "@/pages/app/collections/request/[id]/layout";
@@ -16,20 +17,20 @@ const EnvironmentPage = lazy(() => import("@/pages/app/environment/page"));
 const ProjectsLayout = lazy(() => import("@/pages/app/projects/layout"));
 const ProjectsPage = lazy(() => import("@/pages/app/projects/page"));
 const AuthorizationLayout = lazy(
-  () => import("@/pages/app/authorization/layout")
+  () => import("@/pages/app/authorization/layout"),
 );
 const AuthorizationPage = lazy(() => import("@/pages/app/authorization/page"));
 import CollectionsLayout from "@/pages/app/collections/layout";
 import CollectionPage from "@/pages/app/collections/page";
 import ThemesLayout from "@/pages/app/themes/layout";
 const ThemeMarketPlaceLayout = lazy(
-  () => import("@/pages/app/themes/marketplace/[id]/layout")
+  () => import("@/pages/app/themes/marketplace/[id]/layout"),
 );
 const ThemeMarketPlacePage = lazy(
-  () => import("@/pages/app/themes/marketplace/[id]/page")
+  () => import("@/pages/app/themes/marketplace/[id]/page"),
 );
 const ThemeEditorLayout = lazy(
-  () => import("@/pages/app/themes/editor/layout")
+  () => import("@/pages/app/themes/editor/layout"),
 );
 const ThemeEditorPage = lazy(() => import("@/pages/app/themes/editor/page"));
 
@@ -48,8 +49,13 @@ const routes = [
         /* app layout */
         element: <AppLayout />,
         children: [
+          {
+            index: true,
+            element: <AppPage />,
+          },
           /* collection ==>> root page, request, folder */
           {
+            path: "collections",
             element: <CollectionsLayout />,
             children: [
               {
