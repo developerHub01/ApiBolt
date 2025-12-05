@@ -37,11 +37,11 @@ const RequestCodeTypeSelector = memo(() => {
         </SelectTrigger>
         <RequestCodeLineWrapButton />
         <SelectContent side="bottom" align="end">
-          {codeSnippitLanguageList.map((lang) => (
-            <SelectGroup>
+          {codeSnippitLanguageList.map(lang => (
+            <SelectGroup key={lang}>
               <SelectLabel className="capitalize">{lang}</SelectLabel>
-              {codeSnippitByLanguageName[lang].map((codeTypes) => (
-                <SelectItem value={codeTypes} className="pl-4">
+              {codeSnippitByLanguageName[lang].map(codeTypes => (
+                <SelectItem key={codeTypes} value={codeTypes} className="pl-4">
                   {requestCodeSnippitsMap[codeTypes]}
                 </SelectItem>
               ))}

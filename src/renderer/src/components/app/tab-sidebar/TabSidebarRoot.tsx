@@ -25,7 +25,7 @@ const TabSidebarRoot = () => {
     localTabList,
     totalTabsOpen,
     isTabListHovering,
-    handleChangeIsTabListHovering
+    handleChangeIsTabListHovering,
   } = useTabSidebar();
 
   useEffect(() => {
@@ -42,7 +42,7 @@ const TabSidebarRoot = () => {
       e.preventDefault();
       if (!isTabListHovering) handleChangeIsTabListHovering(true);
     },
-    [handleChangeIsTabListHovering, isTabListHovering]
+    [handleChangeIsTabListHovering, isTabListHovering],
   );
 
   const handleDrop = useCallback(
@@ -53,18 +53,18 @@ const TabSidebarRoot = () => {
 
       dispatch(
         handleMoveTab({
-          id: draggedId
-        })
+          id: draggedId,
+        }),
       );
     },
-    [dispatch]
+    [dispatch],
   );
 
   const handleMouseEnter = useCallback(() => {
     /* Start a timer when user hovers | AKA long hover */
     hoverEnterTimeoutRef.current = setTimeout(
       () => handleChangeIsTabListHovering(true),
-      TAB_ENTER_LONG_HOVER_TIME
+      TAB_ENTER_LONG_HOVER_TIME,
     );
   }, [handleChangeIsTabListHovering]);
 
@@ -82,7 +82,7 @@ const TabSidebarRoot = () => {
     // Also collapse if it was already expanded
     hoverLeaveTimeoutRef.current = setTimeout(
       () => handleChangeIsTabListHovering(false),
-      TAB_LEAVE_LONG_HOVER_TIME
+      TAB_LEAVE_LONG_HOVER_TIME,
     );
   }, [handleChangeIsTabListHovering]);
 
@@ -97,8 +97,8 @@ const TabSidebarRoot = () => {
         "backdrop-blur-lg transition-all duration-150",
         {
           "right-0 border-l": layoutTypes === "ltr",
-          "left-0 border-r": layoutTypes === "rtl"
-        }
+          "left-0 border-r": layoutTypes === "rtl",
+        },
       )}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -108,11 +108,11 @@ const TabSidebarRoot = () => {
         onDrop={handleDrop}
         onDragOver={handleDragOver}
       >
-        <AutoScrollActiveWrapper className="py-1">
+        <AutoScrollActiveWrapper className="py-1 h-full">
           {!totalTabsOpen ? (
             <>
               {/* if no tabs open */}
-              <div className="p-2.5">
+              <div className="p-2.5 flex-1">
                 {isTabListHovering && <NoTabOpenEmptyBox />}
               </div>
             </>
@@ -126,7 +126,7 @@ const TabSidebarRoot = () => {
           ) : (
             <>
               {/* if search list empty */}
-              <div className="p-2.5">
+              <div className="p-2.5 flex-1">
                 {isTabListHovering && <NoTabSearchResultEmptyBox />}
               </div>
             </>
