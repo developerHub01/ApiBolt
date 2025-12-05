@@ -1,6 +1,12 @@
 /* order is "ctrl" | "shift" | "alt" | "meta" */
 
-export const keyboardBindings = {
+export const keyboardBindings: Record<
+  string,
+  {
+    label: string;
+    key: Array<string>;
+  }
+> = {
   navigate_projects: {
     label: "Navigate to projects",
     key: ["ctrl", "shift", "p"],

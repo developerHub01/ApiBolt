@@ -452,7 +452,7 @@ export const keyboardShortcutTable = sqliteTable(
   {
     id: text().notNull(),
     label: text().notNull().default(""),
-    key: text(),
+    key: text().notNull(),
     projectId: text().references(() => projectTable.id, {
       onDelete: "cascade"
     })
