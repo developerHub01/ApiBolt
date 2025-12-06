@@ -10,3 +10,8 @@ export const selectTabList = createSelector(
   [(state: RootState) => state.requestResponse.tabList],
   (tabList): Array<string> => tabList,
 );
+
+export const selectIsTabListCollapsed = createSelector(
+  [(state: RootState) => state.requestResponse.isTabListCollapsed],
+  (isCollapsed): boolean => isCollapsed,
+);

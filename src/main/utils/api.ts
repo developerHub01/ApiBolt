@@ -44,7 +44,6 @@ export const fetchApi: ElectronAPIInterface["fetchApi"] = async (
 ) => {
   if (!client || !jar) throw new Error();
   const payload = await apiPayloadHandler(rawPayload);
-  console.log(payload);
 
   let responsePayload: ResponseInterface = {
     headers: {},
@@ -65,7 +64,6 @@ export const fetchApi: ElectronAPIInterface["fetchApi"] = async (
   try {
     const normalizedUrl = new URL(payload.url).origin;
     const res = await client(payload);
-    console.log({ res });
 
     const setCookies = res.headers["set-cookie"] || [];
 
@@ -105,7 +103,6 @@ export const fetchApi: ElectronAPIInterface["fetchApi"] = async (
       },
     };
   } catch (error: unknown) {
-    console.log(error);
     if (axios.isAxiosError(error)) {
       const errRes = error.response;
       /* Server responded with error status (4xx, 5xx) */

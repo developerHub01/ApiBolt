@@ -7,7 +7,7 @@ import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 
 const AddNewTab = memo(() => {
   const dispatch = useAppDispatch();
-  const { isTabListHovering: isHovering } = useTabSidebar();
+  const { isTabListOpen } = useTabSidebar();
 
   const handleAdd = useCallback(() => {
     dispatch(addNewTabsData());
@@ -15,7 +15,7 @@ const AddNewTab = memo(() => {
 
   return (
     <TabBottomCTA
-      isHovering={isHovering}
+      isOpen={isTabListOpen}
       onClick={handleAdd}
       Icon={AddIcon}
       label="Add Tab"

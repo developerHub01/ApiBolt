@@ -5,21 +5,21 @@ import { type LucideIcon } from "lucide-react";
 import { motion } from "motion/react";
 
 interface TabBottomCTAProps {
-  isHovering: boolean;
+  isOpen: boolean;
   onClick: () => void;
   Icon?: LucideIcon;
   label?: string;
 }
 
 const TabBottomCTA = memo(
-  ({ isHovering, onClick, Icon, label }: TabBottomCTAProps) => {
+  ({ isOpen, onClick, Icon, label }: TabBottomCTAProps) => {
     return (
       <Button
         variant={"background"}
         size={"sm"}
         className={cn("w-full gap-0 overflow-hidden", {
-          "justify-start": isHovering,
-          "justify-center": !isHovering,
+          "justify-start": isOpen,
+          "justify-center": !isOpen,
         })}
         onClick={onClick}
       >
@@ -28,10 +28,10 @@ const TabBottomCTA = memo(
           className="transition-all duration-300 text-left"
           style={{ transformOrigin: "left" }}
           animate={{
-            opacity: isHovering ? 1 : 0,
-            width: isHovering ? "100%" : "0px",
-            paddingLeft: isHovering ? "8px" : "0px",
-            scaleX: isHovering ? 1 : 0,
+            opacity: isOpen ? 1 : 0,
+            width: isOpen ? "100%" : "0px",
+            paddingLeft: isOpen ? "8px" : "0px",
+            scaleX: isOpen ? 1 : 0,
           }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
         >

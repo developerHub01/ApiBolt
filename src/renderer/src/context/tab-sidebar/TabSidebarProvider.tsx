@@ -3,6 +3,8 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
+  useRef,
   useState,
 } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
@@ -12,6 +14,7 @@ import {
 } from "@/context/redux/request-response/thunks/tab-list";
 import { normalizeText } from "@/utils";
 import {
+  selectIsTabListCollapsed,
   selectSelectedTab,
   selectTabList,
 } from "@/context/redux/request-response/selectors/tab-list";
@@ -21,6 +24,8 @@ interface TabSidebarContext {
   tabList: Array<string>;
   totalTabsOpen: number;
   localTabList: Array<string>;
+  isTabListOpen: boolean;
+  isCollapsed: boolean;
   isTabListHovering: boolean;
   handleSearch: (searchTerm: string) => void;
   handleChangeIsTabListHovering: (value?: boolean | undefined) => void;
@@ -47,11 +52,16 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
   const tabList = useAppSelector(selectTabList);
   const requestList = useAppSelector(selectRequestOrFolderList);
   const selectedTab = useAppSelector(selectSelectedTab);
+  const isCollapsed = useAppSelector(selectIsTabListCollapsed);
   const [isTabListHovering, setIsTabListHovering] = useState<boolean>(false);
   const [localTabList, setLocalTabList] = useState<Array<string>>(
     tabList ?? [],
   );
-  // const navigate = useNavigate();
+  const isTabListOpen = useMemo(
+    () => (isCollapsed ? false : isTabListHovering),
+    [isCollapsed, isTabListHovering],
+  );
+  const changeTabDataTimeout = useRef<NodeJS.Timeout>(null);
 
   /* load tabsList */
   useEffect(() => {
@@ -63,28 +73,20 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
     setLocalTabList(tabList);
   }, [tabList]);
 
-  let changeTabDataTimeout;
   useEffect(() => {
-    clearTimeout(changeTabDataTimeout);
-    setTimeout(() => {
-      dispatch(changeTabsData());
-    }, 500);
+    if (changeTabDataTimeout.current)
+      clearTimeout(changeTabDataTimeout.current);
+
+    changeTabDataTimeout.current = setTimeout(
+      () => dispatch(changeTabsData()),
+      500,
+    );
+
+    return () => {
+      if (changeTabDataTimeout.current)
+        clearTimeout(changeTabDataTimeout.current);
+    };
   }, [tabList, selectedTab, changeTabDataTimeout, dispatch]);
-
-  // useEffect(() => {
-  //   const defaultPath = "/";
-
-  //   if (!selectedTab || !tabList.length) {
-  //     navigate(defaultPath);
-  //     return;
-  //   }
-
-  //   const tabDetails = requestList[selectedTab];
-
-  //   if (!tabDetails) navigate(defaultPath);
-  //   else
-  //     navigate(`/${tabDetails.children ? "folder" : "request"}/${selectedTab}`);
-  // }, [selectedTab, tabList, requestList, navigate]);
 
   const handleSearch = useCallback(
     (searchTerm: string) => {
@@ -94,7 +96,6 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
       setLocalTabList(
         tabList.filter(tab => {
           const tabDetails = requestList[tab];
-
           if (!tabDetails) return false;
 
           return normalizeText(tabDetails.name).includes(searchTerm);
@@ -105,8 +106,9 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
   );
 
   const handleChangeIsTabListHovering = useCallback(
-    (value?: boolean) => setIsTabListHovering(prev => value ?? !prev),
-    [],
+    (value?: boolean) =>
+      !isCollapsed && setIsTabListHovering(prev => value ?? !prev),
+    [isCollapsed],
   );
 
   return (
@@ -117,6 +119,8 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
         localTabList,
         handleSearch,
         isTabListHovering,
+        isTabListOpen,
+        isCollapsed,
         handleChangeIsTabListHovering,
       }}
     >

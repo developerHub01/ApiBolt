@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 const DEBOUNCE_DELAY = 300;
 
 const TabSearchBar = memo(() => {
-  const { handleSearch, isTabListHovering } = useTabSidebar();
+  const { handleSearch, isTabListOpen } = useTabSidebar();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [skipEffect, setSkipEffect] = useState<boolean>(false);
 
@@ -57,10 +57,10 @@ const TabSearchBar = memo(() => {
         <motion.div
           style={{ transformOrigin: "left" }}
           animate={{
-            opacity: isTabListHovering ? 1 : 0,
-            width: isTabListHovering ? "100%" : "0px",
-            paddingLeft: isTabListHovering ? "8px" : "0px",
-            scaleX: isTabListHovering ? 1 : 0,
+            opacity: isTabListOpen ? 1 : 0,
+            width: isTabListOpen ? "100%" : "0px",
+            paddingLeft: isTabListOpen ? "8px" : "0px",
+            scaleX: isTabListOpen ? 1 : 0,
           }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
           className="flex items-center gap-1 pl-1"

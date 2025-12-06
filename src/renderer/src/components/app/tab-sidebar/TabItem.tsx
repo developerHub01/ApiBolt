@@ -41,7 +41,7 @@ const TabItem = memo(({ id, index }: Props) => {
 
   const tabDetails =
     useAppSelector(state => selectRequestOrFolderById(state, id)) ?? {};
-  const { isTabListHovering } = useTabSidebar();
+  const { isTabListOpen } = useTabSidebar();
   const selectedTab = useAppSelector(selectSelectedTab);
 
   const handleDragStart = (e: DragEvent<HTMLDivElement>) => {
@@ -138,8 +138,8 @@ const TabItem = memo(({ id, index }: Props) => {
         {(children || method) && (
           <div
             className={cn("flex justify-center items-center", {
-              "w-11": isTabListHovering,
-              "w-8": !isTabListHovering,
+              "w-11": isTabListOpen,
+              "w-8": !isTabListOpen,
             })}
           >
             {children && (
@@ -153,7 +153,7 @@ const TabItem = memo(({ id, index }: Props) => {
               <RequestMethodTag
                 method={method as THTTPMethods}
                 shortCut={true}
-                shortCutSizeForAll={isTabListHovering ? undefined : 3}
+                shortCutSizeForAll={isTabListOpen ? undefined : 3}
                 className={"w-full"}
               />
             )}
@@ -163,16 +163,16 @@ const TabItem = memo(({ id, index }: Props) => {
           className={cn(
             "cursor-pointer flex items-center transition-all duration-300",
             {
-              "flex-1": isTabListHovering,
+              "flex-1": isTabListOpen,
             },
           )}
           style={{ transformOrigin: "left" }}
           key={id}
           animate={{
-            opacity: isTabListHovering ? 1 : 0,
-            width: isTabListHovering ? "100%" : "0px",
-            paddingLeft: isTabListHovering ? "8px" : "0px",
-            scaleX: isTabListHovering ? 1 : 0.8,
+            opacity: isTabListOpen ? 1 : 0,
+            width: isTabListOpen ? "100%" : "0px",
+            paddingLeft: isTabListOpen ? "8px" : "0px",
+            scaleX: isTabListOpen ? 1 : 0.8,
           }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
         >
@@ -183,7 +183,7 @@ const TabItem = memo(({ id, index }: Props) => {
             className="w-full h-full outline-0 rounded-md text-sm whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer select-none pointer-events-none"
           />
         </motion.div>
-        {isTabListHovering && (
+        {isTabListOpen && (
           <AnimatePresence>
             {isTabHovering && (
               <motion.div

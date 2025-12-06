@@ -61,6 +61,7 @@ export interface RequestResponseState {
 
   tabList: Array<string>;
   selectedTab: string | null /* selectedTabId in tabList */;
+  isTabListCollapsed: boolean;
 
   isResponseCollapsed: Record<string, boolean>;
   activeMetaTab: Record<string, TActiveTabType>;
@@ -137,8 +138,9 @@ const initialState: RequestResponseState = {
   requestListCollapsed: false,
 
   tabList: [],
-
   selectedTab: null,
+  isTabListCollapsed: false,
+
   isResponseCollapsed: {},
   activeMetaTab: {},
 
@@ -574,6 +576,12 @@ export const requestResponseSlice = createSlice({
       }
 
       state.selectedTab = id;
+    },
+    handleToggleTabListCollapse: (
+      state,
+      action: PayloadAction<boolean | undefined>,
+    ) => {
+      state.isTabListCollapsed = action.payload ?? !state.isTabListCollapsed;
     },
     /* ================ TabsList end =================== */
 
@@ -1365,6 +1373,7 @@ export const {
   handleRemoveTab,
   handleMoveTab,
   handleChangeSelectedTab,
+  handleToggleTabListCollapse,
 
   /* MetaShowColumn start =========== */
   handleLoadMetaShowColumn,

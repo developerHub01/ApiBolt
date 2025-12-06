@@ -18,6 +18,7 @@ const ActionButton = memo(({ id, label, Icon, onClick }: ActionButtonProps) => {
     <Tooltip key={id}>
       <TooltipTrigger asChild>
         <button
+          type="button"
           title={label}
           onClick={() => onClick && onClick(id)}
           className="cursor-pointer p-1 rounded-md aspect-square bg-accent/5 hover:bg-accent transition-all duration-100"

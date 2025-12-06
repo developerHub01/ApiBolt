@@ -25,6 +25,7 @@ const TabSidebarRoot = () => {
     localTabList,
     totalTabsOpen,
     isTabListHovering,
+    isTabListOpen,
     handleChangeIsTabListHovering,
   } = useTabSidebar();
 
@@ -89,7 +90,7 @@ const TabSidebarRoot = () => {
   return (
     <motion.div
       initial={{ width: 60 }}
-      animate={{ width: isTabListHovering ? 280 : 60 }}
+      animate={{ width: isTabListOpen ? 280 : 60 }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
       className={cn(
         "h-full flex flex-col absolute right-0 top-0 z-40 gap-0.5 shadow-2xl border-l border-muted-foreground/20",
@@ -113,7 +114,7 @@ const TabSidebarRoot = () => {
             <>
               {/* if no tabs open */}
               <div className="p-2.5 flex-1">
-                {isTabListHovering && <NoTabOpenEmptyBox />}
+                {isTabListOpen && <NoTabOpenEmptyBox />}
               </div>
             </>
           ) : localTabList.length ? (
@@ -127,7 +128,7 @@ const TabSidebarRoot = () => {
             <>
               {/* if search list empty */}
               <div className="p-2.5 flex-1">
-                {isTabListHovering && <NoTabSearchResultEmptyBox />}
+                {isTabListOpen && <NoTabSearchResultEmptyBox />}
               </div>
             </>
           )}
