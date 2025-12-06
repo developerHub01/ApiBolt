@@ -51,10 +51,10 @@ const BodyRawDataTypeSelector = memo(() => {
       dispatch(
         updateRequestBodyRaw({
           type,
-        })
+        }),
       );
     },
-    [dispatch]
+    [dispatch],
   );
 
   if (requestBodyType !== "raw") return null;

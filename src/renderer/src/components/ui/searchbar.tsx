@@ -21,17 +21,17 @@ const Searchbar = memo(
           onSubmit={handleSubmit}
           className="w-full max-w-64 flex items-center gap-1.5 border rounded-md px-2 py-1 focus-within:border-primary transition-all duration-75"
           initial={{
-            opacity: 0
+            opacity: 0,
           }}
           exit={{
-            opacity: 0
+            opacity: 0,
           }}
           animate={{
-            opacity: 1
+            opacity: 1,
           }}
           transition={{
             duration: 0.3,
-            ease: "anticipate"
+            ease: "anticipate",
           }}
         >
           <SearchLabelIcon />
@@ -47,7 +47,7 @@ const Searchbar = memo(
         </motion.form>
       </AnimatePresence>
     );
-  }
+  },
 );
 
 const SearchLabelIcon = memo(() => (

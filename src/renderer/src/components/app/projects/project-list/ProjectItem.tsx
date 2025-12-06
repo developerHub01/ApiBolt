@@ -82,7 +82,7 @@ const ProjectItem = ({ id, name, activeProjectId }: ProjectItemProps) => {
         }
       }
     },
-    [handleDeleteProject, handleExportProject]
+    [handleDeleteProject, handleExportProject],
   );
 
   return (
@@ -94,20 +94,20 @@ const ProjectItem = ({ id, name, activeProjectId }: ProjectItemProps) => {
         "hover:bg-accent/80 transition-all duration-200 border border-transparent overflow-hidden",
         {
           "border-border backdrop-blur-xs": isActive,
-        }
+        },
       )}
       data-active={isActive}
     >
       <Bar isOpen={isActive} side="left" />
       <div
         className={cn(
-          "flex-1 flex justify-between p-5 transition-all duration-100 ease-linear"
+          "flex-1 flex justify-between p-5 transition-all duration-100 ease-linear",
         )}
       >
         <h3 className="capitalize text-lg font-semibold line-clamp-2 leading-relaxed">
           {name}
         </h3>
-        <DropdownMenu open={isOpen} onOpenChange={(val) => setIsOpen(val)}>
+        <DropdownMenu open={isOpen} onOpenChange={val => setIsOpen(val)}>
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
@@ -116,9 +116,9 @@ const ProjectItem = ({ id, name, activeProjectId }: ProjectItemProps) => {
                 "opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto",
                 {
                   "opacity-100": isOpen,
-                }
+                },
               )}
-              onClick={(e) => e.stopPropagation()}
+              onClick={e => e.stopPropagation()}
             >
               <ThreeDotIcon />
             </Button>
@@ -127,7 +127,7 @@ const ProjectItem = ({ id, name, activeProjectId }: ProjectItemProps) => {
             className="p-0 w-fit min-w-40 flex flex-col [&>button]:justify-start [&>div]:cursor-pointer"
             align="end"
             sideOffset={10}
-            onClick={(e) => e.stopPropagation()}
+            onClick={e => e.stopPropagation()}
           >
             {menuList.map(({ id, label, Icon }) => (
               <DropdownMenuItem key={id} onClick={() => handleAction(id)}>

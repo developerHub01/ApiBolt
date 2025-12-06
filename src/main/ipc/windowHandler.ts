@@ -6,33 +6,33 @@ export const windowHandler = (mainWindow: BrowserWindow) => {
     "windowIsMaximized",
     async (): ReturnType<ElectronAPIInterface["isWindowMaximized"]> => {
       return mainWindow?.isMaximized() ?? false;
-    }
+    },
   );
   ipcMain.handle(
     "windowMinimize",
     async (): ReturnType<ElectronAPIInterface["windowMaximize"]> => {
       mainWindow?.minimize();
-    }
+    },
   );
   ipcMain.handle(
     "windowMaximize",
     async (): ReturnType<ElectronAPIInterface["windowMaximize"]> => {
       mainWindow?.maximize();
       mainWindow?.webContents.send("windowMaximizeChange", true);
-    }
+    },
   );
   ipcMain.handle(
     "windowUnmaximize",
     async (): ReturnType<ElectronAPIInterface["windowUnmaximize"]> => {
       mainWindow?.restore();
       mainWindow?.webContents.send("windowMaximizeChange", false);
-    }
+    },
   );
   ipcMain.handle(
     "windowClose",
     async (): ReturnType<ElectronAPIInterface["windowClose"]> => {
       mainWindow?.close();
-    }
+    },
   );
   // native maximize/unmaximize syncing
   mainWindow.on("maximize", () => {

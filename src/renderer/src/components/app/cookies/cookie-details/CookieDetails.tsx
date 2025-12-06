@@ -2,7 +2,7 @@ import { memo, useMemo } from "react";
 import {
   selectIsCookieEditing,
   selectSelectedCookie,
-  selectSelectedEditingCookieDetails
+  selectSelectedEditingCookieDetails,
 } from "@/context/redux/cookies/selectors/cookies";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { cookieToString } from "@/utils/cookies";
@@ -28,10 +28,10 @@ const CookieDetails = memo(() => {
     () =>
       details
         ? cookieToString({
-            ...details
+            ...details,
           })
         : "",
-    [details]
+    [details],
   );
 
   const filteredDetails = useMemo(() => {
@@ -49,7 +49,7 @@ const CookieDetails = memo(() => {
 
   const handleChange = ({
     key,
-    value
+    value,
   }: {
     key: keyof CookieInterface;
     value: CookieInterface[keyof CookieInterface];
@@ -57,9 +57,9 @@ const CookieDetails = memo(() => {
     dispatch(
       handleChangeEditCookie({
         payload: {
-          [key]: value
-        }
-      })
+          [key]: value,
+        },
+      }),
     );
   };
 

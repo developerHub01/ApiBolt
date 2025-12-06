@@ -2,7 +2,7 @@ import type { CodeSnippitDataInterface } from "@shared/types/code-snippit.types"
 import { isValidJson } from "@/utils/helper";
 import {
   getHeadersList,
-  jsonFormatter
+  jsonFormatter,
 } from "@/utils/snippet-generator/helper.utils";
 
 export const generateHeadersString = ({
@@ -10,7 +10,7 @@ export const generateHeadersString = ({
   authorization,
   rawBodyDataType,
   bodyType,
-  method
+  method,
 }: Pick<
   CodeSnippitDataInterface,
   | "headers"
@@ -24,7 +24,7 @@ export const generateHeadersString = ({
     headers,
     authorization,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
 
   if (method === "get")
@@ -32,7 +32,7 @@ export const generateHeadersString = ({
 
   let headersString = headersList
     .map(
-      ({ key, value }) => `\t${JSON.stringify(key)}: ${JSON.stringify(value)}`
+      ({ key, value }) => `\t${JSON.stringify(key)}: ${JSON.stringify(value)}`,
     )
     .join(",\n");
 
@@ -46,7 +46,7 @@ export const generateRawDataString = async ({
   method,
   rawData,
   rawBodyDataType,
-  bodyType
+  bodyType,
 }: Pick<
   CodeSnippitDataInterface,
   "method" | "rawData" | "rawBodyDataType" | "bodyType"

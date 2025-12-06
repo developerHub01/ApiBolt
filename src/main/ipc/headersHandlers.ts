@@ -7,7 +7,7 @@ import {
   duplicateHeaders,
   getHeaders,
   replaceHeaders,
-  updateHeaders
+  updateHeaders,
 } from "@/main/db/headersDB.js";
 import { ElectronAPIHeadersInterface } from "@shared/types/api/electron-headers";
 
@@ -18,7 +18,7 @@ export const headersHandlers = () => {
       _,
       ...rest: Parameters<ElectronAPIHeadersInterface["getHeaders"]>
     ): ReturnType<ElectronAPIHeadersInterface["getHeaders"]> =>
-      await getHeaders(...rest)
+      await getHeaders(...rest),
   );
   ipcMain.handle(
     "deleteHeaders",
@@ -26,7 +26,7 @@ export const headersHandlers = () => {
       _,
       ...rest: Parameters<ElectronAPIHeadersInterface["deleteHeaders"]>
     ): ReturnType<ElectronAPIHeadersInterface["deleteHeaders"]> =>
-      await deleteHeaders(...rest)
+      await deleteHeaders(...rest),
   );
   ipcMain.handle(
     "deleteHeadersByRequestMetaId",
@@ -37,7 +37,7 @@ export const headersHandlers = () => {
       >
     ): ReturnType<
       ElectronAPIHeadersInterface["deleteHeadersByRequestMetaId"]
-    > => await deleteHeadersByRequestMetaId(...rest)
+    > => await deleteHeadersByRequestMetaId(...rest),
   );
   ipcMain.handle(
     "createHeaders",
@@ -45,7 +45,7 @@ export const headersHandlers = () => {
       _,
       ...rest: Parameters<ElectronAPIHeadersInterface["createHeaders"]>
     ): ReturnType<ElectronAPIHeadersInterface["createHeaders"]> =>
-      await createHeaders(...rest)
+      await createHeaders(...rest),
   );
   ipcMain.handle(
     "updateHeaders",
@@ -53,7 +53,7 @@ export const headersHandlers = () => {
       _,
       ...rest: Parameters<ElectronAPIHeadersInterface["updateHeaders"]>
     ): ReturnType<ElectronAPIHeadersInterface["updateHeaders"]> =>
-      await updateHeaders(...rest)
+      await updateHeaders(...rest),
   );
   ipcMain.handle(
     "replaceHeaders",
@@ -61,7 +61,7 @@ export const headersHandlers = () => {
       _,
       ...rest: Parameters<ElectronAPIHeadersInterface["replaceHeaders"]>
     ): ReturnType<ElectronAPIHeadersInterface["replaceHeaders"]> =>
-      await replaceHeaders(...rest)
+      await replaceHeaders(...rest),
   );
   ipcMain.handle(
     "checkAllHeadersByRequestMetaId",
@@ -72,7 +72,7 @@ export const headersHandlers = () => {
       >
     ): ReturnType<
       ElectronAPIHeadersInterface["checkAllHeadersByRequestMetaId"]
-    > => await checkAllHeadersByRequestMetaId(...rest)
+    > => await checkAllHeadersByRequestMetaId(...rest),
   );
   ipcMain.handle(
     "duplicateHeaders",
@@ -80,6 +80,6 @@ export const headersHandlers = () => {
       _,
       ...rest: Parameters<ElectronAPIHeadersInterface["duplicateHeaders"]>
     ): ReturnType<ElectronAPIHeadersInterface["duplicateHeaders"]> =>
-      await duplicateHeaders(...rest)
+      await duplicateHeaders(...rest),
   );
 };

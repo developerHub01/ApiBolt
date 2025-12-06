@@ -62,7 +62,7 @@ const PortToken = memo(() => {
       requestUrlUpdateOriginToken({
         id: "port",
         value,
-      })
+      }),
     );
   };
 

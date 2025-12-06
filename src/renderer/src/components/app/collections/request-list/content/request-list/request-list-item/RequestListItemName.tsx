@@ -32,12 +32,12 @@ const RequestListItemName = memo(() => {
       e.stopPropagation();
       handleRenameAction();
     },
-    [handleRenameAction]
+    [handleRenameAction],
   );
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => setNameState(e.target.value),
-    []
+    [],
   );
 
   const handleBlur = useCallback(
@@ -47,7 +47,7 @@ const RequestListItemName = memo(() => {
       handleChangeName(id, e.target.value);
       window.getSelection()?.removeAllRanges();
     },
-    [handleChangeName, id, name]
+    [handleChangeName, id, name],
   );
 
   const handleKeyDown = useCallback(
@@ -57,7 +57,7 @@ const RequestListItemName = memo(() => {
         handleChangeName(id, nameState.trim() || name);
       }
     },
-    [handleChangeName, id, name, nameState]
+    [handleChangeName, id, name, nameState],
   );
 
   return (
@@ -69,8 +69,8 @@ const RequestListItemName = memo(() => {
           onKeyDown={handleKeyDown}
           onBlur={handleBlur}
           draggable={false}
-          onClick={(e) => e.stopPropagation()}
-          onDragStart={(e) => e.stopPropagation()}
+          onClick={e => e.stopPropagation()}
+          onDragStart={e => e.stopPropagation()}
           id={`request_list_item_input_${id}`}
           ref={inputRef}
           className="w-full h-full outline-0 focus:bg-background/20 py-1 text-sm border-b border-foreground/80 cursor-text"

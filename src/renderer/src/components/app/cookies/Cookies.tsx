@@ -28,7 +28,7 @@ const Cookies = memo(() => {
 
   const handleClose = useCallback(
     () => dispatch(handleChangeIsCookiesOpen(false)),
-    [dispatch]
+    [dispatch],
   );
 
   return (

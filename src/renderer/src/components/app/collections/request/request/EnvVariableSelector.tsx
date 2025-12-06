@@ -30,8 +30,8 @@ const EnvVariableSelector = memo(
     const variableList = useAppSelector(selectEnvironmentsVariableListUnique);
 
     const isVariableExistInList = useMemo(
-      () => variableList.find((item) => item.variable === value),
-      [value, variableList]
+      () => variableList.find(item => item.variable === value),
+      [value, variableList],
     );
 
     const isNotExist = value && !isVariableExistInList;
@@ -53,7 +53,7 @@ const EnvVariableSelector = memo(
               {
                 "text-red-500/60": isNotExist,
               },
-              className
+              className,
             )}
             size={"xs"}
           >
@@ -66,7 +66,7 @@ const EnvVariableSelector = memo(
               value={
                 value
                   ? (variableList.find(
-                      (framework) => framework.variable === value
+                      framework => framework.variable === value,
                     )?.variable ?? value)
                   : "Select variable..."
               }
@@ -84,7 +84,7 @@ const EnvVariableSelector = memo(
             <CommandList>
               <CommandEmpty>No variable found.</CommandEmpty>
               <CommandGroup>
-                {variableList.map((variable) => (
+                {variableList.map(variable => (
                   <CommandItem
                     key={variable.variable}
                     value={variable.variable}
@@ -99,7 +99,7 @@ const EnvVariableSelector = memo(
                         "ml-auto",
                         value === variable.variable
                           ? "opacity-100"
-                          : "opacity-0"
+                          : "opacity-0",
                       )}
                     />
                   </CommandItem>
@@ -110,7 +110,7 @@ const EnvVariableSelector = memo(
         </PopoverContent>
       </Popover>
     );
-  }
+  },
 );
 
 export default EnvVariableSelector;

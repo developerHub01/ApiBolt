@@ -32,7 +32,7 @@ const SettingCodeIndentationSize = () => {
     });
 
   const senitizedValue = Number(
-    senitizeValue(value, DEFAULT_SETTINGS.indentationSize)
+    senitizeValue(value, DEFAULT_SETTINGS.indentationSize),
   );
 
   return (

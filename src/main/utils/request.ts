@@ -2,7 +2,7 @@ import { RequestListItemInterface } from "@shared/types/request-response.types";
 
 export const findSelectedRequestIds = (
   id: string,
-  requestTree: Record<string, RequestListItemInterface>
+  requestTree: Record<string, RequestListItemInterface>,
 ) => {
   const selectedRequestIds = new Set<string>([]);
 

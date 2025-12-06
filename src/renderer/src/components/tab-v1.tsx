@@ -28,7 +28,7 @@ const TabV1 = ({ list, activeTab, handleSelect, className }: TabV1Props) => {
               "border-primary text-primary": activeTab === id,
               "border-transparent text-foreground/70 hover:text-foreground":
                 activeTab !== id,
-            }
+            },
           )}
           onClick={() => handleSelect(id)}
         >

@@ -9,7 +9,7 @@ import type { JWTBearerAuthInterface } from "@shared/types/authorization.types";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { updateAuthorization } from "@/context/redux/request-response/thunks/auth";
 
-const algoList = JWT_ALGO_LIST.map((algo) => ({
+const algoList = JWT_ALGO_LIST.map(algo => ({
   id: algo,
   label: algo.toUpperCase(),
 }));
@@ -41,17 +41,17 @@ const JWTBearer = memo(({ id, authData, disabled = false }: Props) => {
         | "jwtPayload"
         | "jwtHeaderPrefix"
         | "jwtAddTo",
-      value: string
+      value: string,
     ) => {
       dispatch(
         updateAuthorization({
           payload: {
             [key]: value.trim(),
           },
-        })
+        }),
       );
     },
-    [dispatch]
+    [dispatch],
   );
 
   return (
@@ -63,7 +63,7 @@ const JWTBearer = memo(({ id, authData, disabled = false }: Props) => {
         id="api-key-algo"
         items={algoList}
         value={authData.algo || algoList[0].id}
-        onChange={(value) => handleBlur("jwtAlgo", value)}
+        onChange={value => handleBlur("jwtAlgo", value)}
         disabled={disabled}
       />
       <AuthContentInoutLabel htmlFor="api-key-secret">
@@ -73,7 +73,7 @@ const JWTBearer = memo(({ id, authData, disabled = false }: Props) => {
         id="api-key-secret"
         type="password"
         value={authData.secret}
-        onBlur={(value) => handleBlur("jwtSecret", value)}
+        onBlur={value => handleBlur("jwtSecret", value)}
         placeholder="Secret"
         disabled={disabled}
       />
@@ -92,7 +92,7 @@ const JWTBearer = memo(({ id, authData, disabled = false }: Props) => {
       <AuthContentInput
         id="api-key-prefix"
         value={authData.headerPrefix}
-        onBlur={(value) => handleBlur("jwtHeaderPrefix", value)}
+        onBlur={value => handleBlur("jwtHeaderPrefix", value)}
         placeholder="Prefix"
         disabled={disabled}
       />
@@ -104,7 +104,7 @@ const JWTBearer = memo(({ id, authData, disabled = false }: Props) => {
         items={addToList}
         value={authData.addTo ?? addToList[0].id}
         defaultValue={addToList[0].id}
-        onChange={(value) => handleBlur("jwtAddTo", value)}
+        onChange={value => handleBlur("jwtAddTo", value)}
         disabled={disabled}
       />
     </ContentWrapper>

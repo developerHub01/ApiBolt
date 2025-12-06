@@ -33,17 +33,17 @@ interface MetaTableInterface {
 const MetaTable = memo(({ showHiddenData }: MetaTableInterface) => {
   const { cellToShow, ...tableData } = useRequestMetaData();
   const hiddenHeader =
-    useAppSelector((state) =>
+    useAppSelector(state =>
       selectMetaData(state, {
         type: "hiddenHeaders",
-      })
+      }),
     ) ?? [];
 
   const hiddenParams =
-    useAppSelector((state) =>
+    useAppSelector(state =>
       selectMetaData(state, {
         type: "hiddenParams",
-      })
+      }),
     ) ?? [];
 
   if (!tableData) return null;

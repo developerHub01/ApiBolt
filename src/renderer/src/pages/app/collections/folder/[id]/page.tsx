@@ -1,6 +1,6 @@
 import { lazy, Suspense } from "react";
 const FolderRoot = lazy(
-  () => import("@/components/app/collections/folder/FolderRoot")
+  () => import("@/components/app/collections/folder/FolderRoot"),
 );
 import FolderSkeleton from "@/components/app/collections/folder/skeleton/FolderSkeleton";
 

@@ -29,7 +29,7 @@ const SettingBackgroundImageGrid = memo(
 
         handleChangeSelectedBackgroundImageIndex(Number(childDiv.dataset.id));
       },
-      [handleChangeSelectedBackgroundImageIndex]
+      [handleChangeSelectedBackgroundImageIndex],
     );
 
     return (
@@ -40,7 +40,7 @@ const SettingBackgroundImageGrid = memo(
             "col-span-full": selectedIndex === null,
             "col-span-1": selectedIndex !== null,
           },
-          className
+          className,
         )}
       >
         <div
@@ -49,7 +49,7 @@ const SettingBackgroundImageGrid = memo(
             {
               "grid-cols-2 md:grid-cols-3": selectedIndex !== null,
               "grid-cols-3 md:grid-cols-4": selectedIndex == null,
-            }
+            },
           )}
           onClick={handleClickGrid}
         >
@@ -65,7 +65,7 @@ const SettingBackgroundImageGrid = memo(
         </div>
       </ScrollArea>
     );
-  }
+  },
 );
 
 export default SettingBackgroundImageGrid;

@@ -18,7 +18,7 @@ const useCodeKeybaordShortcut = <T extends HTMLElement>({
   handleFontSize,
 }: Props) => {
   const keybindingMap = useAppSelector(
-    selectApplyingKeyboardShortcutsStrFormated
+    selectApplyingKeyboardShortcutsStrFormated,
   );
 
   const handlerKeydown = useCallback(
@@ -35,7 +35,7 @@ const useCodeKeybaordShortcut = <T extends HTMLElement>({
         .filter(([id]) => id.startsWith("code"))
         .find(
           ([, keyBindingString]) =>
-            keyBindingString && keyBindingString === keyString
+            keyBindingString && keyBindingString === keyString,
         )?.[0];
 
       if (!actionId) return;
@@ -57,8 +57,8 @@ const useCodeKeybaordShortcut = <T extends HTMLElement>({
           e.preventDefault();
           e.stopPropagation();
           if (handleFontSize && typeof fontSize === "number")
-            return handleFontSize((prev) =>
-              Math.min(prev + 1, fontSizeLimit.max)
+            return handleFontSize(prev =>
+              Math.min(prev + 1, fontSizeLimit.max),
             );
           return;
         }
@@ -66,8 +66,8 @@ const useCodeKeybaordShortcut = <T extends HTMLElement>({
           e.preventDefault();
           e.stopPropagation();
           if (handleFontSize && typeof fontSize === "number")
-            return handleFontSize((prev) =>
-              Math.max(prev - 1, fontSizeLimit.min)
+            return handleFontSize(prev =>
+              Math.max(prev - 1, fontSizeLimit.min),
             );
           return;
         }
@@ -80,7 +80,7 @@ const useCodeKeybaordShortcut = <T extends HTMLElement>({
         }
       }
     },
-    [keybindingMap, handleLineWrap, handleFormat, handleFontSize, fontSize]
+    [keybindingMap, handleLineWrap, handleFormat, handleFontSize, fontSize],
   );
 
   return handlerKeydown;

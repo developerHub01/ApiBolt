@@ -4,5 +4,5 @@ import { codeSnippitTypes } from "@/constant/code-snippit.constant";
 
 export const selectSelectedCodeSnippit = createSelector(
   (state: RootState) => state.requestResponse.codeSnippitType,
-  (codeSnippitType) => codeSnippitType ?? codeSnippitTypes[0]
+  codeSnippitType => codeSnippitType ?? codeSnippitTypes[0],
 );

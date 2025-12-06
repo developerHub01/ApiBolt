@@ -5,7 +5,7 @@ import { activeThemeTable, themeTable } from "@/main/db/schema.js";
 
 export const generateThemesSeed = async () => {
   try {
-    const payload = defaultThemeList.map((theme) => ({
+    const payload = defaultThemeList.map(theme => ({
       ...theme,
       palette: JSON.stringify(theme.palette),
     }));

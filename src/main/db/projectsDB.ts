@@ -15,13 +15,13 @@ import {
   bodyBinaryTable,
   bodyRawTable,
   requestMetaTabTable,
-  authorizationTable
+  authorizationTable,
 } from "@/main/db/schema.js";
 import { createAuth } from "@/main/db/authorizationDB.js";
 import { v4 as uuidv4 } from "uuid";
 import {
   CreateProjectPayloadInterface,
-  ProjectInterface
+  ProjectInterface,
 } from "@shared/types/project.types.js";
 import { ProjectExportFileInterface } from "@shared/types/export-import/project.js";
 import { ElectronAPIProjectsInterface } from "@shared/types/api/electron-projects";
@@ -36,12 +36,12 @@ export const getProjects = async () => {
 };
 
 export const createProjects = async (
-  payload: CreateProjectPayloadInterface
+  payload: CreateProjectPayloadInterface,
 ) => {
   try {
     const result = (
       await db.insert(projectTable).values(payload).returning({
-        id: projectTable.id
+        id: projectTable.id,
       })
     )?.[0];
 
@@ -49,7 +49,7 @@ export const createProjects = async (
 
     /* add default auth for globbaly for the project */
     await createAuth({
-      projectId: result.id
+      projectId: result.id,
     });
 
     return true;
@@ -65,7 +65,7 @@ export const updateProjects: ElectronAPIProjectsInterface["updateProjects"] =
       const updated = await db
         .update(projectTable)
         .set({
-          ...payload
+          ...payload,
         })
         .where(eq(projectTable.id, id));
 
@@ -95,7 +95,7 @@ export const changeActiveProject: ElectronAPIProjectsInterface["changeActiveProj
     try {
       const countResult = await db
         .select({
-          count: count()
+          count: count(),
         })
         .from(activeProjectTable);
       const rowCount = countResult?.[0]?.count ?? 0;
@@ -106,7 +106,7 @@ export const changeActiveProject: ElectronAPIProjectsInterface["changeActiveProj
             await db
               .update(activeProjectTable)
               .set({
-                activeProjectId: id
+                activeProjectId: id,
               })
               .where(eq(activeProjectTable.id, ACTIVE_PROJECT_ID))
           ).rowsAffected > 0
@@ -116,7 +116,7 @@ export const changeActiveProject: ElectronAPIProjectsInterface["changeActiveProj
           (
             await db.insert(activeProjectTable).values({
               id: ACTIVE_PROJECT_ID,
-              activeProjectId: id
+              activeProjectId: id,
             })
           ).rowsAffected > 0
         );
@@ -151,12 +151,12 @@ export const getActiveProjectDetails =
           await db
             .select({
               id: projectTable.id,
-              name: projectTable.name
+              name: projectTable.name,
             })
             .from(activeProjectTable)
             .leftJoin(
               projectTable,
-              eq(activeProjectTable.activeProjectId, projectTable.id)
+              eq(activeProjectTable.activeProjectId, projectTable.id),
             )
             .where(eq(activeProjectTable.id, ACTIVE_PROJECT_ID))
             .limit(1)
@@ -180,7 +180,7 @@ export const exportProject = async (id?: string | null) => {
       (
         await tsx
           .select({
-            name: projectTable.name
+            name: projectTable.name,
           })
           .from(projectTable)
           .where(eq(projectTable.id, id))
@@ -193,7 +193,7 @@ export const exportProject = async (id?: string | null) => {
           const { id, projectId, createdAt, ...rest } =
             getTableColumns(environmentTable);
           return rest;
-        })()
+        })(),
       )
       .from(environmentTable)
       .where(eq(environmentTable.projectId, id));
@@ -203,10 +203,10 @@ export const exportProject = async (id?: string | null) => {
         .select(
           (() => {
             const { projectId, createdAt, ...rest } = getTableColumns(
-              requestOrFolderMetaTable
+              requestOrFolderMetaTable,
             );
             return rest;
-          })()
+          })(),
         )
         .from(requestOrFolderMetaTable)
         .where(eq(requestOrFolderMetaTable.projectId, id))) ?? []
@@ -223,7 +223,7 @@ export const exportProject = async (id?: string | null) => {
           (() => {
             const { id, createdAt, ...rest } = getTableColumns(apiUrlTable);
             return rest;
-          })()
+          })(),
         )
         .from(apiUrlTable)
         .where(inArray(apiUrlTable.requestOrFolderMetaId, requestIdList))) ?? []
@@ -238,7 +238,7 @@ export const exportProject = async (id?: string | null) => {
           (() => {
             const { id, createdAt, ...rest } = getTableColumns(paramsTable);
             return rest;
-          })()
+          })(),
         )
         .from(paramsTable)
         .where(inArray(paramsTable.requestOrFolderMetaId, requestIdList))) ?? []
@@ -256,7 +256,7 @@ export const exportProject = async (id?: string | null) => {
           (() => {
             const { id, createdAt, ...rest } = getTableColumns(headersTable);
             return rest;
-          })()
+          })(),
         )
         .from(headersTable)
         .where(inArray(headersTable.requestOrFolderMetaId, requestIdList))) ??
@@ -276,14 +276,14 @@ export const exportProject = async (id?: string | null) => {
             (() => {
               const { id, ...rest } = getTableColumns(hiddenHeadersCheckTable);
               return rest;
-            })()
+            })(),
           )
           .from(hiddenHeadersCheckTable)
           .where(
             inArray(
               hiddenHeadersCheckTable.requestOrFolderMetaId,
-              requestIdList
-            )
+              requestIdList,
+            ),
           )) ?? []
       )?.reduce((acc, curr) => {
         acc[curr.requestOrFolderMetaId] = curr;
@@ -297,11 +297,11 @@ export const exportProject = async (id?: string | null) => {
             const { id, createdAt, ...rest } =
               getTableColumns(bodyFormDataTable);
             return rest;
-          })()
+          })(),
         )
         .from(bodyFormDataTable)
         .where(
-          inArray(bodyFormDataTable.requestOrFolderMetaId, requestIdList)
+          inArray(bodyFormDataTable.requestOrFolderMetaId, requestIdList),
         )) ?? []
     )?.reduce((acc, curr) => {
       if (!acc[curr.requestOrFolderMetaId])
@@ -317,17 +317,17 @@ export const exportProject = async (id?: string | null) => {
           .select(
             (() => {
               const { id, createdAt, ...rest } = getTableColumns(
-                bodyXWWWFormUrlencodedTable
+                bodyXWWWFormUrlencodedTable,
               );
               return rest;
-            })()
+            })(),
           )
           .from(bodyXWWWFormUrlencodedTable)
           .where(
             inArray(
               bodyXWWWFormUrlencodedTable.requestOrFolderMetaId,
-              requestIdList
-            )
+              requestIdList,
+            ),
           )) ?? []
       )?.reduce((acc, curr) => {
         if (!acc[curr.requestOrFolderMetaId])
@@ -343,11 +343,11 @@ export const exportProject = async (id?: string | null) => {
           (() => {
             const { id, ...rest } = getTableColumns(bodyBinaryTable);
             return rest;
-          })()
+          })(),
         )
         .from(bodyBinaryTable)
         .where(
-          inArray(bodyBinaryTable.requestOrFolderMetaId, requestIdList)
+          inArray(bodyBinaryTable.requestOrFolderMetaId, requestIdList),
         )) ?? []
     )?.reduce((acc, curr) => {
       if (!acc[curr.requestOrFolderMetaId])
@@ -363,7 +363,7 @@ export const exportProject = async (id?: string | null) => {
           (() => {
             const { id, lineWrap, ...rest } = getTableColumns(bodyRawTable);
             return rest;
-          })()
+          })(),
         )
         .from(bodyRawTable)
         .where(inArray(bodyRawTable.requestOrFolderMetaId, requestIdList))) ??
@@ -383,11 +383,11 @@ export const exportProject = async (id?: string | null) => {
             (() => {
               const { id, ...rest } = getTableColumns(requestMetaTabTable);
               return rest;
-            })()
+            })(),
           )
           .from(requestMetaTabTable)
           .where(
-            inArray(requestMetaTabTable.requestOrFolderMetaId, requestIdList)
+            inArray(requestMetaTabTable.requestOrFolderMetaId, requestIdList),
           )) ?? []
       )?.reduce((acc, curr) => {
         acc[curr.requestOrFolderMetaId] = curr;
@@ -401,7 +401,7 @@ export const exportProject = async (id?: string | null) => {
             const { id, projectId, ...rest } =
               getTableColumns(authorizationTable);
             return rest;
-          })()
+          })(),
         )
         .from(authorizationTable)
         .where(eq(authorizationTable.projectId, id))) ?? []
@@ -423,7 +423,7 @@ export const exportProject = async (id?: string | null) => {
       binaryDataList,
       rawDataList,
       requestMetaTabList,
-      authorization
+      authorization,
     };
   });
 };
@@ -441,7 +441,7 @@ export const importProject = async ({
   binaryDataList = {},
   rawDataList = {},
   requestMetaTabList = {},
-  authorization = {}
+  authorization = {},
 }: ProjectExportFileInterface) => {
   return await db.transaction(async tsx => {
     const projectId = (
@@ -510,7 +510,7 @@ export const importProject = async ({
     if (authorization["null"]) {
       newAuthorization["null"] = {
         ...authorization["null"],
-        projectId
+        projectId,
       };
     }
 
@@ -519,7 +519,7 @@ export const importProject = async ({
       const request = {
         ...requestList[oldId],
         id: newId,
-        projectId
+        projectId,
       };
 
       if (request.parentId) {
@@ -532,7 +532,7 @@ export const importProject = async ({
       if (apiUrlList[oldId]) {
         newApiUrlList.push({
           ...apiUrlList[oldId],
-          requestOrFolderMetaId: newId
+          requestOrFolderMetaId: newId,
         });
       }
 
@@ -540,8 +540,8 @@ export const importProject = async ({
         newParamsList.push(
           ...paramsList[oldId].map(param => ({
             ...param,
-            requestOrFolderMetaId: newId
-          }))
+            requestOrFolderMetaId: newId,
+          })),
         );
       }
 
@@ -549,22 +549,22 @@ export const importProject = async ({
         newHeadersList.push(
           ...headersList[oldId].map(header => ({
             ...header,
-            requestOrFolderMetaId: newId
-          }))
+            requestOrFolderMetaId: newId,
+          })),
         );
       }
 
       if (hiddenHeadersCheckList[oldId]) {
         newHiddenHeadersList.push({
           ...hiddenHeadersCheckList[oldId],
-          requestOrFolderMetaId: newId
+          requestOrFolderMetaId: newId,
         });
       }
 
       if (requestMetaTabList[oldId]) {
         newRequestMetaTabList.push({
           ...requestMetaTabList[oldId],
-          requestOrFolderMetaId: newId
+          requestOrFolderMetaId: newId,
         });
       }
 
@@ -572,8 +572,8 @@ export const importProject = async ({
         newFormDataList.push(
           ...formDataList[oldId].map(form => ({
             ...form,
-            requestOrFolderMetaId: newId
-          }))
+            requestOrFolderMetaId: newId,
+          })),
         );
       }
 
@@ -581,22 +581,22 @@ export const importProject = async ({
         newXWWWList.push(
           ...xWWWFormUrlencodedList[oldId].map(form => ({
             ...form,
-            requestOrFolderMetaId: newId
-          }))
+            requestOrFolderMetaId: newId,
+          })),
         );
       }
 
       if (binaryDataList[oldId]) {
         newBinaryList.push({
           ...binaryDataList[oldId],
-          requestOrFolderMetaId: newId
+          requestOrFolderMetaId: newId,
         });
       }
 
       if (rawDataList[oldId]) {
         newRawList.push({
           ...rawDataList[oldId],
-          requestOrFolderMetaId: newId
+          requestOrFolderMetaId: newId,
         });
       }
 
@@ -604,14 +604,14 @@ export const importProject = async ({
         newAuthorization.push({
           ...authorization[oldId],
           requestOrFolderMetaId: newId,
-          projectId
+          projectId,
         });
       }
     });
 
     const finalEnvironments = environments.map(env => ({
       ...env,
-      projectId
+      projectId,
     }));
     const finalRequests = Object.values(newRequestList);
 

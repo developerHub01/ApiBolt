@@ -10,7 +10,7 @@ const Headers = () => {
   const { headers } = useAppSelector(selectHistoryDetails);
   if (!headers) return null;
 
-  const modifiedHeaders = headers.map((header) => ({
+  const modifiedHeaders = headers.map(header => ({
     ...header,
     isCheck: alwaysAllowIds.has(header.id) ? true : header.isCheck,
   }));

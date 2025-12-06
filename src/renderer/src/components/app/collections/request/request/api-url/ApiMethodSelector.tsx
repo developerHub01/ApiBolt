@@ -21,10 +21,10 @@ const ApiMethodSelector = memo(() => {
         updateRequestOrFolder({
           method: value,
           id: selectedTab,
-        })
+        }),
       );
     },
-    [dispatch, selectedTab]
+    [dispatch, selectedTab],
   );
 
   if (!selectedTab) return null;

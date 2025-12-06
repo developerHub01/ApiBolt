@@ -1,7 +1,7 @@
 import type {
   HttpStatusListInterface,
   HttpStatusSingleInterface,
-  HttpStatusUpdatePayloadInterface
+  HttpStatusUpdatePayloadInterface,
 } from "@shared/types/http-status.type";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
@@ -13,7 +13,7 @@ export interface HttpStatusStateInterface {
 // Define the initial state using that type
 const initialState: HttpStatusStateInterface = {
   httpStatus: {},
-  selectedSettingHttpStatusCode: null
+  selectedSettingHttpStatusCode: null,
 };
 
 export const httpStatusSlice = createSlice({
@@ -23,41 +23,41 @@ export const httpStatusSlice = createSlice({
   reducers: {
     handleLoadHttpStatus: (
       state,
-      action: PayloadAction<HttpStatusListInterface>
+      action: PayloadAction<HttpStatusListInterface>,
     ) => {
       state.httpStatus = action.payload;
     },
     handleLoadSingleHttpStatus: (
       state,
-      action: PayloadAction<HttpStatusSingleInterface>
+      action: PayloadAction<HttpStatusSingleInterface>,
     ) => {
       const { code, ...payload } = action.payload;
       state.httpStatus[code] = payload;
     },
     handleUpdateHttpStatus: (
       state,
-      action: PayloadAction<HttpStatusUpdatePayloadInterface>
+      action: PayloadAction<HttpStatusUpdatePayloadInterface>,
     ) => {
       const { code, ...payload } = action.payload;
       state.httpStatus[code] = {
         ...(state.httpStatus[code] ?? {}),
-        ...payload
+        ...payload,
       };
     },
     handleUpdateSelectedSettingHttpStatusCode: (
       state,
-      action: PayloadAction<string | null>
+      action: PayloadAction<string | null>,
     ) => {
       state.selectedSettingHttpStatusCode = action.payload;
-    }
-  }
+    },
+  },
 });
 
 export const {
   handleLoadHttpStatus,
   handleLoadSingleHttpStatus,
   handleUpdateHttpStatus,
-  handleUpdateSelectedSettingHttpStatusCode
+  handleUpdateSelectedSettingHttpStatusCode,
 } = httpStatusSlice.actions;
 
 export default httpStatusSlice.reducer;

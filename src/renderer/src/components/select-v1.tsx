@@ -33,7 +33,7 @@ const SelectV1 = ({
       <Select
         defaultValue={(value ?? list[0].id) as string}
         value={value}
-        onValueChange={(value) => handleChange(value)}
+        onValueChange={value => handleChange(value)}
       >
         <SelectTrigger size="sm" className="min-w-[120px]">
           <SelectValue placeholder={placeholder} />

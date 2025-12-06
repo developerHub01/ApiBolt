@@ -16,8 +16,8 @@ const ParamsCell = ({ value, cellType, cellContentType }: Props) => {
   const variableList = useAppSelector(selectEnvironmentsVariableListUnique);
 
   const isVariableExistInList = useMemo(
-    () => variableList.find((item) => item.variable === value),
-    [value, variableList]
+    () => variableList.find(item => item.variable === value),
+    [value, variableList],
   );
 
   const isExist = value && isVariableExistInList;

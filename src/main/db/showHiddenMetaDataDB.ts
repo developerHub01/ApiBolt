@@ -43,15 +43,15 @@ export const createShowHiddenMetaData: ElectronAPIShowHiddenMetaDataInterface["c
           .where(
             eq(
               showHiddenMetaDataTable.requestOrFolderMetaId,
-              requestOrFolderMetaId
-            )
+              requestOrFolderMetaId,
+            ),
           )
       )?.[0];
 
       if (existingData)
         return await updateShowHiddenMetaData({
           ...payload,
-          requestOrFolderMetaId
+          requestOrFolderMetaId,
         });
 
       return (
@@ -59,7 +59,7 @@ export const createShowHiddenMetaData: ElectronAPIShowHiddenMetaDataInterface["c
           .insert(showHiddenMetaDataTable)
           .values({
             ...payload,
-            requestOrFolderMetaId
+            requestOrFolderMetaId,
           })
           .returning()
       )?.[0];
@@ -84,27 +84,27 @@ export const updateShowHiddenMetaData: ElectronAPIShowHiddenMetaDataInterface["u
           .where(
             eq(
               showHiddenMetaDataTable.requestOrFolderMetaId,
-              requestOrFolderMetaId
-            )
+              requestOrFolderMetaId,
+            ),
           )
       )?.[0];
 
       if (!isExist)
         await createShowHiddenMetaData({
-          requestOrFolderMetaId
+          requestOrFolderMetaId,
         });
 
       return (
         await db
           .update(showHiddenMetaDataTable)
           .set({
-            ...payload
+            ...payload,
           })
           .where(
             eq(
               showHiddenMetaDataTable.requestOrFolderMetaId,
-              requestOrFolderMetaId
-            )
+              requestOrFolderMetaId,
+            ),
           )
           .returning()
       )?.[0];
@@ -141,7 +141,7 @@ export const duplicateShowHiddenMetaData: ElectronAPIShowHiddenMetaDataInterface
         const { id, ...rest } = metaData;
         return {
           ...rest,
-          requestOrFolderMetaId: payload[metaData.requestOrFolderMetaId]
+          requestOrFolderMetaId: payload[metaData.requestOrFolderMetaId],
         };
       });
 

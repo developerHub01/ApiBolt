@@ -8,7 +8,7 @@ const ListBottomAction = memo(() => {
 
   return (
     <div className="flex items-center justify-end gap-1.5 px-2 py-1.5 border-t-2">
-      {list.map((item) => (
+      {list.map(item => (
         <ActionButton key={item.id} {...item} onClick={handleAction} />
       ))}
       <DeleteButton />

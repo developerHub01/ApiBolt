@@ -3,20 +3,20 @@ import type { AppDispatch, RootState } from "@/context/redux/store";
 import type {
   TAPIUrlOriginTokenType,
   TAPIUrlTokenType,
-  UrlTokenInterface
+  UrlTokenInterface,
 } from "@shared/types/request-url.types";
 import {
   handleRequestUrlAddToken,
   handleRequestUrlDeleteToken,
   handleRequestUrlReplaceTokens,
-  handleRequestUrlUpdateToken
+  handleRequestUrlUpdateToken,
 } from "@/context/redux/request-url/request-url-slice";
 import {
   decodeApiUrl,
   encodeApiUrl,
   filterUrl,
   getUrlSearchParams,
-  isValidApiUrl
+  isValidApiUrl,
 } from "@/utils/request-url.utils";
 import { updateParamsFromSearchParams } from "@/context/redux/request-response/thunks/params";
 import { paramsTableToString } from "@/utils/request-response.utils";
@@ -50,8 +50,8 @@ export const loadApiUrl = createAsyncThunk<
     dispatch(
       handleRequestUrlReplaceTokens({
         selectedTab,
-        tokens
-      })
+        tokens,
+      }),
     );
   } catch (error) {
     console.error(error);
@@ -79,8 +79,8 @@ export const changeRequestApiUrl = createAsyncThunk<
       dispatch(
         handleRequestUrlReplaceTokens({
           selectedTab,
-          tokens
-        })
+          tokens,
+        }),
       );
 
       /* if tab is only url or params then update params.   */
@@ -88,7 +88,7 @@ export const changeRequestApiUrl = createAsyncThunk<
         !["url", "params"].includes(
           state.requestResponse.activeMetaTab[
             state.requestResponse.selectedTab!
-          ]
+          ],
         )
       )
         return true;
@@ -98,14 +98,14 @@ export const changeRequestApiUrl = createAsyncThunk<
        * **/
       const searchParams = getUrlSearchParams(url);
       const paramsString = paramsTableToString(
-        state.requestResponse.params[selectedTab]
+        state.requestResponse.params[selectedTab],
       );
       if (searchParams !== paramsString)
         await dispatch(
           updateParamsFromSearchParams({
             url,
-            saveBackend: false
-          })
+            saveBackend: false,
+          }),
         );
 
       return true;
@@ -113,7 +113,7 @@ export const changeRequestApiUrl = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const changeRequestApiUrlWithBackend = createAsyncThunk<
@@ -138,7 +138,7 @@ export const changeRequestApiUrlWithBackend = createAsyncThunk<
 
       const pureApiUrlUpdated = filterUrl(url);
       const response = await window.electronAPIApiUrl.updateApiUrl({
-        url: pureApiUrlUpdated
+        url: pureApiUrlUpdated,
       });
       if (!response) return false;
 
@@ -146,13 +146,13 @@ export const changeRequestApiUrlWithBackend = createAsyncThunk<
       dispatch(
         handleRequestUrlReplaceTokens({
           selectedTab,
-          tokens
-        })
+          tokens,
+        }),
       );
 
       if (pureApiUrlBefore !== pureApiUrlUpdated)
         await window.electronAPIApiUrl.updateApiUrl({
-          url: pureApiUrlUpdated
+          url: pureApiUrlUpdated,
         });
 
       /**
@@ -160,13 +160,13 @@ export const changeRequestApiUrlWithBackend = createAsyncThunk<
        * **/
       const searchParams = getUrlSearchParams(url);
       const paramsString = paramsTableToString(
-        state.requestResponse.params[selectedTab]
+        state.requestResponse.params[selectedTab],
       );
       if (searchParams !== paramsString)
         await dispatch(
           updateParamsFromSearchParams({
-            url
-          })
+            url,
+          }),
         );
 
       return true;
@@ -174,7 +174,7 @@ export const changeRequestApiUrlWithBackend = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const duplicateRequestApiUrlsByOldNewIds = createAsyncThunk<
@@ -220,21 +220,21 @@ export const requestUrlAddToken = createAsyncThunk<
     dispatch(
       handleRequestUrlAddToken({
         ...payload,
-        selectedTab
-      })
+        selectedTab,
+      }),
     );
 
     const updatedState = getState() as RootState;
 
     const apiUrlAfter = decodeApiUrl(
-      updatedState.requestUrl.tokens[selectedTab]
+      updatedState.requestUrl.tokens[selectedTab],
     );
     /* without search params */
     const pureApiUrlAfter = filterUrl(apiUrlAfter);
 
     if (pureApiUrlBefore !== pureApiUrlAfter)
       await window.electronAPIApiUrl.updateApiUrl({
-        url: pureApiUrlAfter
+        url: pureApiUrlAfter,
       });
   } catch (error) {
     console.error(error);
@@ -264,26 +264,26 @@ export const requestUrlUpdateToken = createAsyncThunk<
       dispatch(
         handleRequestUrlUpdateToken({
           ...payload,
-          selectedTab
-        })
+          selectedTab,
+        }),
       );
 
       const updatedState = getState() as RootState;
 
       const apiUrlAfter = decodeApiUrl(
-        updatedState.requestUrl.tokens[selectedTab]
+        updatedState.requestUrl.tokens[selectedTab],
       );
       /* without search params */
       const pureApiUrlAfter = filterUrl(apiUrlAfter);
 
       if (pureApiUrlBefore !== pureApiUrlAfter)
         await window.electronAPIApiUrl.updateApiUrl({
-          url: pureApiUrlAfter
+          url: pureApiUrlAfter,
         });
     } catch (error) {
       console.error(error);
     }
-  }
+  },
 );
 
 export const requestUrlUpdateOriginToken = createAsyncThunk<
@@ -314,26 +314,26 @@ export const requestUrlUpdateOriginToken = createAsyncThunk<
           id,
           type: id,
           value,
-          selectedTab
-        })
+          selectedTab,
+        }),
       );
 
       const updatedState = getState() as RootState;
 
       const apiUrlAfter = decodeApiUrl(
-        updatedState.requestUrl.tokens[selectedTab]
+        updatedState.requestUrl.tokens[selectedTab],
       );
       /* without search params */
       const pureApiUrlAfter = filterUrl(apiUrlAfter);
 
       if (pureApiUrlBefore !== pureApiUrlAfter)
         await window.electronAPIApiUrl.updateApiUrl({
-          url: pureApiUrlAfter
+          url: pureApiUrlAfter,
         });
     } catch (error) {
       console.error(error);
     }
-  }
+  },
 );
 
 export const requestUrlDeleteToken = createAsyncThunk<
@@ -357,21 +357,21 @@ export const requestUrlDeleteToken = createAsyncThunk<
     dispatch(
       handleRequestUrlDeleteToken({
         id,
-        selectedTab
-      })
+        selectedTab,
+      }),
     );
 
     const updatedState = getState() as RootState;
 
     const apiUrlAfter = decodeApiUrl(
-      updatedState.requestUrl.tokens[selectedTab]
+      updatedState.requestUrl.tokens[selectedTab],
     );
     /* without search params */
     const pureApiUrlAfter = filterUrl(apiUrlAfter);
 
     if (pureApiUrlBefore !== pureApiUrlAfter)
       await window.electronAPIApiUrl.updateApiUrl({
-        url: pureApiUrlAfter
+        url: pureApiUrlAfter,
       });
   } catch (error) {
     console.error(error);

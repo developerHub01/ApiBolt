@@ -3,7 +3,7 @@ import { db } from "@/main/db/index.js";
 import {
   ACTIVE_SIDEBAR_TAB_ID,
   activeSidebarTabTable,
-  DEFAULT_ACTIVE_SIDEBAR_TAB
+  DEFAULT_ACTIVE_SIDEBAR_TAB,
 } from "@/main/db/schema.js";
 import { ElectronAPIActiveSidebarTabInterface } from "@shared/types/api/electron-api-active-sidebar-tab";
 
@@ -33,7 +33,7 @@ export const createActiveSidebarTab: ElectronAPIActiveSidebarTabInterface["creat
         (
           await db.insert(activeSidebarTabTable).values({
             id: ACTIVE_SIDEBAR_TAB_ID,
-            tab
+            tab,
           })
         )?.rowsAffected > 0
       );
@@ -52,13 +52,13 @@ export const updateActiveSidebarTab: ElectronAPIActiveSidebarTabInterface["updat
             .insert(activeSidebarTabTable)
             .values({
               tab,
-              id: ACTIVE_SIDEBAR_TAB_ID
+              id: ACTIVE_SIDEBAR_TAB_ID,
             })
             .onConflictDoUpdate({
               target: [activeSidebarTabTable.id],
               set: {
-                tab
-              }
+                tab,
+              },
             })
         )?.rowsAffected > 0
       );

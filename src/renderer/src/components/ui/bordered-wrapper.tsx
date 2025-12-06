@@ -15,7 +15,7 @@ const BorderedWrapper = ({
     <div
       className={cn(
         "w-full h-full min-h-24 border-2 border-dashed p-4 rounded-md text-muted-foreground select-none",
-        className
+        className,
       )}
       {...props}
     >

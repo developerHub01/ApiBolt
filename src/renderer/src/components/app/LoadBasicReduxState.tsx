@@ -24,7 +24,7 @@ const LoadBasicReduxState = () => {
         dispatch(
           loadAuthorization({
             requestOrFolderId: DEFAULT_AUTHORIZATION_ID,
-          })
+          }),
         ),
       ]);
     })();

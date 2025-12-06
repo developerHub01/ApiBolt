@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 const tooltipBaseClass = cn(
   "animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-fit origin-(--radix-tooltip-content-transform-origin) rounded-md px-3 py-1.5 text-xs text-balance",
-  "select-none p-2 border"
+  "select-none p-2 border",
 );
 
 const tooltipVariants = cva(tooltipBaseClass, {
@@ -23,16 +23,16 @@ const tooltipVariants = cva(tooltipBaseClass, {
       warningSecondary:
         "bg-amber-500/30 border border-amber-500/50 text-secondary-foreground shadow-xs",
       destructiveSecondary:
-        "bg-destructive/30 border border-destructive/50 text-secondary-foreground shadow-xs"
-    }
+        "bg-destructive/30 border border-destructive/50 text-secondary-foreground shadow-xs",
+    },
   },
   defaultVariants: {
-    variant: "default"
-  }
+    variant: "default",
+  },
 });
 
 const tooltipArrowBaseClass = cn(
-  "bg-background fill-background text-accent-foreground z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px]"
+  "bg-background fill-background text-accent-foreground z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px]",
 );
 
 const tooltipArrowVariants = cva(tooltipArrowBaseClass, {
@@ -47,12 +47,12 @@ const tooltipArrowVariants = cva(tooltipArrowBaseClass, {
         "bg-background fill-background text-background-foreground shadow-xs",
       accent: "bg-accent fill-accent text-accent-foreground shadow-xs",
       warningSecondary: "bg-amber-500/30 fill-bg-amber-500/30",
-      destructiveSecondary: "bg-destructive/30 fill-destructive/30"
-    }
+      destructiveSecondary: "bg-destructive/30 fill-destructive/30",
+    },
   },
   defaultVariants: {
-    variant: "default"
-  }
+    variant: "default",
+  },
 });
 
 function TooltipProvider({

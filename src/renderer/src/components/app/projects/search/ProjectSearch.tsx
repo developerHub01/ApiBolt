@@ -22,7 +22,7 @@ const ProjectSearch = () => {
         handleSearchProjects(value);
       }, DEBOUNCE_DELAY);
     },
-    [handleSearchProjects]
+    [handleSearchProjects],
   );
 
   const handleChange = useCallback(
@@ -30,7 +30,7 @@ const ProjectSearch = () => {
       setSearchTerm(e.target.value);
       handleSearch(e.target.value.trim());
     },
-    [handleSearch]
+    [handleSearch],
   );
 
   const handleClear = useCallback(() => {

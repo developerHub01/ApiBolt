@@ -163,8 +163,8 @@ const FieldInput = memo(
         placeholder={placeholder}
         value={fieldValue}
         className={cn(
-          "w-full border-0 border-b border-transparent focus-within:border-primary placeholder:capitalize focus-visible:ring-0 focus-visible:rounded-br-none focus-visible:rounded-bl-none",
-          className
+          "w-full border-0 border-b border-border/80 focus-within:border-border placeholder:capitalize focus-visible:ring-0 focus-visible:ring-transparent rounded-b-none px-0",
+          className,
         )}
         onChange={handleChange}
         onBlur={handleBlur}
@@ -172,7 +172,7 @@ const FieldInput = memo(
         onPaste={handlePaste}
       />
     );
-  }
+  },
 );
 
 export default FieldInput;

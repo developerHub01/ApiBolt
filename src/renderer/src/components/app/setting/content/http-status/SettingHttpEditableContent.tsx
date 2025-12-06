@@ -36,8 +36,8 @@ const SettingHttpEditableContent = ({
   const [valueState, setValueState] = useState<string>(
     (editedValue || value).slice(
       0,
-      type === "description" ? DESCRIPTION_MAX_LENGTH : REASON_MAX_LENGTH
-    )
+      type === "description" ? DESCRIPTION_MAX_LENGTH : REASON_MAX_LENGTH,
+    ),
   );
 
   useEffect(
@@ -45,24 +45,24 @@ const SettingHttpEditableContent = ({
       setValueState(
         (editedValue || value).slice(
           0,
-          type === "description" ? DESCRIPTION_MAX_LENGTH : REASON_MAX_LENGTH
-        )
+          type === "description" ? DESCRIPTION_MAX_LENGTH : REASON_MAX_LENGTH,
+        ),
       ),
-    [editedValue, type, value]
+    [editedValue, type, value],
   );
 
   const handleUpdate = (value: string | null) => {
     const filteredValue =
       value?.slice(
         0,
-        type === "description" ? DESCRIPTION_MAX_LENGTH : REASON_MAX_LENGTH
+        type === "description" ? DESCRIPTION_MAX_LENGTH : REASON_MAX_LENGTH,
       ) || null;
     dispatch(
       updateHttpStatus({
         code,
         [type === "reason" ? "editedReason" : "editedDescription"]:
           filteredValue,
-      })
+      }),
     );
 
     setValueState(filteredValue || editedValue);
@@ -78,8 +78,8 @@ const SettingHttpEditableContent = ({
     setValueState(
       valueState.slice(
         0,
-        type === "description" ? DESCRIPTION_MAX_LENGTH : REASON_MAX_LENGTH
-      )
+        type === "description" ? DESCRIPTION_MAX_LENGTH : REASON_MAX_LENGTH,
+      ),
     );
   };
 

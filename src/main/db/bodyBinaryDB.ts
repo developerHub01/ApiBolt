@@ -21,11 +21,11 @@ export const getBodyBinary = async (
         await db
           .select({
             requestOrFolderMetaId: bodyBinaryTable.requestOrFolderMetaId,
-            path: bodyBinaryTable.path
+            path: bodyBinaryTable.path,
           })
           .from(bodyBinaryTable)
           .where(
-            eq(bodyBinaryTable.requestOrFolderMetaId, requestOrFolderMetaId)
+            eq(bodyBinaryTable.requestOrFolderMetaId, requestOrFolderMetaId),
           )
       )?.[0] ?? null
     );
@@ -46,7 +46,7 @@ export const createBodyBinary: ElectronAPIBodyBinaryInterface["createBodyBinary"
         (
           await db.insert(bodyBinaryTable).values({
             ...payload,
-            requestOrFolderMetaId
+            requestOrFolderMetaId,
           })
         ).rowsAffected > 0
       );
@@ -57,7 +57,7 @@ export const createBodyBinary: ElectronAPIBodyBinaryInterface["createBodyBinary"
   };
 
 export const updateBodyBinary = async (
-  payload: Partial<BodyBinaryInterface>
+  payload: Partial<BodyBinaryInterface>,
 ) => {
   try {
     const requestOrFolderMetaId =
@@ -70,13 +70,13 @@ export const updateBodyBinary = async (
           .insert(bodyBinaryTable)
           .values({
             ...payload,
-            requestOrFolderMetaId
+            requestOrFolderMetaId,
           })
           .onConflictDoUpdate({
             target: [bodyBinaryTable.requestOrFolderMetaId],
             set: {
-              ...payload
-            }
+              ...payload,
+            },
           })
       )?.rowsAffected > 0
     );
@@ -97,7 +97,7 @@ export const deleteBodyBinary: ElectronAPIBodyBinaryInterface["deleteBodyBinary"
           await db
             .delete(bodyBinaryTable)
             .where(
-              eq(bodyBinaryTable.requestOrFolderMetaId, requestOrFolderMetaId)
+              eq(bodyBinaryTable.requestOrFolderMetaId, requestOrFolderMetaId),
             )
         ).rowsAffected > 0
       );
@@ -134,7 +134,7 @@ export const duplicateBodyBinary: ElectronAPIBodyBinaryInterface["duplicateBodyB
         const { id, ...binaryPayload } = binary;
         return {
           ...binaryPayload,
-          requestOrFolderMetaId: payload[binary.requestOrFolderMetaId]
+          requestOrFolderMetaId: payload[binary.requestOrFolderMetaId],
         };
       });
 
@@ -157,13 +157,13 @@ export const replaceBodyBinary: ElectronAPIBodyBinaryInterface["replaceBodyBinar
           .where(
             eq(
               bodyBinaryTable.requestOrFolderMetaId,
-              payload.requestOrFolderMetaId
-            )
+              payload.requestOrFolderMetaId,
+            ),
           );
 
         if (Object.keys(payload || {}).length)
           await tsx.insert(bodyBinaryTable).values({
-            ...payload
+            ...payload,
           });
 
         return true;

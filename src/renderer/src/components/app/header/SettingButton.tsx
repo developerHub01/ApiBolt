@@ -23,14 +23,14 @@ const SettingButton = () => {
   const dispatch = useAppDispatch();
   const isEnabled = useAppSelector(selectIsSettingButtonEnabled);
 
-  const cookiesShortcuts = useAppSelector((state) =>
-    selectApplyingKeyboardShortcutsById(state, "open_cookies")
+  const cookiesShortcuts = useAppSelector(state =>
+    selectApplyingKeyboardShortcutsById(state, "open_cookies"),
   );
-  const keyboardShortcuts = useAppSelector((state) =>
-    selectApplyingKeyboardShortcutsById(state, "open_keyboard_shortcut")
+  const keyboardShortcuts = useAppSelector(state =>
+    selectApplyingKeyboardShortcutsById(state, "open_keyboard_shortcut"),
   );
-  const settingsShortcuts = useAppSelector((state) =>
-    selectApplyingKeyboardShortcutsById(state, "open_settings")
+  const settingsShortcuts = useAppSelector(state =>
+    selectApplyingKeyboardShortcutsById(state, "open_settings"),
   );
 
   const shortcutsMap: Record<string, TShortcutKey> = {
@@ -73,7 +73,7 @@ const SettingButton = () => {
             variant="secondary"
             className={cn(
               "rounded-none h-full aspect-square bg-transparent",
-              "hover:bg-foreground/10"
+              "hover:bg-foreground/10",
             )}
             disabled={!isEnabled}
           >

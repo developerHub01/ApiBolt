@@ -35,7 +35,7 @@ const SettingThemeCardWrapper = ({
           "bg-secondary/80 shadow-2xl": isActive,
           "ring-ring ring-offset-2 ring-0": isActive && !isInheritedFrom,
         },
-        className
+        className,
       )}
       {...props}
     >

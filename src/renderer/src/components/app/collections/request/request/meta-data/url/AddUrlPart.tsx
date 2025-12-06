@@ -37,7 +37,7 @@ const AddUrlPart = ({ id }: Props) => {
       requestUrlAddToken({
         type,
         preTokenId: id,
-      })
+      }),
     );
 
   return (

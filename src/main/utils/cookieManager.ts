@@ -1,18 +1,23 @@
 import { CookieJar } from "tough-cookie";
-import { jar } from "@/main/index.js";
+import { jar as defaultJar } from "@/main/index.js";
 import {
   getCookiesByProject,
-  replaceCookiesByProject
+  replaceCookiesByProject,
 } from "@/main/db/cookiesDB.js";
 
-export const clearJar = async jar => {
-  jar = new CookieJar();
+export const clearJar = async (jar: CookieJar | null) => {
+  const targetJar = jar ?? defaultJar;
+  targetJar?.removeAllCookies();
 };
 
-export const loadJarFromDB = async (jar, projectId) => {
+export const loadJarFromDB = async (
+  jar: CookieJar | null,
+  projectId?: string,
+) => {
   try {
+    const targetJar = jar ?? defaultJar;
     // clear existing cookies first
-    await jarManager.clear(jar);
+    await jarManager.clear(targetJar);
 
     const cookiesData = await getCookiesByProject(projectId);
     if (!cookiesData) return;
@@ -22,6 +27,7 @@ export const loadJarFromDB = async (jar, projectId) => {
 
     const allCookies = await tempJar.store.getAllCookies();
     for (const cookie of allCookies) {
+      if (!cookie.domain) continue;
       let normalizedUrl = "";
       try {
         normalizedUrl = new URL(cookie.domain).origin;
@@ -29,9 +35,9 @@ export const loadJarFromDB = async (jar, projectId) => {
         normalizedUrl = cookie.domain;
       }
 
-      await jar.setCookie(
+      await targetJar?.setCookie(
         `${cookie.key ?? ""}=${cookie.value ?? ""}; Domain=${cookie.domain ?? ""}; Path=${cookie.path ?? "/"}`,
-        normalizedUrl
+        normalizedUrl,
       );
     }
   } catch (error) {
@@ -42,6 +48,7 @@ export const loadJarFromDB = async (jar, projectId) => {
 export const initialCookieJar = async () => {
   try {
     const cookies = await getCookiesByProject();
+    if (!cookies) throw new Error();
     const cookiesData = JSON.parse(cookies);
     if (!cookiesData || !cookiesData.cookies)
       throw new Error("No cookies exist");
@@ -55,36 +62,31 @@ export const initialCookieJar = async () => {
 
 export const saveCookiesToDB = async () => {
   try {
-    if (!jar) return;
-
-    const json = jar.toJSON();
-    await replaceCookiesByProject({
-      cookies: json
-    });
+    if (!defaultJar) return;
+    const json = defaultJar.toJSON();
+    await replaceCookiesByProject(json ?? null);
   } catch (error) {
     console.error("error from save cookiesToFile");
     console.error(error);
   }
 };
 
-export const getAllCookies = async () => {
-  return await jar.store.getAllCookies();
-};
+export const getAllCookies = async () =>
+  await defaultJar?.store.getAllCookies();
 
-export const getCookiesByDomain = async domain => {
-  return await jar.getCookies(domain);
-};
+export const getCookiesByDomain = async (domain: string) =>
+  await defaultJar?.getCookies(domain);
 
-export const getCookiesStringByDomain = async domain => {
-  return await jar.getCookieString(domain);
-};
+export const getCookiesStringByDomain = async (domain: string) =>
+  await defaultJar?.getCookieString(domain);
 
 export const jarManager = {
-  clear: jarParam => clearJar(jarParam ?? jar),
-  loadFromDB: projectId => loadJarFromDB(jar, projectId),
+  clear: (jarParam?: CookieJar | null) => clearJar(jarParam ?? defaultJar),
+  loadFromDB: (projectId?: string) => loadJarFromDB(defaultJar, projectId),
   saveToDB: () => saveCookiesToDB(),
   init: () => initialCookieJar(),
   getCookiesAll: () => getAllCookies(),
-  getCookiesByDomain: domain => getCookiesByDomain(domain),
-  getCookiesStringByDomain: domain => getCookiesStringByDomain(domain)
+  getCookiesByDomain: (domain: string) => getCookiesByDomain(domain),
+  getCookiesStringByDomain: (domain: string) =>
+    getCookiesStringByDomain(domain),
 };

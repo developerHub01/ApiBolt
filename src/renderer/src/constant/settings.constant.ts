@@ -44,7 +44,7 @@ export const DEFAULT_RAW_SETTINGS_VALUES: SettingsInterface = {
   isZoomable: -1, // 0: disable, 1: enable, -1: default
   activityBarVisible: -1,
   layoutType: "default",
-  projectId: null
+  projectId: null,
 };
 
 export const DEFAULT_SETTINGS: SettingsInterface = {
@@ -59,5 +59,5 @@ export const DEFAULT_SETTINGS: SettingsInterface = {
   isZoomable: 0, // 0: disable, 1: enable, -1: default
   activityBarVisible: DEFAULT_ACTIVITY_BAR_VISIBLE,
   layoutType: "ltr",
-  projectId: null
+  projectId: null,
 };

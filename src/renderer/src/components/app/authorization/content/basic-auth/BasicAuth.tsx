@@ -21,10 +21,10 @@ const BasicAuth = memo(({ id, authData, disabled = false }: Props) => {
           payload: {
             [key]: value.trim(),
           },
-        })
+        }),
       );
     },
-    [dispatch]
+    [dispatch],
   );
 
   return (
@@ -36,7 +36,7 @@ const BasicAuth = memo(({ id, authData, disabled = false }: Props) => {
         id="basic-auth-username"
         placeholder="Username"
         value={authData.username}
-        onBlur={(value) => handleBlur("basicAuthUsername", value)}
+        onBlur={value => handleBlur("basicAuthUsername", value)}
         disabled={disabled}
       />
       <AuthContentInoutLabel htmlFor="basic-auth-password" className="w-17">
@@ -47,7 +47,7 @@ const BasicAuth = memo(({ id, authData, disabled = false }: Props) => {
         placeholder="Password"
         type="password"
         value={authData.password}
-        onBlur={(value) => handleBlur("basicAuthPassword", value)}
+        onBlur={value => handleBlur("basicAuthPassword", value)}
         disabled={disabled}
       />
     </ContentWrapper>

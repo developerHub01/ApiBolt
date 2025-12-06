@@ -5,8 +5,8 @@ export const selectIsFetchApiLoading = createSelector(
   [
     (state: RootState) =>
       Boolean(
-        state.status.isFetchApiLoading[state.requestResponse.selectedTab ?? ""]
+        state.status.isFetchApiLoading[state.requestResponse.selectedTab ?? ""],
       ),
   ],
-  (isLoading) => isLoading
+  isLoading => isLoading,
 );

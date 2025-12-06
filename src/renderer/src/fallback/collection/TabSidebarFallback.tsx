@@ -8,7 +8,7 @@ const TabSidebarFallback = () => {
       className={cn(
         "h-full flex flex-col gap-0.5 shadow-2xl border-l border-muted-foreground/20",
         "bg-secondary/30",
-        "backdrop-blur-lg"
+        "backdrop-blur-lg",
       )}
     >
       <ScrollArea className="w-full h-full min-h-0 flex-1 pb-0 [&>div>div]:w-full [&>div>div]:h-full">

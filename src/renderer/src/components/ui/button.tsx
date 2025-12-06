@@ -28,7 +28,7 @@ const buttonVariants = cva(
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         transparent:
           "bg-transparent dark:bg-transparent hover:bg-transparent hover:text-accent-foreground dark:hover:bg-transparent",
-        link: "text-primary underline-offset-4 hover:underline"
+        link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
@@ -37,19 +37,19 @@ const buttonVariants = cva(
         lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
         icon: "size-9",
         iconSm: "size-8",
-        iconXs: "size-7"
+        iconXs: "size-7",
       },
       focusMode: {
         true: "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
-        false: ""
-      }
+        false: "",
+      },
     },
     defaultVariants: {
       variant: "default",
       size: "default",
-      focusMode: false
-    }
-  }
+      focusMode: false,
+    },
+  },
 );
 
 function Button({

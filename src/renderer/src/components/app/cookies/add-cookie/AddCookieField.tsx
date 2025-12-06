@@ -18,7 +18,7 @@ const AddCookieField = ({ fieldKey, value }: Props) => {
     dispatch(
       handleChangeAddCookie({
         [fieldKey]: value,
-      })
+      }),
     );
   };
 

@@ -1,13 +1,13 @@
 import React, { memo } from "react";
 import {
   ClipboardCopy as ClipboardCopyIcon,
-  type LucideIcon
+  type LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
-  TooltipTrigger
+  TooltipTrigger,
 } from "@/components/ui/tooltip-custom";
 import { cn } from "@/lib/utils";
 import useCustomToast from "@/hooks/ui/use-custom-toast";
@@ -43,7 +43,7 @@ const CopyButton = memo(
     align = "center",
     side = "bottom",
     size = "default",
-    variant = "secondary"
+    variant = "secondary",
   }: CopyButtonProps & React.ComponentProps<"button">) => {
     const toast = useCustomToast();
 
@@ -53,7 +53,7 @@ const CopyButton = memo(
         toast({
           type: "success",
           title: "Copied success",
-          description: "Copied to clipboard"
+          description: "Copied to clipboard",
         });
       } catch (error) {
         console.error(error);
@@ -87,7 +87,7 @@ const CopyButton = memo(
         </TooltipContent>
       </Tooltip>
     );
-  }
+  },
 );
 
 export default CopyButton;

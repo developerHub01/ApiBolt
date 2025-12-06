@@ -10,12 +10,12 @@ export default defineConfig({
       alias: {
         "@/main": resolve("src/main"),
         "@/data": resolve("src/data"),
-        "@shared": resolve("src/shared")
-      }
-    }
+        "@shared": resolve("src/shared"),
+      },
+    },
   },
   preload: {
-    plugins: [externalizeDepsPlugin()]
+    plugins: [externalizeDepsPlugin()],
   },
   renderer: {
     assetsInclude: "src/renderer/assets/**",
@@ -23,9 +23,9 @@ export default defineConfig({
       alias: {
         "@renderer": resolve("src/renderer/src"),
         "@shared": resolve("src/shared"),
-        "@": resolve("src/renderer/src")
-      }
+        "@": resolve("src/renderer/src"),
+      },
     },
-    plugins: [react(), tailwindcss()]
-  }
+    plugins: [react(), tailwindcss()],
+  },
 });

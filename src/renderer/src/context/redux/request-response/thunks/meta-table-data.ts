@@ -1,6 +1,6 @@
 import {
   type FormDataPayloadInterface,
-  type ParamHeaderBuildPayloadInterface
+  type ParamHeaderBuildPayloadInterface,
 } from "@shared/types/request-response.types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
@@ -46,7 +46,7 @@ export const replaceMetaTableData = createAsyncThunk<
         let handler:
           | ((
               requestOrFolderMetaId: string,
-              payload: Array<Partial<FormDataPayloadInterface>>
+              payload: Array<Partial<FormDataPayloadInterface>>,
             ) => Promise<boolean>)
           | null = null;
 
@@ -66,14 +66,14 @@ export const replaceMetaTableData = createAsyncThunk<
         if (handler)
           response = await handler(
             selectedTab,
-            payload as Array<Partial<FormDataPayloadInterface>>
+            payload as Array<Partial<FormDataPayloadInterface>>,
           );
       } else {
         /* ================ if params or headers ================ */
         let handler:
           | ((
               requestOrFolderMetaId: string,
-              payload: Array<Partial<ParamHeaderBuildPayloadInterface>>
+              payload: Array<Partial<ParamHeaderBuildPayloadInterface>>,
             ) => Promise<boolean>)
           | null = null;
 
@@ -88,7 +88,7 @@ export const replaceMetaTableData = createAsyncThunk<
         if (handler)
           response = await handler(
             selectedTab,
-            payload as Array<Partial<ParamHeaderBuildPayloadInterface>>
+            payload as Array<Partial<ParamHeaderBuildPayloadInterface>>,
           );
       }
 
@@ -99,7 +99,7 @@ export const replaceMetaTableData = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 /* ==============================
 ======== meta-table-data end =============

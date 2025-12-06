@@ -25,7 +25,7 @@ const FileTag = ({
         {
           "pr-0": !disabled,
         },
-        className
+        className,
       )}
       variant={"secondary"}
       size={"xs"}

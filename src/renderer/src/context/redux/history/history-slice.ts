@@ -2,7 +2,7 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type {
   HistoryItemInterface,
   HistoryItemMetaInterface,
-  THistoryFilter
+  THistoryFilter,
 } from "@shared/types/history.types";
 import { MAX_LIMIT_OF_HISTORY_PER_REQUEST } from "@/constant/history.constant";
 
@@ -21,7 +21,7 @@ const initialState: HistoryInterface = {
   meta: null,
   selectedFilterMethod: {},
   openedHistory: null,
-  historyDetails: null
+  historyDetails: null,
 };
 
 export const historySlice = createSlice({
@@ -34,7 +34,7 @@ export const historySlice = createSlice({
       action: PayloadAction<{
         requestId: string;
         method: THistoryFilter;
-      }>
+      }>,
     ) => {
       state.selectedFilterMethod[action.payload.requestId] =
         action.payload.method;
@@ -44,22 +44,22 @@ export const historySlice = createSlice({
     },
     handleLoadHistory: (
       state,
-      action: PayloadAction<Array<HistoryItemMetaInterface>>
+      action: PayloadAction<Array<HistoryItemMetaInterface>>,
     ) => {
       state.meta = action.payload;
     },
     handleAddHistory: (
       state,
-      action: PayloadAction<HistoryItemMetaInterface>
+      action: PayloadAction<HistoryItemMetaInterface>,
     ) => {
       state.meta = [action.payload, ...(state.meta ?? [])].slice(
         0,
-        MAX_LIMIT_OF_HISTORY_PER_REQUEST
+        MAX_LIMIT_OF_HISTORY_PER_REQUEST,
       );
     },
     handleReplaceHistory: (
       state,
-      action: PayloadAction<Array<HistoryItemMetaInterface>>
+      action: PayloadAction<Array<HistoryItemMetaInterface>>,
     ) => {
       state.meta = action.payload;
     },
@@ -78,17 +78,17 @@ export const historySlice = createSlice({
           }
         | null
         | undefined
-      >
+      >,
     ) => {
       state.openedHistory = action.payload ?? null;
     },
     handleReplaceHistoryDetails: (
       state,
-      action: PayloadAction<HistoryItemInterface | null | undefined>
+      action: PayloadAction<HistoryItemInterface | null | undefined>,
     ) => {
       state.historyDetails = action.payload ?? null;
-    }
-  }
+    },
+  },
 });
 
 export const {
@@ -99,7 +99,7 @@ export const {
   handleReplaceHistory,
   handleDeleteHistory,
   handleChangeOpenedHistory,
-  handleReplaceHistoryDetails
+  handleReplaceHistoryDetails,
 } = historySlice.actions;
 
 export default historySlice.reducer;

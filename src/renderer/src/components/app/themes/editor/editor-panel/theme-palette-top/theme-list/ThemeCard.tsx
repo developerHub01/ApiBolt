@@ -33,7 +33,7 @@ const ThemeCard = ({ id, name, thumbnail, type, isActive, onClick }: Props) => {
         {
           "bg-secondary/80 shadow-2xl ring ring-primary ring-offset-1":
             isActive,
-        }
+        },
       )}
       id={id}
       onClick={onClick}

@@ -17,7 +17,7 @@ const DeleteButton = memo(() => {
   const id = useAppSelector(selectSelectedTab);
   const handleClick = useCallback(
     () => dispatch(handleChangeDeleteFolderOrRequestId(id!)),
-    [dispatch, id]
+    [dispatch, id],
   );
 
   if (!id) return null;

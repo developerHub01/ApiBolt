@@ -21,7 +21,7 @@ const RequestListItem = memo(
         <RequestListItemContent />
       </RequestListProvider>
     );
-  }
+  },
 );
 
 export default RequestListItem;

@@ -15,8 +15,8 @@ import { keyListStringify } from "@/utils/keyboard-shortcut.utils";
 
 const FullScreenToggle = () => {
   const { isFullscreen, toggleFullscreen } = useGlobal();
-  const shortcut = useAppSelector((state) =>
-    selectApplyingKeyboardShortcutsById(state, "toggle_fullscreen")
+  const shortcut = useAppSelector(state =>
+    selectApplyingKeyboardShortcutsById(state, "toggle_fullscreen"),
   );
 
   const shortCutString =

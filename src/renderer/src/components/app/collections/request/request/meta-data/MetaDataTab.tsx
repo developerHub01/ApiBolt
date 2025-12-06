@@ -46,41 +46,40 @@ const MetaDataTab = memo(() => {
   const dispatch = useAppDispatch();
   const activeTabList = useAppSelector(selectActiveMetaTabList);
   const activeMetaTab = useAppSelector(selectActiveMetaTab);
-  const params = useAppSelector((state) =>
+  const params = useAppSelector(state =>
     selectMetaData(state, {
       type: "params",
-    })
+    }),
   );
-  const hiddenParams = useAppSelector((state) =>
+  const hiddenParams = useAppSelector(state =>
     selectMetaData(state, {
       type: "hiddenParams",
-    })
+    }),
   );
-  const headers = useAppSelector((state) =>
+  const headers = useAppSelector(state =>
     selectMetaData(state, {
       type: "headers",
-    })
+    }),
   );
-  const hiddenHeaders = useAppSelector((state) =>
+  const hiddenHeaders = useAppSelector(state =>
     selectMetaData(state, {
       type: "hiddenHeaders",
-    })
+    }),
   );
 
   const tabListWithActivity = useMemo(() => {
     const hiddenParamsCount = hiddenParams?.length ?? 0;
-    const paramsCount = params?.filter((param) => param.isCheck)?.length ?? 0;
+    const paramsCount = params?.filter(param => param.isCheck)?.length ?? 0;
 
-    const headersCount =
-      headers?.filter((header) => header.isCheck)?.length ?? 0;
+    const headersCount = headers?.filter(header => header.isCheck)?.length ?? 0;
     const hiddenHeadersCount = hiddenHeaders?.length ?? 0;
 
     return tabList
-      .map((item) => ({
+      .map(item => ({
         ...item,
         isActive: Boolean(activeTabList[item.id]),
       }))
-      .map((item) => {
+      .map(item => {
         if (item.id === "params") {
           if (item.count && !params?.length) delete item.count;
           else if (item.count !== paramsCount) {
@@ -109,9 +108,9 @@ const MetaDataTab = memo(() => {
       dispatch(
         updateRequestMetaTab({
           activeMetaTab: tab,
-        })
+        }),
       ),
-    [dispatch]
+    [dispatch],
   );
 
   return (
@@ -119,13 +118,13 @@ const MetaDataTab = memo(() => {
       <SelectV1
         list={tabListWithActivity}
         value={activeMetaTab ?? "url"}
-        handleChange={(value) => handleChange(value as TActiveTabType)}
+        handleChange={value => handleChange(value as TActiveTabType)}
         className="block md:hidden"
       />
       <TabV1
         list={tabListWithActivity}
         activeTab={activeMetaTab ?? "url"}
-        handleSelect={(value) => handleChange(value as TActiveTabType)}
+        handleSelect={value => handleChange(value as TActiveTabType)}
         className="hidden md:flex select-none"
       />
     </>

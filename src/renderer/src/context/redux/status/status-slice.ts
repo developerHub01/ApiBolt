@@ -56,7 +56,7 @@ export const statusSlice = createSlice({
   reducers: {
     handleChangeIsCookiesError: (
       state,
-      action: PayloadAction<string | null | undefined>
+      action: PayloadAction<string | null | undefined>,
     ) => {
       state.isCookiesError = action.payload ?? null;
     },
@@ -65,7 +65,7 @@ export const statusSlice = createSlice({
       action: PayloadAction<{
         requestId: string;
         isLoading: boolean;
-      }>
+      }>,
     ) => {
       if (action.payload.isLoading)
         state.isFetchApiLoading[action.payload.requestId] = true;
@@ -73,20 +73,20 @@ export const statusSlice = createSlice({
     },
   },
 
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
       /**
        * =======================
        * Projects
        * =======================
        */
-      .addCase(loadProjectList.pending, (state) => {
+      .addCase(loadProjectList.pending, state => {
         state.isProjectLoading = true;
       })
-      .addCase(loadProjectList.fulfilled, (state) => {
+      .addCase(loadProjectList.fulfilled, state => {
         state.isProjectLoading = false;
       })
-      .addCase(loadProjectList.rejected, (state) => {
+      .addCase(loadProjectList.rejected, state => {
         state.isProjectLoading = false;
       })
 
@@ -95,13 +95,13 @@ export const statusSlice = createSlice({
        * Request-list
        * =======================
        */
-      .addCase(loadRequestList.pending, (state) => {
+      .addCase(loadRequestList.pending, state => {
         state.isRequestListLoading = true;
       })
-      .addCase(loadRequestList.fulfilled, (state) => {
+      .addCase(loadRequestList.fulfilled, state => {
         state.isRequestListLoading = false;
       })
-      .addCase(loadRequestList.rejected, (state) => {
+      .addCase(loadRequestList.rejected, state => {
         state.isRequestListLoading = false;
       })
 
@@ -110,13 +110,13 @@ export const statusSlice = createSlice({
        * sidebar active tab
        * =======================
        */
-      .addCase(loadActiveTab.pending, (state) => {
+      .addCase(loadActiveTab.pending, state => {
         state.isSidebarActiiveTabLoading = true;
       })
-      .addCase(loadActiveTab.fulfilled, (state) => {
+      .addCase(loadActiveTab.fulfilled, state => {
         state.isSidebarActiiveTabLoading = false;
       })
-      .addCase(loadActiveTab.rejected, (state) => {
+      .addCase(loadActiveTab.rejected, state => {
         state.isSidebarActiiveTabLoading = false;
       })
 
@@ -125,11 +125,11 @@ export const statusSlice = createSlice({
        * Cookies
        * =======================
        */
-      .addCase(loadCookies.pending, (state) => {
+      .addCase(loadCookies.pending, state => {
         state.isCookiesLoading = true;
         state.isCookiesError = null;
       })
-      .addCase(loadCookies.fulfilled, (state) => {
+      .addCase(loadCookies.fulfilled, state => {
         state.isCookiesLoading = false;
         state.isCookiesError = null;
       })
@@ -143,11 +143,11 @@ export const statusSlice = createSlice({
        * keyboard shortcut
        * =======================
        */
-      .addCase(loadKeyboardShortcuts.pending, (state) => {
+      .addCase(loadKeyboardShortcuts.pending, state => {
         state.isKeyboardShortcutLoading = true;
         state.isKeyboardShortcutError = null;
       })
-      .addCase(loadKeyboardShortcuts.fulfilled, (state) => {
+      .addCase(loadKeyboardShortcuts.fulfilled, state => {
         state.isKeyboardShortcutLoading = false;
         state.isKeyboardShortcutError = null;
       })
@@ -155,11 +155,11 @@ export const statusSlice = createSlice({
         state.isKeyboardShortcutLoading = false;
         state.isKeyboardShortcutError = action.error?.message ?? null;
       })
-      .addCase(updateKeyboardShortcuts.pending, (state) => {
+      .addCase(updateKeyboardShortcuts.pending, state => {
         state.isKeyboardShortcutLoading = true;
         state.isKeyboardShortcutError = null;
       })
-      .addCase(updateKeyboardShortcuts.fulfilled, (state) => {
+      .addCase(updateKeyboardShortcuts.fulfilled, state => {
         state.isKeyboardShortcutLoading = false;
         state.isKeyboardShortcutError = null;
       })
@@ -167,11 +167,11 @@ export const statusSlice = createSlice({
         state.isKeyboardShortcutLoading = false;
         state.isKeyboardShortcutError = action.error?.message ?? null;
       })
-      .addCase(resetKeyboardShortcuts.pending, (state) => {
+      .addCase(resetKeyboardShortcuts.pending, state => {
         state.isKeyboardShortcutLoading = true;
         state.isKeyboardShortcutError = null;
       })
-      .addCase(resetKeyboardShortcuts.fulfilled, (state) => {
+      .addCase(resetKeyboardShortcuts.fulfilled, state => {
         state.isKeyboardShortcutLoading = false;
         state.isKeyboardShortcutError = null;
       })
@@ -185,13 +185,13 @@ export const statusSlice = createSlice({
        * load history meta
        * =======================
        */
-      .addCase(loadRequestHistoryMeta.pending, (state) => {
+      .addCase(loadRequestHistoryMeta.pending, state => {
         state.isHistoryMetaLoading = true;
       })
-      .addCase(loadRequestHistoryMeta.fulfilled, (state) => {
+      .addCase(loadRequestHistoryMeta.fulfilled, state => {
         state.isHistoryMetaLoading = false;
       })
-      .addCase(loadRequestHistoryMeta.rejected, (state) => {
+      .addCase(loadRequestHistoryMeta.rejected, state => {
         state.isHistoryMetaLoading = false;
       })
 
@@ -200,13 +200,13 @@ export const statusSlice = createSlice({
        * load history details
        * =======================
        */
-      .addCase(loadRequestHistory.pending, (state) => {
+      .addCase(loadRequestHistory.pending, state => {
         state.isHistoryDetailsLoading = true;
       })
-      .addCase(loadRequestHistory.fulfilled, (state) => {
+      .addCase(loadRequestHistory.fulfilled, state => {
         state.isHistoryDetailsLoading = false;
       })
-      .addCase(loadRequestHistory.rejected, (state) => {
+      .addCase(loadRequestHistory.rejected, state => {
         state.isHistoryDetailsLoading = false;
       })
 
@@ -215,13 +215,13 @@ export const statusSlice = createSlice({
        * replace request by history
        * =======================
        */
-      .addCase(replaceCurrentByHistory.pending, (state) => {
+      .addCase(replaceCurrentByHistory.pending, state => {
         state.isHistoryReplacingLoading = true;
       })
-      .addCase(replaceCurrentByHistory.fulfilled, (state) => {
+      .addCase(replaceCurrentByHistory.fulfilled, state => {
         state.isHistoryReplacingLoading = false;
       })
-      .addCase(replaceCurrentByHistory.rejected, (state) => {
+      .addCase(replaceCurrentByHistory.rejected, state => {
         state.isHistoryReplacingLoading = false;
       })
 
@@ -230,13 +230,13 @@ export const statusSlice = createSlice({
        * theme editing palette
        * =======================
        */
-      .addCase(loadThemePalette.pending, (state) => {
+      .addCase(loadThemePalette.pending, state => {
         state.isThemeEditingPaletteLoading = true;
       })
-      .addCase(loadThemePalette.fulfilled, (state) => {
+      .addCase(loadThemePalette.fulfilled, state => {
         state.isThemeEditingPaletteLoading = false;
       })
-      .addCase(loadThemePalette.rejected, (state) => {
+      .addCase(loadThemePalette.rejected, state => {
         state.isThemeEditingPaletteLoading = false;
       });
 
@@ -245,13 +245,13 @@ export const statusSlice = createSlice({
      * load folder
      * =======================
      */
-    builder.addCase(loadFolder.pending, (state) => {
+    builder.addCase(loadFolder.pending, state => {
       state.isFolderLoading = true;
     });
-    builder.addCase(loadFolder.fulfilled, (state) => {
+    builder.addCase(loadFolder.fulfilled, state => {
       state.isFolderLoading = false;
     });
-    builder.addCase(loadFolder.rejected, (state) => {
+    builder.addCase(loadFolder.rejected, state => {
       state.isFolderLoading = false;
     });
   },

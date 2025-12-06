@@ -1,32 +1,32 @@
 import {
   RequestListItemInterface,
   RequestListItemMovePayloadInterface,
-  RequestListItemUpdatePayloadInterface
+  RequestListItemUpdatePayloadInterface,
 } from "@shared/types/request-response.types";
 
 export interface ElectronAPIRequestOrFolderMetaInterface {
   getRequestOrFolderMeta(): Promise<Record<string, RequestListItemInterface>>;
   getRequestOrFolderMetaById(
-    id: string
+    id: string,
   ): Promise<RequestListItemInterface | null>;
   createRequestOrFolderMeta(
-    payload: RequestListItemInterface | Array<RequestListItemInterface>
+    payload: RequestListItemInterface | Array<RequestListItemInterface>,
   ): Promise<boolean>;
   updateRequestOrFolderMeta(
-    payload: RequestListItemUpdatePayloadInterface
+    payload: RequestListItemUpdatePayloadInterface,
   ): Promise<boolean>;
   collapseAllRequestOrFolderMeta(projectId?: string | null): Promise<boolean>;
   moveRequestOrFolderMeta(
-    payload: RequestListItemMovePayloadInterface
+    payload: RequestListItemMovePayloadInterface,
   ): Promise<boolean>;
   deleteRequestOrFolderMetaById(id: string | Array<string>): Promise<boolean>;
   duplicateRequestOrFolderMeta(
-    payload: Array<Omit<RequestListItemInterface, "children" | "createdAt">>
+    payload: Array<Omit<RequestListItemInterface, "children" | "createdAt">>,
   ): Promise<boolean>;
   deleteRequestOrFolderMetaAll(): Promise<boolean>;
   deleteRequestOrFolderMetaByProjectId(id?: string): Promise<boolean>;
   expendOrCollapseRequestOrFolderMetaAll(
     id?: string | Array<string> | null,
-    isExpended?: boolean
+    isExpended?: boolean,
   ): Promise<boolean>;
 }

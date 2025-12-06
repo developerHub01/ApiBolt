@@ -27,7 +27,7 @@ export const getApiUrlDB: ElectronAPIApiUrlInterface["getApiUrlDB"] =
   };
 
 export const createApiUrl: ElectronAPIApiUrlInterface["createApiUrl"] = async (
-  payload = {}
+  payload = {},
 ) => {
   try {
     const tabId = (await getTabList())?.selectedTab;
@@ -35,7 +35,7 @@ export const createApiUrl: ElectronAPIApiUrlInterface["createApiUrl"] = async (
 
     const result = await db.insert(apiUrlTable).values({
       ...payload,
-      requestOrFolderMetaId: tabId
+      requestOrFolderMetaId: tabId,
     });
     return result.rowsAffected > 0;
   } catch (error) {
@@ -71,8 +71,8 @@ export const duplicateApiUrl: ElectronAPIApiUrlInterface["duplicateApiUrl"] =
         const duplicatePayload = existingUrlData.map(
           ({ url, requestOrFolderMetaId }) => ({
             requestOrFolderMetaId: payload[requestOrFolderMetaId],
-            url
-          })
+            url,
+          }),
         );
 
         return (
@@ -106,7 +106,7 @@ export const updateApiUrl: ElectronAPIApiUrlInterface["updateApiUrl"] =
         if (!isExist) {
           await tsx.insert(apiUrlTable).values({
             ...payload,
-            requestOrFolderMetaId: tabId
+            requestOrFolderMetaId: tabId,
           });
           return true;
         }
@@ -114,7 +114,7 @@ export const updateApiUrl: ElectronAPIApiUrlInterface["updateApiUrl"] =
         await tsx
           .update(apiUrlTable)
           .set({
-            ...payload
+            ...payload,
           })
           .where(eq(apiUrlTable.requestOrFolderMetaId, tabId));
         return true;
@@ -126,7 +126,7 @@ export const updateApiUrl: ElectronAPIApiUrlInterface["updateApiUrl"] =
   };
 
 export const deleteApiUrlByRequestMetaId = async (
-  requestOrFolderMetaId: string
+  requestOrFolderMetaId: string,
 ) => {
   try {
     await db

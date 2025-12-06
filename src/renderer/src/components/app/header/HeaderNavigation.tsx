@@ -17,7 +17,7 @@ const HeaderNavigation = memo(() => {
   const canGoBack = useMemo(() => location.key !== "default", [location.key]);
   const canGoForward = useMemo(
     () => window.history.state?.idx < window.history.length - 1,
-    []
+    [],
   );
 
   return (

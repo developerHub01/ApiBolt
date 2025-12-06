@@ -25,7 +25,7 @@ const SettingBackgroundImage = memo(
             "border-accent/50 opacity-50 blur-in-sm before:absolute before:top-1/2 before:left-1/2 before:-translate-1/2 before:w-full before:h-full before:bg-gray-900/80 before:mix-blend-multiply before:rounded-lg before:scale-105 before:pointer-events-none":
               disabled,
             "border-primary": isActive,
-          }
+          },
         )}
         whileHover={{ scale: 0.95 }}
         whileTap={{ scale: 0.85 }}
@@ -35,11 +35,11 @@ const SettingBackgroundImage = memo(
           alt=""
           loading="lazy"
           className="w-full h-full object-cover blur-sm pointer-events-none"
-          onLoad={(e) => e.currentTarget.classList.remove("blur-sm")}
+          onLoad={e => e.currentTarget.classList.remove("blur-sm")}
         />
       </motion.div>
     );
-  }
+  },
 );
 
 export default SettingBackgroundImage;

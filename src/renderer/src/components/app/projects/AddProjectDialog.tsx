@@ -61,7 +61,7 @@ const AddProjectDialog = memo(() => {
         handleCreate();
       }
     },
-    [handleCreate]
+    [handleCreate],
   );
   const handleClose = useCallback(() => {
     handleChangeIsCreateDialogOpen(false);

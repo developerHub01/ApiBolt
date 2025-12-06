@@ -3,18 +3,18 @@ import { Button } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
-  TooltipTrigger
+  TooltipTrigger,
 } from "@/components/ui/tooltip-custom";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { Link } from "react-router-dom";
 import { changeActiveTab } from "@/context/redux/sidebar/thunks/sidebar";
 import {
   HIDDEN_TABS_WHEN_NOT_PROJECT_SELECTED,
-  SIDEBAR_MENU_LIST
+  SIDEBAR_MENU_LIST,
 } from "@/constant/sidebar.constant";
 import type {
   SidebarMenuItemInterface,
-  TSidebarTab
+  TSidebarTab,
 } from "@shared/types/sidebar.types";
 import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
 import { selectSidebarActiveTab } from "@/context/redux/sidebar/selectors/sidebar";
@@ -36,7 +36,7 @@ const SidebarMenu = memo(() => {
         ...item,
         label: binding
           ? `${item.label} (${keyListStringify(binding)})`
-          : item.label
+          : item.label,
       };
     });
   }, [shortcuts]);
@@ -49,7 +49,7 @@ const SidebarMenu = memo(() => {
       }
       await dispatch(changeActiveTab(id));
     },
-    [activeTab, dispatch]
+    [activeTab, dispatch],
   );
   const activeProjectId = useAppSelector(selectActiveProjectId);
 

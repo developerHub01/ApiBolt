@@ -11,12 +11,12 @@ const RequestList = memo(() => {
   const rootList = useMemo(
     () =>
       Object.values(requestList)
-        .filter((item) => !item.parentId)
+        .filter(item => !item.parentId)
         .sort(
           (a, b) =>
-            new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime()
+            new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime(),
         ),
-    [requestList]
+    [requestList],
   );
 
   return (

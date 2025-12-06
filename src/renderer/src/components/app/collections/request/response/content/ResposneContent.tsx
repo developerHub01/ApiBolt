@@ -2,15 +2,15 @@ import { memo, lazy, Suspense } from "react";
 import { useResponse } from "@/context/collections/request/ResponseProvider";
 const Body = lazy(
   () =>
-    import("@/components/app/collections/request/response/content/body/Body")
+    import("@/components/app/collections/request/response/content/body/Body"),
 );
 const Cookies = lazy(
   () =>
-    import("@/components/app/collections/request/response/content/cookies/Cookies")
+    import("@/components/app/collections/request/response/content/cookies/Cookies"),
 );
 const Headers = lazy(
   () =>
-    import("@/components/app/collections/request/response/content/headers/Headers")
+    import("@/components/app/collections/request/response/content/headers/Headers"),
 );
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectResponse } from "@/context/redux/request-response/selectors/response";

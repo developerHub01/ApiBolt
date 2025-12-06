@@ -3,7 +3,10 @@ import { Outlet, useParams } from "react-router-dom";
 import RequestResponseProvider from "@/context/collections/request/RequestResponseProvider";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { loadParams } from "@/context/redux/request-response/thunks/params";
-import { loadHeaders, loadHiddenHeaders } from "@/context/redux/request-response/thunks/headers";
+import {
+  loadHeaders,
+  loadHiddenHeaders,
+} from "@/context/redux/request-response/thunks/headers";
 import { loadRequestBodyRaw } from "@/context/redux/request-response/thunks/body-raw";
 import { loadRequestBodyBinary } from "@/context/redux/request-response/thunks/body-binary";
 import { loadRequestMetaTab } from "@/context/redux/request-response/thunks/request-meta-tab";
@@ -19,8 +22,8 @@ import RequestOrFolderNotFound from "@/components/app/collections/RequestOrFolde
 const RequestLayout = () => {
   const dispatch = useAppDispatch();
   const { id: requestOrFolderId } = useParams<{ id?: string }>();
-  const isExist = useAppSelector((state) =>
-    selectIsRequestOrFolderExist(state, requestOrFolderId)
+  const isExist = useAppSelector(state =>
+    selectIsRequestOrFolderExist(state, requestOrFolderId),
   );
 
   useEffect(() => {
@@ -42,7 +45,7 @@ const RequestLayout = () => {
       loadRequestBodyRaw,
       loadRequestBodyBinary,
       loadApiUrl,
-    ].forEach((action) => dispatch(action(payload)));
+    ].forEach(action => dispatch(action(payload)));
   }, [dispatch, isExist, requestOrFolderId]);
 
   if (!isExist) return <RequestOrFolderNotFound type="request" />;

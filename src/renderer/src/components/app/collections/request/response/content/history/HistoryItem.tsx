@@ -77,7 +77,7 @@ const HistoryItem = memo(({ id, method, createdAt, responseStatus }: Props) => {
             animate={{ opacity: 1, scale: 1, width: "auto" }}
             exit={{ opacity: 0, scale: 0.5, width: "0" }}
             transition={{ duration: 0.2 }}
-            onClick={(e) => e.stopPropagation()}
+            onClick={e => e.stopPropagation()}
           >
             <Button
               variant={"destructive"}

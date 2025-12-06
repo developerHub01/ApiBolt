@@ -2,18 +2,18 @@ import { ElectronResponseInterface } from "@shared/types";
 
 export interface ElectronAPIRequestInterface {
   clearRequest(
-    requestOrFolderMetaId?: string
+    requestOrFolderMetaId?: string,
   ): Promise<ElectronResponseInterface>;
   exportRequest(
-    requestOrFolderMetaId?: string
+    requestOrFolderMetaId?: string,
   ): Promise<ElectronResponseInterface>;
   importRequest(
-    requestOrFolderMetaId?: string
+    requestOrFolderMetaId?: string,
   ): Promise<ElectronResponseInterface>;
   exportFolder(
-    requestOrFolderMetaId?: string
+    requestOrFolderMetaId?: string,
   ): Promise<ElectronResponseInterface>;
   importFolder(
-    requestOrFolderMetaId?: string | null
+    requestOrFolderMetaId?: string | null,
   ): Promise<ElectronResponseInterface>;
 }

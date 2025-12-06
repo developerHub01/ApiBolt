@@ -15,9 +15,9 @@ export const jsonWebTokenHandlers = () => {
         generateJWT({
           payload,
           secret,
-          algorithm
-        })
+          algorithm,
+        }),
       );
-    }
+    },
   );
 };

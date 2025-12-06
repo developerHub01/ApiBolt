@@ -12,7 +12,7 @@ const BodyTopLeft = () => {
   if (!response) return null;
 
   const responseType = getResponseType(
-    String(response?.headers?.["content-type"] ?? "")
+    String(response?.headers?.["content-type"] ?? ""),
   );
 
   return (

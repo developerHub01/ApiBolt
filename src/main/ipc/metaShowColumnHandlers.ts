@@ -4,7 +4,7 @@ import {
   deleteMetaShowColumn,
   duplicateMetaShowColumn,
   getMetaShowColumn,
-  updateMetaShowColumn
+  updateMetaShowColumn,
 } from "@/main/db/metaShowColumnDB.js";
 import { ElectronAPIMetaShowColumnInterface } from "@shared/types/api/electron-meta-show-column";
 
@@ -17,7 +17,7 @@ export const metaShowColumnHandlers = () => {
         ElectronAPIMetaShowColumnInterface["getMetaShowColumn"]
       >
     ): ReturnType<ElectronAPIMetaShowColumnInterface["getMetaShowColumn"]> =>
-      await getMetaShowColumn(...rest)
+      await getMetaShowColumn(...rest),
   );
   ipcMain.handle(
     "createMetaShowColumn",
@@ -27,7 +27,7 @@ export const metaShowColumnHandlers = () => {
         ElectronAPIMetaShowColumnInterface["createMetaShowColumn"]
       >
     ): ReturnType<ElectronAPIMetaShowColumnInterface["createMetaShowColumn"]> =>
-      await createMetaShowColumn(...rest)
+      await createMetaShowColumn(...rest),
   );
   ipcMain.handle(
     "updateMetaShowColumn",
@@ -37,7 +37,7 @@ export const metaShowColumnHandlers = () => {
         ElectronAPIMetaShowColumnInterface["updateMetaShowColumn"]
       >
     ): ReturnType<ElectronAPIMetaShowColumnInterface["updateMetaShowColumn"]> =>
-      await updateMetaShowColumn(...rest)
+      await updateMetaShowColumn(...rest),
   );
   ipcMain.handle(
     "deleteMetaShowColumn",
@@ -47,7 +47,7 @@ export const metaShowColumnHandlers = () => {
         ElectronAPIMetaShowColumnInterface["deleteMetaShowColumn"]
       >
     ): ReturnType<ElectronAPIMetaShowColumnInterface["deleteMetaShowColumn"]> =>
-      await deleteMetaShowColumn(...rest)
+      await deleteMetaShowColumn(...rest),
   );
   ipcMain.handle(
     "duplicateMetaShowColumn",
@@ -58,6 +58,6 @@ export const metaShowColumnHandlers = () => {
       >
     ): ReturnType<
       ElectronAPIMetaShowColumnInterface["duplicateMetaShowColumn"]
-    > => await duplicateMetaShowColumn(...rest)
+    > => await duplicateMetaShowColumn(...rest),
   );
 };

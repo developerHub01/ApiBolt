@@ -6,11 +6,11 @@ import {
 } from "@/components/ui/resizable";
 const DescriptionEditor = lazy(
   () =>
-    import("@/components/app/collections/folder/description/DescriptionEditor")
+    import("@/components/app/collections/folder/description/DescriptionEditor"),
 );
 const DescriptionPreview = lazy(
   () =>
-    import("@/components/app/collections/folder/description/DescriptionPreview")
+    import("@/components/app/collections/folder/description/DescriptionPreview"),
 );
 import DescriptionWrapper from "@/components/app/collections/folder/description/DescriptionWrapper";
 import FolderEditorFallback from "@/fallback/collection/folder/FolderEditorFallback";

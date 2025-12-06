@@ -10,7 +10,7 @@ const BulkEditButton = memo(() => {
 
   const handleToggleBulkEdit = useCallback(
     () => dispatch(handleToggleMetaBulkEditOpen()),
-    [dispatch]
+    [dispatch],
   );
 
   return (

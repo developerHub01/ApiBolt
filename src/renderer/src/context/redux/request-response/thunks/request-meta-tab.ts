@@ -3,7 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import {
   handleLoadReqestMetaTab,
-  handleUpdateReqestMetaTab
+  handleUpdateReqestMetaTab,
 } from "@/context/redux/request-response/request-response-slice";
 
 /* ==============================
@@ -31,7 +31,7 @@ export const loadRequestMetaTab = createAsyncThunk<
         !selectedTab ||
         ([
           state.requestResponse.activeMetaTab[selectedTab],
-          state.requestResponse.requestBodyType[selectedTab]
+          state.requestResponse.requestBodyType[selectedTab],
         ].every(data => typeof data !== "undefined") &&
           once)
       )
@@ -44,7 +44,7 @@ export const loadRequestMetaTab = createAsyncThunk<
     } catch (error) {
       console.error(error);
     }
-  }
+  },
 );
 
 export const updateRequestMetaTab = createAsyncThunk<
@@ -62,8 +62,8 @@ export const updateRequestMetaTab = createAsyncThunk<
     if (response)
       dispatch(
         handleUpdateReqestMetaTab({
-          ...payload
-        })
+          ...payload,
+        }),
       );
     return;
   } catch (error) {
@@ -82,7 +82,7 @@ export const duplicateRequestMetaTabByOldNewIds = createAsyncThunk<
   try {
     const response =
       await window.electronAPIRequestMetaTab.duplicateRequestMetaTab(
-        oldNewIdMap
+        oldNewIdMap,
       );
 
     return response;

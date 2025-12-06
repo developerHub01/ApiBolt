@@ -17,7 +17,7 @@ const ThemeEditorWrapper = memo(({ children }: Props) => {
         "flex-1 min-h-0 h-full overflow-hidden [&>div>div]:h-full w-full border rounded-lg p-3 relative bg-background",
         {
           "border-destructive": haveError,
-        }
+        },
       )}
     >
       {children}

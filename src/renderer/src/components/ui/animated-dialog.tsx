@@ -34,7 +34,7 @@ const AnimatedDialog = memo(
             id="setting"
             className={cn(
               "absolute top-0 left-0 w-full h-full flex justify-center items-center p-10 z-50 overflow-hidden focus:outline-0",
-              className
+              className,
             )}
             onClick={onClose}
             {...props}
@@ -44,23 +44,23 @@ const AnimatedDialog = memo(
             <motion.div
               className={cn(
                 "absolute top-0 left-0 w-full h-full bg-background/15 backdrop-blur-sm z-0",
-                overlayClassName
+                overlayClassName,
               )}
               initial={{
-                opacity: 0
+                opacity: 0,
               }}
               animate={{
-                opacity: 1
+                opacity: 1,
               }}
               exit={{
                 opacity: 0,
                 transition: {
-                  delay: 0.5
-                }
+                  delay: 0.5,
+                },
               }}
               transition={{
                 duration: 0.2,
-                ease: "linear"
+                ease: "linear",
               }}
             ></motion.div>
             {children}
@@ -68,7 +68,7 @@ const AnimatedDialog = memo(
         )}
       </AnimatePresence>
     );
-  }
+  },
 );
 
 interface AnimatedDialogContentWrapperProps {
@@ -87,38 +87,38 @@ const AnimatedDialogContentWrapper = memo(
         className={cn(
           "relative z-1 w-full h-full max-w-2xl backdrop-blur-lg rounded-lg flex flex-col overflow-hidden shadow-2xl",
           "border bg-background/70",
-          className
+          className,
         )}
         onClick={e => e.stopPropagation()}
         initial={{
           y: 50,
           scale: 0.8,
-          opacity: 0
+          opacity: 0,
         }}
         animate={{
           y: 0,
           scale: 1,
           opacity: 1,
           transition: {
-            delay: 0.2
-          }
+            delay: 0.2,
+          },
         }}
         exit={{
           y: -20,
           scale: 0.95,
-          opacity: 0
+          opacity: 0,
         }}
         transition={{
           duration: 0.3,
           type: "spring",
-          ease: "anticipate"
+          ease: "anticipate",
         }}
         {...props}
       >
         {children}
       </motion.section>
     );
-  }
+  },
 );
 
 interface AnimatedDialogTopProps {
@@ -137,7 +137,7 @@ const AnimatedDialogTop = memo(
         {children}
       </div>
     );
-  }
+  },
 );
 
 interface AnimatedDialogContentProps {
@@ -160,7 +160,7 @@ const AnimatedDialogContent = memo(
         {children}
       </div>
     );
-  }
+  },
 );
 const AnimatedDialogContentScroll = memo(
   ({
@@ -173,14 +173,14 @@ const AnimatedDialogContentScroll = memo(
       <ScrollArea
         className={cn(
           "w-full flex-1 min-h-0 px-3 py-2 [&>div>div]:h-full",
-          className
+          className,
         )}
         {...props}
       >
         {children}
       </ScrollArea>
     );
-  }
+  },
 );
 
 const AnimatedDialogBottom = memo(
@@ -193,14 +193,14 @@ const AnimatedDialogBottom = memo(
       <div
         className={cn(
           "border-t-2 p-3 flex justify-center items-center",
-          className
+          className,
         )}
         {...props}
       >
         {children}
       </div>
     );
-  }
+  },
 );
 
 interface AnimatedDialogLoaderProps {
@@ -210,12 +210,12 @@ interface AnimatedDialogLoaderProps {
 const AnimatedDialogLoader = memo(
   ({
     isLoading = false,
-    className = ""
+    className = "",
   }: AnimatedDialogLoaderProps & HTMLMotionProps<"div">) => {
     return (
       <LoaderV1 key="loader" isLoading={isLoading} className={className} />
     );
-  }
+  },
 );
 
 export {
@@ -225,5 +225,5 @@ export {
   AnimatedDialogContent,
   AnimatedDialogContentScroll,
   AnimatedDialogBottom,
-  AnimatedDialogLoader
+  AnimatedDialogLoader,
 };

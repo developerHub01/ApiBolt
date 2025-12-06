@@ -29,7 +29,7 @@ export const useRequestFolder = () => {
 
   if (!context) {
     throw new Error(
-      "useRequestFolder must be used within a RequestFolderProvider."
+      "useRequestFolder must be used within a RequestFolderProvider.",
     );
   }
 
@@ -55,7 +55,7 @@ const RequestFolderProvider = ({ children }: RequestFolderProviderProps) => {
 
   const handleChangeDescription = useCallback(
     (value: string) => setFolderDescription(value),
-    []
+    [],
   );
 
   const handleBlurDescription = useCallback(
@@ -63,14 +63,14 @@ const RequestFolderProvider = ({ children }: RequestFolderProviderProps) => {
       dispatch(
         updateFolder({
           description: folderDescription ?? "",
-        })
+        }),
       ),
-    [dispatch, folderDescription]
+    [dispatch, folderDescription],
   );
 
   const handleLineWrap = useCallback(
     () => dispatch(handleToggleFolderDescriptionLineWrap()),
-    [dispatch]
+    [dispatch],
   );
 
   if (!id) return null;

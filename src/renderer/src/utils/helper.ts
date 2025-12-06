@@ -1,8 +1,8 @@
 export const areSamePayload = (
   payload: Record<string, unknown>,
-  existingPayload: Record<string, unknown>
+  existingPayload: Record<string, unknown>,
 ) =>
-  Object.keys(payload).every((key) => {
+  Object.keys(payload).every(key => {
     return payload[key] === existingPayload[key];
   });
 
@@ -23,7 +23,7 @@ export const toCapitalizeFirst = (str: string) =>
 export const toCapitalize = (str: string) =>
   str
     .split(" ")
-    .map((item) => item[0].toUpperCase() + item.slice(1))
+    .map(item => item[0].toUpperCase() + item.slice(1))
     .join(" ");
 
 export const isValidJson = (str: string): boolean => {

@@ -7,13 +7,13 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAppDispatch } from "@/context/redux/hooks";
 import {
   createCollection,
   createRestApiBasic,
-  createSingleRequest
+  createSingleRequest,
 } from "@/context/redux/request-response/thunks/request-list";
 import { importRequest } from "@/context/redux/request-response/thunks/request";
 import useCustomToast from "@/hooks/ui/use-custom-toast";
@@ -34,23 +34,23 @@ const actionsList: Record<
   add: [
     {
       id: "blank_collection",
-      label: "Blank Collection"
+      label: "Blank Collection",
     },
     {
       id: "single_request",
-      label: "Single Request"
+      label: "Single Request",
     },
     {
       id: "rest_api_basics",
-      label: "REST API Basics"
-    }
+      label: "REST API Basics",
+    },
   ],
   import: [
     {
       id: "import_folder",
-      label: "Import Request Folder"
-    }
-  ]
+      label: "Import Request Folder",
+    },
+  ],
 };
 
 const AddAction = memo(() => {
@@ -67,7 +67,7 @@ const AddAction = memo(() => {
             title: response ? "Add success" : "Add error",
             description: response
               ? "Request added successfully"
-              : "Couldn't add request, something went wrong."
+              : "Couldn't add request, something went wrong.",
           });
         }
         case "blank_collection": {
@@ -77,7 +77,7 @@ const AddAction = memo(() => {
             title: response ? "Add success" : "Add error",
             description: response
               ? "Request collection added successfully"
-              : "Couldn't add request, collection something went wrong."
+              : "Couldn't add request, collection something went wrong.",
           });
         }
         case "rest_api_basics": {
@@ -87,7 +87,7 @@ const AddAction = memo(() => {
             title: response ? "Add success" : "Add error",
             description: response
               ? "Request folder added successfully"
-              : "Couldn't add request folder, something went wrong."
+              : "Couldn't add request folder, something went wrong.",
           });
         }
         case "import_folder": {
@@ -95,13 +95,13 @@ const AddAction = memo(() => {
           toast({
             type: success ? "success" : "error",
             title: success ? "Import success" : "Import error",
-            description: message
+            description: message,
           });
           return;
         }
       }
     },
-    [dispatch, toast]
+    [dispatch, toast],
   );
 
   return (

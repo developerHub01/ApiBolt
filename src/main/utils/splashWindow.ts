@@ -20,8 +20,8 @@ export const createSplashWindow = () => {
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true,
-      spellcheck: false
-    }
+      spellcheck: false,
+    },
   });
 
   win.webContents.setWindowOpenHandler(details => {

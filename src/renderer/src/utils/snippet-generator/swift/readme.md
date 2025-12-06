@@ -124,7 +124,7 @@ request.addValue("Basic Og==", forHTTPHeaderField: "Authorization")
 request.httpMethod = "GET"
 request.httpBody = postData
 
-let task = URLSession.shared.dataTask(with: request) { data, response, error in 
+let task = URLSession.shared.dataTask(with: request) { data, response, error in
   guard let data = data else {
     print(String(describing: error))
     return
@@ -148,7 +148,7 @@ request.addValue("Basic Og==", forHTTPHeaderField: "Authorization")
 request.httpMethod = "GET"
 request.httpBody = postData
 
-let task = URLSession.shared.dataTask(with: request) { data, response, error in 
+let task = URLSession.shared.dataTask(with: request) { data, response, error in
   guard let data = data else {
     print(String(describing: error))
     return
@@ -173,7 +173,7 @@ request.addValue("Basic Og==", forHTTPHeaderField: "Authorization")
 request.httpMethod = "GET"
 request.httpBody = postData
 
-let task = URLSession.shared.dataTask(with: request) { data, response, error in 
+let task = URLSession.shared.dataTask(with: request) { data, response, error in
   guard let data = data else {
     print(String(describing: error))
     return

@@ -8,11 +8,10 @@ import {
   getRequestType,
 } from "@/utils/request-response.utils";
 
-interface RequestListItemContext
-  extends Pick<
-    RequestListItemInterface,
-    "id" | "name" | "method" | "parentId" | "isExpended" | "children"
-  > {
+interface RequestListItemContext extends Pick<
+  RequestListItemInterface,
+  "id" | "name" | "method" | "parentId" | "isExpended" | "children"
+> {
   type: TRequestListItemType;
   isContextMenuOpen: boolean;
   isRenameActive: boolean;
@@ -25,7 +24,7 @@ interface RequestListItemContext
 }
 
 const RequestListItemContext = createContext<RequestListItemContext | null>(
-  null
+  null,
 );
 
 export const useRequestListItem = () => {
@@ -33,7 +32,7 @@ export const useRequestListItem = () => {
 
   if (!context) {
     throw new Error(
-      "useRequestListItem must be used within a RequestListItemProvider."
+      "useRequestListItem must be used within a RequestListItemProvider.",
     );
   }
 
@@ -58,7 +57,7 @@ const RequestListItemProvider = ({
   const dispatch = useAppDispatch();
 
   const requestDetails = useAppSelector(
-    (state) => state.requestResponse.requestList[id]
+    state => state.requestResponse.requestList[id],
   );
 
   /* if have children then as usual but if not and not have method means folder so add and empty children else children will be undefined means acutally it is a request*/
@@ -70,8 +69,8 @@ const RequestListItemProvider = ({
 
   const handleToggleContextMenu = useCallback(
     (value?: boolean) =>
-      setIsContextMenuOpen((prev) => (value === undefined ? !prev : value)),
-    []
+      setIsContextMenuOpen(prev => (value === undefined ? !prev : value)),
+    [],
   );
 
   const handleRenameAction = useCallback(() => {
@@ -83,7 +82,7 @@ const RequestListItemProvider = ({
       setIsRenameActive(false);
       dispatch(updateRequestOrFolder({ id, name }));
     },
-    [dispatch]
+    [dispatch],
   );
 
   if (!requestDetails) return null;

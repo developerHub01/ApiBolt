@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 const kbdBaseClasses = cn(
   "pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-md px-1 font-sans text-xs font-medium select-none",
   "[&_svg:not([class*='size-'])]:size-3",
-  "[[data-slot=tooltip-content]_&]:bg-background/20 [[data-slot=tooltip-content]_&]:text-background dark:[[data-slot=tooltip-content]_&]:bg-background/10"
+  "[[data-slot=tooltip-content]_&]:bg-background/20 [[data-slot=tooltip-content]_&]:text-background dark:[[data-slot=tooltip-content]_&]:bg-background/10",
 );
 
 const kbdVariants = cva(kbdBaseClasses, {
@@ -27,12 +27,12 @@ const kbdVariants = cva(kbdBaseClasses, {
         "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
       transparent:
         "hover:bg-transparent hover:text-accent-foreground dark:hover:bg-transparent",
-      link: "text-primary underline-offset-4 hover:underline"
-    }
+      link: "text-primary underline-offset-4 hover:underline",
+    },
   },
   defaultVariants: {
-    variant: "default"
-  }
+    variant: "default",
+  },
 });
 
 function Kbd({

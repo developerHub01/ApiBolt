@@ -33,7 +33,7 @@ const TabSearchBar = memo(() => {
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value),
-    []
+    [],
   );
 
   const handleClear = useCallback(() => {
@@ -78,7 +78,7 @@ const TabSearchBar = memo(() => {
               "pointer-events-none opacity-0 duration-75 ease-in-out transition-all",
               {
                 "pointer-events-auto opacity-100": searchTerm,
-              }
+              },
             )}
             variant={"ghost"}
             onClick={handleClear}

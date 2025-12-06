@@ -24,7 +24,7 @@ const Authorization = memo(() => {
     if (authorization?.inheritedId) return INHERIT_AUTH.label;
 
     return (
-      AUTH_LIST.find((item) => item.id === authorization?.type) ?? INHERIT_AUTH
+      AUTH_LIST.find(item => item.id === authorization?.type) ?? INHERIT_AUTH
     ).label;
   }, [authorization?.inheritedId, authorization?.type]);
 

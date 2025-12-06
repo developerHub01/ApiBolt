@@ -78,7 +78,7 @@ export const createParams: ElectronAPIParamsInterface["createParams"] =
 
       const result = await db.insert(paramsTable).values({
         ...payload,
-        requestOrFolderMetaId
+        requestOrFolderMetaId,
       });
       return result.rowsAffected > 0;
     } catch (error) {
@@ -89,7 +89,7 @@ export const createParams: ElectronAPIParamsInterface["createParams"] =
 
 export const updateParams: ElectronAPIParamsInterface["updateParams"] = async (
   paramId,
-  payload
+  payload,
 ) => {
   try {
     if (!payload) return false;
@@ -100,7 +100,7 @@ export const updateParams: ElectronAPIParamsInterface["updateParams"] = async (
 
     if (!isExist)
       await createParams({
-        id: paramId
+        id: paramId,
       });
 
     if (typeof payload === "object" && !Object.keys(payload).length)
@@ -112,7 +112,7 @@ export const updateParams: ElectronAPIParamsInterface["updateParams"] = async (
           .update(paramsTable)
           .set({
             ...payload,
-            requestOrFolderMetaId: payload.requestOrFolderMetaId ?? undefined
+            requestOrFolderMetaId: payload.requestOrFolderMetaId ?? undefined,
           })
           .where(eq(paramsTable.id, paramId))
       )?.rowsAffected > 0
@@ -134,7 +134,7 @@ export const replaceParams: ElectronAPIParamsInterface["replaceParams"] =
             param["requestOrFolderMetaId"] ?? requestOrFolderMetaId,
           value: Array.isArray(param.value)
             ? JSON.stringify(param.value)
-            : param.value
+            : param.value,
         };
       });
       return await db.transaction(async tsx => {
@@ -167,7 +167,7 @@ export const checkAllParamsByRequestMetaId: ElectronAPIParamsInterface["checkAll
           .select()
           .from(paramsTable)
           .where(
-            eq(paramsTable.requestOrFolderMetaId, requestOrFolderMetaId)
+            eq(paramsTable.requestOrFolderMetaId, requestOrFolderMetaId),
           )) ?? [];
       if (rows.length === 0) return false;
 
@@ -178,7 +178,7 @@ export const checkAllParamsByRequestMetaId: ElectronAPIParamsInterface["checkAll
           await db
             .update(paramsTable)
             .set({
-              isCheck: checkValue
+              isCheck: checkValue,
             })
             .where(eq(paramsTable.requestOrFolderMetaId, requestOrFolderMetaId))
         )?.rowsAffected > 0
@@ -216,7 +216,7 @@ export const duplicateParams: ElectronAPIParamsInterface["duplicateParams"] =
         const { id, createdAt, ...rest } = param;
         return {
           ...rest,
-          requestOrFolderMetaId: payload[param.requestOrFolderMetaId]
+          requestOrFolderMetaId: payload[param.requestOrFolderMetaId],
         };
       });
 

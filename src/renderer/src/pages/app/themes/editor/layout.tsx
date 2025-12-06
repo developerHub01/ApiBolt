@@ -9,7 +9,7 @@ const ThemeEditorLayout = () => {
     dispatch(
       loadThemePalette({
         once: true,
-      })
+      }),
     );
   }, [dispatch]);
 

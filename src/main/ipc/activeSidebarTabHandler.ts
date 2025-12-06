@@ -3,7 +3,7 @@ import {
   createActiveSidebarTab,
   deleteActiveSidebarTab,
   getActiveSidebarTab,
-  updateActiveSidebarTab
+  updateActiveSidebarTab,
 } from "@/main/db/activeSidebarTabDB.js";
 import { ElectronAPIActiveSidebarTabInterface } from "@shared/types/api/electron-api-active-sidebar-tab";
 
@@ -17,7 +17,7 @@ export const activeSidebarTabHandler = () => {
       >
     ): ReturnType<
       ElectronAPIActiveSidebarTabInterface["getActiveSidebarTab"]
-    > => await getActiveSidebarTab(...rest)
+    > => await getActiveSidebarTab(...rest),
   );
   ipcMain.handle(
     "createActiveSidebarTab",
@@ -28,7 +28,7 @@ export const activeSidebarTabHandler = () => {
       >
     ): ReturnType<
       ElectronAPIActiveSidebarTabInterface["createActiveSidebarTab"]
-    > => await createActiveSidebarTab(...rest)
+    > => await createActiveSidebarTab(...rest),
   );
   ipcMain.handle(
     "updateActiveSidebarTab",
@@ -39,7 +39,7 @@ export const activeSidebarTabHandler = () => {
       >
     ): ReturnType<
       ElectronAPIActiveSidebarTabInterface["updateActiveSidebarTab"]
-    > => await updateActiveSidebarTab(...rest)
+    > => await updateActiveSidebarTab(...rest),
   );
   ipcMain.handle(
     "deleteActiveSidebarTab",
@@ -50,6 +50,6 @@ export const activeSidebarTabHandler = () => {
       >
     ): ReturnType<
       ElectronAPIActiveSidebarTabInterface["deleteActiveSidebarTab"]
-    > => await deleteActiveSidebarTab(...rest)
+    > => await deleteActiveSidebarTab(...rest),
   );
 };

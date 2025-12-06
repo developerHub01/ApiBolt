@@ -1,15 +1,15 @@
 import { requestDefaultCodeSnippit } from "@/constant/code-snippit.constant";
 import type {
   CodeSnippitDataInterface,
-  TRequestCodeType
+  TRequestCodeType,
 } from "@shared/types/code-snippit.types";
 import {
   defaultBinaryData,
-  generateMaskedAndRealCode
+  generateMaskedAndRealCode,
 } from "@/utils/snippet-generator/helper.utils";
 import {
   generateHeadersString,
-  generateRawDataString
+  generateRawDataString,
 } from "@/utils/snippet-generator/python/helper.utils";
 
 export const generatePythonRequestsCode = async ({
@@ -22,7 +22,7 @@ export const generatePythonRequestsCode = async ({
   rawBodyDataType,
   bodyType,
   binaryData,
-  rawData
+  rawData,
 }: CodeSnippitDataInterface) => {
   const importString = `import requests\n\n`;
   const urlString = `url = "${url}"\n\n`;
@@ -33,7 +33,7 @@ export const generatePythonRequestsCode = async ({
     authorization,
     rawBodyDataType,
     bodyType,
-    method
+    method,
   });
 
   /* ============== FORM-DATA =================== */
@@ -60,7 +60,7 @@ ${formData
   .filter(entry => entry.type === "file")
   .map(
     ({ key, value }) =>
-      `\t(${JSON.stringify(key)}, open(${JSON.stringify(value)}, "rb"))`
+      `\t(${JSON.stringify(key)}, open(${JSON.stringify(value)}, "rb"))`,
   )
   .join(",\n")}
 ]\n\n`;
@@ -91,7 +91,7 @@ ${xWWWFormUrlencoded
     method,
     rawData,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
   if (method !== "get" && bodyType === "raw" && rawBodyDataType === "json")
     rawDataString += `body = json.dumps(json_data)\n\n`;
@@ -106,19 +106,19 @@ ${xWWWFormUrlencoded
   if (headersString)
     optionsArr.push({
       key: "headers",
-      value: "headers"
+      value: "headers",
     });
 
   if (bodyType === "form-data" && method !== "get" && formData.length) {
     if (formData.some(entry => entry.type === "text"))
       optionsArr.push({
         key: "data",
-        value: "data"
+        value: "data",
       });
     if (formData.some(entry => entry.type === "file"))
       optionsArr.push({
         key: "files",
-        value: "files"
+        value: "files",
       });
   }
 
@@ -129,14 +129,14 @@ ${xWWWFormUrlencoded
   ) {
     optionsArr.push({
       key: "data",
-      value: "data"
+      value: "data",
     });
   }
 
   if (bodyType === "binary" && method !== "get") {
     optionsArr.push({
       key: "data",
-      value: "f"
+      value: "f",
     });
   }
 
@@ -177,7 +177,7 @@ export const generatePythonHttpClientCode = async ({
   rawBodyDataType,
   bodyType,
   binaryData,
-  rawData
+  rawData,
 }: CodeSnippitDataInterface) => {
   const importString = `import http.client
 from urllib.parse import urlparse, urlencode
@@ -193,7 +193,7 @@ parsed = urlparse(url)\n\n`;
     authorization,
     rawBodyDataType,
     bodyType,
-    method
+    method,
   });
 
   /* ============== FORM-DATA =================== */
@@ -228,7 +228,7 @@ files = [
 ${formData
   .filter(entry => entry.type === "file")
   .map(
-    ({ key, value }) => `\t(${JSON.stringify(key)}, ${JSON.stringify(value)})`
+    ({ key, value }) => `\t(${JSON.stringify(key)}, ${JSON.stringify(value)})`,
   )
   .join(",\n")}
 ]
@@ -278,7 +278,7 @@ ${xWWWFormUrlencoded
     method,
     rawData,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
   if (method !== "get" && bodyType === "raw" && rawBodyDataType === "json")
     rawDataString += `body = json.dumps(json_data)\n\n`;
@@ -299,13 +299,13 @@ with open(${JSON.stringify(binaryData ?? defaultBinaryData)}, "rb") as f:
   if (headersString)
     optionsArr.push({
       key: "headers",
-      value: "headers"
+      value: "headers",
     });
 
   if (["binary", "raw"].includes(bodyType) && method !== "get")
     optionsArr.push({
       key: "body",
-      value: "body"
+      value: "body",
     });
   if (
     (bodyType === "form-data" && formData.length) ||
@@ -315,7 +315,7 @@ with open(${JSON.stringify(binaryData ?? defaultBinaryData)}, "rb") as f:
   )
     optionsArr.push({
       key: "body",
-      value: "body"
+      value: "body",
     });
 
   const optionsString = optionsArr.length
@@ -343,7 +343,7 @@ export const generatePythonUrllib3Code = async ({
   rawBodyDataType,
   bodyType,
   binaryData,
-  rawData
+  rawData,
 }: CodeSnippitDataInterface) => {
   const importString = `import urllib3
 from urllib.parse import urlparse, urlencode
@@ -360,7 +360,7 @@ http = urllib3.PoolManager()\n\n`;
     authorization,
     rawBodyDataType,
     bodyType,
-    method
+    method,
   });
 
   /* ============== FORM-DATA =================== */
@@ -394,7 +394,7 @@ ${xWWWFormUrlencoded
     method,
     rawData,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
   if (method !== "get" && bodyType === "raw" && rawBodyDataType === "json")
     rawDataString += `body = json.dumps(json_data).encode()\n\n`;
@@ -415,13 +415,13 @@ with open(${JSON.stringify(binaryData ?? defaultBinaryData)}, "rb") as f:
   if (headersString)
     optionsArr.push({
       key: "headers",
-      value: "headers"
+      value: "headers",
     });
 
   if (["binary", "raw"].includes(bodyType) && method !== "get")
     optionsArr.push({
       key: "body",
-      value: "body"
+      value: "body",
     });
 
   if (
@@ -431,7 +431,7 @@ with open(${JSON.stringify(binaryData ?? defaultBinaryData)}, "rb") as f:
   )
     optionsArr.push({
       key: "body",
-      value: "body"
+      value: "body",
     });
 
   const optionsString = optionsArr.length
@@ -459,7 +459,7 @@ export const generatePythonAiohttpCode = async ({
   rawBodyDataType,
   bodyType,
   binaryData,
-  rawData
+  rawData,
 }: CodeSnippitDataInterface) => {
   const startString = `import aiohttp
 import asyncio
@@ -473,7 +473,7 @@ url = "${url}"\n\n`;
     authorization,
     rawBodyDataType,
     bodyType,
-    method
+    method,
   });
 
   /* ============== FORM-DATA =================== */
@@ -500,7 +500,7 @@ ${formData
   .filter(entry => entry.type === "file")
   .map(
     ({ key, value }) =>
-      `\t(${JSON.stringify(key)}, open(${JSON.stringify(value)}, "rb"))`
+      `\t(${JSON.stringify(key)}, open(${JSON.stringify(value)}, "rb"))`,
   )
   .join(",\n")}
 ]\n\n`;
@@ -550,7 +550,7 @@ ${xWWWFormUrlencoded
     method,
     rawData,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
   if (method !== "get" && bodyType === "raw" && rawBodyDataType === "json")
     rawDataString += `body = json.dumps(json_data)\n\n`;
@@ -571,19 +571,19 @@ with open(${JSON.stringify(binaryData ?? defaultBinaryData)}, "rb") as f:
   if (headersString)
     optionsArr.push({
       key: "headers",
-      value: "headers"
+      value: "headers",
     });
 
   if (["binary", "raw"].includes(bodyType) && method !== "get")
     optionsArr.push({
       key: "body",
-      value: "body"
+      value: "body",
     });
 
   if (bodyType === "form-data" && method !== "get" && formData.length)
     optionsArr.push({
       key: "body",
-      value: "form"
+      value: "form",
     });
 
   if (
@@ -593,7 +593,7 @@ with open(${JSON.stringify(binaryData ?? defaultBinaryData)}, "rb") as f:
   )
     optionsArr.push({
       key: "body",
-      value: "body"
+      value: "body",
     });
 
   const optionsString = optionsArr.length
@@ -613,7 +613,7 @@ ${formDataImplementationString}\t\tasync with session.${method.toLowerCase()}(ur
 
 export const generatePythonCode = async (
   type: TRequestCodeType,
-  data: CodeSnippitDataInterface
+  data: CodeSnippitDataInterface,
 ) => {
   switch (type) {
     case "python-requests":

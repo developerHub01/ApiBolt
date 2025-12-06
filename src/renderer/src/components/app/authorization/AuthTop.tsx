@@ -20,7 +20,7 @@ const AuthTop = memo(
         <AuthDetails id={id} />
       </div>
     );
-  }
+  },
 );
 
 export default AuthTop;

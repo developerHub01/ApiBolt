@@ -17,7 +17,7 @@ export const useRequestBody = () => {
 
   if (!context) {
     throw new Error(
-      "useRequestBody must be used within a RequestBodyProvider."
+      "useRequestBody must be used within a RequestBodyProvider.",
     );
   }
 
@@ -37,7 +37,7 @@ const RequestBodyProvider = ({ children }: RequestBodyProviderProps) => {
     dispatch(
       updateRequestBodyRaw({
         lineWrap: !codeLineWrap,
-      })
+      }),
     );
   }, [codeLineWrap, dispatch]);
 
@@ -46,11 +46,11 @@ const RequestBodyProvider = ({ children }: RequestBodyProviderProps) => {
   return (
     <RequestBodyContext.Provider
       value={{
-        handleChangeRawData: (rawData) =>
+        handleChangeRawData: rawData =>
           dispatch(
             updateRequestBodyRaw({
               rawData,
-            })
+            }),
           ),
         codeLineWrap,
         handleToggleCodeLineWrap,

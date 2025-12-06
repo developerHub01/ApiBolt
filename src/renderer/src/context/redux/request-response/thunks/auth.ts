@@ -7,7 +7,7 @@ import {
   handleClearHiddenAuthorizationHeaders,
   handleClearHiddenAuthorizationParams,
   handleUpdateHiddenAuthorizationHeaders,
-  handleUpdateHiddenAuthorizationParams
+  handleUpdateHiddenAuthorizationParams,
 } from "@/context/redux/request-response/request-response-slice";
 import { areSamePayload } from "@/utils/helper";
 import {
@@ -15,7 +15,7 @@ import {
   DEFAULT_API_KEY,
   DEFAULT_AUTHORIZATION_ID,
   DEFAULT_BASIC_AUTH,
-  DEFAULT_JWT_BEARER_AUTH
+  DEFAULT_JWT_BEARER_AUTH,
 } from "@/constant/authorization.constant";
 import type { AuthorizationPayloadInterface } from "@shared/types/authorization.types";
 
@@ -66,20 +66,20 @@ export const loadAuthorization = createAsyncThunk<
       dispatch(
         handleAuthorizations({
           id: requestOrFolderId,
-          payload: authorizationData
-        })
+          payload: authorizationData,
+        }),
       );
 
       dispatch(
         updateHiddenAuthorization({
           requestOrFolderId: requestOrFolderId,
-          payload: authorizationData
-        })
+          payload: authorizationData,
+        }),
       );
     } catch (error) {
       console.error(error);
     }
-  }
+  },
 );
 
 export const loadInheritParentAuthorization = createAsyncThunk<
@@ -107,21 +107,21 @@ export const loadInheritParentAuthorization = createAsyncThunk<
       dispatch(
         handleAuthorizations({
           id: authorizationData.requestOrFolderMetaId,
-          payload: authorizationData
-        })
+          payload: authorizationData,
+        }),
       );
       dispatch(
         handleAuthorizationsInheritedId({
           requestId: selectedTab,
-          inheritedId: authorizationData.requestOrFolderMetaId
-        })
+          inheritedId: authorizationData.requestOrFolderMetaId,
+        }),
       );
 
       dispatch(
         updateHiddenAuthorization({
           requestOrFolderId: authorizationData.requestOrFolderMetaId,
-          payload: authorizationData
-        })
+          payload: authorizationData,
+        }),
       );
 
       return authorizationData.requestOrFolderMetaId;
@@ -129,7 +129,7 @@ export const loadInheritParentAuthorization = createAsyncThunk<
       console.error(error);
       return null;
     }
-  }
+  },
 );
 
 export const updateHiddenAuthorization = createAsyncThunk<
@@ -147,14 +147,14 @@ export const updateHiddenAuthorization = createAsyncThunk<
   async (
     {
       requestOrFolderId = DEFAULT_AUTHORIZATION_ID,
-      payload: authorizationData
+      payload: authorizationData,
     },
-    { dispatch, getState }
+    { dispatch, getState },
   ) => {
     try {
       const payload = {
         requestOrFolderId,
-        payload: authorizationData
+        payload: authorizationData,
       };
 
       if (authorizationData.type === "no-auth")
@@ -171,8 +171,8 @@ export const updateHiddenAuthorization = createAsyncThunk<
         if (!authorizationData.requestOrFolderMetaId) return;
         const inheritedParentId = await dispatch(
           loadInheritParentAuthorization(
-            authorizationData.requestOrFolderMetaId
-          )
+            authorizationData.requestOrFolderMetaId,
+          ),
         ).unwrap();
         if (!inheritedParentId) return;
 
@@ -198,7 +198,7 @@ export const updateHiddenAuthorization = createAsyncThunk<
     } catch (error) {
       console.error(error);
     }
-  }
+  },
 );
 
 export const updateHiddenAuthorizationNoAuth = createAsyncThunk<
@@ -221,7 +221,7 @@ export const updateHiddenAuthorizationNoAuth = createAsyncThunk<
     } catch (error) {
       console.error(error);
     }
-  }
+  },
 );
 
 export const updateHiddenAuthorizationBasicAuth = createAsyncThunk<
@@ -239,9 +239,9 @@ export const updateHiddenAuthorizationBasicAuth = createAsyncThunk<
   async (
     {
       requestOrFolderId = DEFAULT_AUTHORIZATION_ID,
-      payload: authorizationData
+      payload: authorizationData,
     },
-    { dispatch }
+    { dispatch },
   ) => {
     try {
       let shouldClearHiddenAuthHeaders = false;
@@ -253,8 +253,8 @@ export const updateHiddenAuthorizationBasicAuth = createAsyncThunk<
         dispatch(
           handleUpdateHiddenAuthorizationHeaders({
             id: requestOrFolderId,
-            value: `Basic ${authorizationData.basicAuthToken}`
-          })
+            value: `Basic ${authorizationData.basicAuthToken}`,
+          }),
         );
       } else shouldClearHiddenAuthHeaders = true;
 
@@ -265,7 +265,7 @@ export const updateHiddenAuthorizationBasicAuth = createAsyncThunk<
     } catch (error) {
       console.error(error);
     }
-  }
+  },
 );
 
 export const updateHiddenAuthorizationBearerToken = createAsyncThunk<
@@ -283,9 +283,9 @@ export const updateHiddenAuthorizationBearerToken = createAsyncThunk<
   async (
     {
       requestOrFolderId = DEFAULT_AUTHORIZATION_ID,
-      payload: authorizationData
+      payload: authorizationData,
     },
-    { dispatch }
+    { dispatch },
   ) => {
     try {
       let shouldClearHiddenAuthHeaders = false;
@@ -301,8 +301,8 @@ export const updateHiddenAuthorizationBearerToken = createAsyncThunk<
         dispatch(
           handleUpdateHiddenAuthorizationHeaders({
             id: requestOrFolderId,
-            value
-          })
+            value,
+          }),
         );
       } else shouldClearHiddenAuthHeaders = true;
 
@@ -313,7 +313,7 @@ export const updateHiddenAuthorizationBearerToken = createAsyncThunk<
     } catch (error) {
       console.error(error);
     }
-  }
+  },
 );
 
 export const updateHiddenAuthorizationJwtBearer = createAsyncThunk<
@@ -331,9 +331,9 @@ export const updateHiddenAuthorizationJwtBearer = createAsyncThunk<
   async (
     {
       requestOrFolderId = DEFAULT_AUTHORIZATION_ID,
-      payload: authorizationData
+      payload: authorizationData,
     },
-    { dispatch }
+    { dispatch },
   ) => {
     try {
       let shouldClearHiddenAuthParams = false;
@@ -353,8 +353,8 @@ export const updateHiddenAuthorizationJwtBearer = createAsyncThunk<
           dispatch(
             handleUpdateHiddenAuthorizationHeaders({
               id: requestOrFolderId,
-              value: `${prefix}${authorizationData.jwtAuthToken}`
-            })
+              value: `${prefix}${authorizationData.jwtAuthToken}`,
+            }),
           );
         } else {
           shouldClearHiddenAuthHeaders = true;
@@ -362,8 +362,8 @@ export const updateHiddenAuthorizationJwtBearer = createAsyncThunk<
             handleUpdateHiddenAuthorizationParams({
               id: requestOrFolderId,
               key: authorizationData.jwtHeaderPrefix ?? "token",
-              value: authorizationData.jwtAuthToken ?? ""
-            })
+              value: authorizationData.jwtAuthToken ?? "",
+            }),
           );
         }
       } else {
@@ -379,7 +379,7 @@ export const updateHiddenAuthorizationJwtBearer = createAsyncThunk<
     } catch (error) {
       console.error(error);
     }
-  }
+  },
 );
 
 export const updateHiddenAuthorizationApiKey = createAsyncThunk<
@@ -397,9 +397,9 @@ export const updateHiddenAuthorizationApiKey = createAsyncThunk<
   async (
     {
       requestOrFolderId = DEFAULT_AUTHORIZATION_ID,
-      payload: authorizationData
+      payload: authorizationData,
     },
-    { dispatch }
+    { dispatch },
   ) => {
     try {
       if (!authorizationData.apiKeyKey && !authorizationData.apiKeyValue)
@@ -415,8 +415,8 @@ export const updateHiddenAuthorizationApiKey = createAsyncThunk<
             handleUpdateHiddenAuthorizationHeaders({
               id: requestOrFolderId,
               key: authorizationData.apiKeyKey ?? "",
-              value: authorizationData.apiKeyValue ?? ""
-            })
+              value: authorizationData.apiKeyValue ?? "",
+            }),
           );
         } else {
           shouldClearHiddenAuthHeaders = true;
@@ -424,8 +424,8 @@ export const updateHiddenAuthorizationApiKey = createAsyncThunk<
             handleUpdateHiddenAuthorizationParams({
               id: requestOrFolderId,
               key: authorizationData.apiKeyKey ?? "",
-              value: authorizationData.apiKeyValue ?? ""
-            })
+              value: authorizationData.apiKeyValue ?? "",
+            }),
           );
         }
       } else {
@@ -441,7 +441,7 @@ export const updateHiddenAuthorizationApiKey = createAsyncThunk<
     } catch (error) {
       console.error(error);
     }
-  }
+  },
 );
 
 export const updateAuthorization = createAsyncThunk<
@@ -504,7 +504,7 @@ export const updateAuthorization = createAsyncThunk<
           DEFAULT_JWT_BEARER_AUTH.headerPrefix,
         jwtAddTo:
           state.requestResponse.jwtBearerAuth[tempId]?.addTo ??
-          DEFAULT_JWT_BEARER_AUTH.addTo
+          DEFAULT_JWT_BEARER_AUTH.addTo,
       };
 
       if (areSamePayload(payload, existingPayload)) return true;
@@ -512,8 +512,8 @@ export const updateAuthorization = createAsyncThunk<
       dispatch(
         handleAuthorizations({
           id: requestOrFolderId,
-          payload
-        })
+          payload,
+        }),
       );
 
       const response = await window.electronAPIAuthorization.updateAuth({
@@ -521,7 +521,7 @@ export const updateAuthorization = createAsyncThunk<
           requestOrFolderId === DEFAULT_AUTHORIZATION_ID
             ? undefined
             : requestOrFolderId,
-        payload
+        payload,
       });
 
       /* if update successfully and updating type and in change from inheri-parent type */
@@ -541,8 +541,8 @@ export const updateAuthorization = createAsyncThunk<
           updateHiddenAuthorization({
             requestOrFolderId: requestOrFolderId,
             /* as AuthorizationPayloadInterface because other properties not need */
-            payload: response
-          })
+            payload: response,
+          }),
         );
       }
 
@@ -550,8 +550,8 @@ export const updateAuthorization = createAsyncThunk<
       if (!response) {
         await dispatch(
           loadAuthorization({
-            requestOrFolderId
-          })
+            requestOrFolderId,
+          }),
         );
       }
 
@@ -560,7 +560,7 @@ export const updateAuthorization = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const duplicateAuthorizationByOldNewIds = createAsyncThunk<

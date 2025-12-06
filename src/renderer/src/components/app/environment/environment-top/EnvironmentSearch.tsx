@@ -6,8 +6,8 @@ import Searchbar from "@/components/ui/searchbar";
 
 const EnvironmentSearch = memo(() => {
   const { searchQuery, handleChangeSearchQuery } = useEnvironments();
-  const showSearch = useAppSelector((state) =>
-    Boolean(Object.keys(selectEnvironmentsList(state) ?? {}).length)
+  const showSearch = useAppSelector(state =>
+    Boolean(Object.keys(selectEnvironmentsList(state) ?? {}).length),
   );
 
   if (!showSearch) return null;

@@ -20,7 +20,7 @@ interface HistoryMetaListContext {
 }
 
 const HistoryMetaListContext = createContext<HistoryMetaListContext | null>(
-  null
+  null,
 );
 
 export const useHistoryMetaList = () => {
@@ -28,7 +28,7 @@ export const useHistoryMetaList = () => {
 
   if (!context) {
     throw new Error(
-      "useHistoryMetaList must be used within a HistoryMetaListProvider."
+      "useHistoryMetaList must be used within a HistoryMetaListProvider.",
     );
   }
 
@@ -51,7 +51,7 @@ const HistoryMetaListProvider = ({
 
   const filteredMetaList = useMemo(() => {
     if (method !== "all")
-      return metaList.filter((meta) => meta.method === method);
+      return metaList.filter(meta => meta.method === method);
     return metaList;
   }, [method, metaList]);
 

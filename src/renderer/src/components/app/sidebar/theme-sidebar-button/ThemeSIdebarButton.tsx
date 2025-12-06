@@ -34,7 +34,7 @@ const ThemeSIdebarButton = ({ label, Icon, onClick }: Props) => {
   const localtion = useLocation();
   const shortcuts = useAppSelector(selectApplyingKeyboardShortcuts);
   const menuList = useMemo(() => {
-    return SIDEBAR_THEME_MENU_ITEMS.map((item) => {
+    return SIDEBAR_THEME_MENU_ITEMS.map(item => {
       const binding = shortcuts[item.id];
 
       return {

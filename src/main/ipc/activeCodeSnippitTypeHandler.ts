@@ -3,7 +3,7 @@ import {
   createActiveCodeSnippitType,
   deleteActiveCodeSnippitType,
   getActiveCodeSnippitType,
-  updateActiveCodeSnippitType
+  updateActiveCodeSnippitType,
 } from "@/main/db/activeCodeSnippitTypeDB.js";
 import { ElectronAPIActiveCodeSnippitTypeInterface } from "@shared/types/api/electron-active-code-snippit-type.js";
 
@@ -17,7 +17,7 @@ export const activeCodeSnippitTypeHandler = () => {
       >
     ): ReturnType<
       ElectronAPIActiveCodeSnippitTypeInterface["getActiveCodeSnippitType"]
-    > => await getActiveCodeSnippitType(...rest)
+    > => await getActiveCodeSnippitType(...rest),
   );
   ipcMain.handle(
     "createActiveCodeSnippitType",
@@ -28,7 +28,7 @@ export const activeCodeSnippitTypeHandler = () => {
       >
     ): ReturnType<
       ElectronAPIActiveCodeSnippitTypeInterface["createActiveCodeSnippitType"]
-    > => await createActiveCodeSnippitType(...rest)
+    > => await createActiveCodeSnippitType(...rest),
   );
   ipcMain.handle(
     "updateActiveCodeSnippitType",
@@ -39,7 +39,7 @@ export const activeCodeSnippitTypeHandler = () => {
       >
     ): ReturnType<
       ElectronAPIActiveCodeSnippitTypeInterface["updateActiveCodeSnippitType"]
-    > => await updateActiveCodeSnippitType(...rest)
+    > => await updateActiveCodeSnippitType(...rest),
   );
   ipcMain.handle(
     "deleteActiveCodeSnippitType",
@@ -50,6 +50,6 @@ export const activeCodeSnippitTypeHandler = () => {
       >
     ): ReturnType<
       ElectronAPIActiveCodeSnippitTypeInterface["deleteActiveCodeSnippitType"]
-    > => await deleteActiveCodeSnippitType(...rest)
+    > => await deleteActiveCodeSnippitType(...rest),
   );
 };

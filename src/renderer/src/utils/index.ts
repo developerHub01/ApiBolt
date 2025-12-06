@@ -41,7 +41,7 @@ export const parseUrlParams = (api: string) => {
 };
 
 export const getRawContentType = (
-  subtype: "json" | "xml" | "html" | "text" | "javascript"
+  subtype: "json" | "xml" | "html" | "text" | "javascript",
 ) => {
   switch (subtype) {
     case "json":
@@ -69,7 +69,7 @@ export const fileToBase64 = (file: File): Promise<string> =>
 
 export const converterFileToMetadata = async (
   file: File,
-  supportBase64: boolean = false
+  supportBase64: boolean = false,
 ) => {
   const fileData = {
     name: file.name,
@@ -89,7 +89,7 @@ export const converterFileToMetadata = async (
 export const base64ToFileObject = (
   base64: string,
   filename: string,
-  mimeType: string
+  mimeType: string,
 ): File => {
   const byteString = atob(base64.split(",")[1]); // Decode Base64
   const ab = new ArrayBuffer(byteString.length);

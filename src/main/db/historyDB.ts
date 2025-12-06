@@ -4,7 +4,7 @@ import { historyTable } from "@/main/db/schema.js";
 import { ElectronAPIHistoryInterface } from "@shared/types/api/electron-history";
 import {
   HistoryItemInterface,
-  HistoryItemMetaInterface
+  HistoryItemMetaInterface,
 } from "@shared/types/history.types";
 
 /* max limit of history track for a request */
@@ -42,7 +42,7 @@ export const getHistoryById: ElectronAPIHistoryInterface["getHistoryById"] =
         body: response.body ? JSON.parse(response.body) : response.body,
         responseSize: response.responseSize
           ? JSON.parse(response.responseSize)
-          : response.responseSize
+          : response.responseSize,
       } as HistoryItemInterface;
     } catch (error) {
       console.error(error);
@@ -61,7 +61,7 @@ export const getHistoryByRequestId: ElectronAPIHistoryInterface["getHistoryByReq
           request: historyTable.request,
           method: historyTable.method,
           responseStatus: historyTable.responseStatus,
-          createdAt: historyTable.createdAt
+          createdAt: historyTable.createdAt,
         })
         .from(historyTable)
         .where(eq(historyTable.request, id))
@@ -86,7 +86,7 @@ export const createHistory: ElectronAPIHistoryInterface["createHistory"] =
         "headers",
         "authorization",
         "body",
-        "responseSize"
+        "responseSize",
       ];
       for (const key of keys) {
         if (payload[key]) payload[key] = JSON.stringify(payload[key]);
@@ -163,7 +163,7 @@ export const createHistory: ElectronAPIHistoryInterface["createHistory"] =
             id: historyTable.id,
             method: historyTable.method,
             responseStatus: historyTable.responseStatus,
-            createdAt: historyTable.createdAt
+            createdAt: historyTable.createdAt,
           })
           .from(historyTable)
           .where(eq(historyTable.request, payload.request))

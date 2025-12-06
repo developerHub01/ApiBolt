@@ -75,10 +75,10 @@ const FolderTitle = memo(() => {
       dispatch(
         updateFolder({
           title: newTitle,
-        })
+        }),
       );
     },
-    [dispatch]
+    [dispatch],
   );
 
   return (
@@ -93,7 +93,7 @@ const FolderTitle = memo(() => {
         onCopy={handleCopy}
         className={cn(
           "relative w-full text-xl md:text-3xl font-semibold  bg-accent/50 focus:bg-accent/50 py-1 px-2 rounded-t-sm border-b outline-none",
-          "empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400 empty:before:absolute empty:before:pointer-events-none"
+          "empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400 empty:before:absolute empty:before:pointer-events-none",
         )}
         data-placeholder="Enter title..."
       >

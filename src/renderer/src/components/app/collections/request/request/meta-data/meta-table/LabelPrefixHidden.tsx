@@ -13,21 +13,21 @@ interface Props {
 
 const LabelPrefixHidden = memo(({ type }: Props) => {
   const dispatch = useAppDispatch();
-  const showHiddenData = useAppSelector((state) =>
-    selectShowHiddenMetaData(state, type)
+  const showHiddenData = useAppSelector(state =>
+    selectShowHiddenMetaData(state, type),
   );
   const hiddenData =
-    useAppSelector((state) =>
+    useAppSelector(state =>
       selectMetaData(state, {
         type: type === "header" ? "hiddenHeaders" : "hiddenParams",
-      })
+      }),
     ) ?? [];
 
   const handleToggle = () =>
     dispatch(
       toggleShowHiddenMetaData({
         type,
-      })
+      }),
     );
 
   if (!hiddenData.length) return;

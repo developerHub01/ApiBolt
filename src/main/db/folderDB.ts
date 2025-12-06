@@ -23,7 +23,7 @@ export const getFolder: ElectronAPIFolderInterface["getFolder"] =
 
       return {
         title: result.title,
-        description: result.description
+        description: result.description,
       };
     } catch (error) {
       console.error(error);
@@ -49,13 +49,13 @@ export const updateFolder: ElectronAPIFolderInterface["updateFolder"] =
             .values({
               ...payload,
               requestOrFolderMetaId,
-              projectId: activeProject
+              projectId: activeProject,
             })
             .onConflictDoUpdate({
               target: [folderTable.requestOrFolderMetaId],
               set: {
-                ...updatePayload
-              }
+                ...updatePayload,
+              },
             })
         ).rowsAffected > 0
       );
@@ -92,7 +92,7 @@ export const duplicateFolder: ElectronAPIFolderInterface["duplicateFolder"] =
         const { id, ...folderPayload } = folder;
         return {
           ...folderPayload,
-          requestOrFolderMetaId: payload[folder.requestOrFolderMetaId]
+          requestOrFolderMetaId: payload[folder.requestOrFolderMetaId],
         };
       });
 

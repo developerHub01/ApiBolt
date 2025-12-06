@@ -13,11 +13,10 @@ import { AUTHORIZATION_DATA_ID } from "@/constant/authorization.constant";
 
 const hiddenDummyText = "•••••••••••••••••••••••••";
 
-interface MetaItemInputProps
-  extends Omit<
-    React.ComponentProps<"input">,
-    "id" | "value" | "onBlur" | "className" | "ref"
-  > {
+interface MetaItemInputProps extends Omit<
+  React.ComponentProps<"input">,
+  "id" | "value" | "onBlur" | "className" | "ref"
+> {
   id: string;
   ref: RefObject<HTMLInputElement | null>;
   cellType: string;
@@ -40,7 +39,7 @@ const MetaItemInput = memo(
   }: MetaItemInputProps) => {
     const [valueState, setValueState] = useState<string>(value);
     const [hidePassword, setHidePassword] = useState<boolean>(
-      type !== "text" || (id === AUTHORIZATION_DATA_ID && cellType === "value")
+      type !== "text" || (id === AUTHORIZATION_DATA_ID && cellType === "value"),
     );
 
     useEffect(() => {
@@ -50,7 +49,7 @@ const MetaItemInput = memo(
     useEffect(() => {
       setHidePassword(
         type !== "text" ||
-          (id === AUTHORIZATION_DATA_ID && cellType === "value")
+          (id === AUTHORIZATION_DATA_ID && cellType === "value"),
       );
     }, [type, id, cellType]);
 
@@ -65,10 +64,10 @@ const MetaItemInput = memo(
         setValueState(value);
         if (onBlur) onBlur(id, e.target.dataset.metaItemType, value);
       },
-      [onBlur, id]
+      [onBlur, id],
     );
 
-    const handleTogglePasswordView = () => setHidePassword((prev) => !prev);
+    const handleTogglePasswordView = () => setHidePassword(prev => !prev);
 
     const showPasswordButton =
       type === "password" ||
@@ -88,7 +87,7 @@ const MetaItemInput = memo(
             "border-b border-transparent focus:border-primary",
             "placeholder:capitalize placeholder:opacity-50",
             "disabled:opacity-95",
-            className
+            className,
           )}
           placeholder={cellType}
           {...props}
@@ -98,7 +97,7 @@ const MetaItemInput = memo(
             onClick={handleTogglePasswordView}
             className={cn(
               "cursor-pointer size-5 [&>svg]:size-4 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto rounded-full transition duration-100",
-              "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+              "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
             )}
           >
             {hidePassword ? <ShowIcon /> : <HideIcon />}
@@ -106,7 +105,7 @@ const MetaItemInput = memo(
         )}
       </div>
     );
-  }
+  },
 );
 MetaItemInput.displayName = "Meta item input";
 

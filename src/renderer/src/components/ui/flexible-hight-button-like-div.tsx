@@ -8,7 +8,7 @@ interface FlexibleHightButtonLikeDivProps {
 
 const FlexibleHightButtonLikeDiv = ({
   className = "",
-  children
+  children,
 }: FlexibleHightButtonLikeDivProps & React.ComponentProps<"button">) => {
   return (
     <ButtonLikeDiv

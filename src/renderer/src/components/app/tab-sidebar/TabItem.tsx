@@ -3,7 +3,7 @@ import {
   useCallback,
   useState,
   type DragEvent,
-  type MouseEvent
+  type MouseEvent,
 } from "react";
 import RequestMethodTag from "@/components/app/RequestMethodTag";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ import type { THTTPMethods } from "@shared/types/request-response.types";
 import {
   changeSelectedTab,
   expendParentsOnSelectedChangeTabsData,
-  removeTab
+  removeTab,
 } from "@/context/redux/request-response/thunks/tab-list";
 import { selectRequestOrFolderById } from "@/context/redux/request-response/selectors/request-list";
 import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
@@ -24,7 +24,7 @@ import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 import {
   Tooltip,
   TooltipContent,
-  TooltipTrigger
+  TooltipTrigger,
 } from "@/components/ui/tooltip-custom";
 import { selectApplyingKeyboardShortcutsById } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
 import { keyListStringify } from "@/utils/keyboard-shortcut.utils";
@@ -66,8 +66,8 @@ const TabItem = memo(({ id, index }: Props) => {
     dispatch(
       handleMoveTab({
         id: draggedId,
-        index
-      })
+        index,
+      }),
     );
   };
 
@@ -77,11 +77,11 @@ const TabItem = memo(({ id, index }: Props) => {
   const children = tabDetails.method ? undefined : (tabDetails.children ?? []);
 
   const method = useAppSelector(
-    state => state.requestResponse.requestList[id]?.method ?? tabDetails.method
+    state => state.requestResponse.requestList[id]?.method ?? tabDetails.method,
   );
   const name = useAppSelector(
     state =>
-      state.requestResponse.requestList[id]?.name ?? tabDetails.name ?? ""
+      state.requestResponse.requestList[id]?.name ?? tabDetails.name ?? "",
   );
 
   const handleCloseBtnClick = (e: MouseEvent<HTMLButtonElement>) => {
@@ -114,8 +114,8 @@ const TabItem = memo(({ id, index }: Props) => {
           "border-yellow-500": selectedTab === id && method === "put",
           "border-orange-500": selectedTab === id && method === "patch",
           "border-red-500": selectedTab === id && method === "delete",
-          "border-primary": selectedTab === id && !method
-        }
+          "border-primary": selectedTab === id && !method,
+        },
       )}
       onMouseEnter={() => setIsTabHovering(true)}
       onMouseLeave={() => setIsTabHovering(false)}
@@ -131,15 +131,15 @@ const TabItem = memo(({ id, index }: Props) => {
           "w-full h-full flex items-center justify-center px-1 ring-2",
           {
             "ring-primary/50": isDragging,
-            "ring-transparent": !isDragging
-          }
+            "ring-transparent": !isDragging,
+          },
         )}
       >
         {(children || method) && (
           <div
             className={cn("flex justify-center items-center", {
               "w-11": isTabListHovering,
-              "w-8": !isTabListHovering
+              "w-8": !isTabListHovering,
             })}
           >
             {children && (
@@ -163,8 +163,8 @@ const TabItem = memo(({ id, index }: Props) => {
           className={cn(
             "cursor-pointer flex items-center transition-all duration-300",
             {
-              "flex-1": isTabListHovering
-            }
+              "flex-1": isTabListHovering,
+            },
           )}
           style={{ transformOrigin: "left" }}
           key={id}
@@ -172,7 +172,7 @@ const TabItem = memo(({ id, index }: Props) => {
             opacity: isTabListHovering ? 1 : 0,
             width: isTabListHovering ? "100%" : "0px",
             paddingLeft: isTabListHovering ? "8px" : "0px",
-            scaleX: isTabListHovering ? 1 : 0.8
+            scaleX: isTabListHovering ? 1 : 0.8,
           }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
         >
@@ -221,7 +221,7 @@ const TabItem = memo(({ id, index }: Props) => {
 
 const ShortcutText = () => {
   const shortcuts = useAppSelector(state =>
-    selectApplyingKeyboardShortcutsById(state, "close_tab")
+    selectApplyingKeyboardShortcutsById(state, "close_tab"),
   );
 
   const shortcutString =

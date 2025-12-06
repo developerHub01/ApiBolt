@@ -33,10 +33,10 @@ const APIKey = memo(({ id, authData, disabled = false }: Props) => {
           payload: {
             [key]: value.trim(),
           },
-        })
+        }),
       );
     },
-    [dispatch]
+    [dispatch],
   );
 
   return (
@@ -46,7 +46,7 @@ const APIKey = memo(({ id, authData, disabled = false }: Props) => {
         id="api-key"
         placeholder="Key"
         value={authData.key}
-        onBlur={(value) => handleBlur("apiKeyKey", value)}
+        onBlur={value => handleBlur("apiKeyKey", value)}
         disabled={disabled}
       />
       <AuthContentInoutLabel htmlFor="api-value">Value</AuthContentInoutLabel>
@@ -55,7 +55,7 @@ const APIKey = memo(({ id, authData, disabled = false }: Props) => {
         placeholder="Value"
         type="password"
         value={authData.value}
-        onBlur={(value) => handleBlur("apiKeyValue", value)}
+        onBlur={value => handleBlur("apiKeyValue", value)}
         disabled={disabled}
       />
       <AuthContentInoutLabel htmlFor="api-add-to">Add to</AuthContentInoutLabel>
@@ -64,7 +64,7 @@ const APIKey = memo(({ id, authData, disabled = false }: Props) => {
         items={addToList}
         value={authData.addTo}
         defaultValue={addToList[0].id}
-        onChange={(value) => handleBlur("apiKeyAddTo", value)}
+        onChange={value => handleBlur("apiKeyAddTo", value)}
         disabled={disabled}
       />
     </ContentWrapper>

@@ -4,5 +4,5 @@ import type { TSidebarTab } from "@shared/types/sidebar.types";
 
 export const selectSidebarActiveTab = createSelector(
   [(state: RootState) => state.sidebar.activeTab],
-  (activeTab: TSidebarTab) => activeTab
+  (activeTab: TSidebarTab) => activeTab,
 );

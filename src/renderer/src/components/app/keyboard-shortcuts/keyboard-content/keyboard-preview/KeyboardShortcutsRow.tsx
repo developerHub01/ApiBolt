@@ -23,7 +23,7 @@ const KeyboardShortcutsRow = memo(
     const { activeTab } = useKeyboardShortcuts();
     const handleEdit = useCallback(
       () => dispatch(handleChangeEditingId(id)),
-      [dispatch, id]
+      [dispatch, id],
     );
 
     const handleReset = useCallback(async () => {
@@ -31,7 +31,7 @@ const KeyboardShortcutsRow = memo(
         resetKeyboardShortcuts({
           id,
           type: activeTab,
-        })
+        }),
       ).unwrap();
 
       toast({
@@ -49,7 +49,7 @@ const KeyboardShortcutsRow = memo(
         className={cn(
           "[&>td]:border-r [&>td]:last:border-r-0",
           "focus-within:bg-accent/60 duration-75 transition-colors",
-          "group"
+          "group",
         )}
       >
         <KeyboardCell className="capitalize">{label}</KeyboardCell>
@@ -62,7 +62,7 @@ const KeyboardShortcutsRow = memo(
         </KeyboardCell>
       </TableRow>
     );
-  }
+  },
 );
 
 export default KeyboardShortcutsRow;

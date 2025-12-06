@@ -14,7 +14,7 @@ import {
   changeActiveThemeId,
   loadThemeMetaList,
 } from "@/context/redux/theme/thunks/theme";
-import { useSetting } from "../SettingProvider";
+import { useSetting } from "@/context/setting/SettingProvider";
 import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 
 export type TSettingThemeTab = "global" | "project";
@@ -34,7 +34,7 @@ export const useSettingTheme = () => {
 
   if (!context) {
     throw new Error(
-      "useSettingTheme must be used within a SettingThemeProvider."
+      "useSettingTheme must be used within a SettingThemeProvider.",
     );
   }
 
@@ -58,7 +58,7 @@ const SettingThemeProvider = ({ children }: SettingThemeProviderProps) => {
       (activeTab === "global" || (activeTab === "project" && !localThemeId)
         ? globalThemeId
         : localThemeId)!,
-    [activeTab, globalThemeId, localThemeId]
+    [activeTab, globalThemeId, localThemeId],
   );
 
   const handleChangeActiveTheme = useCallback(
@@ -67,10 +67,10 @@ const SettingThemeProvider = ({ children }: SettingThemeProviderProps) => {
         changeActiveThemeId({
           activeTheme: id ?? null,
           projectId: activeTab === "project" ? projectId : null,
-        })
+        }),
       );
     },
-    [dispatch, projectId, activeTab]
+    [dispatch, projectId, activeTab],
   );
 
   useEffect(() => {

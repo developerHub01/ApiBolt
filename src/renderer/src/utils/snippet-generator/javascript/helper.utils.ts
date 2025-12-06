@@ -1,7 +1,7 @@
 import type { CodeSnippitDataInterface } from "@shared/types/code-snippit.types";
 import {
   getHeadersList,
-  jsonFormatter
+  jsonFormatter,
 } from "@/utils/snippet-generator/helper.utils";
 import { isValidJson, needsQuotesForKey } from "@/utils/helper";
 
@@ -10,7 +10,7 @@ export const getHeadersData = ({
   authorization,
   binaryData,
   rawBodyDataType,
-  bodyType
+  bodyType,
 }: Pick<
   CodeSnippitDataInterface,
   "headers" | "authorization" | "binaryData" | "rawBodyDataType" | "bodyType"
@@ -20,7 +20,7 @@ export const getHeadersData = ({
     authorization,
     binaryData,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
   if (!headersList.length) return "";
 
@@ -34,7 +34,7 @@ export const getHeadersDataObject = ({
   authorization,
   binaryData,
   rawBodyDataType,
-  bodyType
+  bodyType,
 }: Pick<
   CodeSnippitDataInterface,
   "headers" | "authorization" | "binaryData" | "rawBodyDataType" | "bodyType"
@@ -44,7 +44,7 @@ export const getHeadersDataObject = ({
     authorization,
     binaryData,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
   if (!headersList.length) return "";
 
@@ -57,7 +57,7 @@ ${headersList.map(({ key, value }) => `\t${needsQuotesForKey(key) ? JSON.stringi
 export const getBodyRawData = async ({
   rawBodyDataType,
   bodyType,
-  rawData
+  rawData,
 }: Pick<
   CodeSnippitDataInterface,
   "rawBodyDataType" | "bodyType" | "rawData"
@@ -75,7 +75,7 @@ export const getBodyRawData = async ({
 
 export const getXWWWFormUrlencodedData = ({
   bodyType,
-  xWWWFormUrlencoded
+  xWWWFormUrlencoded,
 }: Pick<CodeSnippitDataInterface, "bodyType" | "xWWWFormUrlencoded">) => {
   if (bodyType !== "x-www-form-urlencoded" || !xWWWFormUrlencoded.length)
     return "";
@@ -85,14 +85,14 @@ const params = new URLSearchParams();
 ${xWWWFormUrlencoded
   .map(
     ({ key, value }) =>
-      `params.append(${JSON.stringify(key)}, ${JSON.stringify(value)});`
+      `params.append(${JSON.stringify(key)}, ${JSON.stringify(value)});`,
   )
   .join("\n")}\t\n\n`;
 };
 
 export const getFormData = ({
   bodyType,
-  formData
+  formData,
 }: Pick<CodeSnippitDataInterface, "bodyType" | "formData">) => {
   if (bodyType !== "form-data" || !formData.length) return "";
 
@@ -102,7 +102,7 @@ ${formData
   .map(({ key, value, type }) =>
     type === "text"
       ? `formData.append(${JSON.stringify(key)}, ${JSON.stringify(value)});`
-      : `formData.append(${JSON.stringify(key)}, fileInput.files[0], ${JSON.stringify(value)});`
+      : `formData.append(${JSON.stringify(key)}, fileInput.files[0], ${JSON.stringify(value)});`,
   )
   .join("\n")}\t\n\n`;
 };

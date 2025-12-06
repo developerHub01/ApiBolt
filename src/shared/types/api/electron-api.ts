@@ -1,7 +1,7 @@
 import { JWTBearerAuthInterface } from "@shared/types/authorization.types";
 import {
   APIPayloadBody,
-  ResponseInterface
+  ResponseInterface,
 } from "@shared/types/request-response.types";
 import { ThemeInterface } from "@shared/types/theme.types";
 
@@ -11,7 +11,7 @@ export interface ElectronAPIInterface {
 
   getAllCookies(): Promise<unknown>;
   getCookieByDomain(url: string): Promise<unknown>;
-  getCookieStringByDomain(url: string): Promise<unknown>;
+  getCookieStringByDomain(url: string): Promise<string | null>;
 
   // window controls
   windowMinimize(): Promise<void>;
@@ -30,7 +30,7 @@ export interface ElectronAPIInterface {
   generateJWTToken(
     data: Omit<JWTBearerAuthInterface, "headerPrefix" | "algo" | "addTo"> & {
       algorithm: string;
-    }
+    },
   ): Promise<string>;
 
   /***

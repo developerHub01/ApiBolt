@@ -46,7 +46,7 @@ const RequestResponseSize = memo(
         </HoverCardContent>
       </HoverCard>
     );
-  }
+  },
 );
 RequestResponseSize.displayName = "Request response size";
 
@@ -65,7 +65,7 @@ const SizeDetails = memo(({ type, header = 0, body = 0 }: SizeDetailsProps) => {
           {
             "bg-amber-500": type === "request",
             "bg-blue-500": type === "response",
-          }
+          },
         )}
       >
         {type === "request" ? <UpIcon size={14} /> : <DownIcon size={14} />}

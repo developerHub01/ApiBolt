@@ -46,7 +46,7 @@ const ActionButtons = () => {
         onClick: handleImport,
       },
     ],
-    [handleCreate, handleImport]
+    [handleCreate, handleImport],
   );
 
   return (

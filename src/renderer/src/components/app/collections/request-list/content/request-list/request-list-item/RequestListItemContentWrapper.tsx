@@ -36,7 +36,7 @@ const RequestListItemContentWrapper = memo(
         e.dataTransfer.setData("text/plain", id);
         e.dataTransfer.effectAllowed = "move";
       },
-      [id]
+      [id],
     );
 
     const handleDragOver = useCallback((e: DragEvent<HTMLDivElement>) => {
@@ -63,17 +63,17 @@ const RequestListItemContentWrapper = memo(
           moveRequestOrFolder({
             requestId: draggedId,
             parentId: children ? id : parentId,
-          })
+          }),
         );
       },
-      [checkIsRequestDropable, children, dispatch, id, lavel, parentId]
+      [checkIsRequestDropable, children, dispatch, id, lavel, parentId],
     );
 
     const handleDragLeave = useCallback(() => setIsDragging(false), []);
 
     const handleRequestClick = useCallback(
       () => dispatch(changeSelectedTab(id)),
-      [dispatch, id]
+      [dispatch, id],
     );
 
     const leftSpace = REQUEST_ITEM_SPACE_SIZE * lavel;
@@ -104,7 +104,7 @@ const RequestListItemContentWrapper = memo(
               {
                 "ring-primary/50": isDragging,
                 "ring-transparent": !isDragging,
-              }
+              },
             )}
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
@@ -123,7 +123,7 @@ const RequestListItemContentWrapper = memo(
         {isExpended && <RequestListItemExpendedContent />}
       </>
     );
-  }
+  },
 );
 
 export default RequestListItemContentWrapper;

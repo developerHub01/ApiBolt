@@ -12,7 +12,7 @@ const ThemeListPanelWrapper = memo(() => {
 
   const handleCollapse = useCallback(
     () => dispath(handleToggleThemeListCollapsed(true)),
-    [dispath]
+    [dispath],
   );
 
   return (

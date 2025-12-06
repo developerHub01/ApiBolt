@@ -34,7 +34,7 @@ interface RequestCodeSnippitContext {
   maskedCode: string;
   language: string;
   handleChangeCodeSnippitLanguageType: (
-    value: TRequestCodeType
+    value: TRequestCodeType,
   ) => Promise<void>;
   handleToggleLineWrap: () => void;
 }
@@ -47,7 +47,7 @@ export const useRequestCodeSnippit = () => {
 
   if (!context) {
     throw new Error(
-      "useRequestCodeSnippit must be used within a RequestCodeSnippitProvider."
+      "useRequestCodeSnippit must be used within a RequestCodeSnippitProvider.",
     );
   }
 
@@ -72,21 +72,21 @@ const RequestCodeSnippitProvider = ({
   const rawBodyDataType = useAppSelector(selectRawRequestBodyType);
   const rawData = useAppSelector(selectRawData);
   const binaryData = useAppSelector(selectBinaryData)?.path;
-  const xWWWFormUrlencoded = useAppSelector((state) =>
+  const xWWWFormUrlencoded = useAppSelector(state =>
     selectFilterAndUniqueMetaData(state, {
       type: "x-www-form-urlencoded",
-    })
+    }),
   );
   const serializedxWWWFormUrlencoded = useMemo(
     () =>
-      xWWWFormUrlencoded?.map((form) => ({
+      xWWWFormUrlencoded?.map(form => ({
         key: form.key,
         value: form.value,
       })) ?? [],
-    [xWWWFormUrlencoded]
+    [xWWWFormUrlencoded],
   );
-  const formData = useAppSelector((state) =>
-    selectFilterAndUniqueFormData(state)
+  const formData = useAppSelector(state =>
+    selectFilterAndUniqueFormData(state),
   );
 
   const serializedFormData = useMemo(() => {
@@ -100,12 +100,12 @@ const RequestCodeSnippitProvider = ({
           type: "text",
         });
       else {
-        value.forEach((entry) =>
+        value.forEach(entry =>
           serialized.push({
             key,
             value: entry.file,
             type: "file",
-          })
+          }),
         );
       }
     });
@@ -113,22 +113,22 @@ const RequestCodeSnippitProvider = ({
     return serialized;
   }, [formData]);
 
-  const headers = useAppSelector((state) =>
+  const headers = useAppSelector(state =>
     selectFilterAndUniqueMetaData(state, {
       type: "headers",
-    })
+    }),
   );
   const serializedHeaders = useMemo(
     () =>
-      headers?.map((header) => ({
+      headers?.map(header => ({
         key: header.key,
         value: header.value,
       })) ?? [],
-    [headers]
+    [headers],
   );
 
-  const authorization = useAppSelector((state) =>
-    selectAuthorizationHeaderData(state)
+  const authorization = useAppSelector(state =>
+    selectAuthorizationHeaderData(state),
   );
 
   const serializedAuthorization = useMemo(() => {
@@ -178,11 +178,11 @@ const RequestCodeSnippitProvider = ({
     async (value: TRequestCodeType) => {
       await dispatch(changeCodeSnippitType(value));
     },
-    [dispatch]
+    [dispatch],
   );
 
   const handleToggleLineWrap = useCallback(() => {
-    setLineWrap((prev) => !prev);
+    setLineWrap(prev => !prev);
   }, []);
 
   return (

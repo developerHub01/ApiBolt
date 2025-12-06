@@ -34,7 +34,7 @@ export const createBodyRaw: ElectronAPIBodyRawInterface["createBodyRaw"] =
         (
           await db.insert(bodyRawTable).values({
             ...payload,
-            requestOrFolderMetaId
+            requestOrFolderMetaId,
           })
         ).rowsAffected > 0
       );
@@ -59,13 +59,13 @@ export const updateBodyRaw: ElectronAPIBodyRawInterface["updateBodyRaw"] =
             .insert(bodyRawTable)
             .values({
               ...payload,
-              requestOrFolderMetaId
+              requestOrFolderMetaId,
             })
             .onConflictDoUpdate({
               target: [bodyRawTable.requestOrFolderMetaId],
               set: {
-                ...updatePayload
-              }
+                ...updatePayload,
+              },
             })
         ).rowsAffected > 0
       );
@@ -76,7 +76,7 @@ export const updateBodyRaw: ElectronAPIBodyRawInterface["updateBodyRaw"] =
   };
 
 export const deleteBodyRawByRequestMetaId = async (
-  requestOrFolderMetaId?: string | null
+  requestOrFolderMetaId?: string | null,
 ) => {
   try {
     requestOrFolderMetaId =
@@ -123,7 +123,7 @@ export const duplicateBodyRaw: ElectronAPIBodyRawInterface["duplicateBodyRaw"] =
         const { id, ...rest } = raw;
         return {
           ...rest,
-          requestOrFolderMetaId: payload[raw.requestOrFolderMetaId]
+          requestOrFolderMetaId: payload[raw.requestOrFolderMetaId],
         };
       });
 
@@ -151,7 +151,7 @@ export const replaceBodyRaw: ElectronAPIBodyRawInterface["replaceBodyRaw"] =
         if (Object.keys(updatePayload || {}).length)
           await tsx.insert(bodyRawTable).values({
             ...updatePayload,
-            requestOrFolderMetaId
+            requestOrFolderMetaId,
           });
 
         return true;

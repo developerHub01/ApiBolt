@@ -1,13 +1,13 @@
 import { memo, useEffect, useState } from "react";
 import {
   ClipboardPaste as ClipboardPasteIcon,
-  type LucideIcon
+  type LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
-  TooltipTrigger
+  TooltipTrigger,
 } from "@/components/ui/tooltip-custom";
 import { cn } from "@/lib/utils";
 
@@ -42,7 +42,7 @@ const PasteButton = memo(
     align = "center",
     side = "bottom",
     size = "default",
-    variant = "secondary"
+    variant = "secondary",
   }: PasteButtonProps & React.ComponentProps<"button">) => {
     const [isActive, setIsActive] = useState<boolean>(false);
 
@@ -99,7 +99,7 @@ const PasteButton = memo(
         </TooltipContent>
       </Tooltip>
     );
-  }
+  },
 );
 
 export default PasteButton;

@@ -62,7 +62,7 @@ const SettingContextBasedLayout = memo(
         )}
       </SettingItemHorizontalLayout>
     );
-  }
+  },
 );
 
 export default SettingContextBasedLayout;

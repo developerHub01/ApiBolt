@@ -6,7 +6,7 @@ const PreventDefaultActions = () => {
       if (
         (e.ctrlKey &&
           ["=", "+", "-", "0", "s", "p", "u", "r", "f"].includes(
-            e.key.toLowerCase()
+            e.key.toLowerCase(),
           )) ||
         (e.ctrlKey && e.shiftKey && ["c"].includes(e.key.toLowerCase())) ||
         (e.altKey && e.shiftKey && ["f"].includes(e.key.toLowerCase())) ||

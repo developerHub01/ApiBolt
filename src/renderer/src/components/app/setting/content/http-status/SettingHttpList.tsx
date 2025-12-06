@@ -26,7 +26,7 @@ const statusSectionList = [
 const statusSectionListObj: Array<{
   type: string;
   value: Record<string, HttpStatusInterface & { code: string }>;
-}> = statusSectionList.map((item) => ({
+}> = statusSectionList.map(item => ({
   type: item,
   value: {},
 }));
@@ -36,7 +36,7 @@ const SettingHttpList = memo(() => {
 
   const list = useMemo(() => {
     const categorizedList = statusSectionListObj;
-    Object.keys(statusList).forEach((code) => {
+    Object.keys(statusList).forEach(code => {
       const index = Number(code[0]) - 1;
       categorizedList[index].value[code] = {
         code,
@@ -99,7 +99,7 @@ const SettingHttpList = memo(() => {
                           />
                         </TableCell>
                       </TableRow>
-                    )
+                    ),
                   )}
                 </TableBody>
               </Table>

@@ -34,9 +34,7 @@ const MetaDataTab = () => {
     <TabV1
       list={tabList}
       activeTab={activeMetaTab ?? "params"}
-      handleSelect={(value) =>
-        handleChangeActiveMetaTab(value as TActiveTabType)
-      }
+      handleSelect={value => handleChangeActiveMetaTab(value as TActiveTabType)}
       className="select-none"
     />
   );

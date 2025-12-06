@@ -3,9 +3,9 @@ import { mainWindow } from "@/main/index.js";
 
 const allowedProtocols = new Set(["http:", "https:"]);
 
-export const handleExternalUrl = async (url) => {
+export const handleExternalUrl = async (url: string) => {
   const parsedUrl = maybeParseUrl(url);
-  if (!parsedUrl) return;
+  if (!parsedUrl || !mainWindow) return;
 
   const { protocol } = parsedUrl;
   // We could handle all possible link cases here, not only http/https
@@ -31,18 +31,15 @@ export const handleExternalUrl = async (url) => {
   try {
     await shell.openExternal(url);
   } catch (error) {
-    log.error(`Failed to open url: ${error}`);
+    console.error(`Failed to open url: ${error}`);
   }
 };
 
-export const maybeParseUrl = (url) => {
-  if (typeof url === "string") {
-    try {
-      return new URL(url);
-    } catch (err) {
-      log.error(`Failed to parse url: ${url}`);
-    }
+export const maybeParseUrl = (url: string): URL | null => {
+  try {
+    return new URL(url);
+  } catch (err) {
+    console.error(`Failed to parse url: ${url}`);
+    return null;
   }
-
-  return undefined;
 };

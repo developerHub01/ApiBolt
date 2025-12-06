@@ -5,7 +5,7 @@ import { decodeApiUrl } from "@/utils/request-url.utils";
 import type { ParamInterface } from "@shared/types/request-response.types";
 import {
   paramsTableToString,
-  paramsTableToStringParsedFromEnvs
+  paramsTableToStringParsedFromEnvs,
 } from "@/utils/request-response.utils";
 import { INITIAL_URL_TOKENS_VALUE } from "@/constant/request-url.constant";
 import { removeDuplicateEnvs } from "@/utils/environments.utils";
@@ -25,7 +25,7 @@ export const selectRequestUrl = createSelector(
       console.error(error);
       return queryParams;
     }
-  }
+  },
 );
 
 export const selectParsedRequestUrl = createSelector(
@@ -39,7 +39,7 @@ export const selectParsedRequestUrl = createSelector(
     tokens: Array<UrlTokenInterface>,
     params: Array<ParamInterface>,
     authorizationParam,
-    environmentsList
+    environmentsList,
   ): string => {
     const paramsCopy = [...(params ?? [])];
     const envMap = removeDuplicateEnvs(environmentsList);
@@ -51,7 +51,7 @@ export const selectParsedRequestUrl = createSelector(
       return {
         ...token,
         type: "text",
-        value: envMap.get(token.value)?.value || ""
+        value: envMap.get(token.value)?.value || "",
       };
     });
 
@@ -64,5 +64,5 @@ export const selectParsedRequestUrl = createSelector(
       console.error(error);
       return queryParams;
     }
-  }
+  },
 );

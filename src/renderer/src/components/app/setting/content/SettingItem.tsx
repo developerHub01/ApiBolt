@@ -29,7 +29,7 @@ const SettingItem = memo(
         <AccordionTrigger
           className={cn(
             "hover:no-underline cursor-pointer text-base",
-            triggerClassName
+            triggerClassName,
           )}
         >
           {title}
@@ -37,14 +37,14 @@ const SettingItem = memo(
         <AccordionContent
           className={cn(
             "flex flex-col gap-4 text-balance pb-4",
-            contentClassName
+            contentClassName,
           )}
         >
           {children}
         </AccordionContent>
       </AccordionItem>
     );
-  }
+  },
 );
 
 export default SettingItem;

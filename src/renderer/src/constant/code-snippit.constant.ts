@@ -1,6 +1,6 @@
 import type {
   RequestCodeSnippitInterface,
-  TRequestCodeType
+  TRequestCodeType,
 } from "@shared/types/code-snippit.types";
 
 export const requestCodeSnippitsMap: Record<TRequestCodeType, string> = {
@@ -68,15 +68,15 @@ export const requestCodeSnippitsMap: Record<TRequestCodeType, string> = {
 
   // Elixir
   "elixir-httpoison": "Elixir - HTTPoison",
-  "elixir-tesla": "Elixir - Tesla"
+  "elixir-tesla": "Elixir - Tesla",
 };
 
 export const codeSnippitTypes = Object.keys(
-  requestCodeSnippitsMap
+  requestCodeSnippitsMap,
 ) as Array<TRequestCodeType>;
 
 export const codeSnippitByLanguageName = Object.keys(
-  requestCodeSnippitsMap
+  requestCodeSnippitsMap,
 ).reduce(
   (acc, curr) => {
     const language = curr.split("-")[0];
@@ -84,7 +84,7 @@ export const codeSnippitByLanguageName = Object.keys(
     acc[language].push(curr as TRequestCodeType);
     return acc;
   },
-  {} as Record<string, Array<TRequestCodeType>>
+  {} as Record<string, Array<TRequestCodeType>>,
 );
 
 export const codeSnippitLanguageList = Object.keys(codeSnippitByLanguageName);
@@ -93,5 +93,5 @@ export const MASKED_AUTHORIZATION = "••••••";
 
 export const requestDefaultCodeSnippit: RequestCodeSnippitInterface = {
   code: "",
-  maskedCode: ""
+  maskedCode: "",
 };

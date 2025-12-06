@@ -28,7 +28,7 @@ const SettingBackgroundImagePreview = memo(
           <motion.div
             className={cn(
               "bg-accent/50 col-span-1 h-90 origin-center overflow-hidden rounded-lg relative flex flex-col p-3",
-              className
+              className,
             )}
             initial={{ scale: 0.6, opacity: 0, filter: "blur(10px)" }}
             animate={{ scale: 1, opacity: 1, filter: "blur(0)" }}
@@ -61,7 +61,7 @@ const SettingBackgroundImagePreview = memo(
                     className="max-w-full max-h-full object-contain rounded-lg shadow-xl blur-sm"
                     style={{ transformStyle: "preserve-3d" }}
                     loading="lazy"
-                    onLoad={(e) => e.currentTarget.classList.remove("blur-sm")}
+                    onLoad={e => e.currentTarget.classList.remove("blur-sm")}
                     initial={{
                       scale: 0.6,
                       opacity: 0.5,
@@ -112,7 +112,7 @@ const SettingBackgroundImagePreview = memo(
         )}
       </AnimatePresence>
     );
-  }
+  },
 );
 
 export default SettingBackgroundImagePreview;

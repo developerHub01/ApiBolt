@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import {
   selectAddCookieDetails,
-  selectIsAddOptionOpen
+  selectIsAddOptionOpen,
 } from "@/context/redux/cookies/selectors/cookies";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import AddCookieBottomAction from "@/components/app/cookies/add-cookie/AddCookieBottomAction";
@@ -18,18 +18,18 @@ const AddCookieDetails = () => {
   const handleChange = useCallback(
     ({
       key,
-      value
+      value,
     }: {
       key: keyof CookieInterface;
       value: CookieInterface[keyof CookieInterface];
     }) => {
       dispatch(
         handleChangeAddCookie({
-          [key]: value
-        })
+          [key]: value,
+        }),
       );
     },
-    [dispatch]
+    [dispatch],
   );
 
   return (

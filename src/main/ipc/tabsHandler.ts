@@ -3,7 +3,7 @@ import {
   deleteAllTabList,
   deleteTabListByProjectId,
   getTabList,
-  updateTabList
+  updateTabList,
 } from "@/main/db/tabsDB.js";
 import { ElectronAPITabsInterface } from "@shared/types/api/electron-tabs";
 
@@ -14,7 +14,7 @@ export const tabsHandler = () => {
       _,
       ...rest: Parameters<ElectronAPITabsInterface["getTabList"]>
     ): ReturnType<ElectronAPITabsInterface["getTabList"]> =>
-      await getTabList(...rest)
+      await getTabList(...rest),
   );
   ipcMain.handle(
     "updateTabList",
@@ -22,7 +22,7 @@ export const tabsHandler = () => {
       _,
       ...rest: Parameters<ElectronAPITabsInterface["updateTabList"]>
     ): ReturnType<ElectronAPITabsInterface["updateTabList"]> =>
-      await updateTabList(...rest)
+      await updateTabList(...rest),
   );
   ipcMain.handle(
     "deleteAllTabList",
@@ -30,7 +30,7 @@ export const tabsHandler = () => {
       _,
       ...rest: Parameters<ElectronAPITabsInterface["deleteAllTabList"]>
     ): ReturnType<ElectronAPITabsInterface["deleteAllTabList"]> =>
-      await deleteAllTabList(...rest)
+      await deleteAllTabList(...rest),
   );
   ipcMain.handle(
     "deleteTabListByProjectId",
@@ -38,6 +38,6 @@ export const tabsHandler = () => {
       _,
       ...rest: Parameters<ElectronAPITabsInterface["deleteTabListByProjectId"]>
     ): ReturnType<ElectronAPITabsInterface["deleteTabListByProjectId"]> =>
-      await deleteTabListByProjectId(...rest)
+      await deleteTabListByProjectId(...rest),
   );
 };

@@ -9,7 +9,7 @@ const ArrayHeaderPreview = ({ data = [] }: ArrayHeaderPreviewProps) => {
   const headerList = Array.from(
     data.reduce<Set<string>>((acc, curr) => {
       return new Set([...acc, ...Object.keys(curr)]);
-    }, new Set())
+    }, new Set()),
   );
 
   return (
@@ -20,7 +20,7 @@ const ArrayHeaderPreview = ({ data = [] }: ArrayHeaderPreviewProps) => {
         }}
       >
         <TableHead></TableHead>
-        {headerList.map((key) => (
+        {headerList.map(key => (
           <TableHead key={key} className="font-semibold">
             {key}
           </TableHead>

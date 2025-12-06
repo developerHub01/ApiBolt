@@ -22,7 +22,7 @@ export const useEnvironments = () => {
   const context = useContext(EnvironmentsContext);
   if (!context) {
     throw new Error(
-      "useEnvironments must be used within an EnvironmentsProvider."
+      "useEnvironments must be used within an EnvironmentsProvider.",
     );
   }
   return context;
@@ -40,8 +40,8 @@ const searchFilteredEnvironments = ({
 
   return Object.fromEntries(
     Object.entries(environmentsList).filter(([, env]) =>
-      env.variable?.toLowerCase().includes(searchQuery.toLowerCase())
-    )
+      env.variable?.toLowerCase().includes(searchQuery.toLowerCase()),
+    ),
   );
 };
 
@@ -54,7 +54,7 @@ interface EnvironmentsProviderProps {
 const EnvironmentsProvider = ({ children }: EnvironmentsProviderProps) => {
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
   const environmentsListFromStore = useAppSelector(
-    (state) => state.environments.environmentsList ?? {}
+    state => state.environments.environmentsList ?? {},
   );
 
   const [environmentsListState, setEnvironmentsListState] = useState<
@@ -69,10 +69,10 @@ const EnvironmentsProvider = ({ children }: EnvironmentsProviderProps) => {
         searchFilteredEnvironments({
           searchQuery: query,
           environmentsList: environmentsListFromStore,
-        })
+        }),
       );
     },
-    [environmentsListFromStore]
+    [environmentsListFromStore],
   );
 
   /* Debounced search */
@@ -84,7 +84,7 @@ const EnvironmentsProvider = ({ children }: EnvironmentsProviderProps) => {
         updateFilteredEnvironments(value);
       }, DEBOUNCE_DELAY);
     },
-    [updateFilteredEnvironments]
+    [updateFilteredEnvironments],
   );
 
   /* Handle input change */
@@ -93,7 +93,7 @@ const EnvironmentsProvider = ({ children }: EnvironmentsProviderProps) => {
       setSearchQuery(value);
       handleSearch(value);
     },
-    [handleSearch]
+    [handleSearch],
   );
 
   /* Initialize environments list on mount and whenever the store updates */

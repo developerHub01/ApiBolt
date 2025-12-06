@@ -6,5 +6,5 @@ export const selectBinaryData = createSelector(
     (state: RootState) =>
       state.requestResponse.binaryData[state.requestResponse.selectedTab!],
   ],
-  (binaryData) => binaryData
+  binaryData => binaryData,
 );

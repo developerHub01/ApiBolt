@@ -2,7 +2,7 @@ import { requestDefaultCodeSnippit } from "@/constant/code-snippit.constant";
 import type {
   CodeSnippitDataInterface,
   RequestCodeSnippitInterface,
-  TRequestCodeType
+  TRequestCodeType,
 } from "@shared/types/code-snippit.types";
 import { generateMaskedAndRealCode } from "@/utils/snippet-generator/helper.utils";
 import {
@@ -15,7 +15,7 @@ import {
   getPeclFormData,
   getRawData,
   getXWWWFormUrlencodedArrData,
-  getXWWWFormUrlencodedCurlData
+  getXWWWFormUrlencodedCurlData,
 } from "@/utils/snippet-generator/php/helper.utils";
 
 const binaryDataStringValue = `/* binary data ========= */
@@ -32,7 +32,7 @@ export const generatePHPCURLCode = async ({
   rawBodyDataType,
   bodyType,
   binaryData,
-  rawData
+  rawData,
 }: CodeSnippitDataInterface) => {
   const codeStartString = `<?php\n`;
 
@@ -41,22 +41,22 @@ export const generatePHPCURLCode = async ({
     authorization,
     binaryData,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
   const xWWWFormUrlencodedString = getXWWWFormUrlencodedCurlData({
     bodyType,
-    xWWWFormUrlencoded
+    xWWWFormUrlencoded,
   });
   const formDataString = getFormData({
     bodyType,
-    formData
+    formData,
   });
   const binaryDataString = bodyType === "binary" ? binaryDataStringValue : "";
 
   const rawDataString = getRawData({
     bodyType,
     rawBodyDataType,
-    rawData
+    rawData,
   });
 
   const curlInitString = `$curl = curl_init();\n\n`;
@@ -64,44 +64,44 @@ export const generatePHPCURLCode = async ({
   const curlSetupOptionsArr = [
     {
       key: "CURLOPT_URL",
-      value: `"${url}"`
+      value: `"${url}"`,
     },
     {
       key: "CURLOPT_RETURNTRANSFER",
-      value: "true"
+      value: "true",
     },
     {
       key: "CURLOPT_CUSTOMREQUEST",
-      value: `"${method.toUpperCase()}"`
-    }
+      value: `"${method.toUpperCase()}"`,
+    },
   ];
 
   if (rawDataString !== null)
     curlSetupOptionsArr.push({
       key: "CURLOPT_POSTFIELDS",
-      value: "$data"
+      value: "$data",
     });
 
   if (formDataString)
     curlSetupOptionsArr.push({
       key: "CURLOPT_POSTFIELDS",
-      value: "$formData"
+      value: "$formData",
     });
   if (xWWWFormUrlencodedString)
     curlSetupOptionsArr.push({
       key: "CURLOPT_POSTFIELDS",
-      value: "$data"
+      value: "$data",
     });
   if (binaryDataString)
     curlSetupOptionsArr.push({
       key: "CURLOPT_POSTFIELDS",
-      value: "$binaryData"
+      value: "$binaryData",
     });
 
   if (headersString)
     curlSetupOptionsArr.push({
       key: "CURLOPT_HTTPHEADER",
-      value: "$headers"
+      value: "$headers",
     });
 
   const curlSetoptArrayString = `curl_setopt_array($curl, [
@@ -133,7 +133,7 @@ export const generatePHPGuzzleCode = async ({
   rawBodyDataType,
   bodyType,
   binaryData,
-  rawData
+  rawData,
 }: CodeSnippitDataInterface) => {
   const codeStartString = `<?php
 require 'vendor/autoload.php';
@@ -146,20 +146,20 @@ $client = new Client();\n\n`;
     authorization,
     binaryData,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
   const xWWWFormUrlencodedString = getXWWWFormUrlencodedArrData({
     bodyType,
-    xWWWFormUrlencoded
+    xWWWFormUrlencoded,
   });
   const formDataString = getMultipartData({
     bodyType,
-    formData
+    formData,
   });
   const rawDataString = getRawData({
     bodyType,
     rawBodyDataType,
-    rawData
+    rawData,
   });
   const binaryDataString = bodyType === "binary" ? binaryDataStringValue : "";
 
@@ -168,30 +168,30 @@ $client = new Client();\n\n`;
   if (headersString)
     optionsArr.push({
       key: "headers",
-      value: "$headers"
+      value: "$headers",
     });
 
   if (bodyType === "form-data" && formDataString)
     optionsArr.push({
       key: "multipart",
-      value: "$multipart"
+      value: "$multipart",
     });
   if (bodyType === "binary" && binaryDataString)
     optionsArr.push({
       key: "body",
-      value: "$binaryData"
+      value: "$binaryData",
     });
 
   if (bodyType === "raw" && rawDataString !== null)
     optionsArr.push({
       key: "body",
-      value: "$data"
+      value: "$data",
     });
 
   if (bodyType === "x-www-form-urlencoded" && xWWWFormUrlencodedString)
     optionsArr.push({
       key: "form_params",
-      value: "$data"
+      value: "$data",
     });
 
   const optionsString = optionsArr.length
@@ -223,7 +223,7 @@ export const generatePHPPeclHttpCode = async ({
   rawBodyDataType,
   bodyType,
   binaryData,
-  rawData
+  rawData,
 }: CodeSnippitDataInterface) => {
   const codeStartString = `<?php\n\n`;
 
@@ -232,20 +232,20 @@ export const generatePHPPeclHttpCode = async ({
     authorization,
     binaryData,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
   const formDataString = getPeclFormData({
     bodyType,
-    formData
+    formData,
   });
   const xWWWFormUrlencodedString = getXWWWFormUrlencodedArrData({
     bodyType,
-    xWWWFormUrlencoded
+    xWWWFormUrlencoded,
   });
   const rawDataString = getRawData({
     bodyType,
     rawBodyDataType,
-    rawData
+    rawData,
   });
   const binaryDataString =
     bodyType === "binary"
@@ -295,7 +295,7 @@ export const generatePHPHTTPRequest2Code = async ({
   rawBodyDataType,
   bodyType,
   binaryData,
-  rawData
+  rawData,
 }: CodeSnippitDataInterface) => {
   const codeStartString = `<?php
 require_once 'HTTP/Request2.php';\n\n`;
@@ -307,20 +307,20 @@ require_once 'HTTP/Request2.php';\n\n`;
     authorization,
     binaryData,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
   const xWWWFormUrlencodedString = getXWWWFormUrlencodedCurlData({
     bodyType,
-    xWWWFormUrlencoded
+    xWWWFormUrlencoded,
   });
   const formDataString = getHttpRequest2FormData({
     bodyType,
-    formData
+    formData,
   });
   const rawDataString = getRawData({
     bodyType,
     rawBodyDataType,
-    rawData
+    rawData,
   });
   const binaryDataString =
     bodyType === "binary"
@@ -349,7 +349,7 @@ $binaryData = file_get_contents("${binaryData ?? "<file contents here>"}");
 
 export const generatePHPCode = async (
   type: TRequestCodeType,
-  data: CodeSnippitDataInterface
+  data: CodeSnippitDataInterface,
 ): Promise<RequestCodeSnippitInterface> => {
   switch (type) {
     case "php-curl":

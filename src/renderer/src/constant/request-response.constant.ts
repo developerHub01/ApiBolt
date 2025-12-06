@@ -9,7 +9,7 @@ export const generateNewMetaDataItem = (type?: TMetaTableType) => ({
   key: "",
   value: "",
   contentType: type !== "form-data" ? undefined : "",
-  description: ""
+  description: "",
 });
 
 export const getCookiesByDomain = async (url: string) => {
@@ -27,7 +27,7 @@ export const RESPONSE_PANEL_MIN_LIMIT = 15;
 
 export const DEFAULT_REQUEST_RESPONSE_SIZE = {
   header: 0,
-  body: 0
+  body: 0,
 };
 
 export const COOKIE_DATA_ID = "cookie";
@@ -37,7 +37,7 @@ export const initialHiddenCookie = () => ({
   value: "",
   description: "",
   prevent: true,
-  calculateDynamicly: true
+  calculateDynamicly: true,
 });
 
 export const INITIAL_HIDDEN_HEADERS_DATA = [
@@ -46,7 +46,7 @@ export const INITIAL_HIDDEN_HEADERS_DATA = [
     key: "User-Agent",
     value: `${import.meta.env.VITE_APP_NAME}/${import.meta.env.VITE_APP_VERSION}`,
     prevent: true,
-    isCheck: true
+    isCheck: true,
   },
   {
     id: "contentLength",
@@ -54,29 +54,29 @@ export const INITIAL_HIDDEN_HEADERS_DATA = [
     value: "",
     prevent: true,
     isCheck: true,
-    calculateDynamicly: true
+    calculateDynamicly: true,
   },
   {
     id: "accept",
     key: "Accept",
     value: "*/*",
     prevent: true,
-    isCheck: true
+    isCheck: true,
   },
   {
     id: "acceptEncoding",
     key: "Accept-Encoding",
     value: "gzip, deflate, br",
     prevent: true,
-    isCheck: true
+    isCheck: true,
   },
   {
     id: "connection",
     key: "Connection",
     value: "keep-alive",
     prevent: true,
-    isCheck: true
-  }
+    isCheck: true,
+  },
 ];
 
 export const HEADERS_HIDDEN_IDS = new Set([
@@ -86,5 +86,5 @@ export const HEADERS_HIDDEN_IDS = new Set([
   "contentLength",
   "accept",
   "acceptEncoding",
-  "connection"
+  "connection",
 ]);

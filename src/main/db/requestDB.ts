@@ -12,7 +12,7 @@ import {
   hiddenHeadersCheckTable,
   paramsTable,
   requestMetaTabTable,
-  requestOrFolderMetaTable
+  requestOrFolderMetaTable,
 } from "@/main/db/schema.js";
 import { db } from "@/main/db/index.js";
 import { getActiveProject } from "@/main/db/projectsDB.js";
@@ -74,7 +74,7 @@ export const clearRequest = async (id: string) => {
       .update(requestOrFolderMetaTable)
       .set({
         name: "Request",
-        method: "get"
+        method: "get",
       })
       .where(eq(requestOrFolderMetaTable.id, id));
 
@@ -86,7 +86,7 @@ export const clearRequest = async (id: string) => {
         contentLength: true,
         accept: true,
         acceptEncoding: true,
-        connection: true
+        connection: true,
       })
       .where(eq(hiddenHeadersCheckTable.requestOrFolderMetaId, id));
 
@@ -107,7 +107,7 @@ export const importRequest = async ({
   bodyBinary,
   bodyXWWWFormUrlencoded,
   bodyFormData,
-  authorization
+  authorization,
 }: RequestExportFileInterface & {
   requestId: string;
 }): Promise<boolean> => {
@@ -124,7 +124,7 @@ export const importRequest = async ({
       .update(requestOrFolderMetaTable)
       .set({
         name,
-        method
+        method,
       })
       .where(eq(requestOrFolderMetaTable.id, id));
 
@@ -137,15 +137,15 @@ export const importRequest = async ({
       .insert(apiUrlTable)
       .values({
         requestOrFolderMetaId: id,
-        url
+        url,
       })
       .onConflictDoUpdate({
         target: [apiUrlTable.requestOrFolderMetaId],
         set: {
           url,
           /* this extra requestOrFolderMetaId so that it not remain empty so not fail the query */
-          requestOrFolderMetaId: id
-        }
+          requestOrFolderMetaId: id,
+        },
       });
 
     /**
@@ -161,8 +161,8 @@ export const importRequest = async ({
       await tsx.insert(paramsTable).values(
         params.map(param => ({
           ...param,
-          requestOrFolderMetaId: id
-        }))
+          requestOrFolderMetaId: id,
+        })),
       );
 
     /**
@@ -178,8 +178,8 @@ export const importRequest = async ({
       await tsx.insert(headersTable).values(
         headers.map(header => ({
           ...header,
-          requestOrFolderMetaId: id
-        }))
+          requestOrFolderMetaId: id,
+        })),
       );
 
     /**
@@ -191,15 +191,15 @@ export const importRequest = async ({
       .insert(hiddenHeadersCheckTable)
       .values({
         ...hiddenHeadersCheck,
-        requestOrFolderMetaId: id
+        requestOrFolderMetaId: id,
       })
       .onConflictDoUpdate({
         target: [hiddenHeadersCheckTable.requestOrFolderMetaId],
         set: {
           ...hiddenHeadersCheck,
           /* this extra requestOrFolderMetaId so that it not remain empty so not fail the query */
-          requestOrFolderMetaId: id
-        }
+          requestOrFolderMetaId: id,
+        },
       });
 
     /**
@@ -211,15 +211,15 @@ export const importRequest = async ({
       .insert(requestMetaTabTable)
       .values({
         ...requestMetaTab,
-        requestOrFolderMetaId: id
+        requestOrFolderMetaId: id,
       })
       .onConflictDoUpdate({
         target: [requestMetaTabTable.requestOrFolderMetaId],
         set: {
           ...requestMetaTab,
           /* this extra requestOrFolderMetaId so that it not remain empty so not fail the query */
-          requestOrFolderMetaId: id
-        }
+          requestOrFolderMetaId: id,
+        },
       });
 
     /**
@@ -235,8 +235,8 @@ export const importRequest = async ({
       await tsx.insert(bodyXWWWFormUrlencodedTable).values(
         bodyXWWWFormUrlencoded.map(form => ({
           ...form,
-          requestOrFolderMetaId: id
-        }))
+          requestOrFolderMetaId: id,
+        })),
       );
 
     /**
@@ -252,8 +252,8 @@ export const importRequest = async ({
       await tsx.insert(bodyFormDataTable).values(
         bodyFormData.map(form => ({
           ...form,
-          requestOrFolderMetaId: id
-        }))
+          requestOrFolderMetaId: id,
+        })),
       );
 
     /**
@@ -265,15 +265,15 @@ export const importRequest = async ({
       .insert(bodyBinaryTable)
       .values({
         ...bodyBinary,
-        requestOrFolderMetaId: id
+        requestOrFolderMetaId: id,
       })
       .onConflictDoUpdate({
         target: [bodyBinaryTable.requestOrFolderMetaId],
         set: {
           ...bodyBinary,
           /* this extra requestOrFolderMetaId so that it not remain empty so not fail the query */
-          requestOrFolderMetaId: id
-        }
+          requestOrFolderMetaId: id,
+        },
       });
 
     /**
@@ -285,15 +285,15 @@ export const importRequest = async ({
       .insert(bodyRawTable)
       .values({
         ...bodyRaw,
-        requestOrFolderMetaId: id
+        requestOrFolderMetaId: id,
       })
       .onConflictDoUpdate({
         target: [bodyRawTable.requestOrFolderMetaId],
         set: {
           ...bodyRaw,
           /* this extra requestOrFolderMetaId so that it not remain empty so not fail the query */
-          requestOrFolderMetaId: id
-        }
+          requestOrFolderMetaId: id,
+        },
       });
 
     /**
@@ -306,15 +306,15 @@ export const importRequest = async ({
       .values({
         ...authorization,
         requestOrFolderMetaId: id,
-        projectId
+        projectId,
       })
       .onConflictDoUpdate({
         target: [authorizationTable.requestOrFolderMetaId],
         set: {
           ...authorization,
           /* this extra requestOrFolderMetaId so that it not remain empty so not fail the query */
-          requestOrFolderMetaId: id
-        }
+          requestOrFolderMetaId: id,
+        },
       });
 
     return true;
@@ -322,7 +322,7 @@ export const importRequest = async ({
 };
 
 export const exportRequest = async (
-  id: string
+  id: string,
 ): Promise<RequestExportFileInterface | null> => {
   return await db.transaction(async tsx => {
     const { name, method } =
@@ -331,13 +331,13 @@ export const exportRequest = async (
           .select(
             (() => {
               const { method, name } = getTableColumns(
-                requestOrFolderMetaTable
+                requestOrFolderMetaTable,
               );
               return {
                 method,
-                name
+                name,
               };
-            })()
+            })(),
           )
           .from(requestOrFolderMetaTable)
           .where(eq(requestOrFolderMetaTable.id, id))
@@ -353,7 +353,7 @@ export const exportRequest = async (
               const { id, createdAt, requestOrFolderMetaId, ...rest } =
                 getTableColumns(apiUrlTable);
               return rest;
-            })()
+            })(),
           )
           .from(apiUrlTable)
           .where(eq(apiUrlTable.requestOrFolderMetaId, id))
@@ -367,7 +367,7 @@ export const exportRequest = async (
             const { id, createdAt, requestOrFolderMetaId, ...rest } =
               getTableColumns(paramsTable);
             return rest;
-          })()
+          })(),
         )
         .from(paramsTable)
         .where(eq(paramsTable.requestOrFolderMetaId, id))) ?? [];
@@ -379,7 +379,7 @@ export const exportRequest = async (
             const { id, createdAt, requestOrFolderMetaId, ...rest } =
               getTableColumns(headersTable);
             return rest;
-          })()
+          })(),
         )
         .from(headersTable)
         .where(eq(headersTable.requestOrFolderMetaId, id))) ?? [];
@@ -390,10 +390,10 @@ export const exportRequest = async (
           .select(
             (() => {
               const { id, requestOrFolderMetaId, ...rest } = getTableColumns(
-                hiddenHeadersCheckTable
+                hiddenHeadersCheckTable,
               );
               return rest;
-            })()
+            })(),
           )
           .from(hiddenHeadersCheckTable)
           .where(eq(hiddenHeadersCheckTable.requestOrFolderMetaId, id))
@@ -407,7 +407,7 @@ export const exportRequest = async (
             (() => {
               const { id, ...rest } = getTableColumns(requestMetaTabTable);
               return rest;
-            })()
+            })(),
           )
           .from(requestMetaTabTable)
           .where(eq(requestMetaTabTable.requestOrFolderMetaId, id))
@@ -422,7 +422,7 @@ export const exportRequest = async (
               const { id, requestOrFolderMetaId, lineWrap, ...rest } =
                 getTableColumns(bodyRawTable);
               return rest;
-            })()
+            })(),
           )
           .from(bodyRawTable)
           .where(eq(bodyRawTable.requestOrFolderMetaId, id))
@@ -437,7 +437,7 @@ export const exportRequest = async (
               const { id, requestOrFolderMetaId, ...rest } =
                 getTableColumns(bodyBinaryTable);
               return rest;
-            })()
+            })(),
           )
           .from(bodyBinaryTable)
           .where(eq(bodyBinaryTable.requestOrFolderMetaId, id))
@@ -451,7 +451,7 @@ export const exportRequest = async (
             const { id, createdAt, requestOrFolderMetaId, ...rest } =
               getTableColumns(bodyXWWWFormUrlencodedTable);
             return rest;
-          })()
+          })(),
         )
         .from(bodyXWWWFormUrlencodedTable)
         .where(eq(bodyXWWWFormUrlencodedTable.requestOrFolderMetaId, id))) ??
@@ -464,7 +464,7 @@ export const exportRequest = async (
             const { id, createdAt, requestOrFolderMetaId, ...rest } =
               getTableColumns(bodyFormDataTable);
             return rest;
-          })()
+          })(),
         )
         .from(bodyFormDataTable)
         .where(eq(bodyFormDataTable.requestOrFolderMetaId, id))) ?? [];
@@ -477,7 +477,7 @@ export const exportRequest = async (
               const { id, projectId, requestOrFolderMetaId, ...rest } =
                 getTableColumns(authorizationTable);
               return rest;
-            })()
+            })(),
           )
           .from(authorizationTable)
           .where(eq(authorizationTable.requestOrFolderMetaId, id))
@@ -496,13 +496,13 @@ export const exportRequest = async (
       bodyBinary,
       bodyXWWWFormUrlencoded,
       bodyFormData,
-      authorization
+      authorization,
     };
   });
 };
 
 export const exportFolder = async (
-  id: string
+  id: string,
 ): Promise<FolderExportFileInterface | null> => {
   return await db.transaction(async tsx => {
     const projectId = await getActiveProject();
@@ -533,7 +533,7 @@ export const exportFolder = async (
           (() => {
             const { id, createdAt, ...rest } = getTableColumns(apiUrlTable);
             return rest;
-          })()
+          })(),
         )
         .from(apiUrlTable)
         .where(inArray(apiUrlTable.requestOrFolderMetaId, requestIdList))) ?? []
@@ -551,7 +551,7 @@ export const exportFolder = async (
           (() => {
             const { id, createdAt, ...rest } = getTableColumns(paramsTable);
             return rest;
-          })()
+          })(),
         )
         .from(paramsTable)
         .where(inArray(paramsTable.requestOrFolderMetaId, requestIdList))) ?? []
@@ -569,7 +569,7 @@ export const exportFolder = async (
           (() => {
             const { id, createdAt, ...rest } = getTableColumns(headersTable);
             return rest;
-          })()
+          })(),
         )
         .from(headersTable)
         .where(inArray(headersTable.requestOrFolderMetaId, requestIdList))) ??
@@ -588,11 +588,11 @@ export const exportFolder = async (
           (() => {
             const { id, ...rest } = getTableColumns(hiddenHeadersCheckTable);
             return rest;
-          })()
+          })(),
         )
         .from(hiddenHeadersCheckTable)
         .where(
-          inArray(hiddenHeadersCheckTable.requestOrFolderMetaId, requestIdList)
+          inArray(hiddenHeadersCheckTable.requestOrFolderMetaId, requestIdList),
         )) ?? []
     )?.reduce((acc, curr) => {
       if (!acc[curr.requestOrFolderMetaId])
@@ -609,11 +609,11 @@ export const exportFolder = async (
             const { id, createdAt, ...rest } =
               getTableColumns(bodyFormDataTable);
             return rest;
-          })()
+          })(),
         )
         .from(bodyFormDataTable)
         .where(
-          inArray(bodyFormDataTable.requestOrFolderMetaId, requestIdList)
+          inArray(bodyFormDataTable.requestOrFolderMetaId, requestIdList),
         )) ?? []
     )?.reduce((acc, curr) => {
       if (!acc[curr.requestOrFolderMetaId])
@@ -628,17 +628,17 @@ export const exportFolder = async (
         .select(
           (() => {
             const { id, createdAt, ...rest } = getTableColumns(
-              bodyXWWWFormUrlencodedTable
+              bodyXWWWFormUrlencodedTable,
             );
             return rest;
-          })()
+          })(),
         )
         .from(bodyXWWWFormUrlencodedTable)
         .where(
           inArray(
             bodyXWWWFormUrlencodedTable.requestOrFolderMetaId,
-            requestIdList
-          )
+            requestIdList,
+          ),
         )) ?? []
     )?.reduce((acc, curr) => {
       if (!acc[curr.requestOrFolderMetaId])
@@ -654,11 +654,11 @@ export const exportFolder = async (
           (() => {
             const { id, ...rest } = getTableColumns(bodyBinaryTable);
             return rest;
-          })()
+          })(),
         )
         .from(bodyBinaryTable)
         .where(
-          inArray(bodyBinaryTable.requestOrFolderMetaId, requestIdList)
+          inArray(bodyBinaryTable.requestOrFolderMetaId, requestIdList),
         )) ?? []
     )?.reduce((acc, curr) => {
       if (!acc[curr.requestOrFolderMetaId])
@@ -674,7 +674,7 @@ export const exportFolder = async (
           (() => {
             const { id, lineWrap, ...rest } = getTableColumns(bodyRawTable);
             return rest;
-          })()
+          })(),
         )
         .from(bodyRawTable)
         .where(inArray(bodyRawTable.requestOrFolderMetaId, requestIdList))) ??
@@ -693,11 +693,11 @@ export const exportFolder = async (
           (() => {
             const { id, ...rest } = getTableColumns(requestMetaTabTable);
             return rest;
-          })()
+          })(),
         )
         .from(requestMetaTabTable)
         .where(
-          inArray(requestMetaTabTable.requestOrFolderMetaId, requestIdList)
+          inArray(requestMetaTabTable.requestOrFolderMetaId, requestIdList),
         )) ?? []
     )?.reduce((acc, curr) => {
       if (!acc[curr.requestOrFolderMetaId])
@@ -714,11 +714,11 @@ export const exportFolder = async (
             const { id, projectId, ...rest } =
               getTableColumns(authorizationTable);
             return rest;
-          })()
+          })(),
         )
         .from(authorizationTable)
         .where(
-          inArray(authorizationTable.requestOrFolderMetaId, requestIdList)
+          inArray(authorizationTable.requestOrFolderMetaId, requestIdList),
         )) ?? []
     )?.reduce((acc, curr) => {
       if (!acc[`${curr.requestOrFolderMetaId}`])
@@ -739,7 +739,7 @@ export const exportFolder = async (
       binaryDataList,
       rawDataList,
       requestMetaTabList,
-      authorization
+      authorization,
     };
   });
 };
@@ -757,7 +757,7 @@ export const importFolder = async ({
   binaryDataList = {},
   rawDataList = {},
   requestMetaTabList = {},
-  authorization = {}
+  authorization = {},
 }: FolderExportFileInterface & {
   requestId: string | null;
   projectId: string;
@@ -824,7 +824,7 @@ export const importFolder = async ({
       const request = {
         ...requestList[oldId],
         id: newId,
-        projectId
+        projectId,
       };
 
       if (request.parentId) {
@@ -837,7 +837,7 @@ export const importFolder = async ({
       if (apiUrlList[oldId]) {
         newApiUrlList.push({
           ...apiUrlList[oldId],
-          requestOrFolderMetaId: newId
+          requestOrFolderMetaId: newId,
         });
       }
 
@@ -845,8 +845,8 @@ export const importFolder = async ({
         newParamsList.push(
           ...paramsList[oldId].map(param => ({
             ...param,
-            requestOrFolderMetaId: newId
-          }))
+            requestOrFolderMetaId: newId,
+          })),
         );
       }
 
@@ -854,22 +854,22 @@ export const importFolder = async ({
         newHeadersList.push(
           ...headersList[oldId].map(header => ({
             ...header,
-            requestOrFolderMetaId: newId
-          }))
+            requestOrFolderMetaId: newId,
+          })),
         );
       }
 
       if (hiddenHeadersCheckList[oldId]) {
         newHiddenHeadersList.push({
           ...hiddenHeadersCheckList[oldId],
-          requestOrFolderMetaId: newId
+          requestOrFolderMetaId: newId,
         });
       }
 
       if (requestMetaTabList[oldId]) {
         newRequestMetaTabList.push({
           ...requestMetaTabList[oldId],
-          requestOrFolderMetaId: newId
+          requestOrFolderMetaId: newId,
         });
       }
 
@@ -877,8 +877,8 @@ export const importFolder = async ({
         newFormDataList.push(
           ...formDataList[oldId].map(form => ({
             ...form,
-            requestOrFolderMetaId: newId
-          }))
+            requestOrFolderMetaId: newId,
+          })),
         );
       }
 
@@ -886,22 +886,22 @@ export const importFolder = async ({
         newXWWWList.push(
           ...xWWWFormUrlencodedList[oldId].map(form => ({
             ...form,
-            requestOrFolderMetaId: newId
-          }))
+            requestOrFolderMetaId: newId,
+          })),
         );
       }
 
       if (binaryDataList[oldId]) {
         newBinaryList.push({
           ...binaryDataList[oldId],
-          requestOrFolderMetaId: newId
+          requestOrFolderMetaId: newId,
         });
       }
 
       if (rawDataList[oldId]) {
         newRawList.push({
           ...rawDataList[oldId],
-          requestOrFolderMetaId: newId
+          requestOrFolderMetaId: newId,
         });
       }
 
@@ -909,7 +909,7 @@ export const importFolder = async ({
         newAuthorization.push({
           ...authorization[oldId],
           requestOrFolderMetaId: newId,
-          projectId
+          projectId,
         });
       }
     });
@@ -920,7 +920,7 @@ export const importFolder = async ({
      * =========================
      */
     const rootFolderId = Object.keys(newRequestList).find(
-      id => !newRequestList[id].parentId
+      id => !newRequestList[id].parentId,
     );
     if (!rootFolderId) return false;
     newRequestList[rootFolderId].parentId = requestId;

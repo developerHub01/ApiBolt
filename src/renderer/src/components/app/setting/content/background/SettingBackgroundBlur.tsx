@@ -31,7 +31,7 @@ const SettingBackgroundBlur = () => {
     });
 
   const senitizedValue = Number(
-    senitizeValue(value, DEFAULT_SETTINGS.backgroundBlur) ?? 0
+    senitizeValue(value, DEFAULT_SETTINGS.backgroundBlur) ?? 0,
   );
 
   return (

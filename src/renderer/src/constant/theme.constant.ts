@@ -17,7 +17,7 @@ export const DEFAULT_THEME_PALETTE: Record<ThemeColorId, string> = {
   border: "#002233",
   input: "#00406c",
   ring: "#295a7e",
-  line: "#00416cb3"
+  line: "#00416cb3",
 };
 
 export const DEFAULT_THUMBNAIL_FALLBACK =

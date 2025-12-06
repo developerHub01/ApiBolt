@@ -33,7 +33,7 @@ const SettingZoomLevel = () => {
     });
 
   const senitizedValue = calculateIntoFixedPoint(
-    Number(senitizeValue(value, DEFAULT_SETTINGS.zoomLevel)) * 100
+    Number(senitizeValue(value, DEFAULT_SETTINGS.zoomLevel)) * 100,
   );
 
   return (
@@ -44,7 +44,7 @@ const SettingZoomLevel = () => {
       defaultValue={calculateIntoFixedPoint(DEFAULT_ZOOM_LEVEL * 100, 1)}
       min={calculateIntoFixedPoint(MIN_ZOOM_LEVEL * 100, 1)}
       max={calculateIntoFixedPoint(MAX_ZOOM_LEVEL * 100, 1)}
-      onChange={(value) =>
+      onChange={value =>
         handleChange(calculateIntoFixedPoint(Number(value) / 100, 1))
       }
       suffixLable="%"

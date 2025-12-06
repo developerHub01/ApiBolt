@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import {
   handleChangeIsRequestListLoaded,
-  handleClearRequestResponse
+  handleClearRequestResponse,
 } from "@/context/redux/request-response/request-response-slice";
 import { loadTabsData } from "@/context/redux/request-response/thunks/tab-list";
 import type { ProjectInterface } from "@shared/types/project.types";
@@ -11,7 +11,7 @@ import { loadEnvironmentsList } from "@/context/redux/environments/thunks/enviro
 import { loadAuthorization } from "@/context/redux/request-response/thunks/auth";
 import {
   handleChangeActiveProject,
-  handleLoadProjectsList
+  handleLoadProjectsList,
 } from "@/context/redux/project/project-slice";
 import { loadKeyboardShortcuts } from "@/context/redux/keyboard-shortcuts/thunks/keyboard-shortcuts";
 import { applyThemeInApp } from "@/context/redux/theme/thunks/theme";
@@ -39,7 +39,7 @@ export const loadProjectList = createAsyncThunk<
 
     return {
       activeProject,
-      projectList: list
+      projectList: list,
     };
   } catch (error) {
     console.error(error);
@@ -75,10 +75,10 @@ export const changeActiveProject = createAsyncThunk<
       dispatch(loadEnvironmentsList()),
       dispatch(
         loadAuthorization({
-          requestOrFolderId: DEFAULT_AUTHORIZATION_ID
-        })
+          requestOrFolderId: DEFAULT_AUTHORIZATION_ID,
+        }),
       ),
-      dispatch(loadKeyboardShortcuts())
+      dispatch(loadKeyboardShortcuts()),
     ]);
 
     return response;
@@ -98,7 +98,7 @@ export const createProject = createAsyncThunk<
 >("project/changeActiveProject", async (name, { dispatch }) => {
   try {
     const response = await window.electronAPIProjects.createProjects({
-      name
+      name,
     });
 
     if (response) dispatch(loadProjectList());
@@ -129,8 +129,8 @@ export const deleteProject = createAsyncThunk<
       dispatch(loadEnvironmentsList());
       dispatch(
         loadAuthorization({
-          requestOrFolderId: DEFAULT_AUTHORIZATION_ID
-        })
+          requestOrFolderId: DEFAULT_AUTHORIZATION_ID,
+        }),
       );
     }
     return response;
@@ -153,7 +153,7 @@ export const updateProject = createAsyncThunk<
 >("project/updateProject", async ({ id, name }, { dispatch }) => {
   try {
     const response = await window.electronAPIProjects.updateProjects(id, {
-      name
+      name,
     });
 
     // update the project list after deletion
@@ -183,7 +183,7 @@ export const exportProject = createAsyncThunk<
     console.error(error);
     return {
       success: false,
-      message: "Something went wrong while exporting the project."
+      message: "Something went wrong while exporting the project.",
     };
   }
 });
@@ -206,7 +206,7 @@ export const importProject = createAsyncThunk<
     console.error(error);
     return {
       success: false,
-      message: "Something went wrong while exporting the project."
+      message: "Something went wrong while exporting the project.",
     };
   }
 });

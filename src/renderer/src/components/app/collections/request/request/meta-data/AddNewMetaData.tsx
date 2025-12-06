@@ -21,7 +21,7 @@ const AddNewMetaData = memo(
         label={label}
       />
     );
-  }
+  },
 );
 AddNewMetaData.displayName = "Add New Meta Data";
 

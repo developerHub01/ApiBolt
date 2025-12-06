@@ -15,7 +15,7 @@ const BodyResponse = memo(() => {
   const [formattedCode, setFormattedCode] = useState("");
 
   const responseType = getResponseType(
-    String(response?.headers?.["content-type"] ?? "")
+    String(response?.headers?.["content-type"] ?? ""),
   ).toLowerCase() as TContentType;
 
   const parser = useMemo(() => getParser(responseType), [responseType]);
@@ -45,7 +45,7 @@ const BodyResponse = memo(() => {
         "flex-1 min-h-0 h-full overflow-hidden [&>div>div]:h-full",
         "rounded-md border",
         "bg-background/10",
-        "backdrop-blur-xs"
+        "backdrop-blur-xs",
       )}
     >
       <Code

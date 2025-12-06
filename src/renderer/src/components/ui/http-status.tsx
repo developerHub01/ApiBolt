@@ -12,7 +12,7 @@ const HttpStatus = ({
   status,
   statusText,
   variant = "primary",
-  className = ""
+  className = "",
 }: Props) => {
   return (
     <Badge
@@ -29,9 +29,9 @@ const HttpStatus = ({
           "bg-amber-500/50 border border-amber-500":
             status < 500 && status >= 400 && variant === "secondary",
           "bg-destructive/50 border border-destructive":
-            status >= 500 && variant === "secondary"
+            status >= 500 && variant === "secondary",
         },
-        className
+        className,
       )}
     >
       {Boolean(status) && <span>{status}</span>}

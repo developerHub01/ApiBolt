@@ -11,7 +11,7 @@ const ResponseMetaWrapper = ({ children, className, ...props }: Props) => {
     <section
       className={cn(
         "flex justify-between items-center gap-2 px-2.5 min-h-10",
-        className
+        className,
       )}
       {...props}
     >

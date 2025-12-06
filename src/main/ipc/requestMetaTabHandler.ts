@@ -5,7 +5,7 @@ import {
   updateRequestMetaTab,
   deleteRequestMetaTab,
   duplicateRequestMetaTab,
-  replaceRequestMetaTab
+  replaceRequestMetaTab,
 } from "@/main/db/requestMetaTabDB.js";
 import { ElectronAPIRequestMetaTabInterface } from "@shared/types/api/electron-request-meta-tab";
 
@@ -18,7 +18,7 @@ export const requestMetaTabHandler = () => {
         ElectronAPIRequestMetaTabInterface["getRequestMetaTab"]
       >
     ): ReturnType<ElectronAPIRequestMetaTabInterface["getRequestMetaTab"]> =>
-      await getRequestMetaTab(...rest)
+      await getRequestMetaTab(...rest),
   );
   ipcMain.handle(
     "createRequestMetaTab",
@@ -28,7 +28,7 @@ export const requestMetaTabHandler = () => {
         ElectronAPIRequestMetaTabInterface["createRequestMetaTab"]
       >
     ): ReturnType<ElectronAPIRequestMetaTabInterface["createRequestMetaTab"]> =>
-      await createRequestMetaTab(...rest)
+      await createRequestMetaTab(...rest),
   );
   ipcMain.handle(
     "updateRequestMetaTab",
@@ -38,7 +38,7 @@ export const requestMetaTabHandler = () => {
         ElectronAPIRequestMetaTabInterface["updateRequestMetaTab"]
       >
     ): ReturnType<ElectronAPIRequestMetaTabInterface["updateRequestMetaTab"]> =>
-      await updateRequestMetaTab(...rest)
+      await updateRequestMetaTab(...rest),
   );
   ipcMain.handle(
     "deleteRequestMetaTab",
@@ -48,7 +48,7 @@ export const requestMetaTabHandler = () => {
         ElectronAPIRequestMetaTabInterface["deleteRequestMetaTab"]
       >
     ): ReturnType<ElectronAPIRequestMetaTabInterface["deleteRequestMetaTab"]> =>
-      await deleteRequestMetaTab(...rest)
+      await deleteRequestMetaTab(...rest),
   );
   ipcMain.handle(
     "duplicateRequestMetaTab",
@@ -59,7 +59,7 @@ export const requestMetaTabHandler = () => {
       >
     ): ReturnType<
       ElectronAPIRequestMetaTabInterface["duplicateRequestMetaTab"]
-    > => await duplicateRequestMetaTab(...rest)
+    > => await duplicateRequestMetaTab(...rest),
   );
   ipcMain.handle(
     "replaceRequestMetaTab",
@@ -70,6 +70,6 @@ export const requestMetaTabHandler = () => {
       >
     ): ReturnType<
       ElectronAPIRequestMetaTabInterface["replaceRequestMetaTab"]
-    > => await replaceRequestMetaTab(...rest)
+    > => await replaceRequestMetaTab(...rest),
   );
 };

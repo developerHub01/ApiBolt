@@ -39,7 +39,7 @@ const ApiUrl = memo(() => {
       dispatch(
         changeRequestApiUrl({
           url,
-        })
+        }),
       );
     }, 500);
     return () => clearTimeout(timeout);
@@ -57,7 +57,7 @@ const ApiUrl = memo(() => {
     dispatch(
       changeRequestApiUrlWithBackend({
         url,
-      })
+      }),
     );
   }, [dispatch, url]);
 
@@ -69,7 +69,7 @@ const ApiUrl = memo(() => {
         {
           "border-destructive/80": isError,
           "border-input/80": !isError,
-        }
+        },
       )}
     >
       <ApiMethodSelector />

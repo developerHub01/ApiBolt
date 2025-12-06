@@ -1,6 +1,6 @@
 import { memo, Suspense, lazy } from "react";
 const TabSidebarRoot = lazy(
-  () => import("@/components/app/tab-sidebar/TabSidebarRoot")
+  () => import("@/components/app/tab-sidebar/TabSidebarRoot"),
 );
 import TabSidebarFallback from "@/fallback/collection/TabSidebarFallback";
 

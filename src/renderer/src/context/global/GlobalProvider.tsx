@@ -3,7 +3,7 @@ import React, { createContext, useCallback, useContext, useState } from "react";
 interface GlobalContext {
   isFullscreen: boolean;
   toggleFullscreen: (
-    containerRef?: React.RefObject<HTMLDivElement | null>
+    containerRef?: React.RefObject<HTMLDivElement | null>,
   ) => void;
 }
 
@@ -34,15 +34,15 @@ const GlobalProvider = ({ children }: GlobalProviderProps) => {
         target
           ?.requestFullscreen()
           .then(() => setIsFullscreen(true))
-          .catch((err) => console.error("Failed to enter fullscreen", err));
+          .catch(err => console.error("Failed to enter fullscreen", err));
       } else {
         document
           .exitFullscreen()
           .then(() => setIsFullscreen(false))
-          .catch((err) => console.error("Failed to exit fullscreen", err));
+          .catch(err => console.error("Failed to exit fullscreen", err));
       }
     },
-    []
+    [],
   );
 
   return (

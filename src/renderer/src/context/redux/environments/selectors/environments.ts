@@ -5,22 +5,22 @@ import { removeDuplicateEnvs } from "@/utils/environments.utils";
 
 export const selectEnvironmentsList = createSelector(
   [(state: RootState) => state.environments.environmentsList],
-  (environmentsList: Record<string, EnvironmentInterface>) => environmentsList
+  (environmentsList: Record<string, EnvironmentInterface>) => environmentsList,
 );
 
 export const selectEnvironmentsVariableList = createSelector(
   [(state: RootState) => state.environments.environmentsList],
   (
-    environmentsList: Record<string, EnvironmentInterface>
-  ): Array<EnvironmentInterface> => Object.values(environmentsList)
+    environmentsList: Record<string, EnvironmentInterface>,
+  ): Array<EnvironmentInterface> => Object.values(environmentsList),
 );
 
 export const selectEnvironmentsVariableListUnique = createSelector(
   [(state: RootState) => state.environments.environmentsList],
   (
-    environmentsList: Record<string, EnvironmentInterface>
+    environmentsList: Record<string, EnvironmentInterface>,
   ): Array<EnvironmentInterface> => {
     const map = removeDuplicateEnvs(environmentsList);
     return Array.from(map.values());
-  }
+  },
 );

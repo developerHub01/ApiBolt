@@ -1,6 +1,6 @@
 import {
   type ParamHeaderBuildPayloadInterface,
-  type ParamInterface
+  type ParamInterface,
 } from "@shared/types/request-response.types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
@@ -115,7 +115,7 @@ export const deleteParamsByRequestMetaId = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const updateParams = createAsyncThunk<
@@ -151,7 +151,7 @@ export const updateParams = createAsyncThunk<
       if (payload.value && param.valueType === "text") {
         const valueDetails = detectAndCleanVariable(
           payload["value"],
-          "valueType"
+          "valueType",
         );
         payload["value"] = valueDetails.value;
         if (valueDetails.valueType === "env")
@@ -160,7 +160,7 @@ export const updateParams = createAsyncThunk<
 
       const response = await window.electronAPIParams.updateParams(
         paramId,
-        payload
+        payload,
       );
 
       if (response) dispatch(loadParams());
@@ -169,7 +169,7 @@ export const updateParams = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const checkAllParamsByRequestMetaId = createAsyncThunk<
@@ -185,7 +185,7 @@ export const checkAllParamsByRequestMetaId = createAsyncThunk<
     try {
       const response =
         await window.electronAPIParams.checkAllParamsByRequestMetaId(
-          requestOrFolderMetaId
+          requestOrFolderMetaId,
         );
 
       if (response) dispatch(loadParams());
@@ -194,7 +194,7 @@ export const checkAllParamsByRequestMetaId = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const updateParamsFromSearchParams = createAsyncThunk<
@@ -221,7 +221,7 @@ export const updateParamsFromSearchParams = createAsyncThunk<
         value: string;
       }> = parseUrlParams(api).map(([key, value]) => ({
         key,
-        value
+        value,
       }));
 
       let updatedParams: Array<ParamInterface> = [];
@@ -243,20 +243,20 @@ export const updateParamsFromSearchParams = createAsyncThunk<
           const payload = {
             ...generateNewMetaDataItem("params"),
             ...(state.requestResponse.params[selectedTab]?.[index] ?? {}),
-            ...param
+            ...param,
           };
 
           const keyDetails = detectAndCleanVariable(payload.key, "keyType");
           const valueDetails = detectAndCleanVariable(
             payload.value,
-            "valueType"
+            "valueType",
           );
 
           return {
             ...payload,
             isCheck: true,
             ...keyDetails,
-            ...valueDetails
+            ...valueDetails,
           };
         });
       } else {
@@ -269,13 +269,13 @@ export const updateParamsFromSearchParams = createAsyncThunk<
 
               const payload = {
                 ...curr,
-                ...urlParams[index++]
+                ...urlParams[index++],
               };
 
               const keyDetails = detectAndCleanVariable(payload.key, "keyType");
               const valueDetails = detectAndCleanVariable(
                 payload.value,
-                "valueType"
+                "valueType",
               );
 
               return [
@@ -283,11 +283,11 @@ export const updateParamsFromSearchParams = createAsyncThunk<
                 {
                   ...payload,
                   ...keyDetails,
-                  ...valueDetails
-                }
+                  ...valueDetails,
+                },
               ];
             },
-            [] as Array<ParamInterface>
+            [] as Array<ParamInterface>,
           );
         } catch (error) {
           console.error(error);
@@ -299,7 +299,7 @@ export const updateParamsFromSearchParams = createAsyncThunk<
       if (!saveBackend) return true;
       const response = await window.electronAPIParams.replaceParams(
         selectedTab,
-        updatedParams
+        updatedParams,
       );
 
       /* so that if cant update then revert  'handleLoadParams' reducer update*/
@@ -309,7 +309,7 @@ export const updateParamsFromSearchParams = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const duplicateParamsByOldNewIds = createAsyncThunk<

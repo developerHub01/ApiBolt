@@ -28,8 +28,8 @@ const listItemToHide = new Set(["export", "delete"]);
 const ThreeeDotAction = () => {
   const dispatch = useAppDispatch();
   const toast = useCustomToast();
-  const haveListItem = useAppSelector((state) =>
-    Boolean(Object.keys(selectEnvironmentsList(state) ?? {}).length)
+  const haveListItem = useAppSelector(state =>
+    Boolean(Object.keys(selectEnvironmentsList(state) ?? {}).length),
   );
 
   const handleImport = useCallback(async () => {
@@ -88,9 +88,9 @@ const ThreeeDotAction = () => {
           onClick: handleDeleteAll,
         },
       ].filter((item /* if no list item then dont hide listItemToHides */) =>
-        haveListItem ? true : !listItemToHide.has(item.id)
+        haveListItem ? true : !listItemToHide.has(item.id),
       ),
-    [handleDeleteAll, handleExport, handleImport, haveListItem]
+    [handleDeleteAll, handleExport, handleImport, haveListItem],
   );
 
   return (

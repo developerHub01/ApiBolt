@@ -66,10 +66,10 @@ const useGlobalLocalSetting = ({
         updateSettings({
           [key]: updatedValue,
           projectId: activeTab === "project" ? activeProjectId : null,
-        })
+        }),
       );
     },
-    [activeProjectId, activeTab, DEFAULT_SETTINGS, dispatch, key, settingType]
+    [activeProjectId, activeTab, DEFAULT_SETTINGS, dispatch, key, settingType],
   );
 
   const handleChangeSettingType = useCallback(
@@ -87,10 +87,10 @@ const useGlobalLocalSetting = ({
         updateSettings({
           [key]: updatedValue,
           projectId: activeTab === "project" ? activeProjectId : null,
-        })
+        }),
       );
     },
-    [DEFAULT_SETTINGS, activeProjectId, activeTab, dispatch, key]
+    [DEFAULT_SETTINGS, activeProjectId, activeTab, dispatch, key],
   );
 
   return { value, handleChange, handleChangeSettingType, settingType };

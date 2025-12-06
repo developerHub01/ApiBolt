@@ -16,7 +16,7 @@ const CookieDetailsEditBottomAction = () => {
   const haveChanges = useAppSelector(selectUpdateCookieHaveChanges);
   const handleReset = useCallback(
     () => dispatch(handleResetEditing()),
-    [dispatch]
+    [dispatch],
   );
   const handleSave = useCallback(async () => {
     const response = await dispatch(saveEditingCookie()).unwrap();

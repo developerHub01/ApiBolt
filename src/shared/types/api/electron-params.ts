@@ -1,27 +1,27 @@
 import {
   ParamHeaderBuildPayloadInterface,
-  ParamHeaderPayloadInterface
+  ParamHeaderPayloadInterface,
 } from "@shared/types/request-response.types";
 
 export interface ElectronAPIParamsInterface {
   getParams(id?: string | null): Promise<Array<ParamHeaderPayloadInterface>>;
   deleteParams(paramId: string): Promise<boolean>;
   deleteParamsByRequestMetaId(
-    requestOrFolderMetaId?: string | null
+    requestOrFolderMetaId?: string | null,
   ): Promise<boolean>;
   createParams(
-    payload: Partial<ParamHeaderBuildPayloadInterface>
+    payload: Partial<ParamHeaderBuildPayloadInterface>,
   ): Promise<boolean>;
   updateParams(
     paramId: string,
-    payload: Partial<ParamHeaderBuildPayloadInterface>
+    payload: Partial<ParamHeaderBuildPayloadInterface>,
   ): Promise<boolean>;
   replaceParams(
     requestOrFolderMetaId: string,
-    payload?: Array<Partial<ParamHeaderBuildPayloadInterface>>
+    payload?: Array<Partial<ParamHeaderBuildPayloadInterface>>,
   ): Promise<boolean>;
   checkAllParamsByRequestMetaId(
-    requestOrFolderMetaId?: string | null
+    requestOrFolderMetaId?: string | null,
   ): Promise<boolean>;
   duplicateParams(payload: Record<string, string>): Promise<boolean>;
 }

@@ -49,7 +49,7 @@ export const deleteHeadersByRequestMetaId: ElectronAPIHeadersInterface["deleteHe
           await db
             .delete(headersTable)
             .where(
-              eq(headersTable.requestOrFolderMetaId, requestOrFolderMetaId)
+              eq(headersTable.requestOrFolderMetaId, requestOrFolderMetaId),
             )
         ).rowsAffected > 0
       );
@@ -70,7 +70,7 @@ export const createHeaders: ElectronAPIHeadersInterface["createHeaders"] =
         (
           await db.insert(headersTable).values({
             ...payload,
-            requestOrFolderMetaId
+            requestOrFolderMetaId,
           })
         )?.rowsAffected > 0
       );
@@ -95,7 +95,7 @@ export const updateHeaders: ElectronAPIHeadersInterface["updateHeaders"] =
       if (!isExist)
         await createHeaders({
           id: headerId,
-          ...payload
+          ...payload,
         });
 
       return (
@@ -106,7 +106,7 @@ export const updateHeaders: ElectronAPIHeadersInterface["updateHeaders"] =
               ...payload,
               requestOrFolderMetaId: payload.requestOrFolderMetaId
                 ? payload.requestOrFolderMetaId
-                : undefined
+                : undefined,
             })
             .where(eq(headersTable.id, headerId))
         )?.rowsAffected > 0
@@ -128,7 +128,7 @@ export const replaceHeaders: ElectronAPIHeadersInterface["replaceHeaders"] =
             header["requestOrFolderMetaId"] ?? requestOrFolderMetaId,
           value: Array.isArray(header.value)
             ? JSON.stringify(header.value)
-            : header.value
+            : header.value,
         };
       });
 
@@ -160,7 +160,7 @@ export const checkAllHeadersByRequestMetaId: ElectronAPIHeadersInterface["checkA
           .select()
           .from(headersTable)
           .where(
-            eq(headersTable.requestOrFolderMetaId, requestOrFolderMetaId)
+            eq(headersTable.requestOrFolderMetaId, requestOrFolderMetaId),
           )) ?? [];
 
       const checkValue = !rows.every(row => row.isCheck);
@@ -170,10 +170,10 @@ export const checkAllHeadersByRequestMetaId: ElectronAPIHeadersInterface["checkA
           await db
             .update(headersTable)
             .set({
-              isCheck: checkValue
+              isCheck: checkValue,
             })
             .where(
-              eq(headersTable.requestOrFolderMetaId, requestOrFolderMetaId)
+              eq(headersTable.requestOrFolderMetaId, requestOrFolderMetaId),
             )
         ).rowsAffected > 0
       );
@@ -210,7 +210,7 @@ export const duplicateHeaders: ElectronAPIHeadersInterface["duplicateHeaders"] =
         const { id, createdAt, ...rest } = header;
         return {
           ...rest,
-          requestOrFolderMetaId: payload[header.requestOrFolderMetaId]
+          requestOrFolderMetaId: payload[header.requestOrFolderMetaId],
         };
       });
 

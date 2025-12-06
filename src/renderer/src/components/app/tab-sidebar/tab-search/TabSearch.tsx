@@ -4,8 +4,8 @@ import TabSearchBar from "@/components/app/tab-sidebar/tab-search/TabSearchBar";
 import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 
 const TabSearch = () => {
-  const showTabSearch = useAppSelector((state) =>
-    Boolean(state.requestResponse.tabList?.length ?? 0)
+  const showTabSearch = useAppSelector(state =>
+    Boolean(state.requestResponse.tabList?.length ?? 0),
   );
   const { totalTabsOpen } = useTabSidebar();
 

@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { clearCookies } from "@/context/redux/cookies/thunks/cookies";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { cn } from "@/lib/utils";
+import useCustomToast from "@renderer/hooks/ui/use-custom-toast";
 
 interface Props {
   isOpen: boolean;
@@ -20,8 +21,17 @@ interface Props {
 
 const ClearAlert = ({ isOpen, onClose }: Props) => {
   const dispatch = useAppDispatch();
-  const handleClear = () => {
-    dispatch(clearCookies());
+  const toast = useCustomToast();
+
+  const handleClear = async () => {
+    const response = await dispatch(clearCookies()).unwrap();
+    toast({
+      type: response ? "success" : "error",
+      title: response ? "Delete success" : "Delete error",
+      description: response
+        ? "Cookies cleared successfully"
+        : "Couldn't cleared cookies, something went wrong.",
+    });
     onClose();
   };
 
@@ -45,7 +55,7 @@ const ClearAlert = ({ isOpen, onClose }: Props) => {
               onClick={handleClear}
               className={cn(
                 "text-foreground bg-red-500",
-                "hover:text-foreground hover:bg-red-700"
+                "hover:text-foreground hover:bg-red-700",
               )}
             >
               Clear

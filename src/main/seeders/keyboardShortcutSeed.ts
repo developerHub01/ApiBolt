@@ -13,7 +13,7 @@ export const generateKeyboardBindingsSeed = async () => {
         })
         .from(keyboardShortcutTable)
         .where(isNull(keyboardShortcutTable.projectId))) ?? []
-    ).map((item) => item.id);
+    ).map(item => item.id);
 
     /* making exsting ids set */
     const existingIdSet = new Set(existingGlobalKeybindingIds);

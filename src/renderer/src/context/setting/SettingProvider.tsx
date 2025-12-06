@@ -35,13 +35,13 @@ interface SettingProviderProps {
 const SettingProvider = ({ children }: SettingProviderProps) => {
   const projectId = useAppSelector(selectActiveProjectId);
   const [activeTab, setActiveTab] = useState<TSettingTab>(
-    projectId ? "project" : "global"
+    projectId ? "project" : "global",
   );
 
   useEffect(() => setActiveTab(projectId ? "project" : "global"), [projectId]);
 
   const handleChangeActiveTab = useCallback((value?: TSettingTab) => {
-    setActiveTab((prev) => value ?? (prev === "global" ? "project" : "global"));
+    setActiveTab(prev => value ?? (prev === "global" ? "project" : "global"));
   }, []);
 
   return (

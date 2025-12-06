@@ -84,7 +84,7 @@ const MetaTableThreeDotAction = memo(
         </PopoverContent>
       </Popover>
     );
-  }
+  },
 );
 MetaTableThreeDotAction.displayName = "Meta table three dot action";
 

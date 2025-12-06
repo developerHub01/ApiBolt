@@ -5,7 +5,7 @@ import {
   updateAuth,
   deleteAuth,
   getInheritedAuthFromId,
-  duplicateAuth
+  duplicateAuth,
 } from "@/main/db/authorizationDB.js";
 import { ElectronAPIAuthorizationInterface } from "@shared/types/api/electron-authorization";
 
@@ -16,7 +16,7 @@ export const authorizationHandler = () => {
       _,
       ...rest: Parameters<ElectronAPIAuthorizationInterface["getAuth"]>
     ): ReturnType<ElectronAPIAuthorizationInterface["getAuth"]> =>
-      await getAuth(...rest)
+      await getAuth(...rest),
   );
   ipcMain.handle(
     "getInheritedAuthFromId",
@@ -27,7 +27,7 @@ export const authorizationHandler = () => {
       >
     ): ReturnType<
       ElectronAPIAuthorizationInterface["getInheritedAuthFromId"]
-    > => await getInheritedAuthFromId(...rest)
+    > => await getInheritedAuthFromId(...rest),
   );
   ipcMain.handle(
     "createAuth",
@@ -35,7 +35,7 @@ export const authorizationHandler = () => {
       _,
       ...rest: Parameters<ElectronAPIAuthorizationInterface["createAuth"]>
     ): ReturnType<ElectronAPIAuthorizationInterface["createAuth"]> =>
-      await createAuth(...rest)
+      await createAuth(...rest),
   );
   ipcMain.handle(
     "updateAuth",
@@ -43,7 +43,7 @@ export const authorizationHandler = () => {
       _,
       ...rest: Parameters<ElectronAPIAuthorizationInterface["updateAuth"]>
     ): ReturnType<ElectronAPIAuthorizationInterface["updateAuth"]> =>
-      await updateAuth(...rest)
+      await updateAuth(...rest),
   );
   ipcMain.handle(
     "deleteAuth",
@@ -51,7 +51,7 @@ export const authorizationHandler = () => {
       _,
       ...rest: Parameters<ElectronAPIAuthorizationInterface["deleteAuth"]>
     ): ReturnType<ElectronAPIAuthorizationInterface["deleteAuth"]> =>
-      await deleteAuth(...rest)
+      await deleteAuth(...rest),
   );
   ipcMain.handle(
     "duplicateAuth",
@@ -59,6 +59,6 @@ export const authorizationHandler = () => {
       _,
       ...rest: Parameters<ElectronAPIAuthorizationInterface["duplicateAuth"]>
     ): ReturnType<ElectronAPIAuthorizationInterface["duplicateAuth"]> =>
-      await duplicateAuth(...rest)
+      await duplicateAuth(...rest),
   );
 };

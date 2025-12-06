@@ -5,33 +5,33 @@ import { DEFAULT_THEME_PALETTE } from "@/constant/theme.constant";
 
 export const selectIsThemeListCollapsed = createSelector(
   [(state: RootState) => state.theme.isThemeListCollapsed],
-  isCollapsed => isCollapsed
+  isCollapsed => isCollapsed,
 );
 
 export const selectThemePalette = createSelector(
   [(state: RootState) => state.theme.palette],
-  palette => palette ?? DEFAULT_THEME_PALETTE
+  palette => palette ?? DEFAULT_THEME_PALETTE,
 );
 
 export const selectThemeMetaLoaded = createSelector(
   [(state: RootState) => state.theme.themeMetaList.length],
-  haveLoaded => Boolean(haveLoaded)
+  haveLoaded => Boolean(haveLoaded),
 );
 
 export const selectThemeMetaList = createSelector(
   [(state: RootState) => state.theme.themeMetaList],
-  list => list
+  list => list,
 );
 
 export const selectThemeActiveId = createSelector(
   [(state: RootState) => state.theme.activeThemeId],
-  ids => ids
+  ids => ids,
 );
 
 export const selectThemeHaveError = createSelector(
   [(state: RootState) => state.theme.palette],
   palette =>
     Object.values(palette ?? DEFAULT_THEME_PALETTE).some(
-      item => !isValidColor(item)
-    )
+      item => !isValidColor(item),
+    ),
 );

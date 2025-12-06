@@ -48,9 +48,9 @@ const DescriptionTabs = memo(() => {
       dispatch(
         handleChangeFolderDescriptionActiveTab({
           value: id,
-        })
+        }),
       ),
-    [dispatch]
+    [dispatch],
   );
 
   return (
@@ -66,7 +66,7 @@ const DescriptionTabs = memo(() => {
                 "border-b-transparent": id !== activeTab,
                 "rounded-tl-md": !index,
                 "rounded-tr-md": index === buttonList.length - 1,
-              }
+              },
             )}
             onClick={() => handleChangeTab(id)}
           >

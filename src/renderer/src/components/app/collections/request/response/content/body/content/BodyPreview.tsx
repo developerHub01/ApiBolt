@@ -11,7 +11,7 @@ const BodyPreview = () => {
   if (!response || !response) return null;
 
   const responseType = getResponseType(
-    String(response?.headers?.["content-type"] ?? "")
+    String(response?.headers?.["content-type"] ?? ""),
   ).toLowerCase() as TContentType;
 
   const responseData = response?.data;

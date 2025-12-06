@@ -49,10 +49,10 @@ const BodyTypeSelector = () => {
       dispatch(
         updateRequestMetaTab({
           requestBodyType: type,
-        })
+        }),
       );
     },
-    [dispatch]
+    [dispatch],
   );
 
   return (

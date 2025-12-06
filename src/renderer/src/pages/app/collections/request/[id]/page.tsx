@@ -1,7 +1,7 @@
 import { lazy, Suspense } from "react";
 import RequestFallback from "@/fallback/collection/request/request/RequestFallback";
 const RequestRoot = lazy(
-  () => import("@/components/app/collections/request/RequestRoot")
+  () => import("@/components/app/collections/request/RequestRoot"),
 );
 
 const RequestPage = () => {

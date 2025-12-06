@@ -30,13 +30,13 @@ const RequestMethodTag = memo(
             "bg-orange-500/80 text-white backdrop-blur-lg": method === "patch",
             "bg-red-500/80 text-white backdrop-blur-lg": method === "delete",
           },
-          className
+          className,
         )}
       >
         {shortCut && modifiedMethod === "delete" ? "del" : modifiedMethod}
       </Badge>
     );
-  }
+  },
 );
 
 export default RequestMethodTag;

@@ -2,7 +2,7 @@ import { ipcMain } from "electron";
 import {
   changeActiveTheme,
   getActiveThemeId,
-  getActiveThemePalette
+  getActiveThemePalette,
 } from "@/main/db/activeThemeDB.js";
 import { ElectronAPIActiveThemeInterface } from "@shared/types/api/electron-active-theme";
 
@@ -13,7 +13,7 @@ export const activeThemeHandler = () => {
       _,
       ...rest: Parameters<ElectronAPIActiveThemeInterface["getActiveThemeId"]>
     ): ReturnType<ElectronAPIActiveThemeInterface["getActiveThemeId"]> =>
-      await getActiveThemeId(...rest)
+      await getActiveThemeId(...rest),
   );
   ipcMain.handle(
     "getActiveThemePalette",
@@ -23,7 +23,7 @@ export const activeThemeHandler = () => {
         ElectronAPIActiveThemeInterface["getActiveThemePalette"]
       >
     ): ReturnType<ElectronAPIActiveThemeInterface["getActiveThemePalette"]> =>
-      await getActiveThemePalette(...rest)
+      await getActiveThemePalette(...rest),
   );
   ipcMain.handle(
     "changeActiveTheme",
@@ -31,6 +31,6 @@ export const activeThemeHandler = () => {
       _,
       ...rest: Parameters<ElectronAPIActiveThemeInterface["changeActiveTheme"]>
     ): ReturnType<ElectronAPIActiveThemeInterface["changeActiveTheme"]> =>
-      await changeActiveTheme(...rest)
+      await changeActiveTheme(...rest),
   );
 };

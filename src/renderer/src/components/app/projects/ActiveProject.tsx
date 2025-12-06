@@ -22,16 +22,14 @@ const ActiveProject = memo(() => {
   const nameRef = useRef<HTMLInputElement>(null);
 
   const activeProjectId = useAppSelector(
-    (state) => state.project.activeProjectId
+    state => state.project.activeProjectId,
   );
-  const projectList = useAppSelector((state) => state.project.projectList);
+  const projectList = useAppSelector(state => state.project.projectList);
 
   // Find active project
   const activeProject = useMemo(() => {
     if (!activeProjectId) return null;
-    return (
-      projectList.find((project) => project.id === activeProjectId) || null
-    );
+    return projectList.find(project => project.id === activeProjectId) || null;
   }, [activeProjectId, projectList]);
 
   /* to intitialize local name with redux state */
@@ -49,10 +47,10 @@ const ActiveProject = memo(() => {
         updateProject({
           id: activeProject?.id,
           name,
-        })
+        }),
       );
     },
-    [dispatch, activeProject]
+    [dispatch, activeProject],
   );
 
   const handleKeydownName = useCallback(
@@ -63,7 +61,7 @@ const ActiveProject = memo(() => {
         nameRef.current?.blur();
       }
     },
-    [activeProject]
+    [activeProject],
   );
 
   const handleBlurName = useCallback(
@@ -74,7 +72,7 @@ const ActiveProject = memo(() => {
       setName(value);
       handleDispatchName(value);
     },
-    [activeProject, handleDispatchName]
+    [activeProject, handleDispatchName],
   );
 
   const handleDelete = useCallback(() => {
@@ -89,7 +87,7 @@ const ActiveProject = memo(() => {
       className={cn(
         "w-full border-2 border-dotted border-border rounded-md p-4 flex gap-2 bg-accent/50",
         "backdrop-blur-xs",
-        "group hover:bg-accent/80 focus-within:bg-accent/80 transition-all duration-200"
+        "group hover:bg-accent/80 focus-within:bg-accent/80 transition-all duration-200",
       )}
     >
       <div className="w-full flex flex-col flex-1">
@@ -98,13 +96,13 @@ const ActiveProject = memo(() => {
           <span className="inline-block w-2 h-2 rounded-full bg-green-500 shadow-md shadow-green-400"></span>
           <input
             className={cn(
-              "w-full flex-1 outline-none border-b border-transparent focus:border-b-primary"
+              "w-full flex-1 outline-none border-b border-transparent focus:border-b-primary",
             )}
             onKeyDown={handleKeydownName}
             onBlur={handleBlurName}
             ref={nameRef}
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={e => setName(e.target.value)}
           />
           <Button
             size={"iconSm"}

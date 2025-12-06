@@ -2,19 +2,19 @@ import { requestDefaultCodeSnippit } from "@/constant/code-snippit.constant";
 import type {
   CodeSnippitDataInterface,
   RequestCodeSnippitInterface,
-  TRequestCodeType
+  TRequestCodeType,
 } from "@shared/types/code-snippit.types";
 import { needsQuotesForKey } from "@/utils/helper";
 import {
   generateMaskedAndRealCode,
-  getBodyData
+  getBodyData,
 } from "@/utils/snippet-generator/helper.utils";
 import {
   getBodyRawData,
   getFormData,
   getHeadersData,
   getHeadersDataObject,
-  getXWWWFormUrlencodedData
+  getXWWWFormUrlencodedData,
 } from "@/utils/snippet-generator/javascript/helper.utils";
 
 export const generateJavascriptFetchCode = async ({
@@ -27,20 +27,20 @@ export const generateJavascriptFetchCode = async ({
   binaryData,
   rawBodyDataType,
   bodyType,
-  formData
+  formData,
 }: CodeSnippitDataInterface) => {
   const headersString = getHeadersData({
     headers,
     bodyType,
     rawBodyDataType,
     authorization,
-    binaryData
+    binaryData,
   });
 
   const bodyRawData = await getBodyRawData({
     rawBodyDataType,
     bodyType,
-    rawData
+    rawData,
   });
 
   const options: Array<{
@@ -49,31 +49,31 @@ export const generateJavascriptFetchCode = async ({
   }> = [
     {
       key: "method",
-      value: `"${method.toUpperCase()}"`
-    }
+      value: `"${method.toUpperCase()}"`,
+    },
   ];
 
   if (headersString)
     options.push({
       key: "headers",
-      value: "myHeaders"
+      value: "myHeaders",
     });
 
   const dataValue = getBodyData({ bodyType, formData, xWWWFormUrlencoded });
   if (dataValue)
     options.push({
       key: "data",
-      value: dataValue
+      value: dataValue,
     });
 
   const formDataString = getFormData({
     bodyType,
-    formData
+    formData,
   });
 
   const xwwFormUrlEncodedString = getXWWWFormUrlencodedData({
     bodyType,
-    xWWWFormUrlencoded
+    xWWWFormUrlencoded,
   });
 
   const apiFetchString = `fetch("${url}", {
@@ -97,7 +97,7 @@ export const generateJavascriptAxiosCode = async ({
   rawBodyDataType,
   bodyType,
   binaryData,
-  rawData
+  rawData,
 }: CodeSnippitDataInterface) => {
   const importString = `import axios from "axios";\n\n`;
 
@@ -106,23 +106,23 @@ export const generateJavascriptAxiosCode = async ({
     bodyType,
     rawBodyDataType,
     authorization,
-    binaryData
+    binaryData,
   });
 
   const bodyRawData = await getBodyRawData({
     rawBodyDataType,
     bodyType,
-    rawData
+    rawData,
   });
 
   const formDataString = getFormData({
     bodyType,
-    formData
+    formData,
   });
 
   const xwwFormUrlEncodedString = getXWWWFormUrlencodedData({
     bodyType,
-    xWWWFormUrlencoded
+    xWWWFormUrlencoded,
   });
 
   const options: Array<{
@@ -131,25 +131,25 @@ export const generateJavascriptAxiosCode = async ({
   }> = [
     {
       key: "method",
-      value: `"${method.toUpperCase()}"`
+      value: `"${method.toUpperCase()}"`,
     },
     {
       key: "url",
-      value: `"${url}"`
-    }
+      value: `"${url}"`,
+    },
   ];
 
   if (headersString)
     options.push({
       key: "headers",
-      value: "myHeaders"
+      value: "myHeaders",
     });
 
   const dataValue = getBodyData({ bodyType, formData, xWWWFormUrlencoded });
   if (dataValue)
     options.push({
       key: "data",
-      value: dataValue
+      value: dataValue,
     });
 
   const apiFetchString = `axios({
@@ -172,7 +172,7 @@ export const generateJavascriptjQueryCode = async ({
   rawData,
   rawBodyDataType,
   bodyType,
-  binaryData
+  binaryData,
 }: CodeSnippitDataInterface) => {
   const importString = `/* Requires jQuery library */\n\n`;
 
@@ -181,28 +181,28 @@ export const generateJavascriptjQueryCode = async ({
     bodyType,
     rawBodyDataType,
     authorization,
-    binaryData
+    binaryData,
   });
 
   const bodyRawData = await getBodyRawData({
     rawBodyDataType,
     bodyType,
-    rawData
+    rawData,
   });
 
   const formDataString = getFormData({
     bodyType,
-    formData
+    formData,
   });
 
   const xwwFormUrlEncodedString = getXWWWFormUrlencodedData({
     bodyType,
-    xWWWFormUrlencoded
+    xWWWFormUrlencoded,
   });
 
   const options: Array<{ key: string; value: unknown }> = [
     { key: "url", value: `"${url}"` },
-    { key: "method", value: `"${method.toUpperCase()}"` }
+    { key: "method", value: `"${method.toUpperCase()}"` },
   ];
 
   if (headersString) options.push({ key: "headers", value: "myHeaders" });
@@ -219,7 +219,7 @@ export const generateJavascriptjQueryCode = async ({
 ${options
   .map(
     ({ key, value }) =>
-      `\t${needsQuotesForKey(key) ? JSON.stringify(key) : key}: ${value}`
+      `\t${needsQuotesForKey(key) ? JSON.stringify(key) : key}: ${value}`,
   )
   .join(",\n")}
 })
@@ -240,14 +240,14 @@ export const generateJavascriptXhrCode = async ({
   rawData,
   rawBodyDataType,
   bodyType,
-  binaryData
+  binaryData,
 }: CodeSnippitDataInterface) => {
   const headersString = getHeadersDataObject({
     headers,
     bodyType,
     rawBodyDataType,
     authorization,
-    binaryData
+    binaryData,
   });
 
   const headerLoopString = headersString
@@ -265,22 +265,22 @@ const file = fileInput.files[0];\n\n`
   const bodyRawData = await getBodyRawData({
     rawBodyDataType,
     bodyType,
-    rawData
+    rawData,
   });
 
   const formDataString = getFormData({
     bodyType,
-    formData
+    formData,
   });
 
   const xwwFormUrlEncodedString = getXWWWFormUrlencodedData({
     bodyType,
-    xWWWFormUrlencoded
+    xWWWFormUrlencoded,
   });
 
   const options: Array<{ key: string; value: unknown }> = [
     { key: "url", value: `"${url}"` },
-    { key: "method", value: `"${method.toUpperCase()}"` }
+    { key: "method", value: `"${method.toUpperCase()}"` },
   ];
 
   if (headersString) options.push({ key: "headers", value: "myHeaders" });
@@ -332,7 +332,7 @@ export const generateJavascriptSuperagentCode = async ({
   rawBodyDataType,
   bodyType,
   binaryData,
-  rawData
+  rawData,
 }: CodeSnippitDataInterface) => {
   const importString = `import superagent from "superagent";\n\n`;
 
@@ -341,7 +341,7 @@ export const generateJavascriptSuperagentCode = async ({
     bodyType,
     rawBodyDataType,
     authorization,
-    binaryData
+    binaryData,
   });
 
   const binaryDataString =
@@ -353,17 +353,17 @@ const file = fileInput.files[0];\n\n`
   const bodyRawData = await getBodyRawData({
     rawBodyDataType,
     bodyType,
-    rawData
+    rawData,
   });
 
   const formDataString = getFormData({
     bodyType,
-    formData
+    formData,
   });
 
   const xwwFormUrlEncodedString = getXWWWFormUrlencodedData({
     bodyType,
-    xWWWFormUrlencoded
+    xWWWFormUrlencoded,
   });
 
   const options: Array<{
@@ -372,25 +372,25 @@ const file = fileInput.files[0];\n\n`
   }> = [
     {
       key: "method",
-      value: `"${method.toUpperCase()}"`
+      value: `"${method.toUpperCase()}"`,
     },
     {
       key: "url",
-      value: `"${url}"`
-    }
+      value: `"${url}"`,
+    },
   ];
 
   if (headersString)
     options.push({
       key: "headers",
-      value: "myHeaders"
+      value: "myHeaders",
     });
 
   const dataValue = getBodyData({ bodyType, formData, xWWWFormUrlencoded });
   if (dataValue)
     options.push({
       key: "data",
-      value: dataValue
+      value: dataValue,
     });
 
   const apiSetMethodString = headersString ? `\t.set(myHeaders)\n` : "";
@@ -428,7 +428,7 @@ ${apiSetMethodString}${apiSendMethodString}${errorHandlingString}`;
 
 export const generateJavaScriptCode = async (
   type: TRequestCodeType,
-  data: CodeSnippitDataInterface
+  data: CodeSnippitDataInterface,
 ): Promise<RequestCodeSnippitInterface> => {
   switch (type) {
     case "javascript-fetch":

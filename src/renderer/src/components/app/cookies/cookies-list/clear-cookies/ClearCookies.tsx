@@ -9,7 +9,7 @@ const ClearCookies = () => {
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
 
   const handleToggleAlert = (value?: boolean) =>
-    setIsAlertOpen((prev) => value ?? !prev);
+    setIsAlertOpen(prev => value ?? !prev);
 
   if (!cookiesCount) return null;
 

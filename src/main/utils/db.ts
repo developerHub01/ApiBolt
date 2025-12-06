@@ -1,7 +1,7 @@
 import { db } from "@/main/db/index.js";
 
-export const runInTransaction = async (fn) => {
-  return await db.transaction(async (tx) => {
+export const runInTransaction = async fn => {
+  return await db.transaction(async tx => {
     // backup original functions
     const originalSelect = db.select;
     const originalInsert = db.insert;

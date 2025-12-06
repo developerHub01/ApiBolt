@@ -15,7 +15,7 @@ export const getThemeListMeta: ElectronAPIThemeInterface["getThemeListMeta"] =
           url: themeTable.url,
           author: themeTable.author,
           thumbnail: themeTable.thumbnail,
-          createdAt: themeTable.createdAt
+          createdAt: themeTable.createdAt,
         })
         .from(themeTable);
     } catch (error) {
@@ -35,7 +35,7 @@ export const getThemeById: ElectronAPIThemeInterface["getThemeById"] =
         ...result,
         palette: (result.palette
           ? JSON.parse(result.palette)
-          : {}) as ThemeInterface["palette"]
+          : {}) as ThemeInterface["palette"],
       };
     } catch (error) {
       console.error(error);
@@ -49,7 +49,7 @@ export const getThemePaletteById: ElectronAPIThemeInterface["getThemePaletteById
       const result = (
         await db
           .select({
-            palette: themeTable.palette
+            palette: themeTable.palette,
           })
           .from(themeTable)
           .where(eq(themeTable.id, id))
@@ -74,7 +74,7 @@ export const createTheme: ElectronAPIThemeInterface["createTheme"] =
         (
           await db.insert(themeTable).values({
             ...payload,
-            palette
+            palette,
           })
         ).rowsAffected > 0
       );
@@ -97,7 +97,7 @@ export const updateTheme: ElectronAPIThemeInterface["updateTheme"] =
         (
           await db.update(themeTable).set({
             ...payload,
-            palette
+            palette,
           })
         )?.rowsAffected > 0
       );

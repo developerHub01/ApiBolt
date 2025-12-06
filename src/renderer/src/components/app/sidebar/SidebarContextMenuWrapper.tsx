@@ -40,7 +40,7 @@ const SidebarContextMenuWrapper = ({
 
   const handleToggleRequestListBar = useCallback(
     () => dispatch(handleToggleRequestList()),
-    [dispatch]
+    [dispatch],
   );
 
   const handleHideActivityBar = useCallback(() => {
@@ -48,7 +48,7 @@ const SidebarContextMenuWrapper = ({
       updateSettings({
         activityBarVisible: 0,
         projectId: activeProjectId,
-      })
+      }),
     );
   }, [activeProjectId, dispatch]);
 

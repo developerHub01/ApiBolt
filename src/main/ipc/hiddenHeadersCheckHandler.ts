@@ -3,7 +3,7 @@ import {
   createHiddenHeadersCheck,
   duplicateHiddenHeadersCheck,
   getHiddenHeadersCheck,
-  updateHiddenHeadersCheck
+  updateHiddenHeadersCheck,
 } from "@/main/db/hiddenHeadersCheckDB.js";
 import { ElectronAPIHiddenHeadersCheckInterface } from "@shared/types/api/electron-hidden-headers-check";
 
@@ -17,7 +17,7 @@ export const hiddenHeadersCheckHandler = () => {
       >
     ): ReturnType<
       ElectronAPIHiddenHeadersCheckInterface["getHiddenHeadersCheck"]
-    > => await getHiddenHeadersCheck(...rest)
+    > => await getHiddenHeadersCheck(...rest),
   );
   ipcMain.handle(
     "createHiddenHeadersCheck",
@@ -28,7 +28,7 @@ export const hiddenHeadersCheckHandler = () => {
       >
     ): ReturnType<
       ElectronAPIHiddenHeadersCheckInterface["createHiddenHeadersCheck"]
-    > => await createHiddenHeadersCheck(...rest)
+    > => await createHiddenHeadersCheck(...rest),
   );
   ipcMain.handle(
     "updateHiddenHeadersCheck",
@@ -39,7 +39,7 @@ export const hiddenHeadersCheckHandler = () => {
       >
     ): ReturnType<
       ElectronAPIHiddenHeadersCheckInterface["updateHiddenHeadersCheck"]
-    > => await updateHiddenHeadersCheck(...rest)
+    > => await updateHiddenHeadersCheck(...rest),
   );
   ipcMain.handle(
     "duplicateHiddenHeadersCheck",
@@ -50,6 +50,6 @@ export const hiddenHeadersCheckHandler = () => {
       >
     ): ReturnType<
       ElectronAPIHiddenHeadersCheckInterface["duplicateHiddenHeadersCheck"]
-    > => await duplicateHiddenHeadersCheck(...rest)
+    > => await duplicateHiddenHeadersCheck(...rest),
   );
 };

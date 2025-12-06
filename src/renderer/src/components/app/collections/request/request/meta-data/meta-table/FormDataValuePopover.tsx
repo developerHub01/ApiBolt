@@ -78,7 +78,7 @@ const FormDataValuePopover = memo(
         </PopoverContent>
       </Popover>
     );
-  }
+  },
 );
 
 export default FormDataValuePopover;

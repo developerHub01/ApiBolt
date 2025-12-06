@@ -3,14 +3,14 @@ import {
   useCallback,
   useState,
   type ChangeEvent,
-  type FocusEvent
+  type FocusEvent,
 } from "react";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from "@/components/ui/select";
 import { TableCell } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
@@ -48,19 +48,19 @@ const VariableCell = memo(
     selectList = [
       {
         id: "default",
-        label: "default"
+        label: "default",
       },
       {
         id: "secret",
-        label: "secret"
-      }
+        label: "secret",
+      },
     ],
     onChange,
     onDelete,
     visibilityType = true,
     showActionOption = false,
     className = "",
-    innerClassName = ""
+    innerClassName = "",
   }: VariableCellProps) => {
     const [inputValue, setInputValue] = useState(value ?? "");
 
@@ -68,21 +68,21 @@ const VariableCell = memo(
       (e: ChangeEvent<HTMLInputElement>) => {
         setInputValue(e.target.value);
       },
-      []
+      [],
     );
 
     const handleBlur = useCallback(
       (e: FocusEvent<HTMLInputElement>) => {
         onChange(e.target.value);
       },
-      [onChange]
+      [onChange],
     );
 
     const handleValueChange = useCallback(
       (value: string) => {
         onChange(value);
       },
-      [onChange]
+      [onChange],
     );
 
     const handleVariableKeyDown = useCallback(
@@ -108,7 +108,7 @@ const VariableCell = memo(
         // Prevent first char from being number
         if (inputValue.length === 0 && /^[0-9]$/.test(key)) e.preventDefault();
       },
-      [inputValue]
+      [inputValue],
     );
 
     const isSecretView =
@@ -122,10 +122,10 @@ const VariableCell = memo(
               type={isSecretView ? "password" : "text"}
               className={cn(
                 "w-full py-0.5 border-b border-transparent focus:border-primary",
-                "placeholder:capitalize placeholder:opacity-50"
+                "placeholder:capitalize placeholder:opacity-50",
               )}
               style={{
-                borderRadius: 0
+                borderRadius: 0,
               }}
               value={inputValue}
               onChange={handleInputChange}
@@ -161,7 +161,7 @@ const VariableCell = memo(
               className="opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto"
               {...(onDelete
                 ? {
-                    onClick: onDelete
+                    onClick: onDelete,
                   }
                 : {})}
             >
@@ -172,7 +172,7 @@ const VariableCell = memo(
         </div>
       </TableCell>
     );
-  }
+  },
 );
 
 export default VariableCell;

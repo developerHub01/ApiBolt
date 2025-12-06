@@ -31,7 +31,7 @@ const SettingBackgroundSlideInterval = () => {
     });
 
   const senitizedValue = Number(
-    senitizeValue(value, DEFAULT_SETTINGS.slideInterval)
+    senitizeValue(value, DEFAULT_SETTINGS.slideInterval),
   );
 
   return (

@@ -17,7 +17,7 @@ const SettingHttpSearch = memo(
         />
       </div>
     );
-  }
+  },
 );
 
 export default SettingHttpSearch;

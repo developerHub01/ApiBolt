@@ -19,8 +19,8 @@ export const getRequestMetaTab: ElectronAPIRequestMetaTabInterface["getRequestMe
             .where(
               eq(
                 requestMetaTabTable.requestOrFolderMetaId,
-                requestOrFolderMetaId
-              )
+                requestOrFolderMetaId,
+              ),
             )
         )?.[0] ?? null
       );
@@ -41,7 +41,7 @@ export const createRequestMetaTab: ElectronAPIRequestMetaTabInterface["createReq
         (
           await db.insert(requestMetaTabTable).values({
             ...payload,
-            requestOrFolderMetaId: tabId
+            requestOrFolderMetaId: tabId,
           })
         )?.rowsAffected > 0
       );
@@ -68,14 +68,14 @@ export const updateRequestMetaTab: ElectronAPIRequestMetaTabInterface["updateReq
       if (!requestMetaTabData) {
         await db.insert(requestMetaTabTable).values({
           ...payload,
-          requestOrFolderMetaId: tabId
+          requestOrFolderMetaId: tabId,
         });
       } else {
         const { requestOrFolderMetaId, ...updatePayload } = payload;
         await db
           .update(requestMetaTabTable)
           .set({
-            ...updatePayload
+            ...updatePayload,
           })
           .where(eq(requestMetaTabTable.requestOrFolderMetaId, tabId));
       }
@@ -97,7 +97,7 @@ export const deleteRequestMetaTab: ElectronAPIRequestMetaTabInterface["deleteReq
       await db
         .delete(requestMetaTabTable)
         .where(
-          eq(requestMetaTabTable.requestOrFolderMetaId, requestOrFolderMetaId)
+          eq(requestMetaTabTable.requestOrFolderMetaId, requestOrFolderMetaId),
         );
 
       return true;
@@ -134,7 +134,7 @@ export const duplicateRequestMetaTab: ElectronAPIRequestMetaTabInterface["duplic
         const { id, ...updatePayload } = tab;
         return {
           ...updatePayload,
-          requestOrFolderMetaId: payload[tab.requestOrFolderMetaId]
+          requestOrFolderMetaId: payload[tab.requestOrFolderMetaId],
         };
       });
 
@@ -158,13 +158,13 @@ export const replaceRequestMetaTab: ElectronAPIRequestMetaTabInterface["replaceR
         .insert(requestMetaTabTable)
         .values({
           ...updatPayload,
-          requestOrFolderMetaId
+          requestOrFolderMetaId,
         })
         .onConflictDoUpdate({
           target: requestMetaTabTable.requestOrFolderMetaId,
           set: {
-            ...updatPayload
-          }
+            ...updatPayload,
+          },
         });
 
       return result.rowsAffected > 0;

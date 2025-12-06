@@ -17,7 +17,7 @@ const ApiUrl = memo(() => {
   return (
     <form
       className={cn(
-        "w-full flex p-2 rounded-md bg-accent/50 hover:bg-accent/60 focus-within:bg-accent/70 gap-1.5 border"
+        "w-full flex p-2 rounded-md bg-accent/50 hover:bg-accent/60 focus-within:bg-accent/70 gap-1.5 border",
       )}
     >
       <div
@@ -40,6 +40,7 @@ const ApiUrl = memo(() => {
           placeholder="Enter URL or paste text"
           className="text-sm w-full h-full placeholder:text-muted-foreground px-3 bg-transparent rounded-none border-0 tracking-wide"
           value={url}
+          readOnly
         />
       </div>
       <Button

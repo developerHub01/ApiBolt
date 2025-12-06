@@ -11,7 +11,7 @@ interface SearchBarProps {
 }
 
 const SearchBar = memo(
-  ({  projectName, value, onChange, inputRef }: SearchBarProps) => {
+  ({ projectName, value, onChange, inputRef }: SearchBarProps) => {
     return (
       <div className="w-full flex items-center gap-1">
         <input
@@ -44,7 +44,7 @@ const SearchBar = memo(
         </AnimatePresence>
       </div>
     );
-  }
+  },
 );
 
 export default SearchBar;

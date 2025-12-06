@@ -15,12 +15,12 @@ const BodyBinary = memo(() => {
 
   const handleUpdateBinary = useCallback(
     () => dispatch(updateRequestBodyBinary()),
-    [dispatch]
+    [dispatch],
   );
 
   const handleDeleteBinary = useCallback(
     () => dispatch(deleteRequestBodyBinary()),
-    [dispatch]
+    [dispatch],
   );
 
   return (

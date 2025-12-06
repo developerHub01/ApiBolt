@@ -49,7 +49,7 @@ const SettingSlider = memo(
             step={step}
             className={cn("w-full")}
             onValueChange={handleOnChange}
-            onValueCommit={(value) => onChange(value[0])}
+            onValueCommit={value => onChange(value[0])}
           />
           <p>
             {max}
@@ -58,7 +58,7 @@ const SettingSlider = memo(
         </div>
       </div>
     );
-  }
+  },
 );
 
 export default SettingSlider;

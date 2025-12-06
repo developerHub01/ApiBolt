@@ -4,30 +4,30 @@ import type { TShortcutKey } from "@shared/types/keyboard-shortcut.types";
 
 export const selectIsKeyboardShortcutPanelOpen = createSelector(
   [(state: RootState) => state.keyboardShortcuts.isKeyboardShortcutPanelOpen],
-  isOpen => isOpen ?? {}
+  isOpen => isOpen ?? {},
 );
 
 export const selectGlobalKeyboardShortcuts = createSelector(
   [(state: RootState) => state.keyboardShortcuts.globalShortcuts],
-  globalShortcuts => globalShortcuts ?? {}
+  globalShortcuts => globalShortcuts ?? {},
 );
 
 export const selectLocalKeyboardShortcuts = createSelector(
   [
     (state: RootState) => state.keyboardShortcuts.globalShortcuts,
-    (state: RootState) => state.keyboardShortcuts.localShortcuts
+    (state: RootState) => state.keyboardShortcuts.localShortcuts,
   ],
   (globalShortcuts, localShortcuts) => ({
     ...globalShortcuts,
-    ...localShortcuts
-  })
+    ...localShortcuts,
+  }),
 );
 
 export const selectApplyingKeyboardShortcuts = createSelector(
   [
     (state: RootState) => state.project.activeProjectId,
     (state: RootState) => state.keyboardShortcuts.globalShortcuts,
-    (state: RootState) => state.keyboardShortcuts.localShortcuts
+    (state: RootState) => state.keyboardShortcuts.localShortcuts,
   ],
   (activeProjectId, globalShortcuts, localShortcuts) => {
     const global = Object.entries(globalShortcuts).reduce(
@@ -35,31 +35,31 @@ export const selectApplyingKeyboardShortcuts = createSelector(
         acc[id] = details?.key ?? null;
         return acc;
       },
-      {} as Record<string, TShortcutKey>
+      {} as Record<string, TShortcutKey>,
     );
     const local = Object.entries(localShortcuts).reduce(
       (acc, [id, details]) => {
         acc[id] = details?.key ?? null;
         return acc;
       },
-      {} as Record<string, TShortcutKey>
+      {} as Record<string, TShortcutKey>,
     );
 
     return activeProjectId
       ? {
           ...global,
-          ...local
+          ...local,
         }
       : global;
-  }
+  },
 );
 
 export const selectApplyingKeyboardShortcutsStrFormated = createSelector(
   [selectApplyingKeyboardShortcuts],
   keyMap =>
     Object.fromEntries(
-      Object.entries(keyMap).map(([id, key]) => [id, key?.join("+")])
-    )
+      Object.entries(keyMap).map(([id, key]) => [id, key?.join("+")]),
+    ),
 );
 
 export const selectApplyingKeyboardShortcutsById = createSelector(
@@ -67,7 +67,7 @@ export const selectApplyingKeyboardShortcutsById = createSelector(
     (state: RootState) => state.project.activeProjectId,
     (state: RootState) => state.keyboardShortcuts.globalShortcuts,
     (state: RootState) => state.keyboardShortcuts.localShortcuts,
-    (_, id) => id
+    (_, id) => id,
   ],
   (activeProjectId, globalShortcuts, localShortcuts, id) => {
     return (
@@ -75,10 +75,10 @@ export const selectApplyingKeyboardShortcutsById = createSelector(
         ? (localShortcuts[id] ?? globalShortcuts[id])?.key
         : globalShortcuts[id]?.key) ?? null
     );
-  }
+  },
 );
 
 export const selectApplyingKeyboardShortcutsByIdStrFormated = createSelector(
   [(state, id: string) => selectApplyingKeyboardShortcutsById(state, id)],
-  key => key?.join("+") ?? null
+  key => key?.join("+") ?? null,
 );

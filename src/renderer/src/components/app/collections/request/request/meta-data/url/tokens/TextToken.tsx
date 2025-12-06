@@ -45,7 +45,7 @@ const TextToken = memo(({ id, value }: TextTokenProps) => {
       requestUrlUpdateToken({
         id,
         value: newValue,
-      })
+      }),
     );
   };
 

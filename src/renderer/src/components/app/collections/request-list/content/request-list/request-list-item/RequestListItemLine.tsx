@@ -51,7 +51,7 @@ const RequestListItemLine = memo(
         {children}
       </div>
     );
-  }
+  },
 );
 
 interface HorizontalProps {

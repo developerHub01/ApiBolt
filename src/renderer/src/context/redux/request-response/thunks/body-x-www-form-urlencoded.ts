@@ -33,14 +33,14 @@ export const loadBodyXWWWFormUrlencoded = createAsyncThunk<
 
       const response =
         await window.electronAPIBodyXWWWFormUrlencoded.getBodyXWWWFormUrlencoded(
-          selectedTab
+          selectedTab,
         );
 
       dispatch(handleLoadBodyXWWWFormUrlencoded(response));
     } catch (error) {
       console.error(error);
     }
-  }
+  },
 );
 
 export const addBodyXWWWFormUrlencoded = createAsyncThunk<
@@ -62,7 +62,7 @@ export const addBodyXWWWFormUrlencoded = createAsyncThunk<
       if (!payload) payload = {};
       const response =
         await window.electronAPIBodyXWWWFormUrlencoded.createBodyXWWWFormUrlencoded(
-          payload
+          payload,
         );
 
       if (response) dispatch(loadBodyXWWWFormUrlencoded());
@@ -71,7 +71,7 @@ export const addBodyXWWWFormUrlencoded = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const deleteBodyXWWWFormUrlencoded = createAsyncThunk<
@@ -92,7 +92,7 @@ export const deleteBodyXWWWFormUrlencoded = createAsyncThunk<
 
       const response =
         await window.electronAPIBodyXWWWFormUrlencoded.deleteBodyXWWWFormUrlencoded(
-          id
+          id,
         );
 
       if (response) dispatch(loadBodyXWWWFormUrlencoded());
@@ -101,7 +101,7 @@ export const deleteBodyXWWWFormUrlencoded = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const deleteBodyXWWWFormUrlencodedByRequestMetaId = createAsyncThunk<
@@ -122,7 +122,7 @@ export const deleteBodyXWWWFormUrlencodedByRequestMetaId = createAsyncThunk<
 
       const response =
         await window.electronAPIBodyXWWWFormUrlencoded.deleteBodyXWWWFormUrlencodedByRequestMetaId(
-          id
+          id,
         );
 
       if (response) dispatch(handleLoadBodyXWWWFormUrlencoded([]));
@@ -131,7 +131,7 @@ export const deleteBodyXWWWFormUrlencodedByRequestMetaId = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const updateBodyXWWWFormUrlencoded = createAsyncThunk<
@@ -151,7 +151,7 @@ export const updateBodyXWWWFormUrlencoded = createAsyncThunk<
       const response =
         await window.electronAPIBodyXWWWFormUrlencoded.updateBodyXWWWFormUrlencoded(
           paramId,
-          payload
+          payload,
         );
 
       if (response) dispatch(loadBodyXWWWFormUrlencoded());
@@ -160,7 +160,7 @@ export const updateBodyXWWWFormUrlencoded = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const checkAllBodyXWWWFormUrlencodedByRequestMetaId = createAsyncThunk<
@@ -176,7 +176,7 @@ export const checkAllBodyXWWWFormUrlencodedByRequestMetaId = createAsyncThunk<
     try {
       const response =
         await window.electronAPIBodyXWWWFormUrlencoded.checkAllBodyXWWWFormUrlencodedByRequestMetaId(
-          requestOrFolderMetaId
+          requestOrFolderMetaId,
         );
 
       if (response) dispatch(loadBodyXWWWFormUrlencoded());
@@ -185,7 +185,7 @@ export const checkAllBodyXWWWFormUrlencodedByRequestMetaId = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const duplicateBodyXWWWFormUrlencodedByOldNewIds = createAsyncThunk<
@@ -201,7 +201,7 @@ export const duplicateBodyXWWWFormUrlencodedByOldNewIds = createAsyncThunk<
     try {
       const response =
         await window.electronAPIBodyXWWWFormUrlencoded.duplicateBodyXWWWFormUrlencoded(
-          oldNewIdMap
+          oldNewIdMap,
         );
 
       return response;
@@ -209,7 +209,7 @@ export const duplicateBodyXWWWFormUrlencodedByOldNewIds = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 /* ==============================

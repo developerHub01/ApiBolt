@@ -1,13 +1,15 @@
-export const parseCookie = (cookie) => {
-  cookie = String(cookie);
-  const parsedCookie = {};
-  const cookieParts = cookie.split(";");
+import { Cookie } from "tough-cookie";
+
+export const parseCookie = (cookie: Cookie) => {
+  const cookieStr = String(cookie);
+  const parsedCookie: Record<string, unknown> = {};
+  const cookieParts = cookieStr.split(";");
 
   const [nameValue, cookieValue] = cookieParts[0].split("=");
   parsedCookie.name = nameValue.trim();
   parsedCookie.value = cookieValue.trim();
 
-  cookieParts.slice(1).forEach((part) => {
+  cookieParts.slice(1).forEach(part => {
     const [key, value] = part.trim().split("=");
     switch (key.toLowerCase()) {
       case "domain":
@@ -36,5 +38,5 @@ export const parseCookie = (cookie) => {
   return parsedCookie;
 };
 
-export const parseSetCookie = (setCookieArray) =>
+export const parseSetCookie = (setCookieArray: Array<Cookie>) =>
   setCookieArray?.map(parseCookie);

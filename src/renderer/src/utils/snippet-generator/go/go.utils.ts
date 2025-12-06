@@ -2,16 +2,16 @@ import {
   defaultBinaryData,
   generateMaskedAndRealCode,
   getBodyType,
-  jsonFormatter
+  jsonFormatter,
 } from "@/utils/snippet-generator/helper.utils";
 import type {
   CodeSnippitDataInterface,
   RequestCodeSnippitInterface,
-  TRequestCodeType
+  TRequestCodeType,
 } from "@shared/types/code-snippit.types";
 import {
   MASKED_AUTHORIZATION,
-  requestDefaultCodeSnippit
+  requestDefaultCodeSnippit,
 } from "@/constant/code-snippit.constant";
 import { isStringIsValidObject } from "@/utils/helper";
 
@@ -25,7 +25,7 @@ export const generateGoNetHttpCode = async ({
   binaryData,
   rawBodyDataType,
   bodyType,
-  formData
+  formData,
 }: CodeSnippitDataInterface) => {
   const packageString = `package main\n\n`;
   const imports: Array<string> = ["fmt", "net/http", "net/url", "io"];
@@ -49,11 +49,11 @@ export const generateGoNetHttpCode = async ({
           .map(
             (
               { key, value },
-              index
+              index,
             ) => `\tfile${index + 1}, _ := os.Open(${JSON.stringify(value)})
   \tdefer file${index + 1}.Close()
   \tpart${index + 1}, _ := writer.CreateFormFile(${JSON.stringify(key)}, ${JSON.stringify(value)})
-  \tio.Copy(part${index + 1}, file${index + 1})`
+  \tio.Copy(part${index + 1}, file${index + 1})`,
           )
           .join("\n\n")}\n`
       : "";
@@ -137,7 +137,7 @@ ${xWWWFormUrlencoded.map(({ key, value }) => `\tdata.Set(${JSON.stringify(key)},
     else if (bodyType === "raw") {
       const headerContentType = getBodyType({
         bodyType,
-        rawBodyDataType
+        rawBodyDataType,
       });
       if (headerContentType)
         contentTypeHeader = `req.Header.Set("Content-Type", ${JSON.stringify(headerContentType)})`;
@@ -152,14 +152,14 @@ ${xWWWFormUrlencoded.map(({ key, value }) => `\tdata.Set(${JSON.stringify(key)},
       headers = [
         {
           ...authorization,
-          value: MASKED_AUTHORIZATION
+          value: MASKED_AUTHORIZATION,
         },
-        ...headers
+        ...headers,
       ];
     headersString = headers
       .map(
         ({ key, value }) =>
-          `\treq.Header.Set(${JSON.stringify(key)}, ${JSON.stringify(value)})`
+          `\treq.Header.Set(${JSON.stringify(key)}, ${JSON.stringify(value)})`,
       )
       .join("\n");
     if (headersString) headersString += "\n\n";
@@ -193,7 +193,7 @@ export const generateGoFasthttpCode = async ({
   binaryData,
   rawBodyDataType,
   bodyType,
-  formData
+  formData,
 }: CodeSnippitDataInterface) => {
   const imports: Array<string> = ["fmt"];
   const packageString = `package main\n\n`;
@@ -226,11 +226,11 @@ export const generateGoFasthttpCode = async ({
           .map(
             (
               { key, value },
-              index
+              index,
             ) => `\tfile${index + 1}, _ := os.Open(${JSON.stringify(value)})
   \tdefer file${index + 1}.Close()
   \tpart${index + 1}, _ := writer.CreateFormFile(${JSON.stringify(key)}, ${JSON.stringify(value)})
-  \tio.Copy(part${index + 1}, file${index + 1})`
+  \tio.Copy(part${index + 1}, file${index + 1})`,
           )
           .join("\n\n")}\n`
       : "";
@@ -307,7 +307,7 @@ ${formDataReadingString}
     else if (bodyType === "raw") {
       const headerContentType = getBodyType({
         bodyType,
-        rawBodyDataType
+        rawBodyDataType,
       });
       if (headerContentType)
         contentTypeHeader = `req.Header.Set("Content-Type", ${JSON.stringify(headerContentType)})`;
@@ -326,14 +326,14 @@ ${formDataReadingString}
       headers = [
         {
           ...authorization,
-          value: MASKED_AUTHORIZATION
+          value: MASKED_AUTHORIZATION,
         },
-        ...headers
+        ...headers,
       ];
     headersString = headers
       .map(
         ({ key, value }) =>
-          `\treq.Header.Set(${JSON.stringify(key)}, ${JSON.stringify(value)})`
+          `\treq.Header.Set(${JSON.stringify(key)}, ${JSON.stringify(value)})`,
       )
       .join("\n");
     if (headersString) headersString += "\n\n";
@@ -364,7 +364,7 @@ ${formDataReadingString}
 
 export const generateGoCode = async (
   type: TRequestCodeType,
-  data: CodeSnippitDataInterface
+  data: CodeSnippitDataInterface,
 ): Promise<RequestCodeSnippitInterface> => {
   switch (type) {
     case "go-net-http":

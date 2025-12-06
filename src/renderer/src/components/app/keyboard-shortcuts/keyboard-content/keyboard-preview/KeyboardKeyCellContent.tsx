@@ -44,7 +44,7 @@ const KeyboardKeyCellContent = memo(
         ))}
       </div>
     );
-  }
+  },
 );
 
 export default KeyboardKeyCellContent;

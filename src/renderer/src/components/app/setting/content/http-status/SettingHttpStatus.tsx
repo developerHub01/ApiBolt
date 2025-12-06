@@ -15,7 +15,7 @@ const SettingHttpStatus = memo(() => {
       await dispatch(
         loadHttpStatus({
           once: true,
-        })
+        }),
       );
     })();
   }, [dispatch]);

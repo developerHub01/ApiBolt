@@ -1,13 +1,13 @@
 import type {
   CodeSnippitDataInterface,
   RequestCodeSnippitInterface,
-  TRequestCodeType
+  TRequestCodeType,
 } from "@shared/types/code-snippit.types";
 import {
   defaultBinaryData,
   generateMaskedAndRealCode,
   getBodyType,
-  getHeadersList
+  getHeadersList,
 } from "@/utils/snippet-generator/helper.utils";
 import { requestDefaultCodeSnippit } from "@/constant/code-snippit.constant";
 
@@ -21,7 +21,7 @@ export const generateCSharpHttpClientCode = async ({
   binaryData,
   rawBodyDataType,
   bodyType,
-  formData
+  formData,
 }: CodeSnippitDataInterface) => {
   const startString = `class Program
 {
@@ -36,14 +36,14 @@ export const generateCSharpHttpClientCode = async ({
 
   const bodyTypeString = getBodyType({
     bodyType,
-    rawBodyDataType
+    rawBodyDataType,
   });
 
   const headersList = getHeadersList({
     headers,
     authorization,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
   const headersString = !headersList.length
     ? ""
@@ -116,7 +116,7 @@ export const generateCSharpRestSharpCode = async ({
   binaryData,
   rawBodyDataType,
   bodyType,
-  formData
+  formData,
 }: CodeSnippitDataInterface) => {
   const startString = `class Program
 {
@@ -136,11 +136,11 @@ export const generateCSharpRestSharpCode = async ({
     headers,
     authorization,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
   const bodyTypeString = getBodyType({
     bodyType,
-    rawBodyDataType
+    rawBodyDataType,
   });
 
   /* only if not exist in headersList and if body is x-www-form then have to have content else if any other bodytype then add */
@@ -153,7 +153,7 @@ export const generateCSharpRestSharpCode = async ({
   ) {
     headersList.push({
       key: "Content-Type",
-      value: bodyTypeString
+      value: bodyTypeString,
     });
   }
 
@@ -209,7 +209,7 @@ export const generateCSharpFlurlCode = async ({
   binaryData,
   rawBodyDataType,
   bodyType,
-  formData
+  formData,
 }: CodeSnippitDataInterface) => {
   const startString = `class Program
 {
@@ -221,7 +221,7 @@ export const generateCSharpFlurlCode = async ({
     headers,
     authorization,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
   if (
     bodyType === "binary" &&
@@ -230,7 +230,7 @@ export const generateCSharpFlurlCode = async ({
   ) {
     headersList.push({
       key: "Content-Type",
-      value: "application/octet-stream"
+      value: "application/octet-stream",
     });
   }
 
@@ -239,7 +239,7 @@ export const generateCSharpFlurlCode = async ({
     : headersList
         .map(
           ({ key, value }) =>
-            `\t\t\t.WithHeader(${JSON.stringify(key)}, ${JSON.stringify(value)})`
+            `\t\t\t.WithHeader(${JSON.stringify(key)}, ${JSON.stringify(value)})`,
         )
         .join("\n") + "\n";
 
@@ -309,7 +309,7 @@ ${xWWWFormUrlencoded.map(({ key, value }) => `\t\t\tnew KeyValuePair<string, str
 
 export const generateCSharpCode = async (
   type: TRequestCodeType,
-  data: CodeSnippitDataInterface
+  data: CodeSnippitDataInterface,
 ): Promise<RequestCodeSnippitInterface> => {
   switch (type) {
     case "csharp-httpclient":

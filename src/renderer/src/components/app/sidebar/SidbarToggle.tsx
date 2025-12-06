@@ -14,8 +14,8 @@ import useShowSidebarToggler from "@/hooks/sidebar/use-show-sidebar-toggler";
 import useToggleSidebar from "@/hooks/sidebar/use-toggle-sidebar";
 
 const SidbarToggle = memo(() => {
-  const shortcut = useAppSelector((state) =>
-    selectApplyingKeyboardShortcutsById(state, "toggle_sidebar")
+  const shortcut = useAppSelector(state =>
+    selectApplyingKeyboardShortcutsById(state, "toggle_sidebar"),
   );
   const showToggle = useShowSidebarToggler();
 

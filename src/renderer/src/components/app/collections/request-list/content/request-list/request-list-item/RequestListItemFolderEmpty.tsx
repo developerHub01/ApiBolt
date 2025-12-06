@@ -12,7 +12,7 @@ const RequestListItemFolderEmpty = memo(() => {
   const { id, lavel, isRootLastChild } = useRequestListItem();
   const handleAddRequest = useCallback(
     async () => await dispatch(createSingleRequest(id)),
-    [dispatch, id]
+    [dispatch, id],
   );
 
   const emptyLeftSpace =

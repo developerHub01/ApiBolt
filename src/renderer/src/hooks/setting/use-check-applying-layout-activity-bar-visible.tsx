@@ -8,7 +8,7 @@ import {
 const useCheckApplyingLayoutActivityBarVisible = () => {
   const activeProjectId = useAppSelector(selectActiveProjectId);
   const activityBarVisibleGlobal = useAppSelector(
-    selectActivityBarVisibleGlobal
+    selectActivityBarVisibleGlobal,
   );
   const activityBarVisibleLocal = useAppSelector(selectActivityBarVisibleLocal);
 

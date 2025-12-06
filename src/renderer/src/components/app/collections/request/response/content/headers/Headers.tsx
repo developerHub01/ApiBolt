@@ -16,7 +16,7 @@ const Headers = () => {
         "w-full flex-1 min-h-0 h-full overflow-hidden [&>div>div]:h-full",
         {
           "border-t border-b": headers,
-        }
+        },
       )}
     >
       <div className="w-full h-full">

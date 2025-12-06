@@ -16,12 +16,12 @@ export const useFullScreen = ({
       target
         ?.requestFullscreen()
         .then(() => setIsFullscreen(true))
-        .catch((err) => console.error("Failed to enter fullscreen", err));
+        .catch(err => console.error("Failed to enter fullscreen", err));
     } else {
       document
         .exitFullscreen()
         .then(() => setIsFullscreen(false))
-        .catch((err) => console.error("Failed to exit fullscreen", err));
+        .catch(err => console.error("Failed to exit fullscreen", err));
     }
   };
 

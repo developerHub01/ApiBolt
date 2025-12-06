@@ -1,13 +1,13 @@
 import {
   ActiveThemeIdInterface,
   ActiveThemePaletteInterface,
-  ChangeActiveThemePayloadInterface
+  ChangeActiveThemePayloadInterface,
 } from "@shared/types/theme.types";
 
 export interface ElectronAPIActiveThemeInterface {
   getActiveThemeId(): Promise<ActiveThemeIdInterface>;
   getActiveThemePalette(): Promise<ActiveThemePaletteInterface>;
   changeActiveTheme(
-    payload: ChangeActiveThemePayloadInterface
+    payload: ChangeActiveThemePayloadInterface,
   ): Promise<boolean>;
 }

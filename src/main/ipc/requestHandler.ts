@@ -4,7 +4,7 @@ import {
   exportFolder,
   exportRequest,
   importFolder,
-  importRequest
+  importRequest,
 } from "@/main/db/requestDB.js";
 import { getRequestOrFolderMetaById } from "@/main/db/requestOrFolderMetaDB.js";
 import path from "path";
@@ -32,7 +32,7 @@ export const requestHandler = () => {
 
         return {
           success: true,
-          message: "Request cleared successfully!"
+          message: "Request cleared successfully!",
         };
       } catch (error) {
         console.error(error);
@@ -41,10 +41,10 @@ export const requestHandler = () => {
           message:
             error instanceof Error
               ? error.message
-              : "Something went wrong while clearing the request."
+              : "Something went wrong while clearing the request.",
         };
       }
-    }
+    },
   );
   ipcMain.handle(
     "importRequest",
@@ -64,9 +64,9 @@ export const requestHandler = () => {
           filters: [
             {
               name: "JSON file",
-              extensions: ["json"]
-            }
-          ]
+              extensions: ["json"],
+            },
+          ],
         });
 
         const filePath = filePaths?.[0];
@@ -75,14 +75,14 @@ export const requestHandler = () => {
         const fileStringData = await readFile(filePath, "utf-8");
         try {
           const fileData = JSON.parse(
-            fileStringData
+            fileStringData,
           ) as RequestExportFileInterface;
 
           if (Array.isArray(fileData?.bodyFormData)) {
             fileData.bodyFormData.map((form, index) => {
               if (Array.isArray(form.value)) {
                 fileData.bodyFormData[index].value = JSON.stringify(
-                  fileData.bodyFormData[index].value
+                  fileData.bodyFormData[index].value,
                 );
               }
             });
@@ -90,7 +90,7 @@ export const requestHandler = () => {
 
           const response = await importRequest({
             requestId,
-            ...fileData
+            ...fileData,
           });
           if (!response) throw new Error();
         } catch (error) {
@@ -100,7 +100,7 @@ export const requestHandler = () => {
 
         return {
           success: true,
-          message: "Request imported successfully!"
+          message: "Request imported successfully!",
         };
       } catch (error: unknown) {
         console.error(error);
@@ -109,10 +109,10 @@ export const requestHandler = () => {
           message:
             error instanceof Error
               ? error.message
-              : "Something went wrong while exporting request."
+              : "Something went wrong while exporting request.",
         };
       }
-    }
+    },
   );
   ipcMain.handle(
     "exportRequest",
@@ -137,16 +137,16 @@ export const requestHandler = () => {
           filters: [
             {
               name: "JSON file",
-              extensions: ["json"]
-            }
-          ]
+              extensions: ["json"],
+            },
+          ],
         });
 
         if (!canceled && filePath) {
           await writeFile(filePath, JSON.stringify(payload, null, 2));
           return {
             success: true,
-            message: "Request exported successfully!"
+            message: "Request exported successfully!",
           };
         } else {
           throw new Error("Save dialog cancelled.");
@@ -158,10 +158,10 @@ export const requestHandler = () => {
           message:
             error instanceof Error
               ? error.message
-              : "Something went wrong while exporting the request."
+              : "Something went wrong while exporting the request.",
         };
       }
-    }
+    },
   );
   ipcMain.handle(
     "importFolder",
@@ -182,9 +182,9 @@ export const requestHandler = () => {
           filters: [
             {
               name: "JSON file",
-              extensions: ["json"]
-            }
-          ]
+              extensions: ["json"],
+            },
+          ],
         });
 
         const filePath = filePaths?.[0];
@@ -193,12 +193,12 @@ export const requestHandler = () => {
         const fileStringData = await readFile(filePath, "utf-8");
         try {
           const fileData = JSON.parse(
-            fileStringData
+            fileStringData,
           ) as FolderExportFileInterface;
           const response = await importFolder({
             requestId: id,
             projectId,
-            ...fileData
+            ...fileData,
           });
           if (!response) throw new Error();
         } catch {
@@ -207,7 +207,7 @@ export const requestHandler = () => {
 
         return {
           success: true,
-          message: "Request folder imported successfully!"
+          message: "Request folder imported successfully!",
         };
       } catch (error: unknown) {
         console.error(error);
@@ -216,10 +216,10 @@ export const requestHandler = () => {
           message:
             error instanceof Error
               ? error.message
-              : "Something went wrong while importing request folder."
+              : "Something went wrong while importing request folder.",
         };
       }
-    }
+    },
   );
   ipcMain.handle(
     "exportFolder",
@@ -243,15 +243,15 @@ export const requestHandler = () => {
           filters: [
             {
               name: "JSON file",
-              extensions: ["json"]
-            }
-          ]
+              extensions: ["json"],
+            },
+          ],
         });
         if (!canceled && filePath) {
           await writeFile(filePath, JSON.stringify(payload, null, 2));
           return {
             success: true,
-            message: "Request folder exported successfully!"
+            message: "Request folder exported successfully!",
           };
         } else {
           throw new Error("Save dialog cancelled.");
@@ -263,9 +263,9 @@ export const requestHandler = () => {
           message:
             error instanceof Error
               ? error.message
-              : "Something went wrong while exporting the folder."
+              : "Something went wrong while exporting the folder.",
         };
       }
-    }
+    },
   );
 };

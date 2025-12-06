@@ -21,7 +21,7 @@ export const getRequestOrFolderMeta = async () => {
         projectId: requestOrFolderMetaTable.projectId,
         parentId: requestOrFolderMetaTable.parentId,
         isExpended: requestOrFolderMetaTable.isExpended,
-        createdAt: requestOrFolderMetaTable.createdAt
+        createdAt: requestOrFolderMetaTable.createdAt,
       })
       .from(requestOrFolderMetaTable)
       .where(eq(requestOrFolderMetaTable.projectId, activeProjectId));
@@ -33,8 +33,8 @@ export const getRequestOrFolderMeta = async () => {
       item =>
         (map[item.id] = {
           ...item,
-          ...(item.method ? {} : { children: [] as Array<string> })
-        })
+          ...(item.method ? {} : { children: [] as Array<string> }),
+        }),
     );
 
     // Attach child IDs
@@ -62,7 +62,7 @@ export const getRequestOrFolderMetaById: ElectronAPIRequestOrFolderMetaInterface
             projectId: requestOrFolderMetaTable.projectId,
             parentId: requestOrFolderMetaTable.parentId,
             isExpended: requestOrFolderMetaTable.isExpended,
-            createdAt: requestOrFolderMetaTable.createdAt
+            createdAt: requestOrFolderMetaTable.createdAt,
           })
           .from(requestOrFolderMetaTable)
           .where(eq(requestOrFolderMetaTable.id, id))
@@ -89,7 +89,7 @@ export const createRequestOrFolderMeta: ElectronAPIRequestOrFolderMetaInterface[
         delete item.createdAt;
         requestOrFolderPayload.push({
           ...item,
-          projectId: activeProjectId
+          projectId: activeProjectId,
         });
       });
 
@@ -133,7 +133,7 @@ export const collapseAllRequestOrFolderMeta: ElectronAPIRequestOrFolderMetaInter
       const result = await db
         .update(requestOrFolderMetaTable)
         .set({
-          isExpended: false
+          isExpended: false,
         })
         .where(eq(requestOrFolderMetaTable.projectId, projectId));
 
@@ -150,7 +150,7 @@ export const moveRequestOrFolderMeta: ElectronAPIRequestOrFolderMetaInterface["m
       const updated = await db
         .update(requestOrFolderMetaTable)
         .set({
-          parentId
+          parentId,
         })
         .where(eq(requestOrFolderMetaTable.id, id));
 
@@ -232,7 +232,7 @@ export const expendOrCollapseRequestOrFolderMetaAll: ElectronAPIRequestOrFolderM
       const updated = await db
         .update(requestOrFolderMetaTable)
         .set({
-          isExpended
+          isExpended,
         })
         .where(inArray(requestOrFolderMetaTable.id, id));
 

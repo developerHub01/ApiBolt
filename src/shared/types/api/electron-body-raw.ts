@@ -4,7 +4,7 @@ export interface ElectronAPIBodyRawInterface {
   getBodyRaw(requestId?: string | null): Promise<BodyRawInterface | null>;
   createBodyRaw(
     payload: Partial<BodyRawInterface> &
-      Required<Pick<BodyRawInterface, "requestOrFolderMetaId">>
+      Required<Pick<BodyRawInterface, "requestOrFolderMetaId">>,
   ): Promise<boolean>;
   /* if in payload requestOrFolderMetaId not exist then it will pick active tab from backend */
   updateBodyRaw(payload: Partial<BodyRawInterface>): Promise<boolean>;

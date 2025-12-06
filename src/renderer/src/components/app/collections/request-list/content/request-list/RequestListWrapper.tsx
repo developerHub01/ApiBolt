@@ -11,7 +11,7 @@ const RequestListWrapper = memo(() => {
   const isLoading = useAppSelector(selectRequestListIsLoading);
   const showSkeleton = useShowSkeleton(isLoading, 80);
   const isRequestListLoaded = useAppSelector(
-    state => state.requestResponse.isRequestListLoaded
+    state => state.requestResponse.isRequestListLoaded,
   );
 
   useEffect(() => {

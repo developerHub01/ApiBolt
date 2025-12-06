@@ -7,7 +7,7 @@ import {
   getActiveProject,
   getProjects,
   importProject,
-  updateProjects
+  updateProjects,
 } from "@/main/db/projectsDB";
 import { jarManager } from "@/main/utils/cookieManager";
 import path from "path";
@@ -22,15 +22,15 @@ export const projectsHandlers = () => {
     "getProjects",
     async (): Promise<
       ReturnType<ElectronAPIProjectsInterface["getProjects"]>
-    > => await getProjects()
+    > => await getProjects(),
   );
   ipcMain.handle(
     "createProjects",
     async (
       _: IpcMainInvokeEvent,
-      payload: CreateProjectPayloadInterface
+      payload: CreateProjectPayloadInterface,
     ): Promise<ReturnType<ElectronAPIProjectsInterface["createProjects"]>> =>
-      await createProjects(payload)
+      await createProjects(payload),
   );
   ipcMain.handle(
     "updateProjects",
@@ -38,7 +38,7 @@ export const projectsHandlers = () => {
       _: IpcMainInvokeEvent,
       ...rest: Parameters<ElectronAPIProjectsInterface["updateProjects"]>
     ): Promise<ReturnType<ElectronAPIProjectsInterface["updateProjects"]>> =>
-      await updateProjects(...rest)
+      await updateProjects(...rest),
   );
   ipcMain.handle(
     "deleteProjects",
@@ -46,7 +46,7 @@ export const projectsHandlers = () => {
       _: IpcMainInvokeEvent,
       ...rest: Parameters<ElectronAPIProjectsInterface["deleteProjects"]>
     ): Promise<ReturnType<ElectronAPIProjectsInterface["deleteProjects"]>> =>
-      await deleteProjects(...rest)
+      await deleteProjects(...rest),
   );
   ipcMain.handle(
     "changeActiveProject",
@@ -59,13 +59,13 @@ export const projectsHandlers = () => {
       const response = await changeActiveProject(...rest);
       await jarManager.loadFromDB();
       return response;
-    }
+    },
   );
   ipcMain.handle(
     "getActiveProject",
     async (): Promise<
       ReturnType<ElectronAPIProjectsInterface["getActiveProject"]>
-    > => await getActiveProject()
+    > => await getActiveProject(),
   );
 
   ipcMain.handle(
@@ -78,7 +78,7 @@ export const projectsHandlers = () => {
         if (!mainWindow) throw new Error("Main window not available");
 
         const payload: ProjectExportFileInterface = await exportProject(
-          ...rest
+          ...rest,
         );
         if (!payload) throw new Error("No project to export");
 
@@ -91,7 +91,7 @@ export const projectsHandlers = () => {
         const { canceled, filePath } = await dialog.showSaveDialog(mainWindow, {
           title: "Save project",
           defaultPath: path.join(app.getPath("downloads"), fileName),
-          filters: [{ name: "JSON file", extensions: ["json"] }]
+          filters: [{ name: "JSON file", extensions: ["json"] }],
         });
 
         if (!canceled && filePath) {
@@ -99,7 +99,7 @@ export const projectsHandlers = () => {
           return {
             ...payload,
             success: true,
-            message: "Project exported successfully!"
+            message: "Project exported successfully!",
           };
         } else {
           throw new Error("Save dialog cancelled.");
@@ -111,10 +111,10 @@ export const projectsHandlers = () => {
           message:
             error instanceof Error
               ? error.message
-              : "Something went wrong while exporting the project."
+              : "Something went wrong while exporting the project.",
         };
       }
-    }
+    },
   );
   ipcMain.handle(
     "importProject",
@@ -126,7 +126,7 @@ export const projectsHandlers = () => {
         const { filePaths } = await dialog.showOpenDialog(mainWindow, {
           title: "Open project JSON",
           defaultPath: app.getPath("downloads"),
-          filters: [{ name: "JSON file", extensions: ["json"] }]
+          filters: [{ name: "JSON file", extensions: ["json"] }],
         });
 
         const filePath = filePaths?.[0];
@@ -145,7 +145,7 @@ export const projectsHandlers = () => {
 
         return {
           success: true,
-          message: "Project imported successfully!"
+          message: "Project imported successfully!",
         };
       } catch (error: unknown) {
         console.error(error);
@@ -154,9 +154,9 @@ export const projectsHandlers = () => {
           message:
             error instanceof Error
               ? error.message
-              : "Something went wrong while importing the project."
+              : "Something went wrong while importing the project.",
         };
       }
-    }
+    },
   );
 };

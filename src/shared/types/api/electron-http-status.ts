@@ -1,13 +1,13 @@
 import {
   HttpStatusListInterface,
   HttpStatusSingleInterface,
-  HttpStatusUpdatePayloadInterface
+  HttpStatusUpdatePayloadInterface,
 } from "@shared/types/http-status.type";
 
 export interface ElectronAPIHttpStatusInterface {
   getHttpStatus(): Promise<HttpStatusListInterface | null>;
   getHttpStatusByCode(code: string): Promise<HttpStatusSingleInterface | null>;
   updateHttpStatus(
-    payload: HttpStatusUpdatePayloadInterface
+    payload: HttpStatusUpdatePayloadInterface,
   ): Promise<Required<HttpStatusUpdatePayloadInterface> | null>;
 }

@@ -48,10 +48,10 @@ const SettingIsZoomable = () => {
         updateSettings({
           isZoomable: updatedValue,
           projectId: activeTab === "global" ? null : activeProjectId,
-        })
+        }),
       );
     },
-    [activeProjectId, activeTab, dispatch]
+    [activeProjectId, activeTab, dispatch],
   );
 
   return (

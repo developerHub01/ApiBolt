@@ -6,19 +6,19 @@ import { INITIAL_URL_TOKENS_VALUE } from "@/constant/request-url.constant";
 export const selectRequestUrlTokens = createSelector(
   [
     (state: RootState) =>
-      state.requestUrl.tokens[state.requestResponse.selectedTab ?? ""]
+      state.requestUrl.tokens[state.requestResponse.selectedTab ?? ""],
   ],
   (tokens: Array<UrlTokenInterface>): Array<UrlTokenInterface> =>
-    tokens ?? [...INITIAL_URL_TOKENS_VALUE]
+    tokens ?? [...INITIAL_URL_TOKENS_VALUE],
 );
 
 export const selectRequestUrlTokenById = createSelector(
   [
     (state: RootState) =>
       state.requestUrl.tokens[state.requestResponse.selectedTab ?? ""],
-    (_, id: string) => id
+    (_, id: string) => id,
   ],
   (tokens: Array<UrlTokenInterface>, id): string | null => {
     return (tokens ?? []).find(token => token.id === id)?.value ?? null;
-  }
+  },
 );

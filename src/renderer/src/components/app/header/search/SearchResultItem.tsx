@@ -46,7 +46,7 @@ const SearchResultItem = ({
           "border-red-500": selectedTab === id && method === "delete",
           "border-primary": selectedTab === id && !method,
         },
-        className
+        className,
       )}
       onClick={handleClick}
     >

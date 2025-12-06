@@ -18,7 +18,7 @@ const SettingLayoutActivityBar = () => {
   const dispatch = useAppDispatch();
   const activeProjectId = useAppSelector(selectActiveProjectId);
   const activityBarVisibleGlobal = useAppSelector(
-    selectActivityBarVisibleGlobal
+    selectActivityBarVisibleGlobal,
   );
   const activityBarVisibleLocal = useAppSelector(selectActivityBarVisibleLocal);
 
@@ -50,10 +50,10 @@ const SettingLayoutActivityBar = () => {
         updateSettings({
           activityBarVisible: updatedValue,
           projectId: activeTab === "global" ? null : activeProjectId,
-        })
+        }),
       );
     },
-    [activeProjectId, activeTab, dispatch]
+    [activeProjectId, activeTab, dispatch],
   );
 
   return (

@@ -6,7 +6,7 @@ interface RequestResponseContext {
 }
 
 const RequestResponseContext = createContext<RequestResponseContext | null>(
-  null
+  null,
 );
 
 export const useRequestResponse = () => {
@@ -14,7 +14,7 @@ export const useRequestResponse = () => {
 
   if (!context) {
     throw new Error(
-      "useRequestResponse must be used within a RequestResponseProvider."
+      "useRequestResponse must be used within a RequestResponseProvider.",
     );
   }
 
@@ -30,7 +30,7 @@ const RequestResponseProvider = ({
 }: RequestResponseProviderProps) => {
   const [forceCollapse, setForceCollapse] = useState<boolean>(false);
   const handleForceCollapse = useCallback((value?: boolean) => {
-    setForceCollapse((prev) => value ?? !prev);
+    setForceCollapse(prev => value ?? !prev);
   }, []);
 
   return (

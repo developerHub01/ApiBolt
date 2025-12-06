@@ -1,7 +1,7 @@
 import type { EnvironmentInterface } from "@shared/types/environment.types";
 
 export const removeDuplicateEnvs = (
-  environmentsList: Record<string, EnvironmentInterface>
+  environmentsList: Record<string, EnvironmentInterface>,
 ) => {
   const map = new Map<string, EnvironmentInterface>();
 

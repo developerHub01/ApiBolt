@@ -6,7 +6,7 @@ import {
   ParamHeaderBuildPayloadInterface,
   ParamHeaderPayloadInterface,
   RequestListItemInterface,
-  RequestTabInterface
+  RequestTabInterface,
 } from "@shared/types/request-response.types";
 import { ApiUrlPayload } from "@shared/types/request-url.types";
 import { EnvironmentInterface } from "@shared/types/environment.types";

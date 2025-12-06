@@ -19,6 +19,6 @@ export const fileSystemHandler = () => {
         console.error(error);
         return false;
       }
-    }
+    },
   );
 };

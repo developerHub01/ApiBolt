@@ -1,7 +1,7 @@
 import type {
   KeybaordShortCutInterface,
   KeybaordShortCutReceivePayloadInterface,
-  KeybaordShortCutUpdatePayloadInterface
+  KeybaordShortCutUpdatePayloadInterface,
 } from "@shared/types/keyboard-shortcut.types";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
@@ -17,7 +17,7 @@ const initialState: KeyboardShortcutsStateInterface = {
   isKeyboardShortcutPanelOpen: false,
   globalShortcuts: {},
   localShortcuts: {},
-  editingId: null
+  editingId: null,
 };
 
 export const keyboardShortcutsSlice = createSlice({
@@ -26,7 +26,7 @@ export const keyboardShortcutsSlice = createSlice({
   reducers: {
     handleChangeIsKeyboardShortcutPanelOpen: (
       state,
-      action: PayloadAction<boolean | undefined>
+      action: PayloadAction<boolean | undefined>,
     ) => {
       const payload = action.payload ?? !state.isKeyboardShortcutPanelOpen;
       state.isKeyboardShortcutPanelOpen = payload;
@@ -34,20 +34,20 @@ export const keyboardShortcutsSlice = createSlice({
     },
     handleReplaceShortcuts: (
       state,
-      action: PayloadAction<KeybaordShortCutReceivePayloadInterface>
+      action: PayloadAction<KeybaordShortCutReceivePayloadInterface>,
     ) => {
       state.globalShortcuts = action.payload.global;
       state.localShortcuts = action.payload.local;
     },
     handleChangeEditingId: (
       state,
-      action: PayloadAction<string | undefined | null>
+      action: PayloadAction<string | undefined | null>,
     ) => {
       state.editingId = action.payload ?? null;
     },
     handleUpdateKeyboardShortcuts: (
       state,
-      action: PayloadAction<KeybaordShortCutUpdatePayloadInterface>
+      action: PayloadAction<KeybaordShortCutUpdatePayloadInterface>,
     ) => {
       if (state.editingId) state.editingId = null;
       const payload = action.payload;
@@ -55,23 +55,23 @@ export const keyboardShortcutsSlice = createSlice({
       if (payload.projectId) {
         state.localShortcuts[payload.id] = {
           ...(state.localShortcuts[payload.id] ?? {}),
-          ...payload
+          ...payload,
         };
       } else {
         state.globalShortcuts[payload.id] = {
           ...(state.globalShortcuts[payload.id] ?? {}),
-          ...payload
+          ...payload,
         };
       }
-    }
-  }
+    },
+  },
 });
 
 export const {
   handleChangeIsKeyboardShortcutPanelOpen,
   handleReplaceShortcuts,
   handleChangeEditingId,
-  handleUpdateKeyboardShortcuts
+  handleUpdateKeyboardShortcuts,
 } = keyboardShortcutsSlice.actions;
 
 export default keyboardShortcutsSlice.reducer;

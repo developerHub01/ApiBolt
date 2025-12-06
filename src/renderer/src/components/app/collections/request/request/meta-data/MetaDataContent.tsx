@@ -1,27 +1,28 @@
 import { memo, lazy, Suspense } from "react";
 import { AnimatePresence } from "motion/react";
 const Url = lazy(
-  () => import("@/components/app/collections/request/request/meta-data/url/Url")
+  () =>
+    import("@/components/app/collections/request/request/meta-data/url/Url"),
 );
 const Params = lazy(
   () =>
-    import("@/components/app/collections/request/request/meta-data/params/Params")
+    import("@/components/app/collections/request/request/meta-data/params/Params"),
 );
 const Headers = lazy(
   () =>
-    import("@/components/app/collections/request/request/meta-data/headers/Headers")
+    import("@/components/app/collections/request/request/meta-data/headers/Headers"),
 );
 const Body = lazy(
   () =>
-    import("@/components/app/collections/request/request/meta-data/body/Body")
+    import("@/components/app/collections/request/request/meta-data/body/Body"),
 );
 const RequestAuthorization = lazy(
   () =>
-    import("@/components/app/collections/request/request/meta-data/authorization/RequestAuthorization")
+    import("@/components/app/collections/request/request/meta-data/authorization/RequestAuthorization"),
 );
 const RequestCode = lazy(
   () =>
-    import("@/components/app/collections/request/request/meta-data/code/RequestCode")
+    import("@/components/app/collections/request/request/meta-data/code/RequestCode"),
 );
 import { useAppSelector } from "@/context/redux/hooks";
 import RequestMetaDataProvider from "@/context/collections/request/RequestMetaDataProvider";

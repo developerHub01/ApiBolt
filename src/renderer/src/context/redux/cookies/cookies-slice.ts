@@ -1,6 +1,6 @@
 import type {
   CookieInterface,
-  CookiesInterface
+  CookiesInterface,
 } from "@shared/types/cookies.types";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
@@ -14,7 +14,7 @@ export const DEFAULT_COOKIE_DETAILS: CookieInterface = {
   httpOnly: false,
   hostOnly: false,
   secure: false,
-  sameSite: "lax"
+  sameSite: "lax",
 };
 
 export interface CookiesStateInterface {
@@ -35,7 +35,7 @@ const initialState: CookiesStateInterface = {
   isAddOptionOpen: false,
   addCookieDetails: DEFAULT_COOKIE_DETAILS,
   isEditing: {},
-  editingCookies: {}
+  editingCookies: {},
 };
 
 export const cookiesSlice = createSlice({
@@ -44,7 +44,7 @@ export const cookiesSlice = createSlice({
   reducers: {
     handleChangeIsCookiesOpen: (
       state,
-      action: PayloadAction<boolean | undefined>
+      action: PayloadAction<boolean | undefined>,
     ) => {
       if (state.isCookiesOpen === action.payload) return;
 
@@ -60,14 +60,14 @@ export const cookiesSlice = createSlice({
     },
     handleDeleteCookieByKey: (state, action: PayloadAction<string>) => {
       state.cookies = state.cookies.filter(
-        entry => entry.key !== action.payload
+        entry => entry.key !== action.payload,
       );
       delete state.isEditing[action.payload];
       delete state.editingCookies[action.payload];
     },
     handleChangeSelectedCookieKey: (
       state,
-      action: PayloadAction<string | null>
+      action: PayloadAction<string | null>,
     ) => {
       state.isAddOptionOpen = false;
       state.selectedCookieKey =
@@ -75,7 +75,7 @@ export const cookiesSlice = createSlice({
     },
     handleChangeIsAddCookieOption: (
       state,
-      action: PayloadAction<boolean | undefined>
+      action: PayloadAction<boolean | undefined>,
     ) => {
       state.selectedCookieKey = null;
       state.isAddOptionOpen = action.payload ?? !state.isAddOptionOpen;
@@ -89,11 +89,11 @@ export const cookiesSlice = createSlice({
     },
     handleChangeAddCookie: (
       state,
-      action: PayloadAction<Partial<CookieInterface>>
+      action: PayloadAction<Partial<CookieInterface>>,
     ) => {
       state.addCookieDetails = {
         ...state.addCookieDetails,
-        ...action.payload
+        ...action.payload,
       };
     },
     handleClearEditing: (
@@ -103,7 +103,7 @@ export const cookiesSlice = createSlice({
             key?: string;
           }
         | undefined
-      >
+      >,
     ) => {
       const key = action.payload?.key ?? state.selectedCookieKey;
       if (!key) return;
@@ -120,7 +120,7 @@ export const cookiesSlice = createSlice({
             value?: boolean;
           }
         | undefined
-      >
+      >,
     ) => {
       const key = action.payload?.key ?? state.selectedCookieKey;
       if (!key) return;
@@ -148,14 +148,14 @@ export const cookiesSlice = createSlice({
       action: PayloadAction<{
         key?: string;
         payload: Partial<CookieInterface>;
-      }>
+      }>,
     ) => {
       const key = action.payload?.key ?? state.selectedCookieKey;
       if (!key || !state.editingCookies[key]) return;
 
       state.editingCookies[key] = {
         ...state.editingCookies[key],
-        ...action.payload.payload
+        ...action.payload.payload,
       };
     },
     handleSaveEditCookie: (
@@ -165,7 +165,7 @@ export const cookiesSlice = createSlice({
             key?: string;
           }
         | undefined
-      >
+      >,
     ) => {
       const key = action.payload?.key ?? state.selectedCookieKey;
       if (!key || !state.editingCookies[key]) return;
@@ -175,14 +175,14 @@ export const cookiesSlice = createSlice({
 
       state.cookies[index] = {
         ...state.cookies[index],
-        ...state.editingCookies[key]
+        ...state.editingCookies[key],
       };
     },
     handleAddCookie: state => {
       state.cookies.push(state.addCookieDetails);
       state.addCookieDetails = DEFAULT_COOKIE_DETAILS;
-    }
-  }
+    },
+  },
 });
 
 export const {
@@ -199,7 +199,7 @@ export const {
   handleResetEditing,
   handleChangeEditCookie,
   handleSaveEditCookie,
-  handleAddCookie
+  handleAddCookie,
 } = cookiesSlice.actions;
 
 export default cookiesSlice.reducer;

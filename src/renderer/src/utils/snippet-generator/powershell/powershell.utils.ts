@@ -2,12 +2,12 @@ import { requestDefaultCodeSnippit } from "@/constant/code-snippit.constant";
 import type {
   CodeSnippitDataInterface,
   RequestCodeSnippitInterface,
-  TRequestCodeType
+  TRequestCodeType,
 } from "@shared/types/code-snippit.types";
 import {
   defaultBinaryData,
   generateMaskedAndRealCode,
-  getHeadersList
+  getHeadersList,
 } from "@/utils/snippet-generator/helper.utils";
 
 export const generatePowerShellInvokeRestMethodCode = async ({
@@ -20,13 +20,13 @@ export const generatePowerShellInvokeRestMethodCode = async ({
   binaryData,
   rawBodyDataType,
   bodyType,
-  formData
+  formData,
 }: CodeSnippitDataInterface) => {
   const headersList = getHeadersList({
     headers,
     authorization,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
 
   if (
@@ -36,7 +36,7 @@ export const generatePowerShellInvokeRestMethodCode = async ({
   ) {
     headersList.push({
       key: "Content-Type",
-      value: "application/octet-stream"
+      value: "application/octet-stream",
     });
   }
 
@@ -59,7 +59,7 @@ ${headersList.map(({ key, value }) => `\t${JSON.stringify(key)}=${JSON.stringify
 ${formData
   .filter(entry => entry.type === "text")
   .map(
-    ({ key, value }) => `\t${JSON.stringify(key)} = ${JSON.stringify(value)}`
+    ({ key, value }) => `\t${JSON.stringify(key)} = ${JSON.stringify(value)}`,
   )
   .join("\n")}
 }`
@@ -80,7 +80,7 @@ ${formData
 ${Object.entries(fileMap)
   .map(
     ([key, values]) =>
-      `\t${JSON.stringify(key)} = @(${values.map(value => JSON.stringify(value)).join(", ")})`
+      `\t${JSON.stringify(key)} = @(${values.map(value => JSON.stringify(value)).join(", ")})`,
   )
   .join("\n")}
 }`
@@ -120,7 +120,7 @@ Write-Output $result`;
 
     return generateMaskedAndRealCode({
       code: `${headersString}${formDataString}`,
-      authorization
+      authorization,
     });
   }
 
@@ -171,13 +171,13 @@ export const generatePowerShellInvokeWebRequestCode = async ({
   binaryData,
   rawBodyDataType,
   bodyType,
-  formData
+  formData,
 }: CodeSnippitDataInterface) => {
   const headersList = getHeadersList({
     headers,
     authorization,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
 
   if (
@@ -187,7 +187,7 @@ export const generatePowerShellInvokeWebRequestCode = async ({
   ) {
     headersList.push({
       key: "Content-Type",
-      value: "application/octet-stream"
+      value: "application/octet-stream",
     });
   }
 
@@ -210,7 +210,7 @@ ${headersList
 ${formData
   .filter(entry => entry.type === "text")
   .map(
-    ({ key, value }) => `\t${JSON.stringify(key)} = ${JSON.stringify(value)}`
+    ({ key, value }) => `\t${JSON.stringify(key)} = ${JSON.stringify(value)}`,
   )
   .join("\n")}
 }\n\n`
@@ -229,7 +229,7 @@ ${formData
 ${Object.entries(fileMap)
   .map(
     ([key, values]) =>
-      `\t${JSON.stringify(key)} = @(${values.map(value => JSON.stringify(value)).join(", ")})`
+      `\t${JSON.stringify(key)} = @(${values.map(value => JSON.stringify(value)).join(", ")})`,
   )
   .join("\n")}
 }\n\n`
@@ -267,7 +267,7 @@ Write-Output $result`;
 
     return generateMaskedAndRealCode({
       code: `${headersString}${formDataString}`,
-      authorization
+      authorization,
     });
   }
 
@@ -280,7 +280,7 @@ Write-Output $result`;
     xWWWFormUrlencodedString = `$body = @{
 ${xWWWFormUrlencoded
   .map(
-    ({ key, value }) => `\t${JSON.stringify(key)} = ${JSON.stringify(value)}`
+    ({ key, value }) => `\t${JSON.stringify(key)} = ${JSON.stringify(value)}`,
   )
   .join("\n")}
 }\n\n`;
@@ -317,7 +317,7 @@ Write-Output $response.Content`;
 
 export const generatePowerShellCode = async (
   type: TRequestCodeType,
-  data: CodeSnippitDataInterface
+  data: CodeSnippitDataInterface,
 ): Promise<RequestCodeSnippitInterface> => {
   switch (type) {
     case "powershell-invoke-restmethod":

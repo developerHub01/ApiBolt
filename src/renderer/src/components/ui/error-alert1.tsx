@@ -4,7 +4,7 @@ import { TriangleAlert as AlertIcon } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
-  TooltipTrigger
+  TooltipTrigger,
 } from "@/components/ui/tooltip-custom";
 import { Button } from "@/components/ui/button";
 
@@ -20,19 +20,19 @@ const ErrorAlert1 = memo(({ isError, message }: ErrorAlertProps) => {
         <motion.div
           initial={{
             scale: 0.5,
-            opacity: 0
+            opacity: 0,
           }}
           animate={{
             scale: 1,
-            opacity: 1
+            opacity: 1,
           }}
           exit={{
             scale: 0.5,
-            opacity: 0
+            opacity: 0,
           }}
           transition={{
             duration: 0.5,
-            ease: "anticipate"
+            ease: "anticipate",
           }}
           className="absolute bottom-2 right-2 origin-center"
         >

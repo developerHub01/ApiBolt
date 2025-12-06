@@ -63,7 +63,7 @@ interface KeyboardShortcutsContext {
 }
 
 const KeyboardShortcutsContext = createContext<KeyboardShortcutsContext | null>(
-  null
+  null,
 );
 
 export const useKeyboardShortcuts = () => {
@@ -71,7 +71,7 @@ export const useKeyboardShortcuts = () => {
 
   if (!context) {
     throw new Error(
-      "useKeyboardShortcuts must be used within a KeyboardShortcutsProvider."
+      "useKeyboardShortcuts must be used within a KeyboardShortcutsProvider.",
     );
   }
 
@@ -87,7 +87,7 @@ const KeyboardShortcutsProvider = ({
 }: KeyboardShortcutsProviderProps) => {
   const projectId = useAppSelector(selectActiveProjectId);
   const [activeTab, setActiveTab] = useState<TKeyboardShortcutsTab>(
-    projectId ? "local" : "global"
+    projectId ? "local" : "global",
   );
   const globalMap = useAppSelector(selectGlobalKeyboardShortcuts);
   const localMap = useAppSelector(selectLocalKeyboardShortcuts);
@@ -155,42 +155,42 @@ const KeyboardShortcutsProvider = ({
   useEffect(() => setActiveTab(projectId ? "local" : "global"), [projectId]);
 
   const handleChangeActiveTab = useCallback((value?: TKeyboardShortcutsTab) => {
-    setActiveTab((prev) => value ?? (prev === "global" ? "local" : "global"));
+    setActiveTab(prev => value ?? (prev === "global" ? "local" : "global"));
   }, []);
 
   const handleChangeSearchTerm = useCallback(
     (value?: string) => {
-      setSearchTerm((prev) => ({
+      setSearchTerm(prev => ({
         ...prev,
         [activeTab]: value ?? "",
       }));
     },
-    [activeTab]
+    [activeTab],
   );
 
   const handleChangeSearchByType = useCallback(
     (value: TSearchByType) => {
-      setSelectedSearchByType((prev) => ({
+      setSelectedSearchByType(prev => ({
         ...prev,
         [activeTab]: value,
       }));
     },
-    [activeTab]
+    [activeTab],
   );
 
   const handleChangeSearchKeyList = useCallback(
     (value: Array<string>) => {
-      setSearchKeyList((prev) => ({
+      setSearchKeyList(prev => ({
         ...prev,
         [activeTab]: value,
       }));
     },
-    [activeTab]
+    [activeTab],
   );
 
   const showableSearchTerm = useMemo(
     () => (activeTab === "global" ? searchTerm.global : searchTerm.local),
-    [searchTerm, activeTab]
+    [searchTerm, activeTab],
   );
 
   const showableSearchByType = useMemo(
@@ -198,17 +198,17 @@ const KeyboardShortcutsProvider = ({
       activeTab === "global"
         ? selectedSearchByType.global
         : selectedSearchByType.local,
-    [selectedSearchByType, activeTab]
+    [selectedSearchByType, activeTab],
   );
 
   const showableSearchKeyList = useMemo(
     () => (activeTab === "global" ? searchKeyList.global : searchKeyList.local),
-    [searchKeyList, activeTab]
+    [searchKeyList, activeTab],
   );
 
   const searchResultCount = useMemo(
     () => Object.keys(searchResult).length,
-    [searchResult]
+    [searchResult],
   );
 
   return (

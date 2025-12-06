@@ -10,7 +10,7 @@ export const getCookiePropertyList = (propertyList: Array<string>) => {
     "samesite",
   ];
 
-  propertyList = propertyList.filter((item) => !mustNeed.includes(item));
+  propertyList = propertyList.filter(item => !mustNeed.includes(item));
 
   return [...mustNeed, ...propertyList];
 };

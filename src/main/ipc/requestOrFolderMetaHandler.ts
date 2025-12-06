@@ -10,7 +10,7 @@ import {
   duplicateRequestOrFolderMeta,
   expendOrCollapseRequestOrFolderMetaAll,
   collapseAllRequestOrFolderMeta,
-  getRequestOrFolderMetaById
+  getRequestOrFolderMetaById,
 } from "@/main/db/requestOrFolderMetaDB.js";
 import { ElectronAPIRequestOrFolderMetaInterface } from "@shared/types/api/electron-request-or-folder-meta";
 
@@ -26,7 +26,7 @@ export const requestOrFolderMetaHandler = () => {
       ReturnType<
         ElectronAPIRequestOrFolderMetaInterface["getRequestOrFolderMeta"]
       >
-    > => await getRequestOrFolderMeta(...rest)
+    > => await getRequestOrFolderMeta(...rest),
   );
   ipcMain.handle(
     "getRequestOrFolderMetaById",
@@ -39,7 +39,7 @@ export const requestOrFolderMetaHandler = () => {
       ReturnType<
         ElectronAPIRequestOrFolderMetaInterface["getRequestOrFolderMetaById"]
       >
-    > => await getRequestOrFolderMetaById(...rest)
+    > => await getRequestOrFolderMetaById(...rest),
   );
   ipcMain.handle(
     "createRequestOrFolderMeta",
@@ -52,7 +52,7 @@ export const requestOrFolderMetaHandler = () => {
       ReturnType<
         ElectronAPIRequestOrFolderMetaInterface["createRequestOrFolderMeta"]
       >
-    > => await createRequestOrFolderMeta(...rest)
+    > => await createRequestOrFolderMeta(...rest),
   );
   ipcMain.handle(
     "updateRequestOrFolderMeta",
@@ -65,7 +65,7 @@ export const requestOrFolderMetaHandler = () => {
       ReturnType<
         ElectronAPIRequestOrFolderMetaInterface["updateRequestOrFolderMeta"]
       >
-    > => await updateRequestOrFolderMeta(...rest)
+    > => await updateRequestOrFolderMeta(...rest),
   );
   ipcMain.handle(
     "collapseAllRequestOrFolderMeta",
@@ -78,7 +78,7 @@ export const requestOrFolderMetaHandler = () => {
       ReturnType<
         ElectronAPIRequestOrFolderMetaInterface["collapseAllRequestOrFolderMeta"]
       >
-    > => await collapseAllRequestOrFolderMeta(...rest)
+    > => await collapseAllRequestOrFolderMeta(...rest),
   );
   ipcMain.handle(
     "moveRequestOrFolderMeta",
@@ -91,7 +91,7 @@ export const requestOrFolderMetaHandler = () => {
       ReturnType<
         ElectronAPIRequestOrFolderMetaInterface["moveRequestOrFolderMeta"]
       >
-    > => await moveRequestOrFolderMeta(...rest)
+    > => await moveRequestOrFolderMeta(...rest),
   );
   ipcMain.handle(
     "deleteRequestOrFolderMetaById",
@@ -104,7 +104,7 @@ export const requestOrFolderMetaHandler = () => {
       ReturnType<
         ElectronAPIRequestOrFolderMetaInterface["deleteRequestOrFolderMetaById"]
       >
-    > => await deleteRequestOrFolderMetaById(...rest)
+    > => await deleteRequestOrFolderMetaById(...rest),
   );
   ipcMain.handle(
     "deleteRequestOrFolderMetaByProjectId",
@@ -117,7 +117,7 @@ export const requestOrFolderMetaHandler = () => {
       ReturnType<
         ElectronAPIRequestOrFolderMetaInterface["deleteRequestOrFolderMetaByProjectId"]
       >
-    > => await deleteRequestOrFolderMetaByProjectId(...rest)
+    > => await deleteRequestOrFolderMetaByProjectId(...rest),
   );
   ipcMain.handle(
     "duplicateRequestOrFolderMeta",
@@ -130,7 +130,7 @@ export const requestOrFolderMetaHandler = () => {
       ReturnType<
         ElectronAPIRequestOrFolderMetaInterface["duplicateRequestOrFolderMeta"]
       >
-    > => await duplicateRequestOrFolderMeta(...rest)
+    > => await duplicateRequestOrFolderMeta(...rest),
   );
   ipcMain.handle(
     "deleteRequestOrFolderMetaAll",
@@ -138,7 +138,7 @@ export const requestOrFolderMetaHandler = () => {
       ReturnType<
         ElectronAPIRequestOrFolderMetaInterface["deleteRequestOrFolderMetaAll"]
       >
-    > => await deleteRequestOrFolderMetaAll()
+    > => await deleteRequestOrFolderMetaAll(),
   );
   ipcMain.handle(
     "expendOrCollapseRequestOrFolderMetaAll",
@@ -151,6 +151,6 @@ export const requestOrFolderMetaHandler = () => {
       ReturnType<
         ElectronAPIRequestOrFolderMetaInterface["expendOrCollapseRequestOrFolderMetaAll"]
       >
-    > => await expendOrCollapseRequestOrFolderMetaAll(...rest)
+    > => await expendOrCollapseRequestOrFolderMetaAll(...rest),
   );
 };

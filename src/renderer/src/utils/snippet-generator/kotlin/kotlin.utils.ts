@@ -2,13 +2,13 @@ import { requestDefaultCodeSnippit } from "@/constant/code-snippit.constant";
 import type {
   CodeSnippitDataInterface,
   RequestCodeSnippitInterface,
-  TRequestCodeType
+  TRequestCodeType,
 } from "@shared/types/code-snippit.types";
 import {
   defaultBinaryData,
   generateMaskedAndRealCode,
   getBodyType,
-  getHeadersList
+  getHeadersList,
 } from "@/utils/snippet-generator/helper.utils";
 import mime from "mime";
 
@@ -22,11 +22,11 @@ export const generateKotlinOkHttpCode = async ({
   binaryData,
   rawBodyDataType,
   bodyType,
-  formData
+  formData,
 }: CodeSnippitDataInterface) => {
   const bodyTypeString = getBodyType({
     bodyType,
-    rawBodyDataType
+    rawBodyDataType,
   });
 
   const startString = `val client = OkHttpClient()\n\n`;
@@ -37,7 +37,7 @@ println(response.body?.string())`;
     headers,
     authorization,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
 
   if (
@@ -47,7 +47,7 @@ println(response.body?.string())`;
   ) {
     headersList.push({
       key: "Content-Type",
-      value: "application/octet-stream"
+      value: "application/octet-stream",
     });
   }
 
@@ -56,7 +56,7 @@ println(response.body?.string())`;
     : `\n${headersList
         .map(
           ({ key, value }) =>
-            `\t.addHeader(${JSON.stringify(key)}, ${JSON.stringify(value)})`
+            `\t.addHeader(${JSON.stringify(key)}, ${JSON.stringify(value)})`,
         )
         .join("\n")}\n`;
 
@@ -79,9 +79,9 @@ println(response.body?.string())`;
           .map(
             (
               { value },
-              index
+              index,
             ) => `val file${index + 1} = File(${JSON.stringify(value)})
-val fileBody${index + 1} = file${index + 1}.asRequestBody(${JSON.stringify(mime.getType(value))}.toMediaType())`
+val fileBody${index + 1} = file${index + 1}.asRequestBody(${JSON.stringify(mime.getType(value))}.toMediaType())`,
           )
           .join("\n")}\n\n`;
 
@@ -124,7 +124,7 @@ val body = file.asRequestBody(${JSON.stringify(binaryData ?? defaultBinaryData)}
 
 export const generateKotlinCode = async (
   type: TRequestCodeType,
-  data: CodeSnippitDataInterface
+  data: CodeSnippitDataInterface,
 ): Promise<RequestCodeSnippitInterface> => {
   switch (type) {
     case "kotlin-okhttp":

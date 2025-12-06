@@ -42,7 +42,7 @@ export const createEnvironments: ElectronAPIEnvironmentsInterface["createEnviron
         (
           await db.insert(environmentTable).values({
             ...payload,
-            projectId: activeProjectId
+            projectId: activeProjectId,
           })
         )?.rowsAffected > 0
       );
@@ -59,7 +59,7 @@ export const importEnvironments = async (payload: TEnvironmentFile) => {
 
     const importPayload = payload.map(item => ({
       ...item,
-      projectId: activeProjectId
+      projectId: activeProjectId,
     }));
 
     return (
@@ -85,13 +85,13 @@ export const updateEnvironments: ElectronAPIEnvironmentsInterface["updateEnviron
             .insert(environmentTable)
             .values({
               ...payload,
-              projectId: activeProjectId
+              projectId: activeProjectId,
             })
             .onConflictDoUpdate({
               target: [environmentTable.id],
               set: {
-                ...updatePayload
-              }
+                ...updatePayload,
+              },
             })
         )?.rowsAffected > 0
       );
@@ -134,7 +134,7 @@ export const deleteEnvironments: ElectronAPIEnvironmentsInterface["deleteEnviron
   };
 
 export const deleteEnvironmentsByProjectId = async (
-  id: string
+  id: string,
 ): Promise<boolean> => {
   try {
     return (

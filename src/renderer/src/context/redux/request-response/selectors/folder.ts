@@ -7,9 +7,9 @@ export const selectRequestFolderTitle = createSelector(
     (state: RootState) =>
       state.requestResponse.folderTitle[
         state.requestResponse.selectedTab! ?? ""
-      ]
+      ],
   ],
-  (folderTitle): string | undefined => folderTitle
+  (folderTitle): string | undefined => folderTitle,
 );
 
 export const selectRequestFolderDescription = createSelector(
@@ -17,9 +17,9 @@ export const selectRequestFolderDescription = createSelector(
     (state: RootState) =>
       state.requestResponse.folderDescription[
         state.requestResponse.selectedTab! ?? ""
-      ]
+      ],
   ],
-  (folderDescription): string | undefined => folderDescription
+  (folderDescription): string | undefined => folderDescription,
 );
 
 export const selectRequestFolderDescriptionActiveTab = createSelector(
@@ -27,10 +27,10 @@ export const selectRequestFolderDescriptionActiveTab = createSelector(
     (state: RootState) =>
       state.requestResponse.folderDescriptionActiveTab[
         state.requestResponse.selectedTab! ?? ""
-      ] ?? "markdown"
+      ] ?? "markdown",
   ],
   (folderDescriptionActiveTab): TRequestFolderDescriptionTab =>
-    folderDescriptionActiveTab
+    folderDescriptionActiveTab,
 );
 
 export const selectIsFolderDescriptionLineWrap = createSelector(
@@ -38,7 +38,7 @@ export const selectIsFolderDescriptionLineWrap = createSelector(
     (state: RootState) =>
       state.requestResponse.folderDescriptionLineWrap[
         state.requestResponse.selectedTab! ?? ""
-      ] ?? "markdown"
+      ] ?? "markdown",
   ],
-  (folderDescriptionActiveTab): boolean => folderDescriptionActiveTab
+  (folderDescriptionActiveTab): boolean => folderDescriptionActiveTab,
 );

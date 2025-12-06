@@ -16,7 +16,7 @@ const HeaderWrapper = ({
     layout
     className={cn(
       "bg-accent/80 flex justify-center gap-2 min-h-[50px] items-center border-b",
-      className
+      className,
     )}
     initial={{
       opacity: 0,

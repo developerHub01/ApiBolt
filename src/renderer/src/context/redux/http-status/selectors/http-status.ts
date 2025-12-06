@@ -3,23 +3,23 @@ import { createSelector } from "@reduxjs/toolkit";
 
 export const selectHttpStatusList = createSelector(
   (state: RootState) => state.httpStatus.httpStatus,
-  (httpStatus) => httpStatus
+  httpStatus => httpStatus,
 );
 
 export const selectHttpStatusCodeList = createSelector(
   (state: RootState) => state.httpStatus.httpStatus,
-  (httpStatus) => Object.keys(httpStatus)
+  httpStatus => Object.keys(httpStatus),
 );
 
 export const selectSelectedSettingHttpStatusCode = createSelector(
   (state: RootState) => state.httpStatus.selectedSettingHttpStatusCode,
-  (selectedSettingHttpStatusCode) => selectedSettingHttpStatusCode
+  selectedSettingHttpStatusCode => selectedSettingHttpStatusCode,
 );
 
 export const selectHttpStatusCodeDetails = (code: string) =>
   createSelector(
     (state: RootState) => state.httpStatus.httpStatus[code],
-    (httpStatusDetails) => httpStatusDetails
+    httpStatusDetails => httpStatusDetails,
   );
 
 export const selectHttpStatusCodeDetailsPartial = createSelector(
@@ -29,9 +29,9 @@ export const selectHttpStatusCodeDetailsPartial = createSelector(
   ],
   (httpStatusList, code) =>
     Object.keys(httpStatusList)
-      .filter((httpCode) => httpCode.startsWith(code))
-      .map((statusCode) => ({
+      .filter(httpCode => httpCode.startsWith(code))
+      .map(statusCode => ({
         code: statusCode,
         ...httpStatusList[statusCode],
-      }))
+      })),
 );

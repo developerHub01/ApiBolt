@@ -1,12 +1,12 @@
 import { requestDefaultCodeSnippit } from "@/constant/code-snippit.constant";
 import type {
   CodeSnippitDataInterface,
-  TRequestCodeType
+  TRequestCodeType,
 } from "@shared/types/code-snippit.types";
 import {
   defaultBinaryData,
   generateMaskedAndRealCode,
-  getHeadersList
+  getHeadersList,
 } from "@/utils/snippet-generator/helper.utils";
 
 export const generateSwiftURLSessionCode = async ({
@@ -19,7 +19,7 @@ export const generateSwiftURLSessionCode = async ({
   rawBodyDataType,
   bodyType,
   binaryData,
-  rawData
+  rawData,
 }: CodeSnippitDataInterface) => {
   const endString = `\nlet task = URLSession.shared.dataTask(with: request) { data, response, error in 
 \tguard let data = data else {
@@ -35,7 +35,7 @@ task.resume()`;
     headers,
     authorization,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
 
   if (
@@ -45,7 +45,7 @@ task.resume()`;
   ) {
     headersList.push({
       key: "Content-Type",
-      value: "application/octet-stream"
+      value: "application/octet-stream",
     });
   }
 
@@ -55,7 +55,7 @@ task.resume()`;
       headersList
         .map(
           ({ key, value }) =>
-            `request.addValue(${JSON.stringify(value)}, forHTTPHeaderField: ${JSON.stringify(key)})`
+            `request.addValue(${JSON.stringify(value)}, forHTTPHeaderField: ${JSON.stringify(key)})`,
         )
         .join("\n") + "\n";
   }
@@ -72,7 +72,7 @@ ${formData
 \t\t"key": ${JSON.stringify(key)},
 \t\t"src": ${JSON.stringify(value)},
 \t\t"type": ${type}
-\t]`
+\t]`,
   )
   .join(",\n")}
 ] as [[String: Any]]
@@ -157,7 +157,7 @@ export const generateSwiftAlamofireCode = async ({
   rawBodyDataType,
   bodyType,
   binaryData,
-  rawData
+  rawData,
 }: CodeSnippitDataInterface) => {
   console.log({
     url,
@@ -169,7 +169,7 @@ export const generateSwiftAlamofireCode = async ({
     rawBodyDataType,
     bodyType,
     binaryData,
-    rawData
+    rawData,
   });
 
   const code = ``;
@@ -178,7 +178,7 @@ export const generateSwiftAlamofireCode = async ({
 
 export const generateSwiftCode = async (
   type: TRequestCodeType,
-  data: CodeSnippitDataInterface
+  data: CodeSnippitDataInterface,
 ) => {
   switch (type) {
     case "swift-urlsession":

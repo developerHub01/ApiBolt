@@ -1,7 +1,7 @@
 import {
   TContentType,
   THTTPMethods,
-  TRequestBodyType
+  TRequestBodyType,
 } from "@shared/types/request-response.types";
 
 export type TRequestCodeType =

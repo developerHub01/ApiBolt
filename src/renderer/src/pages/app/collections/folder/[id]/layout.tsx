@@ -10,8 +10,8 @@ import RequestOrFolderNotFound from "@/components/app/collections/RequestOrFolde
 const FolderLayout = () => {
   const dispatch = useAppDispatch();
   const { id: requestOrFolderId } = useParams<{ id?: string }>();
-  const isExist = useAppSelector((state) =>
-    selectIsRequestOrFolderExist(state, requestOrFolderId)
+  const isExist = useAppSelector(state =>
+    selectIsRequestOrFolderExist(state, requestOrFolderId),
   );
 
   useEffect(() => {
@@ -20,8 +20,8 @@ const FolderLayout = () => {
       requestOrFolderId,
       once: true,
     };
-    [loadFolder, loadAuthorization].forEach((action) =>
-      dispatch(action(payload))
+    [loadFolder, loadAuthorization].forEach(action =>
+      dispatch(action(payload)),
     );
   }, [dispatch, isExist, requestOrFolderId]);
 

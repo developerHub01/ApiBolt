@@ -12,12 +12,12 @@ import {
   getBodyFormDataByFormId,
   replaceBodyFormData,
   replaceFullBodyFormData,
-  updateBodyFormData
+  updateBodyFormData,
 } from "@/main/db/bodyFormDataDB.js";
 import { ElectronAPIBodyFormDataInterface } from "@shared/types/api/electron-body-form";
 import {
   FileDataInterface,
-  FormDataPayloadInterface
+  FormDataPayloadInterface,
 } from "@shared/types/request-response.types";
 
 export const bodyFormDataHandlers = () => {
@@ -35,7 +35,7 @@ export const bodyFormDataHandlers = () => {
           value: form.value?.map(filePath => {
             if (!filePath || !fs.existsSync(filePath)) return null;
             return filePath;
-          })
+          }),
         };
       });
 
@@ -49,7 +49,7 @@ export const bodyFormDataHandlers = () => {
         })
         .map(formData => ({
           id: formData.id,
-          value: (formData.value as Array<string>).filter(Boolean)
+          value: (formData.value as Array<string>).filter(Boolean),
         }));
 
       /* updating in db removing file path of non-existing */
@@ -59,9 +59,9 @@ export const bodyFormDataHandlers = () => {
             return await updateBodyFormData(formData.id, {
               value: (formData?.value ?? []).length
                 ? JSON.stringify([...formData.value])
-                : ""
+                : "",
             });
-          })
+          }),
         );
 
       /* filtering the non-existing files from db end */
@@ -79,18 +79,18 @@ export const bodyFormDataHandlers = () => {
                 filePath =>
                   ({
                     file: path.basename(filePath),
-                    path: filePath
-                  }) as FileDataInterface
-              )
+                    path: filePath,
+                  }) as FileDataInterface,
+              ),
             };
           } catch (error) {
             return formData as FormDataPayloadInterface;
           }
-        }
+        },
       );
 
       return result;
-    }
+    },
   );
   ipcMain.handle(
     "deleteBodyFormData",
@@ -100,7 +100,7 @@ export const bodyFormDataHandlers = () => {
         ElectronAPIBodyFormDataInterface["deleteBodyFormData"]
       >
     ): ReturnType<ElectronAPIBodyFormDataInterface["deleteBodyFormData"]> =>
-      await deleteBodyFormData(...rest)
+      await deleteBodyFormData(...rest),
   );
   ipcMain.handle(
     "deleteBodyFormDataByRequestMetaId",
@@ -111,7 +111,7 @@ export const bodyFormDataHandlers = () => {
       >
     ): ReturnType<
       ElectronAPIBodyFormDataInterface["deleteBodyFormDataByRequestMetaId"]
-    > => await deleteBodyFormDataByRequestMetaId(...rest)
+    > => await deleteBodyFormDataByRequestMetaId(...rest),
   );
   ipcMain.handle(
     "deleteBodyFormDataFile",
@@ -121,7 +121,7 @@ export const bodyFormDataHandlers = () => {
         ElectronAPIBodyFormDataInterface["deleteBodyFormDataFile"]
       >
     ): ReturnType<ElectronAPIBodyFormDataInterface["deleteBodyFormDataFile"]> =>
-      await deleteBodyFormDataFile(...rest)
+      await deleteBodyFormDataFile(...rest),
   );
   ipcMain.handle(
     "createBodyFormData",
@@ -131,7 +131,7 @@ export const bodyFormDataHandlers = () => {
         ElectronAPIBodyFormDataInterface["createBodyFormData"]
       >
     ): ReturnType<ElectronAPIBodyFormDataInterface["createBodyFormData"]> =>
-      await createBodyFormData(...rest)
+      await createBodyFormData(...rest),
   );
   ipcMain.handle(
     "updateBodyFormData",
@@ -141,7 +141,7 @@ export const bodyFormDataHandlers = () => {
         ElectronAPIBodyFormDataInterface["updateBodyFormData"]
       >
     ): ReturnType<ElectronAPIBodyFormDataInterface["updateBodyFormData"]> =>
-      await updateBodyFormData(...rest)
+      await updateBodyFormData(...rest),
   );
   ipcMain.handle(
     "updateBodyFormDataFile",
@@ -165,19 +165,19 @@ export const bodyFormDataHandlers = () => {
         const result = await dialog.showOpenDialog({
           properties: ["openFile"],
           title: "Select file",
-          buttonLabel: "Select"
+          buttonLabel: "Select",
         });
 
         const filePath = result?.filePaths;
         if (!Array.isArray(filePath)) throw new Error();
 
         return await updateBodyFormData(id, {
-          value: JSON.stringify([...prevValue, ...filePath])
+          value: JSON.stringify([...prevValue, ...filePath]),
         });
       } catch (error) {
         return false;
       }
-    }
+    },
   );
   ipcMain.handle(
     "replaceBodyFormData",
@@ -187,7 +187,7 @@ export const bodyFormDataHandlers = () => {
         ElectronAPIBodyFormDataInterface["replaceBodyFormData"]
       >
     ): ReturnType<ElectronAPIBodyFormDataInterface["replaceBodyFormData"]> =>
-      await replaceBodyFormData(...rest)
+      await replaceBodyFormData(...rest),
   );
   ipcMain.handle(
     "replaceFullBodyFormData",
@@ -198,7 +198,7 @@ export const bodyFormDataHandlers = () => {
       >
     ): ReturnType<
       ElectronAPIBodyFormDataInterface["replaceFullBodyFormData"]
-    > => await replaceFullBodyFormData(...rest)
+    > => await replaceFullBodyFormData(...rest),
   );
   ipcMain.handle(
     "checkAllBodyFormDataByRequestMetaId",
@@ -209,7 +209,7 @@ export const bodyFormDataHandlers = () => {
       >
     ): ReturnType<
       ElectronAPIBodyFormDataInterface["checkAllBodyFormDataByRequestMetaId"]
-    > => await checkAllBodyFormDataByRequestMetaId(...rest)
+    > => await checkAllBodyFormDataByRequestMetaId(...rest),
   );
   ipcMain.handle(
     "duplicateBodyFormData",
@@ -219,6 +219,6 @@ export const bodyFormDataHandlers = () => {
         ElectronAPIBodyFormDataInterface["duplicateBodyFormData"]
       >
     ): ReturnType<ElectronAPIBodyFormDataInterface["duplicateBodyFormData"]> =>
-      await duplicateBodyFormData(...rest)
+      await duplicateBodyFormData(...rest),
   );
 };

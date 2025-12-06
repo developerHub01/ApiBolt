@@ -33,7 +33,7 @@ export const changeCodeSnippitType = createAsyncThunk<
     dispatch(handleChangeCodeSnippitType(languageId));
     const response =
       await window.electronAPIActiveCodeSnippitType.updateActiveCodeSnippitType(
-        languageId
+        languageId,
       );
 
     if (!response) await dispatch(loadCodeSnippitType());

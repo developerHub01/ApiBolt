@@ -6,7 +6,7 @@ import {
   handleClearHistoryCache,
   handleDeleteHistory,
   handleLoadHistory,
-  handleReplaceHistoryDetails
+  handleReplaceHistoryDetails,
 } from "@/context/redux/history/history-slice";
 import type { THistoryFilter } from "@shared/types/history.types";
 import { loadParams } from "@/context/redux/request-response/thunks/params";
@@ -20,7 +20,7 @@ import { changeRequestApiUrlWithBackend } from "@/context/redux/request-url/thun
 import { updateRequestOrFolder } from "@/context/redux/request-response/thunks/request-list";
 import {
   loadHeaders,
-  loadHiddenHeaders
+  loadHiddenHeaders,
 } from "@/context/redux/request-response/thunks/headers";
 import type { HiddenHeadersCheckInterface } from "@shared/types/request-response.types";
 import { HEADERS_HIDDEN_IDS } from "@/constant/request-response.constant";
@@ -121,7 +121,7 @@ export const deleteRequestHistoryByRequestId = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const changeHistoryFilterMethod = createAsyncThunk<
@@ -147,13 +147,13 @@ export const changeHistoryFilterMethod = createAsyncThunk<
       dispatch(
         handleChangeFilterMethod({
           requestId,
-          method
-        })
+          method,
+        }),
       );
     } catch (error) {
       console.error(error);
     }
-  }
+  },
 );
 
 export const changeOpenedHistory = createAsyncThunk<
@@ -176,8 +176,8 @@ export const changeOpenedHistory = createAsyncThunk<
     dispatch(
       handleChangeOpenedHistory({
         id,
-        requestId
-      })
+        requestId,
+      }),
     );
   } catch (error) {
     console.error(error);
@@ -209,7 +209,7 @@ export const replaceCurrentByHistory = createAsyncThunk<
     if (headers?.length) {
       const headersResponse = await window.electronAPIHeaders.replaceHeaders(
         requestId,
-        headers.filter(header => !header.prevent)
+        headers.filter(header => !header.prevent),
       );
 
       const checkList = headers
@@ -221,7 +221,7 @@ export const replaceCurrentByHistory = createAsyncThunk<
 
       const headerCheckResponse =
         await window.electronAPIHiddenHeadersCheck.updateHiddenHeadersCheck(
-          checkList
+          checkList,
         );
 
       if (headersResponse) dispatch(loadHeaders());
@@ -236,13 +236,13 @@ export const replaceCurrentByHistory = createAsyncThunk<
     {
       const paramsResponse = await window.electronAPIParams.replaceParams(
         requestId,
-        params ?? []
+        params ?? [],
       );
       if (paramsResponse)
         dispatch(
           loadParams({
-            requestOrFolderId: requestId
-          })
+            requestOrFolderId: requestId,
+          }),
         );
     }
 
@@ -262,8 +262,8 @@ export const replaceCurrentByHistory = createAsyncThunk<
       updateRequestOrFolder({
         id: requestId,
         method,
-        name
-      })
+        name,
+      }),
     );
 
     /**
@@ -275,8 +275,8 @@ export const replaceCurrentByHistory = createAsyncThunk<
       dispatch(
         updateAuthorization({
           requestOrFolderId: requestId,
-          payload: authorization
-        })
+          payload: authorization,
+        }),
       );
     }
 
@@ -289,13 +289,13 @@ export const replaceCurrentByHistory = createAsyncThunk<
       const bodyTypeResponse =
         await window.electronAPIRequestMetaTab.replaceRequestMetaTab({
           requestOrFolderMetaId: requestId,
-          requestBodyType: historyDetails.body?.type
+          requestBodyType: historyDetails.body?.type,
         });
       if (bodyTypeResponse)
         dispatch(
           loadRequestMetaTab({
-            requestOrFolderId: requestId
-          })
+            requestOrFolderId: requestId,
+          }),
         );
     }
 
@@ -312,15 +312,15 @@ export const replaceCurrentByHistory = createAsyncThunk<
             ...form,
             value: Array.isArray(form.value)
               ? JSON.stringify(form.value.map(item => item.path))
-              : form.value
-          }))
+              : form.value,
+          })),
         );
 
       if (formDataResponse)
         dispatch(
           loadBodyFormData({
-            requestOrFolderId: requestId
-          })
+            requestOrFolderId: requestId,
+          }),
         );
     }
 
@@ -333,13 +333,13 @@ export const replaceCurrentByHistory = createAsyncThunk<
       const xWWWFormUrlencodedResponse =
         await window.electronAPIBodyXWWWFormUrlencoded.replaceBodyXWWWFormUrlencoded(
           requestId,
-          historyDetails?.body?.xWWWFormUrlencoded
+          historyDetails?.body?.xWWWFormUrlencoded,
         );
       if (xWWWFormUrlencodedResponse)
         dispatch(
           loadBodyXWWWFormUrlencoded({
-            requestOrFolderId: requestId
-          })
+            requestOrFolderId: requestId,
+          }),
         );
     }
 
@@ -352,13 +352,13 @@ export const replaceCurrentByHistory = createAsyncThunk<
       const binaryResponse =
         await window.electronAPIBodyBinary.replaceBodyBinary({
           requestOrFolderMetaId: requestId,
-          path: historyDetails?.body?.binaryData?.path
+          path: historyDetails?.body?.binaryData?.path,
         });
       if (binaryResponse)
         dispatch(
           loadRequestBodyBinary({
-            requestOrFolderId: requestId
-          })
+            requestOrFolderId: requestId,
+          }),
         );
     }
 
@@ -371,13 +371,13 @@ export const replaceCurrentByHistory = createAsyncThunk<
       const rawResponse = await window.electronAPIBodyRaw.replaceBodyRaw({
         requestOrFolderMetaId: requestId,
         rawData: body.raw,
-        type: body.rawType
+        type: body.rawType,
       });
       if (rawResponse)
         dispatch(
           loadRequestBodyRaw({
-            requestOrFolderId: requestId
-          })
+            requestOrFolderId: requestId,
+          }),
         );
     }
 

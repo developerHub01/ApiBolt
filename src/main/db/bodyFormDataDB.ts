@@ -29,7 +29,7 @@ export const getBodyFormDataByFormId = async (id: string) => {
 export const getBodyFormData = async (
   requestOrFolderMetaId: Parameters<
     ElectronAPIBodyFormDataInterface["getBodyFormData"]
-  >[0]
+  >[0],
 ) => {
   try {
     requestOrFolderMetaId =
@@ -40,7 +40,7 @@ export const getBodyFormData = async (
       .select()
       .from(bodyFormDataTable)
       .where(
-        eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId)
+        eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId),
       );
 
     const formDataList = rawFormData.map(item => {
@@ -53,7 +53,7 @@ export const getBodyFormData = async (
 
       return {
         ...item,
-        value
+        value,
       };
     });
 
@@ -93,7 +93,10 @@ export const deleteBodyFormDataByRequestMetaId: ElectronAPIBodyFormDataInterface
           await db
             .delete(bodyFormDataTable)
             .where(
-              eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId)
+              eq(
+                bodyFormDataTable.requestOrFolderMetaId,
+                requestOrFolderMetaId,
+              ),
             )
         ).rowsAffected > 0
       );
@@ -128,7 +131,7 @@ export const deleteBodyFormDataFile: ElectronAPIBodyFormDataInterface["deleteBod
           await db
             .update(bodyFormDataTable)
             .set({
-              value: updatedValue
+              value: updatedValue,
             })
             .where(eq(bodyFormDataTable.id, formId))
         )?.rowsAffected > 0
@@ -154,7 +157,7 @@ export const createBodyFormData: ElectronAPIBodyFormDataInterface["createBodyFor
           await db.insert(bodyFormDataTable).values({
             ...payload,
             value,
-            requestOrFolderMetaId
+            requestOrFolderMetaId,
           })
         )?.rowsAffected > 0
       );
@@ -189,14 +192,14 @@ export const updateBodyFormData: ElectronAPIBodyFormDataInterface["updateBodyFor
         return await createBodyFormData({
           id: formId,
           ...payload,
-          value
+          value,
         });
 
       const updated = await db
         .update(bodyFormDataTable)
         .set({
           ...payload,
-          value
+          value,
         })
         .where(eq(bodyFormDataTable.id, formId));
       return updated?.rowsAffected > 0;
@@ -217,7 +220,7 @@ export const replaceBodyFormData: ElectronAPIBodyFormDataInterface["replaceBodyF
             formData["requestOrFolderMetaId"] ?? requestOrFolderMetaId,
           value: Array.isArray(formData.value)
             ? JSON.stringify(formData.value)
-            : formData.value
+            : formData.value,
         };
       });
 
@@ -229,10 +232,10 @@ export const replaceBodyFormData: ElectronAPIBodyFormDataInterface["replaceBodyF
             not(
               and(
                 like(bodyFormDataTable.value, "[%"), // starts with [
-                like(bodyFormDataTable.value, "%]") // ends with ]
-              )!
-            )
-          )
+                like(bodyFormDataTable.value, "%]"), // ends with ]
+              )!,
+            ),
+          ),
         );
 
         if (!replacePayload?.length) return true;
@@ -256,7 +259,7 @@ export const replaceFullBodyFormData: ElectronAPIBodyFormDataInterface["replaceF
           formData["requestOrFolderMetaId"] ?? requestOrFolderMetaId,
         value: Array.isArray(formData.value)
           ? JSON.stringify(formData.value)
-          : formData.value
+          : formData.value,
       };
     });
 
@@ -264,7 +267,7 @@ export const replaceFullBodyFormData: ElectronAPIBodyFormDataInterface["replaceF
       await db
         .delete(bodyFormDataTable)
         .where(
-          eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId)
+          eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId),
         );
 
       if (!replacePayload?.length) return true;
@@ -290,7 +293,7 @@ export const checkAllBodyFormDataByRequestMetaId: ElectronAPIBodyFormDataInterfa
           .select()
           .from(bodyFormDataTable)
           .where(
-            eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId)
+            eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId),
           )) ?? [];
 
       const checkValue = !rows.every(row => row.isCheck);
@@ -300,10 +303,13 @@ export const checkAllBodyFormDataByRequestMetaId: ElectronAPIBodyFormDataInterfa
           await db
             .update(bodyFormDataTable)
             .set({
-              isCheck: checkValue
+              isCheck: checkValue,
             })
             .where(
-              eq(bodyFormDataTable.requestOrFolderMetaId, requestOrFolderMetaId)
+              eq(
+                bodyFormDataTable.requestOrFolderMetaId,
+                requestOrFolderMetaId,
+              ),
             )
         )?.rowsAffected > 0
       );
@@ -340,7 +346,7 @@ export const duplicateBodyFormData: ElectronAPIBodyFormDataInterface["duplicateB
         const { id, createdAt, ...rest } = formData;
         return {
           ...rest,
-          requestOrFolderMetaId: payload[formData.requestOrFolderMetaId]
+          requestOrFolderMetaId: payload[formData.requestOrFolderMetaId],
         };
       });
 

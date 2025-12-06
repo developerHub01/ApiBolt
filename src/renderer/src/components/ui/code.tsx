@@ -29,7 +29,7 @@ const getEditableOptions = ({
   onBlur,
   lineNumbers,
   foldLine,
-  autoFocus
+  autoFocus,
 }: {
   editable: boolean;
   onChange?: (code: string) => void;
@@ -47,14 +47,14 @@ const getEditableOptions = ({
       bracketMatching: true,
       closeBrackets: true,
       lineNumbers,
-      foldGutter: foldLine
+      foldGutter: foldLine,
     },
     onChange: (value: string) => {
       if (onChange) onChange(value);
     },
     onBlur: () => {
       if (onBlur) onBlur();
-    }
+    },
   };
 };
 
@@ -115,7 +115,7 @@ const Code = ({
   const extensions: Array<Extension> = [
     getLangExtension(contentType)(),
     EditorState.tabSize.of(indentationSize),
-    indentUnit.of(" ".repeat(indentationSize))
+    indentUnit.of(" ".repeat(indentationSize)),
   ];
   if (lineWrap) extensions.push(EditorView.lineWrapping);
 
@@ -123,7 +123,7 @@ const Code = ({
     handleLineWrap,
     handleFormat,
     fontSize,
-    handleFontSize: zoomable ? setFontSizeState : undefined
+    handleFontSize: zoomable ? setFontSizeState : undefined,
   });
 
   const handleCopy = useCallback(async () => {
@@ -134,7 +134,7 @@ const Code = ({
       toast({
         type: "success",
         title: "Copied success",
-        description: "Code copied to clipboard"
+        description: "Code copied to clipboard",
       });
     } catch (error) {
       toast({
@@ -142,7 +142,7 @@ const Code = ({
         title: "Copy error",
         description:
           "Failed to copy code. " +
-          (error instanceof Error ? error.message : "Please try again.")
+          (error instanceof Error ? error.message : "Please try again."),
       });
     }
   }, [code, toast]);
@@ -164,7 +164,7 @@ const Code = ({
     <div
       className={cn(
         "w-full h-full relative flex flex-col focus:outline-0",
-        className
+        className,
       )}
       tabIndex={0}
       ref={wrapperRef}
@@ -194,15 +194,15 @@ const Code = ({
           "[&_.cm-scroller]:leading-loose!",
           {
             "[&>div]:bg-background!": !transparentBg,
-            "[&>div]:bg-transparent!": transparentBg
+            "[&>div]:bg-transparent!": transparentBg,
           },
-          innerClassName
+          innerClassName,
         )}
         height="100%"
         width="100%"
         theme={theme}
         style={{
-          fontSize: fontSizeState
+          fontSize: fontSizeState,
         }}
         value={code}
         placeholder={placeholder}
@@ -214,7 +214,7 @@ const Code = ({
           onBlur,
           lineNumbers,
           foldLine,
-          autoFocus
+          autoFocus,
         })}
         readOnly={!editable}
       />

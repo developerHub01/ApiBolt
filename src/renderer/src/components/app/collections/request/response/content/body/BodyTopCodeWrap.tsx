@@ -11,8 +11,8 @@ import { keyListStringify } from "@/utils/keyboard-shortcut.utils";
 
 const BodyTopCodeWrap = () => {
   const { responseCodeWrap, handleToggleResponseCodeWrap } = useResponse();
-  const shortcuts = useAppSelector((state) =>
-    selectApplyingKeyboardShortcutsById(state, "code_line_wrap")
+  const shortcuts = useAppSelector(state =>
+    selectApplyingKeyboardShortcutsById(state, "code_line_wrap"),
   );
 
   const shortcutString =

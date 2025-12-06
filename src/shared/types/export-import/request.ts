@@ -5,7 +5,7 @@ import {
   ParamHeaderBuildPayloadInterface,
   ParamHeaderPayloadInterface,
   RequestTabInterface,
-  THTTPMethods
+  THTTPMethods,
 } from "@shared/types/request-response.types";
 import { AuthorizationPayloadInterface } from "@shared/types/authorization.types";
 
@@ -28,7 +28,12 @@ export interface RequestExportFileInterface {
   hiddenHeadersCheck: HiddenHeadersCheckInterface;
   requestMetaTab: Omit<RequestTabInterface, "requestOrFolderMetaId">;
   bodyRaw: Pick<BodyRawInterface, "type" | "rawData">;
-  bodyBinary: Pick<BodyBinaryInterface, "path">;
+  // bodyBinary: Pick<BodyBinaryInterface, "path">;
+  bodyBinary: {
+    [K in keyof Pick<BodyBinaryInterface, "path">]:
+      | BodyBinaryInterface["path"]
+      | null;
+  };
   bodyXWWWFormUrlencoded: Array<Header>;
   bodyFormData: RequestExportFileInterface["params"];
   authorization: Omit<

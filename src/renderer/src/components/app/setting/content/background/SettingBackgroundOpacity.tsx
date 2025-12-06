@@ -32,7 +32,7 @@ const SettingBackgroundOpacity = () => {
     });
 
   const senitizedValue = calculateIntoFixedPoint(
-    Number(senitizeValue(value, DEFAULT_SETTINGS.backgroundOpacity)) * 100
+    Number(senitizeValue(value, DEFAULT_SETTINGS.backgroundOpacity)) * 100,
   );
 
   return (
@@ -41,13 +41,13 @@ const SettingBackgroundOpacity = () => {
       settingType={settingType}
       handleChangeSettingType={handleChangeSettingType}
       defaultValue={calculateIntoFixedPoint(
-        DEFAULT_SETTINGS.backgroundOpacity * 100
+        DEFAULT_SETTINGS.backgroundOpacity * 100,
       )}
       value={senitizedValue}
       min={calculateIntoFixedPoint(MIN_BACKGROUND_OPACITY * 100, 1)}
       max={calculateIntoFixedPoint(MAX_BACKGROUND_OPACITY * 100, 1)}
       suffixLable="%"
-      onChange={(value) =>
+      onChange={value =>
         handleChange(calculateIntoFixedPoint(Number(value) / 100, 1))
       }
     />

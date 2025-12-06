@@ -1,11 +1,11 @@
 import type {
   CodeSnippitDataInterface,
-  TRequestCodeType
+  TRequestCodeType,
 } from "@shared/types/code-snippit.types";
 import {
   defaultBinaryData,
   generateMaskedAndRealCode,
-  getHeadersList
+  getHeadersList,
 } from "@/utils/snippet-generator/helper.utils";
 import { requestDefaultCodeSnippit } from "@/constant/code-snippit.constant";
 import mime from "mime";
@@ -21,7 +21,7 @@ export const generateRubyNetHttpCode = async ({
   rawBodyDataType,
   bodyType,
   binaryData,
-  rawData
+  rawData,
 }: CodeSnippitDataInterface) => {
   const startString = `require "net/http"
 require "uri"
@@ -42,7 +42,7 @@ end`;
           .filter(entry => entry.type === "file")
           .map(
             ({ value }, index) =>
-              `file${index + 1} = UploadIO.new("/your_file_path_here/${value}", ${JSON.stringify(mime.getType(value))}, ${JSON.stringify(value)})`
+              `file${index + 1} = UploadIO.new("/your_file_path_here/${value}", ${JSON.stringify(mime.getType(value))}, ${JSON.stringify(value)})`,
           )
           .join("\n")}\n\n`
       : "";
@@ -51,7 +51,7 @@ end`;
     headers,
     authorization,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
 
   if (
@@ -61,7 +61,7 @@ end`;
   ) {
     headersList.push({
       key: "Content-Type",
-      value: "application/octet-stream"
+      value: "application/octet-stream",
     });
   }
 
@@ -86,7 +86,7 @@ end`;
     rawDataString = await getBodyRawData({
       rawBodyDataType,
       bodyType,
-      rawData
+      rawData,
     });
 
     rawDataString =
@@ -112,7 +112,7 @@ end`;
             .filter(entry => entry.type === "text")
             .map(
               ({ key, value }) =>
-                `\t\t${JSON.stringify(key)} => ${JSON.stringify(value)}`
+                `\t\t${JSON.stringify(key)} => ${JSON.stringify(value)}`,
             )
             .join(",\n")}`
         : ""
@@ -130,14 +130,14 @@ end`;
 
           return acc;
         },
-        {} as Record<string, Array<string>>
+        {} as Record<string, Array<string>>,
       );
 
     const filesString = formData.some(entry => entry.type === "file")
       ? `${Object.entries(filesData)
           .map(
             ([key, values]) =>
-              `\t\t${JSON.stringify(key + "[]")} => [${values.join(", ")}]`
+              `\t\t${JSON.stringify(key + "[]")} => [${values.join(", ")}]`,
           )
           .join(",\n")}`
       : "";
@@ -164,17 +164,17 @@ export const generateRubyRestClientCode = async ({
   rawBodyDataType,
   bodyType,
   binaryData,
-  rawData
+  rawData,
 }: CodeSnippitDataInterface) => {
   const snippitList: Array<string> = [
-    `RestClient.${method.toLowerCase()} ${JSON.stringify(url)}`
+    `RestClient.${method.toLowerCase()} ${JSON.stringify(url)}`,
   ];
 
   const headersList = getHeadersList({
     headers,
     authorization,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
 
   if (
@@ -184,7 +184,7 @@ export const generateRubyRestClientCode = async ({
   ) {
     headersList.push({
       key: "Content-Type",
-      value: "application/octet-stream"
+      value: "application/octet-stream",
     });
   }
 
@@ -211,8 +211,8 @@ export const generateRubyRestClientCode = async ({
 ${value.map(value => `\t\t\tFile.new(${JSON.stringify(value)})`).join(",\n")}
 \t\t]`
             : `${JSON.stringify(value)}`
-        }`
-      )
+        }`,
+      ),
     );
 
     snippitList.push(`\t{
@@ -228,20 +228,20 @@ ${formDataSnippit.join(",\n")}
     snippitList.push(
       `\t{
 ${xWWWFormUrlencoded.map(({ key, value }) => `\t\t${JSON.stringify(key)} => ${JSON.stringify(value)}`).join(",\n")}
-\t}`
+\t}`,
     );
   }
 
   if (bodyType === "binary" && method.toLowerCase() !== "get")
     snippitList.push(
-      `\tFile.read(${JSON.stringify(binaryData ?? defaultBinaryData)})`
+      `\tFile.read(${JSON.stringify(binaryData ?? defaultBinaryData)})`,
     );
 
   if (bodyType === "raw" && method.toLowerCase() !== "get") {
     let rawDataString = await getBodyRawData({
       rawBodyDataType,
       bodyType,
-      rawData
+      rawData,
     });
 
     rawDataString =
@@ -257,7 +257,7 @@ ${xWWWFormUrlencoded.map(({ key, value }) => `\t\t${JSON.stringify(key)} => ${JS
 
   if (headersList.length)
     snippitList.push(
-      `\t{\n${headersList.map(({ key, value }) => `\t\t${JSON.stringify(key)} => ${JSON.stringify(value)}`).join(",\n")}\n\t}`
+      `\t{\n${headersList.map(({ key, value }) => `\t\t${JSON.stringify(key)} => ${JSON.stringify(value)}`).join(",\n")}\n\t}`,
     );
 
   const code = `${snippitList.join(",\n")}`;
@@ -274,7 +274,7 @@ export const generateRubyHTTPRbCode = async ({
   rawBodyDataType,
   bodyType,
   binaryData,
-  rawData
+  rawData,
 }: CodeSnippitDataInterface) => {
   const startString = `require 'http'\n\n`;
   const endString = `puts response.to_s`;
@@ -283,7 +283,7 @@ export const generateRubyHTTPRbCode = async ({
     headers,
     authorization,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
 
   if (
@@ -293,7 +293,7 @@ export const generateRubyHTTPRbCode = async ({
   ) {
     headersList.push({
       key: "Content-Type",
-      value: "application/octet-stream"
+      value: "application/octet-stream",
     });
   }
 
@@ -327,10 +327,10 @@ ${Object.entries(formDataMap)
       ? `\t\t${JSON.stringify(key + "[]")}: [
 ${value.map(entry => `\t\t\tHTTP::FormData::File.new(${JSON.stringify(entry)})`).join(",\n")}
 \t\t]`
-      : `\t\t${JSON.stringify(key)}: ${JSON.stringify(value)}`
+      : `\t\t${JSON.stringify(key)}: ${JSON.stringify(value)}`,
   )
   .join(",\n")}
-\t}`
+\t}`,
     );
   }
 
@@ -342,20 +342,20 @@ ${value.map(entry => `\t\t\tHTTP::FormData::File.new(${JSON.stringify(entry)})`)
     snippitList.push(
       `\tform: {
 ${xWWWFormUrlencoded.map(({ key, value }) => `\t\t${JSON.stringify(key)}: ${JSON.stringify(value)}`).join(",\n")}
-\t}`
+\t}`,
     );
   }
 
   if (bodyType === "binary" && method.toLowerCase() !== "get")
     snippitList.push(
-      `\tbody: File.binread(${JSON.stringify(binaryData ?? defaultBinaryData)})`
+      `\tbody: File.binread(${JSON.stringify(binaryData ?? defaultBinaryData)})`,
     );
 
   if (bodyType === "raw" && method.toLowerCase() !== "get") {
     let rawDataString = await getBodyRawData({
       rawBodyDataType,
       bodyType,
-      rawData
+      rawData,
     });
 
     rawDataString =
@@ -379,7 +379,7 @@ ${snippitList.join(",\n")}
 
 export const generateRubyCode = async (
   type: TRequestCodeType,
-  data: CodeSnippitDataInterface
+  data: CodeSnippitDataInterface,
 ) => {
   switch (type) {
     case "ruby-net-http":

@@ -3,7 +3,7 @@ import type { AppDispatch, RootState } from "@/context/redux/store";
 import {
   handleLoadHttpStatus,
   handleLoadSingleHttpStatus,
-  handleUpdateHttpStatus
+  handleUpdateHttpStatus,
 } from "@/context/redux/http-status/http-status-slice";
 import type { HttpStatusUpdatePayloadInterface } from "@shared/types/http-status.type";
 

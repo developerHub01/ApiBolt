@@ -3,7 +3,7 @@ import type {
   ActiveThemeIdInterface,
   ThemeColorId,
   ThemeInterface,
-  ThemeMetaInterface
+  ThemeMetaInterface,
 } from "@shared/types/theme.types";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
@@ -27,8 +27,8 @@ const initialState: ThemeInitialInterface = {
   themeMetaList: [],
   activeThemeId: {
     global: "",
-    local: null
-  }
+    local: null,
+  },
 };
 
 export const themeSlice = createSlice({
@@ -38,7 +38,7 @@ export const themeSlice = createSlice({
   reducers: {
     handleToggleThemeListCollapsed: (
       state,
-      action: PayloadAction<boolean | undefined>
+      action: PayloadAction<boolean | undefined>,
     ) => {
       state.isThemeListCollapsed =
         action.payload ?? !state.isThemeListCollapsed;
@@ -48,7 +48,7 @@ export const themeSlice = createSlice({
       action: PayloadAction<{
         key: ThemeColorId;
         value: string;
-      }>
+      }>,
     ) => {
       const { key, value } = action.payload;
       if (!state.palette) state.palette = DEFAULT_THEME_PALETTE;
@@ -56,32 +56,32 @@ export const themeSlice = createSlice({
     },
     handleReplaceThemePalette: (
       state,
-      action: PayloadAction<ThemeInitialInterface["palette"]>
+      action: PayloadAction<ThemeInitialInterface["palette"]>,
     ) => {
       state.palette = action.payload;
     },
     handleLoadThemeMetaList: (
       state,
-      action: PayloadAction<Array<ThemeMetaInterface>>
+      action: PayloadAction<Array<ThemeMetaInterface>>,
     ) => {
       state.themeMetaList = action.payload;
     },
     handleLoadActiveThemeId: (
       state,
-      action: PayloadAction<ActiveThemeIdInterface>
+      action: PayloadAction<ActiveThemeIdInterface>,
     ) => {
       state.activeThemeId = action.payload;
     },
     handleUpdateActiveThemeId: (
       state,
-      action: PayloadAction<Partial<ActiveThemeIdInterface>>
+      action: PayloadAction<Partial<ActiveThemeIdInterface>>,
     ) => {
       state.activeThemeId = {
         ...state.activeThemeId,
-        ...action.payload
+        ...action.payload,
       };
-    }
-  }
+    },
+  },
 });
 
 export const {
@@ -90,7 +90,7 @@ export const {
   handleReplaceThemePalette,
   handleLoadThemeMetaList,
   handleLoadActiveThemeId,
-  handleUpdateActiveThemeId
+  handleUpdateActiveThemeId,
 } = themeSlice.actions;
 
 export default themeSlice.reducer;

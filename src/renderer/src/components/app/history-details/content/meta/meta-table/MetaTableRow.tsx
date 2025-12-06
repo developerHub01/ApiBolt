@@ -64,7 +64,7 @@ const MetaTableRow = memo(
         )}
       </TableRow>
     );
-  }
+  },
 );
 
 export default MetaTableRow;

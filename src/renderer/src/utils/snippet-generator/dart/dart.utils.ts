@@ -2,12 +2,12 @@ import { requestDefaultCodeSnippit } from "@/constant/code-snippit.constant";
 import type {
   CodeSnippitDataInterface,
   RequestCodeSnippitInterface,
-  TRequestCodeType
+  TRequestCodeType,
 } from "@shared/types/code-snippit.types";
 import {
   defaultBinaryData,
   generateMaskedAndRealCode,
-  getHeadersList
+  getHeadersList,
 } from "@/utils/snippet-generator/helper.utils";
 import { getBodyRawData } from "@/utils/snippet-generator/dart/helper.utils";
 
@@ -21,7 +21,7 @@ export const generateDartHttpCode = async ({
   binaryData,
   rawBodyDataType,
   bodyType,
-  formData
+  formData,
 }: CodeSnippitDataInterface) => {
   const startString = `void main() async {\n`;
 
@@ -35,7 +35,7 @@ export const generateDartHttpCode = async ({
     headers,
     authorization,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
 
   if (
@@ -45,14 +45,14 @@ export const generateDartHttpCode = async ({
   ) {
     headersList.push({
       key: "Content-Type",
-      value: "application/octet-stream"
+      value: "application/octet-stream",
     });
   }
 
   let rawDataString = await getBodyRawData({
     rawBodyDataType,
     bodyType,
-    rawData
+    rawData,
   });
   if (rawDataString) {
     if (method.toLowerCase() !== "get") {
@@ -86,7 +86,7 @@ export const generateDartHttpCode = async ({
               : `\trequest.files.add(await http.MultipartFile.fromPath(
 \t\t${JSON.stringify(key)},
 \t\t${JSON.stringify(value)},
-\t))`
+\t))`,
           )
           .join(";\n")}\n`;
 
@@ -102,7 +102,7 @@ export const generateDartHttpCode = async ({
     : `,\n\t\theaders: {\n${headersList
         .map(
           ({ key, value }) =>
-            `\t\t\t${JSON.stringify(key)}: ${JSON.stringify(value)}`
+            `\t\t\t${JSON.stringify(key)}: ${JSON.stringify(value)}`,
         )
         .join(",\n")}\n\t\t},\n`;
 
@@ -145,7 +145,7 @@ export const generateDartDioCode = async ({
   binaryData,
   rawBodyDataType,
   bodyType,
-  formData
+  formData,
 }: CodeSnippitDataInterface) => {
   let bodyString = "";
 
@@ -158,7 +158,7 @@ export const generateDartDioCode = async ({
     headers,
     authorization,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
 
   if (
@@ -168,7 +168,7 @@ export const generateDartDioCode = async ({
   ) {
     headersList.push({
       key: "Content-Type",
-      value: "application/octet-stream"
+      value: "application/octet-stream",
     });
   }
 
@@ -192,7 +192,7 @@ ${headersList.map(({ key, value }) => `\t\t${JSON.stringify(key)}: ${JSON.string
 ${formData
   .filter(entry => entry.type === "text")
   .map(
-    ({ key, value }) => `\t\t${JSON.stringify(key)}: ${JSON.stringify(value)}`
+    ({ key, value }) => `\t\t${JSON.stringify(key)}: ${JSON.stringify(value)}`,
   )
   .join(",\n")}
 \t};\n\n`;
@@ -213,7 +213,7 @@ ${formData
 ${Object.entries(fileMap)
   .map(
     ([key, value]) =>
-      `\t\t${JSON.stringify(key)}: [${filMapLength ? "\n" : ""}${value.map(entry => `\t\t\tFile(${JSON.stringify(entry)})`).join(",\n")}${filMapLength ? "\n\t\t]" : "]"}`
+      `\t\t${JSON.stringify(key)}: [${filMapLength ? "\n" : ""}${value.map(entry => `\t\t\tFile(${JSON.stringify(entry)})`).join(",\n")}${filMapLength ? "\n\t\t]" : "]"}`,
   )
   .join(",\n")}
 \t};\n`;
@@ -267,7 +267,7 @@ ${fieldString}${fileString}
   let rawDataString = await getBodyRawData({
     rawBodyDataType,
     bodyType,
-    rawData
+    rawData,
   });
   if (rawDataString) {
     if (method.toLowerCase() !== "get") {
@@ -304,7 +304,7 @@ ${fieldString}${fileString}
 
 export const generateDartCode = async (
   type: TRequestCodeType,
-  data: CodeSnippitDataInterface
+  data: CodeSnippitDataInterface,
 ): Promise<RequestCodeSnippitInterface> => {
   switch (type) {
     case "dart-http":

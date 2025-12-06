@@ -34,8 +34,8 @@ const DeleteProjectDialog = memo(() => {
     handleChangeDeletionCandidate,
     handleDeleteProject,
   } = useProject();
-  const projectDetails = useAppSelector((state) =>
-    selectProjectById(state, deletionCandidate)
+  const projectDetails = useAppSelector(state =>
+    selectProjectById(state, deletionCandidate),
   );
   const projectName = projectDetails?.name;
   const [name, setName] = useState<string>(defaultName);
@@ -80,7 +80,7 @@ const DeleteProjectDialog = memo(() => {
         handleDelete();
       }
     },
-    [handleDelete]
+    [handleDelete],
   );
 
   if (!projectName) return;

@@ -3,7 +3,7 @@ import {
   getKeyboardShortcuts,
   getKeyboardShortcutsById,
   resetKeyboardShortcuts,
-  updateKeyboardShortcuts
+  updateKeyboardShortcuts,
 } from "@/main/db/keyboardShortcutDB.js";
 import { ElectronAPIKeyboardShortcutInterface } from "@shared/types/api/electron-keyboard-shortcuts";
 
@@ -17,7 +17,7 @@ export const keyboardShortcutHandler = () => {
       >
     ): ReturnType<
       ElectronAPIKeyboardShortcutInterface["getKeyboardShortcuts"]
-    > => await getKeyboardShortcuts(...rest)
+    > => await getKeyboardShortcuts(...rest),
   );
   ipcMain.handle(
     "getKeyboardShortcutsById",
@@ -28,7 +28,7 @@ export const keyboardShortcutHandler = () => {
       >
     ): ReturnType<
       ElectronAPIKeyboardShortcutInterface["getKeyboardShortcutsById"]
-    > => await getKeyboardShortcutsById(...rest)
+    > => await getKeyboardShortcutsById(...rest),
   );
   ipcMain.handle(
     "updateKeyboardShortcuts",
@@ -39,7 +39,7 @@ export const keyboardShortcutHandler = () => {
       >
     ): ReturnType<
       ElectronAPIKeyboardShortcutInterface["updateKeyboardShortcuts"]
-    > => await updateKeyboardShortcuts(...rest)
+    > => await updateKeyboardShortcuts(...rest),
   );
   ipcMain.handle(
     "resetKeyboardShortcuts",
@@ -50,6 +50,6 @@ export const keyboardShortcutHandler = () => {
       >
     ): ReturnType<
       ElectronAPIKeyboardShortcutInterface["resetKeyboardShortcuts"]
-    > => await resetKeyboardShortcuts(...rest)
+    > => await resetKeyboardShortcuts(...rest),
   );
 };

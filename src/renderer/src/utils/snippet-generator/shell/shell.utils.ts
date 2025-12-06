@@ -1,12 +1,12 @@
 import type {
   CodeSnippitDataInterface,
   RequestCodeSnippitInterface,
-  TRequestCodeType
+  TRequestCodeType,
 } from "@shared/types/code-snippit.types";
 import {
   defaultBinaryData,
   generateMaskedAndRealCode,
-  getHeadersList
+  getHeadersList,
 } from "@/utils/snippet-generator/helper.utils";
 import { requestDefaultCodeSnippit } from "@/constant/code-snippit.constant";
 import { getBodyRawData } from "@/utils/snippet-generator/shell/helper.utils";
@@ -21,7 +21,7 @@ export const generateShellCURLCode = async ({
   binaryData,
   rawBodyDataType,
   bodyType,
-  formData
+  formData,
 }: CodeSnippitDataInterface) => {
   const snippitList = [];
 
@@ -31,7 +31,7 @@ export const generateShellCURLCode = async ({
     headers,
     authorization,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
 
   if (
@@ -41,13 +41,13 @@ export const generateShellCURLCode = async ({
   ) {
     headersList.push({
       key: "Content-Type",
-      value: "application/octet-stream"
+      value: "application/octet-stream",
     });
   }
 
   if (headersList.length)
     headersList.forEach(({ key, value }) =>
-      snippitList.push(`\t-H ${JSON.stringify(`${key}:${value}`)}`)
+      snippitList.push(`\t-H ${JSON.stringify(`${key}:${value}`)}`),
     );
 
   if (
@@ -57,8 +57,8 @@ export const generateShellCURLCode = async ({
   )
     formData.forEach(({ key, value, type }) =>
       snippitList.push(
-        `\t-F ${type === "text" ? JSON.stringify(`${key}=${value}`) : JSON.stringify(`${key}[]=${value}`)}`
-      )
+        `\t-F ${type === "text" ? JSON.stringify(`${key}=${value}`) : JSON.stringify(`${key}[]=${value}`)}`,
+      ),
     );
 
   if (
@@ -68,13 +68,13 @@ export const generateShellCURLCode = async ({
   )
     snippitList.push(
       `\t-d ${JSON.stringify(
-        xWWWFormUrlencoded.map(({ key, value }) => `${key}=${value}`).join("&")
-      )}`
+        xWWWFormUrlencoded.map(({ key, value }) => `${key}=${value}`).join("&"),
+      )}`,
     );
 
   if (bodyType === "binary" && method.toLowerCase() !== "get") {
     snippitList.push(
-      `\t--data-binary ${JSON.stringify(binaryData ?? defaultBinaryData)}`
+      `\t--data-binary ${JSON.stringify(binaryData ?? defaultBinaryData)}`,
     );
   }
 
@@ -82,7 +82,7 @@ export const generateShellCURLCode = async ({
     let rawDataString = await getBodyRawData({
       rawBodyDataType,
       bodyType,
-      rawData
+      rawData,
     });
 
     rawDataString =
@@ -111,7 +111,7 @@ export const generateShellHTTPieCode = async ({
   binaryData,
   rawBodyDataType,
   bodyType,
-  formData
+  formData,
 }: CodeSnippitDataInterface) => {
   const snippitList = [];
 
@@ -122,7 +122,7 @@ export const generateShellHTTPieCode = async ({
     headers,
     authorization,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
 
   let contentType =
@@ -137,7 +137,7 @@ export const generateShellHTTPieCode = async ({
 
   if (headersList.length)
     headersList.forEach(({ key, value }) =>
-      snippitList.push(`\t${JSON.stringify(`${key}:${value}`)}`)
+      snippitList.push(`\t${JSON.stringify(`${key}:${value}`)}`),
     );
 
   if (
@@ -148,8 +148,8 @@ export const generateShellHTTPieCode = async ({
     snippitList[0] = `http --form ${method.toUpperCase()}`;
     formData.forEach(({ key, value, type }) =>
       snippitList.push(
-        `\t${JSON.stringify(type === "text" ? `${key}=${value}` : `${key}@${value}`)}`
-      )
+        `\t${JSON.stringify(type === "text" ? `${key}=${value}` : `${key}@${value}`)}`,
+      ),
     );
   }
 
@@ -160,14 +160,14 @@ export const generateShellHTTPieCode = async ({
   ) {
     snippitList[0] = `http --form ${method.toUpperCase()}`;
     xWWWFormUrlencoded.map(({ key, value }) =>
-      snippitList.push(`\t${JSON.stringify(`${key}=${value}`)}`)
+      snippitList.push(`\t${JSON.stringify(`${key}=${value}`)}`),
     );
   }
 
   if (bodyType === "binary" && method.toLowerCase() !== "get") {
     snippitList.push(
       `\t"Content-Type:application/octet-stream" <`,
-      `\t${JSON.stringify(binaryData ?? defaultBinaryData)}`
+      `\t${JSON.stringify(binaryData ?? defaultBinaryData)}`,
     );
   }
 
@@ -175,7 +175,7 @@ export const generateShellHTTPieCode = async ({
     let rawDataString = await getBodyRawData({
       rawBodyDataType,
       bodyType,
-      rawData
+      rawData,
     });
 
     rawDataString =
@@ -188,7 +188,7 @@ export const generateShellHTTPieCode = async ({
 
     snippitList.push(
       `\t${JSON.stringify(`Content-Type:${contentType}`)} <<<`,
-      `\t${rawDataString}`
+      `\t${rawDataString}`,
     );
   }
 
@@ -206,7 +206,7 @@ export const generateShellWgetCode = async ({
   rawData,
   binaryData,
   rawBodyDataType,
-  bodyType
+  bodyType,
 }: CodeSnippitDataInterface) => {
   const snippitList = [];
 
@@ -216,12 +216,12 @@ export const generateShellWgetCode = async ({
     headers,
     authorization,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
 
   if (headersList.length)
     headersList.forEach(({ key, value }) =>
-      snippitList.push(`\t--header=${JSON.stringify(`${key}:${value}`)}`)
+      snippitList.push(`\t--header=${JSON.stringify(`${key}:${value}`)}`),
     );
 
   if (
@@ -231,15 +231,15 @@ export const generateShellWgetCode = async ({
   ) {
     snippitList.push(
       `\t--body-data=${JSON.stringify(
-        xWWWFormUrlencoded.map(({ key, value }) => `${key}=${value}`).join("&")
-      )}`
+        xWWWFormUrlencoded.map(({ key, value }) => `${key}=${value}`).join("&"),
+      )}`,
     );
   }
 
   if (bodyType === "binary" && method.toLowerCase() !== "get") {
     snippitList.push(
       `\t--header="Content-Type:application/octet-stream"`,
-      `\t--body-file=${JSON.stringify(binaryData ?? defaultBinaryData)}`
+      `\t--body-file=${JSON.stringify(binaryData ?? defaultBinaryData)}`,
     );
   }
 
@@ -263,7 +263,7 @@ export const generateShellWgetCode = async ({
 
 export const generateShellCode = async (
   type: TRequestCodeType,
-  data: CodeSnippitDataInterface
+  data: CodeSnippitDataInterface,
 ): Promise<RequestCodeSnippitInterface> => {
   switch (type) {
     case "shell-curl":

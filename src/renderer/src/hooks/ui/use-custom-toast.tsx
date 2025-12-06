@@ -42,7 +42,7 @@ const defaultIconMap: Record<ToastVariant, LucideIcon> = {
 const useCustomToast = () =>
   useCallback(
     ({ type = "primary", title, description, Icon }: ToastProps) =>
-      toast.custom((t) => {
+      toast.custom(t => {
         const SelectedIcon = Icon ?? defaultIconMap[type];
 
         const Bar = () => (
@@ -72,7 +72,7 @@ const useCustomToast = () =>
                 "bg-blue-500/50 border-blue-500/80": type === "info",
                 "bg-sky-500/50 border-sky-500/80": type === "loading",
                 "bg-gray-500/50 border-gray-500/80": type === "secondary",
-              }
+              },
             )}
           >
             <SelectedIcon
@@ -114,7 +114,7 @@ const useCustomToast = () =>
           </div>
         );
       }),
-    []
+    [],
   );
 
 export default useCustomToast;

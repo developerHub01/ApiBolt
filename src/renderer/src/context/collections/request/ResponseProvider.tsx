@@ -31,7 +31,7 @@ export const useResponse = () => {
 
   if (!context) {
     throw new Error(
-      "useResponseResponse must be used within a ResponseProvider."
+      "useResponseResponse must be used within a ResponseProvider.",
     );
   }
 
@@ -53,7 +53,7 @@ const ResponseProvider = ({ children }: ResponseProviderProps) => {
       if (id === activeMetaTab) return;
       dispatch(handleActiveResponseMetaTab(id));
     },
-    [activeMetaTab, dispatch]
+    [activeMetaTab, dispatch],
   );
 
   const handleChangeActiveResponseTab = useCallback(
@@ -61,12 +61,12 @@ const ResponseProvider = ({ children }: ResponseProviderProps) => {
       if (id === responseTab) return;
       dispatch(handleActiveResponseDataTab(id));
     },
-    [dispatch, responseTab]
+    [dispatch, responseTab],
   );
 
   const handleToggleResponseCodeWrap = useCallback(
     () => dispatch(handleResponseCodeWrap()),
-    [dispatch]
+    [dispatch],
   );
 
   return (

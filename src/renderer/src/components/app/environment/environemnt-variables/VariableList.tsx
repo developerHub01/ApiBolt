@@ -7,7 +7,7 @@ import { useEnvironments } from "@/context/environments/EnvironmentsProvider";
 import Empty from "@/components/ui/empty";
 import {
   deleteEnvironments,
-  updateEnvironments
+  updateEnvironments,
 } from "@/context/redux/environments/thunks/environments";
 import animationData from "@/assets/lottie/no-search-item-available.json";
 
@@ -15,7 +15,7 @@ const VariableList = memo(() => {
   const dispatch = useAppDispatch();
   const { environmentsListState, searchQuery } = useEnvironments();
   const environmentsList = useAppSelector(
-    state => state.environments.environmentsList ?? {}
+    state => state.environments.environmentsList ?? {},
   );
 
   const list = useMemo(() => {
@@ -24,7 +24,7 @@ const VariableList = memo(() => {
     return Object.values(environmentsListState ?? {})
       .sort(
         (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       )
       .map(item => {
         if (item.variable && seen.has(item.variable)) {
@@ -40,22 +40,22 @@ const VariableList = memo(() => {
     (
       id: string,
       key: "isCheck" | "variable" | "type" | "value",
-      value: string | boolean
+      value: string | boolean,
     ) =>
       dispatch(
         updateEnvironments({
           id,
           payload: {
-            [key]: value
-          }
-        })
+            [key]: value,
+          },
+        }),
       ),
-    [dispatch]
+    [dispatch],
   );
 
   const handleDelete = useCallback(
     (id: string) => dispatch(deleteEnvironments(id)),
-    [dispatch]
+    [dispatch],
   );
 
   /* search result not found */

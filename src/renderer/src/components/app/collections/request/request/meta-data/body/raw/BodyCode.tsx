@@ -45,7 +45,7 @@ const BodyCode = memo(() => {
         callback: setCode,
         showErrorToast: true,
       }),
-    [rawRequestBodyType, code]
+    [rawRequestBodyType, code],
   );
 
   useEffect(() => {
@@ -65,10 +65,10 @@ const BodyCode = memo(() => {
       const { success = false } = await formatCode(
         codeString,
         parser,
-        indentationSize
+        indentationSize,
       );
       // Only update if different
-      setIsError((prev) => (prev !== !success ? !success : prev));
+      setIsError(prev => (prev !== !success ? !success : prev));
     }, 500); // debounce for 500ms
 
     return () => {
@@ -81,7 +81,7 @@ const BodyCode = memo(() => {
 
   const handleBlur = useCallback(
     () => handleChangeRawData(code),
-    [code, handleChangeRawData]
+    [code, handleChangeRawData],
   );
 
   return (
@@ -93,7 +93,7 @@ const BodyCode = memo(() => {
         "backdrop-blur-xs",
         {
           "border-destructive/50 ring-1 ring-destructive/50": isError,
-        }
+        },
       )}
     >
       <Code

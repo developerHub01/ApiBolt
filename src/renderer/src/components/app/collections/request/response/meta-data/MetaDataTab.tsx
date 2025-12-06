@@ -48,7 +48,7 @@ const MetaDataTab = memo(() => {
     if (response) {
       if (!response.status) list.push(errorTab);
       else {
-        TAB_LIST.forEach((item) => {
+        TAB_LIST.forEach(item => {
           if (item.id === "cookies") {
             item.count = response?.cookies?.length ?? 0;
           } else if (item.id === "headers") {
@@ -79,7 +79,7 @@ const MetaDataTab = memo(() => {
 
   const handleChange = useCallback(
     (value: string) => handleChangeActiveMetaTab(value as TResponseMetaTab),
-    [handleChangeActiveMetaTab]
+    [handleChangeActiveMetaTab],
   );
 
   return (

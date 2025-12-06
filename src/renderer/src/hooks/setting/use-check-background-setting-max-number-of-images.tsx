@@ -26,7 +26,7 @@ const useCheckBackgroundSettingMaxNumberOfImages = () => {
     });
 
   const senitizedValue = Number(
-    senitizeValue(value, DEFAULT_SETTINGS.maxNumberOfImages)
+    senitizeValue(value, DEFAULT_SETTINGS.maxNumberOfImages),
   );
 
   return {

@@ -14,26 +14,26 @@ export const selectAuthId = createSelector(
   (activeTab, selectedTab) =>
     activeTab === "navigate_collections" && selectedTab
       ? selectedTab
-      : DEFAULT_AUTHORIZATION_ID
+      : DEFAULT_AUTHORIZATION_ID,
 );
 
 export const selectAuthType = createSelector(
   [selectAuthId, (state: RootState) => state.requestResponse.authType],
   (id, authType): TAuthType =>
     authType[id] ??
-    (id === DEFAULT_AUTHORIZATION_ID ? "no-auth" : "inherit-parent")
+    (id === DEFAULT_AUTHORIZATION_ID ? "no-auth" : "inherit-parent"),
 );
 
 export const selectAuthTypeById = createSelector(
   [(state: RootState) => state.requestResponse.authType, (_, id: string) => id],
   (authType, id) =>
     authType[id] ??
-    (id === DEFAULT_AUTHORIZATION_ID ? "no-auth" : "inherit-parent")
+    (id === DEFAULT_AUTHORIZATION_ID ? "no-auth" : "inherit-parent"),
 );
 
 export const selectAuthInheritedId = createSelector(
   [selectAuthId, (state: RootState) => state.requestResponse.authInheritedId],
-  (id, inheritedIds): string | null => inheritedIds[id]
+  (id, inheritedIds): string | null => inheritedIds[id],
 );
 
 export const selectAuthInheritedIdById = createSelector(
@@ -41,7 +41,7 @@ export const selectAuthInheritedIdById = createSelector(
     (state: RootState) => state.requestResponse.authInheritedId,
     (_, id: string) => id,
   ],
-  (inheritedIds, id): string | null => inheritedIds[id]
+  (inheritedIds, id): string | null => inheritedIds[id],
 );
 
 export const selectAuthApiKey = createSelector(
@@ -49,7 +49,7 @@ export const selectAuthApiKey = createSelector(
     (state: RootState) => state.requestResponse.apiKeyAuth,
     (_, id: string) => id,
   ],
-  (authData, id) => authData[id] ?? DEFAULT_API_KEY
+  (authData, id) => authData[id] ?? DEFAULT_API_KEY,
 );
 
 export const selectAuthBasicAuth = createSelector(
@@ -57,7 +57,7 @@ export const selectAuthBasicAuth = createSelector(
     (state: RootState) => state.requestResponse.basicAuth,
     (_, id: string) => id,
   ],
-  (authData, id) => authData[id] ?? DEFAULT_BASIC_AUTH
+  (authData, id) => authData[id] ?? DEFAULT_BASIC_AUTH,
 );
 
 export const selectAuthBearerTokenAuth = createSelector(
@@ -65,7 +65,7 @@ export const selectAuthBearerTokenAuth = createSelector(
     (state: RootState) => state.requestResponse.bearerTokenAuth,
     (_, id: string) => id,
   ],
-  (authData, id) => authData[id] ?? ""
+  (authData, id) => authData[id] ?? "",
 );
 
 export const selectAuthJWTBearerAuth = createSelector(
@@ -73,5 +73,5 @@ export const selectAuthJWTBearerAuth = createSelector(
     (state: RootState) => state.requestResponse.jwtBearerAuth,
     (_, id: string) => id,
   ],
-  (authData, id) => authData[id] ?? DEFAULT_JWT_BEARER_AUTH
+  (authData, id) => authData[id] ?? DEFAULT_JWT_BEARER_AUTH,
 );

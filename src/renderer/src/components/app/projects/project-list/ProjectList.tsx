@@ -5,7 +5,7 @@ import Empty from "@/components/ui/empty";
 import { useProject } from "@/context/project/ProjectProvider";
 import {
   selectActiveProjectId,
-  selectProjectList
+  selectProjectList,
 } from "@/context/redux/project/selectors/project";
 import AutoScrollActiveWrapper from "@/components/ui/auto-scroll-active-wrapper";
 import animationData from "@/assets/lottie/no-search-item-available.json";

@@ -2,10 +2,10 @@ import { AuthorizationPayloadInterface } from "@shared/types/authorization.types
 
 export interface ElectronAPIAuthorizationInterface {
   getAuth(
-    requestId?: string | null
+    requestId?: string | null,
   ): Promise<AuthorizationPayloadInterface | null>;
   getInheritedAuthFromId(
-    requestId: string
+    requestId: string,
   ): Promise<AuthorizationPayloadInterface | null>;
   createAuth(payload: Partial<AuthorizationPayloadInterface>): Promise<boolean>;
   updateAuth(updatePayload: {

@@ -56,25 +56,25 @@ export const clearRequest = createAsyncThunk<
       handleSetParams({
         id: requestId,
         params: [],
-      })
+      }),
     );
     dispatch(
       handleSetHeaders({
         id: requestId,
         headers: [],
-      })
+      }),
     );
     dispatch(
       handleSetBodyFormData({
         id: requestId,
         formData: [],
-      })
+      }),
     );
     dispatch(
       handleSetBodyXWWWFormUrlencoded({
         id: requestId,
         bodyXWWWFormUrlencoded: [],
-      })
+      }),
     );
     dispatch(handleClearBodyRaw(requestId));
     dispatch(handleClearBodyBinary(requestId));
@@ -84,19 +84,19 @@ export const clearRequest = createAsyncThunk<
         id: requestId,
         name: undefined,
         method: "get",
-      })
+      }),
     );
     dispatch(handleRequestUrlClearTokens(requestId));
     dispatch(
       handleSetResponse({
         id: requestId,
         response: null,
-      })
+      }),
     );
     await dispatch(
       loadAuthorization({
         requestOrFolderId: requestId,
-      })
+      }),
     );
 
     return response;

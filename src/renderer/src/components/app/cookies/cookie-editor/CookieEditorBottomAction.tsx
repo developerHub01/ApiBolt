@@ -43,7 +43,7 @@ const CookieEditorBottomAction = memo(
         </Button>
       </div>
     );
-  }
+  },
 );
 
 export default CookieEditorBottomAction;

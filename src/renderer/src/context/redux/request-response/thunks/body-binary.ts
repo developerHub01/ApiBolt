@@ -38,15 +38,15 @@ export const loadRequestBodyBinary = createAsyncThunk<
           response?.file
             ? {
                 path: response.path,
-                file: response.file
+                file: response.file,
               }
-            : null
-        )
+            : null,
+        ),
       );
     } catch (error) {
       console.error(error);
     }
-  }
+  },
 );
 
 export const updateRequestBodyBinary = createAsyncThunk<

@@ -3,7 +3,7 @@ import {
   createApiUrl,
   duplicateApiUrl,
   getApiUrlDB,
-  updateApiUrl
+  updateApiUrl,
 } from "@/main/db/apiUrlDB.js";
 import { ElectronAPIApiUrlInterface } from "@shared/types/api/electron-api-url";
 
@@ -14,7 +14,7 @@ export const apiUrlHandler = () => {
       _,
       ...rest: Parameters<ElectronAPIApiUrlInterface["getApiUrlDB"]>
     ): ReturnType<ElectronAPIApiUrlInterface["getApiUrlDB"]> =>
-      await getApiUrlDB(...rest)
+      await getApiUrlDB(...rest),
   );
   ipcMain.handle(
     "createApiUrl",
@@ -22,7 +22,7 @@ export const apiUrlHandler = () => {
       _,
       ...rest: Parameters<ElectronAPIApiUrlInterface["createApiUrl"]>
     ): ReturnType<ElectronAPIApiUrlInterface["createApiUrl"]> =>
-      await createApiUrl(...rest)
+      await createApiUrl(...rest),
   );
   ipcMain.handle(
     "duplicateApiUrl",
@@ -30,7 +30,7 @@ export const apiUrlHandler = () => {
       _,
       ...rest: Parameters<ElectronAPIApiUrlInterface["duplicateApiUrl"]>
     ): ReturnType<ElectronAPIApiUrlInterface["duplicateApiUrl"]> =>
-      await duplicateApiUrl(...rest)
+      await duplicateApiUrl(...rest),
   );
   ipcMain.handle(
     "updateApiUrl",
@@ -38,6 +38,6 @@ export const apiUrlHandler = () => {
       _,
       ...rest: Parameters<ElectronAPIApiUrlInterface["updateApiUrl"]>
     ): ReturnType<ElectronAPIApiUrlInterface["updateApiUrl"]> =>
-      await updateApiUrl(...rest)
+      await updateApiUrl(...rest),
   );
 };

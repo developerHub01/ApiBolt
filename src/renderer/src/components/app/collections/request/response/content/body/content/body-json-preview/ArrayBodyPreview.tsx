@@ -20,10 +20,10 @@ const ArrayBodyPreview = ({ data, lavel }: ArrayBodyPreviewProps) => {
         "[&_th]:border-r [&_th]:last:border-r-0",
         {
           border: lavel === 0,
-        }
+        },
       )}
     >
-      {data.every((item) => typeof item === "object") && (
+      {data.every(item => typeof item === "object") && (
         <ArrayHeaderPreview data={data} lavel={lavel} />
       )}
       <TableBody>

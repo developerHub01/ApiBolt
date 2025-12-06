@@ -18,17 +18,17 @@ const useRequestItemDetails = () => {
         id,
         source: requestList,
       }),
-    [requestList]
+    [requestList],
   );
 
   const getRequestDetails = useCallback(
     (id: string) => requestList[id],
-    [requestList]
+    [requestList],
   );
 
   const getRequestTypeById = useCallback(
     (id: string) => getRequestType(requestList[id]),
-    [requestList]
+    [requestList],
   );
 
   const checkIsRequestDropable = useCallback(
@@ -47,7 +47,7 @@ const useRequestItemDetails = () => {
 
       return checkPermissionToAddFolderAsChildren(lavel);
     },
-    [getRequestLavel, getRequestTypeById]
+    [getRequestLavel, getRequestTypeById],
   );
 
   const checkIsFolderAddable = useCallback(
@@ -63,7 +63,7 @@ const useRequestItemDetails = () => {
 
       return checkPermissionToAddFolderAsChildren(getRequestLavel(id));
     },
-    [getRequestLavel, selectedTab]
+    [getRequestLavel, selectedTab],
   );
 
   return {

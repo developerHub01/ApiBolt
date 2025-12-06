@@ -3,7 +3,7 @@ import { db } from "@/main/db";
 import {
   ACTIVE_CODE_SNIPPIT_TYPE_ID,
   activeCodeSnippitTypeTable,
-  DEFAULT_ACTIVE_CODE_SNIPPIT_TYPE
+  DEFAULT_ACTIVE_CODE_SNIPPIT_TYPE,
 } from "@/main/db/schema";
 import { ElectronAPIActiveCodeSnippitTypeInterface } from "@shared/types/api/electron-active-code-snippit-type";
 
@@ -43,7 +43,7 @@ export const createActiveCodeSnippitType: ElectronAPIActiveCodeSnippitTypeInterf
         (
           await db.insert(activeCodeSnippitTypeTable).values({
             id,
-            languageId
+            languageId,
           })
         )?.rowsAffected > 0
       );
@@ -63,13 +63,13 @@ export const updateActiveCodeSnippitType: ElectronAPIActiveCodeSnippitTypeInterf
             .insert(activeCodeSnippitTypeTable)
             .values({
               id: ACTIVE_CODE_SNIPPIT_TYPE_ID,
-              languageId
+              languageId,
             })
             .onConflictDoUpdate({
               target: [activeCodeSnippitTypeTable.id],
               set: {
-                languageId
-              }
+                languageId,
+              },
             })
         )?.rowsAffected > 0
       );
@@ -87,7 +87,7 @@ export const deleteActiveCodeSnippitType: ElectronAPIActiveCodeSnippitTypeInterf
           await db
             .delete(activeCodeSnippitTypeTable)
             .where(
-              eq(activeCodeSnippitTypeTable.id, ACTIVE_CODE_SNIPPIT_TYPE_ID)
+              eq(activeCodeSnippitTypeTable.id, ACTIVE_CODE_SNIPPIT_TYPE_ID),
             )
         )?.rowsAffected > 0
       );

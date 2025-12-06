@@ -4,7 +4,7 @@ import { selectIsRequestListCollapsed } from "@/context/redux/request-response/s
 import { ApiBoltResizableLeftPanel } from "@/components/ui/api-bolt-resizable";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 const RequestListPanel = lazy(
-  () => import("@/components/app/collections/request-list/RequestListPanel")
+  () => import("@/components/app/collections/request-list/RequestListPanel"),
 );
 import RequestListPanelFallback from "@/fallback/collection/RequestListPanelFallback";
 
@@ -14,7 +14,7 @@ const RequestListPanelWrapper = memo(() => {
 
   const handleCollapse = useCallback(
     () => dispath(handleToggleRequestList(true)),
-    [dispath]
+    [dispath],
   );
 
   return (

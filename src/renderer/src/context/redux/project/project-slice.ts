@@ -9,7 +9,7 @@ export interface RequestResponseState {
 // Define the initial state using that type
 const initialState: RequestResponseState = {
   projectList: [],
-  activeProjectId: null
+  activeProjectId: null,
 };
 
 export const projectSlice = createSlice({
@@ -19,19 +19,19 @@ export const projectSlice = createSlice({
     /* =============== Project reducers start ============= */
     handleLoadProjectsList: (
       state,
-      action: PayloadAction<Array<ProjectInterface>>
+      action: PayloadAction<Array<ProjectInterface>>,
     ) => {
       state.projectList = action.payload;
     },
     handleChangeActiveProject: (
       state,
-      action: PayloadAction<string | null>
+      action: PayloadAction<string | null>,
     ) => {
       if (state.activeProjectId === action.payload) return;
       state.activeProjectId = action.payload;
-    }
+    },
     /* =============== Project reducers end ============= */
-  }
+  },
 });
 
 export const { handleLoadProjectsList, handleChangeActiveProject } =

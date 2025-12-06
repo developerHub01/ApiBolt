@@ -2,28 +2,28 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import {
   selectParsedRequestUrl,
-  selectRequestUrl
+  selectRequestUrl,
 } from "@/context/redux/request-url/selectors/url";
 import { selectIsHttpMethodType } from "@/context/redux/request-response/selectors/request-list";
 import { selectMetaData } from "@/context/redux/request-response/selectors/meta-request";
 import {
   selectRawData,
   selectRawRequestBodyType,
-  selectRequestBodyType
+  selectRequestBodyType,
 } from "@/context/redux/request-response/selectors/body-raw";
 import type {
   APIPayloadBody,
-  ParamInterface
+  ParamInterface,
 } from "@shared/types/request-response.types";
 import { filterAndUniqueMetaData } from "@/context/redux/request-response/utils";
 import {
   handleActiveResponseMetaTab,
-  handleSetResponse
+  handleSetResponse,
 } from "@/context/redux/request-response/request-response-slice";
 import type { CreateHistoryItemInterface } from "@shared/types/history.types";
 import {
   handleAddHistory,
-  handleReplaceHistory
+  handleReplaceHistory,
 } from "@/context/redux/history/history-slice";
 import { handleIsFetchApiLoading } from "@/context/redux/status/status-slice";
 
@@ -45,34 +45,34 @@ export const fetchApi = createAsyncThunk<
     dispatch(
       handleIsFetchApiLoading({
         requestId,
-        isLoading: true
-      })
+        isLoading: true,
+      }),
     );
 
     const payload: APIPayloadBody = {
       url: "",
       method: "get",
       headers: {},
-      bodyType: "none"
+      bodyType: "none",
     };
 
     payload.url = selectParsedRequestUrl(state);
     payload.method = selectIsHttpMethodType(state);
     const rawHeaders = filterAndUniqueMetaData(
       selectMetaData(state, {
-        type: "headers"
-      }) ?? []
+        type: "headers",
+      }) ?? [],
     );
     const rawHiddenHeaders = filterAndUniqueMetaData(
       selectMetaData(state, {
-        type: "hiddenHeaders"
-      }) ?? []
+        type: "hiddenHeaders",
+      }) ?? [],
     );
 
     rawHeaders
       .concat(rawHiddenHeaders)
       .forEach(
-        header => (payload.headers[header.key] = header.value as string)
+        header => (payload.headers[header.key] = header.value as string),
       );
 
     payload.bodyType = selectRequestBodyType(state);
@@ -86,13 +86,13 @@ export const fetchApi = createAsyncThunk<
 
         case "x-www-form-urlencoded":
           payload.xWWWformDataUrlencoded = filterAndUniqueMetaData(
-            selectMetaData(state, { type: "x-www-form-urlencoded" }) ?? []
+            selectMetaData(state, { type: "x-www-form-urlencoded" }) ?? [],
           ) as APIPayloadBody["xWWWformDataUrlencoded"];
           break;
 
         case "form-data":
           payload.formData = filterAndUniqueMetaData(
-            selectMetaData(state, { type: "form-data" }) ?? []
+            selectMetaData(state, { type: "form-data" }) ?? [],
           );
           break;
 
@@ -107,8 +107,8 @@ export const fetchApi = createAsyncThunk<
     dispatch(
       handleSetResponse({
         id: requestId,
-        response
-      })
+        response,
+      }),
     );
 
     /***
@@ -118,20 +118,20 @@ export const fetchApi = createAsyncThunk<
      * ***/
     const rawHeaderData = (
       selectMetaData(state, {
-        type: "hiddenHeaders"
+        type: "hiddenHeaders",
       }) ?? []
     ).concat(
       selectMetaData(state, {
-        type: "headers"
-      }) ?? []
+        type: "headers",
+      }) ?? [],
     ) as Array<ParamInterface>;
 
     const rawFormData = (selectMetaData(state, {
-      type: "form-data"
+      type: "form-data",
     }) ?? []) as Array<ParamInterface>;
 
     const xWWWFormUrlencoded = (selectMetaData(state, {
-      type: "x-www-form-urlencoded"
+      type: "x-www-form-urlencoded",
     }) ?? []) as Array<ParamInterface>;
 
     const historyPayload: CreateHistoryItemInterface = {
@@ -144,13 +144,13 @@ export const fetchApi = createAsyncThunk<
       responseStatus: `${response.status} ${response.statusText}`,
       responseSize: {
         requestSize: response.requestSize,
-        responseSize: response.responseSize
-      }
+        responseSize: response.responseSize,
+      },
     };
 
     if (state.requestResponse.authType[requestId]) {
       historyPayload.authorization = {
-        type: state.requestResponse.authType[requestId]
+        type: state.requestResponse.authType[requestId],
       };
 
       /***
@@ -217,7 +217,7 @@ export const fetchApi = createAsyncThunk<
 
     if (payload.bodyType !== "none") {
       historyPayload.body = {
-        type: payload.bodyType
+        type: payload.bodyType,
       };
 
       switch (payload.bodyType) {
@@ -246,7 +246,7 @@ export const fetchApi = createAsyncThunk<
     }
 
     const historyResponse = await window.electronAPIHistory.createHistory({
-      ...historyPayload
+      ...historyPayload,
     });
 
     if (historyResponse)
@@ -255,7 +255,7 @@ export const fetchApi = createAsyncThunk<
         Array.isArray(historyResponse)
           ? handleReplaceHistory(historyResponse)
           : /* if not array repsonse means history not modified so just add new history at top */
-            handleAddHistory(historyResponse)
+            handleAddHistory(historyResponse),
       );
 
     /**
@@ -274,8 +274,8 @@ export const fetchApi = createAsyncThunk<
     dispatch(
       handleIsFetchApiLoading({
         requestId,
-        isLoading: false
-      })
+        isLoading: false,
+      }),
     );
   } catch (error) {
     console.error(error);

@@ -6,7 +6,7 @@ import { handleChangeIsKeyboardShortcutPanelOpen } from "@/context/redux/keyboar
 import KeyboardShortcutsProvider from "@/context/keyboard-shortcuts/KeyboardShortcutsProvider";
 import { selectIsKeyboardShortcutPanelOpen } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
 const KeyboardShortcutsRoot = lazy(
-  () => import("@/components/app/keyboard-shortcuts/KeyboardShortcutsRoot")
+  () => import("@/components/app/keyboard-shortcuts/KeyboardShortcutsRoot"),
 );
 import KeyboardShortcutsFallback from "@/fallback/KeyboardShortcutsFallback";
 
@@ -16,7 +16,7 @@ const KeyboardShortcuts = memo(() => {
 
   const handleClose = useCallback(
     () => dispatch(handleChangeIsKeyboardShortcutPanelOpen(false)),
-    [dispatch]
+    [dispatch],
   );
 
   return (

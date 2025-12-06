@@ -2,7 +2,7 @@ import Empty from "@/components/ui/empty";
 import {
   selectCookiesCount,
   selectIsAddOptionOpen,
-  selectSelectedCookieKey
+  selectSelectedCookieKey,
 } from "@/context/redux/cookies/selectors/cookies";
 import { useAppSelector } from "@/context/redux/hooks";
 import animationData from "@/assets/lottie/cookie.json";

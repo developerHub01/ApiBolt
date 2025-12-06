@@ -1,12 +1,12 @@
 import { requestDefaultCodeSnippit } from "@/constant/code-snippit.constant";
 import type {
   CodeSnippitDataInterface,
-  TRequestCodeType
+  TRequestCodeType,
 } from "@shared/types/code-snippit.types";
 import {
   defaultBinaryData,
   generateMaskedAndRealCode,
-  getHeadersList
+  getHeadersList,
 } from "@/utils/snippet-generator/helper.utils";
 import { getBodyRawData } from "@/utils/snippet-generator/elixir/helper.utils";
 import mime from "mime";
@@ -21,7 +21,7 @@ export const generateElixirHTTPoisonCode = async ({
   rawBodyDataType,
   bodyType,
   binaryData,
-  rawData
+  rawData,
 }: CodeSnippitDataInterface) => {
   const startString = `HTTPoison.${method.toLowerCase()}!(\n`;
   const endString = `)`;
@@ -34,7 +34,7 @@ export const generateElixirHTTPoisonCode = async ({
     headers,
     authorization,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
 
   if (
@@ -44,7 +44,7 @@ export const generateElixirHTTPoisonCode = async ({
   ) {
     headersList.push({
       key: "Content-Type",
-      value: "application/octet-stream"
+      value: "application/octet-stream",
     });
   }
 
@@ -75,7 +75,7 @@ ${formData.map(({ key, value, type }) => (type === "text" ? `\t\t{${JSON.stringi
       await getBodyRawData({
         rawBodyDataType,
         bodyType,
-        rawData
+        rawData,
       })
     )
       .split("\n")
@@ -89,7 +89,7 @@ ${formData.map(({ key, value, type }) => (type === "text" ? `\t\t{${JSON.stringi
     snippitList.push(
       `\t[
 ${headersList.map(({ key, value }) => `\t\t{${JSON.stringify(key)}, ${JSON.stringify(value)}}`).join(",\n")}
-\t]\n`
+\t]\n`,
     );
 
   const code = `${startString}${snippitList.join(",\n")}${endString}`;
@@ -106,7 +106,7 @@ export const generateElixirTeslaCode = async ({
   rawBodyDataType,
   bodyType,
   binaryData,
-  rawData
+  rawData,
 }: CodeSnippitDataInterface) => {
   const startString = `Tesla.${method.toLowerCase()}(\n`;
   const endString = `
@@ -120,7 +120,7 @@ export const generateElixirTeslaCode = async ({
     headers,
     authorization,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
 
   if (
@@ -130,7 +130,7 @@ export const generateElixirTeslaCode = async ({
   ) {
     headersList.push({
       key: "Content-Type",
-      value: "application/octet-stream"
+      value: "application/octet-stream",
     });
   }
 
@@ -161,7 +161,7 @@ ${formData.map(({ key, value, type }) => (type === "text" ? `\t\t{${JSON.stringi
       await getBodyRawData({
         rawBodyDataType,
         bodyType,
-        rawData
+        rawData,
       })
     )
       .split("\n")
@@ -175,7 +175,7 @@ ${formData.map(({ key, value, type }) => (type === "text" ? `\t\t{${JSON.stringi
     snippitList.push(
       `\theaders: [
 ${headersList.map(({ key, value }) => `\t\t{${JSON.stringify(key)}, ${JSON.stringify(value)}}`).join(",\n")}
-\t]\n`
+\t]\n`,
     );
 
   const code = `${startString}${snippitList.join(",\n")}${endString}`;
@@ -184,7 +184,7 @@ ${headersList.map(({ key, value }) => `\t\t{${JSON.stringify(key)}, ${JSON.strin
 
 export const generateElixirCode = async (
   type: TRequestCodeType,
-  data: CodeSnippitDataInterface
+  data: CodeSnippitDataInterface,
 ) => {
   switch (type) {
     case "elixir-httpoison":

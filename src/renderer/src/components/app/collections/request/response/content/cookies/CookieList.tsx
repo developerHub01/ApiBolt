@@ -22,17 +22,17 @@ const CookieList = ({ cookies }: CookieListProps) => {
         Array.from(
           cookies.reduce<Set<string>>((acc, curr) => {
             return new Set([...acc, ...Object.keys(curr)]);
-          }, new Set())
-        )
+          }, new Set<string>()),
+        ),
       ),
-    [cookies]
+    [cookies],
   );
 
   return (
     <Table className="w-full h-full border select-text">
       <TableHeader className="[&>tr>th]:border-r [&>tr>th]:last:border-r-0 bg-secondary/80">
         <TableRow>
-          {colList.map((item) => (
+          {colList.map(item => (
             <TableHead key={item} className="capitalize">
               {item}
             </TableHead>
@@ -40,12 +40,12 @@ const CookieList = ({ cookies }: CookieListProps) => {
         </TableRow>
       </TableHeader>
       <TableBody className="[&>tr>td]:border-r [&>tr>td]:last:border-r-0">
-        {cookies.map((cookie) => (
+        {cookies.map(cookie => (
           <TableRow
             key={cookie.key}
             className="wrap-break-word whitespace-pre-wrap"
           >
-            {colList.map((item) => (
+            {colList.map(item => (
               <TableCell
                 key={item}
                 className="whitespace-normal wrap-break-word"

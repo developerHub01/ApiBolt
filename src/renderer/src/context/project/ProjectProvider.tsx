@@ -42,7 +42,7 @@ interface ProjectProviderProps {
 const ProjectProvider = ({ children }: ProjectProviderProps) => {
   const dispatch = useAppDispatch();
   const projectListFromStore = useAppSelector(
-    (state) => state.project.projectList
+    state => state.project.projectList,
   );
 
   const [deletionCandidate, setDeletionCandidate] = useState<string | null>();
@@ -53,11 +53,11 @@ const ProjectProvider = ({ children }: ProjectProviderProps) => {
     (value: string) => {
       dispatch(changeActiveProject(value));
     },
-    [dispatch]
+    [dispatch],
   );
 
   const handleChangeIsCreateDialogOpen = useCallback((value?: boolean) => {
-    setIsCreateDialogOpen((prev) => (value === undefined ? !prev : value));
+    setIsCreateDialogOpen(prev => (value === undefined ? !prev : value));
   }, []);
 
   useEffect(() => {
@@ -68,18 +68,18 @@ const ProjectProvider = ({ children }: ProjectProviderProps) => {
     (term: string) => {
       if (!term) return setProjectList(projectListFromStore);
 
-      setProjectList((prev) =>
-        prev.filter((project) =>
-          project.name.toLowerCase().includes(term.toLowerCase())
-        )
+      setProjectList(prev =>
+        prev.filter(project =>
+          project.name.toLowerCase().includes(term.toLowerCase()),
+        ),
       );
     },
-    [projectListFromStore]
+    [projectListFromStore],
   );
 
   const handleChangeDeletionCandidate = useCallback(
     (value?: string | null) => setDeletionCandidate(value ?? null),
-    []
+    [],
   );
 
   const handleDeleteProject = useCallback(async (): Promise<boolean> => {

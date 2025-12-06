@@ -33,7 +33,7 @@ const SettingThemeList = () => {
           className="w-full h-full grid grid-cols-2 md:grid-cols-3 gap-5"
         >
           {activeTab === "project" && <SettingUseGlobalThemeCard />}
-          {metaList.map((meta) => (
+          {metaList.map(meta => (
             <SettingThemeCard key={meta.id} {...meta} />
           ))}
         </motion.section>

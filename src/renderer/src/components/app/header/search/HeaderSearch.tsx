@@ -57,7 +57,7 @@ const HeaderSearch = () => {
 
   const handleSearchChange = useCallback(
     (value: string) => dispatch(handleChangeSearchTerm(value)),
-    [dispatch]
+    [dispatch],
   );
 
   const handleClose = useCallback(() => {
@@ -69,18 +69,18 @@ const HeaderSearch = () => {
       setRequestOrFolderList(() => {
         let filtered = !searchTerm
           ? []
-          : Object.values(requestList)?.filter((request) =>
-              normalizeText(request.name).includes(normalizeText(searchTerm))
+          : Object.values(requestList)?.filter(request =>
+              normalizeText(request.name).includes(normalizeText(searchTerm)),
             );
 
         const selectedTabData = filtered.find(
-          (request) => request.id === selectedTab
+          request => request.id === selectedTab,
         );
 
         if (selectedTabData) {
           filtered = [
             selectedTabData,
-            ...filtered.filter((request) => request.id !== selectedTab),
+            ...filtered.filter(request => request.id !== selectedTab),
           ];
         }
         return filtered;
@@ -143,7 +143,7 @@ const HeaderSearch = () => {
           <div className="w-full">
             <Popover
               open={isOpen}
-              onOpenChange={(newOpen) => {
+              onOpenChange={newOpen => {
                 /* Close only on outside click or Esc */
                 if (!newOpen) handleClose();
               }}
@@ -197,7 +197,7 @@ const HeaderSearch = () => {
                 </ButtonLikeDiv>
               </PopoverTrigger>
               <PopoverContent
-                onPointerDown={(e) => e.stopPropagation()}
+                onPointerDown={e => e.stopPropagation()}
                 className="lg:w-xl md:w-96 w-72 bg-background/30 backdrop-blur-sm px-0 py-2 border rounded-lg"
                 sideOffset={12}
               >
@@ -216,8 +216,8 @@ const HeaderSearch = () => {
 };
 
 const ShortcutText = () => {
-  const shortcuts = useAppSelector((state) =>
-    selectApplyingKeyboardShortcutsById(state, "search_collection")
+  const shortcuts = useAppSelector(state =>
+    selectApplyingKeyboardShortcutsById(state, "search_collection"),
   );
 
   const shortcutString =

@@ -2,7 +2,7 @@ import { and, eq, inArray, isNull } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import {
   authorizationTable,
-  requestOrFolderMetaTable
+  requestOrFolderMetaTable,
 } from "@/main/db/schema.js";
 import { getActiveProject } from "@/main/db/projectsDB.js";
 import { generateJWT, hasValue } from "@/main/utils/utils.js";
@@ -26,8 +26,8 @@ export const getAuth: ElectronAPIAuthorizationInterface["getAuth"] =
               eq(authorizationTable.projectId, activeProjectId),
               requestId
                 ? eq(authorizationTable.requestOrFolderMetaId, requestId)
-                : isNull(authorizationTable.requestOrFolderMetaId)
-            )
+                : isNull(authorizationTable.requestOrFolderMetaId),
+            ),
           )
       )?.[0];
     } catch (error) {
@@ -96,8 +96,8 @@ export const createAuth: ElectronAPIAuthorizationInterface["createAuth"] =
             .where(
               and(
                 eq(authorizationTable.projectId, projectId),
-                isNull(authorizationTable.requestOrFolderMetaId)
-              )
+                isNull(authorizationTable.requestOrFolderMetaId),
+              ),
             )
         )?.[0];
 
@@ -111,7 +111,7 @@ export const createAuth: ElectronAPIAuthorizationInterface["createAuth"] =
 
       const result = await db.insert(authorizationTable).values({
         ...payload,
-        projectId
+        projectId,
       });
 
       return result.rowsAffected > 0;
@@ -137,17 +137,17 @@ export const updateAuth: ElectronAPIAuthorizationInterface["updateAuth"] =
               requestOrFolderId
                 ? eq(
                     authorizationTable.requestOrFolderMetaId,
-                    requestOrFolderId
+                    requestOrFolderId,
                   )
-                : isNull(authorizationTable.requestOrFolderMetaId)
-            )
+                : isNull(authorizationTable.requestOrFolderMetaId),
+            ),
           )
       )?.[0];
 
       if (!authData)
         await createAuth({
           projectId: activeProjectId,
-          requestOrFolderMetaId: requestOrFolderId
+          requestOrFolderMetaId: requestOrFolderId,
         });
 
       let basicAuthToken: string | null = null;
@@ -175,7 +175,7 @@ export const updateAuth: ElectronAPIAuthorizationInterface["updateAuth"] =
             generateJWT({
               algorithm: authData?.jwtAlgo ?? payload?.jwtAlgo ?? "HS256",
               secret: authData?.jwtSecret ?? payload?.jwtSecret ?? "",
-              payload: authData?.jwtPayload ?? payload?.jwtPayload ?? ""
+              payload: authData?.jwtPayload ?? payload?.jwtPayload ?? "",
             }) ?? "";
         }
       } catch (error) {
@@ -192,7 +192,7 @@ export const updateAuth: ElectronAPIAuthorizationInterface["updateAuth"] =
           await db
             .update(authorizationTable)
             .set({
-              ...payload
+              ...payload,
             })
             .where(
               and(
@@ -200,10 +200,10 @@ export const updateAuth: ElectronAPIAuthorizationInterface["updateAuth"] =
                 requestOrFolderId
                   ? eq(
                       authorizationTable.requestOrFolderMetaId,
-                      requestOrFolderId
+                      requestOrFolderId,
                     )
-                  : isNull(authorizationTable.requestOrFolderMetaId)
-              )
+                  : isNull(authorizationTable.requestOrFolderMetaId),
+              ),
             )
             .returning()
         )?.[0] ?? null
@@ -216,7 +216,7 @@ export const updateAuth: ElectronAPIAuthorizationInterface["updateAuth"] =
 
 export const replaceAuth = async ({
   requestOrFolderId,
-  payload
+  payload,
 }: {
   requestOrFolderId?: string | null;
   payload: Partial<AuthorizationPayloadInterface>;
@@ -248,13 +248,13 @@ export const replaceAuth = async ({
       jwtAddTo: "header",
       basicAuthToken: "",
       jwtAuthToken: "",
-      ...payload
+      ...payload,
     };
 
     const isExist = (
       await db
         .select({
-          id: authorizationTable.id
+          id: authorizationTable.id,
         })
         .from(authorizationTable)
         .where(
@@ -262,8 +262,8 @@ export const replaceAuth = async ({
             eq(authorizationTable.projectId, activeProjectId),
             requestOrFolderId
               ? eq(authorizationTable.requestOrFolderMetaId, requestOrFolderId)
-              : isNull(authorizationTable.requestOrFolderMetaId)
-          )
+              : isNull(authorizationTable.requestOrFolderMetaId),
+          ),
         )
         .limit(1)
     )?.[0]?.id;
@@ -272,21 +272,21 @@ export const replaceAuth = async ({
       await db
         .update(authorizationTable)
         .set({
-          ...payload
+          ...payload,
         })
         .where(
           and(
             eq(authorizationTable.projectId, activeProjectId),
             requestOrFolderId
               ? eq(authorizationTable.requestOrFolderMetaId, requestOrFolderId)
-              : isNull(authorizationTable.requestOrFolderMetaId)
-          )
+              : isNull(authorizationTable.requestOrFolderMetaId),
+          ),
         );
     } else {
       await db.insert(authorizationTable).values({
         ...payload,
         requestOrFolderMetaId: requestOrFolderId,
-        projectId: activeProjectId
+        projectId: activeProjectId,
       });
     }
 
@@ -344,7 +344,7 @@ export const deleteAuthByProjectId = async (id: string): Promise<boolean> => {
 };
 
 export const deleteAuthByRequestMetaId = async (
-  requestOrFolderMetaId?: string | null
+  requestOrFolderMetaId?: string | null,
 ) => {
   try {
     if (!requestOrFolderMetaId)
@@ -356,7 +356,7 @@ export const deleteAuthByRequestMetaId = async (
         await db
           .delete(authorizationTable)
           .where(
-            eq(authorizationTable.requestOrFolderMetaId, requestOrFolderMetaId)
+            eq(authorizationTable.requestOrFolderMetaId, requestOrFolderMetaId),
           )
       )?.rowsAffected > 0
     );
@@ -393,7 +393,7 @@ export const duplicateAuth: ElectronAPIAuthorizationInterface["duplicateAuth"] =
         const { id, ...authPayload } = auth;
         return {
           ...authPayload,
-          requestOrFolderMetaId: payload[auth.requestOrFolderMetaId!]
+          requestOrFolderMetaId: payload[auth.requestOrFolderMetaId!],
         };
       });
 

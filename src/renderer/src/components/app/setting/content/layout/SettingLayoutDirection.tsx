@@ -94,7 +94,7 @@ const SettingSelector = ({ value, onChange }: SettingSelectorProps) => {
             "w-fit min-w-40 p-4 rounded-lg border border-accent ring-2 ring-primary/20 flex flex-col gap-2.5 justify-center items-center text-center cursor-pointer hover:bg-accent/50 transition-all duration-100",
             {
               "bg-accent/80 ring-primary": value === id,
-            }
+            },
           )}
           onClick={() => onChange(id)}
           whileTap={{

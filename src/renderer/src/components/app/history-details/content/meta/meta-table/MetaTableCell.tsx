@@ -66,7 +66,7 @@ const MetaTableCell = memo(
         </div>
       </TableCell>
     );
-  }
+  },
 );
 
 export default MetaTableCell;

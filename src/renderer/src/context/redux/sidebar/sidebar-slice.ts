@@ -3,7 +3,7 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 // Define the initial state using that type
 const initialState: SidebarState = {
-  activeTab: "navigate_collections"
+  activeTab: "navigate_collections",
 };
 
 export const sidebarSlice = createSlice({
@@ -13,13 +13,13 @@ export const sidebarSlice = createSlice({
   reducers: {
     handleChangeActiveTab: (
       state,
-      action: PayloadAction<TSidebarTab | null>
+      action: PayloadAction<TSidebarTab | null>,
     ) => {
       const id = action.payload ?? "navigate_projects";
       if (id === state.activeTab) return;
       state.activeTab = id;
-    }
-  }
+    },
+  },
 });
 
 export const { handleChangeActiveTab } = sidebarSlice.actions;

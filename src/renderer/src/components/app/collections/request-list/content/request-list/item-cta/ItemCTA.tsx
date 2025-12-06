@@ -4,7 +4,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { EllipsisVertical as ThreeDotIcon } from "lucide-react";
@@ -19,14 +19,14 @@ import {
   createRestApiBasic,
   createSingleRequest,
   deleteRequestOrFolder,
-  duplicateRequestOrFolder
+  duplicateRequestOrFolder,
 } from "@/context/redux/request-response/thunks/request-list";
 import { checkPermissionToAddFolderAsChildren } from "@/utils/request-response.utils";
 import {
   exportFolder,
   exportRequest,
   importFolder,
-  importRequest
+  importRequest,
 } from "@/context/redux/request-response/thunks/request";
 import useCustomToast from "@/hooks/ui/use-custom-toast";
 
@@ -43,7 +43,7 @@ type TActionType =
 const folderAddActionList: Array<TActionType> = [
   "add_folder",
   "add_rest_api_basics",
-  "import"
+  "import",
 ];
 
 type TMenuListType = Record<
@@ -59,69 +59,69 @@ const folderCTAList: TMenuListType = {
   add: [
     {
       id: "add_request",
-      label: "Add Request"
+      label: "Add Request",
     },
     {
       id: "add_folder",
-      label: "Add Folder"
+      label: "Add Folder",
     },
     {
       id: "add_rest_api_basics",
-      label: "Add REST API Basics"
-    }
+      label: "Add REST API Basics",
+    },
   ],
   modify: [
     {
       id: "rename",
-      label: "Rename"
+      label: "Rename",
     },
     {
       id: "duplicate",
-      label: "Duplicate"
+      label: "Duplicate",
     },
     {
       id: "delete",
-      label: "Delete"
-    }
+      label: "Delete",
+    },
   ],
   transfer: [
     {
       id: "export",
-      label: "Export"
+      label: "Export",
     },
     {
       id: "import",
-      label: "Import"
-    }
-  ]
+      label: "Import",
+    },
+  ],
 };
 
 const requestCTAList: TMenuListType = {
   modify: [
     {
       id: "rename",
-      label: "Rename"
+      label: "Rename",
     },
     {
       id: "duplicate",
-      label: "Duplicate"
+      label: "Duplicate",
     },
     {
       id: "delete",
-      label: "Delete"
-    }
+      label: "Delete",
+    },
   ],
   transfer: [
     {
       id: "export",
-      label: "Export"
+      label: "Export",
     },
     {
       id: "import",
       label: "Import",
-      sublabel: "replace current"
-    }
-  ]
+      sublabel: "replace current",
+    },
+  ],
 };
 
 const ItemCTA = memo(() => {
@@ -133,7 +133,7 @@ const ItemCTA = memo(() => {
     type,
     isContextMenuOpen,
     handleToggleContextMenu,
-    handleRenameAction
+    handleRenameAction,
   } = useRequestListItem();
   const layoutTypes: TLayoutSetting = useCheckApplyingLayoutDirection();
 
@@ -147,7 +147,7 @@ const ItemCTA = memo(() => {
             title: response ? "Delete success" : "Delete error",
             description: response
               ? "Request deleted successfully"
-              : "Couldn't delete request, something went wrong."
+              : "Couldn't delete request, something went wrong.",
           });
         }
         case "add_folder": {
@@ -157,7 +157,7 @@ const ItemCTA = memo(() => {
             title: response ? "Add success" : "Add error",
             description: response
               ? "Request folder added successfully"
-              : "Couldn't add request, folder something went wrong."
+              : "Couldn't add request, folder something went wrong.",
           });
         }
         case "add_rest_api_basics": {
@@ -167,7 +167,7 @@ const ItemCTA = memo(() => {
             title: response ? "Add success" : "Add error",
             description: response
               ? "Request folder added successfully"
-              : "Couldn't add request folder, something went wrong."
+              : "Couldn't add request folder, something went wrong.",
           });
         }
         case "add_request": {
@@ -177,7 +177,7 @@ const ItemCTA = memo(() => {
             title: response ? "Add success" : "Add error",
             description: response
               ? "Request added successfully"
-              : "Couldn't add request, something went wrong."
+              : "Couldn't add request, something went wrong.",
           });
         }
         case "rename": {
@@ -185,24 +185,24 @@ const ItemCTA = memo(() => {
         }
         case "duplicate": {
           const response = await dispatch(
-            duplicateRequestOrFolder(id)
+            duplicateRequestOrFolder(id),
           ).unwrap();
           return toast({
             type: response ? "success" : "error",
             title: response ? "Duplicate success" : "Duplicate error",
             description: response
               ? "Duplicated successfully"
-              : "Couldn't duplicate, something went wrong."
+              : "Couldn't duplicate, something went wrong.",
           });
         }
         case "export": {
           const { success, message } = await dispatch(
-            type === "request" ? exportRequest(id) : exportFolder(id)
+            type === "request" ? exportRequest(id) : exportFolder(id),
           ).unwrap();
           toast({
             type: success ? "success" : "error",
             title: success ? "Export success" : "Export error",
-            description: message
+            description: message,
           });
           return;
         }
@@ -215,12 +215,12 @@ const ItemCTA = memo(() => {
           toast({
             type: success ? "success" : "error",
             title: success ? "Import success" : "Import error",
-            description: message
+            description: message,
           });
         }
       }
     },
-    [dispatch, handleRenameAction, id, toast, type]
+    [dispatch, handleRenameAction, id, toast, type],
   );
 
   const handlePreventPropagation = useCallback((e: MouseEvent<HTMLElement>) => {
@@ -234,7 +234,7 @@ const ItemCTA = memo(() => {
     const menu: TMenuListType = {};
     Object.keys(folderCTAList).forEach(key => {
       const subMenuList = folderCTAList[key].filter(
-        item => !folderAddActionList.includes(item.id)
+        item => !folderAddActionList.includes(item.id),
       );
       if (!subMenuList.length) return;
       menu[key] = subMenuList;
@@ -246,7 +246,7 @@ const ItemCTA = memo(() => {
     <motion.div
       key={`request-item-cta-${id}`}
       animate={{
-        opacity: 1
+        opacity: 1,
       }}
       exit={{ opacity: 0 }}
     >
@@ -262,8 +262,8 @@ const ItemCTA = memo(() => {
               "opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto",
               {
                 "opacity-100 pointer-events-auto": isContextMenuOpen,
-                "opacity-0 pointer-events-none": !isContextMenuOpen
-              }
+                "opacity-0 pointer-events-none": !isContextMenuOpen,
+              },
             )}
             onClick={handlePreventPropagation}
           >

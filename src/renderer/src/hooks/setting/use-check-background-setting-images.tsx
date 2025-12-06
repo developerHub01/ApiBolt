@@ -25,7 +25,7 @@ const useCheckBackgroundSettingImages = () => {
 
   const senitizedValue = senitizeValue(
     value,
-    DEFAULT_SETTINGS.backgroundImages
+    DEFAULT_SETTINGS.backgroundImages,
   ) as SettingBackgroundImagesValueType;
 
   const folderPath = Array.isArray(senitizedValue) ? senitizedValue[0] : null;

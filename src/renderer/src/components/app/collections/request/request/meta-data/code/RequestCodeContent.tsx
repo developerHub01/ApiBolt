@@ -14,7 +14,7 @@ const RequestCodeContent = memo(() => {
         "flex-1 min-h-0 h-full overflow-hidden [&>div>div]:h-full",
         "bg-background/10",
         "rounded-md border",
-        "backdrop-blur-xs"
+        "backdrop-blur-xs",
       )}
     >
       <Code

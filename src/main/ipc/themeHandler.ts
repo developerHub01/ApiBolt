@@ -7,7 +7,10 @@ import {
   getThemePaletteById,
   updateTheme,
 } from "@/main/db/themeDB.js";
-import { importThemePaletteInEditor, saveThemePaletteLocal } from "@/main/utils/theme.js";
+import {
+  importThemePaletteInEditor,
+  saveThemePaletteLocal,
+} from "@/main/utils/theme.js";
 import { ElectronAPIThemeInterface } from "@shared/types/api/electron-theme";
 
 export const themeHandler = () => {
@@ -69,7 +72,8 @@ export const themeHandler = () => {
   );
   ipcMain.handle(
     "importThemePaletteInEditor",
-    async (): ReturnType<ElectronAPIThemeInterface["importThemePaletteInEditor"]> =>
-      await importThemePaletteInEditor(),
+    async (): ReturnType<
+      ElectronAPIThemeInterface["importThemePaletteInEditor"]
+    > => await importThemePaletteInEditor(),
   );
 };

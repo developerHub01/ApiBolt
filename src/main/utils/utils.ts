@@ -1,7 +1,7 @@
 import { JWTBearerAuthInterface } from "@shared/types/authorization.types";
 import {
   APIPayloadBody,
-  TContentType
+  TContentType,
 } from "@shared/types/request-response.types";
 import jwt, { Algorithm } from "jsonwebtoken";
 
@@ -28,12 +28,12 @@ export const getRawContentType = (subtype: TContentType) => {
 export const generateJWT = ({
   payload,
   secret,
-  algorithm
+  algorithm,
 }: Pick<JWTBearerAuthInterface, "payload" | "secret"> & {
   algorithm: JWTBearerAuthInterface["algo"];
 }) =>
   jwt.sign(payload, secret, {
-    algorithm: algorithm as Algorithm
+    algorithm: algorithm as Algorithm,
   });
 
 type PayloadKeys =
@@ -75,7 +75,7 @@ export const requestDataSize = ({
   formData,
   xWWWformDataUrlencoded,
   rawData,
-  binaryData
+  binaryData,
 }: Pick<
   APIPayloadBody,
   "bodyType" | "formData" | "xWWWformDataUrlencoded" | "rawData" | "binaryData"

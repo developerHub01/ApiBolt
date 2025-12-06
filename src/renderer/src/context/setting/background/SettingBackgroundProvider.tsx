@@ -10,13 +10,13 @@ interface SettingBackgroundContext {
   selectedBackgroundImageIndex: number | null;
   handleChangeSelectedBackgroundImageIndex: (value?: number | null) => void;
   handleNavigateSelectedBackgroundImageIndex: (
-    direction?: "left" | "right"
+    direction?: "left" | "right",
   ) => void;
   settingType: SettingType;
   senitizedValue: string | Array<string> | undefined;
   folderPath: string | null;
   handleChange: (
-    method?: UpdateBackgroundImagePayloadMethodType | undefined
+    method?: UpdateBackgroundImagePayloadMethodType | undefined,
   ) => void;
   isHideMoreData: boolean;
   handleChangeSettingType: (value: SettingType) => void;
@@ -24,7 +24,7 @@ interface SettingBackgroundContext {
 
 // const SettingBackgroundContext = createContext<SettingBackgroundContext | null>(null);
 const SettingBackgroundContext = createContext<SettingBackgroundContext | null>(
-  null
+  null,
 );
 
 export const useSettingBackground = () => {
@@ -32,7 +32,7 @@ export const useSettingBackground = () => {
 
   if (!context) {
     throw new Error(
-      "useSettingBackground must be used within a SettingBackgroundProvider."
+      "useSettingBackground must be used within a SettingBackgroundProvider.",
     );
   }
 
@@ -59,21 +59,21 @@ const SettingBackgroundProvider = ({
 
   const handleChangeSelectedBackgroundImageIndex = useCallback(
     (value?: number | null) => setSelectedBackgroundImageIndex(value ?? null),
-    []
+    [],
   );
 
   const handleNavigateSelectedBackgroundImageIndex = useCallback(
     (direction: "left" | "right" = "left") =>
-      setSelectedBackgroundImageIndex((prev) =>
+      setSelectedBackgroundImageIndex(prev =>
         prev === null
           ? 0
           : Math.abs(
               direction === "left"
                 ? (senitizedValue?.length ?? 0) + prev - 1
-                : prev + 1
-            ) % (senitizedValue?.length ?? 0)
+                : prev + 1,
+            ) % (senitizedValue?.length ?? 0),
       ),
-    [senitizedValue?.length]
+    [senitizedValue?.length],
   );
 
   return (

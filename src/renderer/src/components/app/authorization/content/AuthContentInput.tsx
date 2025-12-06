@@ -37,7 +37,7 @@ const AuthContentInput = memo(
     };
 
     const handleHidePassword = (value?: boolean) =>
-      setHidePassword((prev) => (value === undefined ? !prev : value));
+      setHidePassword(prev => (value === undefined ? !prev : value));
 
     return (
       <ButtonLikeDiv
@@ -56,7 +56,7 @@ const AuthContentInput = memo(
           }
           className={cn(
             "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 outline-none w-full",
-            className
+            className,
           )}
           {...props}
         />
@@ -65,7 +65,7 @@ const AuthContentInput = memo(
             onClick={() => handleHidePassword()}
             className={cn(
               "select-none shrink-0 size-6 grid place-items-center items-center gap-1 [&>svg]:size-4 text-xs rounded-full cursor-pointer aspect-square disabled:pointer-events-none disabled:opacity-50",
-              "hover:bg-accent duration-100 transition-all"
+              "hover:bg-accent duration-100 transition-all",
             )}
             disabled={disabled}
           >
@@ -74,7 +74,7 @@ const AuthContentInput = memo(
         )}
       </ButtonLikeDiv>
     );
-  }
+  },
 );
 
 export default AuthContentInput;

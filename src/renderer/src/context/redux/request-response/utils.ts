@@ -1,11 +1,11 @@
 import type {
   FormDataInterface,
   ParamInterface,
-  ResponseFileDataInterface
+  ResponseFileDataInterface,
 } from "@shared/types/request-response.types";
 
 export const handleCheckImportedRequestFileValidator = (
-  data: ResponseFileDataInterface
+  data: ResponseFileDataInterface,
 ): boolean => {
   // Basic checks
   if ([data.name, data.url].some(v => typeof v === "undefined")) return false;
@@ -22,7 +22,7 @@ export const handleCheckImportedRequestFileValidator = (
         "id" in v &&
         "key" in v &&
         "value" in v &&
-        "description" in v
+        "description" in v,
     )
   )
     return false;
@@ -36,7 +36,7 @@ export const handleCheckImportedRequestFileValidator = (
         "id" in v &&
         "value" in v &&
         "key" in v &&
-        "description" in v
+        "description" in v,
     )
   )
     return false;
@@ -58,7 +58,7 @@ export const handleCheckImportedRequestFileValidator = (
             typeof file.fileName === "string" &&
             typeof file.mimeType === "string" &&
             (typeof file.base64 === "string" ||
-              typeof file.base64 === "undefined")
+              typeof file.base64 === "undefined"),
         );
 
       return (
@@ -96,7 +96,7 @@ export const handleCheckImportedRequestFileValidator = (
 };
 
 export const filterAndUniqueMetaData = (
-  data: Array<ParamInterface | FormDataInterface>
+  data: Array<ParamInterface | FormDataInterface>,
 ) => {
   const matchedKeys = new Set<string>([]);
 
@@ -111,7 +111,7 @@ export const filterAndUniqueMetaData = (
     /* ordering from newer to older so that I can get latest only for duplicated data */
     .sort(
       (a, b) =>
-        new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime()
+        new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime(),
     )
     .map(({ id, key, value }) => {
       if (matchedKeys.has(key)) return;
@@ -119,7 +119,7 @@ export const filterAndUniqueMetaData = (
       result.push({
         id,
         key,
-        value: Array.isArray(value) ? undefined : value
+        value: Array.isArray(value) ? undefined : value,
       });
     });
 
@@ -136,7 +136,7 @@ export const filterAndUniqueFormData = (data: Array<FormDataInterface>) => {
     /* ordering from newer to older so that I can get latest only for duplicated data */
     .sort(
       (a, b) =>
-        new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime()
+        new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime(),
     )
     .map(({ id, key, value }) => {
       if (matchedKeys.has(key)) return;
@@ -144,7 +144,7 @@ export const filterAndUniqueFormData = (data: Array<FormDataInterface>) => {
       result.push({
         id,
         key,
-        value: value
+        value: value,
       });
     });
 

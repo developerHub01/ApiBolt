@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 
 interface Props {
   list: Array<{
@@ -21,9 +22,11 @@ interface Props {
 const FieldSelector = memo(({ list, label, value, onChange }: Props) => {
   return (
     <Select value={value} onValueChange={onChange}>
-      <SelectTrigger className="w-full">
-        <SelectValue placeholder={label ?? ""} />
-      </SelectTrigger>
+      <ButtonLikeDiv variant={"secondary"} className="px-0 py-0 w-full">
+        <SelectTrigger className="w-full">
+          <SelectValue placeholder={label ?? ""} />
+        </SelectTrigger>
+      </ButtonLikeDiv>
       <SelectContent>
         <SelectGroup>
           {list.map(({ id, label }) => (

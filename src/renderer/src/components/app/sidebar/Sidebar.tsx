@@ -39,7 +39,7 @@ const Sidebar = () => {
                   {
                     "border-r-2": layoutTypes !== "rtl",
                     "border-l-2": layoutTypes === "rtl",
-                  }
+                  },
                 )}
               >
                 <SidebarMenu />

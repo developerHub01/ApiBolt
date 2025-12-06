@@ -2,7 +2,7 @@ import { requestDefaultCodeSnippit } from "@/constant/code-snippit.constant";
 import type {
   CodeSnippitDataInterface,
   RequestCodeSnippitInterface,
-  TRequestCodeType
+  TRequestCodeType,
 } from "@shared/types/code-snippit.types";
 import { generateJavaScriptCode } from "@/utils/snippet-generator/javascript/javascript.utils";
 import { generatePHPCode } from "@/utils/snippet-generator/php/php.utils";
@@ -23,7 +23,7 @@ const generatorMap: Record<
   string,
   (
     type: TRequestCodeType,
-    data: CodeSnippitDataInterface
+    data: CodeSnippitDataInterface,
   ) => Promise<RequestCodeSnippitInterface>
 > = {
   javascript: generateJavaScriptCode,
@@ -39,12 +39,12 @@ const generatorMap: Record<
   swift: generateSwiftCode,
   ruby: generateRubyCode,
   r: generateRCode,
-  elixir: generateElixirCode
+  elixir: generateElixirCode,
 };
 
 export const generateCode = async (
   type: TRequestCodeType,
-  data: CodeSnippitDataInterface
+  data: CodeSnippitDataInterface,
 ): Promise<RequestCodeSnippitInterface> => {
   const lowerType = type.toLowerCase().replace(/\s+/g, "");
 

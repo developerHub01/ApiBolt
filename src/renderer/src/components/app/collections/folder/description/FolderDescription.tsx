@@ -2,18 +2,18 @@ import { memo, lazy, Suspense } from "react";
 import { useAppSelector } from "@/context/redux/hooks";
 const DescriptionEditor = lazy(
   () =>
-    import("@/components/app/collections/folder/description/DescriptionEditor")
+    import("@/components/app/collections/folder/description/DescriptionEditor"),
 );
 const DescriptionPreview = lazy(
   () =>
-    import("@/components/app/collections/folder/description/DescriptionPreview")
+    import("@/components/app/collections/folder/description/DescriptionPreview"),
 );
 import DescriptionWrapper from "@/components/app/collections/folder/description/DescriptionWrapper";
 import SplitLayout from "@/components/app/collections/folder/description/SplitLayout";
 import DescriptionTabs from "@/components/app/collections/folder/description/DescriptionTabs";
 const FolderAuthorization = lazy(
   () =>
-    import("@/components/app/collections/folder/description/FolderAuthorization")
+    import("@/components/app/collections/folder/description/FolderAuthorization"),
 );
 import { selectRequestFolderDescriptionActiveTab } from "@/context/redux/request-response/selectors/folder";
 import FolderAuthorizationFallback from "@/fallback/collection/folder/FolderAuthorizationFallback";

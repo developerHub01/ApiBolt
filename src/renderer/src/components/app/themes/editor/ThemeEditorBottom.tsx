@@ -21,7 +21,7 @@ const ThemeEditorBottom = () => {
       description: message,
     });
   };
-  
+
   const handleApplyMain = async () => {
     const { success, message } = await dispatch(applyThemeInApp()).unwrap();
     toast({

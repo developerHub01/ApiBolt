@@ -13,7 +13,7 @@ export const useThemeEditor = () => {
 
   if (!context) {
     throw new Error(
-      "useThemeEditor must be used within a ThemeEditorProvider."
+      "useThemeEditor must be used within a ThemeEditorProvider.",
     );
   }
 

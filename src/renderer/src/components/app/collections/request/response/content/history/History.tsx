@@ -2,7 +2,7 @@ import { lazy, Suspense } from "react";
 import HistoryMetaListProvider from "@/context/history/HistoryMetaListProvider";
 const HistoryContent = lazy(
   () =>
-    import("@/components/app/collections/request/response/content/history/HistoryContent")
+    import("@/components/app/collections/request/response/content/history/HistoryContent"),
 );
 import HistorySkeleton from "@/components/app/collections/request/response/content/history/skeleton/HistorySkeleton";
 

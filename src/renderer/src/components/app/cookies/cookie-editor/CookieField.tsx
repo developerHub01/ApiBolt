@@ -57,7 +57,7 @@ const CookieField = memo(({ fieldKey, value, onChange }: Props) => {
 
       return onChange(filterdValue);
     },
-    [fieldKey, onChange]
+    [fieldKey, onChange],
   );
 
   return (

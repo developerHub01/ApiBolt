@@ -9,7 +9,7 @@ const methodList: Array<THTTPMethods> = [
   "post",
   "put",
   "patch",
-  "delete"
+  "delete",
 ];
 
 function ApiMethodSelect({
@@ -49,9 +49,9 @@ function ApiMethodSelectTrigger({
             methodType === "put",
           "border-orange-500 bg-orange-500/5 text-orange-500":
             methodType === "patch",
-          "border-red-500 bg-red-500/5 text-red-500": methodType === "delete"
+          "border-red-500 bg-red-500/5 text-red-500": methodType === "delete",
         },
-        className
+        className,
       )}
       {...props}
     >
@@ -83,7 +83,7 @@ function ApiMethodSelectContent({
           "bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 relative z-50 max-h-(--radix-select-content-available-height) origin-(--radix-select-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-md shadow-md",
           position === "popper" &&
             "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
-          className
+          className,
         )}
         position={position}
         {...props}
@@ -93,7 +93,7 @@ function ApiMethodSelectContent({
           className={cn(
             "py-1",
             position === "popper" &&
-              "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)] scroll-my-1"
+              "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)] scroll-my-1",
           )}
         >
           {methodList.map(id => (
@@ -143,9 +143,10 @@ function ApiMethodSelectItem({
             value === "put" && value !== activeValue,
           "hover:border-orange-500/80":
             value === "patch" && value !== activeValue,
-          "hover:border-red-500/80": value === "delete" && value !== activeValue
+          "hover:border-red-500/80":
+            value === "delete" && value !== activeValue,
         },
-        className
+        className,
       )}
       {...props}
     >
@@ -158,8 +159,8 @@ function ApiMethodSelectItem({
               "text-blue-500": value === "post",
               "text-yellow-500": value === "put",
               "text-orange-500": value === "patch",
-              "text-red-500": value === "delete"
-            }
+              "text-red-500": value === "delete",
+            },
           )}
         >
           {value}
@@ -178,7 +179,7 @@ function ApiMethodSelectScrollUpButton({
       data-slot="select-scroll-up-button"
       className={cn(
         "flex cursor-default items-center justify-center py-1",
-        className
+        className,
       )}
       {...props}
     >
@@ -196,7 +197,7 @@ function ApiMethodSelectScrollDownButton({
       data-slot="select-scroll-down-button"
       className={cn(
         "flex cursor-default items-center justify-center py-1",
-        className
+        className,
       )}
       {...props}
     >
@@ -211,5 +212,5 @@ export {
   ApiMethodSelectItem,
   ApiMethodSelectScrollDownButton,
   ApiMethodSelectScrollUpButton,
-  ApiMethodSelectTrigger
+  ApiMethodSelectTrigger,
 };

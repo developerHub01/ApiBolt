@@ -7,7 +7,7 @@ import {
   updateEnvironments,
   deleteAllEnvironments,
   deleteEnvironments,
-  importEnvironments
+  importEnvironments,
 } from "@/main/db/environmentsDB.js";
 import { mainWindow } from "@/main/index.js";
 import { getActiveProjectDetails } from "@/main/db/projectsDB.js";
@@ -25,7 +25,7 @@ export const enviromentsHandlers = () => {
         ElectronAPIEnvironmentsInterface["getAllEnvironments"]
       >
     ): ReturnType<ElectronAPIEnvironmentsInterface["getAllEnvironments"]> =>
-      await getAllEnvironments(...rest)
+      await getAllEnvironments(...rest),
   );
   ipcMain.handle(
     "getEnvironments",
@@ -33,7 +33,7 @@ export const enviromentsHandlers = () => {
       _,
       ...rest: Parameters<ElectronAPIEnvironmentsInterface["getEnvironments"]>
     ): ReturnType<ElectronAPIEnvironmentsInterface["getEnvironments"]> =>
-      await getEnvironments(...rest)
+      await getEnvironments(...rest),
   );
   ipcMain.handle(
     "createEnvironments",
@@ -43,7 +43,7 @@ export const enviromentsHandlers = () => {
         ElectronAPIEnvironmentsInterface["createEnvironments"]
       >
     ): ReturnType<ElectronAPIEnvironmentsInterface["createEnvironments"]> =>
-      await createEnvironments(...rest)
+      await createEnvironments(...rest),
   );
   ipcMain.handle(
     "updateEnvironments",
@@ -53,7 +53,7 @@ export const enviromentsHandlers = () => {
         ElectronAPIEnvironmentsInterface["updateEnvironments"]
       >
     ): ReturnType<ElectronAPIEnvironmentsInterface["updateEnvironments"]> =>
-      await updateEnvironments(...rest)
+      await updateEnvironments(...rest),
   );
   ipcMain.handle(
     "deleteAllEnvironments",
@@ -63,7 +63,7 @@ export const enviromentsHandlers = () => {
         ElectronAPIEnvironmentsInterface["deleteAllEnvironments"]
       >
     ): ReturnType<ElectronAPIEnvironmentsInterface["deleteAllEnvironments"]> =>
-      await deleteAllEnvironments(...rest)
+      await deleteAllEnvironments(...rest),
   );
   ipcMain.handle(
     "deleteEnvironments",
@@ -73,7 +73,7 @@ export const enviromentsHandlers = () => {
         ElectronAPIEnvironmentsInterface["deleteEnvironments"]
       >
     ): ReturnType<ElectronAPIEnvironmentsInterface["deleteEnvironments"]> =>
-      await deleteEnvironments(...rest)
+      await deleteEnvironments(...rest),
   );
   ipcMain.handle(
     "exportEnvironments",
@@ -91,7 +91,7 @@ export const enviromentsHandlers = () => {
         if (!projectName) throw new Error("no active project");
 
         const envs = (await getEnvironments(...rest))?.map(
-          ({ id, projectId, createdAt, ...env }) => env
+          ({ id, projectId, createdAt, ...env }) => env,
         );
         if (!envs) throw new Error("envs not found");
 
@@ -99,21 +99,21 @@ export const enviromentsHandlers = () => {
           title: "Save environment variable list",
           defaultPath: path.join(
             app.getPath("downloads"),
-            `${projectName.replaceAll(" ", "_")}_environments.json`
+            `${projectName.replaceAll(" ", "_")}_environments.json`,
           ),
           filters: [
             {
               name: "JSON file",
-              extensions: ["json"]
-            }
-          ]
+              extensions: ["json"],
+            },
+          ],
         });
 
         if (!canceled && filePath) {
           await writeFile(filePath, JSON.stringify(envs, null, 2));
           return {
             success: true,
-            message: "Environment variables exported successfully!"
+            message: "Environment variables exported successfully!",
           };
         } else {
           throw new Error("Save dialog cancelled.");
@@ -125,15 +125,15 @@ export const enviromentsHandlers = () => {
           message:
             error instanceof Error
               ? error.message
-              : "Something went wrong while exporting list."
+              : "Something went wrong while exporting list.",
         };
       }
-    }
+    },
   );
   ipcMain.handle(
     "importEnvironments",
     async (
-      _
+      _,
       // ...rest: Parameters<
       //   ElectronAPIEnvironmentsInterface["importEnvironments"]
       // >
@@ -150,9 +150,9 @@ export const enviromentsHandlers = () => {
           filters: [
             {
               name: "JSON file",
-              extensions: ["json"]
-            }
-          ]
+              extensions: ["json"],
+            },
+          ],
         });
 
         const filePath = filePaths?.[0];
@@ -182,7 +182,7 @@ export const enviromentsHandlers = () => {
 
         return {
           success: true,
-          message: "Environments variable imported successfully!"
+          message: "Environments variable imported successfully!",
         };
       } catch (error) {
         console.error(error);
@@ -191,9 +191,9 @@ export const enviromentsHandlers = () => {
           message:
             error instanceof Error
               ? error.message
-              : "Something went wrong while exporting list."
+              : "Something went wrong while exporting list.",
         };
       }
-    }
+    },
   );
 };

@@ -3,7 +3,7 @@ import {
   TableBody,
   TableHead,
   TableHeader,
-  TableRow
+  TableRow,
 } from "@/components/ui/table";
 import { useKeyboardShortcuts } from "@/context/keyboard-shortcuts/KeyboardShortcutsProvider";
 import type { KeybaordShortCutInterface } from "@shared/types/keyboard-shortcut.types";

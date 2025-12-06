@@ -4,14 +4,14 @@ import type {
   TBinaryData,
   TContentType,
   THTTPMethods,
-  TRequestBodyType
+  TRequestBodyType,
 } from "@shared/types/request-response.types";
 import type {
   APIKeyInterface,
   BasicAuthInterface,
   JWTBearerAuthInterface,
   TAuthType,
-  TBearerToken
+  TBearerToken,
 } from "@shared/types/authorization.types";
 
 export interface HistoryItemInterface {

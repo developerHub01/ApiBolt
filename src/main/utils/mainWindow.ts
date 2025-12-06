@@ -22,8 +22,8 @@ export const createMainWindow = () => {
       preload: path.join(__dirname, "../", "preload", "index.js"),
       contextIsolation: true,
       nodeIntegration: false,
-      spellcheck: false
-    }
+      spellcheck: false,
+    },
   });
 
   win.webContents.openDevTools();

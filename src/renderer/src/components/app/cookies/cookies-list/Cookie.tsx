@@ -6,6 +6,7 @@ import { useAppDispatch } from "@/context/redux/hooks";
 import { handleChangeSelectedCookieKey } from "@/context/redux/cookies/cookies-slice";
 import { cn } from "@/lib/utils";
 import { deleteCookieByKey } from "@/context/redux/cookies/thunks/cookies";
+import useCustomToast from "@renderer/hooks/ui/use-custom-toast";
 
 interface Props {
   id: string;
@@ -14,8 +15,19 @@ interface Props {
 
 const Cookie = memo(({ id, selected = false }: Props) => {
   const dispatch = useAppDispatch();
+  const toast = useCustomToast();
+
   const handleClickCookie = () => dispatch(handleChangeSelectedCookieKey(id));
-  const handleDeleteCookie = () => dispatch(deleteCookieByKey(id));
+  const handleDeleteCookie = async () => {
+    const response = await dispatch(deleteCookieByKey(id)).unwrap();
+    return toast({
+      type: response ? "success" : "error",
+      title: response ? "Delete success" : "Delete error",
+      description: response
+        ? "Cookie deleted successfully"
+        : "Couldn't delete cookie, something went wrong.",
+    });
+  };
 
   return (
     <ButtonLikeDiv
@@ -24,7 +36,7 @@ const Cookie = memo(({ id, selected = false }: Props) => {
         "flex items-center gap-0 px-0 py-0 overflow-hidden ring-1 ring-transparent",
         {
           "ring-primary": selected,
-        }
+        },
       )}
     >
       <Button

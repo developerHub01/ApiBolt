@@ -16,7 +16,7 @@ const Url = memo(() => {
       <ProtocolToken />
       <HostPortToken />
       <AddUrlPart id="port" />
-      {urlTokens.slice(3).map((token) => (
+      {urlTokens.slice(3).map(token => (
         <ReorderableToken key={token.id} token={token} />
       ))}
       <QueryParamToken />

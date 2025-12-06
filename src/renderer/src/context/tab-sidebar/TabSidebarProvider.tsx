@@ -49,7 +49,7 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
   const selectedTab = useAppSelector(selectSelectedTab);
   const [isTabListHovering, setIsTabListHovering] = useState<boolean>(false);
   const [localTabList, setLocalTabList] = useState<Array<string>>(
-    tabList ?? []
+    tabList ?? [],
   );
   // const navigate = useNavigate();
 
@@ -92,21 +92,21 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
       if (!searchTerm) return setLocalTabList(tabList);
 
       setLocalTabList(
-        tabList.filter((tab) => {
+        tabList.filter(tab => {
           const tabDetails = requestList[tab];
 
           if (!tabDetails) return false;
 
           return normalizeText(tabDetails.name).includes(searchTerm);
-        })
+        }),
       );
     },
-    [requestList, tabList]
+    [requestList, tabList],
   );
 
   const handleChangeIsTabListHovering = useCallback(
-    (value?: boolean) => setIsTabListHovering((prev) => value ?? !prev),
-    []
+    (value?: boolean) => setIsTabListHovering(prev => value ?? !prev),
+    [],
   );
 
   return (

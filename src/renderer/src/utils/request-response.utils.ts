@@ -6,12 +6,12 @@ import type {
   ParamInterface,
   RequestListInterface,
   RequestListItemInterface,
-  TParamContentType
+  TParamContentType,
 } from "@shared/types/request-response.types";
 import { v4 as uuidv4 } from "uuid";
 
 export const getFolderChildren = (
-  payload: RequestListItemInterface
+  payload: RequestListItemInterface,
 ): Array<string> | null => payload.children ?? (!payload["method"] ? [] : null);
 
 /**
@@ -25,13 +25,13 @@ export const getFolderChildren = (
  *      if method not exist that means it is must a folder so add empty children list else undefined because it is a request.
  */
 export const getRequestType = (
-  payload: RequestListItemInterface
+  payload: RequestListItemInterface,
 ): "folder" | "request" => (getFolderChildren(payload) ? "folder" : "request");
 
 export const getNestedIds = ({
   source,
   id,
-  ids = []
+  ids = [],
 }: {
   source: RequestListInterface;
   id: string;
@@ -54,7 +54,7 @@ export const getNestedIds = ({
 export const getNodeParentsIdList = ({
   source,
   id,
-  ids = []
+  ids = [],
 }: {
   source: RequestListInterface;
   id: string;
@@ -71,7 +71,7 @@ export const getNodeParentsIdList = ({
 export const getRequestNodeLevel = ({
   source,
   id,
-  lavel = 0
+  lavel = 0,
 }: {
   source: RequestListInterface;
   id: string;
@@ -91,8 +91,8 @@ export const duplicateRequestOrFolderNode = ({
   parentId,
   result = {
     nodes: {},
-    newParentId: ""
-  }
+    newParentId: "",
+  },
 }: {
   source: RequestListInterface;
   id: string;
@@ -116,7 +116,7 @@ export const duplicateRequestOrFolderNode = ({
     ...data,
     parentId,
     id: nodeId,
-    oldId: id
+    oldId: id,
   };
   if (!result.newParentId) result.newParentId = nodeId;
 
@@ -126,7 +126,7 @@ export const duplicateRequestOrFolderNode = ({
         source,
         id: childId,
         parentId: nodeId,
-        result
+        result,
       });
     }
   }
@@ -138,7 +138,7 @@ export const checkPermissionToAddFolderAsChildren = (lavel: number = 0) =>
   lavel + 1 <= MAX_REQUEST_LIST_NESTED_FOLDER_COUNT;
 
 export const paramsTableToString = (
-  params: Array<ParamInterface> = []
+  params: Array<ParamInterface> = [],
 ): string => {
   const searchParams = params
     .filter(param => param.isCheck)
@@ -155,7 +155,7 @@ export const paramsTableToString = (
 
 export const paramsTableToStringParsedFromEnvs = (
   params: Array<ParamInterface> = [],
-  envMap: Map<string, EnvironmentInterface> = new Map()
+  envMap: Map<string, EnvironmentInterface> = new Map(),
 ): string => {
   const searchParams = params
     .filter(param => param.isCheck)
@@ -177,34 +177,34 @@ export const paramsTableToStringParsedFromEnvs = (
 
 export function detectAndCleanVariable(
   str: string,
-  type: "keyType"
+  type: "keyType",
 ): { key: string; keyType: TParamContentType };
 
 export function detectAndCleanVariable(
   str: string,
-  type: "valueType"
+  type: "valueType",
 ): { value: string; valueType: TParamContentType };
 
 // Implementation
 export function detectAndCleanVariable(
   str: string,
-  type: "keyType" | "valueType"
+  type: "keyType" | "valueType",
 ) {
   if (!str)
     return {
       [type]: "text",
-      [type === "keyType" ? "key" : "value"]: str
+      [type === "keyType" ? "key" : "value"]: str,
     };
 
   const match = str.match(URL_PURE_VARIABLE_REGEX);
   if (match)
     return {
       [type]: "env",
-      [type === "keyType" ? "key" : "value"]: match[1]
+      [type === "keyType" ? "key" : "value"]: match[1],
     };
 
   return {
     [type]: "text",
-    [type === "keyType" ? "key" : "value"]: str
+    [type === "keyType" ? "key" : "value"]: str,
   };
 }

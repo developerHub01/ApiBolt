@@ -2,7 +2,7 @@ import { ipcMain } from "electron";
 import {
   duplicateFolder,
   getFolder,
-  updateFolder
+  updateFolder,
 } from "@/main/db/folderDB.js";
 import { ElectronAPIFolderInterface } from "@shared/types/api/electron-folder";
 
@@ -13,7 +13,7 @@ export const folderHandlers = () => {
       _,
       ...rest: Parameters<ElectronAPIFolderInterface["getFolder"]>
     ): ReturnType<ElectronAPIFolderInterface["getFolder"]> =>
-      await getFolder(...rest)
+      await getFolder(...rest),
   );
   ipcMain.handle(
     "updateFolder",
@@ -21,7 +21,7 @@ export const folderHandlers = () => {
       _,
       ...rest: Parameters<ElectronAPIFolderInterface["updateFolder"]>
     ): ReturnType<ElectronAPIFolderInterface["updateFolder"]> =>
-      await updateFolder(...rest)
+      await updateFolder(...rest),
   );
   ipcMain.handle(
     "duplicateFolder",
@@ -29,6 +29,6 @@ export const folderHandlers = () => {
       _,
       ...rest: Parameters<ElectronAPIFolderInterface["duplicateFolder"]>
     ): ReturnType<ElectronAPIFolderInterface["duplicateFolder"]> =>
-      await duplicateFolder(...rest)
+      await duplicateFolder(...rest),
   );
 };

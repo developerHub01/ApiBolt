@@ -3,7 +3,7 @@ import {
   createShowHiddenMetaData,
   duplicateShowHiddenMetaData,
   getShowHiddenMetaData,
-  updateShowHiddenMetaData
+  updateShowHiddenMetaData,
 } from "@/main/db/showHiddenMetaDataDB.js";
 import { ElectronAPIShowHiddenMetaDataInterface } from "@shared/types/api/electron-show-hidden-meta-data";
 
@@ -17,7 +17,7 @@ export const showHiddenMetaDataHandler = () => {
       >
     ): ReturnType<
       ElectronAPIShowHiddenMetaDataInterface["getShowHiddenMetaData"]
-    > => await getShowHiddenMetaData(...rest)
+    > => await getShowHiddenMetaData(...rest),
   );
   ipcMain.handle(
     "createShowHiddenMetaData",
@@ -28,7 +28,7 @@ export const showHiddenMetaDataHandler = () => {
       >
     ): ReturnType<
       ElectronAPIShowHiddenMetaDataInterface["createShowHiddenMetaData"]
-    > => await createShowHiddenMetaData(...rest)
+    > => await createShowHiddenMetaData(...rest),
   );
   ipcMain.handle(
     "updateShowHiddenMetaData",
@@ -39,7 +39,7 @@ export const showHiddenMetaDataHandler = () => {
       >
     ): ReturnType<
       ElectronAPIShowHiddenMetaDataInterface["updateShowHiddenMetaData"]
-    > => await updateShowHiddenMetaData(...rest)
+    > => await updateShowHiddenMetaData(...rest),
   );
   ipcMain.handle(
     "duplicateShowHiddenMetaData",
@@ -50,6 +50,6 @@ export const showHiddenMetaDataHandler = () => {
       >
     ): ReturnType<
       ElectronAPIShowHiddenMetaDataInterface["duplicateShowHiddenMetaData"]
-    > => await duplicateShowHiddenMetaData(...rest)
+    > => await duplicateShowHiddenMetaData(...rest),
   );
 };

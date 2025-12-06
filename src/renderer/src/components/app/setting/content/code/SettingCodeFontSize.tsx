@@ -32,7 +32,7 @@ const SettingCodeFontSize = () => {
     });
 
   const senitizedValue = Number(
-    senitizeValue(value, DEFAULT_SETTINGS.codeFontSize)
+    senitizeValue(value, DEFAULT_SETTINGS.codeFontSize),
   );
 
   return (

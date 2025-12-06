@@ -2,7 +2,7 @@ import axios from "axios";
 import {
   getPayloadSize,
   getRawContentType,
-  requestDataSize
+  requestDataSize,
 } from "@/main/utils/utils.js";
 import { parseSetCookie } from "@/main/utils/cookies.js";
 import { client, jar } from "@/main/index.js";
@@ -47,13 +47,13 @@ export const fetchApi = async (_: unknown, rawPayload: APIPayloadBody) => {
     const setCookies = res.headers["set-cookie"] || [];
 
     await Promise.all(
-      setCookies.map(cookie => jar?.setCookie(cookie, normalizedUrl))
+      setCookies.map(cookie => jar?.setCookie(cookie, normalizedUrl)),
     );
 
     await jarManager.saveToDB();
 
     const cookies = parseSetCookie(
-      Array.from(await jarManager.getCookiesByDomain(normalizedUrl))
+      (await jarManager.getCookiesByDomain(normalizedUrl)) ?? [],
     );
 
     const statusDetails = await getHttpStatusByCode(String(res.status));
@@ -71,14 +71,14 @@ export const fetchApi = async (_: unknown, rawPayload: APIPayloadBody) => {
       cookies,
       responseSize: {
         header: getPayloadSize(res.headers) ?? 0,
-        body: getPayloadSize(res.data) ?? 0
-      }
+        body: getPayloadSize(res.data) ?? 0,
+      },
     };
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
       /* Server responded with error status (4xx, 5xx) */
       const statusDetails = await getHttpStatusByCode(
-        String(error.response.status)
+        String(error.response.status),
       );
 
       responsePayload = {
@@ -93,8 +93,8 @@ export const fetchApi = async (_: unknown, rawPayload: APIPayloadBody) => {
           (statusDetails.editedDescription || statusDetails.description),
         responseSize: {
           header: getPayloadSize(error.response.headers) ?? 0,
-          body: getPayloadSize(error.response.data) ?? 0
-        }
+          body: getPayloadSize(error.response.data) ?? 0,
+        },
       };
     } else if (axios.isAxiosError(error) && error.request) {
       /* Request was made but no response received (network error, timeout, etc.) */
@@ -108,8 +108,8 @@ export const fetchApi = async (_: unknown, rawPayload: APIPayloadBody) => {
           "Could not connect to the server. Check your internet or API URL.",
         responseSize: {
           header: 0,
-          body: 0
-        }
+          body: 0,
+        },
       };
     } else {
       /* Something else happened (error in request setup, etc.) */
@@ -123,8 +123,8 @@ export const fetchApi = async (_: unknown, rawPayload: APIPayloadBody) => {
           "An unexpected error occurred while setting up the request.",
         responseSize: {
           header: 0,
-          body: 0
-        }
+          body: 0,
+        },
       };
     }
   } finally {
@@ -137,15 +137,15 @@ export const fetchApi = async (_: unknown, rawPayload: APIPayloadBody) => {
           binaryData: payload.data,
           formData: rawPayload.formData?.map(item => ({
             key: item.key,
-            value: item.value
+            value: item.value,
           })),
           xWWWformDataUrlencoded: rawPayload.xWWWformDataUrlencoded?.map(
             item => ({
               key: item.key,
-              value: item.value
-            })
-          )
-        })
+              value: item.value,
+            }),
+          ),
+        }),
       };
     }
 
@@ -161,7 +161,7 @@ const apiPayloadHandler = async (payload: APIPayloadBody) => {
     withCredentials: true,
     url: payload.url,
     method: payload.method ?? "get",
-    headers: payload.headers
+    headers: payload.headers,
   };
 
   updatedPayload.data = undefined;
@@ -173,7 +173,7 @@ const apiPayloadHandler = async (payload: APIPayloadBody) => {
     }
     case "raw": {
       updatedPayload.headers["Content-Type"] = getRawContentType(
-        rawSubType ?? "text"
+        rawSubType ?? "text",
       );
       updatedPayload.data = rawData;
       break;
@@ -221,7 +221,7 @@ const apiPayloadHandler = async (payload: APIPayloadBody) => {
 };
 
 export const getBodyFormData = async (
-  formData: APIPayloadBody["formData"]
+  formData: APIPayloadBody["formData"],
 ): Promise<FormData> => {
   const formPayload = new FormData();
   if (!formData) return formPayload;
@@ -248,7 +248,7 @@ export const getBodyFormData = async (
 
           formPayload.append(key, fs.createReadStream(filePath), {
             filename,
-            contentType: mimeType
+            contentType: mimeType,
           });
         } catch (err) {
           console.warn(`File not found or not readable: ${filePath}`, err);
@@ -278,6 +278,6 @@ const getBodyBinaryData = async () => {
 
   return {
     contentType,
-    data
+    data,
   };
 };

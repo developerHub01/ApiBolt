@@ -2,15 +2,15 @@ import {
   ProjectSettingsInterface,
   SettingsInterface,
   SettingsTotalInterface,
-  UpdateBackgroundImagePayloadInterface
+  UpdateBackgroundImagePayloadInterface,
 } from "@shared/types/setting.types";
 
 export interface ElectronAPISettingsInterface {
   getSettings(): Promise<SettingsTotalInterface>;
   updateSettings(
-    payload: Partial<SettingsInterface | ProjectSettingsInterface>
+    payload: Partial<SettingsInterface | ProjectSettingsInterface>,
   ): Promise<boolean>;
   updateSettingsBackgroundImages(
-    payload: UpdateBackgroundImagePayloadInterface
+    payload: UpdateBackgroundImagePayloadInterface,
   ): Promise<boolean>;
 }

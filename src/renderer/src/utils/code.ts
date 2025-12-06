@@ -9,7 +9,7 @@ export const codeFormatter = async ({
   rawRequestBodyType,
   code,
   callback,
-  showErrorToast = false
+  showErrorToast = false,
 }: {
   rawRequestBodyType: TContentType;
   code: string;

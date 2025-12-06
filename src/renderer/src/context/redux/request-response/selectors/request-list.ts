@@ -3,18 +3,18 @@ import type { RootState } from "@/context/redux/store";
 import type {
   RequestListInterface,
   RequestListItemInterface,
-  THTTPMethods
+  THTTPMethods,
 } from "@shared/types/request-response.types";
 import { getRequestNodeLevel } from "@/utils/request-response.utils";
 
 export const selectIsRequestListCollapsed = createSelector(
   [(state: RootState) => state.requestResponse.requestListCollapsed],
-  (requestListCollapsed): boolean => requestListCollapsed ?? false
+  (requestListCollapsed): boolean => requestListCollapsed ?? false,
 );
 
 export const selectRequestOrFolderList = createSelector(
   [(state: RootState) => state.requestResponse.requestList],
-  (requestOrFolder): RequestListInterface => requestOrFolder
+  (requestOrFolder): RequestListInterface => requestOrFolder,
 );
 
 export const selectActiveRequestOrFolder = createSelector(
@@ -22,53 +22,53 @@ export const selectActiveRequestOrFolder = createSelector(
     (state: RootState) =>
       state.requestResponse.requestList?.[
         state.requestResponse.selectedTab ?? ""
-      ] ?? null
+      ] ?? null,
   ],
-  (requestOrFolder): RequestListItemInterface | null => requestOrFolder
+  (requestOrFolder): RequestListItemInterface | null => requestOrFolder,
 );
 
 export const selectRequestOrFolderById = createSelector(
   [
     (state: RootState) => state.requestResponse.requestList,
-    (_, id: string) => id
+    (_, id: string) => id,
   ],
-  (request, id): RequestListItemInterface => request[id]
+  (request, id): RequestListItemInterface => request[id],
 );
 
 export const selectRequestOrFolderLavelById = createSelector(
   [
     (state: RootState) => state.requestResponse.requestList,
-    (_, id: string) => id
+    (_, id: string) => id,
   ],
   (requestList, id): number =>
     getRequestNodeLevel({
       source: requestList,
-      id
-    })
+      id,
+    }),
 );
 
 export const selectIsHttpMethodType = createSelector(
   [
     (state: RootState) =>
       state.requestResponse.requestList[state.requestResponse.selectedTab!]
-        ?.method ?? "get"
+        ?.method ?? "get",
   ],
-  (httpMethodType): THTTPMethods => httpMethodType
+  (httpMethodType): THTTPMethods => httpMethodType,
 );
 
 export const selectRequestName = createSelector(
   [
     (state: RootState) =>
       state.requestResponse.requestList[state.requestResponse.selectedTab!]
-        ?.name ?? "Request"
+        ?.name ?? "Request",
   ],
-  (name): string => name
+  (name): string => name,
 );
 
 export const selectIsRequestOrFolderExist = createSelector(
   [
     (state: RootState) => state.requestResponse.requestList,
-    (_, id: string | undefined) => id
+    (_, id: string | undefined) => id,
   ],
-  (requestList, id): boolean => Boolean(id ? requestList[id] : false)
+  (requestList, id): boolean => Boolean(id ? requestList[id] : false),
 );

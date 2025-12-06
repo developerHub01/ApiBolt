@@ -28,10 +28,10 @@ const VariableToken = memo(({ id, value }: VariableTokenProps) => {
         requestUrlUpdateToken({
           id,
           value: variable === value ? "" : variable,
-        })
+        }),
       );
     },
-    [dispatch, id, value]
+    [dispatch, id, value],
   );
 
   const handleDelete = () => {
@@ -39,8 +39,8 @@ const VariableToken = memo(({ id, value }: VariableTokenProps) => {
   };
 
   const isVariableExistInList = useMemo(
-    () => variableList.find((item) => item.variable === value),
-    [value, variableList]
+    () => variableList.find(item => item.variable === value),
+    [value, variableList],
   );
 
   const isExist = value && isVariableExistInList;
@@ -53,7 +53,7 @@ const VariableToken = memo(({ id, value }: VariableTokenProps) => {
         {
           "ring-green-500/60": isExist,
           "ring-red-500/60": isNotExist,
-        }
+        },
       )}
     >
       <TokenDragHandler />

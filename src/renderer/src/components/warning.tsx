@@ -12,7 +12,7 @@ const Warning = memo(({ label, className }: WarningProps) => {
     <p
       className={cn(
         "text-[13px] pt-0.5 leading-relaxed select-none",
-        className
+        className,
       )}
     >
       <InfoIcon size={14} className="inline-block mr-1" />

@@ -68,7 +68,7 @@ const SettingThemeCard = memo(
                 size="iconXs"
                 variant={"ghost"}
                 className="rounded-full"
-                onClick={(e) => e.stopPropagation()}
+                onClick={e => e.stopPropagation()}
               >
                 <LinkArrowIcon />
               </Button>
@@ -77,7 +77,7 @@ const SettingThemeCard = memo(
         </div>
       </SettingThemeCardWrapper>
     );
-  }
+  },
 );
 
 export default SettingThemeCard;

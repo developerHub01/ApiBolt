@@ -5,7 +5,7 @@ import { jsonFormatter } from "@/utils/snippet-generator/helper.utils";
 export const getBodyRawData = async ({
   rawBodyDataType,
   bodyType,
-  rawData
+  rawData,
 }: Pick<
   CodeSnippitDataInterface,
   "rawBodyDataType" | "bodyType" | "rawData"

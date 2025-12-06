@@ -22,7 +22,7 @@ const ObjectPreview = ({ data, lavel }: ObjectPreviewProps) => {
         "[&_th]:border-r [&_th]:last:border-r-0",
         {
           border: lavel === 0,
-        }
+        },
       )}
     >
       <TableBody>

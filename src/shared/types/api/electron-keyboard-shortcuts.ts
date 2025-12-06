@@ -1,20 +1,20 @@
 import {
   KeybaordShortCutInterface,
   KeybaordShortCutReceivePayloadInterface,
-  KeybaordShortCutUpdatePayloadInterface
+  KeybaordShortCutUpdatePayloadInterface,
 } from "@shared/types/keyboard-shortcut.types";
 
 export interface ElectronAPIKeyboardShortcutInterface {
   getKeyboardShortcuts(
-    projectId?: string | null
+    projectId?: string | null,
   ): Promise<KeybaordShortCutReceivePayloadInterface | null>;
   getKeyboardShortcutsById(
-    payload: Pick<KeybaordShortCutInterface, "id" | "projectId">
+    payload: Pick<KeybaordShortCutInterface, "id" | "projectId">,
   ): Promise<KeybaordShortCutInterface | null>;
   updateKeyboardShortcuts(
-    payload: KeybaordShortCutUpdatePayloadInterface
+    payload: KeybaordShortCutUpdatePayloadInterface,
   ): Promise<boolean>;
   resetKeyboardShortcuts(
-    payload: Pick<KeybaordShortCutInterface, "id" | "projectId">
+    payload: Pick<KeybaordShortCutInterface, "id" | "projectId">,
   ): Promise<KeybaordShortCutInterface | null>;
 }

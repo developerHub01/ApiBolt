@@ -21,7 +21,7 @@ const ChangeTokenType = ({ id, type }: Props) => {
       requestUrlUpdateToken({
         id,
         type: type === "env" ? "text" : "env",
-      })
+      }),
     );
   };
 

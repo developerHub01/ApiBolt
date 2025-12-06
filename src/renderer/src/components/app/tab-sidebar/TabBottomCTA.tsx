@@ -39,7 +39,7 @@ const TabBottomCTA = memo(
         </motion.span>
       </Button>
     );
-  }
+  },
 );
 
 export default TabBottomCTA;

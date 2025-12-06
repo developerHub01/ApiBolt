@@ -32,7 +32,7 @@ export const encodeApiUrl = (apiUrl: string): Array<UrlTokenInterface> => {
   const tokens: Array<UrlTokenInterface> = [
     { id: "protocol", type: "protocol", value: protocol },
     { id: "host", type: "host", value: host },
-    { id: "port", type: "port", value: port }
+    { id: "port", type: "port", value: port },
   ];
 
   let lastIndex = 0;
@@ -44,7 +44,7 @@ export const encodeApiUrl = (apiUrl: string): Array<UrlTokenInterface> => {
       tokens.push({
         id: uuidv4(),
         value: requestUri.slice(lastIndex, match.index),
-        type: "text"
+        type: "text",
       });
     }
 
@@ -52,7 +52,7 @@ export const encodeApiUrl = (apiUrl: string): Array<UrlTokenInterface> => {
     tokens.push({
       id: uuidv4(),
       value: match[1],
-      type: "env"
+      type: "env",
     });
 
     lastIndex = match.index + match[0].length;
@@ -63,7 +63,7 @@ export const encodeApiUrl = (apiUrl: string): Array<UrlTokenInterface> => {
     tokens.push({
       id: uuidv4(),
       value: requestUri.slice(lastIndex),
-      type: "text"
+      type: "text",
     });
   }
 

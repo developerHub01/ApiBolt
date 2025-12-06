@@ -9,7 +9,7 @@ interface VariableRowProps extends EnvironmentInterface {
   warning?: boolean;
   onChange: (
     key: "isCheck" | "variable" | "type" | "value",
-    value: boolean | string
+    value: boolean | string,
   ) => void;
   onDelete: () => void;
 }
@@ -31,7 +31,7 @@ const VariableRow = memo(
         className={cn(
           "group",
           "[&>td]:border-r [&>td]:last:border-r-0 [&>td>input]:outline-none [&>td>div>input]:outline-none [&>td>input]:rounded-md [&>td>div>input]:rounded-md",
-          "focus-within:bg-accent/60 duration-75 transition-colors"
+          "focus-within:bg-accent/60 duration-75 transition-colors",
         )}
       >
         <CheckCell
@@ -68,7 +68,7 @@ const VariableRow = memo(
         />
       </TableRow>
     );
-  }
+  },
 );
 
 export default VariableRow;

@@ -36,7 +36,7 @@ const SettingTypeSelector = memo(({ value = "default", onChange }: Props) => {
       </SelectTrigger>
       <SelectContent align="end">
         <SelectGroup>
-          {list.map((id) => (
+          {list.map(id => (
             <SelectItem key={id} value={id} className="capitalize">
               {id}
             </SelectItem>

@@ -22,7 +22,7 @@ interface RequestMetaDataContext {
   handleUpdate: (
     id: string,
     key: string,
-    value: string | File | boolean
+    value: string | File | boolean,
   ) => void;
   handleUpdateHiddenHeader: (keyName: string) => void;
   handleCheckToggle: ({
@@ -37,7 +37,7 @@ interface RequestMetaDataContext {
 }
 
 const RequestMetaDataContext = createContext<RequestMetaDataContext | null>(
-  null
+  null,
 );
 
 export const useRequestMetaData = () => {
@@ -45,7 +45,7 @@ export const useRequestMetaData = () => {
 
   if (!context) {
     throw new Error(
-      "useRequestMetaData must be used within a RequestMetaDataProvider."
+      "useRequestMetaData must be used within a RequestMetaDataProvider.",
     );
   }
 

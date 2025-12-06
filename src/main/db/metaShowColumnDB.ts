@@ -27,7 +27,10 @@ export const getMetaShowColumn: ElectronAPIMetaShowColumnInterface["getMetaShowC
           .select()
           .from(metaShowColumnTable)
           .where(
-            eq(metaShowColumnTable.requestOrFolderMetaId, requestOrFolderMetaId)
+            eq(
+              metaShowColumnTable.requestOrFolderMetaId,
+              requestOrFolderMetaId,
+            ),
           )
       )?.[0];
 
@@ -49,7 +52,7 @@ export const createMetaShowColumn: ElectronAPIMetaShowColumnInterface["createMet
         (
           await db.insert(metaShowColumnTable).values({
             ...payload,
-            requestOrFolderMetaId
+            requestOrFolderMetaId,
           })
         )?.rowsAffected > 0
       );
@@ -71,13 +74,16 @@ export const updateMetaShowColumn: ElectronAPIMetaShowColumnInterface["updateMet
           .select()
           .from(metaShowColumnTable)
           .where(
-            eq(metaShowColumnTable.requestOrFolderMetaId, requestOrFolderMetaId)
+            eq(
+              metaShowColumnTable.requestOrFolderMetaId,
+              requestOrFolderMetaId,
+            ),
           )
       )?.[0];
 
       if (!isExist)
         await createMetaShowColumn({
-          requestOrFolderMetaId
+          requestOrFolderMetaId,
         });
 
       return (
@@ -85,13 +91,13 @@ export const updateMetaShowColumn: ElectronAPIMetaShowColumnInterface["updateMet
           await db
             .update(metaShowColumnTable)
             .set({
-              ...payload
+              ...payload,
             })
             .where(
               eq(
                 metaShowColumnTable.requestOrFolderMetaId,
-                requestOrFolderMetaId
-              )
+                requestOrFolderMetaId,
+              ),
             )
         )?.rowsAffected > 0
       );
@@ -115,8 +121,8 @@ export const deleteMetaShowColumn: ElectronAPIMetaShowColumnInterface["deleteMet
             .where(
               eq(
                 metaShowColumnTable.requestOrFolderMetaId,
-                requestOrFolderMetaId
-              )
+                requestOrFolderMetaId,
+              ),
             )
         )?.rowsAffected > 0
       );
@@ -153,7 +159,7 @@ export const duplicateMetaShowColumn: ElectronAPIMetaShowColumnInterface["duplic
         const { id, createdAt, ...rest } = meta;
         return {
           ...rest,
-          requestOrFolderMetaId: payload[meta.requestOrFolderMetaId]
+          requestOrFolderMetaId: payload[meta.requestOrFolderMetaId],
         };
       });
 

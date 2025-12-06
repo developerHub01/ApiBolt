@@ -34,7 +34,7 @@ const ResponseStatus = memo(
         </HoverCardContent>
       </HoverCard>
     );
-  }
+  },
 );
 
 ResponseStatus.displayName = "Response status";

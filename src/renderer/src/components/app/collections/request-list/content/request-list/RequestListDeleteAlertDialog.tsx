@@ -17,14 +17,14 @@ import { deleteRequestOrFolder } from "@/context/redux/request-response/thunks/r
 const RequestListDeleteAlertDialog = memo(() => {
   const dispatch = useAppDispatch();
   const deleteFolderOrRequestId = useAppSelector(
-    (state) => state.requestResponse.deleteFolderOrRequestId
+    state => state.requestResponse.deleteFolderOrRequestId,
   );
 
   const folderOrRequestName = useAppSelector(
-    (state) =>
+    state =>
       state.requestResponse.requestList[
         state.requestResponse.deleteFolderOrRequestId
-      ]?.name ?? ""
+      ]?.name ?? "",
   );
 
   return (

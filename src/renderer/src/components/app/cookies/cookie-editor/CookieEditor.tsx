@@ -46,14 +46,14 @@ const CookieEditor = memo(
                 Object.keys(DEFAULT_COOKIE_DETAILS) as Array<
                   keyof CookieInterface
                 >
-              ).map((key) => {
+              ).map(key => {
                 const value = details[key] ?? DEFAULT_COOKIE_DETAILS[key];
                 return (
                   <TableRow
                     key={key}
                     className={cn(
                       "[&>td]:border-r [&>td]:last:border-r-0",
-                      "focus-within:bg-accent/60 hover:bg-accent/60 duration-75 transition-colors"
+                      "focus-within:bg-accent/60 hover:bg-accent/60 duration-75 transition-colors",
                     )}
                   >
                     <TableCell className="font-bold whitespace-normal wrap-break-word break-all capitalize p-3">
@@ -64,7 +64,7 @@ const CookieEditor = memo(
                         <CookieField
                           fieldKey={key as keyof CookieInterface}
                           value={value}
-                          onChange={(value) =>
+                          onChange={value =>
                             onChange({
                               key,
                               value,
@@ -84,7 +84,7 @@ const CookieEditor = memo(
         {bottomAction}
       </div>
     );
-  }
+  },
 );
 
 export default CookieEditor;

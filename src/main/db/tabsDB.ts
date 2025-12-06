@@ -29,13 +29,13 @@ export const getTabList: ElectronAPITabsInterface["getTabList"] = async () => {
 
     return {
       ...tabList,
-      openTabs: JSON.parse(tabList.openTabs) as Array<string>
+      openTabs: JSON.parse(tabList.openTabs) as Array<string>,
     };
   } catch (error) {
     console.error(error);
     return {
       openTabs: [],
-      selectedTab: null
+      selectedTab: null,
     };
   }
 };
@@ -80,7 +80,7 @@ export const updateTabList: ElectronAPITabsInterface["updateTabList"] =
       const updated = await db
         .update(tabsTable)
         .set({
-          ...dbPayload
+          ...dbPayload,
         })
         .where(eq(tabsTable.projectId, activeProjectId));
 
@@ -121,14 +121,14 @@ export const deleteTabListByProjectId: ElectronAPITabsInterface["deleteTabListBy
   };
 
 export const updateTablistBasedRequestOrFolderMetaDeletion = async (
-  deletionCandidates: Array<string> = []
+  deletionCandidates: Array<string> = [],
 ) => {
   try {
     const tabList = await getTabList();
     if (!tabList || !tabList?.openTabs?.length) return true;
 
     const openTabs = tabList.openTabs.filter(
-      tab => !deletionCandidates.includes(tab)
+      tab => !deletionCandidates.includes(tab),
     );
     const payload: Partial<TabsInterface> = { openTabs };
 

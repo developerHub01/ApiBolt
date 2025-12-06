@@ -17,7 +17,7 @@ const Setting = () => {
 
   const handleClose = useCallback(
     () => dispatch(handleChangeIsSettingOpen(false)),
-    [dispatch]
+    [dispatch],
   );
 
   return (

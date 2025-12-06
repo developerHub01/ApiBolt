@@ -98,7 +98,7 @@ const KeyboardShortcutSearch = () => {
           )}
         </div>
         <div className="flex items-center gap-1.5 p-1.5">
-          {menuList.map((item) => (
+          {menuList.map(item => (
             <ActionButton key={item.id} {...item} />
           ))}
         </div>

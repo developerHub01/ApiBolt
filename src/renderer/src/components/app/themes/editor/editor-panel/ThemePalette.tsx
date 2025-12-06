@@ -43,7 +43,7 @@ const ThemePalette = memo(() => {
               })}
             />
           );
-        }
+        },
       )}
     </ThemePaletteWrapper>
   );

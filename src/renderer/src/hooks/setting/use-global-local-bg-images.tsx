@@ -90,10 +90,10 @@ const useGlobalLocalBgImages = ({
         updateSettingsBackgroundImages({
           method,
           type: activeTab,
-        })
+        }),
       );
     },
-    [activeTab, dispatch, settingType]
+    [activeTab, dispatch, settingType],
   );
 
   useEffect(() => {

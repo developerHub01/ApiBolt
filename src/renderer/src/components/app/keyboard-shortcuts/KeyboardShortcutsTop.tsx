@@ -54,7 +54,7 @@ const KeyboardShortcutsTop = memo(() => {
             "w-full h-full grid gap-2 absolute top-0 left-0 rounded-xl pointer-events-none z-1",
             {
               "grid-cols-2": activeProjectId,
-            }
+            },
           )}
         >
           <motion.div

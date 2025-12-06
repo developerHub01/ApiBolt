@@ -55,7 +55,7 @@ const MetaTableCell = memo(
 
     const handleUploadFile = useCallback(
       () => dispatch(updateBodyFormDataFile(id)),
-      [dispatch, id]
+      [dispatch, id],
     );
 
     const handleDeleteFormFile = useCallback(
@@ -64,9 +64,9 @@ const MetaTableCell = memo(
           deleteBodyFormDataFile({
             id,
             index,
-          })
+          }),
         ),
-      [dispatch, id]
+      [dispatch, id],
     );
 
     return (
@@ -130,7 +130,7 @@ const MetaTableCell = memo(
         </div>
       </TableCell>
     );
-  }
+  },
 );
 MetaTableCell.displayName = "Meta table cell";
 

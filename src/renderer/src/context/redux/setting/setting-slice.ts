@@ -2,7 +2,7 @@ import { DEFAULT_RAW_SETTINGS_VALUES } from "@/constant/settings.constant";
 import type {
   ProjectSettingsInterface,
   SettingsInterface,
-  SettingsTotalInterface
+  SettingsTotalInterface,
 } from "@shared/types/setting.types";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
@@ -16,7 +16,7 @@ export interface SettingStateInterface {
 const initialState: SettingStateInterface = {
   isSettingOpen: false,
   globalSetting: DEFAULT_RAW_SETTINGS_VALUES,
-  settings: null
+  settings: null,
 };
 
 export const settingSlice = createSlice({
@@ -26,7 +26,7 @@ export const settingSlice = createSlice({
   reducers: {
     handleChangeIsSettingOpen: (
       state,
-      action: PayloadAction<boolean | undefined>
+      action: PayloadAction<boolean | undefined>,
     ) => {
       if (state.isSettingOpen === action.payload) return;
 
@@ -34,7 +34,7 @@ export const settingSlice = createSlice({
     },
     handleLoadSettings: (
       state,
-      action: PayloadAction<SettingsTotalInterface>
+      action: PayloadAction<SettingsTotalInterface>,
     ) => {
       const { settings, globalSetting } = action.payload;
 
@@ -46,28 +46,28 @@ export const settingSlice = createSlice({
       action: PayloadAction<{
         payload: Partial<SettingsInterface | ProjectSettingsInterface>;
         type: "global" | "project";
-      }>
+      }>,
     ) => {
       const { payload, type } = action.payload;
 
       if (type === "global")
         state.globalSetting = {
           ...state.globalSetting,
-          ...(payload as SettingsInterface)
+          ...(payload as SettingsInterface),
         };
       else
         state.settings = {
           ...(state.settings ?? {}),
-          ...payload
+          ...payload,
         };
-    }
-  }
+    },
+  },
 });
 
 export const {
   handleChangeIsSettingOpen,
   handleLoadSettings,
-  handleUpdateSettings
+  handleUpdateSettings,
 } = settingSlice.actions;
 
 export default settingSlice.reducer;

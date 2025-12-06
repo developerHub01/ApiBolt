@@ -3,7 +3,7 @@ import type {
   BasicAuthInterface,
   JWTBearerAuthInterface,
   TAuthType,
-  TBearerToken
+  TBearerToken,
 } from "@shared/types/authorization.types";
 import type { CookieInterface } from "@shared/types/cookies.types";
 
@@ -59,7 +59,7 @@ export interface RequestListInterface {
 }
 
 export interface FlexibleRequestListInterface<
-  Extra extends Record<string, unknown> = Record<string, unknown>
+  Extra extends Record<string, unknown> = Record<string, unknown>,
 > {
   [key: string]: RequestListItemInterface & Extra;
 }

@@ -1,12 +1,12 @@
 import { requestDefaultCodeSnippit } from "@/constant/code-snippit.constant";
 import type {
   CodeSnippitDataInterface,
-  TRequestCodeType
+  TRequestCodeType,
 } from "@shared/types/code-snippit.types";
 import {
   defaultBinaryData,
   generateMaskedAndRealCode,
-  getHeadersList
+  getHeadersList,
 } from "@/utils/snippet-generator/helper.utils";
 import { getBodyRawData } from "@/utils/snippet-generator/r/helper.utils";
 
@@ -20,7 +20,7 @@ export const generateRHttrCode = async ({
   rawBodyDataType,
   bodyType,
   binaryData,
-  rawData
+  rawData,
 }: CodeSnippitDataInterface) => {
   const startString = `library(httr)\n
 ${method.toUpperCase()}(\n`;
@@ -58,7 +58,7 @@ ${formData.map(({ key, value, type }) => `\t\t${key} = ${type === "text" ? JSON.
     const data = await getBodyRawData({
       rawBodyDataType,
       bodyType,
-      rawData
+      rawData,
     });
 
     const code =
@@ -78,7 +78,7 @@ ${formData.map(({ key, value, type }) => `\t\t${key} = ${type === "text" ? JSON.
     headers,
     authorization,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
 
   if (
@@ -88,7 +88,7 @@ ${formData.map(({ key, value, type }) => `\t\t${key} = ${type === "text" ? JSON.
   ) {
     headersList.push({
       key: "Content-Type",
-      value: "application/octet-stream"
+      value: "application/octet-stream",
     });
   }
 
@@ -113,7 +113,7 @@ export const generateRRcurlCode = async ({
   rawBodyDataType,
   bodyType,
   binaryData,
-  rawData
+  rawData,
 }: CodeSnippitDataInterface) => {
   const startString = `library(RCurl)\n
 curlPerform(\n`;
@@ -123,7 +123,7 @@ curlPerform(\n`;
 
   const snippitList: Array<string> = [
     `\turl = ${JSON.stringify(url)}`,
-    `\tcustomrequest = "${method.toUpperCase()}"`
+    `\tcustomrequest = "${method.toUpperCase()}"`,
   ];
 
   if (method.toLowerCase() !== "get") snippitList.push(`\tpostfields = ""`);
@@ -132,7 +132,7 @@ curlPerform(\n`;
     headers,
     authorization,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
 
   if (
@@ -142,7 +142,7 @@ curlPerform(\n`;
   ) {
     headersList.push({
       key: "Content-Type",
-      value: "application/octet-stream"
+      value: "application/octet-stream",
     });
   }
 
@@ -160,7 +160,7 @@ curlPerform(\n`;
     const data = await getBodyRawData({
       rawBodyDataType,
       bodyType,
-      rawData
+      rawData,
     });
 
     const code =
@@ -178,7 +178,7 @@ curlPerform(\n`;
     snippitList.push(`\thttpheader = c(
 ${headersList
   .map(
-    ({ key, value }) => `\t\t${JSON.stringify(key)} = ${JSON.stringify(value)}`
+    ({ key, value }) => `\t\t${JSON.stringify(key)} = ${JSON.stringify(value)}`,
   )
   .join(",\n")}\n\t)`);
   }
@@ -203,7 +203,7 @@ ${formData.map(({ key, value, type }) => `\t\t\t${JSON.stringify(key)} = ${type 
 
 export const generateRCode = async (
   type: TRequestCodeType,
-  data: CodeSnippitDataInterface
+  data: CodeSnippitDataInterface,
 ) => {
   switch (type) {
     case "r-httr":

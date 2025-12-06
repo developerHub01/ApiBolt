@@ -39,7 +39,7 @@ export const loadRequestBodyRaw = createAsyncThunk<
     } catch (error) {
       console.error(error);
     }
-  }
+  },
 );
 export const updateRequestBodyRaw = createAsyncThunk<
   void,
@@ -62,9 +62,9 @@ export const updateRequestBodyRaw = createAsyncThunk<
         ...payload,
         ...(selectedTab
           ? {
-              requestOrFolderMetaId: selectedTab
+              requestOrFolderMetaId: selectedTab,
             }
-          : {})
+          : {}),
       });
 
       if (response) dispatch(loadRequestBodyRaw());
@@ -72,7 +72,7 @@ export const updateRequestBodyRaw = createAsyncThunk<
     } catch (error) {
       console.error(error);
     }
-  }
+  },
 );
 
 export const duplicateBodyRawByOldNewIds = createAsyncThunk<

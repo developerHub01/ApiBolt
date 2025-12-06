@@ -29,13 +29,13 @@ const Empty: React.FC<EmptyProps> = ({
   animationData: animData = animationData, // default local animation
   showFallback = false,
   centered = true,
-  innerClassName = ""
+  innerClassName = "",
 }) => {
   return (
     <BorderedWrapper
       className={cn(
         centered && "flex flex-col justify-center items-center text-center",
-        className
+        className,
       )}
     >
       {icon && <div className="mb-2">{icon}</div>}
@@ -45,7 +45,7 @@ const Empty: React.FC<EmptyProps> = ({
           <AnimationWrapper
             className={cn(
               "w-32 mb-2 flex justify-center items-center [&_canvas]:object-contain!",
-              fallbackClassName
+              fallbackClassName,
             )}
           >
             <Lottie animationData={animData} loop autoplay width="100%" />
@@ -56,7 +56,7 @@ const Empty: React.FC<EmptyProps> = ({
       <div
         className={cn(
           "mx-auto w-full max-w-md flex flex-col gap-2",
-          innerClassName
+          innerClassName,
         )}
       >
         {label && <h4 className="font-medium">{label}</h4>}

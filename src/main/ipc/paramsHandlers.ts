@@ -7,7 +7,7 @@ import {
   duplicateParams,
   getParams,
   replaceParams,
-  updateParams
+  updateParams,
 } from "@/main/db/paramsDB.js";
 import { ElectronAPIParamsInterface } from "@shared/types/api/electron-params";
 
@@ -18,7 +18,7 @@ export const paramsHandlers = () => {
       _,
       ...rest: Parameters<ElectronAPIParamsInterface["getParams"]>
     ): ReturnType<ElectronAPIParamsInterface["getParams"]> =>
-      await getParams(...rest)
+      await getParams(...rest),
   );
   ipcMain.handle(
     "deleteParams",
@@ -26,7 +26,7 @@ export const paramsHandlers = () => {
       _,
       ...rest: Parameters<ElectronAPIParamsInterface["deleteParams"]>
     ): ReturnType<ElectronAPIParamsInterface["deleteParams"]> =>
-      await deleteParams(...rest)
+      await deleteParams(...rest),
   );
   ipcMain.handle(
     "deleteParamsByRequestMetaId",
@@ -36,7 +36,7 @@ export const paramsHandlers = () => {
         ElectronAPIParamsInterface["deleteParamsByRequestMetaId"]
       >
     ): ReturnType<ElectronAPIParamsInterface["deleteParamsByRequestMetaId"]> =>
-      await deleteParamsByRequestMetaId(...rest)
+      await deleteParamsByRequestMetaId(...rest),
   );
   ipcMain.handle(
     "createParams",
@@ -44,7 +44,7 @@ export const paramsHandlers = () => {
       _,
       ...rest: Parameters<ElectronAPIParamsInterface["createParams"]>
     ): ReturnType<ElectronAPIParamsInterface["createParams"]> =>
-      await createParams(...rest)
+      await createParams(...rest),
   );
   ipcMain.handle(
     "updateParams",
@@ -52,7 +52,7 @@ export const paramsHandlers = () => {
       _,
       ...rest: Parameters<ElectronAPIParamsInterface["updateParams"]>
     ): ReturnType<ElectronAPIParamsInterface["updateParams"]> =>
-      await updateParams(...rest)
+      await updateParams(...rest),
   );
   ipcMain.handle(
     "replaceParams",
@@ -60,7 +60,7 @@ export const paramsHandlers = () => {
       _,
       ...rest: Parameters<ElectronAPIParamsInterface["replaceParams"]>
     ): ReturnType<ElectronAPIParamsInterface["replaceParams"]> =>
-      await replaceParams(...rest)
+      await replaceParams(...rest),
   );
   ipcMain.handle(
     "checkAllParamsByRequestMetaId",
@@ -71,7 +71,7 @@ export const paramsHandlers = () => {
       >
     ): ReturnType<
       ElectronAPIParamsInterface["checkAllParamsByRequestMetaId"]
-    > => await checkAllParamsByRequestMetaId(...rest)
+    > => await checkAllParamsByRequestMetaId(...rest),
   );
   ipcMain.handle(
     "duplicateParams",
@@ -79,6 +79,6 @@ export const paramsHandlers = () => {
       _,
       ...rest: Parameters<ElectronAPIParamsInterface["duplicateParams"]>
     ): ReturnType<ElectronAPIParamsInterface["duplicateParams"]> =>
-      await duplicateParams(...rest)
+      await duplicateParams(...rest),
   );
 };

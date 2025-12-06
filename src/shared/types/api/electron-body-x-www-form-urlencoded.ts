@@ -1,32 +1,32 @@
 import {
   FormDataPayloadInterface,
   ParamHeaderBuildPayloadInterface,
-  ParamHeaderPayloadInterface
+  ParamHeaderPayloadInterface,
 } from "@shared/types/request-response.types";
 
 export interface ElectronAPIBodyXWWWFormUrlencodedInterface {
   getBodyXWWWFormUrlencoded(
-    requestOrFolderMetaId?: string | null
+    requestOrFolderMetaId?: string | null,
   ): Promise<Array<ParamHeaderPayloadInterface>>;
   deleteBodyXWWWFormUrlencoded(formId: string): Promise<boolean>;
   deleteBodyXWWWFormUrlencodedByRequestMetaId(
-    requestOrFolderMetaId?: string | null
+    requestOrFolderMetaId?: string | null,
   ): Promise<boolean>;
   createBodyXWWWFormUrlencoded(
-    payload: Partial<ParamHeaderBuildPayloadInterface>
+    payload: Partial<ParamHeaderBuildPayloadInterface>,
   ): Promise<boolean>;
   updateBodyXWWWFormUrlencoded(
     formId: string,
-    payload: Partial<ParamHeaderBuildPayloadInterface>
+    payload: Partial<ParamHeaderBuildPayloadInterface>,
   ): Promise<boolean>;
   replaceBodyXWWWFormUrlencoded(
     requestOrFolderMetaId: string,
-    payload?: Array<Partial<FormDataPayloadInterface>>
+    payload?: Array<Partial<FormDataPayloadInterface>>,
   ): Promise<boolean>;
   checkAllBodyXWWWFormUrlencodedByRequestMetaId(
-    requestOrFolderMetaId?: string | null
+    requestOrFolderMetaId?: string | null,
   ): Promise<boolean>;
   duplicateBodyXWWWFormUrlencoded(
-    payload: Record<string, string>
+    payload: Record<string, string>,
   ): Promise<boolean>;
 }

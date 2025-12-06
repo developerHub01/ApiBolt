@@ -11,7 +11,7 @@ export const useRequestHeader = () => {
 
   if (!context) {
     throw new Error(
-      "useRequestHeader must be used within a RequestHeaderProvider."
+      "useRequestHeader must be used within a RequestHeaderProvider.",
     );
   }
 

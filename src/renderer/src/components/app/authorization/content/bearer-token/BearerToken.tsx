@@ -19,12 +19,12 @@ const BearerToken = memo(({ id, authData, disabled = false }: Props) => {
       dispatch(
         updateAuthorization({
           payload: {
-            bearerToken: value.trim()
-          }
-        })
+            bearerToken: value.trim(),
+          },
+        }),
       );
     },
-    [dispatch]
+    [dispatch],
   );
 
   return (

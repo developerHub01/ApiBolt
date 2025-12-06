@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { handleLoadEnvironmentsList } from "@/context/redux/environments/environments-slice";
 import type {
   EnvironmentInterface,
-  EnvironmentPayloadInterface
+  EnvironmentPayloadInterface,
 } from "@shared/types/environment.types";
 import type { ElectronResponseInterface } from "@shared/types";
 
@@ -26,11 +26,11 @@ export const loadEnvironmentsList = createAsyncThunk<
       (acc, curr) => {
         acc[curr.id] = {
           ...curr,
-          isCheck: Boolean(Number(curr.isCheck))
+          isCheck: Boolean(Number(curr.isCheck)),
         };
         return acc;
       },
-      {} as Record<string, EnvironmentInterface>
+      {} as Record<string, EnvironmentInterface>,
     );
 
     dispatch(handleLoadEnvironmentsList(list));
@@ -50,10 +50,10 @@ export const createEnvironments = createAsyncThunk<
 >("environments/createEnvironments", async (_, { dispatch }) => {
   try {
     const payload = {
-      id: uuidv4()
+      id: uuidv4(),
     };
     const response = await window.electronAPIEnvironments.createEnvironments({
-      ...payload
+      ...payload,
     });
 
     if (response) dispatch(loadEnvironmentsList());
@@ -78,7 +78,7 @@ export const updateEnvironments = createAsyncThunk<
   try {
     const response = await window.electronAPIEnvironments.updateEnvironments({
       id,
-      ...payload
+      ...payload,
     });
 
     if (response) dispatch(loadEnvironmentsList());
@@ -128,7 +128,7 @@ export const exportEnvironments = createAsyncThunk<
     console.error(error);
     return {
       success: false,
-      message: "Something went wrong while exporting list."
+      message: "Something went wrong while exporting list.",
     };
   }
 });
@@ -151,7 +151,7 @@ export const importEnvironments = createAsyncThunk<
     console.error(error);
     return {
       success: false,
-      message: "Something went wrong while exporting list."
+      message: "Something went wrong while exporting list.",
     };
   }
 });

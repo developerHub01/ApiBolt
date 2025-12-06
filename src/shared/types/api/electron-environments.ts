@@ -1,7 +1,7 @@
 import { ElectronResponseInterface } from "@shared/types";
 import {
   EnvironmentInterface,
-  EnvironmentPayloadInterface
+  EnvironmentPayloadInterface,
 } from "@shared/types/environment.types";
 
 export interface ElectronAPIEnvironmentsInterface {
@@ -9,11 +9,11 @@ export interface ElectronAPIEnvironmentsInterface {
   getEnvironments(id?: string | null): Promise<Array<EnvironmentInterface>>;
   createEnvironments(
     payload: Partial<EnvironmentPayloadInterface> &
-      Required<Pick<EnvironmentPayloadInterface, "id">>
+      Required<Pick<EnvironmentPayloadInterface, "id">>,
   ): Promise<boolean>;
   updateEnvironments(
     payload: Partial<EnvironmentPayloadInterface> &
-      Required<Pick<EnvironmentPayloadInterface, "id">>
+      Required<Pick<EnvironmentPayloadInterface, "id">>,
   ): Promise<boolean>;
   deleteAllEnvironments(): Promise<boolean>;
   deleteEnvironments(id: string): Promise<boolean>;

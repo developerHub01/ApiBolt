@@ -7,7 +7,7 @@ export interface RequestResponseState {
 
 // Define the initial state using that type
 const initialState: RequestResponseState = {
-  environmentsList: {}
+  environmentsList: {},
 };
 
 export const requesEnvironmentsSlice = createSlice({
@@ -18,12 +18,12 @@ export const requesEnvironmentsSlice = createSlice({
     /* =============== Environment reducers start ============= */
     handleLoadEnvironmentsList: (
       state,
-      action: PayloadAction<Record<string, EnvironmentInterface>>
+      action: PayloadAction<Record<string, EnvironmentInterface>>,
     ) => {
       state.environmentsList = action.payload;
-    }
+    },
     /* =============== Environment reducers end ============= */
-  }
+  },
 });
 
 export const { handleLoadEnvironmentsList } = requesEnvironmentsSlice.actions;

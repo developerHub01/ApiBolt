@@ -25,7 +25,7 @@ const MetaDataWrapper = memo(
         <Metadata>{children}</Metadata>
       </>
     );
-  }
+  },
 );
 
 interface MetaDataProps {

@@ -13,7 +13,7 @@ const MetaTableCheckAll = memo(
     const { data, type, handleCheckAll } = useRequestMetaData();
 
     const isAllChecked = useMemo(() => {
-      return data?.length ? data.every((item) => item.isCheck) : false;
+      return data?.length ? data.every(item => item.isCheck) : false;
     }, [data]);
 
     if (!type || !data || !data.length) return null;
@@ -28,7 +28,7 @@ const MetaTableCheckAll = memo(
         />
       </div>
     );
-  }
+  },
 );
 MetaTableCheckAll.displayName = "Meta table check all";
 

@@ -24,7 +24,7 @@ const AddNewData = memo(
         {label}
       </Button>
     );
-  }
+  },
 );
 AddNewData.displayName = "Add New Data";
 

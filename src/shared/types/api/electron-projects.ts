@@ -1,7 +1,7 @@
 import { ElectronResponseInterface } from "@shared/types";
 import {
   CreateProjectPayloadInterface,
-  ProjectInterface
+  ProjectInterface,
 } from "@shared/types/project.types";
 
 export interface ElectronAPIProjectsInterface {
@@ -9,7 +9,7 @@ export interface ElectronAPIProjectsInterface {
   createProjects(payload: CreateProjectPayloadInterface): Promise<boolean>;
   updateProjects(
     id: string,
-    payload: Omit<ProjectInterface, "id">
+    payload: Omit<ProjectInterface, "id">,
   ): Promise<boolean>;
   deleteProjects(id: string): Promise<boolean>;
   changeActiveProject(id?: string | null): Promise<boolean>;

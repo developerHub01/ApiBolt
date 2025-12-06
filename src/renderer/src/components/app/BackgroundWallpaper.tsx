@@ -55,7 +55,7 @@ const BackgroundImageSlider = memo(
       if (imagesLength === 0) return;
 
       const interval = setInterval(() => {
-        setCurrentIndex((prev) => (prev + 1) % imagesLength);
+        setCurrentIndex(prev => (prev + 1) % imagesLength);
       }, slideInterval);
 
       return () => clearInterval(interval);
@@ -78,7 +78,7 @@ const BackgroundImageSlider = memo(
         ))}
       </>
     );
-  }
+  },
 );
 
 export default BackgroundWallpaper;

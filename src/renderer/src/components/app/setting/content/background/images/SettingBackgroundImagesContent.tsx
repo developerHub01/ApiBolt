@@ -28,7 +28,7 @@ const SettingBackgroundImagesContent = memo(
               <motion.div
                 layout
                 className={cn("h-90 grid grid-cols-2 gap-4 overflow-hidden", {
-                  "h-80": height === "short"
+                  "h-80": height === "short",
                 })}
               >
                 {/* LEFT GRID */}
@@ -37,7 +37,7 @@ const SettingBackgroundImagesContent = memo(
                   selectedIndex={selectedBackgroundImageIndex}
                   backgroundList={backgroundList}
                   className={cn({
-                    "h-80": height === "short"
+                    "h-80": height === "short",
                   })}
                 />
                 {/* RIGHT PREVIEW */}
@@ -45,7 +45,7 @@ const SettingBackgroundImagesContent = memo(
                   selectedIndex={selectedBackgroundImageIndex}
                   backgroundList={backgroundList}
                   className={cn({
-                    "h-80": height === "short"
+                    "h-80": height === "short",
                   })}
                 />
               </motion.div>
@@ -63,7 +63,7 @@ const SettingBackgroundImagesContent = memo(
         )}
       </AnimatePresence>
     );
-  }
+  },
 );
 
 export default SettingBackgroundImagesContent;

@@ -1,7 +1,7 @@
 import { INITIAL_URL_TOKENS_VALUE } from "@/constant/request-url.constant";
 import type {
   TAPIUrlTokenType,
-  UrlTokenInterface
+  UrlTokenInterface,
 } from "@shared/types/request-url.types";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
@@ -12,7 +12,7 @@ export interface RequestUrlStateInterface {
 
 // Define the initial state using that type
 const initialState: RequestUrlStateInterface = {
-  tokens: {}
+  tokens: {},
 };
 
 export const requestUrlSlice = createSlice({
@@ -25,7 +25,7 @@ export const requestUrlSlice = createSlice({
       action: PayloadAction<{
         tokens: Array<UrlTokenInterface>;
         selectedTab: string;
-      }>
+      }>,
     ) => {
       const { selectedTab, tokens } = action.payload;
 
@@ -41,7 +41,7 @@ export const requestUrlSlice = createSlice({
         type: TAPIUrlTokenType;
         preTokenId: string;
         selectedTab: string;
-      }>
+      }>,
     ) => {
       const { selectedTab, type, preTokenId = "port" } = action.payload;
 
@@ -61,7 +61,7 @@ export const requestUrlSlice = createSlice({
       action: PayloadAction<
         Partial<UrlTokenInterface> &
           Pick<UrlTokenInterface, "id"> & { selectedTab: string }
-      >
+      >,
     ) => {
       const { selectedTab, id, ...payload } = action.payload;
 
@@ -69,7 +69,7 @@ export const requestUrlSlice = createSlice({
         state.tokens[selectedTab] = [...INITIAL_URL_TOKENS_VALUE];
 
       const index = state.tokens[selectedTab].findIndex(
-        token => token.id === id
+        token => token.id === id,
       );
       if (index < 0) return;
 
@@ -91,7 +91,7 @@ export const requestUrlSlice = createSlice({
 
       state.tokens[selectedTab][index] = {
         ...(state.tokens[selectedTab][index] ?? {}),
-        ...payload
+        ...payload,
       };
     },
     handleRequestUrlDeleteToken: (
@@ -99,7 +99,7 @@ export const requestUrlSlice = createSlice({
       action: PayloadAction<{
         id: string;
         selectedTab: string;
-      }>
+      }>,
     ) => {
       const { selectedTab, id } = action.payload;
 
@@ -110,10 +110,10 @@ export const requestUrlSlice = createSlice({
         return;
 
       state.tokens[selectedTab] = state.tokens[selectedTab].filter(
-        item => item.id !== id
+        item => item.id !== id,
       );
-    }
-  }
+    },
+  },
 });
 
 export const {
@@ -121,7 +121,7 @@ export const {
   handleRequestUrlClearTokens,
   handleRequestUrlAddToken,
   handleRequestUrlUpdateToken,
-  handleRequestUrlDeleteToken
+  handleRequestUrlDeleteToken,
 } = requestUrlSlice.actions;
 
 export default requestUrlSlice.reducer;

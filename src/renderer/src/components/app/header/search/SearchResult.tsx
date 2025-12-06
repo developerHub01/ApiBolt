@@ -27,14 +27,14 @@ const SearchResult = memo(
               {...data}
               selectedTab={selectedTab}
               className={cn({
-                "border-0": index + 1 === list.length
+                "border-0": index + 1 === list.length,
               })}
             />
           ))}
         </div>
       </ScrollArea>
     );
-  }
+  },
 );
 
 SearchResult.displayName = "SearchResult";

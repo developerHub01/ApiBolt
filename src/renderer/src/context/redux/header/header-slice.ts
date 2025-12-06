@@ -21,7 +21,7 @@ export const headerSlice = createSlice({
     },
     handleChangeSearchTerm: (
       state,
-      action: PayloadAction<string | undefined>
+      action: PayloadAction<string | undefined>,
     ) => {
       state.searchTerm = action.payload ?? "";
     },

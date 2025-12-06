@@ -1,12 +1,12 @@
 import type {
   CodeSnippitDataInterface,
-  TRequestCodeType
+  TRequestCodeType,
 } from "@shared/types/code-snippit.types";
 import {
   defaultBinaryData,
   generateMaskedAndRealCode,
   getBodyType,
-  getHeadersList
+  getHeadersList,
 } from "@/utils/snippet-generator/helper.utils";
 import { requestDefaultCodeSnippit } from "@/constant/code-snippit.constant";
 import mime from "mime";
@@ -21,17 +21,17 @@ export const generateJavaOkhttpCode = async ({
   rawBodyDataType,
   bodyType,
   binaryData,
-  rawData
+  rawData,
 }: CodeSnippitDataInterface) => {
   const headersList = getHeadersList({
     headers,
     authorization,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
   const bodyTypeString = getBodyType({
     bodyType,
-    rawBodyDataType
+    rawBodyDataType,
   });
 
   const importString = "";
@@ -59,7 +59,7 @@ export const generateJavaOkhttpCode = async ({
         .filter(entry => entry.type === "text")
         .map(
           ({ key, value }) =>
-            `\t\tform.addFormDataPart(${JSON.stringify(key)}, ${JSON.stringify(value)});`
+            `\t\tform.addFormDataPart(${JSON.stringify(key)}, ${JSON.stringify(value)});`,
         )
         .join("\n")}\n`;
     }
@@ -69,7 +69,7 @@ export const generateJavaOkhttpCode = async ({
         .filter(entry => entry.type === "file")
         .map(
           ({ key, value }) =>
-            `\t\tform.addFormDataPart(${JSON.stringify(key)}, ${JSON.stringify(value)}, \n\t\t\tRequestBody.create(new File(${JSON.stringify(value)}), MediaType.parse(${JSON.stringify(mime.getType(value))})));`
+            `\t\tform.addFormDataPart(${JSON.stringify(key)}, ${JSON.stringify(value)}, \n\t\t\tRequestBody.create(new File(${JSON.stringify(value)}), MediaType.parse(${JSON.stringify(mime.getType(value))})));`,
         )
         .join("\n")}\n`;
     }
@@ -132,7 +132,7 @@ export const generateJavaUnirestCode = async ({
   rawBodyDataType,
   bodyType,
   binaryData,
-  rawData
+  rawData,
 }: CodeSnippitDataInterface) => {
   const startString = `import kong.unirest.*;
 import java.nio.file.*;
@@ -145,7 +145,7 @@ public class Main {
     headers,
     authorization,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
 
   /* if binary type and not get method and not have content type then add content type manually */
@@ -156,7 +156,7 @@ public class Main {
   ) {
     headersList.push({
       key: "Content-Type",
-      value: "application/octet-stream"
+      value: "application/octet-stream",
     });
   }
 
@@ -210,7 +210,7 @@ export const generateJavaHttpURLConnectionCode = async ({
   rawBodyDataType,
   bodyType,
   binaryData,
-  rawData
+  rawData,
 }: CodeSnippitDataInterface) => {
   const startString = `public class Main {
 \tpublic static void main(String[] args) throws IOException {
@@ -234,7 +234,7 @@ export const generateJavaHttpURLConnectionCode = async ({
     headers,
     authorization,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
 
   /* if binary type and not get method and not have content type then add content type manually */
@@ -245,7 +245,7 @@ export const generateJavaHttpURLConnectionCode = async ({
   ) {
     headersList.push({
       key: "Content-Type",
-      value: "application/octet-stream"
+      value: "application/octet-stream",
     });
   }
 
@@ -266,13 +266,13 @@ export const generateJavaHttpURLConnectionCode = async ({
           .map(
             (
               { key, value },
-              index
+              index,
             ) => `\t\t\t// ===== Text Field ${index + 1} =====
 \t\t\tString key${index + 1} = ${JSON.stringify(key)};
 \t\t\tString value${index + 1} = ${JSON.stringify(value)};
 \t\t\tos.write(("--" + boundary + "\\r\\n").getBytes());
 \t\t\tos.write(("Content-Disposition: form-data; name=\\"" + key${index + 1} + "\\"\\r\\n\\r\\n").getBytes());
-\t\t\tos.write((value${index + 1} + "\\r\\n").getBytes());`
+\t\t\tos.write((value${index + 1} + "\\r\\n").getBytes());`,
           )
           .join("\n\n")}\n\n`
       : "";
@@ -287,7 +287,7 @@ export const generateJavaHttpURLConnectionCode = async ({
 \t\t\tos.write(("Content-Disposition: form-data; name=\\"${key}\\"; filename=\\"" + file${index + 1}.getName() + "\\"\\r\\n").getBytes());
 \t\t\tos.write(("Content-Type: " + Files.probeContentType(file${index + 1}.toPath()) + "\\r\\n\\r\\n").getBytes());
 \t\t\tFiles.copy(file${index + 1}.toPath(), os);
-\t\t\tos.write("\\r\\n".getBytes());`
+\t\t\tos.write("\\r\\n".getBytes());`,
           )
           .join("\n\n")}\n`
       : "";
@@ -349,7 +349,7 @@ export const generateJavaApacheHttpClientCode = async ({
   rawBodyDataType,
   bodyType,
   binaryData,
-  rawData
+  rawData,
 }: CodeSnippitDataInterface) => {
   const startString = `public class Main {
 \tpublic static void main(String[] args) throws Exception {
@@ -370,7 +370,7 @@ export const generateJavaApacheHttpClientCode = async ({
     headers,
     authorization,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
 
   /* if binary type and not get method and not have content type then add content type manually */
@@ -381,7 +381,7 @@ export const generateJavaApacheHttpClientCode = async ({
   ) {
     headersList.push({
       key: "Content-Type",
-      value: "application/octet-stream"
+      value: "application/octet-stream",
     });
   }
 
@@ -427,7 +427,7 @@ export const generateJavaApacheHttpClientCode = async ({
 
 export const generateJavaCode = async (
   type: TRequestCodeType,
-  data: CodeSnippitDataInterface
+  data: CodeSnippitDataInterface,
 ) => {
   switch (type) {
     case "java-okhttp":

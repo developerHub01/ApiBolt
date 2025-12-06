@@ -13,7 +13,7 @@ const CheckCell = memo(({ id, value = true, onChange }: CheckCellProps) => {
     (value: boolean) => {
       onChange(value);
     },
-    [onChange]
+    [onChange],
   );
 
   return (

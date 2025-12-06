@@ -1,12 +1,12 @@
 import { memo, useEffect, useRef, type CSSProperties } from "react";
 import type {
   ImperativePanelGroupHandle,
-  ImperativePanelHandle
+  ImperativePanelHandle,
 } from "react-resizable-panels";
 import {
   ResizableHandle,
   ResizablePanel,
-  ResizablePanelGroup
+  ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { cn } from "@/lib/utils";
 import useIsSmallDevice from "@/hooks/use-is-small-device";
@@ -29,7 +29,7 @@ const ApiBoltResizableWrapper = memo(
         direction="horizontal"
         className="w-full h-full md:min-w-[450px] relative flex-1"
         style={{
-          height: "auto"
+          height: "auto",
         }}
         ref={panelGroupRef}
       >
@@ -40,7 +40,7 @@ const ApiBoltResizableWrapper = memo(
         </ResizablePanel>
       </ResizablePanelGroup>
     );
-  }
+  },
 );
 
 interface ApiBoltResizableLeftPanelProps {
@@ -61,7 +61,7 @@ const ApiBoltResizableLeftPanel = memo(
     style = {},
     defaultSize = 30,
     minSize = 20,
-    maxSize = 50
+    maxSize = 50,
   }: ApiBoltResizableLeftPanelProps) => {
     const isSmallDevice = useIsSmallDevice(1100);
     const resizablePanelRef = useRef<ImperativePanelHandle>(null);
@@ -96,14 +96,14 @@ const ApiBoltResizableLeftPanel = memo(
         })}
         style={{
           maxWidth: "50vw",
-          ...style
+          ...style,
         }}
         ref={resizablePanelRef}
       >
         {isSmallDevice || children}
       </ResizablePanel>
     );
-  }
+  },
 );
 
 interface ApiBoltResizableLeftPanelSmallDeviceWrapperProps {
@@ -116,7 +116,7 @@ const ApiBoltResizableLeftPanelSmallDeviceWrapper = memo(
   ({
     isCollapsed,
     handleCollapse,
-    children
+    children,
   }: ApiBoltResizableLeftPanelSmallDeviceWrapperProps) => {
     const layoutTypes: TLayoutSetting = useCheckApplyingLayoutDirection();
 
@@ -126,7 +126,7 @@ const ApiBoltResizableLeftPanelSmallDeviceWrapper = memo(
         onClose={handleCollapse}
         className={cn("p-0 justify-start", {
           "justify-start": layoutTypes === "ltr",
-          "justify-end": layoutTypes === "rtl"
+          "justify-end": layoutTypes === "rtl",
         })}
       >
         <motion.div
@@ -134,39 +134,39 @@ const ApiBoltResizableLeftPanelSmallDeviceWrapper = memo(
             "w-full backdrop-blur-lg h-full border-r-2 bg-background/70",
             {
               "border-r-2": layoutTypes === "ltr",
-              "border-l-2": layoutTypes === "rtl"
-            }
+              "border-l-2": layoutTypes === "rtl",
+            },
           )}
           onClick={e => e.stopPropagation()}
           style={{
-            maxWidth: "60vw"
+            maxWidth: "60vw",
           }}
           initial={{
             opacity: 0,
             x: layoutTypes === "ltr" ? -100 : 100,
             transition: {
-              delay: 0.2
-            }
+              delay: 0.2,
+            },
           }}
           animate={{
             opacity: 1,
-            x: 0
+            x: 0,
           }}
           exit={{
             opacity: 0,
-            x: layoutTypes === "ltr" ? -100 : 100
+            x: layoutTypes === "ltr" ? -100 : 100,
           }}
           transition={{
             duration: 0.5,
             type: "spring",
-            ease: "anticipate"
+            ease: "anticipate",
           }}
         >
           {children}
         </motion.div>
       </AnimatedDialog>
     );
-  }
+  },
 );
 
 export { ApiBoltResizableWrapper, ApiBoltResizableLeftPanel };

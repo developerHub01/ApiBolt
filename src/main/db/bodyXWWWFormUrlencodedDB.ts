@@ -17,8 +17,8 @@ export const getBodyXWWWFormUrlencoded: ElectronAPIBodyXWWWFormUrlencodedInterfa
         .where(
           eq(
             bodyXWWWFormUrlencodedTable.requestOrFolderMetaId,
-            requestOrFolderMetaId
-          )
+            requestOrFolderMetaId,
+          ),
         );
 
       return result;
@@ -59,8 +59,8 @@ export const deleteBodyXWWWFormUrlencodedByRequestMetaId: ElectronAPIBodyXWWWFor
             .where(
               eq(
                 bodyXWWWFormUrlencodedTable.requestOrFolderMetaId,
-                requestOrFolderMetaId
-              )
+                requestOrFolderMetaId,
+              ),
             )
         ).rowsAffected > 0
       );
@@ -81,7 +81,7 @@ export const createBodyXWWWFormUrlencoded: ElectronAPIBodyXWWWFormUrlencodedInte
         (
           await db.insert(bodyXWWWFormUrlencodedTable).values({
             ...payload,
-            requestOrFolderMetaId
+            requestOrFolderMetaId,
           })
         )?.rowsAffected > 0
       );
@@ -106,7 +106,7 @@ export const updateBodyXWWWFormUrlencoded: ElectronAPIBodyXWWWFormUrlencodedInte
       if (!isExist)
         return await createBodyXWWWFormUrlencoded({
           id: formId,
-          ...payload
+          ...payload,
         });
 
       return (
@@ -117,7 +117,7 @@ export const updateBodyXWWWFormUrlencoded: ElectronAPIBodyXWWWFormUrlencodedInte
               ...payload,
               requestOrFolderMetaId: payload.requestOrFolderMetaId
                 ? payload.requestOrFolderMetaId
-                : undefined
+                : undefined,
             })
             .where(eq(bodyXWWWFormUrlencodedTable.id, formId))
         )?.rowsAffected > 0
@@ -139,7 +139,7 @@ export const replaceBodyXWWWFormUrlencoded: ElectronAPIBodyXWWWFormUrlencodedInt
             formData["requestOrFolderMetaId"] ?? requestOrFolderMetaId,
           value: Array.isArray(formData.value)
             ? JSON.stringify(formData.value)
-            : formData.value
+            : formData.value,
         };
       });
 
@@ -149,8 +149,8 @@ export const replaceBodyXWWWFormUrlencoded: ElectronAPIBodyXWWWFormUrlencodedInt
           .where(
             eq(
               bodyXWWWFormUrlencodedTable.requestOrFolderMetaId,
-              requestOrFolderMetaId
-            )
+              requestOrFolderMetaId,
+            ),
           );
 
         if (!replacePayload.length) return true;
@@ -178,8 +178,8 @@ export const checkAllBodyXWWWFormUrlencodedByRequestMetaId: ElectronAPIBodyXWWWF
           .where(
             eq(
               bodyXWWWFormUrlencodedTable.requestOrFolderMetaId,
-              requestOrFolderMetaId
-            )
+              requestOrFolderMetaId,
+            ),
           )) ?? [];
 
       const checkValue = !rows.every(row => row.isCheck);
@@ -189,13 +189,13 @@ export const checkAllBodyXWWWFormUrlencodedByRequestMetaId: ElectronAPIBodyXWWWF
           await db
             .update(bodyXWWWFormUrlencodedTable)
             .set({
-              isCheck: checkValue
+              isCheck: checkValue,
             })
             .where(
               eq(
                 bodyXWWWFormUrlencodedTable.requestOrFolderMetaId,
-                requestOrFolderMetaId
-              )
+                requestOrFolderMetaId,
+              ),
             )
         )?.rowsAffected > 0
       );
@@ -221,7 +221,7 @@ export const duplicateBodyXWWWFormUrlencoded: ElectronAPIBodyXWWWFormUrlencodedI
         .select()
         .from(bodyXWWWFormUrlencodedTable)
         .where(
-          inArray(bodyXWWWFormUrlencodedTable.requestOrFolderMetaId, oldIds)
+          inArray(bodyXWWWFormUrlencodedTable.requestOrFolderMetaId, oldIds),
         );
 
       if (!existingBodyXWWWFormUrlencodedData.length) return true;
@@ -236,9 +236,9 @@ export const duplicateBodyXWWWFormUrlencoded: ElectronAPIBodyXWWWFormUrlencodedI
           return {
             ...rest,
             requestOrFolderMetaId:
-              payload[bodyXWWWFormUrlencoded.requestOrFolderMetaId]
+              payload[bodyXWWWFormUrlencoded.requestOrFolderMetaId],
           };
-        }
+        },
       );
 
       return (

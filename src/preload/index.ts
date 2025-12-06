@@ -780,7 +780,6 @@ if (process.contextIsolated) {
       "electronAPIRequest",
       electronAPIRequestBridge,
     );
-
     contextBridge.exposeInMainWorld(
       "electronAPIKeyboardShortcut",
       electronAPIKeyboardShortcutBridge,

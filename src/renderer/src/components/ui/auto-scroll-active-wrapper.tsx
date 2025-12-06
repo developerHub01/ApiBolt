@@ -15,13 +15,13 @@ const AutoScrollActiveWrapper = memo(
     useEffect(() => {
       requestAnimationFrame(() => {
         const activeTab = scrollAreaRef.current?.querySelector(
-          '[data-active="true"]'
+          '[data-active="true"]',
         );
         if (!activeTab) return;
 
         activeTab.scrollIntoView({
           behavior: "smooth",
-          block
+          block,
         });
       });
     }, [block]);
@@ -34,7 +34,7 @@ const AutoScrollActiveWrapper = memo(
         {children}
       </motion.div>
     );
-  }
+  },
 );
 
 export default AutoScrollActiveWrapper;

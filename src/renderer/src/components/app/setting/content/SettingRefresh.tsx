@@ -74,7 +74,7 @@ const SettingRefresh = memo(
         )}
       </AnimatePresence>
     );
-  }
+  },
 );
 
 export default SettingRefresh;

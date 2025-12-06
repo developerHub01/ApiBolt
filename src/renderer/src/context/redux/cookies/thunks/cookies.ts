@@ -7,7 +7,7 @@ import {
   handleClearEditing,
   handleDeleteCookieByKey,
   handleLoadCookies,
-  handleSaveEditCookie
+  handleSaveEditCookie,
 } from "@/context/redux/cookies/cookies-slice";
 import type { CookieInterface } from "@shared/types/cookies.types";
 
@@ -31,7 +31,7 @@ export const loadCookies = createAsyncThunk<
 });
 
 export const deleteCookieByKey = createAsyncThunk<
-  void,
+  boolean,
   string,
   {
     dispatch: AppDispatch;
@@ -46,12 +46,14 @@ export const deleteCookieByKey = createAsyncThunk<
     dispatch(handleDeleteCookieByKey(key));
 
     const response = await window.electronAPICookies.deleteCookieKeyByProject({
-      key
+      key,
     });
 
     if (!response) await dispatch(loadCookies());
+    return response;
   } catch (error) {
     console.error(error);
+    return false;
   }
 });
 
@@ -141,7 +143,7 @@ export const updateCookies = createAsyncThunk<
     });
 
     const response = await window.electronAPICookies.updateCookiesByProject({
-      cookies
+      cookies,
     });
 
     if (!response) await dispatch(loadCookies());

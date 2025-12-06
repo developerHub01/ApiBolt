@@ -16,7 +16,7 @@ const Splash = () => {
 
   useEffect(() => {
     const progressInterval = setInterval(() => {
-      setLoadingProgress((prev) => {
+      setLoadingProgress(prev => {
         if (prev >= 100) {
           clearInterval(progressInterval);
           setTimeout(() => setIsReady(true), 300);
@@ -27,7 +27,7 @@ const Splash = () => {
     }, 80);
 
     const methodInterval = setInterval(() => {
-      setCurrentMethod((prev) => (prev + 1) % apiMethods.length);
+      setCurrentMethod(prev => (prev + 1) % apiMethods.length);
     }, 800);
 
     return () => {

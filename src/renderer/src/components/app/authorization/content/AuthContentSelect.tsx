@@ -48,7 +48,7 @@ const AuthContentSelect = memo(
           variant={"secondary"}
           className={cn(
             "border-2 border-accent rounded-lg text-sm w-full flex items-center gap-1 flex-1 px-0",
-            className
+            className,
           )}
           tabIndex={-1}
           disabled={disabled}
@@ -71,7 +71,7 @@ const AuthContentSelect = memo(
         </SelectContent>
       </Select>
     );
-  }
+  },
 );
 
 export default AuthContentSelect;

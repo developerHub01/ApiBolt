@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { useHistoryDetails } from "@/context/history/HistoryDetailsProvider";
 import HistoryDetailsFallback from "@/fallback/HistoryDetailsFallback";
 const HistoryDetailsRoot = lazy(
-  () => import("@/components/app/history-details/HistoryDetailsRoot")
+  () => import("@/components/app/history-details/HistoryDetailsRoot"),
 );
 
 const HistoryDetails = memo(() => {
@@ -19,7 +19,7 @@ const HistoryDetails = memo(() => {
 
   const handleClose = useCallback(
     () => dispatch(changeOpenedHistory()),
-    [dispatch]
+    [dispatch],
   );
 
   return (

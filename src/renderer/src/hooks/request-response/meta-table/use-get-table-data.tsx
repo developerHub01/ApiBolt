@@ -65,10 +65,10 @@ export const useGetTableData = () => {
   }, [activeMetaTab, requestBodyType]);
 
   const data =
-    useAppSelector((state) =>
+    useAppSelector(state =>
       selectMetaData(state, {
         type,
-      })
+      }),
     ) ?? [];
 
   const showColumn = useMemo(
@@ -99,7 +99,7 @@ export const useGetTableData = () => {
                       : true
               : false,
           },
-    [metaShowColumn, type]
+    [metaShowColumn, type],
   );
 
   const handleDelete = useCallback(
@@ -116,7 +116,7 @@ export const useGetTableData = () => {
                 : deleteBodyFormData;
       dispatch(handler(id));
     },
-    [dispatch, type]
+    [dispatch, type],
   );
 
   const handleUpdate = useCallback(
@@ -137,10 +137,10 @@ export const useGetTableData = () => {
           payload: {
             [key]: value,
           },
-        })
+        }),
       );
     },
-    [dispatch, type]
+    [dispatch, type],
   );
 
   const handleCheckAll = useCallback(() => {
@@ -162,9 +162,9 @@ export const useGetTableData = () => {
       dispatch(
         updateHiddenHeaders({
           keyName: keyName as keyof HiddenHeadersCheckInterface,
-        })
+        }),
       ),
-    [dispatch]
+    [dispatch],
   );
 
   const handleCheckToggle = useCallback(
@@ -188,10 +188,10 @@ export const useGetTableData = () => {
               : prevent && type === "headers"
                 ? "hiddenHeaders"
                 : type,
-        })
+        }),
       );
     },
-    [dispatch, handleUpdate, handleUpdateHiddenHeader, type]
+    [dispatch, handleUpdate, handleUpdateHiddenHeader, type],
   );
 
   const handleAddNewData = useCallback(() => {
@@ -254,7 +254,7 @@ export const useGetTableData = () => {
 
       dispatch(updateMetaShowColumn(payload));
     },
-    [dispatch, metaShowColumn, type]
+    [dispatch, metaShowColumn, type],
   );
 
   return {

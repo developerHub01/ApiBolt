@@ -46,10 +46,10 @@ const ParamCell = memo(
             payload: {
               [cellType === "key" ? "keyType" : "valueType"]: value,
             },
-          })
+          }),
         );
       },
-      [dispatch, id, cellType]
+      [dispatch, id, cellType],
     );
 
     const handleChangeValue = useCallback(
@@ -60,10 +60,10 @@ const ParamCell = memo(
             payload: {
               [cellType]: value,
             },
-          })
+          }),
         );
       },
-      [dispatch, id, cellType]
+      [dispatch, id, cellType],
     );
 
     return (
@@ -76,7 +76,7 @@ const ParamCell = memo(
         {prevent || <TypeMenu value={type} onChange={handleChangeType} />}
       </>
     );
-  }
+  },
 );
 
 interface TypeMenuProps {

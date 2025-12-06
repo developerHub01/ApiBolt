@@ -2,7 +2,7 @@ const KEY_LIST_SEPARATOR = "___________";
 
 export const areKeyListMatched = (
   keyList: Array<string>,
-  target: Array<string>
+  target: Array<string>,
 ) => {
   /* added spearator in between and start and end so that in can search perfectly for any key instead of partial. so as every key are spearated by separator even starting or ending too, so less chance to have partial so will match exact keys only */
   const targetString =
@@ -21,4 +21,4 @@ export const areKeyListMatched = (
 };
 
 export const keyListStringify = (keyList: Array<string>) =>
-  keyList.map((key) => key[0].toUpperCase() + key.slice(1)).join("+");
+  keyList.map(key => key[0].toUpperCase() + key.slice(1)).join("+");

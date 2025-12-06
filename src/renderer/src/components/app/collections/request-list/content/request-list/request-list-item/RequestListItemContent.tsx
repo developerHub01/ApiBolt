@@ -30,9 +30,9 @@ const RequestListItemContent = memo(() => {
         updateRequestOrFolder({
           id,
           isExpended: !isExpended,
-        })
+        }),
       ),
-    [dispatch, id, isExpended]
+    [dispatch, id, isExpended],
   );
 
   return (

@@ -7,7 +7,7 @@ import {
   duplicateBodyXWWWFormUrlencoded,
   getBodyXWWWFormUrlencoded,
   replaceBodyXWWWFormUrlencoded,
-  updateBodyXWWWFormUrlencoded
+  updateBodyXWWWFormUrlencoded,
 } from "@/main/db/bodyXWWWFormUrlencodedDB.js";
 import { ElectronAPIBodyXWWWFormUrlencodedInterface } from "@shared/types/api/electron-body-x-www-form-urlencoded";
 
@@ -21,7 +21,7 @@ export const bodyXWWWFormUrlencodedHandlers = () => {
       >
     ): ReturnType<
       ElectronAPIBodyXWWWFormUrlencodedInterface["getBodyXWWWFormUrlencoded"]
-    > => await getBodyXWWWFormUrlencoded(...rest)
+    > => await getBodyXWWWFormUrlencoded(...rest),
   );
   ipcMain.handle(
     "deleteBodyXWWWFormUrlencoded",
@@ -32,7 +32,7 @@ export const bodyXWWWFormUrlencodedHandlers = () => {
       >
     ): ReturnType<
       ElectronAPIBodyXWWWFormUrlencodedInterface["deleteBodyXWWWFormUrlencoded"]
-    > => await deleteBodyXWWWFormUrlencoded(...rest)
+    > => await deleteBodyXWWWFormUrlencoded(...rest),
   );
   ipcMain.handle(
     "deleteBodyXWWWFormUrlencodedByRequestMetaId",
@@ -43,7 +43,7 @@ export const bodyXWWWFormUrlencodedHandlers = () => {
       >
     ): ReturnType<
       ElectronAPIBodyXWWWFormUrlencodedInterface["deleteBodyXWWWFormUrlencodedByRequestMetaId"]
-    > => await deleteBodyXWWWFormUrlencodedByRequestMetaId(...rest)
+    > => await deleteBodyXWWWFormUrlencodedByRequestMetaId(...rest),
   );
   ipcMain.handle(
     "createBodyXWWWFormUrlencoded",
@@ -54,7 +54,7 @@ export const bodyXWWWFormUrlencodedHandlers = () => {
       >
     ): ReturnType<
       ElectronAPIBodyXWWWFormUrlencodedInterface["createBodyXWWWFormUrlencoded"]
-    > => await createBodyXWWWFormUrlencoded(...rest)
+    > => await createBodyXWWWFormUrlencoded(...rest),
   );
   ipcMain.handle(
     "updateBodyXWWWFormUrlencoded",
@@ -65,7 +65,7 @@ export const bodyXWWWFormUrlencodedHandlers = () => {
       >
     ): ReturnType<
       ElectronAPIBodyXWWWFormUrlencodedInterface["updateBodyXWWWFormUrlencoded"]
-    > => await updateBodyXWWWFormUrlencoded(...rest)
+    > => await updateBodyXWWWFormUrlencoded(...rest),
   );
   ipcMain.handle(
     "replaceBodyXWWWFormUrlencoded",
@@ -76,7 +76,7 @@ export const bodyXWWWFormUrlencodedHandlers = () => {
       >
     ): ReturnType<
       ElectronAPIBodyXWWWFormUrlencodedInterface["replaceBodyXWWWFormUrlencoded"]
-    > => await replaceBodyXWWWFormUrlencoded(...rest)
+    > => await replaceBodyXWWWFormUrlencoded(...rest),
   );
   ipcMain.handle(
     "checkAllBodyXWWWFormUrlencodedByRequestMetaId",
@@ -87,7 +87,7 @@ export const bodyXWWWFormUrlencodedHandlers = () => {
       >
     ): ReturnType<
       ElectronAPIBodyXWWWFormUrlencodedInterface["checkAllBodyXWWWFormUrlencodedByRequestMetaId"]
-    > => await checkAllBodyXWWWFormUrlencodedByRequestMetaId(...rest)
+    > => await checkAllBodyXWWWFormUrlencodedByRequestMetaId(...rest),
   );
   ipcMain.handle(
     "duplicateBodyXWWWFormUrlencoded",
@@ -98,6 +98,6 @@ export const bodyXWWWFormUrlencodedHandlers = () => {
       >
     ): ReturnType<
       ElectronAPIBodyXWWWFormUrlencodedInterface["duplicateBodyXWWWFormUrlencoded"]
-    > => await duplicateBodyXWWWFormUrlencoded(...rest)
+    > => await duplicateBodyXWWWFormUrlencoded(...rest),
   );
 };

@@ -1,13 +1,13 @@
 import {
   type HiddenHeadersCheckInterface,
-  type ParamHeaderBuildPayloadInterface
+  type ParamHeaderBuildPayloadInterface,
 } from "@shared/types/request-response.types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import {
   handleLoadHeaders,
   handleLoadHiddenHeadersIsCheck,
-  handleUpdateHiddenHeadersIsCheck
+  handleUpdateHiddenHeadersIsCheck,
 } from "@/context/redux/request-response/request-response-slice";
 
 /* ==============================
@@ -64,14 +64,14 @@ export const loadHiddenHeaders = createAsyncThunk<
 
       const response =
         await window.electronAPIHiddenHeadersCheck.getHiddenHeadersCheck(
-          selectedTab
+          selectedTab,
         );
 
       if (response) dispatch(handleLoadHiddenHeadersIsCheck(response));
     } catch (error) {
       console.error(error);
     }
-  }
+  },
 );
 
 export const addHeaders = createAsyncThunk<
@@ -148,7 +148,7 @@ export const deleteHeadersByRequestMetaId = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const updateHeaders = createAsyncThunk<
@@ -167,7 +167,7 @@ export const updateHeaders = createAsyncThunk<
     try {
       const response = await window.electronAPIHeaders.updateHeaders(
         paramId,
-        payload
+        payload,
       );
 
       if (response) dispatch(loadHeaders());
@@ -176,7 +176,7 @@ export const updateHeaders = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const checkAllHeadersByRequestMetaId = createAsyncThunk<
@@ -192,7 +192,7 @@ export const checkAllHeadersByRequestMetaId = createAsyncThunk<
     try {
       const response =
         await window.electronAPIHeaders.checkAllHeadersByRequestMetaId(
-          requestOrFolderMetaId
+          requestOrFolderMetaId,
         );
 
       if (response) dispatch(loadHeaders());
@@ -201,7 +201,7 @@ export const checkAllHeadersByRequestMetaId = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const updateHiddenHeaders = createAsyncThunk<
@@ -227,20 +227,20 @@ export const updateHiddenHeaders = createAsyncThunk<
 
       const response =
         await window.electronAPIHiddenHeadersCheck.updateHiddenHeadersCheck({
-          [keyName]: newValue
+          [keyName]: newValue,
         });
 
       if (response)
         dispatch(
           handleUpdateHiddenHeadersIsCheck({
-            keyName
-          })
+            keyName,
+          }),
         );
       return;
     } catch (error) {
       console.error(error);
     }
-  }
+  },
 );
 
 export const duplicateHeadersByOldNewIds = createAsyncThunk<
@@ -273,7 +273,7 @@ export const duplicateHiddenHeadersByOldNewIds = createAsyncThunk<
   try {
     const response =
       await window.electronAPIHiddenHeadersCheck.duplicateHiddenHeadersCheck(
-        oldNewIdMap
+        oldNewIdMap,
       );
 
     return response;

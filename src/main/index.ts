@@ -88,7 +88,7 @@ app.whenReady().then(async () => {
         mainWindow?.show();
         mainWindow?.maximize();
       },
-      remaining > 0 ? remaining : 0
+      remaining > 0 ? remaining : 0,
     );
   });
 

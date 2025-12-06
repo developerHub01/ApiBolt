@@ -36,7 +36,7 @@ interface MetaTableRowProps {
     payload: Pick<
       ParamInterface<string> | FormDataInterface,
       "id" | "prevent" | "isCheck"
-    >
+    >,
   ) => void;
   cellList: Array<string>;
 }
@@ -68,12 +68,12 @@ const MetaTableRow = memo(
         contentType,
         description,
       }),
-      [keyName, value, contentType, description]
+      [keyName, value, contentType, description],
     );
 
     const handleDelete = useCallback(
       () => handleDeleteItem(id),
-      [handleDeleteItem, id]
+      [handleDeleteItem, id],
     );
 
     const handleCheckChange = useCallback(
@@ -83,7 +83,7 @@ const MetaTableRow = memo(
           prevent,
           isCheck,
         }),
-      [handleCheckToggle, id, isCheck, prevent]
+      [handleCheckToggle, id, isCheck, prevent],
     );
 
     return (
@@ -91,7 +91,7 @@ const MetaTableRow = memo(
         key={id}
         className={cn(
           "[&>td]:border-r [&>td]:last:border-r-0 [&>td>input]:outline-none [&>td>div>input]:outline-none [&>td>input]:rounded-md [&>td>div>input]:rounded-md",
-          "focus-within:bg-accent/60 duration-75 transition-colors"
+          "focus-within:bg-accent/60 duration-75 transition-colors",
         )}
       >
         <CheckCell
@@ -100,7 +100,7 @@ const MetaTableRow = memo(
           disabled={preventCheck || id === AUTHORIZATION_DATA_ID}
           onChange={handleCheckChange}
         />
-        {cellList.map((cellType) => {
+        {cellList.map(cellType => {
           const value = data[cellType];
           return (
             <MetaTableCell
@@ -137,7 +137,7 @@ const MetaTableRow = memo(
         </TableCell>
       </TableRow>
     );
-  }
+  },
 );
 MetaTableRow.displayName = "Meta table row";
 

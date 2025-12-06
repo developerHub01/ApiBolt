@@ -33,7 +33,7 @@ const RequestTopLeft = () => {
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => setRequestNameState(e.target.value),
-    []
+    [],
   );
 
   const handleBlur = useCallback(
@@ -44,10 +44,10 @@ const RequestTopLeft = () => {
         updateRequestOrFolder({
           name: e.target.value,
           id: selectedTab,
-        })
+        }),
       );
     },
-    [dispatch, selectedTab]
+    [dispatch, selectedTab],
   );
 
   const handleKeyDown = useCallback(
@@ -57,7 +57,7 @@ const RequestTopLeft = () => {
         nameInputRef.current?.blur();
       }
     },
-    []
+    [],
   );
 
   return (

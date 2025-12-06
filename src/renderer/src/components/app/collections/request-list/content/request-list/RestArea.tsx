@@ -16,17 +16,17 @@ const RestArea = memo(({ children }: Props) => {
       dispatch(
         moveRequestOrFolder({
           requestId: draggedId,
-        })
+        }),
       );
     },
-    [dispatch]
+    [dispatch],
   );
 
   return (
     <div
       className="h-full flex flex-col w-full gap-0.5 p-0"
       onDrop={handleDrop}
-      onDragOver={(e) => e.preventDefault()}
+      onDragOver={e => e.preventDefault()}
     >
       {children ? children : <div className="h-8" />}
     </div>

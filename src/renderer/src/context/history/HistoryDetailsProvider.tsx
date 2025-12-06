@@ -37,7 +37,7 @@ export const useHistoryDetails = () => {
 
   if (!context) {
     throw new Error(
-      "useHistoryDetails must be used within a HistoryDetailsProvider."
+      "useHistoryDetails must be used within a HistoryDetailsProvider.",
     );
   }
 
@@ -55,7 +55,7 @@ const HistoryDetailsProvider = ({ children }: HistoryDetailsProviderProps) => {
   const historyId = useAppSelector(selectHistoryItemOpenId);
   const isHistoryDetailsLoading = useAppSelector(selectHistoryDetailsLoading);
   const isHistoryReplacinglsLoading = useAppSelector(
-    selectHistoryReplacingIsLoading
+    selectHistoryReplacingIsLoading,
   );
   const isLoading = isHistoryDetailsLoading || isHistoryReplacinglsLoading;
   const [activeMetaTab, setActiveMetaTab] = useState<TActiveTabType>("params");
@@ -64,15 +64,15 @@ const HistoryDetailsProvider = ({ children }: HistoryDetailsProviderProps) => {
 
   const handleChangeActiveMetaTab = useCallback(
     (value: TActiveTabType) => setActiveMetaTab(value),
-    []
+    [],
   );
   const handleToggleCodeWrap = useCallback(
-    (value?: boolean) => setCodeWrap((prev) => value ?? !prev),
-    []
+    (value?: boolean) => setCodeWrap(prev => value ?? !prev),
+    [],
   );
   const handleToggleReplaceAlert = useCallback(
-    (value?: boolean) => setIsReplaceAlertOpen((prev) => value ?? !prev),
-    []
+    (value?: boolean) => setIsReplaceAlertOpen(prev => value ?? !prev),
+    [],
   );
 
   useEffect(() => {

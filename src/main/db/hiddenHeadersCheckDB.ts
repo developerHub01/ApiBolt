@@ -38,7 +38,7 @@ export const createHiddenHeadersCheck: ElectronAPIHiddenHeadersCheckInterface["c
           .insert(hiddenHeadersCheckTable)
           .values({
             ...payload,
-            requestOrFolderMetaId
+            requestOrFolderMetaId,
           })
           .returning()
       )?.[0];
@@ -65,13 +65,13 @@ export const updateHiddenHeadersCheck: ElectronAPIHiddenHeadersCheckInterface["u
           .update(hiddenHeadersCheckTable)
           .set({
             ...payload,
-            requestOrFolderMetaId: payload.requestOrFolderMetaId ?? undefined
+            requestOrFolderMetaId: payload.requestOrFolderMetaId ?? undefined,
           })
           .where(
             eq(
               hiddenHeadersCheckTable.requestOrFolderMetaId,
-              requestOrFolderMetaId
-            )
+              requestOrFolderMetaId,
+            ),
           )
           .returning()
       )?.[0];
@@ -108,7 +108,7 @@ export const duplicateHiddenHeadersCheck: ElectronAPIHiddenHeadersCheckInterface
         const { id, ...rest } = headersCheck;
         return {
           ...rest,
-          requestOrFolderMetaId: payload[headersCheck.requestOrFolderMetaId]
+          requestOrFolderMetaId: payload[headersCheck.requestOrFolderMetaId],
         };
       });
 

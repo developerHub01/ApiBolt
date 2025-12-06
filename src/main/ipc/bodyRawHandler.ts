@@ -4,7 +4,7 @@ import {
   duplicateBodyRaw,
   getBodyRaw,
   replaceBodyRaw,
-  updateBodyRaw
+  updateBodyRaw,
 } from "@/main/db/bodyRawDB.js";
 import { ElectronAPIBodyRawInterface } from "@shared/types/api/electron-body-raw";
 
@@ -15,7 +15,7 @@ export const bodyRawHandler = () => {
       _,
       ...rest: Parameters<ElectronAPIBodyRawInterface["getBodyRaw"]>
     ): ReturnType<ElectronAPIBodyRawInterface["getBodyRaw"]> =>
-      await getBodyRaw(...rest)
+      await getBodyRaw(...rest),
   );
   ipcMain.handle(
     "createBodyRaw",
@@ -23,7 +23,7 @@ export const bodyRawHandler = () => {
       _,
       ...rest: Parameters<ElectronAPIBodyRawInterface["createBodyRaw"]>
     ): ReturnType<ElectronAPIBodyRawInterface["createBodyRaw"]> =>
-      await createBodyRaw(...rest)
+      await createBodyRaw(...rest),
   );
   ipcMain.handle(
     "updateBodyRaw",
@@ -31,7 +31,7 @@ export const bodyRawHandler = () => {
       _,
       ...rest: Parameters<ElectronAPIBodyRawInterface["updateBodyRaw"]>
     ): ReturnType<ElectronAPIBodyRawInterface["updateBodyRaw"]> =>
-      await updateBodyRaw(...rest)
+      await updateBodyRaw(...rest),
   );
   ipcMain.handle(
     "duplicateBodyRaw",
@@ -39,7 +39,7 @@ export const bodyRawHandler = () => {
       _,
       ...rest: Parameters<ElectronAPIBodyRawInterface["duplicateBodyRaw"]>
     ): ReturnType<ElectronAPIBodyRawInterface["duplicateBodyRaw"]> =>
-      await duplicateBodyRaw(...rest)
+      await duplicateBodyRaw(...rest),
   );
   ipcMain.handle(
     "replaceBodyRaw",
@@ -47,6 +47,6 @@ export const bodyRawHandler = () => {
       _,
       ...rest: Parameters<ElectronAPIBodyRawInterface["replaceBodyRaw"]>
     ): ReturnType<ElectronAPIBodyRawInterface["replaceBodyRaw"]> =>
-      await replaceBodyRaw(...rest)
+      await replaceBodyRaw(...rest),
   );
 };

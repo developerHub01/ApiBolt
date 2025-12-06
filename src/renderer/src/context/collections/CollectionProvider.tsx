@@ -45,7 +45,7 @@ const CollectionProvider = ({ children, type }: CollectionProviderProps) => {
       await dispatch(loadInheritParentAuthorization(id));
       setIsLoading(false);
     },
-    [dispatch]
+    [dispatch],
   );
 
   useEffect(() => {

@@ -6,13 +6,13 @@ const CONTENT = {
   folder: {
     label: "Folder Not Found",
     description:
-      "This folder may have been moved, deleted, or the reference is invalid."
+      "This folder may have been moved, deleted, or the reference is invalid.",
   },
   request: {
     label: "Request Not Found",
     description:
-      "This request may have been moved, deleted, or the reference is invalid."
-  }
+      "This request may have been moved, deleted, or the reference is invalid.",
+  },
 };
 
 interface Props {

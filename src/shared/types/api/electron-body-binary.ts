@@ -12,6 +12,6 @@ export interface ElectronAPIBodyBinaryInterface {
         Omit<BodyBinaryInterface, "requestOrFolderMetaId"> & {
           path: BodyBinaryInterface["path"] | null;
         }
-      >
+      >,
   ): Promise<boolean>;
 }

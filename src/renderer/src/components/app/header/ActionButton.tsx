@@ -21,7 +21,7 @@ const ActionButton = ({
       className={cn(
         "rounded-none h-full aspect-square bg-transparent",
         "hover:bg-foreground/10",
-        className
+        className,
       )}
       onClick={() => onClick && id && onClick(id)}
     >

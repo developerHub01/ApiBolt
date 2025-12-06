@@ -8,7 +8,7 @@ export const getHeadersData = ({
   authorization,
   binaryData,
   rawBodyDataType,
-  bodyType
+  bodyType,
 }: Pick<
   CodeSnippitDataInterface,
   "headers" | "authorization" | "binaryData" | "rawBodyDataType" | "bodyType"
@@ -18,7 +18,7 @@ export const getHeadersData = ({
     authorization,
     binaryData,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
 
   if (!headersList.length) return "";
@@ -34,7 +34,7 @@ export const getHeadersDataObject = ({
   authorization,
   binaryData,
   rawBodyDataType,
-  bodyType
+  bodyType,
 }: Pick<
   CodeSnippitDataInterface,
   "headers" | "authorization" | "binaryData" | "rawBodyDataType" | "bodyType"
@@ -44,7 +44,7 @@ export const getHeadersDataObject = ({
     authorization,
     binaryData,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
 
   if (!headersList.length) return "";
@@ -60,7 +60,7 @@ export const getHttpRequest2HeadersData = ({
   authorization,
   binaryData,
   rawBodyDataType,
-  bodyType
+  bodyType,
 }: Pick<
   CodeSnippitDataInterface,
   "headers" | "authorization" | "binaryData" | "rawBodyDataType" | "bodyType"
@@ -70,7 +70,7 @@ export const getHttpRequest2HeadersData = ({
     authorization,
     binaryData,
     rawBodyDataType,
-    bodyType
+    bodyType,
   });
 
   if (!headersList.length) return "";
@@ -83,7 +83,7 @@ ${headersList.map(({ key, value }) => `\t${`${JSON.stringify(key)} => ${JSON.str
 
 export const getXWWWFormUrlencodedCurlData = ({
   bodyType,
-  xWWWFormUrlencoded
+  xWWWFormUrlencoded,
 }: Pick<CodeSnippitDataInterface, "bodyType" | "xWWWFormUrlencoded">) => {
   if (bodyType !== "x-www-form-urlencoded" || !xWWWFormUrlencoded.length)
     return "";
@@ -92,7 +92,7 @@ export const getXWWWFormUrlencodedCurlData = ({
 $data = http_build_query([
 ${xWWWFormUrlencoded
   .map(
-    ({ key, value }) => `\t${JSON.stringify(key)} => ${JSON.stringify(value)}`
+    ({ key, value }) => `\t${JSON.stringify(key)} => ${JSON.stringify(value)}`,
   )
   .join(",\n")}
 ]);\t\n\n`;
@@ -100,7 +100,7 @@ ${xWWWFormUrlencoded
 
 export const getXWWWFormUrlencodedArrData = ({
   bodyType,
-  xWWWFormUrlencoded
+  xWWWFormUrlencoded,
 }: Pick<CodeSnippitDataInterface, "bodyType" | "xWWWFormUrlencoded">) => {
   if (bodyType !== "x-www-form-urlencoded" || !xWWWFormUrlencoded.length)
     return "";
@@ -109,7 +109,7 @@ export const getXWWWFormUrlencodedArrData = ({
 $data = [
 ${xWWWFormUrlencoded
   .map(
-    ({ key, value }) => `\t${JSON.stringify(key)} => ${JSON.stringify(value)}`
+    ({ key, value }) => `\t${JSON.stringify(key)} => ${JSON.stringify(value)}`,
   )
   .join(",\n")}
 ];\t\n\n`;
@@ -117,7 +117,7 @@ ${xWWWFormUrlencoded
 
 export const getFormData = ({
   bodyType,
-  formData
+  formData,
 }: Pick<CodeSnippitDataInterface, "bodyType" | "formData">) => {
   if (bodyType !== "form-data" || !formData.length) return "";
 
@@ -127,7 +127,7 @@ ${formData
   .map(({ key, value, type }) =>
     type === "text"
       ? `\t${JSON.stringify(key)} => ${JSON.stringify(value)}`
-      : `\t${JSON.stringify(key)} => new CURLFile(${JSON.stringify(value)}`
+      : `\t${JSON.stringify(key)} => new CURLFile(${JSON.stringify(value)}`,
   )
   .join(",\n")}
 ];\t\n\n`;
@@ -135,7 +135,7 @@ ${formData
 
 export const getMultipartData = ({
   bodyType,
-  formData
+  formData,
 }: Pick<CodeSnippitDataInterface, "bodyType" | "formData">) => {
   if (bodyType !== "form-data" || !formData.length) return "";
 
@@ -160,7 +160,7 @@ ${formData
 
 export const getPeclFormData = ({
   bodyType,
-  formData
+  formData,
 }: Pick<CodeSnippitDataInterface, "bodyType" | "formData">) => {
   if (bodyType !== "form-data" || !formData.length) return "";
 
@@ -171,7 +171,7 @@ ${formData
   .map(({ key, value, type }) =>
     type === "text"
       ? `\t${JSON.stringify(key)} => ${JSON.stringify(value)}`
-      : `\t${JSON.stringify(key)} => new CURLFile(${JSON.stringify(value)}`
+      : `\t${JSON.stringify(key)} => new CURLFile(${JSON.stringify(value)}`,
   )
   .join(",\n")}
 ]);\t\n\n`;
@@ -179,7 +179,7 @@ ${formData
 
 export const getHttpRequest2FormData = ({
   bodyType,
-  formData
+  formData,
 }: Pick<CodeSnippitDataInterface, "bodyType" | "formData">) => {
   if (bodyType !== "form-data" || !formData.length) return "";
 
@@ -190,7 +190,7 @@ $request->addPostParameter([
 ${formData
   .filter(entry => entry.type === "text")
   .map(
-    ({ key, value }) => `\t${JSON.stringify(key)} => ${JSON.stringify(value)}`
+    ({ key, value }) => `\t${JSON.stringify(key)} => ${JSON.stringify(value)}`,
   )
   .join(",\n")}
 ]);`;
@@ -203,7 +203,7 @@ ${formData
   .filter(entry => entry.type === "file")
   .map(
     ({ key, value }) =>
-      `$request->addUpload(${JSON.stringify(key)}, ${JSON.stringify(value)}, "remoteFileName", ${JSON.stringify(mime.getType(value))});`
+      `$request->addUpload(${JSON.stringify(key)}, ${JSON.stringify(value)}, "remoteFileName", ${JSON.stringify(mime.getType(value))});`,
   )
   .join("\n")}`;
   }
@@ -253,7 +253,7 @@ const objectToString = (data: unknown, level: number = 0): string => {
 export const getRawData = ({
   bodyType,
   rawBodyDataType,
-  rawData
+  rawData,
 }: Pick<
   CodeSnippitDataInterface,
   "bodyType" | "rawBodyDataType" | "rawData"

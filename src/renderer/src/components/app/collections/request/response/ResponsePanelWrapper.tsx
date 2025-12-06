@@ -14,10 +14,10 @@ const ResponsePanelWrapper = memo(({ children }: ResponsePanelWrapperProps) => {
       dispatch(
         handleToggleCollapse({
           size,
-        })
+        }),
       );
     },
-    [dispatch]
+    [dispatch],
   );
 
   return (

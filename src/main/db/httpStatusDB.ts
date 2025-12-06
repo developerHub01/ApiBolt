@@ -13,7 +13,7 @@ export const getHttpStatus: ElectronAPIHttpStatusInterface["getHttpStatus"] =
         acc[code] = {
           ...rest,
           editedReason: rest.editedReason ?? "",
-          editedDescription: rest.editedDescription ?? ""
+          editedDescription: rest.editedDescription ?? "",
         };
         return acc;
       }, {});
@@ -85,7 +85,7 @@ export const updateHttpStatus: ElectronAPIHttpStatusInterface["updateHttpStatus"
       return {
         ...updatedData,
         editedReason: updatedData.editedReason ?? "",
-        editedDescription: updatedData.editedDescription ?? ""
+        editedDescription: updatedData.editedDescription ?? "",
       };
     } catch (error) {
       console.error(error);

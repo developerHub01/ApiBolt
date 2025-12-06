@@ -18,14 +18,14 @@ interface Props {
 
 const AuthTypeTab = memo(({ id, className = "" }: Props) => {
   const dispatch = useAppDispatch();
-  const authType = useAppSelector((state) => selectAuthTypeById(state, id));
+  const authType = useAppSelector(state => selectAuthTypeById(state, id));
 
   const list = useMemo(
     () =>
       id === DEFAULT_AUTHORIZATION_ID
         ? AUTH_LIST
         : [INHERIT_AUTH, ...AUTH_LIST],
-    [id]
+    [id],
   );
 
   const handleChange = useCallback(
@@ -36,10 +36,10 @@ const AuthTypeTab = memo(({ id, className = "" }: Props) => {
           payload: {
             type: type as TAuthType,
           },
-        })
+        }),
       );
     },
-    [dispatch, id]
+    [dispatch, id],
   );
 
   return (

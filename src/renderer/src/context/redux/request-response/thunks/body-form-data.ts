@@ -34,7 +34,7 @@ export const loadBodyFormData = createAsyncThunk<
     } catch (error) {
       console.error(error);
     }
-  }
+  },
 );
 
 export const addBodyFormData = createAsyncThunk<
@@ -63,7 +63,7 @@ export const addBodyFormData = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const deleteBodyFormData = createAsyncThunk<
@@ -109,7 +109,7 @@ export const deleteBodyFormDataByRequestMetaId = createAsyncThunk<
 
       const response =
         await window.electronAPIBodyFormData.deleteBodyFormDataByRequestMetaId(
-          id
+          id,
         );
 
       if (response) dispatch(handleLoadBodyFormData([]));
@@ -118,7 +118,7 @@ export const deleteBodyFormDataByRequestMetaId = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const deleteBodyFormDataFile = createAsyncThunk<
@@ -144,7 +144,7 @@ export const deleteBodyFormDataFile = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const updateBodyFormData = createAsyncThunk<
@@ -163,7 +163,7 @@ export const updateBodyFormData = createAsyncThunk<
     try {
       const response = await window.electronAPIBodyFormData.updateBodyFormData(
         paramId,
-        payload
+        payload,
       );
 
       if (response) dispatch(loadBodyFormData());
@@ -172,7 +172,7 @@ export const updateBodyFormData = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const updateBodyFormDataFile = createAsyncThunk<
@@ -208,7 +208,7 @@ export const checkAllBodyFormDataByRequestMetaId = createAsyncThunk<
     try {
       const response =
         await window.electronAPIBodyFormData.checkAllBodyFormDataByRequestMetaId(
-          requestOrFolderMetaId
+          requestOrFolderMetaId,
         );
 
       if (response) dispatch(loadBodyFormData());
@@ -217,7 +217,7 @@ export const checkAllBodyFormDataByRequestMetaId = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const duplicateBodyFormDataByOldNewIds = createAsyncThunk<

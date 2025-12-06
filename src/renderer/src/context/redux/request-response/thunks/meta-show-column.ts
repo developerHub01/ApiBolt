@@ -1,4 +1,7 @@
-import { MetaShowColumnInterface, type ParamHeaderBuildPayloadInterface } from "@shared/types/request-response.types";
+import {
+  MetaShowColumnInterface,
+  type ParamHeaderBuildPayloadInterface,
+} from "@shared/types/request-response.types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import { handleLoadMetaShowColumn } from "@/context/redux/request-response/request-response-slice";
