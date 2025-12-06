@@ -15,7 +15,11 @@ import FormData from "form-data";
 import mime from "mime-types";
 import { getBodyFormDataByFormId } from "@/main/db/bodyFormDataDB.js";
 import { getHttpStatusByCode } from "@/main/db/httpStatusDB.js";
-import { APIPayloadBody } from "@shared/types/request-response.types.js";
+import {
+  APIPayloadBody,
+  ResponseInterface,
+} from "@shared/types/request-response.types.js";
+import { ElectronAPIInterface } from "@shared/types/api/electron-api";
 
 /* 
 
@@ -32,17 +36,36 @@ interface APIPayloadInterface extends Pick<
   "headers" | "url" | "method"
 > {
   withCredentials?: boolean;
-  data?: FormData | URLSearchParams | string;
+  data?: FormData | URLSearchParams | string | fs.ReadStream;
 }
 
-export const fetchApi = async (_: unknown, rawPayload: APIPayloadBody) => {
-  if (!client || !jar) return;
+export const fetchApi: ElectronAPIInterface["fetchApi"] = async (
+  rawPayload: APIPayloadBody,
+) => {
+  if (!client || !jar) throw new Error();
   const payload = await apiPayloadHandler(rawPayload);
-  let responsePayload = {};
+  console.log(payload);
+
+  let responsePayload: ResponseInterface = {
+    headers: {},
+    status: 0,
+    statusText: "",
+    statusDescription: "",
+    data: null,
+    requestSize: {
+      header: 0,
+      body: 0,
+    },
+    responseSize: {
+      header: 0,
+      body: 0,
+    },
+  };
 
   try {
     const normalizedUrl = new URL(payload.url).origin;
     const res = await client(payload);
+    console.log({ res });
 
     const setCookies = res.headers["set-cookie"] || [];
 
@@ -57,69 +80,94 @@ export const fetchApi = async (_: unknown, rawPayload: APIPayloadBody) => {
     );
 
     const statusDetails = await getHttpStatusByCode(String(res.status));
-    if (!statusDetails) return;
+    if (!statusDetails) throw new Error();
 
     responsePayload = {
+      ...responsePayload,
       headers: res.headers,
       status: res.status,
       statusText:
         res.statusText ?? (statusDetails.editedReason || statusDetails.reason),
       statusDescription:
-        res.statusDescription ??
-        (statusDetails.editedDescription || statusDetails.description),
+        statusDetails.editedDescription || statusDetails.description,
       data: res.data,
       cookies,
       responseSize: {
-        header: getPayloadSize(res.headers) ?? 0,
+        header:
+          getPayloadSize(
+            Object.entries(res.headers).map(([key, value]) => ({
+              id: key,
+              key,
+              value: String(value),
+            })),
+          ) ?? 0,
         body: getPayloadSize(res.data) ?? 0,
       },
     };
-  } catch (error) {
-    if (axios.isAxiosError(error) && error.response) {
+  } catch (error: unknown) {
+    console.log(error);
+    if (axios.isAxiosError(error)) {
+      const errRes = error.response;
       /* Server responded with error status (4xx, 5xx) */
-      const statusDetails = await getHttpStatusByCode(
-        String(error.response.status),
-      );
 
-      responsePayload = {
-        data: error.response.data,
-        headers: error.response.headers,
-        status: error.response.status,
-        statusText:
-          error.response.statusText ??
-          (statusDetails.editedReason || statusDetails.reason),
-        statusDescription:
-          error.response.statusDescription ??
-          (statusDetails.editedDescription || statusDetails.description),
-        responseSize: {
-          header: getPayloadSize(error.response.headers) ?? 0,
-          body: getPayloadSize(error.response.data) ?? 0,
-        },
-      };
-    } else if (axios.isAxiosError(error) && error.request) {
-      /* Request was made but no response received (network error, timeout, etc.) */
-      responsePayload = {
-        data: null,
-        headers: {},
-        status: 0,
-        statusText: "Network Error",
-        statusDescription:
-          error.message ||
-          "Could not connect to the server. Check your internet or API URL.",
-        responseSize: {
-          header: 0,
-          body: 0,
-        },
-      };
+      if (errRes) {
+        const statusDetails = await getHttpStatusByCode(String(errRes.status));
+        responsePayload = {
+          ...responsePayload,
+          data: errRes.data,
+          headers: errRes.headers,
+          status: errRes.status,
+          statusText:
+            errRes.statusText ??
+            statusDetails?.editedReason ??
+            statusDetails?.reason ??
+            "",
+          statusDescription:
+            statusDetails?.editedDescription ??
+            statusDetails?.description ??
+            "",
+          responseSize: {
+            header:
+              getPayloadSize(
+                Object.entries(errRes.headers).map(([key, value]) => ({
+                  id: key,
+                  key,
+                  value: String(value),
+                })),
+              ) ?? 0,
+            body: getPayloadSize(errRes.data) ?? 0,
+          },
+        };
+      } else if (error.request) {
+        responsePayload = {
+          ...responsePayload,
+          data: null,
+          headers: {},
+          status: 0,
+          statusText: "Network Error",
+          statusDescription: error.message,
+          responseSize: { header: 0, body: 0 },
+        };
+      } else {
+        responsePayload = {
+          ...responsePayload,
+          data: null,
+          headers: {},
+          status: 0,
+          statusText: "Request Error",
+          statusDescription: (error as Error).message,
+          responseSize: { header: 0, body: 0 },
+        };
+      }
     } else {
       /* Something else happened (error in request setup, etc.) */
       responsePayload = {
+        ...responsePayload,
         data: null,
         headers: {},
         status: 0,
         statusText: "Request Error",
         statusDescription:
-          error.message ||
           "An unexpected error occurred while setting up the request.",
         responseSize: {
           header: 0,
@@ -130,17 +178,28 @@ export const fetchApi = async (_: unknown, rawPayload: APIPayloadBody) => {
   } finally {
     if (!["get", "option"].includes(payload.method)) {
       responsePayload.requestSize = {
-        header: getPayloadSize(payload.headers) ?? 0,
+        ...responsePayload,
+        header:
+          getPayloadSize(
+            Object.entries(payload.headers).map(([key, value]) => ({
+              id: key,
+              key,
+              value: String(value),
+            })),
+          ) ?? 0,
         body: requestDataSize({
           bodyType: rawPayload.bodyType,
           rawData: rawPayload.rawData,
-          binaryData: payload.data,
+          binaryData:
+            typeof payload.data === "string" ? payload.data : undefined,
           formData: rawPayload.formData?.map(item => ({
+            id: item.id,
             key: item.key,
             value: item.value,
           })),
           xWWWformDataUrlencoded: rawPayload.xWWWformDataUrlencoded?.map(
             item => ({
+              id: item.id,
               key: item.key,
               value: item.value,
             }),
@@ -148,9 +207,8 @@ export const fetchApi = async (_: unknown, rawPayload: APIPayloadBody) => {
         }),
       };
     }
-
-    return responsePayload;
   }
+  return responsePayload;
 };
 
 const apiPayloadHandler = async (payload: APIPayloadBody) => {
@@ -202,7 +260,6 @@ const apiPayloadHandler = async (payload: APIPayloadBody) => {
 
       if (!data) delete updatedPayload.data;
       else updatedPayload.data = data;
-
       break;
     }
     default: {
@@ -213,9 +270,9 @@ const apiPayloadHandler = async (payload: APIPayloadBody) => {
   if (["get", "head"].includes(updatedPayload.method?.toLowerCase())) {
     delete updatedPayload.data;
     delete updatedPayload.headers["Content-Type"];
-    delete updatedPayload.headers["Content-Length"];
   }
   if (!updatedPayload.data) delete updatedPayload.headers["Content-Type"];
+  delete updatedPayload.headers["Content-Length"];
 
   return updatedPayload;
 };
@@ -234,7 +291,6 @@ export const getBodyFormData = async (
       typeof value === "undefined"
         ? (await getBodyFormDataByFormId(id))?.value
         : value;
-
     if (!currentValue) continue;
 
     if (Array.isArray(currentValue)) {
@@ -264,7 +320,7 @@ export const getBodyFormData = async (
 
 const getBodyBinaryData = async () => {
   const contentType = "application/octet-stream";
-  let data;
+  let data: fs.ReadStream | undefined;
   const binaryData = await getBodyBinary();
   if (binaryData?.path) {
     try {

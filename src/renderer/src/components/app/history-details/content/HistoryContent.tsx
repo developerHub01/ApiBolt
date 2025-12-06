@@ -26,7 +26,6 @@ const HistoryContent = memo(() => {
           </section>
           <AnimatedDialogContent
             className="flex-1 px-5 py-0"
-            scrollAreaClassName="px-0"
           >
             <MetaDataContent />
           </AnimatedDialogContent>

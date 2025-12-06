@@ -142,7 +142,6 @@ const AnimatedDialogTop = memo(
 
 interface AnimatedDialogContentProps {
   className?: string;
-  scrollAreaClassName?: string;
   children: React.ReactNode;
 }
 

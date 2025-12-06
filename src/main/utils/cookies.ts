@@ -1,12 +1,13 @@
+import { CookieInterface } from "@shared/types/cookies.types";
 import { Cookie } from "tough-cookie";
 
-export const parseCookie = (cookie: Cookie) => {
+export const parseCookie = (cookie: Cookie): CookieInterface => {
   const cookieStr = String(cookie);
-  const parsedCookie: Record<string, unknown> = {};
+  const parsedCookie: Partial<CookieInterface> = {};
   const cookieParts = cookieStr.split(";");
 
   const [nameValue, cookieValue] = cookieParts[0].split("=");
-  parsedCookie.name = nameValue.trim();
+  parsedCookie.key = nameValue.trim();
   parsedCookie.value = cookieValue.trim();
 
   cookieParts.slice(1).forEach(part => {
@@ -22,20 +23,20 @@ export const parseCookie = (cookie: Cookie) => {
         parsedCookie.expires = value;
         break;
       case "httponly":
-        parsedCookie.HttpOnly = true;
+        parsedCookie.httpOnly = true;
         break;
       case "secure":
         parsedCookie.secure = true;
         break;
       case "samesite":
-        parsedCookie.samesite = value;
+        parsedCookie.sameSite = value as CookieInterface["sameSite"];
         break;
       default:
         break;
     }
   });
 
-  return parsedCookie;
+  return parsedCookie as CookieInterface;
 };
 
 export const parseSetCookie = (setCookieArray: Array<Cookie>) =>

@@ -4,7 +4,13 @@ import { jarManager } from "@/main/utils/cookieManager.js";
 import { ElectronAPIInterface } from "@shared/types/api/electron-api";
 
 export const registerCookieHandlers = () => {
-  ipcMain.handle("fetchApi", fetchApi);
+  ipcMain.handle(
+    "fetchApi",
+    async (
+      _,
+      ...rest: Parameters<ElectronAPIInterface["fetchApi"]>
+    ): ReturnType<ElectronAPIInterface["fetchApi"]> => await fetchApi(...rest),
+  );
   ipcMain.handle(
     "getAllCookies",
     async (): ReturnType<ElectronAPIInterface["getAllCookies"]> =>
