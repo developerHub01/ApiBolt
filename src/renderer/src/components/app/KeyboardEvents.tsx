@@ -26,7 +26,7 @@ const KeyboardEvents = () => {
   const { toggleFullscreen } = useGlobal();
   const activeProjectId = useAppSelector(selectActiveProjectId);
   const keybindingMap = useAppSelector(
-    selectApplyingKeyboardShortcutsStrFormated
+    selectApplyingKeyboardShortcutsStrFormated,
   );
   const isActivityBarVisible = useCheckApplyingLayoutActivityBarVisible();
   const handleToggleSidebar = useToggleSidebar();
@@ -34,7 +34,7 @@ const KeyboardEvents = () => {
 
   useEffect(() => {
     const handler = async (e: KeyboardEvent) => {
-      const keyList = [];
+      const keyList: Array<string> = [];
 
       MODIFIER_KEY_TRACK_ORDER.forEach(({ eventProperty, key }) => {
         if (e[eventProperty]) keyList.push(key);
@@ -44,7 +44,7 @@ const KeyboardEvents = () => {
       const keyString = keyList.join("+");
       const actionId = Object.entries(keybindingMap).find(
         ([, keyBindingString]) =>
-          keyBindingString && keyBindingString === keyString
+          keyBindingString && keyBindingString === keyString,
       )?.[0];
 
       if (!actionId) return;
@@ -62,7 +62,7 @@ const KeyboardEvents = () => {
           e.preventDefault();
           await dispatch(changeActiveTab(actionId as TSidebarTab));
           const path = SIDEBAR_THEME_MENU_ITEMS.find(
-            (item) => item.id === actionId
+            item => item.id === actionId,
           )?.path;
           if (path) navigate(path);
           return;
@@ -73,7 +73,7 @@ const KeyboardEvents = () => {
             updateSettings({
               activityBarVisible: Number(!isActivityBarVisible),
               projectId: activeProjectId,
-            })
+            }),
           );
         }
         case "toggle_sidebar": {
@@ -113,8 +113,8 @@ const KeyboardEvents = () => {
 
           return dispatch(
             updateSettingsZoomByKeyboard(
-              keybindingMap[actionId]?.at(-1) as TKeyboardShortcutKey
-            )
+              keybindingMap[actionId]?.at(-1) as TKeyboardShortcutKey,
+            ),
           );
         }
       }

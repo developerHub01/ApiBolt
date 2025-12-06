@@ -40,7 +40,6 @@ const RequestMetaDataContext = createContext<RequestMetaDataContext | null>(
   null
 );
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useRequestMetaData = () => {
   const context = useContext(RequestMetaDataContext);
 

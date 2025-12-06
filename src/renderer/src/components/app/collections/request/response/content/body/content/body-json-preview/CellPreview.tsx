@@ -21,7 +21,7 @@ const CellPreview = ({ data }: CellPreviewProps) => {
 
   return (
     <TableCell
-      className={cn("whitespace-normal break-words", {
+      className={cn("whitespace-normal wrap-break-word", {
         "p-0": cellDataType !== "raw",
       })}
     >

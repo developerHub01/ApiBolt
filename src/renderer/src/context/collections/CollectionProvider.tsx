@@ -8,7 +8,7 @@ import React, {
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { DEFAULT_AUTHORIZATION_ID } from "@/constant/authorization.constant";
 import { loadInheritParentAuthorization } from "@/context/redux/request-response/thunks/auth";
-import type { TAuthContextType } from "@/types/authorization.types";
+import type { TAuthContextType } from "@shared/types/authorization.types";
 import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
 
 interface CollectionContext {
@@ -17,7 +17,6 @@ interface CollectionContext {
 
 const CollectionContext = createContext<CollectionContext | null>(null);
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useCollection = () => {
   const context = useContext(CollectionContext);
 

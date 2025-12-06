@@ -26,7 +26,6 @@ interface ResponseContext {
 
 const ResponseContext = createContext<ResponseContext | null>(null);
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useResponse = () => {
   const context = useContext(ResponseContext);
 

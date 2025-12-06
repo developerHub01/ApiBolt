@@ -12,7 +12,6 @@ interface RequestBodyContext {
 
 const RequestBodyContext = createContext<RequestBodyContext | null>(null);
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useRequestBody = () => {
   const context = useContext(RequestBodyContext);
 

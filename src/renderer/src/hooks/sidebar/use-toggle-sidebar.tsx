@@ -13,6 +13,8 @@ const useToggleSidebar = () => {
         return dispatch(handleToggleRequestList());
       case "navigate_themes_marketplace":
         return dispatch(handleToggleThemeListCollapsed());
+      default:
+        return;
     }
   };
 };

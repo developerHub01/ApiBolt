@@ -28,7 +28,6 @@ interface TabSidebarContext {
 
 const TabSidebarContext = createContext<TabSidebarContext | null>(null);
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useTabSidebar = () => {
   const context = useContext(TabSidebarContext);
 

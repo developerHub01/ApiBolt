@@ -18,26 +18,23 @@ interface Props {
   onChange: (value: string) => void;
 }
 
-const FieldSelector = memo(
-  ({ list, label, value, onChange }: Props) => {
-    return (
-      <Select
-        value={value}
-        onValueChange={onChange}
-      >
-        <SelectTrigger className="w-full">
-          <SelectValue placeholder={label ?? ""} />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            {list.map(({ id, label }) => (
-              <SelectItem value={id}>{label}</SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-    );
-  }
-);
+const FieldSelector = memo(({ list, label, value, onChange }: Props) => {
+  return (
+    <Select value={value} onValueChange={onChange}>
+      <SelectTrigger className="w-full">
+        <SelectValue placeholder={label ?? ""} />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          {list.map(({ id, label }) => (
+            <SelectItem key={id} value={id}>
+              {label}
+            </SelectItem>
+          ))}
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+  );
+});
 
 export default FieldSelector;

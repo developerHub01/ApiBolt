@@ -7,13 +7,13 @@ import { cn } from "@/lib/utils";
 
 const codeFormatter = async (
   code: string,
-  callback: (code: string) => void
+  callback: (code: string) => void,
 ) => {
   code = code.trim();
   const { success, data, message } = await formatCode(code, "json");
   if (!code) return;
   if (!success || !data) return message && toast(message);
-  callback(data);
+  return callback(data);
 };
 
 interface PayloadCodeProps {
@@ -50,7 +50,7 @@ const PayloadCode = memo(
           "bg-background/10",
           "rounded-md border",
           "backdrop-blur-xs",
-          className
+          className,
         )}
       >
         <ScrollArea
@@ -59,7 +59,7 @@ const PayloadCode = memo(
             "backdrop-blur-xs",
             {
               "cursor-not-allowed": disabled,
-            }
+            },
           )}
         >
           <Code
@@ -79,7 +79,7 @@ const PayloadCode = memo(
         </ScrollArea>
       </div>
     );
-  }
+  },
 );
 
 export default PayloadCode;

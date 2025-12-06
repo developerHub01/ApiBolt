@@ -24,7 +24,6 @@ interface RequestFolderContext {
 
 const RequestFolderContext = createContext<RequestFolderContext | null>(null);
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useRequestFolder = () => {
   const context = useContext(RequestFolderContext);
 

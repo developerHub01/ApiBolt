@@ -23,7 +23,7 @@ const useTrackKeyTyped = <T extends HTMLElement>({
       if (key === "escape") return onEscape?.();
       if (key === "enter") return onEnter?.();
 
-      const list = [];
+      const list: Array<string> = [];
       /* handle modifiere keys */
       MODIFIER_KEY_TRACK_ORDER.forEach(({ eventProperty, key }) => {
         if (e[eventProperty]) list.push(key);
@@ -34,7 +34,7 @@ const useTrackKeyTyped = <T extends HTMLElement>({
 
       onChange(list);
     },
-    [onChange, onEnter, onEscape]
+    [onChange, onEnter, onEscape],
   );
 
   return handlerKeydown;

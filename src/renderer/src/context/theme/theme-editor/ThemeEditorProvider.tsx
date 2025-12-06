@@ -8,7 +8,6 @@ interface ThemeEditorContext {
 
 const ThemeEditorContext = createContext<ThemeEditorContext | null>(null);
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useThemeEditor = () => {
   const context = useContext(ThemeEditorContext);
 

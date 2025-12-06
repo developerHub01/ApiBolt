@@ -29,7 +29,6 @@ interface SettingThemeContext {
 // const SettingThemeContext = createContext<SettingThemeContext | null>(null);
 const SettingThemeContext = createContext<SettingThemeContext | null>(null);
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useSettingTheme = () => {
   const context = useContext(SettingThemeContext);
 

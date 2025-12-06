@@ -30,7 +30,7 @@ const KeyboardShortcutsEditContent = memo(({ shortcutId }: Props) => {
 
   const handleClose = useCallback(
     () => dispatch(handleChangeEditingId()),
-    [dispatch]
+    [dispatch],
   );
 
   const handleUpdate = useCallback(async () => {
@@ -40,10 +40,10 @@ const KeyboardShortcutsEditContent = memo(({ shortcutId }: Props) => {
       updateKeyboardShortcuts({
         type: activeTab,
         key: keyList,
-      })
+      }),
     ).unwrap();
 
-    toast({
+    return toast({
       type: response ? "success" : "error",
       title: response ? "Update success" : "Update error",
       description: response
@@ -66,7 +66,7 @@ const KeyboardShortcutsEditContent = memo(({ shortcutId }: Props) => {
     const keyString = keyList.join("+");
     const matchedKey =
       Object.values(applyingKeybindingMap).findIndex(
-        (item) => item.key?.join("+") === keyString && item.id !== shortcutId
+        item => item.key?.join("+") === keyString && item.id !== shortcutId,
       ) >= 0;
 
     setIsExisting(matchedKey);
@@ -87,7 +87,7 @@ const KeyboardShortcutsEditContent = memo(({ shortcutId }: Props) => {
           "w-4/5 px-2 py-3 bg-background/80 border-2 border-ring rounded-md min-h-11 flex justify-center items-center",
           {
             "border-destructive": isExisting,
-          }
+          },
         )}
       >
         {keyList.length ? (

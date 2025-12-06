@@ -352,7 +352,7 @@ export const replaceCurrentByHistory = createAsyncThunk<
       const binaryResponse =
         await window.electronAPIBodyBinary.replaceBodyBinary({
           requestOrFolderMetaId: requestId,
-          path: historyDetails?.body?.binaryData?.path ?? null
+          path: historyDetails?.body?.binaryData?.path
         });
       if (binaryResponse)
         dispatch(

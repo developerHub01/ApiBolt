@@ -31,7 +31,9 @@ const RequestListDeleteAlertDialog = memo(() => {
     <AlertDialog open={Boolean(deleteFolderOrRequestId)}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete "{folderOrRequestName}"?</AlertDialogTitle>
+          <AlertDialogTitle>
+            Delete {`"${folderOrRequestName}"`}?
+          </AlertDialogTitle>
           <AlertDialogDescription>
             Are you sure you want to delete {folderOrRequestName}?
           </AlertDialogDescription>
@@ -50,7 +52,7 @@ const RequestListDeleteAlertDialog = memo(() => {
               onClick={() => dispatch(deleteRequestOrFolder(true))}
               className={cn(
                 "text-foreground bg-red-500",
-                "hover:text-foreground hover:bg-red-700"
+                "hover:text-foreground hover:bg-red-700",
               )}
             >
               Delete

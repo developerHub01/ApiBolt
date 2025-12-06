@@ -1,7 +1,7 @@
 import { memo, useCallback, useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { updateAuthorization } from "@/context/redux/request-response/thunks/auth";
-import type { TAuthType } from "@/types/authorization.types";
+import type { TAuthType } from "@shared/types/authorization.types";
 import {
   AUTH_LIST,
   DEFAULT_AUTHORIZATION_ID,

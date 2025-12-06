@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import {
   handleReplaceShortcuts,
-  handleUpdateKeyboardShortcuts
+  handleUpdateKeyboardShortcuts,
 } from "@/context/redux/keyboard-shortcuts/keyboard-shortcuts-slice";
 import type { TKeyboardShortcutsTab } from "@/context/keyboard-shortcuts/KeyboardShortcutsProvider";
 import type { TShortcutKey } from "@shared/types/keyboard-shortcut.types";
@@ -21,6 +21,7 @@ export const loadKeyboardShortcuts = createAsyncThunk<
   try {
     const list =
       await window.electronAPIKeyboardShortcut.getKeyboardShortcuts();
+    if (!list) throw new Error();
     dispatch(handleReplaceShortcuts(list));
   } catch (error) {
     console.error(error);
@@ -50,18 +51,18 @@ export const updateKeyboardShortcuts = createAsyncThunk<
       const payload = {
         id: editingKeyId,
         projectId: type === "local" && activeProjectId ? activeProjectId : null,
-        key
+        key,
       };
 
       dispatch(
         handleUpdateKeyboardShortcuts({
-          ...payload
-        })
+          ...payload,
+        }),
       );
 
       const response =
         await window.electronAPIKeyboardShortcut.updateKeyboardShortcuts({
-          ...payload
+          ...payload,
         });
 
       if (response) return true;
@@ -70,22 +71,22 @@ export const updateKeyboardShortcuts = createAsyncThunk<
       const rollbackData =
         await window.electronAPIKeyboardShortcut.getKeyboardShortcutsById({
           id: editingKeyId,
-          projectId: activeProjectId
+          projectId: activeProjectId,
         });
 
       if (!rollbackData) return false;
 
       dispatch(
         handleUpdateKeyboardShortcuts({
-          ...rollbackData
-        })
+          ...rollbackData,
+        }),
       );
       return false;
     } catch (error) {
       console.error(error);
       return false;
     }
-  }
+  },
 );
 
 export const resetKeyboardShortcuts = createAsyncThunk<
@@ -107,19 +108,19 @@ export const resetKeyboardShortcuts = createAsyncThunk<
 
       const payload = {
         id,
-        projectId: type === "local" && activeProjectId ? activeProjectId : null
+        projectId: type === "local" && activeProjectId ? activeProjectId : null,
       };
 
       const response =
         await window.electronAPIKeyboardShortcut.resetKeyboardShortcuts({
-          ...payload
+          ...payload,
         });
       if (!response) return false;
 
       dispatch(
         handleUpdateKeyboardShortcuts({
-          ...response
-        })
+          ...response,
+        }),
       );
 
       return true;
@@ -127,7 +128,7 @@ export const resetKeyboardShortcuts = createAsyncThunk<
       console.error(error);
       return false;
     }
-  }
+  },
 );
 /* ==============================
 ========== Keyboard Shortcuts end =========

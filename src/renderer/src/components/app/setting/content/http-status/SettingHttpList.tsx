@@ -86,7 +86,7 @@ const SettingHttpList = memo(() => {
                           <SettingHttpEditableContent
                             type="reason"
                             code={code}
-                            editedValue={editedReason}
+                            editedValue={editedReason ?? ""}
                             value={reason}
                           />
                         </TableCell>
@@ -94,7 +94,7 @@ const SettingHttpList = memo(() => {
                           <SettingHttpEditableContent
                             type="description"
                             code={code}
-                            editedValue={editedDescription}
+                            editedValue={editedDescription ?? ""}
                             value={description}
                           />
                         </TableCell>

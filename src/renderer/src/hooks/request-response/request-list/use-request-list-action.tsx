@@ -23,7 +23,7 @@ const useRequestListAction = () => {
     if (showFolderButton) return REQUEST_LIST_ACTION_BUTTON_LIST;
 
     return REQUEST_LIST_ACTION_BUTTON_LIST.filter(
-      (item) => !REQUEST_LIST_ACTION_FOLDER_TYPE_ID_LIST.includes(item.id)
+      item => !REQUEST_LIST_ACTION_FOLDER_TYPE_ID_LIST.includes(item.id),
     );
   }, [checkIsFolderAddable]);
 
@@ -40,9 +40,11 @@ const useRequestListAction = () => {
           return dispatch(loadRequestList());
         case "collapse":
           return dispatch(collapseAllRequestOrFolder());
+        default:
+          return;
       }
     },
-    [dispatch]
+    [dispatch],
   );
 
   return {

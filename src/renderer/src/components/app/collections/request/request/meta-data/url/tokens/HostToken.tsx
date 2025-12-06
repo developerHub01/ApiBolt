@@ -57,7 +57,7 @@ const HostToken = memo(({ hostType }: HostTokenProps) => {
       requestUrlUpdateOriginToken({
         id: "host",
         value,
-      })
+      }),
     );
   };
 
@@ -79,7 +79,7 @@ const HostToken = memo(({ hostType }: HostTokenProps) => {
   const handleChangeHostType = useCallback(
     (type: THostType) => {
       const value = (["127.0.0.1", "localhost"] as Array<THostType>).includes(
-        type
+        type,
       )
         ? type
         : "custom.com";
@@ -88,10 +88,10 @@ const HostToken = memo(({ hostType }: HostTokenProps) => {
         requestUrlUpdateOriginToken({
           id: "host",
           value,
-        })
+        }),
       );
     },
-    [dispatch]
+    [dispatch],
   );
 
   const handleOutterClick = () => hostnameRef.current?.focus();
@@ -151,10 +151,14 @@ const Menu = ({ value, onChange }: MenuProps) => {
         <DropdownMenuRadioGroup
           defaultValue={"localhost"}
           value={value}
-          onValueChange={(newValue) => onChange(newValue as THostType)}
+          onValueChange={newValue => onChange(newValue as THostType)}
         >
-          {API_HOST_TYPE_LIST.map((type) => (
-            <DropdownMenuRadioItem value={type} className="capitalize">
+          {API_HOST_TYPE_LIST.map(type => (
+            <DropdownMenuRadioItem
+              key={type}
+              value={type}
+              className="capitalize"
+            >
               {type}
             </DropdownMenuRadioItem>
           ))}

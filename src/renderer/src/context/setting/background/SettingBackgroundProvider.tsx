@@ -27,7 +27,6 @@ const SettingBackgroundContext = createContext<SettingBackgroundContext | null>(
   null
 );
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useSettingBackground = () => {
   const context = useContext(SettingBackgroundContext);
 

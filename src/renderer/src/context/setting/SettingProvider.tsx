@@ -18,7 +18,6 @@ interface SettingContext {
 // const SettingContext = createContext<SettingContext | null>(null);
 const SettingContext = createContext<SettingContext | null>(null);
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useSetting = () => {
   const context = useContext(SettingContext);
 

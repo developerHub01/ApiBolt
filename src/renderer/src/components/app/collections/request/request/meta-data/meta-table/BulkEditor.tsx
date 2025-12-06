@@ -25,7 +25,7 @@ Variable with {{variable}}`;
 const textToMetaData = (text: string) =>
   text
     .split("\n")
-    .map((line) => {
+    .map(line => {
       const tempLine = line.trim();
 
       if (tempLine && tempLine !== "//" && !tempLine.includes(":"))
@@ -35,12 +35,12 @@ const textToMetaData = (text: string) =>
 
       return line;
     })
-    .map((line) => line.split(":"))
-    .filter((line) => {
+    .map(line => line.split(":"))
+    .filter(line => {
       if (line.length <= 1) return false;
       return line;
     })
-    .map((line) => {
+    .map(line => {
       let key = line[0].trim();
       if (key.startsWith("//")) key = key.slice(2).trim();
 
@@ -48,14 +48,16 @@ const textToMetaData = (text: string) =>
       const description = line[2]?.trimEnd() ?? "";
       const enabled =
         !line[0].startsWith(
-          "//"
+          "//",
         ); /* if start with // then it mean hidden so false */
 
-      let keyType = null;
-      let valueType = null;
+      const cleanKeyVariable = detectAndCleanVariable(key, "keyType");
+      key = cleanKeyVariable.key;
+      const keyType = cleanKeyVariable.keyType;
 
-      ({ key, keyType } = detectAndCleanVariable(key, "keyType"));
-      ({ value, valueType } = detectAndCleanVariable(value, "valueType"));
+      const cleanVariableVariable = detectAndCleanVariable(value, "valueType");
+      value = cleanVariableVariable.value;
+      const valueType = cleanVariableVariable.valueType;
 
       return {
         key,
@@ -98,7 +100,7 @@ const BulkEditor = memo(() => {
 
   const handleBlur = useCallback(() => {
     const metaArray = textToMetaData(value);
-    const payload = metaArray.map((param) => ({
+    const payload = metaArray.map(param => ({
       key: param.key as string,
       value: param.value as string,
       description: param.description as string,
@@ -117,7 +119,7 @@ const BulkEditor = memo(() => {
     <ScrollArea
       className={cn(
         "flex-1 min-h-0 h-full overflow-hidden [&>div>div]:h-full relative bg-background/10 rounded-md border",
-        "backdrop-blur-xs"
+        "backdrop-blur-xs",
       )}
     >
       <Code

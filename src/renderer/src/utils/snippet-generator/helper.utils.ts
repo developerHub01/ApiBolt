@@ -6,7 +6,7 @@ export const defaultBinaryData = "<Your file path should go here>";
 
 export const getBodyType = ({
   bodyType,
-  rawBodyDataType
+  rawBodyDataType,
 }: Pick<CodeSnippitDataInterface, "rawBodyDataType" | "bodyType">) =>
   bodyType === "x-www-form-urlencoded"
     ? "application/x-www-form-urlencoded"
@@ -28,7 +28,7 @@ export const getHeadersList = ({
   headers,
   authorization,
   rawBodyDataType,
-  bodyType
+  bodyType,
 }: Pick<
   CodeSnippitDataInterface,
   "headers" | "authorization" | "binaryData" | "rawBodyDataType" | "bodyType"
@@ -38,18 +38,18 @@ export const getHeadersList = ({
 }> => {
   const headerContentType = getBodyType({
     bodyType,
-    rawBodyDataType
+    rawBodyDataType,
   });
 
   if (headerContentType)
     headers.push({
       key: "Content-Type",
-      value: headerContentType
+      value: headerContentType,
     });
   if (authorization)
     headers.push({
       key: authorization.key,
-      value: MASKED_AUTHORIZATION
+      value: MASKED_AUTHORIZATION,
     });
 
   return headers;
@@ -58,12 +58,12 @@ export const getHeadersList = ({
 export const getBodyData = ({
   bodyType,
   formData,
-  xWWWFormUrlencoded
+  xWWWFormUrlencoded,
 }: Pick<
   CodeSnippitDataInterface,
   "bodyType" | "formData" | "xWWWFormUrlencoded"
 >) => {
-  let settingsData = null;
+  let settingsData: string | null = null;
   switch (bodyType) {
     case "form-data":
       if (!formData.length) break;
@@ -90,12 +90,12 @@ export const getBodyData = ({
 export const jsonFormatter = async (str: string) =>
   await codeFormatter({
     code: str,
-    rawRequestBodyType: "json"
+    rawRequestBodyType: "json",
   });
 
 export const generateMaskedAndRealCode = ({
   code,
-  authorization
+  authorization,
 }: {
   code: string;
   authorization: CodeSnippitDataInterface["authorization"];
@@ -103,5 +103,5 @@ export const generateMaskedAndRealCode = ({
   maskedCode: code,
   code: authorization
     ? code.replaceAll(MASKED_AUTHORIZATION, authorization.value)
-    : code
+    : code,
 });

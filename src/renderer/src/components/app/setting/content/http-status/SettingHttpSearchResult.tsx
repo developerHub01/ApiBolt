@@ -14,7 +14,7 @@ interface SettingHttpSearchResultProps {
 const SettingHttpSearchResult = memo(
   ({ value }: SettingHttpSearchResultProps) => {
     const details = useAppSelector(state =>
-      selectHttpStatusCodeDetailsPartial(state, value)
+      selectHttpStatusCodeDetailsPartial(state, value),
     );
 
     if (!details)
@@ -38,7 +38,7 @@ const SettingHttpSearchResult = memo(
               <TableRow
                 className={cn(
                   "[&>td]:border-r [&>td]:last:border-r-0",
-                  "focus-within:bg-accent/60 duration-75 transition-colors"
+                  "focus-within:bg-accent/60 duration-75 transition-colors",
                 )}
               >
                 <TableCell className="font-medium whitespace-break-spaces w-32">
@@ -51,7 +51,7 @@ const SettingHttpSearchResult = memo(
               <TableRow
                 className={cn(
                   "[&>td]:border-r [&>td]:last:border-r-0",
-                  "focus-within:bg-accent/60 duration-75 transition-colors"
+                  "focus-within:bg-accent/60 duration-75 transition-colors",
                 )}
               >
                 <TableCell className="font-medium whitespace-break-spaces w-32">
@@ -61,7 +61,7 @@ const SettingHttpSearchResult = memo(
                   <SettingHttpEditableContent
                     type="reason"
                     code={detail.code}
-                    editedValue={detail.editedReason}
+                    editedValue={detail.editedReason ?? ""}
                     value={detail.reason}
                   />
                 </TableCell>
@@ -69,7 +69,7 @@ const SettingHttpSearchResult = memo(
               <TableRow
                 className={cn(
                   "[&>td]:border-r [&>td]:last:border-r-0",
-                  "focus-within:bg-accent/60 duration-75 transition-colors"
+                  "focus-within:bg-accent/60 duration-75 transition-colors",
                 )}
               >
                 <TableCell className="font-medium whitespace-break-spaces w-32">
@@ -79,7 +79,7 @@ const SettingHttpSearchResult = memo(
                   <SettingHttpEditableContent
                     type="description"
                     code={detail.code}
-                    editedValue={detail.editedDescription}
+                    editedValue={detail.editedDescription ?? ""}
                     value={detail.description}
                   />
                 </TableCell>
@@ -89,7 +89,7 @@ const SettingHttpSearchResult = memo(
         ))}
       </div>
     );
-  }
+  },
 );
 
 export default SettingHttpSearchResult;

@@ -23,7 +23,6 @@ const HistoryMetaListContext = createContext<HistoryMetaListContext | null>(
   null
 );
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useHistoryMetaList = () => {
   const context = useContext(HistoryMetaListContext);
 

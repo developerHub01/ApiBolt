@@ -6,7 +6,6 @@ import { useParams } from "react-router-dom";
 
 const RequestHeaderContext = createContext<undefined | null>(null);
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useRequestHeader = () => {
   const context = useContext(RequestHeaderContext);
 

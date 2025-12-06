@@ -9,7 +9,6 @@ const RequestResponseContext = createContext<RequestResponseContext | null>(
   null
 );
 
-/* eslint-disable react-refresh/only-export-components */
 export const useRequestResponse = () => {
   const context = useContext(RequestResponseContext);
 

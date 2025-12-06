@@ -37,7 +37,7 @@ const ProtocolToken = memo(() => {
       requestUrlUpdateOriginToken({
         id: "protocol",
         value,
-      })
+      }),
     );
   };
 
@@ -68,10 +68,10 @@ const Menu = ({ value, onChange }: MenuProps) => {
         <DropdownMenuRadioGroup
           defaultValue={optionList[0].id}
           value={value}
-          onValueChange={(newValue) => onChange(newValue as THostType)}
+          onValueChange={newValue => onChange(newValue as THostType)}
         >
           {optionList.map(({ id, label }) => (
-            <DropdownMenuRadioItem value={id} className="capitalize">
+            <DropdownMenuRadioItem key={id} value={id} className="capitalize">
               {label}
             </DropdownMenuRadioItem>
           ))}

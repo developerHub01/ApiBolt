@@ -23,7 +23,7 @@ const useCodeKeybaordShortcut = <T extends HTMLElement>({
 
   const handlerKeydown = useCallback(
     (e: KeyboardEvent<T>) => {
-      const keyList = [];
+      const keyList: Array<string> = [];
 
       MODIFIER_KEY_TRACK_ORDER.forEach(({ eventProperty, key }) => {
         if (e[eventProperty]) keyList.push(key);

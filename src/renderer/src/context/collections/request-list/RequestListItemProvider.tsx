@@ -28,7 +28,6 @@ const RequestListItemContext = createContext<RequestListItemContext | null>(
   null
 );
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useRequestListItem = () => {
   const context = useContext(RequestListItemContext);
 

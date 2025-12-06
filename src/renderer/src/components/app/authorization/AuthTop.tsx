@@ -2,7 +2,7 @@ import React, { memo } from "react";
 import AuthTypeTab from "@/components/app/authorization/AuthTypeTab";
 import AuthDetails from "@/components/app/authorization/AuthDetails";
 import { cn } from "@/lib/utils";
-import type { TAuthContextType } from "@/types/authorization.types";
+import type { TAuthContextType } from "@shared/types/authorization.types";
 
 interface Props {
   id: string;

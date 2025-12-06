@@ -22,20 +22,17 @@ interface Props {
 
 const MetaTable = memo(({ type, data }: Props) => {
   const showDescription = useMemo(
-    () => data.some((item) => item.description),
-    [data]
+    () => data.some(item => item.description),
+    [data],
   );
 
-  const isAllChecked = useMemo(
-    () => data.every((item) => item.isCheck),
-    [data]
-  );
+  const isAllChecked = useMemo(() => data.every(item => item.isCheck), [data]);
 
   return (
     <ScrollArea
       className={cn(
         "flex-1 min-h-0 h-full overflow-hidden [&>div>div]:h-full",
-        "rounded-lg border"
+        "rounded-lg border",
       )}
     >
       <Table className="w-full h-full select-text table-fixed">
@@ -61,11 +58,12 @@ const MetaTable = memo(({ type, data }: Props) => {
           </TableRow>
         </TableHeader>
         <TableBody className="[&>tr>td]:border-r [&>tr>td]:last:border-r-0 [&>tr>td]:border-b">
-          {data.map((rowData) => (
+          {data.map(rowData => (
             <MetaTableRow
               type={type}
               keyName={rowData.key}
               {...rowData}
+              key={rowData.id}
               showDescription={showDescription}
             />
           ))}

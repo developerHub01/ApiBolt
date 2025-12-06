@@ -68,9 +68,9 @@ const HistoryTop = memo(() => {
       dispatch(
         changeHistoryFilterMethod({
           method: value as THistoryFilter,
-        })
+        }),
       ),
-    [dispatch]
+    [dispatch],
   );
 
   return (
@@ -84,7 +84,7 @@ const HistoryTop = memo(() => {
           <SelectGroup>
             <SelectLabel>Methods</SelectLabel>
             {methodList.map(({ id, label }) => (
-              <SelectItem value={id} className="uppercase text-xs">
+              <SelectItem key={id} value={id} className="uppercase text-xs">
                 {label}
               </SelectItem>
             ))}

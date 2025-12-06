@@ -24,8 +24,8 @@ const BeautifyCode = memo(() => {
   const requestBodyType = useAppSelector(selectRequestBodyType);
   const rawRequestBodyType = useAppSelector(selectRawRequestBodyType);
   const code = useAppSelector(selectRawData);
-  const shortcuts = useAppSelector((state) =>
-    selectApplyingKeyboardShortcutsById(state, "code_beautify")
+  const shortcuts = useAppSelector(state =>
+    selectApplyingKeyboardShortcutsById(state, "code_beautify"),
   );
 
   const shortcutString =
@@ -35,7 +35,7 @@ const BeautifyCode = memo(() => {
 
   const parser = useMemo(
     () => getParser(rawRequestBodyType),
-    [rawRequestBodyType]
+    [rawRequestBodyType],
   );
 
   const handleClick = useCallback(async () => {
@@ -51,7 +51,7 @@ const BeautifyCode = memo(() => {
         })
       );
 
-    handleChangeRawData(data);
+    return handleChangeRawData(data);
   }, [code, parser, toast, handleChangeRawData]);
 
   if (requestBodyType !== "raw" || rawRequestBodyType === "text") return null;
