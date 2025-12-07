@@ -120,9 +120,7 @@ interface ListItemProps {
 }
 
 const ListItem = ({ label, onClick }: ListItemProps) => (
-  <ContextMenuItem onClick={onClick} className="text-xs">
-    {label}
-  </ContextMenuItem>
+  <ContextMenuItem onClick={onClick}>{label}</ContextMenuItem>
 );
 
 export default SidebarContextMenuWrapper;

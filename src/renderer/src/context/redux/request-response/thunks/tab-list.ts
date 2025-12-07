@@ -7,6 +7,9 @@ import {
   handleChangeSelectedTab,
   handleChangeTabList,
   handleCreateSingleRequest,
+  handleRemoveAllLeftTabs,
+  handleRemoveAllRightTabs,
+  handleRemoveOtherTabs,
   handleRemoveTab,
 } from "@/context/redux/request-response/request-response-slice";
 import { v4 as uuidv4 } from "uuid";
@@ -77,35 +80,79 @@ export const changeTabsData = createAsyncThunk<
 
 export const addNewTabsData = createAsyncThunk<
   void,
-  void,
+  | {
+      index?: number;
+      autoSelect?: boolean;
+    }
+  | undefined,
   {
     state: RootState;
     dispatch: AppDispatch;
   }
->("request-response/addNewTabsData", async (_, { getState, dispatch }) => {
-  try {
-    const state = getState() as RootState;
-    const projectId = state.project.activeProjectId;
-    if (!projectId) throw new Error();
-    const newTabId = uuidv4();
+>(
+  "request-response/addNewTabsData",
+  async (payload, { getState, dispatch }) => {
+    try {
+      const index = payload?.index;
+      const autoSelect = payload?.autoSelect ?? false;
+      const state = getState() as RootState;
+      const projectId = state.project.activeProjectId;
+      if (!projectId) throw new Error();
+      const newTabId = uuidv4();
 
-    const payload: RequestListItemInterface = {
-      id: newTabId,
-      name: "Request",
-      method: "get",
-      projectId,
-    };
+      const createPayload: RequestListItemInterface = {
+        id: newTabId,
+        name: "Request",
+        method: "get",
+        projectId,
+      };
 
-    dispatch(handleAddTab(newTabId));
-    dispatch(handleChangeSelectedTab(newTabId));
-    dispatch(handleCreateSingleRequest(payload));
-    await window.electronAPIRequestOrFolderMeta.createRequestOrFolderMeta(
-      payload,
-    );
-  } catch (error) {
-    console.error(error);
+      dispatch(
+        handleAddTab({
+          id: newTabId,
+          index,
+        }),
+      );
+      if (autoSelect) dispatch(handleChangeSelectedTab(newTabId));
+      dispatch(handleCreateSingleRequest(createPayload));
+      await window.electronAPIRequestOrFolderMeta.createRequestOrFolderMeta(
+        createPayload,
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  },
+);
+
+export const addNewTabsToLeftOrRight = createAsyncThunk<
+  void,
+  {
+    id: string;
+    type: "left" | "right";
+  },
+  {
+    state: RootState;
+    dispatch: AppDispatch;
   }
-});
+>(
+  "request-response/addNewTabsToRight",
+  async ({ id, type }, { getState, dispatch }) => {
+    try {
+      const state = getState() as RootState;
+      const tabList = state.requestResponse.tabList;
+      const tabIndex = tabList.findIndex(item => item === id);
+      if (tabIndex < 0) throw new Error();
+
+      dispatch(
+        addNewTabsData({
+          index: type === "left" ? tabIndex : tabIndex + 1,
+        }),
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  },
+);
 
 export const expendParentsOnSelectedChangeTabsData = createAsyncThunk<
   void,
@@ -143,23 +190,39 @@ export const expendParentsOnSelectedChangeTabsData = createAsyncThunk<
 
 export const removeTab = createAsyncThunk<
   void,
-  string | undefined,
+  {
+    id: string;
+    type: "current" | "others" | "all-left" | "all-right";
+  },
   {
     state: RootState;
     dispatch: AppDispatch;
   }
->("request-response/removeTab", (id, { dispatch, getState }) => {
+>("request-response/removeTab", ({ id, type }, { dispatch, getState }) => {
   try {
     const state = getState() as RootState;
     const activeTab = state.sidebar.activeTab;
 
     if (activeTab !== "navigate_collections") return;
-
-    dispatch(handleRemoveTab(id));
+    switch (type) {
+      case "current":
+        dispatch(handleRemoveTab(id));
+        break;
+      case "others":
+        dispatch(handleRemoveOtherTabs(id));
+        break;
+      case "all-left":
+        dispatch(handleRemoveAllLeftTabs(id));
+        break;
+      case "all-right":
+        dispatch(handleRemoveAllRightTabs(id));
+        break;
+    }
   } catch (error) {
     console.error(error);
   }
 });
+
 /* ==============================
 ========= TabList end =========
 ================================= */

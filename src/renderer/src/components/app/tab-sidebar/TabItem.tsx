@@ -86,7 +86,12 @@ const TabItem = memo(({ id, index }: Props) => {
 
   const handleCloseBtnClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    dispatch(removeTab(id));
+    dispatch(
+      removeTab({
+        id,
+        type: "current",
+      }),
+    );
   };
 
   const handleClick = useCallback(async () => {
@@ -101,6 +106,7 @@ const TabItem = memo(({ id, index }: Props) => {
   return (
     <div
       key={id}
+      data-tab-id={id}
       data-active={selectedTab === id}
       className={cn(
         "w-full h-9 cursor-pointer px-1 border-x-2 border-transparent",

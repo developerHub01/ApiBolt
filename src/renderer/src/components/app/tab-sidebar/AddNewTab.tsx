@@ -10,7 +10,11 @@ const AddNewTab = memo(() => {
   const { isTabListOpen } = useTabSidebar();
 
   const handleAdd = useCallback(() => {
-    dispatch(addNewTabsData());
+    dispatch(
+      addNewTabsData({
+        autoSelect: true,
+      }),
+    );
   }, [dispatch]);
 
   return (

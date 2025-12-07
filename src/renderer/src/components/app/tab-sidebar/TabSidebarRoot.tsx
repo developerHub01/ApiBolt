@@ -12,6 +12,7 @@ import type { TLayoutSetting } from "@shared/types/setting.types";
 import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 import NoTabOpenEmptyBox from "@/components/app/tab-sidebar/empty/NoTabOpenEmptyBox";
 import NoTabSearchResultEmptyBox from "@/components/app/tab-sidebar/empty/NoTabSearchResultEmptyBox";
+import TabSidebarContextMenuWrapper from "@/components/app/tab-sidebar/TabSidebarContextMenuWrapper";
 
 const TAB_ENTER_LONG_HOVER_TIME = 350;
 const TAB_LEAVE_LONG_HOVER_TIME = 500;
@@ -109,30 +110,32 @@ const TabSidebarRoot = () => {
         onDrop={handleDrop}
         onDragOver={handleDragOver}
       >
-        <AutoScrollActiveWrapper className="py-1 h-full">
-          {!totalTabsOpen ? (
-            <>
-              {/* if no tabs open */}
-              <div className="p-2.5 flex-1">
-                {isTabListOpen && <NoTabOpenEmptyBox />}
-              </div>
-            </>
-          ) : localTabList.length ? (
-            <>
-              {/* if search list have result */}
-              {localTabList.map((tabId, index) => (
-                <TabItem key={tabId} id={tabId} index={index} />
-              ))}
-            </>
-          ) : (
-            <>
-              {/* if search list empty */}
-              <div className="p-2.5 flex-1">
-                {isTabListOpen && <NoTabSearchResultEmptyBox />}
-              </div>
-            </>
-          )}
-        </AutoScrollActiveWrapper>
+        <TabSidebarContextMenuWrapper>
+          <AutoScrollActiveWrapper className="py-1 h-full">
+            {!totalTabsOpen ? (
+              <>
+                {/* if no tabs open */}
+                <div className="p-2.5 flex-1">
+                  {isTabListOpen && <NoTabOpenEmptyBox />}
+                </div>
+              </>
+            ) : localTabList.length ? (
+              <>
+                {/* if search list have result */}
+                {localTabList.map((tabId, index) => (
+                  <TabItem key={tabId} id={tabId} index={index} />
+                ))}
+              </>
+            ) : (
+              <>
+                {/* if search list empty */}
+                <div className="p-2.5 flex-1">
+                  {isTabListOpen && <NoTabSearchResultEmptyBox />}
+                </div>
+              </>
+            )}
+          </AutoScrollActiveWrapper>
+        </TabSidebarContextMenuWrapper>
       </ScrollArea>
       <TabActionWrapper />
     </motion.div>

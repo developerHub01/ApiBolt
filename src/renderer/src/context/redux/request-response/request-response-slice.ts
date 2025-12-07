@@ -489,26 +489,36 @@ export const requestResponseSlice = createSlice({
     handleChangeTabList: (state, action: PayloadAction<Array<string>>) => {
       state.tabList = action.payload;
     },
-    handleAddTab: (state, action: PayloadAction<string | undefined>) => {
-      const id = action.payload ?? uuidv4();
+    handleAddTab: (
+      state,
+      action: PayloadAction<{ id?: string; index?: number } | undefined>,
+    ) => {
+      const id = action.payload?.id ?? uuidv4();
+      const index = action.payload?.index;
+
+      /** prevent duplicates */
+      if (state.tabList.includes(id)) return;
 
       let addIndex = state.tabList.length;
 
-      const selectedIdIndex = state.tabList.findIndex(
-        tabId => tabId === state.selectedTab,
-      );
+      /** if index is provided -> highest priority */
+      if (typeof index === "number")
+        addIndex = Math.max(0, Math.min(index, state.tabList.length));
+      else {
+        const selectedIdIndex = state.tabList.findIndex(
+          tabId => tabId === state.selectedTab,
+        );
 
-      if (selectedIdIndex >= 0) addIndex = selectedIdIndex + 1;
+        /** insert after selected tab if exists */
+        if (selectedIdIndex >= 0) addIndex = selectedIdIndex + 1;
+      }
 
-      if (state.tabList.includes(id)) return;
-
-      const newList = state.tabList;
-      newList.splice(addIndex, 0, id);
-      state.tabList = newList;
+      /** insert tab */
+      state.tabList.splice(addIndex, 0, id);
     },
+
     handleRemoveTab: (state, action: PayloadAction<string | undefined>) => {
       const id = action.payload ?? state.selectedTab;
-
       if (!id) return;
 
       const idIndex = state.tabList.findIndex(tabId => tabId === id);
@@ -526,6 +536,41 @@ export const requestResponseSlice = createSlice({
       // If no tabs left, set to null
       state.selectedTab =
         newTabList.length === 0 ? null : newTabList[nextSelectedTabIndex];
+    },
+    handleRemoveOtherTabs: (
+      state,
+      action: PayloadAction<string | undefined>,
+    ) => {
+      const id = action.payload ?? state.selectedTab;
+      if (!id) return;
+
+      state.tabList = state.tabList.filter(tabId => tabId === id);
+    },
+    handleRemoveAllRightTabs: (
+      state,
+      action: PayloadAction<string | undefined>,
+    ) => {
+      const id = action.payload ?? state.selectedTab;
+      if (!id) return;
+
+      const idIndex = state.tabList.findIndex(tabId => tabId === id);
+      if (idIndex === -1) return;
+
+      /* Keep LEFT + the selected one */
+      state.tabList = state.tabList.slice(0, idIndex + 1);
+    },
+    handleRemoveAllLeftTabs: (
+      state,
+      action: PayloadAction<string | undefined>,
+    ) => {
+      const id = action.payload ?? state.selectedTab;
+      if (!id) return;
+
+      const idIndex = state.tabList.findIndex(tabId => tabId === id);
+      if (idIndex === -1) return;
+
+      /* Keep RIGHT */
+      state.tabList = state.tabList.slice(idIndex);
     },
     handleMoveTab: (
       state,
@@ -1371,6 +1416,9 @@ export const {
   handleClearTabList,
   handleAddTab,
   handleRemoveTab,
+  handleRemoveOtherTabs,
+  handleRemoveAllRightTabs,
+  handleRemoveAllLeftTabs,
   handleMoveTab,
   handleChangeSelectedTab,
   handleToggleTabListCollapse,

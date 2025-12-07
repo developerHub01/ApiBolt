@@ -29,6 +29,7 @@ interface TabSidebarContext {
   isTabListHovering: boolean;
   handleSearch: (searchTerm: string) => void;
   handleChangeIsTabListHovering: (value?: boolean | undefined) => void;
+  handleChangeIsContextMenuOpen: (value?: boolean | undefined) => void;
 }
 
 const TabSidebarContext = createContext<TabSidebarContext | null>(null);
@@ -54,12 +55,13 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
   const selectedTab = useAppSelector(selectSelectedTab);
   const isCollapsed = useAppSelector(selectIsTabListCollapsed);
   const [isTabListHovering, setIsTabListHovering] = useState<boolean>(false);
+  const [isContextMenuOpen, setIsContextMenuOpen] = useState<boolean>(false);
   const [localTabList, setLocalTabList] = useState<Array<string>>(
     tabList ?? [],
   );
   const isTabListOpen = useMemo(
-    () => (isCollapsed ? false : isTabListHovering),
-    [isCollapsed, isTabListHovering],
+    () => (isCollapsed ? false : isContextMenuOpen ? true : isTabListHovering),
+    [isCollapsed, isContextMenuOpen, isTabListHovering],
   );
   const changeTabDataTimeout = useRef<NodeJS.Timeout>(null);
 
@@ -111,6 +113,11 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
     [isCollapsed],
   );
 
+  const handleChangeIsContextMenuOpen = useCallback(
+    (value?: boolean) => setIsContextMenuOpen(prev => value ?? !prev),
+    [],
+  );
+
   return (
     <TabSidebarContext.Provider
       value={{
@@ -122,6 +129,7 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
         isTabListOpen,
         isCollapsed,
         handleChangeIsTabListHovering,
+        handleChangeIsContextMenuOpen,
       }}
     >
       {children}
