@@ -71,9 +71,11 @@ const MetaDataContent = memo(() => {
         )}
         {activeMetaTab === "body" && (
           <TabMotionWrapper id="body">
-            <Suspense fallback={<RequestBodyFallback />}>
-              <Body />
-            </Suspense>
+            <TabMotionWrapper id="body">
+              <Suspense fallback={<RequestBodyFallback />}>
+                <Body />
+              </Suspense>
+            </TabMotionWrapper>
           </TabMotionWrapper>
         )}
         {activeMetaTab === "code" && (
