@@ -58,31 +58,42 @@ export const handleZoomLevel = async () => {
   }
 };
 
+const handleBackgroundImages = async (
+  images: string | null | "default" = null,
+) => {
+  if (images && images !== "default") {
+    return await getImageFilesFromFolder(images);
+  }
+  return images as null | "default";
+};
+
 export const settingsHandlers = () => {
   ipcMain.handle(
     "getSettings",
     async (_): ReturnType<ElectronAPISettingsInterface["getSettings"]> => {
-      const result = await getSettings();
+      const { settings, globalSetting } = await getSettings();
 
-      if (
-        result?.globalSetting?.backgroundImages &&
-        result?.globalSetting?.backgroundImages !== "default"
-      )
-        result.globalSetting.backgroundImages = await getImageFilesFromFolder(
-          result?.globalSetting?.backgroundImages,
-        );
-
-      if (
-        result?.settings?.backgroundImages &&
-        result?.settings?.backgroundImages !== "default"
-      )
-        result.settings.backgroundImages = await getImageFilesFromFolder(
-          result?.settings?.backgroundImages,
-        );
+      const globalBackgroundImages = await handleBackgroundImages(
+        globalSetting?.backgroundImages,
+      );
+      const localBackgroundImages = await handleBackgroundImages(
+        settings?.backgroundImages,
+      );
 
       await handleZoomLevel();
 
-      return result;
+      return {
+        settings: settings
+          ? {
+              ...settings,
+              backgroundImages: localBackgroundImages,
+            }
+          : settings,
+        globalSetting: {
+          ...globalSetting,
+          backgroundImages: globalBackgroundImages,
+        },
+      };
     },
   );
   ipcMain.handle(
@@ -117,44 +128,45 @@ export const settingsHandlers = () => {
       ElectronAPISettingsInterface["updateSettingsBackgroundImages"]
     > => {
       try {
-        let payload = rest?.[0] ?? {};
-        const method = payload?.method ?? "upload";
-        let result = null;
+        const { method = "upload", projectId } = rest[0];
+
+        let result: string | "default" | null = null;
 
         if (method === "upload") {
-          result = await dialog.showOpenDialog({
+          const dialogResult = await dialog.showOpenDialog({
             properties: ["openDirectory"],
             title: "Select background images folder",
             buttonLabel: "Select",
           });
 
-          result = result?.filePaths?.[0];
+          /* dialogResult.filePaths exists */
+          result = dialogResult.filePaths?.[0] ?? null;
         } else if (method === "default") result = "default";
 
-        payload = {
-          projectId: payload?.projectId ?? null,
-          backgroundImages: result,
+        const updatePayload: Parameters<
+          ElectronAPISettingsInterface["updateSettings"]
+        >[0] = {
+          projectId: projectId ?? null,
         };
 
         /* updating opacity based on the result and method */
         if (result && method === "upload") {
-          const { settings: existingSettings, existingGlobalSetting } =
-            await getSettings();
+          updatePayload["backgroundImages"] = result;
+          const { settings, globalSetting } = await getSettings();
 
           /* if no opacity fixed in global and not have any value in project based setting then update opacity of local */
-
           if (
-            (existingGlobalSetting?.backgroundOpacity === null ||
-              typeof existingGlobalSetting?.backgroundOpacity ===
-                "undefined") &&
-            (existingSettings?.backgroundOpacity === null ||
-              typeof existingSettings?.backgroundOpacity === "undefined")
+            (globalSetting?.backgroundOpacity === undefined ||
+              globalSetting?.backgroundOpacity === null) &&
+            (settings?.backgroundOpacity === undefined ||
+              settings?.backgroundOpacity === null)
           ) {
-            payload.backgroundOpacity = defaultSettings.backgroundOpacity;
+            /* cast payload to proper type with backgroundOpacity */
+            updatePayload.backgroundOpacity = defaultSettings.backgroundOpacity;
           }
         }
 
-        return await updateSettings(payload);
+        return await updateSettings(updatePayload);
       } catch (error) {
         console.error(error);
         return false;

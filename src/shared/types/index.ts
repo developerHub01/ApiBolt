@@ -41,6 +41,10 @@ export type WithNullable<T, K extends keyof T> = {
   [P in keyof T]: P extends K ? T[P] | null : T[P];
 };
 
+export type AllNotNull<T> = {
+  [K in keyof T]-?: NonNullable<T[K]>;
+};
+
 export interface WindowElectronAPIInterface {
   electronAPI: ElectronAPIInterface;
   electronAPIFileSystem: electronAPIFileSystemInterface;

@@ -7,7 +7,7 @@ import {
   THTTPMethods,
   TRequestBodyType,
 } from "@shared/types/request-response.types";
-import { TLayoutSetting } from "@shared/types/setting.types";
+import { SettingsInterface } from "@shared/types/setting.types";
 import { TSidebarTab } from "@shared/types/sidebar.types";
 import { ThemeInterface } from "@shared/types/theme.types";
 import { sql } from "drizzle-orm";
@@ -205,20 +205,22 @@ export const settingTable = sqliteTable("setting_table", {
   maxNumberOfImages: int(),
   slideInterval: int(),
   zoomLevel: real(),
-  isZoomable: int({ mode: "boolean" }),
+  isZoomable: int(),
   codeFontSize: int(),
   indentationSize: int(),
   layoutType: text()
-    .$type<TLayoutSetting>()
-    .notNull()
-    .default("ltr") /* ltr | rtl */,
-  activityBarVisible: int({ mode: "boolean" }),
+    .$type<SettingsInterface["layoutType"]>()
+    .default("ltr"),
+  activityBarVisible: int(),
   projectId: text()
     .unique()
     .references(() => projectTable.id, {
       onDelete: "cascade",
     }),
-});
+},  
+table => [
+  uniqueIndex("unique_project").on(table.projectId)],
+);
 
 export const folderTable = sqliteTable("folder_table", {
   id: text()

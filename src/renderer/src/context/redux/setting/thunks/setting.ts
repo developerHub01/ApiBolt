@@ -3,6 +3,7 @@ import type {
   SettingsInterface,
   TKeyboardShortcutKey,
   UpdateBackgroundImagePayloadInterface,
+  UpdateSettingsInterface,
 } from "@shared/types/setting.types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
@@ -38,7 +39,7 @@ export const loadSettings = createAsyncThunk<
 
 export const updateSettings = createAsyncThunk<
   boolean,
-  Partial<SettingsInterface | ProjectSettingsInterface>,
+  UpdateSettingsInterface,
   {
     dispatch: AppDispatch;
     state: RootState;
@@ -50,7 +51,7 @@ export const updateSettings = createAsyncThunk<
     dispatch(
       handleUpdateSettings({
         type: payload.projectId ? "project" : "global",
-        payload,
+        payload: payload as SettingsInterface,
       }),
     );
 

@@ -24,9 +24,7 @@ const HistoryContent = memo(() => {
             <ApiUrl />
             <MetaDataTop />
           </section>
-          <AnimatedDialogContent
-            className="flex-1 px-5 py-0"
-          >
+          <AnimatedDialogContent className="flex-1 px-5 py-0">
             <MetaDataContent />
           </AnimatedDialogContent>
           <section className="px-5">

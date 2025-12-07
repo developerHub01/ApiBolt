@@ -44,7 +44,7 @@ export const settingSlice = createSlice({
     handleUpdateSettings: (
       state,
       action: PayloadAction<{
-        payload: Partial<SettingsInterface | ProjectSettingsInterface>;
+        payload: Partial<SettingsInterface>;
         type: "global" | "project";
       }>,
     ) => {

@@ -6,8 +6,7 @@ import { ElectronAPIRequestMetaTabInterface } from "@shared/types/api/electron-r
 
 export const getRequestMetaTab: ElectronAPIRequestMetaTabInterface["getRequestMetaTab"] =
   async requestOrFolderMetaId => {
-    if (!requestOrFolderMetaId)
-      requestOrFolderMetaId = (await getTabList())?.selectedTab;
+    requestOrFolderMetaId = requestOrFolderMetaId ?? (await getTabList())?.selectedTab;
     if (!requestOrFolderMetaId) throw Error();
 
     try {
@@ -90,8 +89,7 @@ export const updateRequestMetaTab: ElectronAPIRequestMetaTabInterface["updateReq
 export const deleteRequestMetaTab: ElectronAPIRequestMetaTabInterface["deleteRequestMetaTab"] =
   async requestOrFolderMetaId => {
     try {
-      if (!requestOrFolderMetaId)
-        requestOrFolderMetaId = (await getTabList())?.selectedTab;
+        requestOrFolderMetaId = requestOrFolderMetaId ??(await getTabList())?.selectedTab;
       if (!requestOrFolderMetaId) throw Error();
 
       await db

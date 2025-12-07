@@ -4,17 +4,17 @@ export type TLayoutSetting = "ltr" | "rtl";
 export type TLayoutSettingNoSenitize = "ltr" | "rtl" | "default";
 
 export interface SettingsInterface {
-  backgroundImages: Array<string> | "default";
-  backgroundOpacity: number;
-  backgroundBlur: number;
+  backgroundImages: Array<string> | "default" | null;
+  backgroundOpacity: number | null;
+  backgroundBlur: number | null;
   slideInterval?: number | null; // in milliseconds
   maxNumberOfImages?: number | null;
-  zoomLevel: number;
-  isZoomable: number;
-  codeFontSize: number;
-  indentationSize: number;
-  activityBarVisible: number;
-  layoutType: TLayoutSetting | "default";
+  zoomLevel: number | null;
+  isZoomable: number | null;
+  codeFontSize: number | null;
+  indentationSize: number | null;
+  activityBarVisible: number | null;
+  layoutType: TLayoutSetting | "default" | null;
   projectId?: string | null;
 }
 
@@ -24,7 +24,22 @@ export type ProjectSettingsInterface = {
 
 export interface SettingsTotalInterface {
   globalSetting: SettingsInterface;
-  settings: ProjectSettingsInterface;
+  settings: ProjectSettingsInterface | null;
+}
+
+export type UpdateSettingsInterface = Partial<
+  Omit<SettingsInterface, "backgroundImages"> & {
+    backgroundImages:
+      | Exclude<SettingsInterface["backgroundImages"], Array<string>>
+      | string;
+  }
+>;
+
+export interface UpdateSettingsTotalInterface {
+  globalSetting: UpdateSettingsInterface;
+  settings: {
+    [K in keyof UpdateSettingsInterface]?: UpdateSettingsInterface[K] | null;
+  };
 }
 
 export type SettingType = "default" | "global" | "custom";

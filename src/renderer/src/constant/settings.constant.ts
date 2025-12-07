@@ -1,3 +1,4 @@
+import { AllNotNull } from "@shared/types";
 import type { SettingsInterface } from "@shared/types/setting.types";
 
 export const STEP_AMOUNT_ZOOM_LEVEL = 0.1;
@@ -47,7 +48,10 @@ export const DEFAULT_RAW_SETTINGS_VALUES: SettingsInterface = {
   projectId: null,
 };
 
-export const DEFAULT_SETTINGS: SettingsInterface = {
+export const DEFAULT_SETTINGS: AllNotNull<
+  Omit<SettingsInterface, "projectId">
+> &
+  Pick<SettingsInterface, "projectId"> = {
   backgroundImages: "default",
   backgroundOpacity: DEFAULT_BACKGROUND_OPACITY,
   backgroundBlur: DEFAULT_BACKGROUND_BLUR,
