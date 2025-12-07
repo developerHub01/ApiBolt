@@ -144,7 +144,6 @@ export const updateSettingsBackgroundImages = createAsyncThunk<
   async ({ type, method }, { dispatch, getState }) => {
     try {
       const state = getState() as RootState;
-
       const activeProjectId = state.project.activeProjectId ?? null;
 
       const response =
@@ -152,9 +151,7 @@ export const updateSettingsBackgroundImages = createAsyncThunk<
           projectId: type === "global" ? null : activeProjectId,
           method,
         });
-
       if (response) await dispatch(loadSettings());
-
       return response;
     } catch (error) {
       console.error(error);

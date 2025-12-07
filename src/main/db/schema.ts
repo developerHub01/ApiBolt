@@ -218,7 +218,7 @@ export const settingTable = sqliteTable("setting_table", {
     }),
 },  
 table => [
-  uniqueIndex("unique_project").on(table.projectId)
+  uniqueIndex("setting_unique_project").on(table.projectId)
 ],
 );
 
@@ -521,5 +521,5 @@ export const activeThemeTable = sqliteTable(
       onDelete: "cascade",
     }),
   },
-  table => [uniqueIndex("unique_project").on(table.projectId)],
+  table => [uniqueIndex("active_theme_unique_project").on(table.projectId)],
 );

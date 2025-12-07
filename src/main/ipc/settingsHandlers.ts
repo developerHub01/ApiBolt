@@ -135,7 +135,6 @@ export const settingsHandlers = () => {
     > => {
       try {
         const { method = "upload", projectId } = rest[0];
-
         let result: string | "default" | null = null;
 
         if (method === "upload") {
@@ -153,11 +152,11 @@ export const settingsHandlers = () => {
           ElectronAPISettingsInterface["updateSettings"]
         >[0] = {
           projectId: projectId ?? null,
+          backgroundImages: result,
         };
 
         /* updating opacity based on the result and method */
         if (result && method === "upload") {
-          updatePayload["backgroundImages"] = result;
           const { settings, globalSetting } = await getSettings();
 
           /* if no opacity fixed in global and not have any value in project based setting then update opacity of local */

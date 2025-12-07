@@ -13,7 +13,6 @@ const SettingBackground = () => {
     <SettingItem id="background" title="Background Images">
       <SettingItemContentWrapper>
         <SettingBackgroundImages />
-        <Separator orientation="horizontal" />
         <SettingBackgroundOptionWrapper>
           <SettingBackgroundOpacity />
           <Separator orientation="horizontal" />

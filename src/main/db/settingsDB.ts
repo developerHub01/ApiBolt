@@ -149,15 +149,18 @@ export const updateSettings = async (payload: Parameters<ElectronAPISettingsInte
   )
     updatePayload.isZoomable = 0; // reset to default if out of range
 
-  return (await db.insert(settingTable).values({
+  const isExist = Boolean((await db.select({
+    id: settingTable.id
+  }).from(settingTable).where(projectId ? eq(settingTable.projectId, projectId) : isNull(settingTable.projectId)).limit(1))?.[0]?.id)
+
+  if (!isExist) return (await db.insert(settingTable).values({
     ...updatePayload,
     projectId,
-  }).onConflictDoUpdate({
-    target: [settingTable.projectId],
-    set: {
-    ...updatePayload,
-    }
   })).rowsAffected > 0
+
+  return (await db.update(settingTable).set({
+    ...updatePayload,
+  }).where(projectId ? eq(settingTable.projectId, projectId) : isNull(settingTable.projectId))).rowsAffected > 0
 };
 
 export const deleteSettings = async () => {
