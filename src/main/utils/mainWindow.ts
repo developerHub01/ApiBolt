@@ -23,6 +23,9 @@ export const createMainWindow = () => {
       contextIsolation: true,
       nodeIntegration: false,
       spellcheck: false,
+      sandbox: true,
+      webSecurity: true,
+      allowRunningInsecureContent: false,
     },
   });
 

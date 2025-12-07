@@ -41,6 +41,7 @@ import axios, { type AxiosInstance } from "axios";
 import { wrapper } from "axios-cookiejar-support";
 import { CookieJar } from "tough-cookie";
 import { handleExternalUrl } from "@/main/utils/externalUrl";
+import { handleProtocol } from "@/main/utils/custom-protocol";
 
 export const userDataDir = app.getPath("userData");
 
@@ -58,6 +59,8 @@ app.whenReady().then(async () => {
   jar = await jarManager.init();
   // axios client with cookie jar support
   client = wrapper(axios.create({ jar }));
+
+  handleProtocol();
 
   splashWindow = createSplashWindow();
   mainWindow = createMainWindow();

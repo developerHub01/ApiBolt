@@ -213,13 +213,13 @@ export const settingTable = sqliteTable("setting_table", {
     .default("ltr"),
   activityBarVisible: int(),
   projectId: text()
-    .unique()
     .references(() => projectTable.id, {
       onDelete: "cascade",
     }),
 },  
 table => [
-  uniqueIndex("unique_project").on(table.projectId)],
+  uniqueIndex("unique_project").on(table.projectId)
+],
 );
 
 export const folderTable = sqliteTable("folder_table", {

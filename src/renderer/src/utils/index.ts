@@ -5,6 +5,9 @@ export const normalizeText = (text: string) =>
   // Convert to lowercase and remove anything that's not a letter or number
   text.toLowerCase().replace(/[^a-z0-9]/g, "");
 
+export const stripProtocol = (url: string) =>
+  url.replace(/^[a-zA-Z]+:\/+/, "/");
+
 export const getResponseType = (contentType: string) => {
   if (contentType.includes("application/json")) {
     return "JSON";

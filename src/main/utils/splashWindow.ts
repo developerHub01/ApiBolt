@@ -21,6 +21,8 @@ export const createSplashWindow = () => {
       nodeIntegration: false,
       sandbox: true,
       spellcheck: false,
+      webSecurity: true,
+      allowRunningInsecureContent: false,
     },
   });
 
