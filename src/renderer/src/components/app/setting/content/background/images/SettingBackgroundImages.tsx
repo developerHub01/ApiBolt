@@ -31,7 +31,7 @@ const SettingBackgroundContent = memo(() => {
 
   return (
     <SettingItemHorizontalLayout
-      className={cn("flex-col gap-4 justify-center border-b py-2.5", {
+      className={cn("flex-col gap-4 justify-center border-b", {
         "border-none": isHideMoreData,
       })}
     >

@@ -3,7 +3,6 @@ import SettingItemHorizontalLayout from "@/components/app/setting/content/Settin
 import SettingTypeSelector from "@/components/app/setting/SettingTypeSelector";
 import SettingSlider from "@/components/app/setting/content/SettingSlider";
 import type { SettingType } from "@shared/types/setting.types";
-import { cn } from "@/lib/utils";
 
 interface Props {
   settingType: SettingType;
@@ -17,7 +16,6 @@ interface Props {
   longSuffixLable?: string;
   step?: number;
   handleChangeSettingType: (value: SettingType) => void;
-  isLast?: boolean;
 }
 
 const SettingContextBasedLayout = memo(
@@ -33,14 +31,9 @@ const SettingContextBasedLayout = memo(
     longSuffixLable,
     step,
     handleChangeSettingType,
-    isLast = false,
   }: Props) => {
     return (
-      <SettingItemHorizontalLayout
-        className={cn("flex-col items-center gap-4 py-2.5", {
-          "border-b": !isLast,
-        })}
-      >
+      <SettingItemHorizontalLayout className="flex-col items-center gap-4">
         <SettingItemHorizontalLayout className="w-full items-center gap-2">
           <p className="flex-1">{label}</p>
           <SettingTypeSelector

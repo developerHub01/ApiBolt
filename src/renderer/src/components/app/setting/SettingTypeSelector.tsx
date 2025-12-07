@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/select";
 import { useSetting } from "@/context/setting/SettingProvider";
 import type { SettingType } from "@shared/types/setting.types";
+import SettingSelectorWrapper from "@/components/app/setting/SettingSelectorWrapper";
 
 const globalSettingsTypeList: Array<SettingType> = ["default", "custom"];
 
@@ -31,9 +32,11 @@ const SettingTypeSelector = memo(({ value = "default", onChange }: Props) => {
 
   return (
     <Select value={value} defaultValue={"default"} onValueChange={onChange}>
-      <SelectTrigger className="w-full max-w-32 capitalize" size="sm">
-        <SelectValue placeholder="Setting Type" />
-      </SelectTrigger>
+      <SettingSelectorWrapper>
+        <SelectTrigger className="w-full max-w-32 capitalize" size="sm">
+          <SelectValue placeholder="Setting Type" />
+        </SelectTrigger>
+      </SettingSelectorWrapper>
       <SelectContent align="end">
         <SelectGroup>
           {list.map(id => (

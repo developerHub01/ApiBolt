@@ -57,7 +57,7 @@ const SettingLayoutActivityBar = () => {
   );
 
   return (
-    <SettingItemHorizontalLayout className="py-2.5 items-center">
+    <SettingItemHorizontalLayout className="items-center">
       <p className="flex-1">Activity bar visibility</p>
       {
         <SettingOptionSelector

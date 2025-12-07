@@ -13,6 +13,7 @@ interface Props {
   className?: string;
   triggerClassName?: string;
   contentClassName?: string;
+  showBorder?: boolean;
 }
 
 const SettingItem = memo(
@@ -23,6 +24,7 @@ const SettingItem = memo(
     className = "",
     triggerClassName = "",
     contentClassName = "",
+    showBorder = true,
   }: Props) => {
     return (
       <AccordionItem value={id} className={className}>
@@ -36,7 +38,10 @@ const SettingItem = memo(
         </AccordionTrigger>
         <AccordionContent
           className={cn(
-            "flex flex-col gap-4 text-balance pb-4",
+            "flex flex-col gap-4 text-balance px-3 py-3 rounded-lg mb-4",
+            {
+              "border-2 border-dashed": showBorder,
+            },
             contentClassName,
           )}
         >

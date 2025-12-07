@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import SettingSelectorWrapper from "@/components/app/setting/SettingSelectorWrapper";
 
 interface Props {
   list: Array<string>;
@@ -24,9 +25,11 @@ const SettingOptionSelector = ({
   placeholder,
 }: Props) => (
   <Select value={value} onValueChange={onChange}>
-    <SelectTrigger className="w-full max-w-32 capitalize" size="sm">
-      <SelectValue placeholder={placeholder} />
-    </SelectTrigger>
+    <SettingSelectorWrapper>
+      <SelectTrigger className="w-full max-w-32 capitalize" size="sm">
+        <SelectValue placeholder={placeholder} />
+      </SelectTrigger>
+    </SettingSelectorWrapper>
     <SelectContent>
       <SelectGroup>
         {label && <SelectLabel>{label}</SelectLabel>}

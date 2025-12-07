@@ -55,7 +55,7 @@ const SettingIsZoomable = () => {
   );
 
   return (
-    <SettingItemHorizontalLayout className="py-2.5 items-center">
+    <SettingItemHorizontalLayout className="items-center">
       <p className="flex-1">Enable keyboard shortcuts for zoom in/out</p>
       {
         <SettingOptionSelector

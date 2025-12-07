@@ -55,7 +55,8 @@ const SettingHttpList = memo(() => {
             id={type}
             title={type}
             triggerClassName="capitalize px-3"
-            contentClassName="px-3"
+            contentClassName="px-3 mb-0"
+            showBorder={false}
           >
             <div className="border w-full h-full rounded-lg overflow-hidden">
               <Table className="table-auto">

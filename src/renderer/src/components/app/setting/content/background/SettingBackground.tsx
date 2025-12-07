@@ -6,6 +6,7 @@ import SettingBackgroundOptionWrapper from "@/components/app/setting/content/bac
 import SettingBackgroundMaxNumberOfImages from "@/components/app/setting/content/background/SettingBackgroundMaxNumberOfImages";
 import SettingBackgroundSlideInterval from "@/components/app/setting/content/background/SettingBackgroundSlideInterval";
 import SettingItemContentWrapper from "@/components/app/setting/content/SettingItemContentWrapper";
+import { Separator } from "@/components/ui/separator";
 
 const SettingBackground = () => {
   return (
@@ -14,8 +15,11 @@ const SettingBackground = () => {
         <SettingBackgroundImages />
         <SettingBackgroundOptionWrapper>
           <SettingBackgroundOpacity />
+          <Separator orientation="horizontal" />
           <SettingBackgroundBlur />
+          <Separator orientation="horizontal" />
           <SettingBackgroundMaxNumberOfImages />
+          <Separator orientation="horizontal" />
           <SettingBackgroundSlideInterval />
         </SettingBackgroundOptionWrapper>
       </SettingItemContentWrapper>
