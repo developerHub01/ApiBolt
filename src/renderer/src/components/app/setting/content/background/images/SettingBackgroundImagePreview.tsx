@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSettingBackground } from "@/context/setting/background/SettingBackgroundProvider";
+import ImageWithFallback from "@/components/ui/image-with-fallback";
 
 interface Props {
   backgroundList: Array<string>;
@@ -54,7 +55,8 @@ const SettingBackgroundImagePreview = memo(
                 }}
               >
                 <AnimatePresence mode="wait">
-                  <motion.img
+                  <ImageWithFallback
+                    isAnimated
                     key={selectedIndex}
                     src={backgroundList[selectedIndex]}
                     alt="background-preview"

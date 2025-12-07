@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
+import ImageWithFallback from "@/components/ui/image-with-fallback";
 
 interface SettingBackgroundImageprops {
   src: string;
@@ -30,7 +31,7 @@ const SettingBackgroundImage = memo(
         whileHover={{ scale: 0.95 }}
         whileTap={{ scale: 0.85 }}
       >
-        <img
+        <ImageWithFallback
           src={src}
           alt=""
           loading="lazy"
