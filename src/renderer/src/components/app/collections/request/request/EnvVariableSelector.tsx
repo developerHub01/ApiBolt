@@ -19,7 +19,6 @@ import {
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectEnvironmentsVariableListUnique } from "@/context/redux/environments/selectors/environments";
 import { GLOBAL_ENVS, GLOBAL_ENVS_SET } from "@/constant/global-envs.constant";
-import { TGlobalEnvType } from "@/types/global-env.types";
 
 interface EnvVariableSelectorProps {
   value: string;

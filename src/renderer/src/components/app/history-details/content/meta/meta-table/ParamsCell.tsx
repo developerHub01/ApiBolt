@@ -5,6 +5,7 @@ import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 import type { TParamContentType } from "@shared/types/request-response.types";
 import { cn } from "@/lib/utils";
 import CellTextContent from "@/components/app/history-details/content/meta/meta-table/CellTextContent";
+import { GLOBAL_ENVS_SET } from "@/constant/global-envs.constant";
 
 interface Props {
   value: string;
@@ -16,10 +17,11 @@ const ParamsCell = ({ value, cellType, cellContentType }: Props) => {
   const variableList = useAppSelector(selectEnvironmentsVariableListUnique);
 
   const isVariableExistInList = useMemo(
-    () => variableList.find(item => item.variable === value),
+    () =>
+      GLOBAL_ENVS_SET.has(value) ||
+      variableList.find(item => item.variable === value),
     [value, variableList],
   );
-
   const isExist = value && isVariableExistInList;
   const isNotExist = value && !isVariableExistInList;
 
