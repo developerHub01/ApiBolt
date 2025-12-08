@@ -1,6 +1,8 @@
 import {
   memo,
   useCallback,
+  useEffect,
+  useRef,
   useState,
   type ChangeEvent,
   type KeyboardEvent,
@@ -40,6 +42,7 @@ const DeleteProjectDialog = memo(() => {
   const projectName = projectDetails?.name;
   const [name, setName] = useState<string>(defaultName);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleClose = useCallback(() => {
     handleChangeDeletionCandidate();
@@ -82,6 +85,10 @@ const DeleteProjectDialog = memo(() => {
     },
     [handleDelete],
   );
+  
+  useEffect(() => {
+    if (deletionCandidate) inputRef.current?.focus();
+  }, [deletionCandidate]);
 
   if (!projectName) return;
 
@@ -131,6 +138,7 @@ const DeleteProjectDialog = memo(() => {
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}
                 disabled={isLoading}
+                ref={inputRef}
               />
               <PasteButton handleChange={handleChangeName} align="end" />
             </div>

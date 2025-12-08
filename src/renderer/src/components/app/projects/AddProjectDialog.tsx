@@ -1,6 +1,8 @@
 import {
   memo,
   useCallback,
+  useEffect,
+  useRef,
   useState,
   type ChangeEvent,
   type KeyboardEvent,
@@ -31,6 +33,7 @@ const AddProjectDialog = memo(() => {
   const { isCreateDialogOpen, handleChangeIsCreateDialogOpen } = useProject();
   const [name, setName] = useState<string>(DEFAULT_PROJECT_NAME);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleCreate = useCallback(async () => {
     setIsLoading(true);
@@ -69,6 +72,10 @@ const AddProjectDialog = memo(() => {
     setName(DEFAULT_PROJECT_NAME);
   }, [handleChangeIsCreateDialogOpen]);
 
+  useEffect(() => {
+    if (isCreateDialogOpen) inputRef.current?.focus();
+  }, [isCreateDialogOpen]);
+
   const isDisabled = isLoading || !name;
 
   return (
@@ -99,6 +106,7 @@ const AddProjectDialog = memo(() => {
               onKeyDown={handleKeyDown}
               disabled={isLoading}
               maxLength={MAX_PROJECT_NAME_LENGTH}
+              ref={inputRef}
             />
           </div>
         </AnimatedDialogContent>
