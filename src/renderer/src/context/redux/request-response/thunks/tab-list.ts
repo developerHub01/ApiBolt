@@ -191,7 +191,7 @@ export const expendParentsOnSelectedChangeTabsData = createAsyncThunk<
 export const removeTab = createAsyncThunk<
   void,
   {
-    id: string;
+    id?: string | null;
     type: "current" | "others" | "all-left" | "all-right";
   },
   {
@@ -201,7 +201,9 @@ export const removeTab = createAsyncThunk<
 >("request-response/removeTab", ({ id, type }, { dispatch, getState }) => {
   try {
     const state = getState() as RootState;
+    id = id ?? state.requestResponse.selectedTab;
     const activeTab = state.sidebar.activeTab;
+    if (!id) throw new Error();
 
     if (activeTab !== "navigate_collections") return;
     switch (type) {

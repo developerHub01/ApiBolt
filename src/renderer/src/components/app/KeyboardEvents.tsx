@@ -98,7 +98,11 @@ const KeyboardEvents = () => {
         }
         case "close_tab": {
           e.preventDefault();
-          return dispatch(removeTab());
+          return dispatch(
+            removeTab({
+              type: "current",
+            }),
+          );
         }
         case "search_collection": {
           e.preventDefault();
