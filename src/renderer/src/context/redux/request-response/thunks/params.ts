@@ -56,7 +56,6 @@ export const addParams = createAsyncThunk<
 
     if (!payload) payload = {};
     const response = await window.electronAPIParams.createParams(payload);
-
     if (response) dispatch(loadParams());
 
     return response;

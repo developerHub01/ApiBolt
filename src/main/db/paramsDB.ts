@@ -73,9 +73,6 @@ export const createParams: ElectronAPIParamsInterface["createParams"] =
         payload.requestOrFolderMetaId ?? (await getTabList())?.selectedTab;
       if (!requestOrFolderMetaId) throw new Error();
 
-      if (typeof payload === "object" && !Object.keys(payload).length)
-        return true;
-
       const result = await db.insert(paramsTable).values({
         ...payload,
         requestOrFolderMetaId,
