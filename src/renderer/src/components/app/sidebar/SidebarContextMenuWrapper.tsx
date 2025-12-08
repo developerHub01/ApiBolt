@@ -3,6 +3,7 @@ import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
+  ContextMenuShortcut,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
@@ -56,6 +57,7 @@ const SidebarContextMenuWrapper = ({
     const list: Array<{
       id: string;
       label: string;
+      shortcut?: string;
       onClick: () => void;
     }> = [];
     /* layout menu item */
@@ -72,23 +74,23 @@ const SidebarContextMenuWrapper = ({
 
     /* toggle request list sidebar  */
     if (activeSidebarTab === "navigate_collections") {
-      const keybindingString = shortcuts["toggle_sidebar"]
-        ? ` (${keyListStringify(shortcuts["toggle_sidebar"])})`
-        : "";
-
       list.push({
         id: "request-list-sidebar",
-        label: `${requestListCollapsed ? "Expand" : "Collapse"} sidebar${keybindingString}`,
+        label: `${requestListCollapsed ? "Expand" : "Collapse"} sidebar`,
+        shortcut: shortcuts["toggle_sidebar"]
+          ? keyListStringify(shortcuts["toggle_sidebar"])
+          : undefined,
         onClick: handleToggleRequestListBar,
       });
     }
 
-    const activitBarShortcutString = `${shortcuts["toggle_activitybar"] ? ` (${keyListStringify(shortcuts["toggle_activitybar"])})` : ""}`;
-
     list.push({
       id: "activity-bar",
-      label: `Hide activity bar${activitBarShortcutString}`,
+      label: "Hide activity bar",
       onClick: handleHideActivityBar,
+      shortcut: shortcuts["toggle_activitybar"]
+        ? keyListStringify(shortcuts["toggle_activitybar"])
+        : undefined,
     });
 
     return list;
@@ -106,8 +108,8 @@ const SidebarContextMenuWrapper = ({
     <ContextMenu>
       <ContextMenuTrigger>{children}</ContextMenuTrigger>
       <ContextMenuContent className="w-fit">
-        {menuList.map(({ id, label, onClick }) => (
-          <ListItem key={id} label={label} onClick={onClick} />
+        {menuList.map(item => (
+          <ListItem key={item.id} {...item} />
         ))}
       </ContextMenuContent>
     </ContextMenu>
@@ -117,10 +119,14 @@ const SidebarContextMenuWrapper = ({
 interface ListItemProps {
   label: string;
   onClick?: () => void;
+  shortcut?: string;
 }
 
-const ListItem = ({ label, onClick }: ListItemProps) => (
-  <ContextMenuItem onClick={onClick}>{label}</ContextMenuItem>
+const ListItem = ({ label, shortcut, onClick }: ListItemProps) => (
+  <ContextMenuItem onClick={onClick}>
+    {label}
+    {Boolean(shortcut) && <ContextMenuShortcut>{shortcut}</ContextMenuShortcut>}
+  </ContextMenuItem>
 );
 
 export default SidebarContextMenuWrapper;
