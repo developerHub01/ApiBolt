@@ -125,6 +125,10 @@ export const keyboardBindings: Record<
     label: "Code beautify",
     key: ["shift", "alt", "f"],
   },
+  toggle_response_panel: {
+    label: "Toggle Response",
+    key: ["ctrl", "`"],
+  },
   zoom_in: {
     label: "Zoom in",
     key: ["ctrl", "+"],

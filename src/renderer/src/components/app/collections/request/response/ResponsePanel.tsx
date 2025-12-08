@@ -6,15 +6,15 @@ import ResposneContent from "@/components/app/collections/request/response/conte
 
 const ResponsePanel = () => {
   return (
-    <ResponsePanelWrapper>
-      <ResponseProvider>
+    <ResponseProvider>
+      <ResponsePanelWrapper>
         <ResponseLoader />
         <div className="flex flex-col h-full">
           <ResponseMetaData />
           <ResposneContent />
         </div>
-      </ResponseProvider>
-    </ResponsePanelWrapper>
+      </ResponsePanelWrapper>
+    </ResponseProvider>
   );
 };
 

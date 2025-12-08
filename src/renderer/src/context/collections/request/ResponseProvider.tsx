@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext } from "react";
+import React, { createContext, useCallback, useContext, useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
   selectActiveResponseDataTab,
@@ -14,6 +14,8 @@ import {
   handleActiveResponseMetaTab,
   handleToggleResponseCodeWrap as handleResponseCodeWrap,
 } from "@/context/redux/request-response/request-response-slice";
+import { selectApplyingKeyboardShortcuts } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
+import { keyListStringify } from "@/utils/keyboard-shortcut.utils";
 
 interface ResponseContext {
   activeMetaTab: string | null;
@@ -21,6 +23,7 @@ interface ResponseContext {
   responseTab: TResponseDataTab;
   handleChangeActiveResponseTab: (value: TResponseDataTab) => void;
   responseCodeWrap: boolean;
+  responsePanelToggleShortcut: string;
   handleToggleResponseCodeWrap: () => void;
 }
 
@@ -30,9 +33,7 @@ export const useResponse = () => {
   const context = useContext(ResponseContext);
 
   if (!context) {
-    throw new Error(
-      "useResponseResponse must be used within a ResponseProvider.",
-    );
+    throw new Error("useResponse must be used within a ResponseProvider.");
   }
 
   return context;
@@ -47,6 +48,14 @@ const ResponseProvider = ({ children }: ResponseProviderProps) => {
   const activeMetaTab = useAppSelector(selectActiveResponseMetaTab);
   const responseTab = useAppSelector(selectActiveResponseDataTab);
   const responseCodeWrap = useAppSelector(selectResponseCodeWrap);
+  const shortcuts = useAppSelector(selectApplyingKeyboardShortcuts);
+  const responsePanelToggleShortcut = useMemo(
+    () =>
+      shortcuts["toggle_response_panel"]
+        ? keyListStringify(shortcuts["toggle_response_panel"])
+        : "",
+    [shortcuts],
+  );
 
   const handleChangeActiveMetaTab = useCallback(
     (id: TResponseMetaTab) => {
@@ -77,6 +86,7 @@ const ResponseProvider = ({ children }: ResponseProviderProps) => {
         responseTab,
         handleChangeActiveResponseTab,
         responseCodeWrap,
+        responsePanelToggleShortcut,
         handleToggleResponseCodeWrap,
       }}
     >

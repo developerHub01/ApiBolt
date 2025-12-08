@@ -7,30 +7,21 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip-custom";
-import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import { useAppSelector } from "@/context/redux/hooks";
 import { useRequestResponse } from "@/context/collections/request/RequestResponseProvider";
-import { handleToggleCollapse } from "@/context/redux/request-response/request-response-slice";
 import { selectIsResponseCollapsed } from "@/context/redux/request-response/selectors/response";
+import { useResponse } from "@/context/collections/request/ResponseProvider";
 
 const ResponsCollapseButton = () => {
-  const dispatch = useAppDispatch();
-  const { handleForceCollapse } = useRequestResponse();
+  const { handleCollapse } = useRequestResponse();
+  const { responsePanelToggleShortcut } = useResponse();
   const isResponseCollapsed = useAppSelector(selectIsResponseCollapsed);
-
-  const handleCollapseClick = () => {
-    handleForceCollapse(true);
-    dispatch(handleToggleCollapse());
-  };
 
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button
-            size={"iconSm"}
-            variant={"ghost"}
-            onClick={handleCollapseClick}
-          >
+          <Button size={"iconSm"} variant={"ghost"} onClick={handleCollapse}>
             <ArrowIcon
               className={cn("transition-transform duration-500 ease-in-out", {
                 "rotate-0": isResponseCollapsed,
@@ -40,7 +31,12 @@ const ResponsCollapseButton = () => {
           </Button>
         </TooltipTrigger>
         <TooltipContent side="bottom" align="end" variant={"secondary"}>
-          <p>{isResponseCollapsed ? "Expend" : "Collaps"} Response Panel</p>
+          <p>
+            {isResponseCollapsed ? "Expend" : "Collaps"} Response Panel
+            {responsePanelToggleShortcut
+              ? ` (${responsePanelToggleShortcut})`
+              : ""}
+          </p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
