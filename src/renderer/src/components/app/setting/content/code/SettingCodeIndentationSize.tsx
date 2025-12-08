@@ -45,7 +45,6 @@ const SettingCodeIndentationSize = () => {
       min={MIN_INDENTATION_SIZE}
       max={MAX_INDENTATION_SIZE}
       onChange={handleChange}
-      isLast
     />
   );
 };

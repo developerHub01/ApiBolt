@@ -23,7 +23,7 @@ export const generateShellCURLCode = async ({
   bodyType,
   formData,
 }: CodeSnippitDataInterface) => {
-  const snippitList = [];
+  const snippitList: Array<string> = [];
 
   snippitList.push(`curl -X ${method.toUpperCase()} ${JSON.stringify(url)}`);
 
@@ -113,7 +113,7 @@ export const generateShellHTTPieCode = async ({
   bodyType,
   formData,
 }: CodeSnippitDataInterface) => {
-  const snippitList = [];
+  const snippitList: Array<string> = [];
 
   snippitList.push(`http ${method.toUpperCase()}`);
   snippitList.push(`\t${JSON.stringify(url)}`);
@@ -208,7 +208,7 @@ export const generateShellWgetCode = async ({
   rawBodyDataType,
   bodyType,
 }: CodeSnippitDataInterface) => {
-  const snippitList = [];
+  const snippitList: Array<string> = [];
 
   snippitList.push(`wget`, `\t--method=${method.toUpperCase()}`);
 

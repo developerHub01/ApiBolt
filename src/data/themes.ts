@@ -1,4 +1,6 @@
-export const defaultThemeList = [
+import { ThemeInterface } from "@shared/types/theme.types";
+
+export const defaultThemeList: Array<ThemeInterface> = [
   {
     id: "polar_night",
     name: "Polar Night",

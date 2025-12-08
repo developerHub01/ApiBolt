@@ -46,7 +46,6 @@ const SettingBackgroundSlideInterval = () => {
       max={MAX_BACKGROUNDSLIDE_INTERVAL}
       suffixLable="s"
       longSuffixLable=" seconds"
-      isLast
     />
   );
 };
