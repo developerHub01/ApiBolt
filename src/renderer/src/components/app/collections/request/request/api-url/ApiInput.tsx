@@ -8,12 +8,11 @@ import { cn } from "@/lib/utils";
 
 interface ApiInputProps {
   value: string;
-  isError: boolean;
   onChange: (value: string) => void;
   onBlur: (value: string) => void;
 }
 
-const ApiInput = memo(({ value, isError, onChange, onBlur }: ApiInputProps) => {
+const ApiInput = memo(({ value, onChange, onBlur }: ApiInputProps) => {
   const handleApiUrlChange = (e: ChangeEvent<HTMLInputElement>) =>
     onChange(e.target.value);
   const handleApiUrlBlur = (e: FocusEvent<HTMLInputElement>) =>
@@ -26,12 +25,7 @@ const ApiInput = memo(({ value, isError, onChange, onBlur }: ApiInputProps) => {
   };
 
   return (
-    <div
-      className={cn("w-full border-b", {
-        "border-destructive/80": isError,
-        "border-input/80": !isError,
-      })}
-    >
+    <div className="w-full border-b">
       <input
         placeholder="Enter URL or paste text"
         className="w-full h-full placeholder:text-muted-foreground px-3 bg-transparent rounded-none border-0 tracking-wide"

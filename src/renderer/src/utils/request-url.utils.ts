@@ -11,6 +11,16 @@ export const isValidApiUrl = (apiUrl: string) => {
   }
 };
 
+export const isStrictApiUrl = (apiUrl: string) => {
+  const trimmed = apiUrl.trim();
+  if (/\s/.test(trimmed)) return false; /* reject spaces */
+  try {
+    const url = new URL(trimmed);
+    return ["http:", "https:"].includes(url.protocol);
+  } catch {
+    return false;
+  }
+};
 export const filterUrl = (apiUrl: string): string => {
   const url = new URL(apiUrl);
   const protocol = url.protocol ?? "http:";
