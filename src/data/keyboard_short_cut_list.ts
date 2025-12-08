@@ -103,6 +103,11 @@ export const keyboardBindings: Record<
     label: "Switch Right Tab",
     key: ["ctrl", "meta", "arrowright"],
   },
+  /* lock/unlock =================== */
+  lock_tab: {
+    label: "Lock/unlock Tabs List",
+    key: ["ctrl", "meta", "l"],
+  },
   /***
    * =============================
    * Tabs end

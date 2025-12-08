@@ -25,7 +25,10 @@ import useToggleSidebar from "@/hooks/sidebar/use-toggle-sidebar";
 import { useNavigate } from "react-router-dom";
 import { SIDEBAR_THEME_MENU_ITEMS } from "@/constant/sidebar.constant";
 import type { TSidebarTab } from "@shared/types/sidebar.types";
-import { handleClearTabList } from "@/context/redux/request-response/request-response-slice";
+import {
+  handleClearTabList,
+  handleToggleTabListCollapse,
+} from "@/context/redux/request-response/request-response-slice";
 
 const KeyboardEvents = () => {
   const dispatch = useAppDispatch();
@@ -184,6 +187,11 @@ const KeyboardEvents = () => {
               type: "right",
             }),
           );
+        }
+        /* lock/unlock =================== */
+        case "lock_tab": {
+          e.preventDefault();
+          return dispatch(handleToggleTabListCollapse());
         }
         /***
          * =============================
