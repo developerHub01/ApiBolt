@@ -55,10 +55,59 @@ export const keyboardBindings: Record<
     label: "Open Settings",
     key: ["ctrl", ","],
   },
+  /***
+   * =============================
+   * Tabs start
+   * =============================
+   * ***/
+  /* open =================== */
+  open_tab: {
+    label: "Open Tab",
+    key: ["ctrl", "t"],
+  },
+  open_left_tab: {
+    label: "Open Left Tab",
+    key: ["ctrl", "shift", "l"],
+  },
+  open_right_tab: {
+    label: "Open Right Tab",
+    key: ["ctrl", "shift", "r"],
+  },
+  /* close =================== */
   close_tab: {
-    label: "Close Tab",
+    label: "Close Current Tab",
     key: ["ctrl", "f4"],
   },
+  close_all_tabs: {
+    label: "Close All Tabs",
+    key: ["ctrl", "alt", "a"],
+  },
+  close_other_tabs: {
+    label: "Close Others Tabs",
+    key: ["ctrl", "alt", "o"],
+  },
+  close_left_tabs: {
+    label: "Close Left Tabs",
+    key: ["ctrl", "alt", "q"],
+  },
+  close_right_tabs: {
+    label: "Close Right Tabs",
+    key: ["ctrl", "alt", "e"],
+  },
+  /* switch =================== */
+  switch_left_tab: {
+    label: "Switch Left Tabs",
+    key: ["ctrl", "meta", "arrowleft"],
+  },
+  switch_right_tab: {
+    label: "Switch Right Tab",
+    key: ["ctrl", "meta", "arrowright"],
+  },
+  /***
+   * =============================
+   * Tabs end
+   * =============================
+   * ***/
   search_collection: {
     label: "Search collection",
     key: ["ctrl", "k"],

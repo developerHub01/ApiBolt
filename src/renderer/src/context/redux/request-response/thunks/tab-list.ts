@@ -15,6 +15,7 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import { getNodeParentsIdList } from "@/utils/request-response.utils";
 import { handleClearHistoryCache } from "@/context/redux/history/history-slice";
+import { rotateIndex } from "@/utils";
 
 /* ==============================
 ========= TabList start =========
@@ -127,7 +128,7 @@ export const addNewTabsData = createAsyncThunk<
 export const addNewTabsToLeftOrRight = createAsyncThunk<
   void,
   {
-    id: string;
+    id?: string | null;
     type: "left" | "right";
   },
   {
@@ -139,6 +140,7 @@ export const addNewTabsToLeftOrRight = createAsyncThunk<
   async ({ id, type }, { getState, dispatch }) => {
     try {
       const state = getState() as RootState;
+      id = id ?? state.requestResponse.selectedTab;
       const tabList = state.requestResponse.tabList;
       const tabIndex = tabList.findIndex(item => item === id);
       if (tabIndex < 0) throw new Error();
@@ -203,9 +205,8 @@ export const removeTab = createAsyncThunk<
     const state = getState() as RootState;
     id = id ?? state.requestResponse.selectedTab;
     const activeTab = state.sidebar.activeTab;
-    if (!id) throw new Error();
+    if (!id || activeTab !== "navigate_collections") throw new Error();
 
-    if (activeTab !== "navigate_collections") return;
     switch (type) {
       case "current":
         dispatch(handleRemoveTab(id));
@@ -220,6 +221,40 @@ export const removeTab = createAsyncThunk<
         dispatch(handleRemoveAllRightTabs(id));
         break;
     }
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+export const shiftSelectedTab = createAsyncThunk<
+  void,
+  {
+    type: "left" | "right";
+  },
+  {
+    state: RootState;
+    dispatch: AppDispatch;
+  }
+>("request-response/shiftSelectedTab", ({ type }, { dispatch, getState }) => {
+  try {
+    const state = getState() as RootState;
+    const selectedTab = state.requestResponse.selectedTab;
+    const tabList = state.requestResponse.tabList;
+    const activeTab = state.sidebar.activeTab;
+    if (!selectedTab || activeTab !== "navigate_collections") throw new Error();
+
+    const currentTabIndex = tabList.indexOf(selectedTab);
+    if (currentTabIndex < 0) throw new Error();
+
+    const nextIndex = rotateIndex({
+      type,
+      length: tabList.length,
+      current: currentTabIndex,
+    });
+    const nextTabId = tabList[nextIndex];
+    if (!nextTabId) throw new Error();
+
+    dispatch(handleChangeSelectedTab(nextTabId));
   } catch (error) {
     console.error(error);
   }

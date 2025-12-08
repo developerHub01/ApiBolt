@@ -1,6 +1,6 @@
 import React, { ComponentProps } from "react";
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
-import { cn } from "@renderer/lib/utils";
+import { cn } from "@/lib/utils";
 
 interface Props extends ComponentProps<"div"> {
   children: React.ReactNode;

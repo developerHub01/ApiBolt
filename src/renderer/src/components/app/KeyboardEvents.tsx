@@ -8,7 +8,12 @@ import {
 import { useGlobal } from "@/context/global/GlobalProvider";
 import { changeActiveTab } from "@/context/redux/sidebar/thunks/sidebar";
 import { handleChangeIsCookiesOpen } from "@/context/redux/cookies/cookies-slice";
-import { removeTab } from "@/context/redux/request-response/thunks/tab-list";
+import {
+  addNewTabsData,
+  addNewTabsToLeftOrRight,
+  removeTab,
+  shiftSelectedTab,
+} from "@/context/redux/request-response/thunks/tab-list";
 import useCheckApplyingLayoutActivityBarVisible from "@/hooks/setting/use-check-applying-layout-activity-bar-visible";
 import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 import { selectApplyingKeyboardShortcutsStrFormated } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
@@ -20,6 +25,7 @@ import useToggleSidebar from "@/hooks/sidebar/use-toggle-sidebar";
 import { useNavigate } from "react-router-dom";
 import { SIDEBAR_THEME_MENU_ITEMS } from "@/constant/sidebar.constant";
 import type { TSidebarTab } from "@shared/types/sidebar.types";
+import { handleClearTabList } from "@/context/redux/request-response/request-response-slice";
 
 const KeyboardEvents = () => {
   const dispatch = useAppDispatch();
@@ -46,7 +52,6 @@ const KeyboardEvents = () => {
         ([, keyBindingString]) =>
           keyBindingString && keyBindingString === keyString,
       )?.[0];
-
       if (!actionId) return;
 
       switch (actionId) {
@@ -96,6 +101,37 @@ const KeyboardEvents = () => {
           e.preventDefault();
           return dispatch(handleChangeIsSettingOpen(true));
         }
+        /***
+         * =============================
+         * Tabs start
+         * =============================
+         * ***/
+        /* open =================== */
+        case "open_tab": {
+          e.preventDefault();
+          return dispatch(
+            addNewTabsData({
+              autoSelect: true,
+            }),
+          );
+        }
+        case "open_left_tab": {
+          e.preventDefault();
+          return dispatch(
+            addNewTabsToLeftOrRight({
+              type: "left",
+            }),
+          );
+        }
+        case "open_right_tab": {
+          e.preventDefault();
+          return dispatch(
+            addNewTabsToLeftOrRight({
+              type: "right",
+            }),
+          );
+        }
+        /* close =================== */
         case "close_tab": {
           e.preventDefault();
           return dispatch(
@@ -104,6 +140,56 @@ const KeyboardEvents = () => {
             }),
           );
         }
+        case "close_all_tabs": {
+          e.preventDefault();
+          return dispatch(handleClearTabList());
+        }
+        case "close_other_tabs": {
+          e.preventDefault();
+          return dispatch(
+            removeTab({
+              type: "others",
+            }),
+          );
+        }
+        case "close_left_tabs": {
+          e.preventDefault();
+          return dispatch(
+            removeTab({
+              type: "all-left",
+            }),
+          );
+        }
+        case "close_right_tabs": {
+          e.preventDefault();
+          return dispatch(
+            removeTab({
+              type: "all-right",
+            }),
+          );
+        }
+        /* switch =================== */
+        case "switch_left_tab": {
+          e.preventDefault();
+          return dispatch(
+            shiftSelectedTab({
+              type: "left",
+            }),
+          );
+        }
+        case "switch_right_tab": {
+          e.preventDefault();
+          return dispatch(
+            shiftSelectedTab({
+              type: "right",
+            }),
+          );
+        }
+        /***
+         * =============================
+         * Tabs end
+         * =============================
+         * ***/
         case "search_collection": {
           e.preventDefault();
           return dispatch(changeHeaderSearchIsOpen(true));

@@ -5,8 +5,16 @@ export const normalizeText = (text: string) =>
   // Convert to lowercase and remove anything that's not a letter or number
   text.toLowerCase().replace(/[^a-z0-9]/g, "");
 
-export const stripProtocol = (url: string) =>
-  url.replace(/^[a-zA-Z]+:\/+/, "/");
+export const rotateIndex = ({
+  type,
+  length,
+  current,
+}: {
+  type: "left" | "right";
+  length: number;
+  current: number;
+}) =>
+  type === "left" ? (length + current - 1) % length : (current + 1) % length;
 
 export const getResponseType = (contentType: string) => {
   if (contentType.includes("application/json")) {

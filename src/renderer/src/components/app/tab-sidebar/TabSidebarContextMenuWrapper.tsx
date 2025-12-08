@@ -11,41 +11,47 @@ import {
   ContextMenuItem,
   ContextMenuSeparator,
   ContextMenuTrigger,
+  ContextMenuShortcut,
 } from "@/components/ui/context-menu";
-import { useTabSidebar } from "@renderer/context/tab-sidebar/TabSidebarProvider";
-import { useAppDispatch } from "@renderer/context/redux/hooks";
+import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
   addNewTabsData,
   addNewTabsToLeftOrRight,
   removeTab,
-} from "@renderer/context/redux/request-response/thunks/tab-list";
-import { handleClearTabList } from "@renderer/context/redux/request-response/request-response-slice";
+} from "@/context/redux/request-response/thunks/tab-list";
+import { handleClearTabList } from "@/context/redux/request-response/request-response-slice";
+import { selectApplyingKeyboardShortcuts } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
+import { keyListStringify } from "@/utils/keyboard-shortcut.utils";
 
 type TActionType =
-  | "close-all"
-  | "close"
-  | "close-others"
-  | "close-left"
-  | "close-right"
-  | "add-tab"
-  | "add-left"
-  | "add-right";
+  | "open_tab"
+  | "open_left_tab"
+  | "open_right_tab"
+  | "close_tab"
+  | "close_all_tabs"
+  | "close_other_tabs"
+  | "close_left_tabs"
+  | "close_right_tabs"
+  | "switch_left_tab"
+  | "switch_right_tab";
 
 interface MenuItemInterface {
   id: TActionType;
   label: string;
+  shortcut?: string;
 }
 
 const EMPTY_MENU: Record<string, Array<MenuItemInterface>> = {
   add: [
     {
-      id: "add-tab",
+      id: "open_tab",
       label: "add tab",
     },
   ],
   close: [
     {
-      id: "close-all",
+      id: "close_all_tabs",
       label: "close all",
     },
   ],
@@ -54,33 +60,33 @@ const EMPTY_MENU: Record<string, Array<MenuItemInterface>> = {
 const ELEMENT_MENU: Record<string, Array<MenuItemInterface>> = {
   add: [
     {
-      id: "add-left",
+      id: "open_left_tab",
       label: "add to top",
     },
     {
-      id: "add-right",
+      id: "open_right_tab",
       label: "add to bottom",
     },
   ],
   close: [
     {
-      id: "close",
+      id: "close_tab",
       label: "close",
     },
     {
-      id: "close-all",
+      id: "close_all_tabs",
       label: "close all",
     },
     {
-      id: "close-others",
+      id: "close_other_tabs",
       label: "close others",
     },
     {
-      id: "close-left",
+      id: "close_left_tabs",
       label: "close from top",
     },
     {
-      id: "close-right",
+      id: "close_right_tabs",
       label: "close to bottom",
     },
   ],
@@ -92,13 +98,25 @@ interface Props {
 
 const TabSidebarContextMenuWrapper = ({ children }: Props) => {
   const dispatch = useAppDispatch();
+  const shortcuts = useAppSelector(selectApplyingKeyboardShortcuts);
   const [selectedTab, setSetSelectedTab] = useState<string | null>(null);
   const { handleChangeIsContextMenuOpen } = useTabSidebar();
 
-  const menuItem = useMemo(
-    () => (selectedTab ? ELEMENT_MENU : EMPTY_MENU),
-    [selectedTab],
-  );
+  const menuItem = useMemo(() => {
+    const menu = selectedTab ? ELEMENT_MENU : EMPTY_MENU;
+
+    Object.keys(menu).forEach(category => {
+      const subMenu = menu[category];
+      if (!subMenu) return;
+      subMenu.forEach((item, index) => {
+        const id = item.id;
+        if (shortcuts[id])
+          menu[category][index].shortcut = keyListStringify(shortcuts[id]);
+      });
+    });
+
+    return menu;
+  }, [selectedTab, shortcuts]);
 
   const handleContextMenu = (e: MouseEvent<HTMLSpanElement>) => {
     const targetElement = e.target as HTMLElement;
@@ -109,7 +127,7 @@ const TabSidebarContextMenuWrapper = ({ children }: Props) => {
   const handleAction = useCallback(
     (id: TActionType) => {
       switch (id) {
-        case "close": {
+        case "close_tab": {
           if (!selectedTab) return;
           return dispatch(
             removeTab({
@@ -118,7 +136,7 @@ const TabSidebarContextMenuWrapper = ({ children }: Props) => {
             }),
           );
         }
-        case "close-left": {
+        case "close_left_tabs": {
           if (!selectedTab) return;
           return dispatch(
             removeTab({
@@ -127,7 +145,7 @@ const TabSidebarContextMenuWrapper = ({ children }: Props) => {
             }),
           );
         }
-        case "close-right": {
+        case "close_right_tabs": {
           if (!selectedTab) return;
           return dispatch(
             removeTab({
@@ -136,7 +154,7 @@ const TabSidebarContextMenuWrapper = ({ children }: Props) => {
             }),
           );
         }
-        case "close-others": {
+        case "close_other_tabs": {
           if (!selectedTab) return;
           return dispatch(
             removeTab({
@@ -145,11 +163,11 @@ const TabSidebarContextMenuWrapper = ({ children }: Props) => {
             }),
           );
         }
-        case "close-all":
+        case "close_all_tabs":
           return dispatch(handleClearTabList());
-        case "add-tab":
+        case "open_tab":
           return dispatch(addNewTabsData());
-        case "add-left": {
+        case "open_left_tab": {
           if (!selectedTab) return;
           return dispatch(
             addNewTabsToLeftOrRight({
@@ -158,7 +176,7 @@ const TabSidebarContextMenuWrapper = ({ children }: Props) => {
             }),
           );
         }
-        case "add-right": {
+        case "open_right_tab": {
           if (!selectedTab) return;
           return dispatch(
             addNewTabsToLeftOrRight({
@@ -182,16 +200,19 @@ const TabSidebarContextMenuWrapper = ({ children }: Props) => {
       >
         {children}
       </ContextMenuTrigger>
-      <ContextMenuContent className="w-42">
+      <ContextMenuContent>
         {Object.entries(menuItem).map(([category, submenu], index, arr) => (
           <Fragment key={category}>
-            {submenu.map(({ id, label }) => (
+            {submenu.map(({ id, label, shortcut }) => (
               <ContextMenuItem
                 key={id}
                 className="capitalize"
                 onSelect={() => handleAction(id)}
               >
                 {label}
+                {Boolean(shortcut) && (
+                  <ContextMenuShortcut>{shortcut}</ContextMenuShortcut>
+                )}
               </ContextMenuItem>
             ))}
             {index + 1 < arr.length && <ContextMenuSeparator />}
