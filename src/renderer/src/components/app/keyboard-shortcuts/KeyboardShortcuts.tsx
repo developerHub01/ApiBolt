@@ -21,7 +21,7 @@ const KeyboardShortcuts = memo(() => {
 
   return (
     <KeyboardShortcutsProvider>
-      <AnimatedDialog isOpen={isOpen} onClose={handleClose}>
+      <AnimatedDialog isOpen={isOpen} onClose={handleClose} stopPropagation>
         <AnimatedDialogContentWrapper className="max-w-3xl">
           <Suspense fallback={<KeyboardShortcutsFallback />}>
             <KeyboardShortcutsRoot />

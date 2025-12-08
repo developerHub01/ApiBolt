@@ -11,6 +11,7 @@ interface AnimatedDialogProps {
   children: React.ReactNode;
   className?: string;
   overlayClassName?: string;
+  stopPropagation?: boolean;
 }
 
 const AnimatedDialog = memo(
@@ -20,10 +21,11 @@ const AnimatedDialog = memo(
     children,
     className = "",
     overlayClassName = "",
+    stopPropagation = false,
     ...props
   }: AnimatedDialogProps & ComponentProps<"section">) => {
     const handleKeyDown = (e: KeyboardEvent<HTMLElement>) => {
-      e.stopPropagation();
+      if (stopPropagation) e.stopPropagation();
       if (e.key === "Escape") onClose();
     };
 
