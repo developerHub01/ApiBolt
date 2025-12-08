@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { clearCookies } from "@/context/redux/cookies/thunks/cookies";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { cn } from "@/lib/utils";
-import useCustomToast from "@renderer/hooks/ui/use-custom-toast";
+import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 interface Props {
   isOpen: boolean;

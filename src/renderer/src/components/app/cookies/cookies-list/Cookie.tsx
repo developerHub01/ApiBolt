@@ -6,7 +6,7 @@ import { useAppDispatch } from "@/context/redux/hooks";
 import { handleChangeSelectedCookieKey } from "@/context/redux/cookies/cookies-slice";
 import { cn } from "@/lib/utils";
 import { deleteCookieByKey } from "@/context/redux/cookies/thunks/cookies";
-import useCustomToast from "@renderer/hooks/ui/use-custom-toast";
+import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 interface Props {
   id: string;

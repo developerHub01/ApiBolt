@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { addNewTabsData } from "@/context/redux/request-response/thunks/tab-list";
 import { Link } from "react-router-dom";
-import { SIDEBAR_MENU_ID_PATH_MAP } from "@renderer/constant/sidebar.constant";
+import { SIDEBAR_MENU_ID_PATH_MAP } from "@/constant/sidebar.constant";
 
 const AppPage = () => {
   const dispatch = useAppDispatch();
