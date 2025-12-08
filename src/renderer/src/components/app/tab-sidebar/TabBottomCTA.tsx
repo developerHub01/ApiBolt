@@ -1,13 +1,12 @@
-import { memo } from "react";
+import { ComponentType, memo, SVGProps } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { type LucideIcon } from "lucide-react";
 import { motion } from "motion/react";
 
 interface TabBottomCTAProps {
   isOpen: boolean;
   onClick: () => void;
-  Icon?: LucideIcon;
+  Icon?: ComponentType<SVGProps<SVGSVGElement>>;
   label?: string;
 }
 

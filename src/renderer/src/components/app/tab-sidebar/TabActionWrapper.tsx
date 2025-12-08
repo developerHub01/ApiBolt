@@ -1,6 +1,6 @@
 import AddNewTab from "@/components/app/tab-sidebar/AddNewTab";
 import ClearAllTabs from "@/components/app/tab-sidebar/ClearAllTabs";
-import PinTabBar from "@/components/app/tab-sidebar/PinTabBar";
+import LockTabBar from "@renderer/components/app/tab-sidebar/LockTabBar";
 import TabSearch from "@/components/app/tab-sidebar/tab-search/TabSearch";
 
 const TabActionWrapper = () => {
@@ -9,7 +9,7 @@ const TabActionWrapper = () => {
       <TabSearch />
       <AddNewTab />
       <ClearAllTabs />
-      <PinTabBar />
+      <LockTabBar />
     </div>
   );
 };
