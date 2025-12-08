@@ -8,6 +8,13 @@
       "when": 1765220304799,
       "tag": "0000_unknown_black_widow",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1765220827007,
+      "tag": "0001_amusing_sunfire",
+      "breakpoints": true
     }
   ]
 }

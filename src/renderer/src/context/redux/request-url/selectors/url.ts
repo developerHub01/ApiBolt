@@ -10,6 +10,8 @@ import {
 import { INITIAL_URL_TOKENS_VALUE } from "@/constant/request-url.constant";
 import { removeDuplicateEnvs } from "@/utils/environments.utils";
 import { selectAuthorizationParamData } from "@/context/redux/request-response/selectors/meta-request";
+import { GLOBAL_ENVS_SET } from "@/constant/global-envs.constant";
+import { generateFake } from "@/utils/global-envs.utils";
 
 export const selectRequestUrl = createSelector(
   (state: RootState) =>
@@ -48,10 +50,16 @@ export const selectParsedRequestUrl = createSelector(
     tokens = tokens.map(token => {
       if (token.type !== "env") return token;
 
+      const isGlobalEnv = GLOBAL_ENVS_SET.has(token.value);
+      const globalValue = generateFake(token.value).toString();
+      const envValue = envMap.get(token.value)?.value;
+
+      const value = isGlobalEnv ? globalValue : envValue ? envValue : "";
+
       return {
         ...token,
         type: "text",
-        value: envMap.get(token.value)?.value || "",
+        value,
       };
     });
 

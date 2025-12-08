@@ -1,5 +1,6 @@
 import { MAX_REQUEST_LIST_NESTED_FOLDER_COUNT } from "@/constant/request-response.constant";
 import { URL_PURE_VARIABLE_REGEX } from "@/constant/request-url.constant";
+import { GLOBAL_ENVS_SET } from "@/constant/global-envs.constant";
 import type { EnvironmentInterface } from "@shared/types/environment.types";
 import type {
   FlexibleRequestListInterface,
@@ -9,6 +10,7 @@ import type {
   TParamContentType,
 } from "@shared/types/request-response.types";
 import { v4 as uuidv4 } from "uuid";
+import { generateFake } from "@/utils/global-envs.utils";
 
 export const getFolderChildren = (
   payload: RequestListItemInterface,
@@ -162,12 +164,17 @@ export const paramsTableToStringParsedFromEnvs = (
     .map(param => {
       const key =
         param.keyType === "env"
-          ? envMap.get(param.key)?.value || ""
+          ? GLOBAL_ENVS_SET.has(param.key)
+            ? generateFake(param.key).toString()
+            : envMap.get(param.key)?.value || ""
           : param.key;
       const value =
         param.valueType === "env"
-          ? envMap.get(param.value)?.value || ""
+          ? GLOBAL_ENVS_SET.has(param.value)
+            ? generateFake(param.value).toString()
+            : envMap.get(param.value)?.value || ""
           : param.value;
+
       return `${key}=${value}`;
     })
     .join("&");

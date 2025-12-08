@@ -103,8 +103,8 @@ export interface ParamInterface<ValueT = string> {
   description?: string;
   isCheck?: boolean;
   prevent?: boolean;
-  keyType?: "text" | "env";
-  valueType?: "text" | "env";
+  keyType?: TParamContentType;
+  valueType?: TParamContentType;
   calculateDynamicly?: boolean;
   createdAt?: string;
 }

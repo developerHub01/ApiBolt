@@ -9,6 +9,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
+  CommandSeparator,
 } from "@/components/ui/command";
 import {
   Popover,
@@ -17,6 +18,8 @@ import {
 } from "@/components/ui/popover";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectEnvironmentsVariableListUnique } from "@/context/redux/environments/selectors/environments";
+import { GLOBAL_ENVS, GLOBAL_ENVS_SET } from "@/constant/global-envs.constant";
+import { TGlobalEnvType } from "@/types/global-env.types";
 
 interface EnvVariableSelectorProps {
   value: string;
@@ -30,7 +33,9 @@ const EnvVariableSelector = memo(
     const variableList = useAppSelector(selectEnvironmentsVariableListUnique);
 
     const isVariableExistInList = useMemo(
-      () => variableList.find(item => item.variable === value),
+      () =>
+        GLOBAL_ENVS_SET.has(value) ||
+        variableList.find(item => item.variable === value),
       [value, variableList],
     );
 
@@ -100,6 +105,25 @@ const EnvVariableSelector = memo(
                         value === variable.variable
                           ? "opacity-100"
                           : "opacity-0",
+                      )}
+                    />
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+              <CommandSeparator />
+              <CommandGroup>
+                {GLOBAL_ENVS.map(variable => (
+                  <CommandItem
+                    key={variable}
+                    value={variable}
+                    onSelect={handleChange}
+                    className="w-full"
+                  >
+                    <p className="flex-1 overflow-hidden">{variable}</p>
+                    <Check
+                      className={cn(
+                        "ml-auto",
+                        value === variable ? "opacity-100" : "opacity-0",
                       )}
                     />
                   </CommandItem>
