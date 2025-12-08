@@ -35,3 +35,17 @@ export const selectThemeHaveError = createSelector(
       item => !isValidColor(item),
     ),
 );
+
+export const selectActiveThemeType = createSelector(
+  [
+    (state: RootState) => state.theme.themeMetaList,
+    (state: RootState) => state.theme.activeThemeId,
+    (state: RootState) => state.project.activeProjectId,
+  ],
+  (metaList, activeId, activeProjectId) => {
+    const themeId = activeProjectId
+      ? (activeId.local ?? activeId.global)
+      : activeId.global;
+    return metaList.find(item => item.id === themeId)?.type;
+  },
+);

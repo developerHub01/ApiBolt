@@ -13,6 +13,8 @@ import useCheckApplyingCodeIndentationSize from "@/hooks/setting/use-check-apply
 import { indentUnit } from "@codemirror/language";
 import { getLangExtension } from "@/utils/code";
 import useCustomToast from "@/hooks/ui/use-custom-toast";
+import { useAppSelector } from "@/context/redux/hooks";
+import { selectActiveThemeType } from "@/context/redux/theme/selectors/theme";
 
 export type TLanguageType =
   | TContentType
@@ -109,6 +111,7 @@ const Code = ({
   const [fontSizeState, setFontSizeState] = useState(fontSize);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const isMounted = useMounted();
+  const themeType = useAppSelector(selectActiveThemeType);
 
   useEffect(() => setFontSizeState(fontSize), [fontSize]);
 
@@ -149,16 +152,7 @@ const Code = ({
 
   if (!isMounted) return null;
 
-  // const theme = [
-  //   "light",
-  //   "forest-light",
-  //   "ice-wave",
-  //   "violet-blaze",
-  //   "white-smoke"
-  // ].includes(resolvedTheme ?? "")
-  //   ? "light"
-  //   : "dark";
-  const theme = "dark";
+  const theme = themeType !== "custom" ? themeType : "dark";
 
   return (
     <div
@@ -186,6 +180,9 @@ const Code = ({
         .cm-gutter.cm-lineNumbers,
         .cm-gutter.cm-foldGutter {
             user-select: none;
+        }
+        .cm-gutters.cm-gutters-before {
+          background: var(--line)
         }
       `}</style>
       <CodeMirror
