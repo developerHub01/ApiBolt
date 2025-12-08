@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "44b209f5-063d-4451-b8e8-225225ff035c",
+  "id": "e3697898-8d02-4057-a1a3-af923e0fc874",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "active_code_snippit_type_table": {
@@ -19,8 +19,9 @@
           "name": "languageId",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'javascript-fetch'"
         }
       },
       "indexes": {},
@@ -76,8 +77,8 @@
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
-    "active_active_sidebar_tab_table": {
-      "name": "active_active_sidebar_tab_table",
+    "active_sidebar_tab_table": {
+      "name": "active_sidebar_tab_table",
       "columns": {
         "id": {
           "name": "id",
@@ -91,13 +92,72 @@
           "name": "tab",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": "'project'"
+          "default": "'navigate_projects'"
         }
       },
       "indexes": {},
       "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "active_theme_table": {
+      "name": "active_theme_table",
+      "columns": {
+        "projectId": {
+          "name": "projectId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "activeTheme": {
+          "name": "activeTheme",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "active_theme_unique_project": {
+          "name": "active_theme_unique_project",
+          "columns": [
+            "projectId"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "active_theme_table_projectId_projects_table_id_fk": {
+          "name": "active_theme_table_projectId_projects_table_id_fk",
+          "tableFrom": "active_theme_table",
+          "tableTo": "projects_table",
+          "columnsFrom": [
+            "projectId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "active_theme_table_activeTheme_theme_table_id_fk": {
+          "name": "active_theme_table_activeTheme_theme_table_id_fk",
+          "tableFrom": "active_theme_table",
+          "tableTo": "theme_table",
+          "columnsFrom": [
+            "activeTheme"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
@@ -123,7 +183,7 @@
           "name": "url",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "'http://localhost:3000'"
         },
@@ -179,7 +239,8 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": "'no-auth'"
         },
         "projectId": {
           "name": "projectId",
@@ -199,7 +260,7 @@
           "name": "apiKeyKey",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "''"
         },
@@ -207,7 +268,7 @@
           "name": "apiKeyValue",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "''"
         },
@@ -215,7 +276,7 @@
           "name": "apiKeyAddTo",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "'header'"
         },
@@ -223,7 +284,7 @@
           "name": "bearerToken",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "''"
         },
@@ -231,7 +292,7 @@
           "name": "basicAuthUsername",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "''"
         },
@@ -239,7 +300,7 @@
           "name": "basicAuthPassword",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "''"
         },
@@ -247,7 +308,7 @@
           "name": "jwtAlgo",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "'HS256'"
         },
@@ -255,7 +316,7 @@
           "name": "jwtSecret",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "''"
         },
@@ -263,7 +324,7 @@
           "name": "jwtPayload",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "''"
         },
@@ -271,7 +332,7 @@
           "name": "jwtHeaderPrefix",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "'Bearer'"
         },
@@ -279,7 +340,7 @@
           "name": "jwtAddTo",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "'header'"
         },
@@ -287,7 +348,7 @@
           "name": "basicAuthToken",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "''"
         },
@@ -295,7 +356,7 @@
           "name": "jwtAuthToken",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "''"
         }
@@ -408,9 +469,9 @@
           "name": "isCheck",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": 1
+          "default": true
         },
         "key": {
           "name": "key",
@@ -427,6 +488,22 @@
           "notNull": true,
           "autoincrement": false,
           "default": "''"
+        },
+        "keyType": {
+          "name": "keyType",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'text'"
+        },
+        "valueType": {
+          "name": "valueType",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'text'"
         },
         "description": {
           "name": "description",
@@ -493,7 +570,7 @@
           "name": "type",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "'json'"
         },
@@ -501,7 +578,7 @@
           "name": "rawData",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "''"
         },
@@ -509,9 +586,9 @@
           "name": "lineWrap",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": 1
+          "default": true
         }
       },
       "indexes": {
@@ -556,9 +633,9 @@
           "name": "isCheck",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": 1
+          "default": true
         },
         "key": {
           "name": "key",
@@ -575,6 +652,22 @@
           "notNull": true,
           "autoincrement": false,
           "default": "''"
+        },
+        "keyType": {
+          "name": "keyType",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'text'"
+        },
+        "valueType": {
+          "name": "valueType",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'text'"
         },
         "description": {
           "name": "description",
@@ -634,7 +727,7 @@
           "name": "projectId",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "cookies": {
@@ -642,8 +735,7 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false,
-          "default": "'[]'"
+          "autoincrement": false
         }
       },
       "indexes": {
@@ -688,14 +780,15 @@
           "name": "variable",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
         },
         "type": {
           "name": "type",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "'default'"
         },
@@ -703,8 +796,9 @@
           "name": "value",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
         },
         "isCheck": {
           "name": "isCheck",
@@ -712,7 +806,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": 1
+          "default": true
         },
         "projectId": {
           "name": "projectId",
@@ -846,9 +940,9 @@
           "name": "isCheck",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": 1
+          "default": true
         },
         "key": {
           "name": "key",
@@ -865,6 +959,22 @@
           "notNull": true,
           "autoincrement": false,
           "default": "''"
+        },
+        "keyType": {
+          "name": "keyType",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'text'"
+        },
+        "valueType": {
+          "name": "valueType",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'text'"
         },
         "description": {
           "name": "description",
@@ -927,45 +1037,53 @@
           "notNull": true,
           "autoincrement": false
         },
+        "authorization": {
+          "name": "authorization",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": true
+        },
         "userAgent": {
           "name": "userAgent",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": 1
+          "default": true
         },
         "contentLength": {
           "name": "contentLength",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": 1
+          "default": true
         },
         "accept": {
           "name": "accept",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": 1
+          "default": true
         },
         "acceptEncoding": {
           "name": "acceptEncoding",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": 1
+          "default": true
         },
         "connection": {
           "name": "connection",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": 1
+          "default": true
         }
       },
       "indexes": {
@@ -996,6 +1114,116 @@
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
+    "history_table": {
+      "name": "history_table",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "request": {
+          "name": "request",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "method": {
+          "name": "method",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'get'"
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "params": {
+          "name": "params",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "headers": {
+          "name": "headers",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "authorization": {
+          "name": "authorization",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "body": {
+          "name": "body",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "responseStatus": {
+          "name": "responseStatus",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "responseSize": {
+          "name": "responseSize",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(current_timestamp)"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "history_table_request_request_or_folder_meta_table_id_fk": {
+          "name": "history_table_request_request_or_folder_meta_table_id_fk",
+          "tableFrom": "history_table",
+          "tableTo": "request_or_folder_meta_table",
+          "columnsFrom": [
+            "request"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
     "http_status_table": {
       "name": "http_status_table",
       "columns": {
@@ -1010,7 +1238,7 @@
           "name": "reason",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "''"
         },
@@ -1018,7 +1246,7 @@
           "name": "description",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "''"
         },
@@ -1043,6 +1271,67 @@
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
+    "keyboard_shortcut_table": {
+      "name": "keyboard_shortcut_table",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "label": {
+          "name": "label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "key": {
+          "name": "key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "projectId": {
+          "name": "projectId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "keyboard_shortcut_table_projectId_projects_table_id_fk": {
+          "name": "keyboard_shortcut_table_projectId_projects_table_id_fk",
+          "tableFrom": "keyboard_shortcut_table",
+          "tableTo": "projects_table",
+          "columnsFrom": [
+            "projectId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "keyboard_shortcut_table_id_projectId_pk": {
+          "columns": [
+            "id",
+            "projectId"
+          ],
+          "name": "keyboard_shortcut_table_id_projectId_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
     "meta_show_column_table": {
       "name": "meta_show_column_table",
       "columns": {
@@ -1064,65 +1353,65 @@
           "name": "paramsValue",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": 1
+          "default": true
         },
         "paramsDescription": {
           "name": "paramsDescription",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": 0
+          "default": false
         },
         "headersValue": {
           "name": "headersValue",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": 1
+          "default": true
         },
         "headersDescription": {
           "name": "headersDescription",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": 0
+          "default": false
         },
         "formDataValue": {
           "name": "formDataValue",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": 1
+          "default": true
         },
         "formDataDescription": {
           "name": "formDataDescription",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": 0
+          "default": false
         },
         "xWWWFormUrlencodedValue": {
           "name": "xWWWFormUrlencodedValue",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": 1
+          "default": true
         },
         "xWWWFormUrlencodedDescription": {
           "name": "xWWWFormUrlencodedDescription",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": 0
+          "default": false
         },
         "createdAt": {
           "name": "createdAt",
@@ -1175,9 +1464,9 @@
           "name": "isCheck",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": 1
+          "default": true
         },
         "key": {
           "name": "key",
@@ -1199,7 +1488,7 @@
           "name": "keyType",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "'text'"
         },
@@ -1207,7 +1496,7 @@
           "name": "valueType",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "'text'"
         },
@@ -1270,7 +1559,8 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": "'Project'"
         }
       },
       "indexes": {},
@@ -1300,15 +1590,17 @@
           "name": "activeMetaTab",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'url'"
         },
         "requestBodyType": {
           "name": "requestBodyType",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'none'"
         }
       },
       "indexes": {
@@ -1353,14 +1645,15 @@
           "name": "method",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'null'"
         },
         "name": {
           "name": "name",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "''"
         },
@@ -1384,7 +1677,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": 0
+          "default": false
         },
         "createdAt": {
           "name": "createdAt",
@@ -1506,6 +1799,14 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false,
+          "autoincrement": false,
+          "default": "'ltr'"
+        },
+        "activityBarVisible": {
+          "name": "activityBarVisible",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
           "autoincrement": false
         },
         "projectId": {
@@ -1517,8 +1818,8 @@
         }
       },
       "indexes": {
-        "setting_table_projectId_unique": {
-          "name": "setting_table_projectId_unique",
+        "setting_unique_project": {
+          "name": "setting_unique_project",
           "columns": [
             "projectId"
           ],
@@ -1565,17 +1866,17 @@
           "name": "showHiddenParams",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": 0
+          "default": false
         },
         "showHiddenHeaders": {
           "name": "showHiddenHeaders",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": 0
+          "default": false
         }
       },
       "indexes": {
@@ -1671,6 +1972,78 @@
           "onUpdate": "no action"
         }
       },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "theme_table": {
+      "name": "theme_table",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'theme'"
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'dark'"
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "author": {
+          "name": "author",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'system'"
+        },
+        "thumbnail": {
+          "name": "thumbnail",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "palette": {
+          "name": "palette",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(current_timestamp)"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}

@@ -1,1 +1,0 @@
-ALTER TABLE `keyboard_shortcut_table` RENAME COLUMN "lable" TO "label";

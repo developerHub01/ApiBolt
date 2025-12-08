@@ -1,1 +1,0 @@
-ALTER TABLE `hidden_headers_check_table` ADD `authorization` integer DEFAULT 1;

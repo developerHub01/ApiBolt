@@ -1,1 +1,0 @@
-DROP INDEX `keyboard_shortcut_table_projectId_unique`;

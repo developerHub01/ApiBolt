@@ -6,7 +6,7 @@ const dbPath = `file:${path.join("db", "api-bolt.db")}`;
 
 export default defineConfig({
   out: "./drizzle",
-  schema: "./src/electron/db/schema.js",
+  schema: "./src/main/db/schema.ts",
   dialect: "sqlite",
   dbCredentials: {
     url: dbPath,
