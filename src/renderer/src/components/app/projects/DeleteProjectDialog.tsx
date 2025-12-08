@@ -85,7 +85,7 @@ const DeleteProjectDialog = memo(() => {
     },
     [handleDelete],
   );
-  
+
   useEffect(() => {
     if (deletionCandidate) inputRef.current?.focus();
   }, [deletionCandidate]);

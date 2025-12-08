@@ -11,7 +11,10 @@ const SettingItemContentWrapper = ({
   ...otherProps
 }: Props & ComponentProps<"div">) => {
   return (
-    <div className={cn("w-full flex flex-col gap-3", className)} {...otherProps}>
+    <div
+      className={cn("w-full flex flex-col gap-3", className)}
+      {...otherProps}
+    >
       {children}
     </div>
   );
