@@ -6,13 +6,13 @@ import { motion } from "motion/react";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { handleMoveTab } from "@/context/redux/request-response/request-response-slice";
 import TabActionWrapper from "@/components/app/tab-sidebar/TabActionWrapper";
-import AutoScrollActiveWrapper from "@/components/ui/auto-scroll-active-wrapper";
 import useCheckApplyingLayoutDirection from "@/hooks/setting/use-check-applying-layout-direction";
 import type { TLayoutSetting } from "@shared/types/setting.types";
 import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 import NoTabOpenEmptyBox from "@/components/app/tab-sidebar/empty/NoTabOpenEmptyBox";
 import NoTabSearchResultEmptyBox from "@/components/app/tab-sidebar/empty/NoTabSearchResultEmptyBox";
 import TabSidebarContextMenuWrapper from "@/components/app/tab-sidebar/TabSidebarContextMenuWrapper";
+import TabListAutoScrollWrapper from "@/components/app/tab-sidebar/TabListAutoScrollWrapper";
 
 const TAB_ENTER_LONG_HOVER_TIME = 350;
 const TAB_LEAVE_LONG_HOVER_TIME = 500;
@@ -111,7 +111,7 @@ const TabSidebarRoot = () => {
         onDragOver={handleDragOver}
       >
         <TabSidebarContextMenuWrapper>
-          <AutoScrollActiveWrapper className="py-1 h-full">
+          <TabListAutoScrollWrapper>
             {!totalTabsOpen ? (
               <>
                 {/* if no tabs open */}
@@ -134,7 +134,7 @@ const TabSidebarRoot = () => {
                 </div>
               </>
             )}
-          </AutoScrollActiveWrapper>
+          </TabListAutoScrollWrapper>
         </TabSidebarContextMenuWrapper>
       </ScrollArea>
       <TabActionWrapper />

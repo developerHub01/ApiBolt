@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef } from "react";
+import { memo, useEffect, useMemo, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 
@@ -6,11 +6,18 @@ interface Props {
   className?: string;
   block?: "start" | "end" | "center" | "nearest";
   children: React.ReactNode;
+  scrollDependency?: unknown | Array<unknown>;
 }
 
 const AutoScrollActiveWrapper = memo(
-  ({ className = "", block = "center", children }: Props) => {
+  ({ className = "", block = "center", children, scrollDependency }: Props) => {
     const scrollAreaRef = useRef<HTMLDivElement>(null);
+
+    const memoDeps = useMemo(() => {
+      if (Array.isArray(scrollDependency)) return scrollDependency;
+      if (scrollDependency) return [scrollDependency];
+      return [];
+    }, [scrollDependency]);
 
     useEffect(() => {
       requestAnimationFrame(() => {
@@ -24,7 +31,7 @@ const AutoScrollActiveWrapper = memo(
           block,
         });
       });
-    }, [block]);
+    }, [block, memoDeps]);
 
     return (
       <motion.div

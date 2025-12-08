@@ -21,6 +21,7 @@ import {
 import { selectRequestOrFolderList } from "@/context/redux/request-response/selectors/request-list";
 
 interface TabSidebarContext {
+  selectedTab: string | null;
   tabList: Array<string>;
   totalTabsOpen: number;
   localTabList: Array<string>;
@@ -121,6 +122,7 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
   return (
     <TabSidebarContext.Provider
       value={{
+        selectedTab,
         tabList,
         totalTabsOpen: tabList.length ?? 0,
         localTabList,
