@@ -4,12 +4,13 @@ import WindowControls from "@/components/app/header/WindowControls";
 import HeaderSearch from "@/components/app/header/search/HeaderSearch";
 import SettingButton from "@/components/app/header/SettingButton";
 import { cn } from "@/lib/utils";
-import { useGlobal } from "@/context/global/GlobalProvider";
+// import { useGlobal } from "@/context/global/GlobalProvider";
 import HeaderWrapper from "@/components/app/header/header/HeaderWrapper";
 import { AnimatePresence } from "motion/react";
 
 const Header = () => {
-  const { isFullscreen } = useGlobal();
+  // const { isFullscreen } = useGlobal();
+  const isFullscreen = false;
 
   return (
     <>
