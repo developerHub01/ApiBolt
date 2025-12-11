@@ -41,7 +41,7 @@ const SidebarActionButton = ({
         "hover:bg-secondary/25 hover:text-foreground",
         "has-[>svg]:px-0 [&_svg:not([class*='size-'])]:size-auto",
         {
-          "border-primary bg-secondary/80": isActive,
+          "border-primary bg-secondary/80 text-foreground": isActive,
         },
         className,
       )}
