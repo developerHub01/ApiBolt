@@ -7,11 +7,11 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip-custom";
-import { Button } from "@/components/ui/button";
 import { useGlobal } from "@/context/global/GlobalProvider";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectApplyingKeyboardShortcutsById } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
 import { keyListStringify } from "@/utils/keyboard-shortcut.utils";
+import SidebarActionButton from "@/components/app/sidebar/SidebarActionButton";
 
 const FullScreenToggle = () => {
   const { isFullscreen, toggleFullscreen } = useGlobal();
@@ -27,17 +27,11 @@ const FullScreenToggle = () => {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Button
-          variant={"background"}
+        <SidebarActionButton
           onClick={() => toggleFullscreen()}
           size="icon"
-        >
-          {isFullscreen ? (
-            <SmallScreenIcon size={18} />
-          ) : (
-            <FullScreenIcon size={18} />
-          )}
-        </Button>
+          Icon={isFullscreen ? SmallScreenIcon : FullScreenIcon}
+        />
       </TooltipTrigger>
       <TooltipContent side="right" variant={"secondary"}>
         <p>

@@ -1,7 +1,6 @@
 import { memo } from "react";
 import { Menu as MenuIcon } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { Button } from "@/components/ui/button";
 import { useAppSelector } from "@/context/redux/hooks";
 import {
   Tooltip,
@@ -12,6 +11,7 @@ import { selectApplyingKeyboardShortcutsById } from "@/context/redux/keyboard-sh
 import { keyListStringify } from "@/utils/keyboard-shortcut.utils";
 import useShowSidebarToggler from "@/hooks/sidebar/use-show-sidebar-toggler";
 import useToggleSidebar from "@/hooks/sidebar/use-toggle-sidebar";
+import SidebarActionButton from "@/components/app/sidebar/SidebarActionButton";
 
 const SidbarToggle = memo(() => {
   const shortcut = useAppSelector(state =>
@@ -46,13 +46,11 @@ const SidbarToggle = memo(() => {
         >
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button
+              <SidebarActionButton
                 size={"icon"}
-                variant={"background"}
                 onClick={handleToggle}
-              >
-                <MenuIcon />
-              </Button>
+                Icon={MenuIcon}
+              />
             </TooltipTrigger>
             <TooltipContent side="right" variant={"secondary"}>
               <p>Toggle Sidebar{shortCutString}</p>

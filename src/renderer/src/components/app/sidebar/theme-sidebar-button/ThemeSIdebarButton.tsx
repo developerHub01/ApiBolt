@@ -1,5 +1,4 @@
 import { Fragment, useMemo } from "react";
-import { Button } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
@@ -24,6 +23,7 @@ import { cn } from "@/lib/utils";
 import { selectApplyingKeyboardShortcuts } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
 import { keyListStringify } from "@/utils/keyboard-shortcut.utils";
 import { SIDEBAR_THEME_MENU_ITEMS } from "@/constant/sidebar.constant";
+import SidebarActionButton from "@/components/app/sidebar/SidebarActionButton";
 
 interface Props extends SidebarMenuItemInterface {
   onClick: (id: TSidebarTab) => Promise<void>;
@@ -49,17 +49,12 @@ const ThemeSIdebarButton = ({ label, Icon, onClick }: Props) => {
       <Tooltip>
         <TooltipTrigger asChild>
           <DropdownMenuTrigger asChild>
-            <Button
+            <SidebarActionButton
               size="icon"
-              variant={
-                activeTab?.startsWith("navigate_themes")
-                  ? "default"
-                  : "background"
-              }
+              isActive={activeTab?.startsWith("navigate_themes")}
               className="mt-auto"
-            >
-              <Icon />
-            </Button>
+              Icon={Icon}
+            />
           </DropdownMenuTrigger>
         </TooltipTrigger>
         <TooltipContent side="right" variant={"secondary"}>

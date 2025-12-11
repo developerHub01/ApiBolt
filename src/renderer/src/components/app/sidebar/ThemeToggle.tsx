@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/tooltip-custom";
 import { useTheme } from "@/components/theme-provider";
 import { Moon as DarkIcon, Sun as LightIcon } from "lucide-react";
+import SidebarActionButton from "@/components/app/sidebar/SidebarActionButton";
 
 const ThemeToggle = () => {
   const { theme, setTheme } = useTheme();
@@ -17,9 +18,12 @@ const ThemeToggle = () => {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Button variant="outline" onClick={handleToggleTheme} size="icon">
-          {theme === "light" ? <DarkIcon size={18} /> : <LightIcon size={18} />}
-        </Button>
+        <SidebarActionButton
+          variant="outline"
+          onClick={handleToggleTheme}
+          size="icon"
+          Icon={theme === "light" ? DarkIcon : LightIcon}
+        />
       </TooltipTrigger>
       <TooltipContent side="right" variant={"secondary"}>
         <p>Change Theme</p>

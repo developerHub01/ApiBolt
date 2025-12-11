@@ -1,5 +1,4 @@
 import { memo, useCallback, useMemo } from "react";
-import { Button } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
@@ -22,6 +21,7 @@ import { selectActiveProjectId } from "@/context/redux/project/selectors/project
 import { selectApplyingKeyboardShortcuts } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
 import { keyListStringify } from "@/utils/keyboard-shortcut.utils";
 import ThemeSIdebarButton from "@/components/app/sidebar/theme-sidebar-button/ThemeSIdebarButton";
+import SidebarActionButton from "@/components/app/sidebar/SidebarActionButton";
 
 const SidebarMenu = memo(() => {
   const dispatch = useAppDispatch();
@@ -54,7 +54,7 @@ const SidebarMenu = memo(() => {
   const activeProjectId = useAppSelector(selectActiveProjectId);
 
   return (
-    <div className="flex flex-col gap-2 items-center">
+    <div className="flex flex-col items-center">
       {menuList.map(props => {
         const { id, Icon, label, path } = props;
         if (
@@ -72,14 +72,12 @@ const SidebarMenu = memo(() => {
           <Tooltip key={id}>
             <TooltipTrigger asChild>
               <Link to={path!}>
-                <Button
+                <SidebarActionButton
                   size={"icon"}
-                  variant={activeTab === id ? "default" : "background"}
-                  className="mt-auto"
+                  isActive={activeTab === id}
                   onClick={() => handleClick(id)}
-                >
-                  <Icon />
-                </Button>
+                  Icon={Icon}
+                />
               </Link>
             </TooltipTrigger>
             <TooltipContent side="right" variant={"secondary"}>
