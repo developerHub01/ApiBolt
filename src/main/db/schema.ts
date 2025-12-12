@@ -160,7 +160,6 @@ export const requestOrFolderMetaTable = sqliteTable(
       .$defaultFn(() => uuidv4()),
     method: text()
       .$type<THTTPMethods | null>()
-      .notNull()
       .default(null) /* "get" | "post" | "put" | "patch" | "delete"; */,
     name: text().notNull().default(""),
     projectId: text()
