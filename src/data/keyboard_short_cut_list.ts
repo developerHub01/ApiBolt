@@ -97,11 +97,11 @@ export const keyboardBindings: Record<
   /* switch =================== */
   switch_left_tab: {
     label: "Switch Left Tabs",
-    key: ["ctrl", "meta", "arrowleft"],
+    key: ["ctrl", "shift", "tab"],
   },
   switch_right_tab: {
     label: "Switch Right Tab",
-    key: ["ctrl", "meta", "arrowright"],
+    key: ["ctrl", "tab"],
   },
   /* lock/unlock =================== */
   lock_tab: {
