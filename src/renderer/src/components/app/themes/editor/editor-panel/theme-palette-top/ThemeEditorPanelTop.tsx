@@ -54,7 +54,7 @@ const ACTION_BUTTON_LIST: Array<ActionButtonInterface> = [
   {
     id: "download",
     Icon: DownloadIcon,
-    label: "Download clipboard as JSON",
+    label: "Download palette as JSON",
   },
   {
     id: "import",
