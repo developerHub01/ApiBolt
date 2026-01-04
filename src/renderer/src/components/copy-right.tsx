@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useState } from "react";
 import { X as CloseIcon } from "lucide-react";
 import useMounted from "@/hooks/use-mounted";
-import { Link } from "react-router-dom";
+import ExternalLink from "@/components/ux/ExternalLink";
 
 const githubLink = "https://github.com/developerHub01";
 
@@ -44,13 +44,9 @@ const CopyRight = memo(() => {
     <div className="p-1 pt-1 bg-accent/50 relative">
       <p className="text-center text-xs md:text-sm select-none">
         All rights reserved for
-        <Link
-          to={githubLink}
-          target="_blank"
-          className="text-primary underline ml-1"
-        >
+        <ExternalLink to={githubLink} className="text-primary underline ml-1">
           Shakil
-        </Link>
+        </ExternalLink>
       </p>
       <button
         title="Close Copyright"

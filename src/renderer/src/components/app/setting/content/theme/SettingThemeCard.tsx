@@ -10,9 +10,9 @@ import {
 import { useSettingTheme } from "@/context/setting/theme/SettingThemeProvider";
 import SettingThemeCardWrapper from "@/components/app/setting/content/theme/SettingThemeCardWrapper";
 import { useSetting } from "@/context/setting/SettingProvider";
-import { Link } from "react-router-dom";
 import ImageWithFallback from "@/components/ui/image-with-fallback";
 import { DEFAULT_THUMBNAIL_FALLBACK } from "@/constant/theme.constant";
+import ExternalLink from "@/components/ux/ExternalLink";
 
 const SettingThemeCard = memo(
   ({ id, thumbnail, name, type, author, url }: ThemeMetaInterface) => {
@@ -63,7 +63,7 @@ const SettingThemeCard = memo(
             {type}
           </Badge>
           {Boolean(url) && (
-            <Link to={url!} target="_blank">
+            <ExternalLink to={url!}>
               <Button
                 size="iconXs"
                 variant={"ghost"}
@@ -72,7 +72,7 @@ const SettingThemeCard = memo(
               >
                 <LinkArrowIcon />
               </Button>
-            </Link>
+            </ExternalLink>
           )}
         </div>
       </SettingThemeCardWrapper>
