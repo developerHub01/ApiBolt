@@ -5,7 +5,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip-custom";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { Link } from "react-router-dom";
 import { changeActiveTab } from "@/context/redux/sidebar/thunks/sidebar";
 import {
   HIDDEN_TABS_WHEN_NOT_PROJECT_SELECTED,
@@ -71,14 +70,12 @@ const SidebarMenu = memo(() => {
         return (
           <Tooltip key={id}>
             <TooltipTrigger asChild>
-              <Link to={path!}>
-                <SidebarActionButton
-                  size={"icon"}
-                  isActive={activeTab === id}
-                  onClick={() => handleClick(id)}
-                  Icon={Icon}
-                />
-              </Link>
+              <SidebarActionButton
+                size={"icon"}
+                isActive={activeTab === id}
+                onClick={() => handleClick(id)}
+                Icon={Icon}
+              />
             </TooltipTrigger>
             <TooltipContent side="right" variant={"secondary"}>
               <p>{label}</p>

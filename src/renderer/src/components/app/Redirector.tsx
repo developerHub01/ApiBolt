@@ -3,10 +3,8 @@ import { useAppSelector } from "@/context/redux/hooks";
 import { useNavigate } from "react-router-dom";
 import {
   SIDEBAR_MENU_ID_PATH_MAP,
-  SIDEBAR_MENU_LIST,
   SIDEBAR_THEME_MENU_ID_PATH_MAP,
   SIDEBAR_THEME_MENU_IDS,
-  SIDEBAR_THEME_MENU_ITEMS,
 } from "@/constant/sidebar.constant";
 import { selectSidebarActiveTab } from "@/context/redux/sidebar/selectors/sidebar";
 import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
