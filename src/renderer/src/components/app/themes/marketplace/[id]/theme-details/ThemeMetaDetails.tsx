@@ -1,9 +1,9 @@
 import { memo } from "react";
 import ImageWithFallback from "@/components/ui/image-with-fallback";
 import { CloudDownload as DownloadIcon } from "lucide-react";
-import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import ExternalLink from "@/components/ux/ExternalLink";
 
 const ThemeMetaDetails = memo(() => {
   return (
@@ -19,12 +19,12 @@ const ThemeMetaDetails = memo(() => {
       <div className="w-full flex-1 flex flex-col gap-1.5">
         <p className="line-clamp-1 font-semibold text-xl">Theme name</p>
         <div className="w-full flex gap-2 text-sm">
-          <Link
+          <ExternalLink
             to={"https://jsonplaceholder.typicode.com/"}
             className="font-semibold py-0.5"
           >
             author
-          </Link>
+          </ExternalLink>
           <Separator
             className="bg-border data-[orientation=vertical]:w-0.5"
             orientation="vertical"

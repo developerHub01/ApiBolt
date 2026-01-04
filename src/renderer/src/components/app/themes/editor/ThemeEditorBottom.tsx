@@ -6,7 +6,7 @@ import {
 } from "@/context/redux/theme/thunks/theme";
 import { useThemeEditor } from "@/context/theme/theme-editor/ThemeEditorProvider";
 import useCustomToast from "@/hooks/ui/use-custom-toast";
-import { Link } from "react-router-dom";
+import ExternalLink from "@/components/ux/ExternalLink";
 
 const ThemeEditorBottom = () => {
   const dispatch = useAppDispatch();
@@ -33,11 +33,11 @@ const ThemeEditorBottom = () => {
 
   return (
     <div className="flex items-center gap-2">
-      <Link to={"https://jsonplaceholder.typicode.com/"} target="_blank">
+      <ExternalLink to={"https://jsonplaceholder.typicode.com/"}>
         <Button variant={"link"} className="pl-0">
           Upload theme in marketplace
         </Button>
-      </Link>
+      </ExternalLink>
       <Button
         className="ml-auto"
         disabled={haveError}
