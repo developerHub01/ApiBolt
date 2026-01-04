@@ -1,4 +1,5 @@
 import {
+  ButtonHTMLAttributes,
   memo,
   useCallback,
   useEffect,
@@ -13,10 +14,18 @@ import { cn } from "@/lib/utils";
 
 const DEBOUNCE_DELAY = 300;
 
-const TabSearchBar = memo(() => {
+interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
+  isOpen?: boolean;
+}
+
+const TabSearchBar = memo(({ isOpen, className, ...props }: Props) => {
   const { handleSearch, isTabListOpen } = useTabSidebar();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [skipEffect, setSkipEffect] = useState<boolean>(false);
+
+  useEffect(() => {
+    return () => setSearchTerm("");
+  }, []);
 
   useEffect(() => {
     if (skipEffect) {
@@ -42,25 +51,26 @@ const TabSearchBar = memo(() => {
     handleSearch("");
   }, [handleSearch]);
 
+  const isExpended = isOpen ?? isTabListOpen;
+
   return (
     <Button
       asChild
       variant={"background"}
       size={"sm"}
-      className="overflow-hidden gap-0"
+      className={cn("overflow-hidden gap-0 pr-0.5!", className)}
+      {...props}
     >
       <div className="w-full flex items-center">
-        <div>
-          <SearchIcon size={16} />
-        </div>
+        <SearchIcon size={16} />
         {/* show input of expended mode else hide */}
         <motion.div
           style={{ transformOrigin: "left" }}
           animate={{
-            opacity: isTabListOpen ? 1 : 0,
-            width: isTabListOpen ? "100%" : "0px",
-            paddingLeft: isTabListOpen ? "8px" : "0px",
-            scaleX: isTabListOpen ? 1 : 0,
+            opacity: isExpended ? 1 : 0,
+            width: isExpended ? "100%" : "0px",
+            paddingLeft: isExpended ? "8px" : "0px",
+            scaleX: isExpended ? 1 : 0,
           }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
           className="flex items-center gap-1 pl-1"

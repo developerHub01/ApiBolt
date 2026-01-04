@@ -6,66 +6,63 @@ import SettingItemHorizontalLayout from "@/components/app/setting/content/Settin
 import SettingType from "@/components/app/setting/SettingTypeSelector";
 import { senitizeValue } from "@/utils/settings.utils";
 import {
-  selectLayoutTypeGlobal,
-  selectLayoutTypeLocal,
+  selectTabListLayoutTypeGlobal,
+  selectTabListLayoutTypeLocal,
 } from "@/context/redux/setting/selectors/setting";
 import SettingItemContentWrapper from "@/components/app/setting/content/SettingItemContentWrapper";
 import {
-  PanelTopDashed as LTRIcon,
-  PanelRightOpen as RTLIcon,
+  PanelTopDashed as TopLayoutIcon,
+  PanelRightDashed as RightLayoutIcon,
   type LucideIcon,
 } from "lucide-react";
-import type { TLayoutSetting } from "@shared/types/setting.types";
+import type { TTabsLayoutSetting } from "@shared/types/setting.types";
 import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 import SettingTypeSelector from "@/components/app/setting/content/layout/SettingTypeSelector";
 
 const layoutList: Array<{
-  id: TLayoutSetting;
+  id: TTabsLayoutSetting;
   label: string;
   subLabel?: string;
   Icon: LucideIcon;
 }> = [
   {
-    id: "ltr",
-    label: "Left To Right",
+    id: "right",
+    label: "Right Align",
     subLabel: "Default layout",
-    Icon: LTRIcon,
+    Icon: RightLayoutIcon,
   },
   {
-    id: "rtl",
-    label: "Right To Left",
-    Icon: RTLIcon,
+    id: "top",
+    label: "Top Align",
+    Icon: TopLayoutIcon,
   },
 ];
 
-const SettingLayoutDirection = () => {
+const SettingTabsListLayoutDirection = () => {
   const { activeTab } = useSetting();
   const activeProjectId = useAppSelector(selectActiveProjectId);
-  const layoutTypeGlobal = useAppSelector(selectLayoutTypeGlobal);
-  const layoutTypeLocal = useAppSelector(selectLayoutTypeLocal);
+  const layoutTypeGlobal = useAppSelector(selectTabListLayoutTypeGlobal);
+  const layoutTypeLocal = useAppSelector(selectTabListLayoutTypeLocal);
 
   const { value, handleChange, handleChangeSettingType, settingType } =
     useGlobalLocalSettingv1({
       globalSetting: layoutTypeGlobal,
       localSetting: layoutTypeLocal,
-      DEFAULT_SETTINGS: DEFAULT_SETTINGS.layoutType,
+      DEFAULT_SETTINGS: DEFAULT_SETTINGS.tabListLayoutType,
       activeTab,
       activeProjectId,
-      key: "layoutType",
+      key: "tabListLayoutType",
     });
 
-  const senitizedValue = senitizeValue(value, DEFAULT_SETTINGS.layoutType);
-  /**
-   * ===========================================================
-   * This setting is under development so we are not rendering it for now
-   * ===========================================================
-   * ***/
-  return null;
+  const senitizedValue = senitizeValue(
+    value,
+    DEFAULT_SETTINGS.tabListLayoutType,
+  );
 
   return (
     <SettingItemContentWrapper className="flex-col gap-4">
       <SettingItemHorizontalLayout className="items-center gap-2">
-        <p className="flex-1">Change Layout</p>
+        <p className="flex-1">Change Tab List Layout</p>
         <SettingType value={settingType} onChange={handleChangeSettingType} />
       </SettingItemHorizontalLayout>
       {settingType === "custom" && (
@@ -79,4 +76,4 @@ const SettingLayoutDirection = () => {
   );
 };
 
-export default SettingLayoutDirection;
+export default SettingTabsListLayoutDirection;

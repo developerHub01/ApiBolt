@@ -1,0 +1,1 @@
+ALTER TABLE `setting_table` ADD `tabListLayoutType` text DEFAULT 'right';

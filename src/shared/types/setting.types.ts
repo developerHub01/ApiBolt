@@ -1,7 +1,9 @@
 export type TKeyboardShortcutKey = "+" | "-" | "0";
 
 export type TLayoutSetting = "ltr" | "rtl";
+export type TTabsLayoutSetting = "top" | "right";
 export type TLayoutSettingNoSenitize = "ltr" | "rtl" | "default";
+export type TTabsLayoutSettingNoSenitize = "top" | "right" | "default";
 
 export interface SettingsInterface {
   backgroundImages: Array<string> | "default" | null;
@@ -15,6 +17,7 @@ export interface SettingsInterface {
   indentationSize: number | null;
   activityBarVisible: number | null;
   layoutType: TLayoutSetting | "default" | null;
+  tabListLayoutType: TTabsLayoutSetting | "default" | null;
   projectId?: string | null;
 }
 

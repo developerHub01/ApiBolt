@@ -12,7 +12,6 @@ import { X as CloseIcon } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { handleMoveTab } from "@/context/redux/request-response/request-response-slice";
-import type { THTTPMethods } from "@shared/types/request-response.types";
 import {
   changeSelectedTab,
   expendParentsOnSelectedChangeTabsData,
@@ -26,8 +25,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip-custom";
-import { selectApplyingKeyboardShortcutsById } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
-import { keyListStringify } from "@/utils/keyboard-shortcut.utils";
+import CollectionTabType from "@/components/app/tab-sidebar/CollectionTabType";
+import ShortcutText from "@/components/app/tab-sidebar/ShortcutText";
 
 interface Props {
   id: string;
@@ -141,30 +140,12 @@ const TabItem = memo(({ id, index }: Props) => {
           },
         )}
       >
-        {(children || method) && (
-          <div
-            className={cn("flex justify-center items-center", {
-              "w-11": isTabListOpen,
-              "w-8": !isTabListOpen,
-            })}
-          >
-            {children && (
-              <img
-                className="w-6 h-full object-contain"
-                src="./icons/folder.png"
-                alt="folder"
-              />
-            )}
-            {method && (
-              <RequestMethodTag
-                method={method as THTTPMethods}
-                shortCut={true}
-                shortCutSizeForAll={isTabListOpen ? undefined : 3}
-                className={"w-full"}
-              />
-            )}
-          </div>
-        )}
+        <CollectionTabType
+          haveChildren={Boolean(children)}
+          isShort={!isTabListOpen}
+          method={method}
+          isFlexibleSize={false}
+        />
         <motion.div
           className={cn(
             "cursor-pointer flex items-center transition-all duration-300",
@@ -224,20 +205,5 @@ const TabItem = memo(({ id, index }: Props) => {
     </div>
   );
 });
-
-const ShortcutText = () => {
-  const shortcuts = useAppSelector(state =>
-    selectApplyingKeyboardShortcutsById(state, "close_tab"),
-  );
-
-  const shortcutString =
-    Array.isArray(shortcuts) && shortcuts.length
-      ? ` (${keyListStringify(shortcuts)})`
-      : "";
-
-  if (!shortcutString) return null;
-
-  return <p>Close Tab {shortcutString}</p>;
-};
 
 export default TabItem;

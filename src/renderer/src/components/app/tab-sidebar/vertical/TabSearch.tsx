@@ -1,15 +1,11 @@
 import { useAppSelector } from "@/context/redux/hooks";
 import { AnimatePresence, motion } from "motion/react";
-import TabSearchBar from "@/components/app/tab-sidebar/tab-search/TabSearchBar";
-import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
+import TabSearchBar from "@/components/app/tab-sidebar/TabSearchBar";
 
 const TabSearch = () => {
   const showTabSearch = useAppSelector(state =>
     Boolean(state.requestResponse.tabList?.length ?? 0),
   );
-  const { totalTabsOpen } = useTabSidebar();
-
-  if (!totalTabsOpen) return null;
 
   return (
     <AnimatePresence>

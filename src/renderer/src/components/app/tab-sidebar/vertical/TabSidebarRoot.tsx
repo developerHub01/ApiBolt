@@ -1,18 +1,18 @@
 import { useCallback, useEffect, useRef, type DragEvent } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import TabItem from "@/components/app/tab-sidebar/TabItem";
+import TabItem from "@/components/app/tab-sidebar/vertical/TabItem";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { handleMoveTab } from "@/context/redux/request-response/request-response-slice";
-import TabActionWrapper from "@/components/app/tab-sidebar/TabActionWrapper";
+import TabActionWrapper from "@/components/app/tab-sidebar/vertical/TabActionWrapper";
 import useCheckApplyingLayoutDirection from "@/hooks/setting/use-check-applying-layout-direction";
 import type { TLayoutSetting } from "@shared/types/setting.types";
 import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
-import NoTabOpenEmptyBox from "@/components/app/tab-sidebar/empty/NoTabOpenEmptyBox";
-import NoTabSearchResultEmptyBox from "@/components/app/tab-sidebar/empty/NoTabSearchResultEmptyBox";
-import TabSidebarContextMenuWrapper from "@/components/app/tab-sidebar/TabSidebarContextMenuWrapper";
-import TabListAutoScrollWrapper from "@/components/app/tab-sidebar/TabListAutoScrollWrapper";
+import NoTabOpenEmptyBox from "@/components/app/tab-sidebar/vertical/empty/NoTabOpenEmptyBox";
+import NoTabSearchResultEmptyBox from "@/components/app/tab-sidebar/vertical/empty/NoTabSearchResultEmptyBox";
+import TabSidebarContextMenuWrapper from "@renderer/components/app/tab-sidebar/TabSidebarContextMenuWrapper";
+import TabListAutoScrollWrapper from "@/components/app/tab-sidebar/vertical/TabListAutoScrollWrapper";
 
 const TAB_ENTER_LONG_HOVER_TIME = 350;
 const TAB_LEAVE_LONG_HOVER_TIME = 500;
@@ -94,7 +94,7 @@ const TabSidebarRoot = () => {
       animate={{ width: isTabListOpen ? 280 : 60 }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
       className={cn(
-        "h-full flex flex-col absolute right-0 top-0 z-40 gap-0.5 shadow-2xl border-l border-muted-foreground/20",
+        "h-full flex flex-col absolute right-0 top-0 z-40 gap-0.5 pt-1 shadow-2xl border-l border-muted-foreground/20",
         "bg-secondary/30",
         "backdrop-blur-lg transition-all duration-150",
         {

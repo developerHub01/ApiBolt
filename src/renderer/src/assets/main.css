@@ -195,6 +195,17 @@
   }
 }
 
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+
 [data-radix-scroll-area-viewport-type="flex"]
   [data-radix-scroll-area-viewport]
   > div {

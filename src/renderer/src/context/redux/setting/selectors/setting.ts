@@ -118,6 +118,16 @@ export const selectLayoutTypeLocal = createSelector(
   layoutType => layoutType ?? null,
 );
 
+export const selectTabListLayoutTypeGlobal = createSelector(
+  [(state: RootState) => state.setting.globalSetting.tabListLayoutType],
+  TabListLayoutType => TabListLayoutType,
+);
+
+export const selectTabListLayoutTypeLocal = createSelector(
+  [(state: RootState) => state.setting.settings?.tabListLayoutType],
+  TabListLayoutType => TabListLayoutType ?? null,
+);
+
 export const selectIsZoomableGlobal = createSelector(
   [(state: RootState) => state.setting.globalSetting.isZoomable],
   isZoomable => isZoomable,

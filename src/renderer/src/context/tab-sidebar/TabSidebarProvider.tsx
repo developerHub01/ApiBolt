@@ -24,6 +24,7 @@ interface TabSidebarContext {
   selectedTab: string | null;
   tabList: Array<string>;
   totalTabsOpen: number;
+  haveAnyTabsOpen: boolean;
   localTabList: Array<string>;
   isTabListOpen: boolean;
   isCollapsed: boolean;
@@ -125,6 +126,7 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
         selectedTab,
         tabList,
         totalTabsOpen: tabList.length ?? 0,
+        haveAnyTabsOpen: Boolean(tabList.length ?? 0),
         localTabList,
         handleSearch,
         isTabListHovering,

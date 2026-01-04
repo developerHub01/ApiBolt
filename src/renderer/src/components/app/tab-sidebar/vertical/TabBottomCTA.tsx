@@ -1,9 +1,9 @@
-import { ComponentType, memo, SVGProps } from "react";
+import { ButtonHTMLAttributes, ComponentType, memo, SVGProps } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 
-interface TabBottomCTAProps {
+interface TabBottomCTAProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   isOpen: boolean;
   onClick: () => void;
   Icon?: ComponentType<SVGProps<SVGSVGElement>>;
@@ -11,16 +11,28 @@ interface TabBottomCTAProps {
 }
 
 const TabBottomCTA = memo(
-  ({ isOpen, onClick, Icon, label }: TabBottomCTAProps) => {
+  ({
+    isOpen,
+    onClick,
+    Icon,
+    label,
+    className,
+    ...props
+  }: TabBottomCTAProps) => {
     return (
       <Button
         variant={"background"}
         size={"sm"}
-        className={cn("w-full gap-0 overflow-hidden", {
-          "justify-start": isOpen,
-          "justify-center": !isOpen,
-        })}
+        className={cn(
+          "w-full gap-0 overflow-hidden",
+          {
+            "justify-start": isOpen,
+            "justify-center": !isOpen,
+          },
+          className,
+        )}
         onClick={onClick}
+        {...props}
       >
         {Icon && <Icon />}
         <motion.span

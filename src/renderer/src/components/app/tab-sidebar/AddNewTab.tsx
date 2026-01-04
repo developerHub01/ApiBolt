@@ -1,11 +1,18 @@
-import { memo, useCallback } from "react";
+import { ButtonHTMLAttributes, memo, useCallback } from "react";
 import { useAppDispatch } from "@/context/redux/hooks";
-import TabBottomCTA from "@/components/app/tab-sidebar/TabBottomCTA";
+import TabBottomCTA from "@/components/app/tab-sidebar/vertical/TabBottomCTA";
 import { Plus as AddIcon } from "lucide-react";
 import { addNewTabsData } from "@/context/redux/request-response/thunks/tab-list";
 import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 
-const AddNewTab = memo(() => {
+interface Props extends Omit<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  "onClick"
+> {
+  isOpen?: boolean;
+}
+
+const AddNewTab = memo(({ isOpen, ...props }: Props) => {
   const dispatch = useAppDispatch();
   const { isTabListOpen } = useTabSidebar();
 
@@ -19,10 +26,11 @@ const AddNewTab = memo(() => {
 
   return (
     <TabBottomCTA
-      isOpen={isTabListOpen}
+      isOpen={isOpen ?? isTabListOpen}
       onClick={handleAdd}
       Icon={AddIcon}
       label="Add Tab"
+      {...props}
     />
   );
 });
