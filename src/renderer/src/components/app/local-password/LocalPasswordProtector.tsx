@@ -5,10 +5,12 @@ import LocalPasswordInput from "@/components/app/local-password/LocalPasswordInp
 import { useAppDispatch } from "@/context/redux/hooks";
 import { matchLocalPassword } from "@/context/redux/local-password/thunks/local-password";
 import { useLocalPassword } from "@/context/local-password/LocalPasswordProvider";
+import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 const LocalPasswordProtector = () => {
   const dispatch = useAppDispatch();
   const { handleChangeStage } = useLocalPassword();
+  const toast = useCustomToast();
   const [passwordState, setPasswordState] = useState<string>("");
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
@@ -16,9 +18,14 @@ const LocalPasswordProtector = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const response = await dispatch(matchLocalPassword(passwordState));
-    if (!response) return;
-    handleChangeStage("option");
+    const response = await dispatch(matchLocalPassword(passwordState)).unwrap();
+    if (response) return handleChangeStage("option");
+
+    toast({
+      type: "error",
+      title: "Wrong",
+      description: "Password is wrong.",
+    });
   };
 
   const isDisabled = !passwordState;
