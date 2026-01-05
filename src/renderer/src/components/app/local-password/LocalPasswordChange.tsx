@@ -56,6 +56,7 @@ const LocalPasswordChange = () => {
         ? "Password updated successfully."
         : "Couldn't update password.",
     });
+    handleChangeStage("option");
   };
 
   const isDisabled = useMemo(

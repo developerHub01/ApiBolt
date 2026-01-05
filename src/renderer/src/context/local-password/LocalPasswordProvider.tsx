@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectHaveLocalPassword } from "@/context/redux/local-password/selectors/local-password";
 import { selectLocalPasswordIsLoading } from "@/context/redux/status/selectors/local-password";
@@ -35,6 +41,7 @@ const LocalPasswordProvider = ({ children }: LocalPasswordProviderProps) => {
   const isLocalPasswordLoading = useAppSelector(selectLocalPasswordIsLoading);
   const [stage, setStage] = useState<TLocalPasswordStage | null>(null);
   const [isDisableRequest, setIsDisableRequest] = useState<boolean>(false);
+  const initialized = useRef<boolean>(false);
 
   const handleChangeStage = (level: TLocalPasswordStage) => setStage(level);
 
@@ -42,8 +49,9 @@ const LocalPasswordProvider = ({ children }: LocalPasswordProviderProps) => {
     setIsDisableRequest(value);
 
   useEffect(() => {
-    if (isLocalPasswordLoading) return;
+    if (isLocalPasswordLoading || initialized.current) return;
     setStage(haveLocalPassword ? "protect" : "option");
+    initialized.current = true;
   }, [haveLocalPassword, isLocalPasswordLoading]);
 
   return (
