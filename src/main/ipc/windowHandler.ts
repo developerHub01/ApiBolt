@@ -31,7 +31,9 @@ export const windowHandler = (mainWindow: BrowserWindow) => {
   ipcMain.handle(
     "windowClose",
     async (): ReturnType<ElectronAPIInterface["windowClose"]> => {
-      mainWindow?.close();
+      BrowserWindow.getAllWindows().forEach(win => {
+        if (!win.isDestroyed()) win.close();
+      });
     },
   );
   // native maximize/unmaximize syncing
