@@ -8,11 +8,11 @@ import {
 import { VariantProps } from "class-variance-authority";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import LocalPasswordDetails from "@/components/app/local-password/LocalPasswordDetails";
+import LocalPasswordDetails from "@renderer/components/app/local-password/micro/LocalPasswordDetails";
 import { useLocalPassword } from "@/context/local-password/LocalPasswordProvider";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { handleChangeIsLocalPasswordOpen } from "@/context/redux/local-password/local-password-slice";
-import LocalPasswordScreenWrapper from "@/components/app/local-password/LocalPasswordScreenWrapper";
+import LocalPasswordScreenWrapper from "@renderer/components/app/local-password/micro/LocalPasswordScreenWrapper";
 
 interface CTAInterface {
   id: "change" | "disable" | "back";
