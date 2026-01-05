@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { AnimatePresence, motion } from "motion/react";
 import { StatusAlert } from "@/components/ui/status-alert";
+import SplashScreenBg from "@renderer/components/splash/SplashScreenBg";
 
 const dragableStyle = {
   appRegion: "drag",
@@ -45,11 +46,11 @@ const Splash = () => {
   };
 
   return (
-    <>
-      <div
-        className="w-full h-screen aspect-square bg-background backdrop-blur-3xl flex justify-center items-center overflow-hidden relative rounded-lg border border-border/20 p-3"
-        style={dragableStyle}
-      >
+    <div
+      className="w-full h-screen aspect-square bg-background backdrop-blur-3xl flex justify-center items-center overflow-hidden relative rounded-lg border border-border/20 p-3"
+      style={dragableStyle}
+    >
+      <SplashScreenBg>
         <form
           onSubmit={handleSubmit}
           className="w-full max-w-75 flex flex-col gap-5 justify-center items-center text-center"
@@ -113,8 +114,8 @@ const Splash = () => {
             )}
           </AnimatePresence>
         </form>
-      </div>
-    </>
+      </SplashScreenBg>
+    </div>
   );
 };
 
