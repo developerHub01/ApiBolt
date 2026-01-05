@@ -35,6 +35,7 @@ import { generateHttpStatusSeed } from "@/main/seeders/httpStatusSeed";
 import { generateKeyboardBindingsSeed } from "@/main/seeders/keyboardShortcutSeed";
 import { generateThemesSeed } from "@/main/seeders/themesSeed";
 import { createSplashWindow } from "@/main/utils/splashWindow";
+import { createLocalPasswordWindow } from "@/main/utils/localPasswordWindow";
 import { createMainWindow } from "@/main/utils/mainWindow";
 import { jarManager } from "@/main/utils/cookieManager";
 import axios, { type AxiosInstance } from "axios";
@@ -43,6 +44,7 @@ import { CookieJar } from "tough-cookie";
 import { handleExternalUrl } from "@/main/utils/externalUrl";
 import { handleProtocol } from "@/main/utils/custom-protocol";
 import { localPasswordHandler } from "@/main/ipc/localPasswordHandler";
+import { getLocalPassword } from "@/main/db/localPasswordDB";
 
 export const userDataDir = app.getPath("userData");
 
@@ -50,8 +52,40 @@ export let jar: CookieJar | null = null;
 export let client: AxiosInstance | null = null;
 
 export let splashWindow: BrowserWindow | null = null;
+export let localPasswordWindow: BrowserWindow | null = null;
 export let mainWindow: BrowserWindow | null = null;
 
+export const showMainWindow = () => {
+  if (!mainWindow) return;
+  mainWindow.show();
+  mainWindow.maximize();
+};
+
+export const showLocalPasswordWindow = () => {
+  if (!localPasswordWindow) return;
+  localPasswordWindow.show();
+};
+
+export const closeSplash = () => {
+  splashWindow?.close();
+  splashWindow = null;
+};
+
+export const closeLocalPassword = () => {
+  localPasswordWindow?.close();
+  localPasswordWindow = null;
+};
+
+const enterMainApp = () => {
+  if (!mainWindow) return;
+
+  if (!mainWindow.webContents.isLoading()) return showMainWindow();
+
+  mainWindow.once("ready-to-show", () => {
+    showMainWindow();
+  });
+  closeLocalPassword();
+};
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -61,15 +95,28 @@ app.whenReady().then(async () => {
   // axios client with cookie jar support
   client = wrapper(axios.create({ jar }));
 
+  /* handle protocol ex: api-bolt:// */
   handleProtocol();
-
-  splashWindow = createSplashWindow();
-  mainWindow = createMainWindow();
-  const splashMinDuration = 5000; // 5 sec minimum splash
-  const splashShownAt = Date.now();
 
   // Set app user model id for windows
   electronApp.setAppUserModelId("com.api-bolt");
+
+  /* getting local password state */
+  const haveLocalPassword = Boolean(await getLocalPassword());
+
+  splashWindow = createSplashWindow();
+  localPasswordWindow = createLocalPasswordWindow();
+  mainWindow = createMainWindow();
+
+  const splashMinDuration = 5000; /* 5 sec minimum splash */
+
+  splashWindow.show();
+  setTimeout(() => {
+    if (haveLocalPassword) showLocalPasswordWindow();
+    else enterMainApp();
+
+    closeSplash();
+  }, splashMinDuration);
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
@@ -81,20 +128,12 @@ app.whenReady().then(async () => {
   // IPC test
   ipcMain.on("ping", () => console.info("pong"));
 
-  mainWindow.once("ready-to-show", () => {
-    const elapsed = Date.now() - splashShownAt;
-    const remaining = splashMinDuration - elapsed;
-
-    setTimeout(
-      () => {
-        splashWindow?.close();
-        splashWindow = null;
-        mainWindow?.show();
-        mainWindow?.maximize();
-      },
-      remaining > 0 ? remaining : 0,
-    );
+  // Render main window after local password matched
+  ipcMain.on("local-password-valid", () => {
+    enterMainApp();
   });
+
+  // mainWindow.once("ready-to-show", () => {});
 
   mainWindow.webContents.on("did-finish-load", async () => {
     await handleZoomLevel();

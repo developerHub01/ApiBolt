@@ -4,6 +4,7 @@ import {
   getLocalPassword,
 } from "@/main/db/localPasswordDB";
 import { ElectronAPILocalPasswordInterface } from "@shared/types/api/electron-local-password";
+import { closeLocalPassword, showMainWindow } from "@/main/index";
 
 export const localPasswordHandler = () => {
   ipcMain.handle(
@@ -35,6 +36,15 @@ export const localPasswordHandler = () => {
       const payload = rest[0];
       const password = await getLocalPassword();
       return payload === password;
+    },
+  );
+  ipcMain.handle(
+    "setLocalPasswordValid",
+    async (): ReturnType<
+      ElectronAPILocalPasswordInterface["setLocalPasswordValid"]
+    > => {
+      closeLocalPassword();
+      showMainWindow();
     },
   );
   ipcMain.handle(
