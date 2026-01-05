@@ -78,12 +78,15 @@ export const closeLocalPassword = () => {
 
 const enterMainApp = () => {
   if (!mainWindow) return;
-
-  if (!mainWindow.webContents.isLoading()) return showMainWindow();
-
-  mainWindow.once("ready-to-show", () => {
+  
+  if (mainWindow.webContents.isLoading()) {
+    mainWindow.once("ready-to-show", () => {
+      showMainWindow();
+    });
+  } else {
     showMainWindow();
-  });
+  }
+
   closeLocalPassword();
 };
 // This method will be called when Electron has finished
