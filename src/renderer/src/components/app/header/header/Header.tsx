@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 // import { useGlobal } from "@/context/global/GlobalProvider";
 import HeaderWrapper from "@/components/app/header/header/HeaderWrapper";
 import { AnimatePresence } from "motion/react";
-import { APP_NAME } from "@renderer/constant";
+import { APP_NAME } from "@/constant";
 
 const Header = () => {
   // const { isFullscreen } = useGlobal();

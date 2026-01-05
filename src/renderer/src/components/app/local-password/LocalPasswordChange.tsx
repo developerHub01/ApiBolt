@@ -7,14 +7,14 @@ import {
   useState,
 } from "react";
 import { Button } from "@/components/ui/button";
-import LocalPasswordDetails from "@renderer/components/app/local-password/micro/LocalPasswordDetails";
-import LocalPasswordInput from "@renderer/components/app/local-password/micro/LocalPasswordInput";
+import LocalPasswordDetails from "@/components/app/local-password/micro/LocalPasswordDetails";
+import LocalPasswordInput from "@/components/app/local-password/micro/LocalPasswordInput";
 import { Save as SaveIcon, ArrowLeft as BackIcon } from "lucide-react";
 import { useLocalPassword } from "@/context/local-password/LocalPasswordProvider";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { updateLocalPassword } from "@/context/redux/local-password/thunks/local-password";
 import useCustomToast from "@/hooks/ui/use-custom-toast";
-import LocalPasswordScreenWrapper from "@renderer/components/app/local-password/micro/LocalPasswordScreenWrapper";
+import LocalPasswordScreenWrapper from "@/components/app/local-password/micro/LocalPasswordScreenWrapper";
 
 const inputFieldList = [
   {

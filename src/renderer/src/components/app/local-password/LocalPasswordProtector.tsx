@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import LocalPasswordDetails from "@renderer/components/app/local-password/micro/LocalPasswordDetails";
-import LocalPasswordInput from "@renderer/components/app/local-password/micro/LocalPasswordInput";
+import LocalPasswordDetails from "@/components/app/local-password/micro/LocalPasswordDetails";
+import LocalPasswordInput from "@/components/app/local-password/micro/LocalPasswordInput";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { matchLocalPassword } from "@/context/redux/local-password/thunks/local-password";
 import { useLocalPassword } from "@/context/local-password/LocalPasswordProvider";

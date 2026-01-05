@@ -4,10 +4,10 @@ import {
   AnimatedDialogContentScroll,
   AnimatedDialogTop,
 } from "@/components/ui/animated-dialog";
-import LocalPassowrdContent from "@renderer/components/app/local-password/LocalPassowrdContent";
-import LocalPasswordSkeleton from "@renderer/components/app/local-password/micro/LocalPasswordSkeleton";
-import LoadLocalPassword from "@renderer/components/app/local-password/micro/LoadLocalPassword";
-import LocalPasswordDisableAlert from "@renderer/components/app/local-password/micro/LocalPasswordDisableAlert";
+import LocalPassowrdContent from "@/components/app/local-password/LocalPassowrdContent";
+import LocalPasswordSkeleton from "@/components/app/local-password/micro/LocalPasswordSkeleton";
+import LoadLocalPassword from "@/components/app/local-password/micro/LoadLocalPassword";
+import LocalPasswordDisableAlert from "@/components/app/local-password/micro/LocalPasswordDisableAlert";
 import useShowSkeleton from "@/hooks/ui/use-show-skeleton";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectLocalPasswordIsLoading } from "@/context/redux/status/selectors/local-password";

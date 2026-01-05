@@ -11,8 +11,8 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { AnimatePresence, motion } from "motion/react";
 import { StatusAlert } from "@/components/ui/status-alert";
-import SplashScreenBg from "@renderer/components/splash/SplashScreenBg";
-import { APP_NAME } from "@renderer/constant";
+import SplashScreenBg from "@/components/splash/SplashScreenBg";
+import { APP_NAME } from "@/constant";
 
 const dragableStyle = {
   appRegion: "drag",

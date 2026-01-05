@@ -1,8 +1,8 @@
 import { useEffect, useState, type CSSProperties } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Zap, Activity, Code, Database } from "lucide-react";
-import SplashScreenBg from "@renderer/components/splash/SplashScreenBg";
-import { APP_NAME } from "@renderer/constant";
+import SplashScreenBg from "@/components/splash/SplashScreenBg";
+import { APP_NAME } from "@/constant";
 
 const dragableStyle = {
   appRegion: "drag",
