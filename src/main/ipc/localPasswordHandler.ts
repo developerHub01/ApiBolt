@@ -5,6 +5,9 @@ import {
 } from "@/main/db/localPasswordDB";
 import { ElectronAPILocalPasswordInterface } from "@shared/types/api/electron-local-password";
 import { closeLocalPassword, showMainWindow } from "@/main/index";
+import bcrypt from "bcryptjs";
+
+export const PASSWORD_SALT = 12;
 
 export const localPasswordHandler = () => {
   ipcMain.handle(
@@ -34,8 +37,10 @@ export const localPasswordHandler = () => {
       >
     ): ReturnType<ElectronAPILocalPasswordInterface["matchLocalPassword"]> => {
       const payload = rest[0];
-      const password = await getLocalPassword();
-      return payload === password;
+      const hasedPassword = await getLocalPassword();
+      if (!hasedPassword) return false;
+
+      return bcrypt.compare(payload, hasedPassword);
     },
   );
   ipcMain.handle(
@@ -54,7 +59,13 @@ export const localPasswordHandler = () => {
       ...rest: Parameters<
         ElectronAPILocalPasswordInterface["changeLocalPassword"]
       >
-    ): ReturnType<ElectronAPILocalPasswordInterface["changeLocalPassword"]> =>
-      await changeLocalPassword(...rest),
+    ): ReturnType<ElectronAPILocalPasswordInterface["changeLocalPassword"]> => {
+      const password = rest[0];
+
+      const hasedPassword = password
+        ? await bcrypt.hash(password, PASSWORD_SALT)
+        : null;
+      return await changeLocalPassword(hasedPassword);
+    },
   );
 };
