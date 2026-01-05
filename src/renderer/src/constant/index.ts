@@ -1,3 +1,5 @@
+export const APP_NAME = "APIBolt";
+
 export const METHOD = ["GET", "POST", "PUT", "PATCH", "DELETE"] as const;
 
 export const JWT_ALGO_LIST = [
