@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import LocalPasswordDetails from "@renderer/components/app/local-password/micro/LocalPasswordDetails";
 import LocalPasswordInput from "@renderer/components/app/local-password/micro/LocalPasswordInput";
@@ -12,6 +12,9 @@ const LocalPasswordProtector = () => {
   const { handleChangeStage } = useLocalPassword();
   const toast = useCustomToast();
   const [passwordState, setPasswordState] = useState<string>("");
+  const passwordRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => passwordRef.current?.focus(), []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
     setPasswordState(e.target.value);
@@ -48,7 +51,7 @@ const LocalPasswordProtector = () => {
           value={passwordState}
           onChange={handleChange}
           placeholder={"Enter password"}
-          type="password"
+          ref={passwordRef}
         />
         <Button disabled={isDisabled} className="mt-3 justify-start">
           Submit

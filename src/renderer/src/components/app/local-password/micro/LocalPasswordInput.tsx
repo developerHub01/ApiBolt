@@ -1,15 +1,18 @@
-import { InputHTMLAttributes } from "react";
+import { InputHTMLAttributes, Ref } from "react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
-interface Props extends InputHTMLAttributes<HTMLInputElement> {}
+interface Props extends InputHTMLAttributes<HTMLInputElement> {
+  ref?: Ref<HTMLInputElement>;
+}
 
-const LocalPasswordInput = ({ className, ...props }: Props) => {
+const LocalPasswordInput = ({ className, ref, ...props }: Props) => {
   return (
     <Input
-      className={cn("border-none bg-secondary focus-visible:ring-0", className)}
+      className={cn("border-none bg-secondary focus-visible:ring-2", className)}
       type="password"
       {...props}
+      ref={ref}
     />
   );
 };

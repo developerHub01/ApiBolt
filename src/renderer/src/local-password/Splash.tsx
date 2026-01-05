@@ -1,4 +1,11 @@
-import { ChangeEvent, FormEvent, useState, type CSSProperties } from "react";
+import {
+  ChangeEvent,
+  FormEvent,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import LocalPasswordInput from "@/components/app/local-password/micro/LocalPasswordInput";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -16,6 +23,9 @@ const unDragableStyle = {
 const Splash = () => {
   const [password, setPassword] = useState<string>("");
   const [isSuccess, setIsSuccess] = useState<boolean | null>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => passwordRef.current?.focus(), []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
@@ -65,6 +75,7 @@ const Splash = () => {
             }}
             value={password}
             onChange={handleChange}
+            ref={passwordRef}
           />
           <Button
             className="w-full"

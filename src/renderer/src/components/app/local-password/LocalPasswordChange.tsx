@@ -1,4 +1,11 @@
-import { ChangeEvent, FormEvent, useMemo, useState } from "react";
+import {
+  ChangeEvent,
+  FormEvent,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Button } from "@/components/ui/button";
 import LocalPasswordDetails from "@renderer/components/app/local-password/micro/LocalPasswordDetails";
 import LocalPasswordInput from "@renderer/components/app/local-password/micro/LocalPasswordInput";
@@ -36,6 +43,9 @@ const LocalPasswordChange = () => {
     password: "",
     rePassword: "",
   });
+  const passwordRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => passwordRef.current?.focus(), []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -89,6 +99,7 @@ const LocalPasswordChange = () => {
             onChange={handleChange}
             placeholder={placeholder}
             type="password"
+            ref={id === "password" ? passwordRef : null}
           />
         ))}
         <Button type="submit" disabled={isDisabled} className="justify-start">
