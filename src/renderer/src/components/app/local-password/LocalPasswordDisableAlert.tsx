@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { disableLocalPassword } from "@/context/redux/local-password/thunks/local-password";
 import { useAppDispatch } from "@/context/redux/hooks";
 import useCustomToast from "@/hooks/ui/use-custom-toast";
+import { handleChangeIsLocalPasswordOpen } from "@/context/redux/local-password/local-password-slice";
 
 const LocalPasswordDisableAlert = memo(() => {
   const dispatch = useAppDispatch();
@@ -32,6 +33,7 @@ const LocalPasswordDisableAlert = memo(() => {
         : "Couldn't update password.",
     });
     handleChangeDisableRequest(false);
+    dispatch(handleChangeIsLocalPasswordOpen(false));
   };
 
   return (

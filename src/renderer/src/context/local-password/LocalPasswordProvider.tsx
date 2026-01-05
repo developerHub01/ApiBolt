@@ -50,7 +50,7 @@ const LocalPasswordProvider = ({ children }: LocalPasswordProviderProps) => {
 
   useEffect(() => {
     if (isLocalPasswordLoading || initialized.current) return;
-    setStage(haveLocalPassword ? "protect" : "option");
+    setStage(haveLocalPassword ? "protect" : "change");
     initialized.current = true;
   }, [haveLocalPassword, isLocalPasswordLoading]);
 
