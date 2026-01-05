@@ -18,7 +18,6 @@ import {
   createCollection,
   createRestApiBasic,
   createSingleRequest,
-  deleteRequestOrFolder,
   duplicateRequestOrFolder,
 } from "@/context/redux/request-response/thunks/request-list";
 import { checkPermissionToAddFolderAsChildren } from "@/utils/request-response.utils";
@@ -29,6 +28,7 @@ import {
   importRequest,
 } from "@/context/redux/request-response/thunks/request";
 import useCustomToast from "@/hooks/ui/use-custom-toast";
+import { handleChangeDeleteFolderOrRequestId } from "@/context/redux/request-response/request-response-slice";
 
 type TActionType =
   | "add_request"
@@ -140,16 +140,8 @@ const ItemCTA = memo(() => {
   const handleCTAAction = useCallback(
     async (actionType: string) => {
       switch (actionType as TActionType) {
-        case "delete": {
-          const response = await dispatch(deleteRequestOrFolder(id)).unwrap();
-          return toast({
-            type: response ? "success" : "error",
-            title: response ? "Delete success" : "Delete error",
-            description: response
-              ? "Request deleted successfully"
-              : "Couldn't delete request, something went wrong.",
-          });
-        }
+        case "delete":
+          return dispatch(handleChangeDeleteFolderOrRequestId(id!));
         case "add_folder": {
           const response = await dispatch(createCollection(id)).unwrap();
           return toast({

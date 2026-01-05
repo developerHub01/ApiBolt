@@ -13,9 +13,12 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { deleteRequestOrFolder } from "@/context/redux/request-response/thunks/request-list";
+import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 const RequestListDeleteAlertDialog = memo(() => {
   const dispatch = useAppDispatch();
+  const toast = useCustomToast();
+
   const deleteFolderOrRequestId = useAppSelector(
     state => state.requestResponse.deleteFolderOrRequestId,
   );
@@ -26,6 +29,19 @@ const RequestListDeleteAlertDialog = memo(() => {
         state.requestResponse.deleteFolderOrRequestId
       ]?.name ?? "",
   );
+
+  const handleDelete = async () => {
+    const response = await dispatch(
+      deleteRequestOrFolder(deleteFolderOrRequestId),
+    ).unwrap();
+    return toast({
+      type: response ? "success" : "error",
+      title: response ? "Delete success" : "Delete error",
+      description: response
+        ? "Request deleted successfully"
+        : "Couldn't delete request, something went wrong.",
+    });
+  };
 
   return (
     <AlertDialog open={Boolean(deleteFolderOrRequestId)}>
@@ -49,7 +65,7 @@ const RequestListDeleteAlertDialog = memo(() => {
           </AlertDialogCancel>
           <AlertDialogAction asChild>
             <Button
-              onClick={() => dispatch(deleteRequestOrFolder(true))}
+              onClick={handleDelete}
               className={cn(
                 "text-foreground bg-red-500",
                 "hover:text-foreground hover:bg-red-700",
