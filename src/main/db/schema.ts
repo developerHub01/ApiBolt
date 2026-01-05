@@ -24,10 +24,18 @@ import { v4 as uuidv4 } from "uuid";
 export const ACTIVE_PROJECT_ID = "singleton";
 export const ACTIVE_SIDEBAR_TAB_ID = "singleton";
 export const ACTIVE_CODE_SNIPPIT_TYPE_ID = "singleton";
+export const LOCAL_PASSWORD_ID = "singleton";
 export const API_URL_DEFAULT_VALUE = "http://localhost:3000";
 export const DEFAULT_ACTIVE_SIDEBAR_TAB: TSidebarTab = "navigate_projects";
 export const DEFAULT_ACTIVE_CODE_SNIPPIT_TYPE: TRequestCodeType =
   "javascript-fetch";
+
+export const localPasswordTable = sqliteTable("local_password_table", {
+  id: text("id")
+    .primaryKey()
+    .default(LOCAL_PASSWORD_ID),
+  password: text(),
+});
 
 export const projectTable = sqliteTable("projects_table", {
   id: text("id")

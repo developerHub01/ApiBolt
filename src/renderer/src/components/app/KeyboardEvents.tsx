@@ -29,6 +29,7 @@ import {
   handleClearTabList,
   handleToggleTabListCollapse,
 } from "@/context/redux/request-response/request-response-slice";
+import { handleChangeIsLocalPasswordOpen } from "@/context/redux/local-password/local-password-slice";
 
 const KeyboardEvents = () => {
   const dispatch = useAppDispatch();
@@ -74,6 +75,10 @@ const KeyboardEvents = () => {
           )?.path;
           if (path) navigate(path);
           return;
+        }
+        case "navigate_local_password": {
+          e.preventDefault();
+          return dispatch(handleChangeIsLocalPasswordOpen());
         }
         case "toggle_activitybar": {
           e.preventDefault();

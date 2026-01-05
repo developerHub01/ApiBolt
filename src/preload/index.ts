@@ -99,6 +99,23 @@ if (process.contextIsolated) {
 
     /**
      * ====================
+     * Local Password
+     * ====================
+     */
+    const electronAPILocalPasswordBridge: WindowElectronAPIInterface["electronAPILocalPassword"] =
+      {
+        getLocalPassword: async (...payload) =>
+          await ipcRenderer.invoke("getThemeListMeta", ...payload),
+        getHaveLocalPassword: async (...payload) =>
+          await ipcRenderer.invoke("getHaveLocalPassword", ...payload),
+        matchLocalPassword: async (...payload) =>
+          await ipcRenderer.invoke("matchLocalPassword", ...payload),
+        changeLocalPassword: async (...payload) =>
+          await ipcRenderer.invoke("changeLocalPassword", ...payload),
+      };
+
+    /**
+     * ====================
      * Theme
      * ====================
      */
@@ -689,6 +706,10 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld(
       "electronAPIFileSystem",
       electronAPIFileSystemBridge,
+    );
+    contextBridge.exposeInMainWorld(
+      "electronAPILocalPassword",
+      electronAPILocalPasswordBridge,
     );
     contextBridge.exposeInMainWorld("electronAPITheme", electronAPIThemeBridge);
     contextBridge.exposeInMainWorld(

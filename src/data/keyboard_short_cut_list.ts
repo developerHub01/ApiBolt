@@ -55,6 +55,10 @@ export const keyboardBindings: Record<
     label: "Open Settings",
     key: ["ctrl", ","],
   },
+  navigate_local_password: {
+    label: "Open Local Password",
+    key: ["ctrl", "alt", "p"],
+  },
   /***
    * =============================
    * Tabs start

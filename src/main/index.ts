@@ -42,6 +42,7 @@ import { wrapper } from "axios-cookiejar-support";
 import { CookieJar } from "tough-cookie";
 import { handleExternalUrl } from "@/main/utils/externalUrl";
 import { handleProtocol } from "@/main/utils/custom-protocol";
+import { localPasswordHandler } from "@/main/ipc/localPasswordHandler";
 
 export const userDataDir = app.getPath("userData");
 
@@ -110,6 +111,7 @@ app.whenReady().then(async () => {
     return { action: "deny" };
   });
 
+  localPasswordHandler();
   httpStatusHandler();
   registerCookieHandlers();
   windowHandler(mainWindow);

@@ -18,9 +18,11 @@ import { selectIsSettingButtonEnabled } from "@/context/redux/common-selectors/s
 import { selectApplyingKeyboardShortcutsById } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
 import { keyListStringify } from "@/utils/keyboard-shortcut.utils";
 import type { TShortcutKey } from "@shared/types/keyboard-shortcut.types";
+import { handleChangeIsLocalPasswordOpen } from "@/context/redux/local-password/local-password-slice";
 
 const SettingButton = () => {
   const dispatch = useAppDispatch();
+
   const isEnabled = useAppSelector(selectIsSettingButtonEnabled);
 
   const cookiesShortcuts = useAppSelector(state =>
@@ -32,11 +34,15 @@ const SettingButton = () => {
   const settingsShortcuts = useAppSelector(state =>
     selectApplyingKeyboardShortcutsById(state, "open_settings"),
   );
+  const localPasswordShortcuts = useAppSelector(state =>
+    selectApplyingKeyboardShortcutsById(state, "navigate_local_password"),
+  );
 
   const shortcutsMap: Record<string, TShortcutKey> = {
     open_cookies: cookiesShortcuts,
     open_keyboard_shortcut: keyboardShortcuts,
     open_settings: settingsShortcuts,
+    navigate_local_password: localPasswordShortcuts,
   };
 
   const getShortcutString = (id: string) => {
@@ -61,6 +67,12 @@ const SettingButton = () => {
       id: "open_settings",
       label: "Settings",
       onClick: () => dispatch(handleChangeIsSettingOpen()),
+      isSeparatorAbove: true,
+    },
+    {
+      id: "navigate_local_password",
+      label: "Local Password",
+      onClick: () => dispatch(handleChangeIsLocalPasswordOpen()),
       isSeparatorAbove: true,
     },
   ];

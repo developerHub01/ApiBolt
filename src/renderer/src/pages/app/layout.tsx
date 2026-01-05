@@ -15,6 +15,7 @@ import LoadBasicReduxState from "@/components/app/LoadBasicReduxState";
 import Cookies from "@/components/app/cookies/Cookies";
 import KeyboardShortcuts from "@/components/app/keyboard-shortcuts/KeyboardShortcuts";
 import History from "@/components/app/history-details/History";
+import LocalPassword from "@/components/app/local-password/LocalPassword";
 
 const AppLayout = () => {
   return (
@@ -80,6 +81,7 @@ const InnerLayout = ({ children }: CustomizedBgWrapperProps) => {
 const DialogsAnchor = memo(() => {
   return (
     <>
+      <LocalPassword />
       <Setting />
       <Cookies />
       <KeyboardShortcuts />

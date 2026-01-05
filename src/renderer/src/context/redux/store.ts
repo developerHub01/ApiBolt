@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import localPasswordReducer from "@/context/redux/local-password/local-password-slice";
 import projectReducer from "@/context/redux/project/project-slice";
 import environmentsReducer from "@/context/redux/environments/environments-slice";
 import themeReducer from "@/context/redux/theme/theme-slice";
@@ -15,6 +16,7 @@ import historyReducer from "@/context/redux/history/history-slice";
 
 export const store = configureStore({
   reducer: {
+    localPassword: localPasswordReducer,
     project: projectReducer,
     environments: environmentsReducer,
     theme: themeReducer,

@@ -11,7 +11,7 @@ import type { TLayoutSetting } from "@shared/types/setting.types";
 import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 import NoTabOpenEmptyBox from "@/components/app/tab-sidebar/vertical/empty/NoTabOpenEmptyBox";
 import NoTabSearchResultEmptyBox from "@/components/app/tab-sidebar/vertical/empty/NoTabSearchResultEmptyBox";
-import TabSidebarContextMenuWrapper from "@renderer/components/app/tab-sidebar/TabSidebarContextMenuWrapper";
+import TabSidebarContextMenuWrapper from "@/components/app/tab-sidebar/TabSidebarContextMenuWrapper";
 import TabListAutoScrollWrapper from "@/components/app/tab-sidebar/vertical/TabListAutoScrollWrapper";
 
 const TAB_ENTER_LONG_HOVER_TIME = 350;

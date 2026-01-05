@@ -15,8 +15,10 @@ import {
 import { loadThemePalette } from "@/context/redux/theme/thunks/theme";
 import { loadRequestList } from "@/context/redux/request-response/thunks/request-list";
 import { loadFolder } from "@/context/redux/request-response/thunks/folder";
+import { loadLocalPassword } from "@/context/redux/local-password/thunks/local-password";
 
 export interface StatusInterface {
+  isLocalPasswordLoading: boolean;
   isProjectLoading: boolean;
   isRequestListLoading: boolean;
   isSidebarActiiveTabLoading: boolean;
@@ -34,6 +36,7 @@ export interface StatusInterface {
 
 // Define the initial state using that type
 const initialState: StatusInterface = {
+  isLocalPasswordLoading: true,
   isProjectLoading: true,
   isRequestListLoading: true,
   isSidebarActiiveTabLoading: true,
@@ -75,6 +78,21 @@ export const statusSlice = createSlice({
 
   extraReducers: builder => {
     builder
+      /**
+       * =======================
+       * Local password
+       * =======================
+       */
+      .addCase(loadLocalPassword.pending, state => {
+        state.isLocalPasswordLoading = true;
+      })
+      .addCase(loadLocalPassword.fulfilled, state => {
+        state.isLocalPasswordLoading = false;
+      })
+      .addCase(loadLocalPassword.rejected, state => {
+        state.isLocalPasswordLoading = false;
+      })
+
       /**
        * =======================
        * Projects
