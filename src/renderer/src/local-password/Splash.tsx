@@ -12,6 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { AnimatePresence, motion } from "motion/react";
 import { StatusAlert } from "@/components/ui/status-alert";
 import SplashScreenBg from "@renderer/components/splash/SplashScreenBg";
+import { APP_NAME } from "@renderer/constant";
 
 const dragableStyle = {
   appRegion: "drag",
@@ -62,7 +63,7 @@ const Splash = () => {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              ApiBolt
+              {APP_NAME}
             </motion.h1>
             <Separator className="bg-primary max-w-12 pb-1" />
           </div>

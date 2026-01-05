@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 // import { useGlobal } from "@/context/global/GlobalProvider";
 import HeaderWrapper from "@/components/app/header/header/HeaderWrapper";
 import { AnimatePresence } from "motion/react";
+import { APP_NAME } from "@renderer/constant";
 
 const Header = () => {
   // const { isFullscreen } = useGlobal();
@@ -22,7 +23,7 @@ const Header = () => {
             })}
           >
             <p className="justify-start flex-1 select-none text-lg md:text-xl font-bold tracking-wide px-2.5 py-1.5">
-              ApiBolt
+              {APP_NAME}
             </p>
             <div className="w-full flex-2 flex justify-center items-center">
               <HeaderSearch />

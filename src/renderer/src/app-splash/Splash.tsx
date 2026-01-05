@@ -2,6 +2,7 @@ import { useEffect, useState, type CSSProperties } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Zap, Activity, Code, Database } from "lucide-react";
 import SplashScreenBg from "@renderer/components/splash/SplashScreenBg";
+import { APP_NAME } from "@renderer/constant";
 
 const dragableStyle = {
   appRegion: "drag",
@@ -85,7 +86,7 @@ const Splash = () => {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              ApiBolt
+              {APP_NAME}
             </motion.h1>
 
             <motion.p
