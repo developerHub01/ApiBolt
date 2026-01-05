@@ -12,6 +12,7 @@ import LocalPasswordDetails from "@/components/app/local-password/LocalPasswordD
 import { useLocalPassword } from "@/context/local-password/LocalPasswordProvider";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { handleChangeIsLocalPasswordOpen } from "@/context/redux/local-password/local-password-slice";
+import LocalPasswordScreenWrapper from "@/components/app/local-password/LocalPasswordScreenWrapper";
 
 interface CTAInterface {
   id: "change" | "disable" | "back";
@@ -59,7 +60,7 @@ const LocalPasswordOption = () => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col justify-center items-center gap-4 p-2">
+    <LocalPasswordScreenWrapper>
       <div className="w-full max-w-4/5 flex flex-col gap-4">
         <LocalPasswordDetails
           title="Protect your app locally"
@@ -79,7 +80,7 @@ const LocalPasswordOption = () => {
           </Fragment>
         ))}
       </div>
-    </div>
+    </LocalPasswordScreenWrapper>
   );
 };
 

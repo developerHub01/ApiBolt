@@ -7,6 +7,7 @@ import { useLocalPassword } from "@/context/local-password/LocalPasswordProvider
 import { useAppDispatch } from "@/context/redux/hooks";
 import { updateLocalPassword } from "@/context/redux/local-password/thunks/local-password";
 import useCustomToast from "@/hooks/ui/use-custom-toast";
+import LocalPasswordScreenWrapper from "@/components/app/local-password/LocalPasswordScreenWrapper";
 
 const inputFieldList = [
   {
@@ -68,7 +69,7 @@ const LocalPasswordChange = () => {
   );
 
   return (
-    <div className="w-full h-full flex flex-col justify-center items-center gap-4 p-2">
+    <LocalPasswordScreenWrapper>
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-4/5 flex flex-col gap-4"
@@ -104,7 +105,7 @@ const LocalPasswordChange = () => {
           Back
         </Button>
       </form>
-    </div>
+    </LocalPasswordScreenWrapper>
   );
 };
 
