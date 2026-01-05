@@ -27,6 +27,8 @@ export const createLocalPasswordWindow = () => {
     },
   });
 
+  // win.webContents.openDevTools();
+
   win.webContents.setWindowOpenHandler(details => {
     shell.openExternal(details.url);
     return { action: "deny" };

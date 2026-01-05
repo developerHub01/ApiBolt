@@ -78,14 +78,12 @@ export const closeLocalPassword = () => {
 
 const enterMainApp = () => {
   if (!mainWindow) return;
-  
-  if (mainWindow.webContents.isLoading()) {
+
+  if (mainWindow.webContents.isLoading())
     mainWindow.once("ready-to-show", () => {
       showMainWindow();
     });
-  } else {
-    showMainWindow();
-  }
+  else showMainWindow();
 
   closeLocalPassword();
 };
