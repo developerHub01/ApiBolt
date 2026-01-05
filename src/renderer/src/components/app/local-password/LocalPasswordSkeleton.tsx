@@ -11,7 +11,7 @@ const LocalPasswordSkeleton = () => {
             <Skeleton
               key={index}
               className={cn("w-full rounded-md h-8 mb-2", {
-                "h-14": !index
+                "h-14": !index,
               })}
             />
           ))}
