@@ -20,7 +20,8 @@ const useCheckApplyingTabListLayoutDirection = (): TTabsLayoutSetting => {
     : (layoutTypeLocal ?? layoutTypeGlobal)) ??
     "ltr") as TTabsLayoutSettingNoSenitize;
 
-  if (layoutTypes === "default") layoutTypes = DEFAULT_SETTINGS.tabListLayoutType;
+  if (layoutTypes === "default")
+    layoutTypes = DEFAULT_SETTINGS.tabListLayoutType;
 
   return layoutTypes as TTabsLayoutSetting;
 };
