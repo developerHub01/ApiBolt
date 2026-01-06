@@ -11,6 +11,7 @@ import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 import { X as ClearIcon, Search as SearchIcon } from "lucide-react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
+import useCheckApplyingTabListLayoutDirection from "@/hooks/setting/use-check-applying-tab-list-layout-direction";
 
 const DEBOUNCE_DELAY = 300;
 
@@ -19,6 +20,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const TabSearchBar = memo(({ isOpen, className, ...props }: Props) => {
+  const tabListLayoutType = useCheckApplyingTabListLayoutDirection();
   const { handleSearch, isTabListOpen } = useTabSidebar();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [skipEffect, setSkipEffect] = useState<boolean>(false);
@@ -58,7 +60,13 @@ const TabSearchBar = memo(({ isOpen, className, ...props }: Props) => {
       asChild
       variant={"background"}
       size={"sm"}
-      className={cn("overflow-hidden gap-0 pr-0.5!", className)}
+      className={cn(
+        "overflow-hidden gap-0",
+        {
+          "pr-0.5!": tabListLayoutType === "top",
+        },
+        className,
+      )}
       {...props}
     >
       <div className="w-full flex items-center">

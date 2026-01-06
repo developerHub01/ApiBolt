@@ -65,7 +65,11 @@ const TabHorizontalSidebar = () => {
   };
 
   return (
-    <div className={cn("flex items-center border-b-2 divide-x divide-border")}>
+    <div
+      className={cn(
+        "flex items-center border-b-2 divide-x divide-border backdrop-blur-lg",
+      )}
+    >
       {/* Left Arrow with Gradient */}
       {isOverflowing && (
         <Button
