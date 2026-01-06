@@ -46,15 +46,29 @@ import { handleProtocol } from "@/main/utils/custom-protocol";
 import { localPasswordHandler } from "@/main/ipc/localPasswordHandler";
 import { getLocalPassword } from "@/main/db/localPasswordDB";
 
+/***
+ * App basic setup declaration
+ */
 export const userDataDir = app.getPath("userData");
 
 export let jar: CookieJar | null = null;
 export let client: AxiosInstance | null = null;
 
+/***
+ * Initiallizing all windows declaration
+ */
 export let splashWindow: BrowserWindow | null = null;
 export let localPasswordWindow: BrowserWindow | null = null;
 export let mainWindow: BrowserWindow | null = null;
 
+/***
+ * To track is a window is closed by user or programmatically
+ */
+const windowCloseReason = new WeakMap<BrowserWindow, "user" | "programmatic">();
+
+/***
+ * Windows open close helper functions
+ */
 export const showMainWindow = () => {
   if (!mainWindow) return;
   mainWindow.show();
@@ -67,15 +81,22 @@ export const showLocalPasswordWindow = () => {
 };
 
 export const closeSplash = () => {
-  splashWindow?.close();
-  splashWindow = null;
+  if (!splashWindow) return;
+
+  windowCloseReason.set(splashWindow, "programmatic");
+  splashWindow.close();
 };
 
 export const closeLocalPassword = () => {
-  localPasswordWindow?.close();
-  localPasswordWindow = null;
+  if (!localPasswordWindow) return;
+
+  windowCloseReason.set(localPasswordWindow, "programmatic");
+  localPasswordWindow.close();
 };
 
+/***
+ * Main window opening function
+ */
 const enterMainApp = () => {
   if (!mainWindow) return;
 
@@ -91,26 +112,42 @@ const enterMainApp = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(async () => {
-  // browser style cookies holder by domain/path
+  /***
+   * App basic setup start on app statup.
+   * cookies | axios-client | protocols | app-model-id | splash
+   */
   jar = await jarManager.init();
   // axios client with cookie jar support
   client = wrapper(axios.create({ jar }));
-
   /* handle protocol ex: api-bolt:// */
   handleProtocol();
-
   // Set app user model id for windows
   electronApp.setAppUserModelId("com.api-bolt");
+  /* 5 sec minimum splash */
+  const splashMinDuration = 5000;
 
-  /* getting local password state */
+  /***
+   * flag to check do have local password or not
+   */
   const haveLocalPassword = Boolean(await getLocalPassword());
 
+  /***
+   * create all windows
+   */
   splashWindow = createSplashWindow();
   localPasswordWindow = createLocalPasswordWindow();
   mainWindow = createMainWindow();
 
-  const splashMinDuration = 5000; /* 5 sec minimum splash */
+  /***
+   * by default setting all windows closing reasone as "user"
+   */
+  windowCloseReason.set(splashWindow, "user");
+  windowCloseReason.set(localPasswordWindow, "user");
+  windowCloseReason.set(mainWindow, "user");
 
+  /***
+   * handling splash and other windows opening
+   */
   splashWindow.show();
   setTimeout(() => {
     if (haveLocalPassword) showLocalPasswordWindow();
@@ -129,13 +166,19 @@ app.whenReady().then(async () => {
   // IPC test
   ipcMain.on("ping", () => console.info("pong"));
 
-  // Render main window after local password matched
+  /***
+   * Render main window after local password matched
+   * that will only call if local password have and local-password-window open and can validate the password
+   */
   ipcMain.on("local-password-valid", () => {
     enterMainApp();
   });
 
   // mainWindow.once("ready-to-show", () => {});
 
+  /***
+   * on mainWindow loading finish then handle the zoom-level of the window
+   */
   mainWindow.webContents.on("did-finish-load", async () => {
     await handleZoomLevel();
   });
@@ -146,11 +189,17 @@ app.whenReady().then(async () => {
     if (BrowserWindow.getAllWindows().length === 0) createMainWindow();
   });
 
+  /***
+   * handling external links in mainWindow. to forcefully open external link outside the app instead of in
+   */
   mainWindow?.webContents.setWindowOpenHandler(details => {
     handleExternalUrl(details.url);
     return { action: "deny" };
   });
 
+  /***
+   * Initiallizing all IPC handlers
+   */
   localPasswordHandler();
   httpStatusHandler();
   registerCookieHandlers();
@@ -183,6 +232,10 @@ app.whenReady().then(async () => {
   fileSystemHandler();
   keyboardShortcutHandler();
   historyHandler();
+
+  /***
+   * Initiallizing all seeds
+   */
   await generateHttpStatusSeed();
   await generateKeyboardBindingsSeed();
   await generateThemesSeed();
@@ -197,5 +250,28 @@ app.on("window-all-closed", () => {
   }
 });
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+/***
+ * track window creating, closings and before clsoings
+ */
+app.on("browser-window-created", (_, win) => {
+  /**
+   * before closing the window checking is that closed by user or not. if user then close because if user closed it means user intended  to close the app
+   */
+  win.on("close", () => {
+    const reasone = windowCloseReason.get(win) ?? "user";
+
+    if (reasone !== "user") return;
+    app.quit();
+  });
+
+  /**
+   * after close app clear windows and windowCloseReason Map
+   */
+  win.on("closed", () => {
+    windowCloseReason.delete(win);
+
+    if (win === splashWindow) splashWindow = null;
+    if (win === localPasswordWindow) localPasswordWindow = null;
+    if (win === mainWindow) mainWindow = null;
+  });
+});

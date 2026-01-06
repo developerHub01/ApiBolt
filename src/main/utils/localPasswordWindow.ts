@@ -9,7 +9,7 @@ export const createLocalPasswordWindow = () => {
     height: 450,
     frame: false,
     transparent: true,
-    // resizable: false,
+    resizable: false,
     titleBarStyle: "hidden",
     title: "local-password",
     vibrancy: "under-window",
