@@ -45,6 +45,7 @@ import { handleExternalUrl } from "@/main/utils/externalUrl";
 import { handleProtocol } from "@/main/utils/custom-protocol";
 import { localPasswordHandler } from "@/main/ipc/localPasswordHandler";
 import { getLocalPassword } from "@/main/db/localPasswordDB";
+import { applyingThemeBackground } from "@/main/utils/applyingTheme";
 
 /***
  * App basic setup declaration
@@ -130,6 +131,10 @@ app.whenReady().then(async () => {
    * flag to check do have local password or not
    */
   const haveLocalPassword = Boolean(await getLocalPassword());
+  /***
+   * getting background color from theme palette
+   */
+  const backgroundColor = await applyingThemeBackground();
 
   /***
    * create all windows
@@ -137,6 +142,7 @@ app.whenReady().then(async () => {
   splashWindow = createSplashWindow();
   localPasswordWindow = createLocalPasswordWindow();
   mainWindow = createMainWindow();
+  mainWindow.setBackgroundColor(backgroundColor);
 
   /***
    * by default setting all windows closing reasone as "user"

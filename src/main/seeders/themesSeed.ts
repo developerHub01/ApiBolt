@@ -1,5 +1,5 @@
 import { isNull } from "drizzle-orm";
-import { defaultThemeList } from "@/data/themes.js";
+import { defaultThemeList, defaultActiveThemeId } from "@/data/themes.js";
 import { db } from "@/main/db/index.js";
 import { activeThemeTable, themeTable } from "@/main/db/schema.js";
 
@@ -23,7 +23,7 @@ export const generateThemesSeed = async () => {
       await db
         .insert(activeThemeTable)
         .values({
-          activeTheme: defaultThemeList[0].id,
+          activeTheme: defaultActiveThemeId,
           projectId: null,
         })
         .onConflictDoNothing();
