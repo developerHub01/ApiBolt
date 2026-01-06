@@ -25,7 +25,7 @@ const CollectionTabType = ({
               ? "w-fit"
               : {
                   "w-11": isShort,
-                  "w-8": !isShort,
+                  "w-10": !isShort,
                 },
           )}
         >
