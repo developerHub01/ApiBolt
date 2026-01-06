@@ -95,7 +95,8 @@ export const clearRequest = async (id: string) => {
 };
 
 export const importRequest = async ({
-  requestId: id,
+  requestId,
+  parentId,
   name,
   url,
   method,
@@ -110,6 +111,7 @@ export const importRequest = async ({
   authorization,
 }: RequestExportFileInterface & {
   requestId: string;
+  parentId?: string | null;
 }): Promise<boolean> => {
   return await db.transaction(async tsx => {
     const projectId = await getActiveProject();
@@ -120,13 +122,32 @@ export const importRequest = async ({
      * request-meta-data
      * ===================
      */
-    await tsx
-      .update(requestOrFolderMetaTable)
-      .set({
+    // await tsx
+    //   .update(requestOrFolderMetaTable)
+    //   .set({
+    //     name,
+    //     method,
+    //   })
+    //   .where(eq(requestOrFolderMetaTable.id, id));
+    await tsx.insert(requestOrFolderMetaTable).values({
+      id: requestId,
+      name,
+      method,
+      projectId,
+      parentId
+    }).onConflictDoUpdate({
+      target: [requestOrFolderMetaTable.id],
+      set: {
         name,
         method,
-      })
-      .where(eq(requestOrFolderMetaTable.id, id));
+      }
+    })
+    // .update(requestOrFolderMetaTable)
+    // .set({
+    //   name,
+    //   method,
+    // })
+    // .where(eq(requestOrFolderMetaTable.id, id));
 
     /**
      * ===================
@@ -136,7 +157,7 @@ export const importRequest = async ({
     await tsx
       .insert(apiUrlTable)
       .values({
-        requestOrFolderMetaId: id,
+        requestOrFolderMetaId: requestId,
         url,
       })
       .onConflictDoUpdate({
@@ -144,7 +165,7 @@ export const importRequest = async ({
         set: {
           url,
           /* this extra requestOrFolderMetaId so that it not remain empty so not fail the query */
-          requestOrFolderMetaId: id,
+          requestOrFolderMetaId: requestId,
         },
       });
 
@@ -155,13 +176,13 @@ export const importRequest = async ({
      */
     await tsx
       .delete(paramsTable)
-      .where(eq(paramsTable.requestOrFolderMetaId, id));
+      .where(eq(paramsTable.requestOrFolderMetaId, requestId));
 
     if (Array.isArray(params) && params.length)
       await tsx.insert(paramsTable).values(
         params.map(param => ({
           ...param,
-          requestOrFolderMetaId: id,
+          requestOrFolderMetaId: requestId,
         })),
       );
 
@@ -172,13 +193,13 @@ export const importRequest = async ({
      */
     await tsx
       .delete(headersTable)
-      .where(eq(headersTable.requestOrFolderMetaId, id));
+      .where(eq(headersTable.requestOrFolderMetaId, requestId));
 
     if (Array.isArray(headers) && headers.length)
       await tsx.insert(headersTable).values(
         headers.map(header => ({
           ...header,
-          requestOrFolderMetaId: id,
+          requestOrFolderMetaId: requestId,
         })),
       );
 
@@ -191,14 +212,14 @@ export const importRequest = async ({
       .insert(hiddenHeadersCheckTable)
       .values({
         ...hiddenHeadersCheck,
-        requestOrFolderMetaId: id,
+        requestOrFolderMetaId: requestId,
       })
       .onConflictDoUpdate({
         target: [hiddenHeadersCheckTable.requestOrFolderMetaId],
         set: {
           ...hiddenHeadersCheck,
           /* this extra requestOrFolderMetaId so that it not remain empty so not fail the query */
-          requestOrFolderMetaId: id,
+          requestOrFolderMetaId: requestId,
         },
       });
 
@@ -211,14 +232,14 @@ export const importRequest = async ({
       .insert(requestMetaTabTable)
       .values({
         ...requestMetaTab,
-        requestOrFolderMetaId: id,
+        requestOrFolderMetaId: requestId,
       })
       .onConflictDoUpdate({
         target: [requestMetaTabTable.requestOrFolderMetaId],
         set: {
           ...requestMetaTab,
           /* this extra requestOrFolderMetaId so that it not remain empty so not fail the query */
-          requestOrFolderMetaId: id,
+          requestOrFolderMetaId: requestId,
         },
       });
 
@@ -229,13 +250,13 @@ export const importRequest = async ({
      */
     await tsx
       .delete(bodyXWWWFormUrlencodedTable)
-      .where(eq(bodyXWWWFormUrlencodedTable.requestOrFolderMetaId, id));
+      .where(eq(bodyXWWWFormUrlencodedTable.requestOrFolderMetaId, requestId));
 
     if (Array.isArray(bodyXWWWFormUrlencoded) && bodyXWWWFormUrlencoded.length)
       await tsx.insert(bodyXWWWFormUrlencodedTable).values(
         bodyXWWWFormUrlencoded.map(form => ({
           ...form,
-          requestOrFolderMetaId: id,
+          requestOrFolderMetaId: requestId,
         })),
       );
 
@@ -246,13 +267,13 @@ export const importRequest = async ({
      */
     await tsx
       .delete(bodyFormDataTable)
-      .where(eq(bodyFormDataTable.requestOrFolderMetaId, id));
+      .where(eq(bodyFormDataTable.requestOrFolderMetaId, requestId));
 
     if (Array.isArray(bodyFormData) && bodyFormData.length)
       await tsx.insert(bodyFormDataTable).values(
         bodyFormData.map(form => ({
           ...form,
-          requestOrFolderMetaId: id,
+          requestOrFolderMetaId: requestId,
         })),
       );
 
@@ -265,14 +286,14 @@ export const importRequest = async ({
       .insert(bodyBinaryTable)
       .values({
         ...bodyBinary,
-        requestOrFolderMetaId: id,
+        requestOrFolderMetaId: requestId,
       })
       .onConflictDoUpdate({
         target: [bodyBinaryTable.requestOrFolderMetaId],
         set: {
           ...bodyBinary,
           /* this extra requestOrFolderMetaId so that it not remain empty so not fail the query */
-          requestOrFolderMetaId: id,
+          requestOrFolderMetaId: requestId,
         },
       });
 
@@ -285,14 +306,14 @@ export const importRequest = async ({
       .insert(bodyRawTable)
       .values({
         ...bodyRaw,
-        requestOrFolderMetaId: id,
+        requestOrFolderMetaId: requestId,
       })
       .onConflictDoUpdate({
         target: [bodyRawTable.requestOrFolderMetaId],
         set: {
           ...bodyRaw,
           /* this extra requestOrFolderMetaId so that it not remain empty so not fail the query */
-          requestOrFolderMetaId: id,
+          requestOrFolderMetaId: requestId,
         },
       });
 
@@ -305,7 +326,7 @@ export const importRequest = async ({
       .insert(authorizationTable)
       .values({
         ...authorization,
-        requestOrFolderMetaId: id,
+        requestOrFolderMetaId: requestId,
         projectId,
       })
       .onConflictDoUpdate({
@@ -313,7 +334,7 @@ export const importRequest = async ({
         set: {
           ...authorization,
           /* this extra requestOrFolderMetaId so that it not remain empty so not fail the query */
-          requestOrFolderMetaId: id,
+          requestOrFolderMetaId: requestId,
         },
       });
 

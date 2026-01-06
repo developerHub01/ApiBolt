@@ -140,53 +140,114 @@ export const exportRequest = createAsyncThunk<
 
 export const importRequest = createAsyncThunk<
   ElectronResponseInterface,
-  void | string,
+  void | string | null,
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->("request-response/importRequest", async (id, { getState, dispatch }) => {
-  try {
-    const state = getState() as RootState;
-    const requestId = id ?? state.requestResponse.selectedTab;
-    if (!requestId || !state.requestResponse.requestList[requestId].method)
+>(
+  "request-response/importRequest",
+  async (requestId, { getState, dispatch }) => {
+    try {
+      const state = getState() as RootState;
+      /**
+       * if requestId exist then check do it have in requestlist
+       * and if requestId dont have means have to import in root
+       */
+      const meta = requestId
+        ? state.requestResponse.requestList[requestId]
+        : null;
+      if (requestId && !meta)
+        return {
+          success: false,
+          message: "Request not found.",
+        };
+
+      const response = await window.electronAPIRequest.importRequest(
+        requestId ?? null,
+      );
+
+      if (!response.success) return response;
+
+      /**
+       * if requestId have and it is a request not folder then again load everything of the request
+       * ***/
+      if (requestId && meta?.method) {
+        await Promise.all([
+          dispatch(loadSingleRequestMeta(requestId)),
+          dispatch(
+            loadAuthorization({
+              requestOrFolderId: requestId,
+            }),
+          ),
+          dispatch(
+            loadParams({
+              requestOrFolderId: requestId,
+            }),
+          ),
+          dispatch(
+            loadHeaders({
+              requestOrFolderId: requestId,
+            }),
+          ),
+          dispatch(
+            loadHiddenHeaders({
+              requestOrFolderId: requestId,
+            }),
+          ),
+          dispatch(
+            loadRequestMetaTab({
+              requestOrFolderId: requestId,
+            }),
+          ),
+          dispatch(
+            loadMetaShowColumn({
+              requestOrFolderId: requestId,
+            }),
+          ),
+          dispatch(
+            loadShowHiddenMetaData({
+              requestOrFolderId: requestId,
+            }),
+          ),
+          dispatch(
+            loadBodyFormData({
+              requestOrFolderId: requestId,
+            }),
+          ),
+          dispatch(
+            loadBodyXWWWFormUrlencoded({
+              requestOrFolderId: requestId,
+            }),
+          ),
+          dispatch(
+            loadRequestBodyRaw({
+              requestOrFolderId: requestId,
+            }),
+          ),
+          dispatch(
+            loadRequestBodyBinary({
+              requestOrFolderId: requestId,
+            }),
+          ),
+          dispatch(
+            loadApiUrl({
+              requestOrFolderId: requestId,
+            }),
+          ),
+        ]);
+      } else dispatch(forceLoadRequestList());
+
+      return response;
+    } catch (error) {
+      console.error(error);
       return {
         success: false,
-        message: "No request active",
+        message: "Something went wrong while exporting request.",
       };
-
-    const response = await window.electronAPIRequest.importRequest(requestId);
-
-    if (!response.success) return response;
-
-    /**
-     * if success then reload data in frontend
-     * ***/
-    await Promise.all([
-      dispatch(loadSingleRequestMeta(requestId)),
-      dispatch(loadAuthorization()),
-      dispatch(loadParams()),
-      dispatch(loadHeaders()),
-      dispatch(loadHiddenHeaders()),
-      dispatch(loadRequestMetaTab()),
-      dispatch(loadMetaShowColumn()),
-      dispatch(loadShowHiddenMetaData()),
-      dispatch(loadBodyFormData()),
-      dispatch(loadBodyXWWWFormUrlencoded()),
-      dispatch(loadRequestBodyRaw()),
-      dispatch(loadRequestBodyBinary()),
-      dispatch(loadApiUrl()),
-    ]);
-
-    return response;
-  } catch (error) {
-    console.error(error);
-    return {
-      success: false,
-      message: "Something went wrong while exporting request.",
-    };
-  }
-});
+    }
+  },
+);
 
 export const exportFolder = createAsyncThunk<
   ElectronResponseInterface,
@@ -228,10 +289,10 @@ export const importFolder = createAsyncThunk<
   try {
     const state = getState() as RootState;
     /* if pass any request id and if it is not folder then exit */
-    if (id && state.requestResponse.requestList[id].method)
+    if (id && !state.requestResponse.requestList[id])
       return {
         success: false,
-        message: "No request active",
+        message: "Folder not found.",
       };
 
     const response = await window.electronAPIRequest.importFolder(id ?? null);

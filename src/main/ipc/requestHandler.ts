@@ -15,6 +15,7 @@ import { getActiveProject } from "@/main/db/projectsDB.js";
 import { ElectronAPIRequestInterface } from "@shared/types/api/electron-request.js";
 import { RequestExportFileInterface } from "@shared/types/export-import/request";
 import { FolderExportFileInterface } from "@shared/types/export-import/folder";
+import { v4 as uuidv4 } from "uuid";
 
 export const requestHandler = () => {
   ipcMain.handle(
@@ -55,8 +56,29 @@ export const requestHandler = () => {
       try {
         if (!mainWindow) throw new Error();
 
-        const requestId = rest[0] ?? (await getSelectedTab());
-        if (!requestId) throw new Error("no request selected");
+        let requestId = rest[0];
+        let parentId: null | undefined | string;
+        /**
+         * if dont have requestId means it is from root
+         * so in that case
+         *  have to take new requestId
+         *  annd parentId will be null
+         * **/
+        if (!requestId) {
+          requestId = uuidv4();
+          parentId = null;
+        } else {
+          const meta = await getRequestOrFolderMetaById(requestId);
+          /**
+           * check is it folder or not
+           *  if folder means we have to take it as parent so in that case we need to use the imported request with new requestId
+           *  else it is request means just have to replace so no need to think about parentId
+           */
+          if (!meta?.method) {
+            parentId = requestId;
+            requestId = uuidv4();
+          }
+        }
 
         const { filePaths } = await dialog.showOpenDialog(mainWindow, {
           title: "Open request data",
@@ -90,6 +112,7 @@ export const requestHandler = () => {
 
           const response = await importRequest({
             requestId,
+            parentId,
             ...fileData,
           });
           if (!response) throw new Error();

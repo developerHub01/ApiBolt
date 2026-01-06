@@ -28,13 +28,15 @@ const RequestTopRight = () => {
   const toast = useCustomToast();
 
   const handleImport = useCallback(async () => {
-    const { success, message } = await dispatch(importRequest()).unwrap();
+    const { success, message } = await dispatch(
+      importRequest(selectedTab),
+    ).unwrap();
     toast({
       type: success ? "success" : "error",
       title: success ? "Import Success" : "Import Error",
       description: message,
     });
-  }, [dispatch, toast]);
+  }, [dispatch, selectedTab, toast]);
 
   const handleExport = useCallback(async () => {
     const { success, message } = await dispatch(exportRequest()).unwrap();

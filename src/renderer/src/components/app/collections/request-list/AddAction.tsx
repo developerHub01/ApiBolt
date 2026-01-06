@@ -15,13 +15,17 @@ import {
   createRestApiBasic,
   createSingleRequest,
 } from "@/context/redux/request-response/thunks/request-list";
-import { importRequest } from "@/context/redux/request-response/thunks/request";
+import {
+  importFolder,
+  importRequest,
+} from "@/context/redux/request-response/thunks/request";
 import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 type TAction =
   | "blank_collection"
   | "single_request"
   | "rest_api_basics"
+  | "import_request"
   | "import_folder";
 
 const actionsList: Record<
@@ -47,8 +51,12 @@ const actionsList: Record<
   ],
   import: [
     {
+      id: "import_request",
+      label: "Import Request",
+    },
+    {
       id: "import_folder",
-      label: "Import Request Folder",
+      label: "Import Folder",
     },
   ],
 };
@@ -90,14 +98,21 @@ const AddAction = memo(() => {
               : "Couldn't add request folder, something went wrong.",
           });
         }
-        case "import_folder": {
+        case "import_request": {
           const { success, message } = await dispatch(importRequest()).unwrap();
-          toast({
+          return toast({
             type: success ? "success" : "error",
             title: success ? "Import success" : "Import error",
             description: message,
           });
-          return;
+        }
+        case "import_folder": {
+          const { success, message } = await dispatch(importFolder()).unwrap();
+          return toast({
+            type: success ? "success" : "error",
+            title: success ? "Import success" : "Import error",
+            description: message,
+          });
         }
       }
     },

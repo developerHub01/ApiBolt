@@ -38,12 +38,15 @@ type TActionType =
   | "duplicate"
   | "delete"
   | "export"
-  | "import";
+  | "import"
+  | "import-request"
+  | "import-folder";
 
 const folderAddActionList: Array<TActionType> = [
   "add_folder",
   "add_rest_api_basics",
-  "import",
+  "import-request",
+  "import-folder",
 ];
 
 type TMenuListType = Record<
@@ -90,8 +93,12 @@ const folderCTAList: TMenuListType = {
       label: "Export",
     },
     {
-      id: "import",
-      label: "Import",
+      id: "import-request",
+      label: "Import Request",
+    },
+    {
+      id: "import-folder",
+      label: "Import Folder",
     },
   ],
 };
@@ -204,9 +211,29 @@ const ItemCTA = memo(() => {
               ? dispatch(importRequest(id))
               : dispatch(importFolder(id))
           ).unwrap();
-          toast({
+          return toast({
             type: success ? "success" : "error",
             title: success ? "Import success" : "Import error",
+            description: message,
+          });
+        }
+        case "import-request": {
+          const { success, message } = await dispatch(
+            importRequest(id),
+          ).unwrap();
+          return toast({
+            type: success ? "success" : "error",
+            title: success ? "Import request success" : "Import request error",
+            description: message,
+          });
+        }
+        case "import-folder": {
+          const { success, message } = await dispatch(
+            importFolder(id),
+          ).unwrap();
+          return toast({
+            type: success ? "success" : "error",
+            title: success ? "Import folder success" : "Import folder error",
             description: message,
           });
         }
