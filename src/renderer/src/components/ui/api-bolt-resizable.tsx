@@ -90,10 +90,14 @@ const ApiBoltResizableLeftPanel = memo(
         defaultSize={defaultSize}
         minSize={minSize}
         maxSize={maxSize}
-        className={cn("backdrop-blur-xs w-full bg-background/30 border-r-4", {
-          // "border-r-4 border-l-0": layoutTypes === "ltr",
-          // "border-l-4 border-r-0": layoutTypes === "rtl",
-        })}
+        className={cn(
+          "backdrop-blur-xs w-full bg-background/30 border-r-3 transition-all duration-75",
+          {
+            "border-r-0": isCollapsed,
+            // "border-r-4 border-l-0": layoutTypes === "ltr",
+            // "border-l-4 border-r-0": layoutTypes === "rtl",
+          },
+        )}
         style={{
           maxWidth: "50vw",
           ...style,
