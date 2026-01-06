@@ -22,6 +22,7 @@ export const defaultSettings: SettingRawInterface = {
   isZoomable: -1,
   activityBarVisible: -1,
   layoutType: "default",
+  tabListLayoutType: "default",
   projectId: null,
 };
 

@@ -221,7 +221,7 @@ export const settingTable = sqliteTable("setting_table", {
   activityBarVisible: int(),
   tabListLayoutType: text()
     .$type<SettingsInterface["tabListLayoutType"]>()
-    .default("right"),
+    .default("top"),
   projectId: text()
     .references(() => projectTable.id, {
       onDelete: "cascade",

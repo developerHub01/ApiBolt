@@ -4,6 +4,7 @@ import {
   selectTabListLayoutTypeGlobal,
   selectTabListLayoutTypeLocal,
 } from "@/context/redux/setting/selectors/setting";
+import { DEFAULT_SETTINGS } from "@/constant/settings.constant";
 import type {
   TTabsLayoutSetting,
   TTabsLayoutSettingNoSenitize,
@@ -19,7 +20,7 @@ const useCheckApplyingTabListLayoutDirection = (): TTabsLayoutSetting => {
     : (layoutTypeLocal ?? layoutTypeGlobal)) ??
     "ltr") as TTabsLayoutSettingNoSenitize;
 
-  if (layoutTypes === "default") layoutTypes = "right";
+  if (layoutTypes === "default") layoutTypes = DEFAULT_SETTINGS.tabListLayoutType;
 
   return layoutTypes as TTabsLayoutSetting;
 };

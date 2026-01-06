@@ -64,6 +64,6 @@ export const DEFAULT_SETTINGS: AllNotNull<
   isZoomable: 0, // 0: disable, 1: enable, -1: default
   activityBarVisible: DEFAULT_ACTIVITY_BAR_VISIBLE,
   layoutType: "ltr",
-  tabListLayoutType: "right",
+  tabListLayoutType: "top",
   projectId: null,
 };
