@@ -26,10 +26,6 @@ const TabSearchBar = memo(({ isOpen, className, ...props }: Props) => {
   const [skipEffect, setSkipEffect] = useState<boolean>(false);
 
   useEffect(() => {
-    return () => setSearchTerm("");
-  }, []);
-
-  useEffect(() => {
     if (skipEffect) {
       setSkipEffect(false);
       return;
@@ -52,6 +48,10 @@ const TabSearchBar = memo(({ isOpen, className, ...props }: Props) => {
     setSearchTerm("");
     handleSearch("");
   }, [handleSearch]);
+
+  useEffect(() => {
+    return () => handleClear();
+  }, [handleClear]);
 
   const isExpended = isOpen ?? isTabListOpen;
 

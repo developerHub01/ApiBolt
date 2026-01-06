@@ -1,8 +1,6 @@
-import { ButtonHTMLAttributes, memo, useCallback } from "react";
-import { useAppDispatch } from "@/context/redux/hooks";
+import { ButtonHTMLAttributes, memo } from "react";
 import TabBottomCTA from "@/components/app/tab-sidebar/vertical/TabBottomCTA";
 import { Plus as AddIcon } from "lucide-react";
-import { addNewTabsData } from "@/context/redux/request-response/thunks/tab-list";
 import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 
 interface Props extends Omit<
@@ -13,16 +11,7 @@ interface Props extends Omit<
 }
 
 const AddNewTab = memo(({ isOpen, ...props }: Props) => {
-  const dispatch = useAppDispatch();
-  const { isTabListOpen } = useTabSidebar();
-
-  const handleAdd = useCallback(() => {
-    dispatch(
-      addNewTabsData({
-        autoSelect: true,
-      }),
-    );
-  }, [dispatch]);
+  const { isTabListOpen, handleAdd } = useTabSidebar();
 
   return (
     <TabBottomCTA

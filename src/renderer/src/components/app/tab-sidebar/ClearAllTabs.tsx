@@ -1,8 +1,6 @@
-import { ButtonHTMLAttributes, useCallback } from "react";
-import { useAppDispatch } from "@/context/redux/hooks";
+import { ButtonHTMLAttributes } from "react";
 import TabBottomCTA from "@/components/app/tab-sidebar/vertical/TabBottomCTA";
 import { Trash2 as ClearIcon } from "lucide-react";
-import { handleClearTabList } from "@/context/redux/request-response/request-response-slice";
 import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 
 interface Props extends Omit<
@@ -13,12 +11,7 @@ interface Props extends Omit<
 }
 
 const ClearAllTabs = ({ isOpen, ...props }: Props) => {
-  const dispatch = useAppDispatch();
-  const { isTabListOpen } = useTabSidebar();
-
-  const handleClearAllTabs = useCallback(() => {
-    dispatch(handleClearTabList());
-  }, [dispatch]);
+  const { isTabListOpen, handleClearAllTabs } = useTabSidebar();
 
   return (
     <TabBottomCTA

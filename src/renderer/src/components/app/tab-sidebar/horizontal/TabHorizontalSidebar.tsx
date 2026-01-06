@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
+  Plus as AddIcon,
   ChevronLeft as LeftIcon,
   ChevronRight as RightIcon,
 } from "lucide-react";
@@ -7,12 +8,14 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import TabList from "@/components/app/tab-sidebar/horizontal/TabList";
 import TabsModifier from "@/components/app/tab-sidebar/horizontal/TabsModifier";
+import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 
 const TabHorizontalSidebar = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(true);
+  const { totalTabsOpen, handleAdd } = useTabSidebar();
 
   const checkScroll = useCallback(() => {
     if (!scrollContainerRef.current) return;
@@ -70,6 +73,16 @@ const TabHorizontalSidebar = () => {
         "flex items-center border-b-2 divide-x divide-border backdrop-blur-lg",
       )}
     >
+      {!totalTabsOpen && (
+        <Button
+          variant="secondary"
+          className="rounded-none"
+          size="icon"
+          onClick={handleAdd}
+        >
+          <AddIcon className="h-4 w-4" />
+        </Button>
+      )}
       {/* Left Arrow with Gradient */}
       {isOverflowing && (
         <Button

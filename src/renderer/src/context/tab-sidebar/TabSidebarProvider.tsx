@@ -9,6 +9,7 @@ import React, {
 } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
+  addNewTabsData,
   changeTabsData,
   loadTabsData,
 } from "@/context/redux/request-response/thunks/tab-list";
@@ -19,6 +20,7 @@ import {
   selectTabList,
 } from "@/context/redux/request-response/selectors/tab-list";
 import { selectRequestOrFolderList } from "@/context/redux/request-response/selectors/request-list";
+import { handleClearTabList } from "@/context/redux/request-response/request-response-slice";
 
 interface TabSidebarContext {
   selectedTab: string | null;
@@ -30,8 +32,10 @@ interface TabSidebarContext {
   isCollapsed: boolean;
   isTabListHovering: boolean;
   handleSearch: (searchTerm: string) => void;
-  handleChangeIsTabListHovering: (value?: boolean | undefined) => void;
-  handleChangeIsContextMenuOpen: (value?: boolean | undefined) => void;
+  handleChangeIsTabListHovering: (value?: boolean) => void;
+  handleChangeIsContextMenuOpen: (value?: boolean) => void;
+  handleAdd: () => void;
+  handleClearAllTabs: () => void;
 }
 
 const TabSidebarContext = createContext<TabSidebarContext | null>(null);
@@ -120,6 +124,18 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
     [],
   );
 
+  const handleAdd = useCallback(() => {
+    dispatch(
+      addNewTabsData({
+        autoSelect: true,
+      }),
+    );
+  }, [dispatch]);
+
+  const handleClearAllTabs = useCallback(() => {
+    dispatch(handleClearTabList());
+  }, [dispatch]);
+
   return (
     <TabSidebarContext.Provider
       value={{
@@ -134,6 +150,8 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
         isCollapsed,
         handleChangeIsTabListHovering,
         handleChangeIsContextMenuOpen,
+        handleAdd,
+        handleClearAllTabs,
       }}
     >
       {children}
