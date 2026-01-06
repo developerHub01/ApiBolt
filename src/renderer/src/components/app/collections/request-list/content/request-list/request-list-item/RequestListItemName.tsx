@@ -7,13 +7,11 @@ import {
   type ChangeEvent,
   type FocusEvent,
   type KeyboardEvent,
-  type MouseEvent,
 } from "react";
 import { useRequestListItem } from "@/context/collections/request-list/RequestListItemProvider";
 
 const RequestListItemName = memo(() => {
-  const { id, name, isRenameActive, handleChangeName, handleRenameAction } =
-    useRequestListItem();
+  const { id, name, isRenameActive, handleChangeName } = useRequestListItem();
   const [nameState, setNameState] = useState<string>(name ?? "");
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -26,14 +24,6 @@ const RequestListItemName = memo(() => {
   useEffect(() => {
     if (isRenameActive) inputRef.current?.focus();
   }, [isRenameActive]);
-
-  const handleNameDoubleClick = useCallback(
-    (e: MouseEvent<HTMLInputElement>) => {
-      e.stopPropagation();
-      handleRenameAction();
-    },
-    [handleRenameAction],
-  );
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => setNameState(e.target.value),
@@ -80,8 +70,7 @@ const RequestListItemName = memo(() => {
           id={`request_list_item_${id}`}
           value={name}
           readOnly
-          onDoubleClick={handleNameDoubleClick}
-          className="w-full h-full outline-0 text-sm py-1 whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer select-none border-b border-transparent"
+          className="w-full h-full outline-0 text-sm py-1 whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer select-none border-b border-transparent pointer-events-none"
         />
       )}
     </>

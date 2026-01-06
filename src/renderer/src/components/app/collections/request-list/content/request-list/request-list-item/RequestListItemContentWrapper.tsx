@@ -1,4 +1,10 @@
-import React, { memo, useCallback, useState, type DragEvent } from "react";
+import React, {
+  memo,
+  MouseEvent,
+  useCallback,
+  useState,
+  type DragEvent,
+} from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { cn } from "@/lib/utils";
 import RequestListItemExpendedContent from "@/components/app/collections/request-list/content/request-list/request-list-item/RequestListItemExpendedContent";
@@ -26,6 +32,7 @@ const RequestListItemContentWrapper = memo(
       lavel,
       isRenameActive,
       handleToggleContextMenu,
+      handleRenameAction,
     } = useRequestListItem();
     const selectedTab = useAppSelector(selectSelectedTab);
     const [isDragging, setIsDragging] = useState<boolean>(false);
@@ -72,8 +79,11 @@ const RequestListItemContentWrapper = memo(
     const handleDragLeave = useCallback(() => setIsDragging(false), []);
 
     const handleRequestClick = useCallback(
-      () => dispatch(changeSelectedTab(id)),
-      [dispatch, id],
+      (e: MouseEvent<HTMLElement>) => {
+        if (e.ctrlKey || e.metaKey) return handleRenameAction();
+        dispatch(changeSelectedTab(id));
+      },
+      [dispatch, handleRenameAction, id],
     );
 
     const leftSpace = REQUEST_ITEM_SPACE_SIZE * lavel;
