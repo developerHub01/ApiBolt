@@ -1,5 +1,5 @@
 import { app, dialog } from "electron";
-import { mainWindow } from "@/main/index.js";
+import { mainWindow } from "@/main/index";
 import path from "path";
 import { readFile, writeFile } from "fs/promises";
 import { ThemeInterface } from "@shared/types/theme.types";

@@ -9,7 +9,7 @@ import {
   deleteEnvironments,
   importEnvironments,
 } from "@/main/db/environmentsDB.js";
-import { mainWindow } from "@/main/index.js";
+import { mainWindow } from "@/main/index";
 import { getActiveProjectDetails } from "@/main/db/projectsDB.js";
 import { readFile, writeFile } from "fs/promises";
 import { filterValidEnvironments } from "@/main/utils/environments.js";

@@ -19,6 +19,7 @@ import {
   FileDataInterface,
   FormDataPayloadInterface,
 } from "@shared/types/request-response.types";
+import { mainWindow } from "@/main/index";
 
 export const bodyFormDataHandlers = () => {
   ipcMain.handle(
@@ -154,6 +155,8 @@ export const bodyFormDataHandlers = () => {
       ElectronAPIBodyFormDataInterface["updateBodyFormDataFile"]
     > => {
       try {
+        if (!mainWindow) throw new Error();
+
         const id = rest?.[0];
         if (!id) throw new Error();
 
@@ -162,7 +165,7 @@ export const bodyFormDataHandlers = () => {
 
         const prevValue = Array.isArray(formData.value) ? formData.value : [];
 
-        const result = await dialog.showOpenDialog({
+        const result = await dialog.showOpenDialog(mainWindow, {
           properties: ["openFile"],
           title: "Select file",
           buttonLabel: "Select",

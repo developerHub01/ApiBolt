@@ -10,6 +10,7 @@ import {
   replaceBodyBinary,
   updateBodyBinary,
 } from "@/main/db/bodyBinaryDB.js";
+import { mainWindow } from "@/main/index";
 
 export const bodyBinaryHandler = () => {
   ipcMain.handle(
@@ -48,9 +49,10 @@ export const bodyBinaryHandler = () => {
       ...rest: Parameters<ElectronAPIBodyBinaryInterface["updateBodyBinary"]>
     ): ReturnType<ElectronAPIBodyBinaryInterface["updateBodyBinary"]> => {
       try {
+        if (!mainWindow) throw new Error();
         const requestOrFolderMetaId = rest?.[0] ?? undefined;
 
-        const result = await dialog.showOpenDialog({
+        const result = await dialog.showOpenDialog(mainWindow, {
           properties: ["openFile"],
           title: "Select file",
           buttonLabel: "Select",

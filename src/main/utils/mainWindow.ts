@@ -29,7 +29,7 @@ export const createMainWindow = () => {
     },
   });
 
-  win.webContents.openDevTools();
+  // win.webContents.openDevTools();
 
   win.webContents.setWindowOpenHandler(details => {
     shell.openExternal(details.url);

@@ -11,7 +11,7 @@ import {
 } from "@/main/db/projectsDB";
 import { jarManager } from "@/main/utils/cookieManager";
 import path from "path";
-import { mainWindow } from "@/main/index.js";
+import { mainWindow } from "@/main/index";
 import { readFile, writeFile } from "fs/promises";
 import { CreateProjectPayloadInterface } from "@shared/types/project.types";
 import { ElectronAPIProjectsInterface } from "@shared/types/api/electron-projects";

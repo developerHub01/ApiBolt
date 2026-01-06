@@ -10,6 +10,7 @@ import { constants } from "fs";
 import path from "path";
 import { ElectronAPISettingsInterface } from "@shared/types/api/electron-settings";
 import { pathToFileURL } from "url";
+import { mainWindow } from "@/main/index";
 
 const BACKGROUND_IMAGES_NUMBER_LIMIT = 30;
 
@@ -134,11 +135,13 @@ export const settingsHandlers = () => {
       ElectronAPISettingsInterface["updateSettingsBackgroundImages"]
     > => {
       try {
+        if (!mainWindow) throw new Error();
+
         const { method = "upload", projectId } = rest[0];
         let result: string | "default" | null = null;
 
         if (method === "upload") {
-          const dialogResult = await dialog.showOpenDialog({
+          const dialogResult = await dialog.showOpenDialog(mainWindow, {
             properties: ["openDirectory"],
             title: "Select background images folder",
             buttonLabel: "Select",
