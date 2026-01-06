@@ -10,7 +10,6 @@ import { getRequestOrFolderMetaById } from "@/main/db/requestOrFolderMetaDB.js";
 import path from "path";
 import { readFile, writeFile } from "fs/promises";
 import { mainWindow } from "@/main/index";
-import { getSelectedTab } from "@/main/db/tabsDB.js";
 import { getActiveProject } from "@/main/db/projectsDB.js";
 import { ElectronAPIRequestInterface } from "@shared/types/api/electron-request.js";
 import { RequestExportFileInterface } from "@shared/types/export-import/request";
