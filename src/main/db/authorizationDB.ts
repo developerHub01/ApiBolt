@@ -136,9 +136,9 @@ export const updateAuth: ElectronAPIAuthorizationInterface["updateAuth"] =
               eq(authorizationTable.projectId, activeProjectId),
               requestOrFolderId
                 ? eq(
-                    authorizationTable.requestOrFolderMetaId,
-                    requestOrFolderId,
-                  )
+                  authorizationTable.requestOrFolderMetaId,
+                  requestOrFolderId,
+                )
                 : isNull(authorizationTable.requestOrFolderMetaId),
             ),
           )
@@ -150,8 +150,8 @@ export const updateAuth: ElectronAPIAuthorizationInterface["updateAuth"] =
           requestOrFolderMetaId: requestOrFolderId,
         });
 
-      let basicAuthToken: string | null = null;
-      let jwtAuthToken: string | null = null;
+      let basicAuthToken: string = authData.basicAuthToken;
+      let jwtAuthToken: string = authData.jwtAuthToken;
       const previousAuthType = authData?.type;
       const currentAuthType = payload.type;
 
@@ -199,9 +199,9 @@ export const updateAuth: ElectronAPIAuthorizationInterface["updateAuth"] =
                 eq(authorizationTable.projectId, activeProjectId),
                 requestOrFolderId
                   ? eq(
-                      authorizationTable.requestOrFolderMetaId,
-                      requestOrFolderId,
-                    )
+                    authorizationTable.requestOrFolderMetaId,
+                    requestOrFolderId,
+                  )
                   : isNull(authorizationTable.requestOrFolderMetaId),
               ),
             )
