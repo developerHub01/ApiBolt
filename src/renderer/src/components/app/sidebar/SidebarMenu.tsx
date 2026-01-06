@@ -19,8 +19,8 @@ import { selectSidebarActiveTab } from "@/context/redux/sidebar/selectors/sideba
 import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 import { selectApplyingKeyboardShortcuts } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
 import { keyListStringify } from "@/utils/keyboard-shortcut.utils";
-import ThemeSIdebarButton from "@/components/app/sidebar/theme-sidebar-button/ThemeSIdebarButton";
 import SidebarActionButton from "@/components/app/sidebar/SidebarActionButton";
+import { handleToggleThemeListCollapsed } from "@/context/redux/theme/theme-slice";
 
 const SidebarMenu = memo(() => {
   const dispatch = useAppDispatch();
@@ -45,6 +45,11 @@ const SidebarMenu = memo(() => {
       if ([id, activeTab].every(item => item === "navigate_collections")) {
         dispatch(handleToggleRequestList());
         return;
+      } else if (
+        [id, activeTab].every(item => item === "navigate_themes_marketplace")
+      ) {
+        dispatch(handleToggleThemeListCollapsed());
+        return;
       }
       await dispatch(changeActiveTab(id));
     },
@@ -54,18 +59,12 @@ const SidebarMenu = memo(() => {
 
   return (
     <div className="flex flex-col items-center">
-      {menuList.map(props => {
-        const { id, Icon, label, path } = props;
+      {menuList.map(({ id, Icon, label }) => {
         if (
           !activeProjectId &&
           HIDDEN_TABS_WHEN_NOT_PROJECT_SELECTED.includes(id)
         )
           return null;
-
-        if (id === "navigate_themes")
-          return (
-            <ThemeSIdebarButton key={id} {...props} onClick={handleClick} />
-          );
 
         return (
           <Tooltip key={id}>

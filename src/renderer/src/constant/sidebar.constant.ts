@@ -7,7 +7,6 @@ import {
   Container as EnvironmentsIcon,
   Layers as ProjectsIcon,
   KeyRound as AuthorizationIcon,
-  Palette as ThemeIcon,
   Store as ThemeMarketIcon,
   PencilRuler as ThemeEditorIcon,
 } from "lucide-react";
@@ -38,9 +37,16 @@ export const SIDEBAR_MENU_LIST: Array<SidebarMenuItemInterface> = [
     path: "/authorization",
   },
   {
-    id: "navigate_themes",
-    Icon: ThemeIcon,
-    label: "Themes",
+    id: "navigate_themes_marketplace",
+    label: "Theme marketplace",
+    path: "/themes/marketplace",
+    Icon: ThemeMarketIcon,
+  },
+  {
+    id: "navigate_themes_editor",
+    label: "Theme editor",
+    path: "/themes/editor",
+    Icon: ThemeEditorIcon,
   },
 ];
 
@@ -59,20 +65,7 @@ export const SIDEBAR_THEME_MENU_ITEMS: Array<
   SidebarMenuItemInterface & {
     shortcut?: string;
   }
-> = [
-  {
-    id: "navigate_themes_marketplace",
-    label: "Theme marketplace",
-    path: "/themes/marketplace",
-    Icon: ThemeMarketIcon,
-  },
-  {
-    id: "navigate_themes_editor",
-    label: "Theme editor",
-    path: "/themes/editor",
-    Icon: ThemeEditorIcon,
-  },
-];
+> = SIDEBAR_MENU_LIST.filter(item => item.id.startsWith("igate_themes_"));
 
 export const SIDEBAR_THEME_MENU_ID_PATH_MAP = SIDEBAR_THEME_MENU_ITEMS.reduce(
   (acc, curr) => {
@@ -102,10 +95,11 @@ export const LOCAL_STORAGE_SIDEBAR_LAST_ACTIVE_TAB_KEY =
 
 export const ALLOWED_TABS_WHEN_NO_ACTIVE_PROJECT = new Set<TSidebarTab>([
   "navigate_projects",
-  "navigate_themes",
+  "navigate_themes_marketplace",
+  "navigate_themes_editor",
 ]);
 
 export const SIDEBAR_TOGGLE_BUTTON_ALLOWED_IDS = new Set<TSidebarTab>([
   "navigate_collections",
-  "navigate_themes",
+  "navigate_themes_marketplace",
 ]);
