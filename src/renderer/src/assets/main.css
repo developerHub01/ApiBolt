@@ -129,7 +129,23 @@
   --sidebar-ring: oklch(0.552 0.016 285.938);
 }
 
+@font-face {
+  font-family: "Roboto";
+  src: url("./fonts/roboto/Roboto.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url("./fonts/roboto/Roboto-Italic.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: italic;
+}
+
 @theme {
+  --font-display: "Roboto", sans-serif;
+
   --animate-loader-v1: loader 2s linear infinite alternate;
   @keyframes loader {
     0% {
@@ -172,6 +188,12 @@
     background-color: var(--border);
     border-radius: var(--radius);
   }
+
+  body {
+    font-family: var(--font-display);
+    font-weight: 400;
+  }
+
 
   p::selection,
   h1::selection,
