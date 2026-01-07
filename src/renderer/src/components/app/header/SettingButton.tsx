@@ -1,4 +1,7 @@
-import { Settings as SettingIcon } from "lucide-react";
+import {
+  ArrowUpRight as ExternalLinkIcon,
+  Settings as SettingIcon,
+} from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -19,6 +22,8 @@ import { selectApplyingKeyboardShortcutsById } from "@/context/redux/keyboard-sh
 import { keyListStringify } from "@/utils/keyboard-shortcut.utils";
 import type { TShortcutKey } from "@shared/types/keyboard-shortcut.types";
 import { handleChangeIsLocalPasswordOpen } from "@/context/redux/local-password/local-password-slice";
+import ExternalLink from "@/components/ux/ExternalLink";
+import { Link } from "react-router-dom";
 
 const SettingButton = () => {
   const dispatch = useAppDispatch();
@@ -75,6 +80,13 @@ const SettingButton = () => {
       onClick: () => dispatch(handleChangeIsLocalPasswordOpen()),
       isSeparatorAbove: true,
     },
+    {
+      id: "navigate_official_website",
+      label: "Official Website",
+      isSeparatorAbove: true,
+      link: "https://jsonplaceholder.typicode.com/",
+      isExternalLink: true,
+    },
   ];
 
   return (
@@ -94,22 +106,57 @@ const SettingButton = () => {
         </MenubarTrigger>
         <MenubarContent
           align="end"
-          className="p-0 w-fit min-w-40 flex flex-col [&>button]:justify-start"
+          className="p-0 w-fit min-w-40 max-w-xs flex flex-col [&>button]:justify-start"
         >
-          {menuItems.map(({ id, label, onClick, isSeparatorAbove }) => {
-            const shortcutString = getShortcutString(id);
-            return (
-              <div key={id}>
-                {isSeparatorAbove && <MenubarSeparator />}
-                <MenubarItem onClick={onClick}>
-                  {label}
-                  {shortcutString && (
-                    <MenubarShortcut>{shortcutString}</MenubarShortcut>
-                  )}
-                </MenubarItem>
-              </div>
-            );
-          })}
+          {menuItems.map(
+            ({
+              id,
+              label,
+              onClick,
+              isSeparatorAbove,
+              link,
+              isExternalLink,
+            }) => {
+              const shortcutString = getShortcutString(id);
+
+              const Comp = ({
+                isExternalLink = false,
+              }: {
+                isExternalLink?: boolean;
+              }) => (
+                <>
+                  {isSeparatorAbove && <MenubarSeparator />}
+                  <MenubarItem onClick={onClick} className="cursor-pointer">
+                    <p className="line-clamp-1">{label}</p>
+                    {shortcutString && (
+                      <MenubarShortcut>{shortcutString}</MenubarShortcut>
+                    )}
+                    {isExternalLink && <ExternalLinkIcon className="ml-auto" />}
+                  </MenubarItem>
+                </>
+              );
+
+              if (link) {
+                if (isExternalLink)
+                  return (
+                    <ExternalLink key={id} to={link}>
+                      <Comp isExternalLink />
+                    </ExternalLink>
+                  );
+                return (
+                  <Link key={id} to={link}>
+                    <Comp />
+                  </Link>
+                );
+              }
+
+              return (
+                <div key={id}>
+                  <Comp />
+                </div>
+              );
+            },
+          )}
         </MenubarContent>
       </MenubarMenu>
     </Menubar>
