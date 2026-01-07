@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/hover-card";
 import HttpStatus from "@/components/ui/http-status";
 import type { ResponseInterface } from "@shared/types/request-response.types";
+import { Button } from "@/components/ui/button";
 
 type Props = Pick<
   ResponseInterface,
@@ -15,12 +16,15 @@ type Props = Pick<
 
 const ResponseStatus = memo(
   ({ status, statusText, statusDescription }: Props) => {
+    console.log({ status, statusText, statusDescription });
     if (!status) return null;
 
     return (
       <HoverCard>
         <HoverCardTrigger asChild>
-          <HttpStatus status={status} statusText={statusText} />
+          <Button variant={"transparent"} className="px-0 py-0 h-auto">
+            <HttpStatus status={status} statusText={statusText} />
+          </Button>
         </HoverCardTrigger>
         <HoverCardContent
           className="w-60 flex flex-col gap-1.5 bg-background p-2.5"
