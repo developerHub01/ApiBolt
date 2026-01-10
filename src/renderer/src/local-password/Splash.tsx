@@ -44,7 +44,10 @@ const Splash = () => {
       setTimeout(() => {
         window.electronAPILocalPassword.setLocalPasswordValid();
       }, 500);
+    else if (passwordRef.current) passwordRef.current.focus();
   };
+
+  const isButtonEnabled = password && !isSuccess;
 
   return (
     <div
@@ -81,9 +84,9 @@ const Splash = () => {
           />
           <Button
             className="w-full"
-            disabled={!password || isSuccess === true}
+            disabled={!isButtonEnabled}
             style={{
-              ...unDragableStyle,
+              ...(isButtonEnabled ? unDragableStyle : {}),
             }}
           >
             Login
