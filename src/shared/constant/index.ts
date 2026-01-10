@@ -1,0 +1,1 @@
+export const SPLASH_MIN_DURATION = 5000;

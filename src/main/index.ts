@@ -124,8 +124,6 @@ app.whenReady().then(async () => {
   handleProtocol();
   // Set app user model id for windows
   electronApp.setAppUserModelId("com.api-bolt");
-  /* 5 sec minimum splash */
-  const splashMinDuration = 5000;
 
   /***
    * flag to check do have local password or not
@@ -155,12 +153,6 @@ app.whenReady().then(async () => {
    * handling splash and other windows opening
    */
   splashWindow.show();
-  setTimeout(() => {
-    if (haveLocalPassword) showLocalPasswordWindow();
-    else enterMainApp();
-
-    closeSplash();
-  }, splashMinDuration);
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
@@ -171,6 +163,19 @@ app.whenReady().then(async () => {
 
   // IPC test
   ipcMain.on("ping", () => console.info("pong"));
+
+  /***
+   * Render main window or local-password window if splash loading finished
+   */
+  ipcMain.on("splash-window-complete-end", () => {
+    if (haveLocalPassword) {
+      showLocalPasswordWindow();
+      closeSplash();
+    } else {
+      enterMainApp();
+      setTimeout(() => closeSplash(), 200);
+    }
+  });
 
   /***
    * Render main window after local password matched

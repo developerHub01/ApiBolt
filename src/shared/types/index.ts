@@ -28,6 +28,7 @@ import { ElectronAPIShowHiddenMetaDataInterface } from "@shared/types/api/electr
 import { ElectronAPITabsInterface } from "@shared/types/api/electron-tabs";
 import { ElectronAPIThemeInterface } from "@shared/types/api/electron-theme";
 import { ElectronAPILocalPasswordInterface } from "@shared/types/api/electron-local-password";
+import { ElectronAPISplashWindowInterface } from "@shared/types/api/electron-api-splash-window";
 
 export interface ElectronResponseInterface {
   success: boolean;
@@ -48,6 +49,7 @@ export type AllNotNull<T> = {
 
 export interface WindowElectronAPIInterface {
   electronAPI: ElectronAPIInterface;
+  electronAPISplashWindow: ElectronAPISplashWindowInterface;
   electronAPIFileSystem: electronAPIFileSystemInterface;
   electronAPILocalPassword: ElectronAPILocalPasswordInterface;
   electronAPITheme: ElectronAPIThemeInterface;

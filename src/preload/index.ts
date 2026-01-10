@@ -99,6 +99,17 @@ if (process.contextIsolated) {
 
     /**
      * ====================
+     * splash window
+     * ====================
+     */
+    const electronAPISplashWindowBridge: WindowElectronAPIInterface["electronAPISplashWindow"] =
+      {
+        splashWindowCompleteEnd: async () =>
+          ipcRenderer.send("splash-window-complete-end"),
+      };
+
+    /**
+     * ====================
      * Local Password
      * ====================
      */
@@ -110,8 +121,8 @@ if (process.contextIsolated) {
           await ipcRenderer.invoke("getHaveLocalPassword", ...payload),
         matchLocalPassword: async (...payload) =>
           await ipcRenderer.invoke("matchLocalPassword", ...payload),
-        setLocalPasswordValid: async (...payload) =>
-          await ipcRenderer.invoke("setLocalPasswordValid", ...payload),
+        setLocalPasswordValid: async () =>
+          ipcRenderer.send("local-password-valid"),
         changeLocalPassword: async (...payload) =>
           await ipcRenderer.invoke("changeLocalPassword", ...payload),
       };
@@ -708,6 +719,10 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld(
       "electronAPIFileSystem",
       electronAPIFileSystemBridge,
+    );
+    contextBridge.exposeInMainWorld(
+      "electronAPISplashWindow",
+      electronAPISplashWindowBridge,
     );
     contextBridge.exposeInMainWorld(
       "electronAPILocalPassword",

@@ -14,6 +14,7 @@ export const createLocalPasswordWindow = () => {
     title: "local-password",
     vibrancy: "under-window",
     visualEffectState: "active",
+    alwaysOnTop: true,
 
     webPreferences: {
       // preload: path.join(app.getAppPath(), "src", "preload", "index.js"),

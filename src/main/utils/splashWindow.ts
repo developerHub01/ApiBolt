@@ -14,6 +14,7 @@ export const createSplashWindow = () => {
     title: "splash",
     vibrancy: "under-window",
     visualEffectState: "active",
+    alwaysOnTop: true,
 
     webPreferences: {
       // preload: path.join(app.getAppPath(), "src", "preload", "index.js"),
@@ -26,6 +27,8 @@ export const createSplashWindow = () => {
       allowRunningInsecureContent: false,
     },
   });
+
+  // win.webContents.openDevTools();
 
   win.webContents.setWindowOpenHandler(details => {
     shell.openExternal(details.url);
