@@ -216,12 +216,10 @@ export const settingTable = sqliteTable("setting_table", {
   codeFontSize: int(),
   indentationSize: int(),
   layoutType: text()
-    .$type<SettingsInterface["layoutType"]>()
-    .default("ltr"),
+    .$type<SettingsInterface["layoutType"]>(),
   activityBarVisible: int(),
   tabListLayoutType: text()
-    .$type<SettingsInterface["tabListLayoutType"]>()
-    .default("top"),
+    .$type<SettingsInterface["tabListLayoutType"]>(),
   projectId: text()
     .references(() => projectTable.id, {
       onDelete: "cascade",
@@ -231,6 +229,36 @@ table => [
   uniqueIndex("setting_unique_project").on(table.projectId)
 ],
 );
+
+// export const settingRequestTable = sqliteTable("setting_request_table", {
+//   id: text()
+//     .primaryKey()
+//     .$defaultFn(() => uuidv4()),
+//   httpVersion: text(),
+//   backgroundOpacity: real(),
+//   backgroundBlur: int(),
+//   maxNumberOfImages: int(),
+//   slideInterval: int(),
+//   zoomLevel: real(),
+//   isZoomable: int(),
+//   codeFontSize: int(),
+//   indentationSize: int(),
+//   layoutType: text()
+//     .$type<SettingsInterface["layoutType"]>()
+//     .default("ltr"),
+//   activityBarVisible: int(),
+//   tabListLayoutType: text()
+//     .$type<SettingsInterface["tabListLayoutType"]>()
+//     .default("top"),
+//   projectId: text()
+//     .references(() => projectTable.id, {
+//       onDelete: "cascade",
+//     }),
+// },  
+// table => [
+//   uniqueIndex("setting_unique_project").on(table.projectId)
+// ],
+// );
 
 export const folderTable = sqliteTable("folder_table", {
   id: text()
