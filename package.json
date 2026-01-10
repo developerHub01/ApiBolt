@@ -65,7 +65,7 @@
     "dotenv": "^16.6.1",
     "drizzle-orm": "^0.44.7",
     "electron-squirrel-startup": "^1.0.1",
-    "form-data": "^4.0.4",
+    "form-data": "^4.0.5",
     "jsonwebtoken": "^9.0.2",
     "lottie-react": "^2.4.1",
     "lucide-react": "^0.555.0",

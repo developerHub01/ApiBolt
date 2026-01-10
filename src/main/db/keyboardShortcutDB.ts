@@ -1,6 +1,6 @@
-import { and, eq, isNull } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
-import { keyboardShortcutTable } from "@/main/db/schema.js";
+import { GLOBAL_PROJECT_ID, keyboardShortcutTable } from "@/main/db/schema.js";
 import { getActiveProject } from "@/main/db/projectsDB.js";
 import { keyboardBindings } from "@/data/keyboard_short_cut_list.js";
 import { ElectronAPIKeyboardShortcutInterface } from "@shared/types/api/electron-keyboard-shortcuts";
@@ -17,13 +17,13 @@ export const getKeyboardShortcuts: ElectronAPIKeyboardShortcutInterface["getKeyb
       const globalShortCuts = await db
         .select()
         .from(keyboardShortcutTable)
-        .where(isNull(keyboardShortcutTable.projectId));
+        .where(eq(keyboardShortcutTable.projectId, GLOBAL_PROJECT_ID));
 
       const localShortCuts = projectId
         ? await db
-            .select()
-            .from(keyboardShortcutTable)
-            .where(eq(keyboardShortcutTable.projectId, projectId))
+          .select()
+          .from(keyboardShortcutTable)
+          .where(eq(keyboardShortcutTable.projectId, projectId))
         : [];
 
       const globalKeyMap: Record<string, KeybaordShortCutInterface> = (
@@ -66,22 +66,17 @@ export const getKeyboardShortcuts: ElectronAPIKeyboardShortcutInterface["getKeyb
 export const getKeyboardShortcutsById: ElectronAPIKeyboardShortcutInterface["getKeyboardShortcutsById"] =
   async ({ id, projectId }) => {
     try {
-      const activeProjectId = projectId ?? (await getActiveProject());
+      const activeProjectId = projectId ?? (await getActiveProject()) ?? GLOBAL_PROJECT_ID;
 
       const result = (
         await db
           .select()
           .from(keyboardShortcutTable)
           .where(
-            activeProjectId
-              ? and(
-                  eq(keyboardShortcutTable.id, id),
-                  eq(keyboardShortcutTable.projectId, activeProjectId),
-                )
-              : and(
-                  eq(keyboardShortcutTable.id, id),
-                  isNull(keyboardShortcutTable.projectId),
-                ),
+            and(
+              eq(keyboardShortcutTable.id, id),
+              eq(keyboardShortcutTable.projectId, activeProjectId),
+            )
           )
           .limit(1)
       )?.[0];
@@ -112,7 +107,7 @@ export const updateKeyboardShortcuts: ElectronAPIKeyboardShortcutInterface["upda
             .where(
               and(
                 eq(keyboardShortcutTable.id, id),
-                isNull(keyboardShortcutTable.projectId),
+                eq(keyboardShortcutTable.projectId, GLOBAL_PROJECT_ID),
               ),
             )
             .limit(1)
@@ -158,7 +153,7 @@ export const resetKeyboardShortcuts: ElectronAPIKeyboardShortcutInterface["reset
             .where(
               and(
                 eq(keyboardShortcutTable.id, id),
-                isNull(keyboardShortcutTable.projectId),
+                eq(keyboardShortcutTable.projectId, GLOBAL_PROJECT_ID),
               ),
             )
             .limit(1)

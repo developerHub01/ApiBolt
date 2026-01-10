@@ -1,7 +1,7 @@
-import { isNull } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { keyboardBindings } from "@/data/keyboard_short_cut_list.js";
 import { db } from "@/main/db/index.js";
-import { keyboardShortcutTable } from "@/main/db/schema.js";
+import { GLOBAL_PROJECT_ID, keyboardShortcutTable } from "@/main/db/schema.js";
 
 export const generateKeyboardBindingsSeed = async () => {
   try {
@@ -12,7 +12,7 @@ export const generateKeyboardBindingsSeed = async () => {
           id: keyboardShortcutTable.id,
         })
         .from(keyboardShortcutTable)
-        .where(isNull(keyboardShortcutTable.projectId))) ?? []
+        .where(eq(keyboardShortcutTable.projectId, GLOBAL_PROJECT_ID))) ?? []
     ).map(item => item.id);
 
     /* making exsting ids set */
@@ -25,6 +25,7 @@ export const generateKeyboardBindingsSeed = async () => {
         id,
         ...value,
         key: JSON.stringify(value.key),
+        projectId: GLOBAL_PROJECT_ID,
       }));
     /* nothing to update then exit */
     if (!payload.length) return;

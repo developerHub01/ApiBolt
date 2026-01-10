@@ -35,6 +35,7 @@ import { keyboardShortcutHandler } from "@/main/ipc/keyboardShortcutHandler";
 import { historyHandler } from "@/main/ipc/historyHandler";
 import { localPasswordHandler } from "@/main/ipc/localPasswordHandler";
 
+import { generateProjectSeed } from "@/main/seeders/projectSeed";
 import { generateHttpStatusSeed } from "@/main/seeders/httpStatusSeed";
 import { generateKeyboardBindingsSeed } from "@/main/seeders/keyboardShortcutSeed";
 import { generateThemesSeed } from "@/main/seeders/themesSeed";
@@ -255,6 +256,7 @@ app.whenReady().then(async () => {
   /***
    * Initiallizing all seeds
    */
+  await generateProjectSeed();
   await generateHttpStatusSeed();
   await generateKeyboardBindingsSeed();
   await generateThemesSeed();

@@ -1,5 +1,5 @@
-import { settingRequestTable } from "@/main/db/schema.js";
-import { eq, isNull } from "drizzle-orm";
+import { GLOBAL_PROJECT_ID, settingRequestTable } from "@/main/db/schema.js";
+import { eq } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { getActiveProject } from "@/main/db/projectsDB.js";
 import { ElectronAPISettingsRequestInterface } from "@shared/types/api/electron-settings-request";
@@ -21,7 +21,7 @@ export const getSettingsRequest = async () => {
       await db
         .select()
         .from(settingRequestTable)
-        .where(isNull(settingRequestTable.projectId))
+        .where(eq(settingRequestTable.projectId, GLOBAL_PROJECT_ID))
         .limit(1)
     )?.[0];
 
@@ -54,7 +54,8 @@ export const getSettingsRequest = async () => {
 
 /* must contain projectId */
 export const updateSettingsRequest = async (payload: Parameters<ElectronAPISettingsRequestInterface["updateSettingsRequest"]>[0]) => {
-  const { projectId = null, ...updatePayload } = payload;
+  const { projectId: pI, ...updatePayload } = payload;
+  const projectId = payload.projectId ?? GLOBAL_PROJECT_ID
 
   for (const key in updatePayload) {
     const value = updatePayload[key];
@@ -63,9 +64,8 @@ export const updateSettingsRequest = async (payload: Parameters<ElectronAPISetti
 
   const isExist = Boolean((await db.select({
     id: settingRequestTable.id
-  }).from(settingRequestTable).where(projectId ?
-    eq(settingRequestTable.projectId, projectId)
-    : isNull(settingRequestTable.projectId))
+  }).from(settingRequestTable).where(
+    eq(settingRequestTable.projectId, projectId))
     .limit(1))?.[0]?.id)
 
   if (!isExist) return (await db.insert(settingRequestTable).values({
@@ -75,7 +75,7 @@ export const updateSettingsRequest = async (payload: Parameters<ElectronAPISetti
 
   return (await db.update(settingRequestTable).set({
     ...updatePayload,
-  }).where(projectId ? eq(settingRequestTable.projectId, projectId) : isNull(settingRequestTable.projectId))).rowsAffected > 0
+  }).where(eq(settingRequestTable.projectId, projectId))).rowsAffected > 0
 };
 
 export const deleteSettingsRequest = async () => {

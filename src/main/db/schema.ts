@@ -223,6 +223,8 @@ export const settingTable = sqliteTable("setting_table", {
   tabListLayoutType: text()
     .$type<SettingsInterface["tabListLayoutType"]>(),
   projectId: text()
+    .notNull()
+    .unique()
     .references(() => projectTable.id, {
       onDelete: "cascade",
     }),
@@ -242,6 +244,8 @@ export const settingRequestTable = sqliteTable("setting_request_table", {
   sslVerification: int(),
   cookieTracking: int(),
   projectId: text()
+    .notNull()
+    .unique()
     .references(() => projectTable.id, {
       onDelete: "cascade",
     }),
@@ -488,9 +492,11 @@ export const keyboardShortcutTable = sqliteTable(
     id: text().notNull(),
     label: text().notNull().default(""),
     key: text().notNull(),
-    projectId: text().references(() => projectTable.id, {
-      onDelete: "cascade",
-    }),
+    projectId: text()
+      .notNull()
+      .references(() => projectTable.id, {
+        onDelete: "cascade",
+      }),
   },
   table => [
     primaryKey({
@@ -543,9 +549,12 @@ export const themeTable = sqliteTable("theme_table", {
 export const activeThemeTable = sqliteTable(
   "active_theme_table",
   {
-    projectId: text().references(() => projectTable.id, {
-      onDelete: "cascade",
-    }),
+    projectId: text()
+      .notNull()
+      .unique()
+      .references(() => projectTable.id, {
+         onDelete: "cascade",
+      }),
     activeTheme: text().references(() => themeTable.id, {
       onDelete: "cascade",
     }),
