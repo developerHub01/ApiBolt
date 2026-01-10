@@ -12,6 +12,7 @@ import SettingCode from "@/components/app/setting/content/code/SettingCode";
 import SettingBackground from "@/components/app/setting/content/background/SettingBackground";
 import SettingHttpStatus from "@/components/app/setting/content/http-status/SettingHttpStatus";
 import SettingTheme from "@/components/app/setting/content/theme/SettingTheme";
+import SettingRequest from "@/components/app/setting/content/request/SettingRequest";
 
 const SettingContent = memo(() => {
   const { activeTab } = useSetting();
@@ -40,6 +41,7 @@ const SettingContent = memo(() => {
           }}
         >
           <Accordion type="multiple" className="w-full flex flex-col p-2">
+            <SettingRequest />
             <SettingBackground />
             <SettingZoom />
             <SettingLayout />

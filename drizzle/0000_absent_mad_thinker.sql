@@ -68,8 +68,6 @@ CREATE TABLE `body_form_data_table` (
 	`isCheck` integer DEFAULT true NOT NULL,
 	`key` text DEFAULT '' NOT NULL,
 	`value` text DEFAULT '' NOT NULL,
-	`keyType` text DEFAULT 'text' NOT NULL,
-	`valueType` text DEFAULT 'text' NOT NULL,
 	`description` text DEFAULT '' NOT NULL,
 	`requestOrFolderMetaId` text NOT NULL,
 	`createdAt` text DEFAULT (current_timestamp) NOT NULL,
@@ -91,8 +89,6 @@ CREATE TABLE `body_x_www_form_urlencoded_table` (
 	`isCheck` integer DEFAULT true NOT NULL,
 	`key` text DEFAULT '' NOT NULL,
 	`value` text DEFAULT '' NOT NULL,
-	`keyType` text DEFAULT 'text' NOT NULL,
-	`valueType` text DEFAULT 'text' NOT NULL,
 	`description` text DEFAULT '' NOT NULL,
 	`requestOrFolderMetaId` text NOT NULL,
 	`createdAt` text DEFAULT (current_timestamp) NOT NULL,
@@ -134,8 +130,6 @@ CREATE TABLE `headers_table` (
 	`isCheck` integer DEFAULT true NOT NULL,
 	`key` text DEFAULT '' NOT NULL,
 	`value` text DEFAULT '' NOT NULL,
-	`keyType` text DEFAULT 'text' NOT NULL,
-	`valueType` text DEFAULT 'text' NOT NULL,
 	`description` text DEFAULT '' NOT NULL,
 	`requestOrFolderMetaId` text NOT NULL,
 	`createdAt` text DEFAULT (current_timestamp) NOT NULL,
@@ -188,6 +182,11 @@ CREATE TABLE `keyboard_shortcut_table` (
 	FOREIGN KEY (`projectId`) REFERENCES `projects_table`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
+CREATE TABLE `local_password_table` (
+	`id` text PRIMARY KEY DEFAULT 'singleton' NOT NULL,
+	`password` text
+);
+--> statement-breakpoint
 CREATE TABLE `meta_show_column_table` (
 	`id` text PRIMARY KEY NOT NULL,
 	`requestOrFolderMetaId` text NOT NULL,
@@ -233,7 +232,7 @@ CREATE TABLE `request_meta_tab_table` (
 CREATE UNIQUE INDEX `request_meta_tab_table_requestOrFolderMetaId_unique` ON `request_meta_tab_table` (`requestOrFolderMetaId`);--> statement-breakpoint
 CREATE TABLE `request_or_folder_meta_table` (
 	`id` text PRIMARY KEY NOT NULL,
-	`method` text DEFAULT 'null' NOT NULL,
+	`method` text DEFAULT 'null',
 	`name` text DEFAULT '' NOT NULL,
 	`projectId` text NOT NULL,
 	`parentId` text,
@@ -243,6 +242,18 @@ CREATE TABLE `request_or_folder_meta_table` (
 	FOREIGN KEY (`parentId`) REFERENCES `request_or_folder_meta_table`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
+CREATE TABLE `setting_request_table` (
+	`id` text PRIMARY KEY NOT NULL,
+	`httpVersion` text,
+	`requestTimeout` integer,
+	`maxResponseSize` integer,
+	`sslVerification` integer,
+	`cookieTracking` integer,
+	`projectId` text,
+	FOREIGN KEY (`projectId`) REFERENCES `projects_table`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
+CREATE UNIQUE INDEX `setting_request_unique_project` ON `setting_request_table` (`projectId`);--> statement-breakpoint
 CREATE TABLE `setting_table` (
 	`id` text PRIMARY KEY NOT NULL,
 	`backgroundImages` text,
@@ -254,8 +265,9 @@ CREATE TABLE `setting_table` (
 	`isZoomable` integer,
 	`codeFontSize` integer,
 	`indentationSize` integer,
-	`layoutType` text DEFAULT 'ltr',
+	`layoutType` text,
 	`activityBarVisible` integer,
+	`tabListLayoutType` text,
 	`projectId` text,
 	FOREIGN KEY (`projectId`) REFERENCES `projects_table`(`id`) ON UPDATE no action ON DELETE cascade
 );

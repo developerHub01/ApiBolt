@@ -26,15 +26,15 @@ const layoutList: Array<{
   Icon: LucideIcon;
 }> = [
   {
-    id: "right",
-    label: "Right Align",
-    subLabel: "Default layout",
-    Icon: RightLayoutIcon,
-  },
-  {
     id: "top",
     label: "Top Align",
+    subLabel: "Default layout",
     Icon: TopLayoutIcon,
+  },
+  {
+    id: "right",
+    label: "Right Align",
+    Icon: RightLayoutIcon,
   },
 ];
 

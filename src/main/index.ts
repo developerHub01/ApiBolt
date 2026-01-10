@@ -1,5 +1,6 @@
 import { app, BrowserWindow, ipcMain } from "electron";
 import { electronApp, optimizer } from "@electron-toolkit/utils";
+
 import { httpStatusHandler } from "@/main/ipc/httpStatusHandler";
 import { registerCookieHandlers } from "@/main/ipc/cookies";
 import { windowHandler } from "@/main/ipc/windowHandler";
@@ -14,7 +15,8 @@ import { authorizationHandler } from "@/main/ipc/authorizationHandler";
 import { enviromentsHandlers } from "@/main/ipc/environmentsHandler";
 import { requestOrFolderMetaHandler } from "@/main/ipc/requestOrFolderMetaHandler";
 import { tabsHandler } from "@/main/ipc/tabsHandler";
-import { handleZoomLevel, settingsHandlers } from "@/main/ipc/settingsHandlers";
+import { handleZoomLevel, settingsHandler } from "@/main/ipc/settingsHandler";
+import { settingsRequestHandler } from "@/main/ipc/settingsRequestHandler";
 import { folderHandlers } from "@/main/ipc/folderHandlers";
 import { paramsHandlers } from "@/main/ipc/paramsHandlers";
 import { headersHandlers } from "@/main/ipc/headersHandlers";
@@ -31,19 +33,24 @@ import { requestHandler } from "@/main/ipc/requestHandler";
 import { fileSystemHandler } from "@/main/ipc/fileSystemHandler";
 import { keyboardShortcutHandler } from "@/main/ipc/keyboardShortcutHandler";
 import { historyHandler } from "@/main/ipc/historyHandler";
+import { localPasswordHandler } from "@/main/ipc/localPasswordHandler";
+
 import { generateHttpStatusSeed } from "@/main/seeders/httpStatusSeed";
 import { generateKeyboardBindingsSeed } from "@/main/seeders/keyboardShortcutSeed";
 import { generateThemesSeed } from "@/main/seeders/themesSeed";
+import { generateSettingsSeed } from "@/main/seeders/settingSeed";
+import { settingRequestSeed } from "@/main/seeders/settingRequestSeed";
+
 import { createSplashWindow } from "@/main/utils/splashWindow";
 import { createLocalPasswordWindow } from "@/main/utils/localPasswordWindow";
 import { createMainWindow } from "@/main/utils/mainWindow";
+
 import { jarManager } from "@/main/utils/cookieManager";
 import axios, { type AxiosInstance } from "axios";
 import { wrapper } from "axios-cookiejar-support";
 import { CookieJar } from "tough-cookie";
 import { handleExternalUrl } from "@/main/utils/externalUrl";
 import { handleProtocol } from "@/main/utils/custom-protocol";
-import { localPasswordHandler } from "@/main/ipc/localPasswordHandler";
 import { getLocalPassword } from "@/main/db/localPasswordDB";
 import { applyingThemeBackground } from "@/main/utils/applyingTheme";
 
@@ -226,7 +233,8 @@ app.whenReady().then(async () => {
   authorizationHandler();
   requestOrFolderMetaHandler();
   tabsHandler();
-  settingsHandlers();
+  settingsHandler();
+  settingsRequestHandler();
   folderHandlers();
   paramsHandlers();
   headersHandlers();
@@ -250,6 +258,8 @@ app.whenReady().then(async () => {
   await generateHttpStatusSeed();
   await generateKeyboardBindingsSeed();
   await generateThemesSeed();
+  await generateSettingsSeed();
+  await settingRequestSeed();
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

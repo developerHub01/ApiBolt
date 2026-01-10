@@ -98,7 +98,10 @@ export const fetchApi: ElectronAPIInterface["fetchApi"] = async (
           ? CurlHttpVersion.V2_0
           : SETTINGS.httpVersion === "HTTP/1.0"
             ? CurlHttpVersion.V1_0
-            : CurlHttpVersion.V1_1,
+            : SETTINGS.httpVersion === "HTTP/1.1"
+              ? CurlHttpVersion.V1_1
+              : /* 'None' for libcurl to negotiate "Auto" */
+                CurlHttpVersion.None,
       );
 
       if (SETTINGS.requestTimeout > 0)

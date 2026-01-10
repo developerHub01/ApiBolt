@@ -5,50 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1765220304799,
-      "tag": "0000_unknown_black_widow",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1765220827007,
-      "tag": "0001_amusing_sunfire",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1765565091715,
-      "tag": "0002_chief_supernaut",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1767530198260,
-      "tag": "0003_natural_lord_tyger",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "6",
-      "when": 1767628798761,
-      "tag": "0004_wide_skaar",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "6",
-      "when": 1767726006786,
-      "tag": "0005_dazzling_maggott",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "6",
-      "when": 1768054513700,
-      "tag": "0006_careless_liz_osborn",
+      "when": 1768059600576,
+      "tag": "0000_absent_mad_thinker",
       "breakpoints": true
     }
   ]

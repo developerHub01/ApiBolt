@@ -1,6 +1,5 @@
 import { BrowserWindow, dialog, ipcMain } from "electron";
 import {
-  defaultSettings,
   getApplyingZoomLevel,
   getSettings,
   updateSettings,
@@ -11,6 +10,7 @@ import path from "path";
 import { ElectronAPISettingsInterface } from "@shared/types/api/electron-settings";
 import { pathToFileURL } from "url";
 import { mainWindow } from "@/main/index";
+import { defaultSettings } from "@/data/settings";
 
 const BACKGROUND_IMAGES_NUMBER_LIMIT = 30;
 
@@ -49,6 +49,7 @@ export const getImageFilesFromFolder = async (folderPath: string) => {
     return null;
   }
 };
+
 export const handleZoomLevel = async () => {
   /* getting access of focused window */
   const windows = BrowserWindow.getAllWindows();
@@ -74,7 +75,7 @@ const handleBackgroundImages = async (
   return images as null | "default";
 };
 
-export const settingsHandlers = () => {
+export const settingsHandler = () => {
   ipcMain.handle(
     "getSettings",
     async (_): ReturnType<ElectronAPISettingsInterface["getSettings"]> => {

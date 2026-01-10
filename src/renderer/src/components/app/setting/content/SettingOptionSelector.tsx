@@ -30,7 +30,7 @@ const SettingOptionSelector = ({
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
     </SettingSelectorWrapper>
-    <SelectContent>
+    <SelectContent align="end">
       <SelectGroup>
         {label && <SelectLabel>{label}</SelectLabel>}
         {list.map((size: string) => (

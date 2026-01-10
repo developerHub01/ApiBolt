@@ -10,6 +10,7 @@ import { selectIsSettingOpen } from "@/context/redux/setting/selectors/setting";
 import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 import SettingThemeProvider from "@/context/setting/theme/SettingThemeProvider";
 import SettingFallback from "@/fallback/SettingFallback";
+import { loadSettingsRequest } from "@/context/redux/setting-request/thunks/setting";
 
 const Setting = () => {
   const dispatch = useAppDispatch();
@@ -39,7 +40,7 @@ const SettingLoader = () => {
 
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(loadSettings());
+    Promise.all([dispatch(loadSettings()), dispatch(loadSettingsRequest())]);
   }, [dispatch, activeProjectId]);
 
   return null;

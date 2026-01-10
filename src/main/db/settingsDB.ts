@@ -2,31 +2,8 @@ import { settingTable } from "@/main/db/schema.js";
 import { eq, isNull } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { getActiveProject } from "@/main/db/projectsDB.js";
-import { SettingsInterface, } from "@shared/types/setting.types";
 import { ElectronAPISettingsInterface } from "@shared/types/api/electron-settings";
-
-type SettingRawInterface = Omit<SettingsInterface, "backgroundImages"> & {
-  backgroundImages: "default" | string | null,
-}
-
-export const defaultSettings: SettingRawInterface = {
-  /* default == "default" | global == null */
-  backgroundImages: "default",
-  maxNumberOfImages: -1,
-  backgroundOpacity: -1,
-  slideInterval: -1,
-  backgroundBlur: -1,
-  codeFontSize: -1,
-  indentationSize: -1,
-  zoomLevel: -1,
-  isZoomable: -1,
-  activityBarVisible: -1,
-  layoutType: "default",
-  tabListLayoutType: "default",
-  projectId: null,
-};
-
-
+import { defaultSettings } from "@/data/settings";
 
 export const getSettings = async () => {
   try {
@@ -48,16 +25,16 @@ export const getSettings = async () => {
         .limit(1)
     )?.[0];
 
-    if (!globalSetting) {
-      await db.insert(settingTable).values(defaultSettings);
-      globalSetting = (
-        await db
-          .select()
-          .from(settingTable)
-          .where(isNull(settingTable.projectId))
-          .limit(1)
-      )?.[0];
-    }
+    // if (!globalSetting) {
+    //   await db.insert(settingTable).values(defaultSettings);
+    //   globalSetting = (
+    //     await db
+    //       .select()
+    //       .from(settingTable)
+    //       .where(isNull(settingTable.projectId))
+    //       .limit(1)
+    //   )?.[0];
+    // }
 
     settings = settings ?? null;
     globalSetting = globalSetting ?? null;

@@ -16,7 +16,6 @@ type Props = Pick<
 
 const ResponseStatus = memo(
   ({ status, statusText, statusDescription }: Props) => {
-    console.log({ status, statusText, statusDescription });
     if (!status) return null;
 
     return (

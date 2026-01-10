@@ -281,6 +281,19 @@ if (process.contextIsolated) {
 
     /**
      * ====================
+     * Settings request
+     * ====================
+     */
+    const electronAPISettingsRequestBridge: WindowElectronAPIInterface["electronAPISettingsRequest"] =
+      {
+        getSettingsRequest: async () =>
+          await ipcRenderer.invoke("getSettingsRequest"),
+        updateSettingsRequest: async (...payload) =>
+          await ipcRenderer.invoke("updateSettingsRequest", ...payload),
+      };
+
+    /**
+     * ====================
      * Environments
      * ====================
      */
@@ -756,6 +769,10 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld(
       "electronAPISettings",
       electronAPISettingsBridge,
+    );
+    contextBridge.exposeInMainWorld(
+      "electronAPISettingsRequest",
+      electronAPISettingsRequestBridge,
     );
     contextBridge.exposeInMainWorld(
       "electronAPIEnvironments",
