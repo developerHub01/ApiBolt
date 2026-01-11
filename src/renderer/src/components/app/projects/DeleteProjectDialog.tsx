@@ -20,7 +20,6 @@ import {
   AnimatedDialogTop,
 } from "@/components/ui/animated-dialog";
 import { useProject } from "@/context/project/ProjectProvider";
-import PasteButton from "@/components/ui/paste-button";
 import CopyButton from "@/components/ui/copy-button";
 import { ClipboardCopy as ClipboardCopyIcon } from "lucide-react";
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
@@ -98,10 +97,10 @@ const DeleteProjectDialog = memo(() => {
 
   return (
     <AnimatedDialog isOpen={Boolean(deletionCandidate)} onClose={handleClose}>
-      <AnimatedDialogContentWrapper className="max-h-[350px] max-w-[450px] md:max-w-[500px]">
-        <AnimatedDialogTop className="flex flex-col gap-3 px-4 py-3">
+      <AnimatedDialogContentWrapper className="max-h-87.5 max-w-112.5 md:max-w-125">
+        <AnimatedDialogTop className="flex flex-col gap-2 px-4 pb-4 pt-6">
           <h3 className="text-lg leading-none font-semibold">Delete Project</h3>
-          <p className="text-muted-foreground text-sm">
+          <div className="text-muted-foreground text-sm">
             <span className="pr-1.5">
               To confirm deletion, type the project name:{" "}
             </span>
@@ -121,7 +120,7 @@ const DeleteProjectDialog = memo(() => {
                 </ButtonLikeDiv>
               </CopyButton>
             </div>
-          </p>
+          </div>
         </AnimatedDialogTop>
         <AnimatedDialogContent>
           <div className="flex-1 flex flex-col gap-3 px-4 py-5">
@@ -140,7 +139,6 @@ const DeleteProjectDialog = memo(() => {
                 disabled={isLoading}
                 ref={inputRef}
               />
-              <PasteButton handleChange={handleChangeName} align="end" />
             </div>
           </div>
         </AnimatedDialogContent>
