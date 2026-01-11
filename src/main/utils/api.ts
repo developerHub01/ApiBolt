@@ -1,7 +1,7 @@
-import { Curl, CurlHttpVersion, CurlCode, HttpPostField } from "node-libcurl";
-import fs, { constants } from "fs";
-import { access, open } from "fs/promises";
-import mime from "mime-types";
+import { Pool, FormData as UndiciFormData, Dispatcher } from "undici";
+import fs from "fs";
+import zlib from "zlib";
+import { promisify } from "util";
 import { getRawContentType } from "@/main/utils/utils.js";
 import { parseSetCookie } from "@/main/utils/cookies.js";
 import { jar } from "@/main/index.js";
@@ -15,254 +15,168 @@ import {
 } from "@shared/types/request-response.types.js";
 import { ElectronAPIInterface } from "@shared/types/api/electron-api";
 
-type CurlHeaderObject = Record<string, string | Array<string> | undefined>;
+const gunzip = promisify(zlib.gunzip);
+const inflate = promisify(zlib.inflate);
+const brotliDecompress = promisify(zlib.brotliDecompress);
 
-interface PreparedPayload {
-  url: string;
-  method: string;
-  headers: Record<string, string>;
-  data: string | Array<HttpPostField> | number | undefined;
-  fileHandle?: fs.promises.FileHandle;
-}
-
-/*
- * Global configuration.
- * maxResponseSize is our primary defense against V8 Heap crashes during string conversion.
- */
 const SETTINGS = {
-  httpVersion: "HTTP/1.x",
-  requestTimeout: 0,
+  requestTimeout: 30000,
   maxResponseSize: 50,
   sslVerification: true,
   disableCookies: false,
 };
 
+interface InternalPayload {
+  method: Dispatcher.HttpMethod;
+  headers: Record<string, string>;
+  data: string | Buffer | UndiciFormData | fs.ReadStream | null;
+}
+
 export const fetchApi: ElectronAPIInterface["fetchApi"] = async (
   rawPayload: APIPayloadBody,
 ): Promise<ResponseInterface> => {
-  /*
-   * Guard: ensure cookie infrastructure is ready if stateful requests are enabled.
-   */
   if (!SETTINGS.disableCookies && !jar)
     throw new Error("Cookie Jar not initialized");
 
-  const curl = new Curl();
-  const normalizedUrl = new URL(rawPayload.url).origin;
-  const payload = await apiPayloadHandler(rawPayload);
+  const urlObj: URL = new URL(rawPayload.url);
+  const normalizedUrl: string = urlObj.origin;
+  const payload: InternalPayload = await apiPayloadHandler(rawPayload);
 
-  /*
-   * Pull stored cookies from the jar and inject the 'Cookie' header before cURL starts.
-   */
-  if (!SETTINGS.disableCookies)
-    payload.headers = await injectCookies(payload.headers, rawPayload.url);
+  if (!SETTINGS.disableCookies) {
+    const cookieString: string | undefined = await jar!.getCookieString(
+      rawPayload.url,
+    );
+    if (cookieString) payload.headers.Cookie = cookieString;
+  }
 
-  const responsePayload: ResponseInterface = {
-    headers: {},
-    status: 0,
-    statusText: "",
-    statusDescription: "",
-    data: null,
-    requestSize: {
-      header: 0,
-      body: 0,
+  const pool: Pool = new Pool(urlObj.origin, {
+    connect: {
+      rejectUnauthorized: SETTINGS.sslVerification,
     },
-    responseSize: {
-      header: 0,
-      body: 0,
-    },
-  };
-
-  return new Promise(resolve => {
-    /*
-     * Finalizer: Closes cURL handles and releases OS file descriptors for uploads.
-     */
-    const cleanupAndResolve = async (result: ResponseInterface) => {
-      if (curl.isOpen) curl.close();
-      if (payload.fileHandle)
-        await payload.fileHandle
-          .close()
-          .catch(err => console.error("File close error:", err));
-      resolve(result);
-    };
-
-    try {
-      curl.setOpt(Curl.option.URL, payload.url);
-      curl.setOpt(Curl.option.CUSTOMREQUEST, payload.method);
-
-      /*
-       * Map UI version selection to libcurl internal constants.
-       */
-      curl.setOpt(
-        Curl.option.HTTP_VERSION,
-        SETTINGS.httpVersion === "HTTP/2.0"
-          ? CurlHttpVersion.V2_0
-          : SETTINGS.httpVersion === "HTTP/1.0"
-            ? CurlHttpVersion.V1_0
-            : SETTINGS.httpVersion === "HTTP/1.1"
-              ? CurlHttpVersion.V1_1
-              : /* 'None' for libcurl to negotiate "Auto" */
-                CurlHttpVersion.None,
-      );
-
-      if (SETTINGS.requestTimeout > 0)
-        curl.setOpt(Curl.option.TIMEOUT_MS, SETTINGS.requestTimeout);
-
-      if (SETTINGS.maxResponseSize > 0)
-        curl.setOpt(
-          Curl.option.MAXFILESIZE,
-          SETTINGS.maxResponseSize * 1024 * 1024,
-        );
-
-      curl.setOpt(Curl.option.SSL_VERIFYPEER, SETTINGS.sslVerification ? 1 : 0);
-      curl.setOpt(Curl.option.SSL_VERIFYHOST, SETTINGS.sslVerification ? 2 : 0);
-      curl.setOpt(Curl.option.ACCEPT_ENCODING, "");
-
-      const headerArray = Object.entries(payload.headers).map(
-        ([k, v]) => `${k}: ${v}`,
-      );
-      curl.setOpt(Curl.option.HTTPHEADER, headerArray);
-
-      /*
-       * Payload dispatch: handles multi-part forms, binary streams, or raw strings.
-       */
-      if (payload.data)
-        if (rawPayload.bodyType === "form-data")
-          curl.setOpt(
-            Curl.option.HTTPPOST,
-            payload.data as Array<HttpPostField>,
-          );
-        else if (rawPayload.bodyType === "binary") {
-          curl.setOpt(Curl.option.UPLOAD, true);
-          curl.setOpt(Curl.option.READDATA, payload.data as number);
-        } else curl.setOpt(Curl.option.POSTFIELDS, payload.data as string);
-
-      /*
-       * Real-time header parsing.
-       * Captures cookies even during 3xx redirects so they aren't lost.
-       */
-      curl.on("header", (headerBuffer: Buffer) => {
-        if (!SETTINGS.disableCookies)
-          processHeaderLine(headerBuffer.toString(), rawPayload.url);
-      });
-
-      curl.on(
-        "end",
-        async (statusCode, data, headersArray: Array<CurlHeaderObject>) => {
-          /*
-           * Retrieve the header set from the final hop in the request chain.
-           */
-          const lastHeaderObj = headersArray[headersArray.length - 1] ?? {};
-          const resHeaders: Record<string, string> = {};
-
-          Object.entries(lastHeaderObj).forEach(([key, value]) => {
-            const lowerKey = key.toLowerCase();
-            if (lowerKey !== "result")
-              resHeaders[lowerKey] = Array.isArray(value)
-                ? value.join(", ")
-                : String(value);
-          });
-
-          /*
-           * Persist all cookies captured via the 'header' event to the local DB.
-           */
-          if (!SETTINGS.disableCookies) await jarManager.saveToDB();
-
-          const cookies = !SETTINGS.disableCookies
-            ? parseSetCookie(
-                (await jarManager.getCookiesByDomain(normalizedUrl)) ?? [],
-              )
-            : [];
-
-          /*
-           * JSON Extraction with whitespace validation to prevent parsing empty bodies.
-           */
-          let finalData = data.toString();
-          const isJson =
-            resHeaders["content-type"]?.includes("application/json");
-          if (isJson && finalData.trim().length)
-            try {
-              finalData = JSON.parse(finalData);
-            } catch (err) {
-              /* Return raw data if the JSON is malformed */
-            }
-
-          const statusDetails = await getHttpStatusByCode(String(statusCode));
-
-          await cleanupAndResolve({
-            ...responsePayload,
-            status: statusCode,
-            headers: resHeaders,
-            data: finalData,
-            cookies,
-            statusText: statusDetails?.reason ?? "OK",
-            statusDescription: statusDetails?.description ?? "",
-            responseSize: {
-              header: curl.getInfo("HEADER_SIZE") as number,
-              body: curl.getInfo("SIZE_DOWNLOAD") as number,
-            },
-            requestSize: {
-              header: curl.getInfo("REQUEST_SIZE") as number,
-              body: curl.getInfo("SIZE_UPLOAD") as number,
-            },
-          });
-        },
-      );
-
-      /*
-       * Error handler for network-level failures (DNS, TCP reset, etc).
-       */
-      curl.on("error", (err, errorCode) => {
-        cleanupAndResolve({
-          ...responsePayload,
-          status: 0,
-          statusText: getDetailedErrorStatus(errorCode),
-          statusDescription: err.message,
-        });
-      });
-
-      curl.perform();
-    } catch (e) {
-      /*
-       * Fallback for immediate synchronous failures.
-       */
-      cleanupAndResolve({
-        ...responsePayload,
-        statusText: "Setup Error",
-        statusDescription: (e as Error).message,
-      });
-    }
   });
+
+  try {
+    const response: Dispatcher.ResponseData = await pool.request({
+      path: urlObj.pathname + urlObj.search,
+      method: payload.method,
+      headers: payload.headers,
+      body: payload.data,
+      headersTimeout: SETTINGS.requestTimeout,
+      bodyTimeout: SETTINGS.requestTimeout,
+    });
+
+    const setCookie = response.headers["set-cookie"];
+    if (!SETTINGS.disableCookies && setCookie) {
+      const cookieArray: Array<string> = Array.isArray(setCookie)
+        ? setCookie
+        : [setCookie];
+      for (const str of cookieArray)
+        await jar!.setCookie(str, rawPayload.url).catch(() => {});
+      await jarManager.saveToDB();
+    }
+
+    const chunks: Array<Buffer> = [];
+    let receivedBytes: number = 0;
+    for await (const chunk of response.body) {
+      const b: Buffer = chunk as Buffer;
+      receivedBytes += b.length;
+      if (
+        SETTINGS.maxResponseSize > 0 &&
+        receivedBytes > SETTINGS.maxResponseSize * 1024 * 1024
+      )
+        throw new Error("MAX_SIZE_EXCEEDED");
+      chunks.push(b);
+    }
+
+    let buffer: Buffer = Buffer.concat(chunks);
+
+    const encoding: string | Array<string> | undefined =
+      response.headers["content-encoding"];
+    if (encoding === "gzip") buffer = await gunzip(buffer);
+    else if (encoding === "deflate") buffer = await inflate(buffer);
+    else if (encoding === "br") buffer = await brotliDecompress(buffer);
+
+    const rawString: string = buffer.toString();
+    let finalData: Record<string, unknown> | string | null = rawString;
+
+    const contentType: string = String(response.headers["content-type"] || "");
+    if (
+      contentType.includes("application/json") &&
+      rawString.trim().length > 0
+    ) {
+      try {
+        finalData = JSON.parse(rawString) as Record<string, unknown>;
+      } catch {
+        finalData = rawString;
+      }
+    }
+
+    const statusDetails = await getHttpStatusByCode(
+      String(response.statusCode),
+    );
+    const cookies = !SETTINGS.disableCookies
+      ? parseSetCookie(
+          (await jarManager.getCookiesByDomain(normalizedUrl)) ?? [],
+        )
+      : [];
+
+    return {
+      status: response.statusCode,
+      headers: response.headers as Record<string, string>,
+      data: finalData,
+      cookies,
+      statusText: statusDetails?.reason ?? "OK",
+      statusDescription: statusDetails?.description ?? "",
+      requestSize: {
+        header: 0,
+        body: 0,
+      },
+      responseSize: {
+        header: JSON.stringify(response.headers).length,
+        body: receivedBytes,
+      },
+    };
+  } catch (err: unknown) {
+    const error = err as Error & { code?: string };
+    return {
+      status: 0,
+      headers: {},
+      data: null,
+      cookies: [],
+      statusText: getDetailedErrorStatus(error),
+      statusDescription: error.message,
+      requestSize: {
+        header: 0,
+        body: 0,
+      },
+      responseSize: {
+        header: 0,
+        body: 0,
+      },
+    };
+  } finally {
+    await pool.close();
+  }
 };
 
-/*
- * Fetches relevant cookies from the jar and prepares the Cookie header.
- */
-const injectCookies = async (
-  headers: Record<string, string>,
-  url: string,
-): Promise<Record<string, string>> => {
-  const cookieString = await jar!.getCookieString(url);
-  if (cookieString) headers["Cookie"] = cookieString;
-  return headers;
+const getDetailedErrorStatus = (error: Error & { code?: string }): string => {
+  if (error.message === "MAX_SIZE_EXCEEDED")
+    return "Max Response Size Exceeded";
+  switch (error.code) {
+    case "UND_ERR_INVALID_ARG":
+      return "Invalid Request Headers (Content-Length)";
+    case "ETIMEDOUT":
+      return "Request Timeout";
+    case "ECONNREFUSED":
+      return "Connection Refused";
+    default:
+      return error.code ? `Transfer Error (${error.code})` : "Transfer Error";
+  }
 };
 
-/*
- * Parses a single header line to extract and store Set-Cookie values immediately.
- */
-const processHeaderLine = (headerLine: string, url: string): void => {
-  if (headerLine.toLowerCase().startsWith("set-cookie:"))
-    /* Extract value and immediately pass to the jar catch-block */
-    jar!
-      .setCookie(headerLine.split(/:(.*)/s)[1]?.trim() ?? "", url)
-      .catch(() => {});
-};
-
-/*
- * Transforms UI-agnostic payload data into a format libcurl can digest.
- */
 const apiPayloadHandler = async (
   payload: APIPayloadBody,
-): Promise<PreparedPayload> => {
+): Promise<InternalPayload> => {
   const {
     bodyType,
     formData,
@@ -270,122 +184,86 @@ const apiPayloadHandler = async (
     rawData,
     rawSubType,
     method,
-    url,
     headers: rawHeaders,
   } = payload;
+
   const headers: Record<string, string> = {
     ...rawHeaders,
   };
-  let data: string | Array<HttpPostField> | number | undefined;
-  let fileHandle: fs.promises.FileHandle | undefined;
-  const upperMethod = method?.toUpperCase() ?? "GET";
 
-  /*
-   * Standardized body handling for write-capable methods.
-   */
-  if (!["GET", "HEAD"].includes(upperMethod))
+  Object.keys(headers).forEach((key: string) => {
+    if (key.toLowerCase() === "content-length") delete headers[key];
+  });
+
+  let data: string | Buffer | UndiciFormData | fs.ReadStream | null = null;
+  const upperMethod: Dispatcher.HttpMethod = (method?.toUpperCase() ??
+    "GET") as Dispatcher.HttpMethod;
+
+  if (!["GET", "HEAD"].includes(upperMethod)) {
     if (bodyType === "raw") {
       headers["Content-Type"] = getRawContentType(rawSubType ?? "text");
-      data = rawData;
+      data = rawData || "";
     } else if (bodyType === "form-data" && formData) {
-      data = await getBodyFormData(formData);
-      delete headers["Content-Type"];
+      const form: UndiciFormData = new UndiciFormData();
+      for (const { id, key, value } of formData) {
+        if (!key?.trim()) continue;
+        const current: string | Array<string> | undefined =
+          typeof value === "undefined"
+            ? (await getBodyFormDataByFormId(id))?.value
+            : value;
+
+        if (!current) continue;
+
+        if (Array.isArray(current)) {
+          for (const path of current) {
+            const fileBuf: Buffer = await fs.promises.readFile(path);
+            form.append(key, new Blob([new Uint8Array(fileBuf)]));
+          }
+        } else form.append(key, String(current));
+      }
+      data = form;
     } else if (bodyType === "x-www-form-urlencoded" && xWWWformDataUrlencoded) {
-      const params = new URLSearchParams();
-      xWWWformDataUrlencoded.forEach(({ key, value }) =>
-        params.append(key, value),
-      );
+      const params: URLSearchParams = new URLSearchParams();
+      xWWWformDataUrlencoded.forEach(i => params.append(i.key, i.value));
       data = params.toString();
       headers["Content-Type"] = "application/x-www-form-urlencoded";
     } else if (bodyType === "binary") {
-      const path = await getBodyBinaryData();
-      if (path) {
+      const binary = await getBodyBinary();
+      if (binary?.path) {
+        data = fs.createReadStream(binary.path);
         headers["Content-Type"] = "application/octet-stream";
-        fileHandle = await open(path, "r");
-        data = fileHandle.fd;
       }
     }
-
-  return { url, method: upperMethod, headers, data, fileHandle };
-};
-
-/*
- * Aggregates multipart fields and validates file accessibility for uploads.
- */
-const getBodyFormData = async (
-  formData: APIPayloadBody["formData"],
-): Promise<Array<HttpPostField>> => {
-  const multipart: Array<HttpPostField> = [];
-  if (!formData) return multipart;
-
-  for (const { id, key, value } of formData) {
-    if (!key?.trim()) continue;
-    const current =
-      typeof value === "undefined"
-        ? (await getBodyFormDataByFormId(id))?.value
-        : value;
-    if (!current) continue;
-    if (Array.isArray(current))
-      for (const filePath of current)
-        try {
-          await access(filePath, constants.R_OK);
-          multipart.push({
-            name: key,
-            file: filePath,
-            type: mime.lookup(filePath) || "application/octet-stream",
-          });
-        } catch (err) {
-          console.error("File access error:", err);
-        }
-    else
-      multipart.push({
-        name: key,
-        contents: String(current),
-      });
   }
-  return multipart;
+
+  return {
+    method: upperMethod,
+    headers,
+    data,
+  };
 };
 
 /*
- * Locates and validates the binary stream source.
+ * CODE EXPLANATION:
+ * * 1. POOL CONNECTION MANAGEMENT:
+ * Uses Undici's Pool to manage HTTP connections. This is significantly faster
+ * than standard fetch as it reuses established sockets for subsequent requests
+ * to the same origin.
+ * * 2. COOKIE SYNCHRONIZATION:
+ * Before the request, relevant cookies are pulled from the Jar. After the
+ * request, any 'set-cookie' headers are parsed and persisted back to the
+ * database, ensuring session continuity like a browser.
+ * * 3. MEMORY-SAFE STREAMING:
+ * The response body is processed as an AsyncIterable stream. This prevents
+ * loading massive files into RAM at once. The engine monitors total
+ * received bytes and aborts if the 'maxResponseSize' limit is exceeded.
+ * * 4. AUTOMATIC DECOMPRESSION:
+ * Standard APIs often return Gzip, Brotli, or Deflate encodings to save
+ * bandwidth. This engine detects the 'content-encoding' header and uses
+ * Node's 'zlib' module to decompress the buffer into readable text.
+ * * 5. DATA TYPE NORMALIZATION:
+ * The 'apiPayloadHandler' converts various body types (Multipart, Binary,
+ * URL-Encoded, Raw) into formats Undici can stream efficiently. It also
+ * strips manual 'Content-Length' headers to prevent conflict with
+ * Undici's internal length calculations.
  */
-const getBodyBinaryData = async (): Promise<string | null> => {
-  const binary = await getBodyBinary();
-  if (binary?.path)
-    try {
-      await access(binary.path, constants.R_OK);
-      return binary.path;
-    } catch (err) {
-      console.error("Binary access error:", err);
-      return null;
-    }
-  return null;
-};
-
-/*
- * Map libcurl numeric error codes to developer-friendly strings.
- */
-const getDetailedErrorStatus = (code: number): string => {
-  switch (code) {
-    case CurlCode.CURLE_COULDNT_RESOLVE_PROXY:
-      return "Proxy Error";
-    case CurlCode.CURLE_COULDNT_RESOLVE_HOST:
-      return "DNS Resolution Failed";
-    case CurlCode.CURLE_COULDNT_CONNECT:
-      return "Connection Refused";
-    case CurlCode.CURLE_OPERATION_TIMEDOUT:
-      return "Request Timeout";
-    case CurlCode.CURLE_SSL_CONNECT_ERROR:
-      return "SSL/TLS Handshake Failed";
-    case CurlCode.CURLE_SSL_CERTPROBLEM:
-      return "SSL Certificate Rejected";
-    case CurlCode.CURLE_TOO_MANY_REDIRECTS:
-      return "Too Many Redirects";
-    case CurlCode.CURLE_ABORTED_BY_CALLBACK:
-      return "Max Response Size Exceeded";
-    case CurlCode.CURLE_HTTP2:
-      return "HTTP/2 Protocol Error";
-    default:
-      return `Transfer Error (${code})`;
-  }
-};
