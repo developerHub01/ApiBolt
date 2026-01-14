@@ -12,6 +12,21 @@ export interface SettingsRequestInterface {
   projectId?: string | null;
 }
 
+export type SettingsRequestAllValueExistInterface = {
+  [K in keyof SettingsRequestInterface]: NonNullable<
+    SettingsRequestInterface[K]
+  >;
+};
+
+export interface SettingsActualValuedRequestInterface {
+  httpVersion: THttpVersionSettingNoSenitize;
+  requestTimeout: number;
+  maxResponseSize: number;
+  sslVerification: boolean;
+  cookieTracking: boolean;
+  projectId?: string;
+}
+
 export type ProjectSettingsRequestInterface = {
   [K in keyof SettingsRequestInterface]?: SettingsRequestInterface[K] | null;
 };

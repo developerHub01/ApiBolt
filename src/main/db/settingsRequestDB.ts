@@ -52,6 +52,39 @@ export const getSettingsRequest = async () => {
   }
 };
 
+export const getSettingsRequestByProjectId = async (id?: string | null) => {
+  try {
+    const activeProjectId = id ?? (await getActiveProject());
+    if (!activeProjectId) throw new Error()
+
+    return (
+      await db
+        .select()
+        .from(settingRequestTable)
+        .where(eq(settingRequestTable.projectId, activeProjectId))
+        .limit(1)
+    )?.[0] ?? null;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+export const getSettingsRequestByGlobal = async () => {
+  try {
+    return (
+      await db
+        .select()
+        .from(settingRequestTable)
+        .where(eq(settingRequestTable.projectId, GLOBAL_PROJECT_ID))
+        .limit(1)
+    )?.[0] ?? defaultSettingsRequest;
+  } catch (error) {
+    console.error(error);
+    return defaultSettingsRequest;
+  }
+};
+
 /* must contain projectId */
 export const updateSettingsRequest = async (payload: Parameters<ElectronAPISettingsRequestInterface["updateSettingsRequest"]>[0]) => {
   const { projectId: pI, ...updatePayload } = payload;
@@ -71,11 +104,11 @@ export const updateSettingsRequest = async (payload: Parameters<ElectronAPISetti
   if (!isExist) return (await db.insert(settingRequestTable).values({
     ...updatePayload,
     projectId,
-  })).rowsAffected > 0
+  }).returning())?.[0]
 
   return (await db.update(settingRequestTable).set({
     ...updatePayload,
-  }).where(eq(settingRequestTable.projectId, projectId))).rowsAffected > 0
+  }).where(eq(settingRequestTable.projectId, projectId)).returning())?.[0]
 };
 
 export const deleteSettingsRequest = async () => {

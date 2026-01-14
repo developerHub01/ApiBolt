@@ -42,6 +42,8 @@ import { generateThemesSeed } from "@/main/seeders/themesSeed";
 import { generateSettingsSeed } from "@/main/seeders/settingSeed";
 import { settingRequestSeed } from "@/main/seeders/settingRequestSeed";
 
+import { SettingRequestState } from "@/main/state/settingRequest";
+
 import { createSplashWindow } from "@/main/utils/splashWindow";
 import { createLocalPasswordWindow } from "@/main/utils/localPasswordWindow";
 import { createMainWindow } from "@/main/utils/mainWindow";
@@ -262,6 +264,7 @@ app.whenReady().then(async () => {
   await generateThemesSeed();
   await generateSettingsSeed();
   await settingRequestSeed();
+  await SettingRequestState.loadGlobalFromDB();
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

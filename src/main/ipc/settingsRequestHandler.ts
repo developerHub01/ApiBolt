@@ -22,6 +22,9 @@ export const settingsRequestHandler = () => {
       >
     ): ReturnType<
       ElectronAPISettingsRequestInterface["updateSettingsRequest"]
-    > => await updateSettingsRequest(...rest),
+    > => {
+      const response = await updateSettingsRequest(...rest);
+      return Boolean(response);
+    },
   );
 };
