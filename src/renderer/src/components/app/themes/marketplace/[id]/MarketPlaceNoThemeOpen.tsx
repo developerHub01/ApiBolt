@@ -11,7 +11,7 @@ const MarketPlaceNoThemeOpen = () => {
           description="Click any theme on the left to discover its color palette, full file previews, and apply it to your current session."
           animationData={animationData}
           showFallback
-          className="w-full h-full md:max-w-xl md:max-h-[450px]"
+          className="w-full h-full md:max-w-xl md:max-h-112.5"
         />
       </div>
     </ScrollArea>

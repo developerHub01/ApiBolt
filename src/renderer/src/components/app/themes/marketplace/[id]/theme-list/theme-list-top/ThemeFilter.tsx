@@ -1,5 +1,4 @@
 import { memo } from "react";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -8,6 +7,7 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { ListFilter as FilterIcon } from "lucide-react";
+import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 
 const MENU_LIST = [
   {
@@ -39,11 +39,15 @@ const MENU_LIST = [
 const ThemeFilter = memo(() => {
   return (
     <Select value={MENU_LIST[0].id} defaultValue={MENU_LIST[0].id}>
-      <Button variant={"secondary"} size={"iconXs"} className="overflow-hidden">
+      <ButtonLikeDiv
+        variant={"secondary"}
+        size={"iconXs"}
+        className="overflow-hidden"
+      >
         <SelectTrigger size="xs" showIcon={false} className="bg-transparent">
           <FilterIcon />
         </SelectTrigger>
-      </Button>
+      </ButtonLikeDiv>
       <SelectContent align="end" sideOffset={10}>
         <SelectGroup>
           {MENU_LIST.map(({ id, label }) => (
