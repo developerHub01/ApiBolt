@@ -1,12 +1,15 @@
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectSidebarActiveTab } from "@/context/redux/sidebar/selectors/sidebar";
+import { TSidebarTab } from "@shared/types/sidebar.types";
+
+const showableTabsId = new Set<TSidebarTab>([
+  "navigate_collections",
+  "navigate_themes_marketplace",
+]);
 
 const useShowSidebarToggler = () => {
   const activeTab = useAppSelector(selectSidebarActiveTab);
-
-  if (activeTab === "navigate_collections") return true;
-
-  return false;
+  return showableTabsId.has(activeTab);
 };
 
 export default useShowSidebarToggler;
