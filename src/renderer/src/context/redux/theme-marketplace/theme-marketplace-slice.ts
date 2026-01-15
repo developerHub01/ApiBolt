@@ -1,11 +1,17 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { TThemeMarketplaceSearchFilter } from "@shared/types/theme.types";
+import {
+  ThemeInterface,
+  ThemeMetaInterface,
+  TThemeMarketplaceSearchFilter,
+} from "@shared/types/theme.types";
 
 export interface ThemeMarketplaceInitialInterface {
   searchTerm: string;
   searchFilter: TThemeMarketplaceSearchFilter;
   page: number;
   selectedThemeId: string | null;
+  themesList: Array<ThemeMetaInterface>;
+  selectedThemeDetails: ThemeInterface | null;
 }
 
 // Define the initial state using that type
@@ -14,6 +20,8 @@ const initialState: ThemeMarketplaceInitialInterface = {
   searchFilter: "all",
   page: 1,
   selectedThemeId: null,
+  themesList: [],
+  selectedThemeDetails: null,
 };
 
 export const themeMarketplaceSlice = createSlice({
@@ -44,6 +52,18 @@ export const themeMarketplaceSlice = createSlice({
     ) => {
       state.selectedThemeId = action.payload ?? null;
     },
+    handleLoadThemeList: (
+      state,
+      action: PayloadAction<Array<ThemeMetaInterface>>,
+    ) => {
+      state.themesList = action.payload;
+    },
+    handleChangeSelectedThemeDetails: (
+      state,
+      action: PayloadAction<ThemeInterface | undefined | null>,
+    ) => {
+      state.selectedThemeDetails = action.payload ?? null;
+    },
   },
 });
 
@@ -52,6 +72,8 @@ export const {
   handleChangeSearchFilter,
   incrementPage,
   handleChangeSelectedThemeId,
+  handleLoadThemeList,
+  handleChangeSelectedThemeDetails,
 } = themeMarketplaceSlice.actions;
 
 export default themeMarketplaceSlice.reducer;

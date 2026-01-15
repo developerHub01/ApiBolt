@@ -1,5 +1,5 @@
-import ThemeDescription from "@renderer/components/app/themes/marketplace/[id]/theme-details/v1/ThemeDescription";
-import ThemeMetaDetails from "@renderer/components/app/themes/marketplace/[id]/theme-details/v1/ThemeMetaDetails";
+import ThemeDescription from "@/components/app/themes/marketplace/[id]/theme-details/v1/ThemeDescription";
+import ThemeMetaDetails from "@/components/app/themes/marketplace/[id]/theme-details/v1/ThemeMetaDetails";
 import { Separator } from "@/components/ui/separator";
 
 const ThemeMarketPlacePage = () => {

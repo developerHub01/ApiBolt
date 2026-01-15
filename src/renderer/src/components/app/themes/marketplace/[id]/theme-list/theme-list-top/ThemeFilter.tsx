@@ -11,7 +11,7 @@ import { ListFilter as FilterIcon } from "lucide-react";
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 import { TThemeMarketplaceSearchFilter } from "@shared/types/theme.types";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { selectIsThemeMarketplaceSearchFilter } from "@/context/redux/theme-marketplace/selectors/theme-marketplace";
+import { selectThemeMarketplaceSearchFilter } from "@/context/redux/theme-marketplace/selectors/theme-marketplace";
 import { handleChangeSearchFilter } from "@/context/redux/theme-marketplace/theme-marketplace-slice";
 
 const MENU_LIST: Array<{
@@ -59,7 +59,7 @@ const MENU_LIST: Array<{
 
 const ThemeFilter = memo(() => {
   const dispatch = useAppDispatch();
-  const filterType = useAppSelector(selectIsThemeMarketplaceSearchFilter);
+  const filterType = useAppSelector(selectThemeMarketplaceSearchFilter);
 
   const handleChange = (value: string) =>
     dispatch(handleChangeSearchFilter(value as TThemeMarketplaceSearchFilter));

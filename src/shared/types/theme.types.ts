@@ -20,10 +20,13 @@ export type ThemeColorId =
 export interface ThemeInterface {
   id: string;
   name: string;
+  description: string;
   type: "light" | "dark" | "custom";
-  url?: string;
   author?: string;
   thumbnail?: string;
+  preview?: string;
+  install_count?: number;
+  version?: number;
   palette: Record<ThemeColorId, string>;
   createdAt?: string;
 }

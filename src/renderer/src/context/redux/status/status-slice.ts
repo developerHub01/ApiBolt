@@ -16,6 +16,10 @@ import { loadThemePalette } from "@/context/redux/theme/thunks/theme";
 import { loadRequestList } from "@/context/redux/request-response/thunks/request-list";
 import { loadFolder } from "@/context/redux/request-response/thunks/folder";
 import { loadLocalPassword } from "@/context/redux/local-password/thunks/local-password";
+import {
+  loadThemesDetails,
+  loadThemesSearchResult,
+} from "@/context/redux/theme-marketplace/thunks/theme-marketplace";
 
 export interface StatusInterface {
   isLocalPasswordLoading: boolean;
@@ -32,6 +36,8 @@ export interface StatusInterface {
   isHistoryReplacingLoading: boolean;
   isThemeEditingPaletteLoading: boolean;
   isFolderLoading: boolean;
+  isThemesSearchResultLoading: boolean;
+  isThemeMarketplaceThemeDetailsLoading: boolean;
 }
 
 // Define the initial state using that type
@@ -50,6 +56,8 @@ const initialState: StatusInterface = {
   isHistoryReplacingLoading: false,
   isThemeEditingPaletteLoading: false,
   isFolderLoading: true,
+  isThemesSearchResultLoading: true,
+  isThemeMarketplaceThemeDetailsLoading: true,
 };
 
 export const statusSlice = createSlice({
@@ -241,6 +249,31 @@ export const statusSlice = createSlice({
       })
       .addCase(replaceCurrentByHistory.rejected, state => {
         state.isHistoryReplacingLoading = false;
+      })
+
+      /**
+       * =======================
+       * theme marketplace
+       * =======================
+       */
+      .addCase(loadThemesSearchResult.pending, state => {
+        state.isThemesSearchResultLoading = true;
+      })
+      .addCase(loadThemesSearchResult.fulfilled, state => {
+        state.isThemesSearchResultLoading = false;
+      })
+      .addCase(loadThemesSearchResult.rejected, state => {
+        state.isThemesSearchResultLoading = false;
+      })
+
+      .addCase(loadThemesDetails.pending, state => {
+        state.isThemeMarketplaceThemeDetailsLoading = true;
+      })
+      .addCase(loadThemesDetails.fulfilled, state => {
+        state.isThemeMarketplaceThemeDetailsLoading = false;
+      })
+      .addCase(loadThemesDetails.rejected, state => {
+        state.isThemeMarketplaceThemeDetailsLoading = false;
       })
 
       /**

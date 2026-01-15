@@ -1,26 +1,41 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ThemeCard from "@/components/app/themes/marketplace/[id]/theme-list/ThemeCard";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { selectIsThemeMarketplaceSelectedThemeId } from "@/context/redux/theme-marketplace/selectors/theme-marketplace";
+import {
+  selectThemeMarketplaceSelectedThemeId,
+  selectThemeMarketplaceThemesList,
+} from "@/context/redux/theme-marketplace/selectors/theme-marketplace";
 import { handleChangeSelectedThemeId } from "@/context/redux/theme-marketplace/theme-marketplace-slice";
+import { selectThemesSearchResultLoading } from "@/context/redux/status/selectors/theme-marketplace";
+import ThemeCardSkeleton from "@/components/app/themes/marketplace/[id]/theme-list/ThemeCardSkeleton";
 
 const ThemeList = () => {
   const dispatch = useAppDispatch();
-  const selectedThemeId = useAppSelector(
-    selectIsThemeMarketplaceSelectedThemeId,
-  );
+  const selectedThemeId = useAppSelector(selectThemeMarketplaceSelectedThemeId);
+  const themesList = useAppSelector(selectThemeMarketplaceThemesList);
+  const isLoading = useAppSelector(selectThemesSearchResultLoading);
 
   return (
     <ScrollArea className="flex-1 w-full min-h-0">
       <section className="grid grid-cols-2 gap-3 p-1">
-        {Array.from({ length: 10 }, (_, key) => (
-          <ThemeCard
-            key={key}
-            id={String(key)}
-            isSelected={selectedThemeId === String(key)}
-            onClick={() => dispatch(handleChangeSelectedThemeId(String(key)))}
-          />
-        ))}
+        {isLoading ? (
+          <>
+            {Array.from({ length: 6 }, (_, key) => (
+              <ThemeCardSkeleton key={key} />
+            ))}
+          </>
+        ) : (
+          <>
+            {themesList.map(theme => (
+              <ThemeCard
+                key={theme.id}
+                {...theme}
+                isSelected={selectedThemeId === theme.id}
+                onClick={() => dispatch(handleChangeSelectedThemeId(theme.id))}
+              />
+            ))}
+          </>
+        )}
       </section>
     </ScrollArea>
   );
