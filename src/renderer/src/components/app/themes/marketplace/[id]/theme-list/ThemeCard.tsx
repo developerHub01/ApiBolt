@@ -2,48 +2,55 @@ import { memo } from "react";
 import ImageWithFallback from "@/components/ui/image-with-fallback";
 import { cn } from "@/lib/utils";
 import { CloudDownload as DownloadIcon } from "lucide-react";
-import { Link, useParams } from "react-router-dom";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 interface Props {
   id: string;
+  isSelected: boolean;
+  onClick: () => void;
 }
 
-const ThemeCard = memo(({ id }: Props) => {
-  const { id: activeId } = useParams<{ id?: string }>();
-
+const ThemeCard = memo(({  isSelected, onClick }: Props) => {
   return (
-    <Link to="/themes/marketplace/99">
-      <div
-        className={cn("w-full p-2 px-2.5 flex gap-3", {
-          "bg-accent/80": activeId === id,
-          "bg-transparent hover:bg-accent/50": activeId !== id,
-        })}
+    <div
+      onClick={onClick}
+      className={cn(
+        "w-full rounded-lg p-4 flex flex-col gap-3 cursor-pointer",
+        "transition-all duration-100",
+        {
+          "bg-accent/80 ring-2 ring-primary": isSelected,
+          "bg-accent/20 hover:bg-accent/50": !isSelected,
+        },
+      )}
+    >
+      <AspectRatio
+        ratio={16 / 9}
+        className="rounded-lg overflow-hidden shrink-0 border-3"
       >
-        <div className="size-20 rounded-md overflow-hidden shrink-0">
-          <ImageWithFallback
-            fallback="./theme-thumbnail/theme_thumbnail_placeholder.png"
-            src="./theme-thumbnail/black_ocean.png"
-            alt=""
-            className="size-full object-cover"
-          />
-        </div>
-        <div className="w-full flex-1 flex-col gap-1.5">
-          <div className="w-full flex gap-1">
-            <p className="flex-1 line-clamp-1 font-medium">Theme name</p>
-            <span className="flex items-center gap-0.5 text-xs">
-              <DownloadIcon size={12} /> 50
-            </span>
-          </div>
-          <p className="w-full line-clamp-2 text-xs text-muted-foreground leading-relaxed">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium
-            delectus quis dolorem commodi animi, qui accusantium consectetur
-            expedita velit? Illum expedita quod veniam neque ratione quisquam
-            molestias quam consequatur minus!
-          </p>
+        <ImageWithFallback
+          fallback="./theme-thumbnail/theme_thumbnail_placeholder.png"
+          src="./theme-thumbnail/black_ocean.png"
+          alt=""
+          className="size-full object-cover"
+        />
+      </AspectRatio>
+
+      <div className="w-full flex-1 flex flex-col gap-2">
+        <h3 className="line-clamp-1 font-medium">Theme name</h3>
+        <p className="w-full line-clamp-2 text-xs text-muted-foreground leading-relaxed">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium
+          delectus quis dolorem commodi animi, qui accusantium consectetur
+          expedita velit? Illum expedita quod veniam neque ratione quisquam
+          molestias quam consequatur minus!
+        </p>
+        <div className="flex justify-between items-center gap-3">
           <p className="font-semibold text-xs py-0.5">author</p>
+          <span className="flex items-center gap-0.5 text-xs">
+            <DownloadIcon size={12} /> 50
+          </span>
         </div>
       </div>
-    </Link>
+    </div>
   );
 });
 

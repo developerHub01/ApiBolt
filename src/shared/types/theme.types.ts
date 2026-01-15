@@ -56,3 +56,11 @@ export interface ActiveThemePaletteInterface {
   global: ThemeInterface["palette"];
   local: ThemeInterface["palette"] | null;
 }
+
+export type TThemeMarketplaceSearchFilter =
+  | "all"
+  | "installed"
+  | "active"
+  | "dark"
+  | "light"
+  | "custom";

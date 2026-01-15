@@ -1,6 +1,6 @@
 import type React from "react";
 import { ApiBoltResizableWrapper } from "@/components/ui/api-bolt-resizable";
-import ThemeListPanelWrapper from "@/components/app/themes/marketplace/[id]/theme-list/ThemeListPanelWrapper";
+import ThemeListPanelWrapper from "@/components/app/themes/marketplace/[id]/theme-list/v1/ThemeListPanelWrapper";
 
 interface Props {
   children: React.ReactNode;

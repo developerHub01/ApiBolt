@@ -3,6 +3,7 @@ import localPasswordReducer from "@/context/redux/local-password/local-password-
 import projectReducer from "@/context/redux/project/project-slice";
 import environmentsReducer from "@/context/redux/environments/environments-slice";
 import themeReducer from "@/context/redux/theme/theme-slice";
+import themeMarketplaceReducer from "@/context/redux/theme-marketplace/theme-marketplace-slice";
 import keyboardShortcutsReducer from "@/context/redux/keyboard-shortcuts/keyboard-shortcuts-slice";
 import requestResponseReducer from "@/context/redux/request-response/request-response-slice";
 import sidebarReducer from "@/context/redux/sidebar/sidebar-slice";
@@ -20,6 +21,7 @@ export const store = configureStore({
     project: projectReducer,
     environments: environmentsReducer,
     theme: themeReducer,
+    themeMarketplace: themeMarketplaceReducer,
     keyboardShortcuts: keyboardShortcutsReducer,
     requestResponse: requestResponseReducer,
     sidebar: sidebarReducer,

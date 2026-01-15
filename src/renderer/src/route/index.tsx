@@ -24,10 +24,10 @@ import CollectionsLayout from "@/pages/app/collections/layout";
 import CollectionPage from "@/pages/app/collections/page";
 import ThemesLayout from "@/pages/app/themes/layout";
 const ThemeMarketPlaceLayout = lazy(
-  () => import("@/pages/app/themes/marketplace/[id]/layout"),
+  () => import("@/pages/app/themes/marketplace/layout"),
 );
 const ThemeMarketPlacePage = lazy(
-  () => import("@/pages/app/themes/marketplace/[id]/page"),
+  () => import("@/pages/app/themes/marketplace/page"),
 );
 const ThemeEditorLayout = lazy(
   () => import("@/pages/app/themes/editor/layout"),
@@ -142,8 +142,26 @@ const routes = [
             path: "themes",
             element: <ThemesLayout />,
             children: [
+              // {
+              //   path: "marketplace/:id?",
+              //   element: (
+              //     <Suspense fallback={<ThemeMarketplaceFallback />}>
+              //       <ThemeMarketPlaceLayout />
+              //     </Suspense>
+              //   ),
+              //   children: [
+              //     {
+              //       index: true,
+              //       element: (
+              //         <Suspense fallback={<ThemeMarketplaceFallback />}>
+              //           <ThemeMarketPlacePage />
+              //         </Suspense>
+              //       ),
+              //     },
+              //   ],
+              // },
               {
-                path: "marketplace/:id?",
+                path: "marketplace?",
                 element: (
                   <Suspense fallback={<ThemeMarketplaceFallback />}>
                     <ThemeMarketPlaceLayout />
