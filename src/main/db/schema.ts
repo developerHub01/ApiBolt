@@ -7,6 +7,7 @@ import {
   THTTPMethods,
   TRequestBodyType,
 } from "@shared/types/request-response.types";
+import { SettingsRequestInterface } from "@shared/types/setting-request.types";
 import { SettingsInterface } from "@shared/types/setting.types";
 import { TSidebarTab } from "@shared/types/sidebar.types";
 import {  ThemeMetaDBInterface } from "@shared/types/theme.types";
@@ -25,6 +26,7 @@ export const ACTIVE_PROJECT_ID = "singleton";
 export const ACTIVE_SIDEBAR_TAB_ID = "singleton";
 export const ACTIVE_CODE_SNIPPIT_TYPE_ID = "singleton";
 export const LOCAL_PASSWORD_ID = "singleton";
+export const GLOBAL_PROJECT_ID = "__global__";
 export const API_URL_DEFAULT_VALUE = "http://localhost:3000";
 export const DEFAULT_ACTIVE_SIDEBAR_TAB: TSidebarTab = "navigate_projects";
 export const DEFAULT_ACTIVE_CODE_SNIPPIT_TYPE: TRequestCodeType =
@@ -216,19 +218,40 @@ export const settingTable = sqliteTable("setting_table", {
   codeFontSize: int(),
   indentationSize: int(),
   layoutType: text()
-    .$type<SettingsInterface["layoutType"]>()
-    .default("ltr"),
+    .$type<SettingsInterface["layoutType"]>(),
   activityBarVisible: int(),
   tabListLayoutType: text()
-    .$type<SettingsInterface["tabListLayoutType"]>()
-    .default("top"),
+    .$type<SettingsInterface["tabListLayoutType"]>(),
   projectId: text()
+    .notNull()
+    .unique()
     .references(() => projectTable.id, {
       onDelete: "cascade",
     }),
 },  
 table => [
   uniqueIndex("setting_unique_project").on(table.projectId)
+],
+);
+
+export const settingRequestTable = sqliteTable("setting_request_table", {
+  id: text()
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  httpVersion: text() .$type<SettingsRequestInterface["httpVersion"]>(),
+  requestTimeout: int(),
+  maxResponseSize: int(),
+  sslVerification: int(),
+  cookieTracking: int(),
+  projectId: text()
+    .notNull()
+    .unique()
+    .references(() => projectTable.id, {
+      onDelete: "cascade",
+    }),
+},  
+table => [
+  uniqueIndex("setting_request_unique_project").on(table.projectId)
 ],
 );
 
@@ -469,9 +492,11 @@ export const keyboardShortcutTable = sqliteTable(
     id: text().notNull(),
     label: text().notNull().default(""),
     key: text().notNull(),
-    projectId: text().references(() => projectTable.id, {
-      onDelete: "cascade",
-    }),
+    projectId: text()
+      .notNull()
+      .references(() => projectTable.id, {
+        onDelete: "cascade",
+      }),
   },
   table => [
     primaryKey({
@@ -524,9 +549,12 @@ export const themeTable = sqliteTable("theme_table", {
 export const activeThemeTable = sqliteTable(
   "active_theme_table",
   {
-    projectId: text().references(() => projectTable.id, {
-      onDelete: "cascade",
-    }),
+    projectId: text()
+      .notNull()
+      .unique()
+      .references(() => projectTable.id, {
+         onDelete: "cascade",
+      }),
     activeTheme: text().references(() => themeTable.id, {
       onDelete: "cascade",
     }),

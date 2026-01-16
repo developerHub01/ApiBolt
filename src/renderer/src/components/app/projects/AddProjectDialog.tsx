@@ -80,8 +80,8 @@ const AddProjectDialog = memo(() => {
 
   return (
     <AnimatedDialog isOpen={isCreateDialogOpen} onClose={handleClose}>
-      <AnimatedDialogContentWrapper className="max-h-[350px] max-w-[450px] md:max-w-[500px]">
-        <AnimatedDialogTop className="flex flex-col gap-3 px-4 py-3">
+      <AnimatedDialogContentWrapper className="max-h-87.5 max-w-112.5 md:max-w-125">
+        <AnimatedDialogTop className="flex flex-col gap-2 px-4 pb-4 pt-6">
           <h3 className="text-lg leading-none font-semibold">
             Create New Project
           </h3>

@@ -40,9 +40,9 @@ const CookieList = ({ cookies }: CookieListProps) => {
         </TableRow>
       </TableHeader>
       <TableBody className="[&>tr>td]:border-r [&>tr>td]:last:border-r-0">
-        {cookies.map(cookie => (
+        {cookies.map((cookie, index) => (
           <TableRow
-            key={cookie.key}
+            key={cookie.key + index}
             className="wrap-break-word whitespace-pre-wrap"
           >
             {colList.map(item => (

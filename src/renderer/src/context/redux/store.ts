@@ -9,6 +9,7 @@ import requestResponseReducer from "@/context/redux/request-response/request-res
 import sidebarReducer from "@/context/redux/sidebar/sidebar-slice";
 import headerReducer from "@/context/redux/header/header-slice";
 import settingReducer from "@/context/redux/setting/setting-slice";
+import settingRequestReducer from "@/context/redux/setting-request/setting-request-slice";
 import cookiesReducer from "@/context/redux/cookies/cookies-slice";
 import requestUrlReducer from "@/context/redux/request-url/request-url-slice";
 import httpStatusReducer from "@/context/redux/http-status/http-status-slice";
@@ -27,6 +28,7 @@ export const store = configureStore({
     sidebar: sidebarReducer,
     header: headerReducer,
     setting: settingReducer,
+    settingRequest: settingRequestReducer,
     cookies: cookiesReducer,
     requestUrl: requestUrlReducer,
     httpStatus: httpStatusReducer,

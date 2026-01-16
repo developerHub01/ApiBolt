@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "e3697898-8d02-4057-a1a3-af923e0fc874",
+  "id": "81282b29-2740-47ca-87f7-ac311584ccc4",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "active_code_snippit_type_table": {
@@ -489,22 +489,6 @@
           "autoincrement": false,
           "default": "''"
         },
-        "keyType": {
-          "name": "keyType",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'text'"
-        },
-        "valueType": {
-          "name": "valueType",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'text'"
-        },
         "description": {
           "name": "description",
           "type": "text",
@@ -652,22 +636,6 @@
           "notNull": true,
           "autoincrement": false,
           "default": "''"
-        },
-        "keyType": {
-          "name": "keyType",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'text'"
-        },
-        "valueType": {
-          "name": "valueType",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'text'"
         },
         "description": {
           "name": "description",
@@ -959,22 +927,6 @@
           "notNull": true,
           "autoincrement": false,
           "default": "''"
-        },
-        "keyType": {
-          "name": "keyType",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'text'"
-        },
-        "valueType": {
-          "name": "valueType",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'text'"
         },
         "description": {
           "name": "description",
@@ -1332,6 +1284,31 @@
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
+    "local_password_table": {
+      "name": "local_password_table",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'singleton'"
+        },
+        "password": {
+          "name": "password",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
     "meta_show_column_table": {
       "name": "meta_show_column_table",
       "columns": {
@@ -1645,7 +1622,7 @@
           "name": "method",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false,
           "default": "'null'"
         },
@@ -1709,6 +1686,87 @@
           "tableTo": "request_or_folder_meta_table",
           "columnsFrom": [
             "parentId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "setting_request_table": {
+      "name": "setting_request_table",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "httpVersion": {
+          "name": "httpVersion",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "requestTimeout": {
+          "name": "requestTimeout",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "maxResponseSize": {
+          "name": "maxResponseSize",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "sslVerification": {
+          "name": "sslVerification",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "cookieTracking": {
+          "name": "cookieTracking",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "projectId": {
+          "name": "projectId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "setting_request_unique_project": {
+          "name": "setting_request_unique_project",
+          "columns": [
+            "projectId"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "setting_request_table_projectId_projects_table_id_fk": {
+          "name": "setting_request_table_projectId_projects_table_id_fk",
+          "tableFrom": "setting_request_table",
+          "tableTo": "projects_table",
+          "columnsFrom": [
+            "projectId"
           ],
           "columnsTo": [
             "id"
@@ -1799,12 +1857,18 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false,
-          "default": "'ltr'"
+          "autoincrement": false
         },
         "activityBarVisible": {
           "name": "activityBarVisible",
           "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "tabListLayoutType": {
+          "name": "tabListLayoutType",
+          "type": "text",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false

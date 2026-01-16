@@ -1,6 +1,6 @@
-import { eq, isNull } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
-import { activeThemeTable, themeTable } from "@/main/db/schema.js";
+import { activeThemeTable, GLOBAL_PROJECT_ID, themeTable } from "@/main/db/schema.js";
 import { getActiveProject } from "@/main/db/projectsDB.js";
 import {
   defaultActiveThemeId,
@@ -78,7 +78,7 @@ export const getActiveThemeId: ElectronAPIActiveThemeInterface["getActiveThemeId
               id: activeThemeTable.activeTheme,
             })
             .from(activeThemeTable)
-            .where(isNull(activeThemeTable.projectId))
+            .where(eq(activeThemeTable.projectId, GLOBAL_PROJECT_ID))
             .limit(1)
         )?.[0]?.id ?? defaultActiveThemeId;
 
@@ -131,7 +131,7 @@ export const getActiveThemePalette: ElectronAPIActiveThemeInterface["getActiveTh
             palette: themeTable.palette,
           })
           .from(activeThemeTable)
-          .where(isNull(activeThemeTable.projectId))
+          .where(eq(activeThemeTable.projectId, GLOBAL_PROJECT_ID))
           .leftJoin(themeTable, eq(activeThemeTable.activeTheme, themeTable.id))
           .limit(1)
       )?.[0]?.palette;
@@ -188,17 +188,16 @@ export const changeActiveTheme: ElectronAPIActiveThemeInterface["changeActiveThe
         await db
           .select()
           .from(activeThemeTable)
-          .where(
-            payload.projectId
-              ? eq(activeThemeTable.projectId, payload.projectId)
-              : isNull(activeThemeTable.projectId),
-          )
+          .where(eq(activeThemeTable.projectId, payload.projectId ?? GLOBAL_PROJECT_ID))
           .limit(1)
       )?.[0];
 
       if (!isExist)
         return (
-          (await db.insert(activeThemeTable).values(payload)).rowsAffected > 0
+          (await db.insert(activeThemeTable).values({
+            ...payload,
+            projectId: payload.projectId ?? GLOBAL_PROJECT_ID
+          })).rowsAffected > 0
         );
 
       return (
@@ -209,9 +208,7 @@ export const changeActiveTheme: ElectronAPIActiveThemeInterface["changeActiveThe
               activeTheme: payload.activeTheme,
             })
             .where(
-              payload.projectId
-                ? eq(activeThemeTable.projectId, payload.projectId)
-                : isNull(activeThemeTable.projectId),
+              eq(activeThemeTable.projectId, payload.projectId ?? GLOBAL_PROJECT_ID)
             )
         ).rowsAffected > 0
       );

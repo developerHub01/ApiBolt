@@ -16,6 +16,7 @@ import { readFile, writeFile } from "fs/promises";
 import { CreateProjectPayloadInterface } from "@shared/types/project.types";
 import { ElectronAPIProjectsInterface } from "@shared/types/api/electron-projects";
 import { ProjectExportFileInterface } from "@shared/types/export-import/project";
+import { SettingRequestState } from "../state/settingRequest";
 
 export const projectsHandlers = () => {
   ipcMain.handle(
@@ -58,6 +59,7 @@ export const projectsHandlers = () => {
     > => {
       const response = await changeActiveProject(...rest);
       await jarManager.loadFromDB();
+      await SettingRequestState.loadLocalFromDB();
       return response;
     },
   );

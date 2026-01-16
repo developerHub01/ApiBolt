@@ -1,6 +1,5 @@
 import { BrowserWindow, dialog, ipcMain } from "electron";
 import {
-  defaultSettings,
   getApplyingZoomLevel,
   getSettings,
   updateSettings,
@@ -40,7 +39,7 @@ const handleBackgroundImages = async (
   return images as null | "default";
 };
 
-export const settingsHandlers = () => {
+export const settingsHandler = () => {
   ipcMain.handle(
     "getSettings",
     async (_): ReturnType<ElectronAPISettingsInterface["getSettings"]> => {

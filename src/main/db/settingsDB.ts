@@ -1,32 +1,9 @@
-import { settingTable } from "@/main/db/schema.js";
-import { eq, isNull } from "drizzle-orm";
+import { GLOBAL_PROJECT_ID, settingTable } from "@/main/db/schema.js";
+import { eq } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { getActiveProject } from "@/main/db/projectsDB.js";
-import { SettingsInterface, } from "@shared/types/setting.types";
 import { ElectronAPISettingsInterface } from "@shared/types/api/electron-settings";
-
-type SettingRawInterface = Omit<SettingsInterface, "backgroundImages"> & {
-  backgroundImages: "default" | string | null,
-}
-
-export const defaultSettings: SettingRawInterface = {
-  /* default == "default" | global == null */
-  backgroundImages: "default",
-  maxNumberOfImages: -1,
-  backgroundOpacity: -1,
-  slideInterval: -1,
-  backgroundBlur: -1,
-  codeFontSize: -1,
-  indentationSize: -1,
-  zoomLevel: -1,
-  isZoomable: -1,
-  activityBarVisible: -1,
-  layoutType: "default",
-  tabListLayoutType: "default",
-  projectId: null,
-};
-
-
+import { defaultSettings } from "@/data/settings";
 
 export const getSettings = async () => {
   try {
@@ -44,20 +21,20 @@ export const getSettings = async () => {
       await db
         .select()
         .from(settingTable)
-        .where(isNull(settingTable.projectId))
+        .where(eq(settingTable.projectId, GLOBAL_PROJECT_ID))
         .limit(1)
     )?.[0];
 
-    if (!globalSetting) {
-      await db.insert(settingTable).values(defaultSettings);
-      globalSetting = (
-        await db
-          .select()
-          .from(settingTable)
-          .where(isNull(settingTable.projectId))
-          .limit(1)
-      )?.[0];
-    }
+    // if (!globalSetting) {
+    //   await db.insert(settingTable).values(defaultSettings);
+    //   globalSetting = (
+    //     await db
+    //       .select()
+    //       .from(settingTable)
+    //       .where(isNull(settingTable.projectId))
+    //       .limit(1)
+    //   )?.[0];
+    // }
 
     settings = settings ?? null;
     globalSetting = globalSetting ?? null;
@@ -84,11 +61,7 @@ export const getZoomLevel = async () => {
         zoomLevel: settingTable.zoomLevel
       })
       .from(settingTable)
-      .where(activeProjectId ? eq(settingTable.projectId, activeProjectId) :
-        isNull(settingTable.projectId)
-
-      ).limit(1))?.[0]?.zoomLevel : null;
-
+      .where(eq(settingTable.projectId, activeProjectId ?? GLOBAL_PROJECT_ID)).limit(1))?.[0]?.zoomLevel : null;
 
     return zoomLevel ?? 1;
   } catch (error) {
@@ -119,7 +92,7 @@ export const getApplyingZoomLevel = async () => {
       await db
         .select({ zoomLevel: settingTable.zoomLevel })
         .from(settingTable)
-        .where(isNull(settingTable.projectId))
+        .where(eq(settingTable.projectId, GLOBAL_PROJECT_ID))
     )?.[0]?.zoomLevel;
     /**
      * If global have level as default(-1)
@@ -137,7 +110,8 @@ export const getApplyingZoomLevel = async () => {
 
 /* must contain projectId */
 export const updateSettings = async (payload: Parameters<ElectronAPISettingsInterface["updateSettings"]>[0]) => {
-  const { projectId = null, ...updatePayload } = payload;
+  const { projectId : pI, ...updatePayload } = payload;
+  const projectId = payload.projectId ?? GLOBAL_PROJECT_ID
 
   for (const key in updatePayload) {
     const value = updatePayload[key];
@@ -152,7 +126,7 @@ export const updateSettings = async (payload: Parameters<ElectronAPISettingsInte
 
   const isExist = Boolean((await db.select({
     id: settingTable.id
-  }).from(settingTable).where(projectId ? eq(settingTable.projectId, projectId) : isNull(settingTable.projectId)).limit(1))?.[0]?.id)
+  }).from(settingTable).where(eq(settingTable.projectId, projectId)).limit(1))?.[0]?.id)
 
   if (!isExist) return (await db.insert(settingTable).values({
     ...updatePayload,
@@ -161,7 +135,7 @@ export const updateSettings = async (payload: Parameters<ElectronAPISettingsInte
 
   return (await db.update(settingTable).set({
     ...updatePayload,
-  }).where(projectId ? eq(settingTable.projectId, projectId) : isNull(settingTable.projectId))).rowsAffected > 0
+  }).where(eq(settingTable.projectId, projectId))).rowsAffected > 0
 };
 
 export const deleteSettings = async () => {

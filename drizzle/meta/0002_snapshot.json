@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "e3e33f5a-630d-4739-b776-5d49a9b4cedb",
-  "prevId": "94759b80-8cfe-4b07-9a4b-6b3d3a8e8a7f",
+  "id": "d6effc29-4a5c-419f-b684-89722bc711f5",
+  "prevId": "e2cbc804-c5d7-4feb-9cd3-940d98166619",
   "tables": {
     "active_code_snippit_type_table": {
       "name": "active_code_snippit_type_table",
@@ -110,7 +110,7 @@
           "name": "projectId",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "activeTheme": {
@@ -122,6 +122,13 @@
         }
       },
       "indexes": {
+        "active_theme_table_projectId_unique": {
+          "name": "active_theme_table_projectId_unique",
+          "columns": [
+            "projectId"
+          ],
+          "isUnique": true
+        },
         "active_theme_unique_project": {
           "name": "active_theme_unique_project",
           "columns": [
@@ -1252,7 +1259,7 @@
           "name": "projectId",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         }
       },
@@ -1281,6 +1288,31 @@
           "name": "keyboard_shortcut_table_id_projectId_pk"
         }
       },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "local_password_table": {
+      "name": "local_password_table",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'singleton'"
+        },
+        "password": {
+          "name": "password",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
@@ -1673,6 +1705,94 @@
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
+    "setting_request_table": {
+      "name": "setting_request_table",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "httpVersion": {
+          "name": "httpVersion",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "requestTimeout": {
+          "name": "requestTimeout",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "maxResponseSize": {
+          "name": "maxResponseSize",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "sslVerification": {
+          "name": "sslVerification",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "cookieTracking": {
+          "name": "cookieTracking",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "projectId": {
+          "name": "projectId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "setting_request_table_projectId_unique": {
+          "name": "setting_request_table_projectId_unique",
+          "columns": [
+            "projectId"
+          ],
+          "isUnique": true
+        },
+        "setting_request_unique_project": {
+          "name": "setting_request_unique_project",
+          "columns": [
+            "projectId"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "setting_request_table_projectId_projects_table_id_fk": {
+          "name": "setting_request_table_projectId_projects_table_id_fk",
+          "tableFrom": "setting_request_table",
+          "tableTo": "projects_table",
+          "columnsFrom": [
+            "projectId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
     "setting_table": {
       "name": "setting_table",
       "columns": {
@@ -1751,8 +1871,7 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false,
-          "default": "'ltr'"
+          "autoincrement": false
         },
         "activityBarVisible": {
           "name": "activityBarVisible",
@@ -1761,15 +1880,29 @@
           "notNull": false,
           "autoincrement": false
         },
-        "projectId": {
-          "name": "projectId",
+        "tabListLayoutType": {
+          "name": "tabListLayoutType",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
+        },
+        "projectId": {
+          "name": "projectId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
         }
       },
       "indexes": {
+        "setting_table_projectId_unique": {
+          "name": "setting_table_projectId_unique",
+          "columns": [
+            "projectId"
+          ],
+          "isUnique": true
+        },
         "setting_unique_project": {
           "name": "setting_unique_project",
           "columns": [
