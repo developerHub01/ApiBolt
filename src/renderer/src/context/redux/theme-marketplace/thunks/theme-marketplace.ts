@@ -6,7 +6,10 @@ import {
   handleChangeSelectedThemeDetails,
   handleLoadThemeList,
 } from "@/context/redux/theme-marketplace/theme-marketplace-slice";
-import { THEME_MARKETPLACE_FILTER_LOCAL } from "@renderer/constant/theme.constant";
+import {
+  loadActiveThemeId,
+  loadThemeMetaList as loadInstalledThemeMetaList,
+} from "@/context/redux/theme/thunks/theme";
 
 export const loadThemesSearchResult = createAsyncThunk<
   void,
@@ -21,20 +24,21 @@ export const loadThemesSearchResult = createAsyncThunk<
     try {
       const state = getState() as RootState;
       const filterType = state.themeMarketplace.searchFilter;
-      const isLocalSearch = THEME_MARKETPLACE_FILTER_LOCAL.has(filterType);
 
-      if (!isLocalSearch) {
+      if (filterType === "active") {
+        dispatch(loadInstalledThemeMetaList());
+        dispatch(loadActiveThemeId());
+        return;
+      } else if (filterType === "installed") {
+        dispatch(loadInstalledThemeMetaList());
+        return;
+      } else {
         const response = await axiosServerClient.get("/themes/meta");
         const data = (response.data?.data ?? []) as Array<ThemeMetaInterface>;
-
+        
         if (response.status !== 200 || !data) throw new Error();
         dispatch(handleLoadThemeList(data));
-      } else if (filterType === "active") {
-        const themes = await window.electronAPITheme.getActiveThemeMeta();
-        console.log(themes);
-      } else {
-        const themeList = await window.electronAPITheme.getThemeListMeta();
-        dispatch(handleLoadThemeList(themeList));
+        return;
       }
     } catch (error) {
       console.error(error);

@@ -12,16 +12,25 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input-transparent";
 import ThemeFilter from "@/components/app/themes/marketplace/[id]/theme-list/theme-list-top/ThemeFilter";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { selectThemeMarketplaceSearchTerm } from "@/context/redux/theme-marketplace/selectors/theme-marketplace";
+import {
+  selectThemeMarketplaceSearchFilter,
+  selectThemeMarketplaceSearchTerm,
+} from "@/context/redux/theme-marketplace/selectors/theme-marketplace";
 import { handleChangeSearchTerm } from "@/context/redux/theme-marketplace/theme-marketplace-slice";
 import { debounce } from "@/lib/utils";
 import { motion, AnimatePresence } from "motion/react";
+import { THEME_MARKETPLACE_FILTER_LOCAL } from "@renderer/constant/theme.constant";
 
 const ThemeListTop = memo(() => {
   const dispatch = useAppDispatch();
   const searchTerm = useAppSelector(selectThemeMarketplaceSearchTerm);
   const [searchTermState, setSearchTermState] = useState<string>(searchTerm);
   const searchTermRef = useRef<HTMLInputElement>(null);
+  const searchFilter = useAppSelector(selectThemeMarketplaceSearchFilter);
+  const isDisabled = useMemo(
+    () => THEME_MARKETPLACE_FILTER_LOCAL.has(searchFilter),
+    [searchFilter],
+  );
 
   useEffect(() => {
     searchTermRef.current?.focus();
@@ -74,6 +83,7 @@ const ThemeListTop = memo(() => {
           placeholder="Search for themes"
           value={searchTermState}
           onChange={handleChange}
+          disabled={isDisabled}
         />
         <AnimatePresence>
           {Boolean(searchTermState) && (

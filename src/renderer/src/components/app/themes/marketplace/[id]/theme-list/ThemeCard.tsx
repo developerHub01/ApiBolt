@@ -65,7 +65,7 @@ const ThemeCard = memo(
           )}
           <div className="flex items-center gap-3">
             {Boolean(author) && (
-              <p className="font-semibold text-xs py-0.5 underline">{author}</p>
+              <p className="font-semibold text-xs py-0.5 underline capitalize">{author}</p>
             )}
             <span className="flex-1"></span>
             <ButtonGroup className="divide-x">
