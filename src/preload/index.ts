@@ -125,6 +125,8 @@ if (process.contextIsolated) {
       {
         getThemeListMeta: async (...payload) =>
           await ipcRenderer.invoke("getThemeListMeta", ...payload),
+        getActiveThemeMeta: async (...payload) =>
+          await ipcRenderer.invoke("getActiveThemeMeta", ...payload),
         getThemeById: async (...payload) =>
           await ipcRenderer.invoke("getThemeById", ...payload),
         getThemePaletteById: async (...payload) =>
@@ -139,6 +141,8 @@ if (process.contextIsolated) {
           await ipcRenderer.invoke("saveThemePalette", ...payload),
         importThemePaletteInEditor: async (...payload) =>
           await ipcRenderer.invoke("importThemePaletteInEditor", ...payload),
+        installTheme: async (...payload) =>
+          await ipcRenderer.invoke("installTheme", ...payload),
       };
 
     /**

@@ -1,16 +1,20 @@
 import {
   ThemeCreatePayloadInterface,
-  ThemeInterface,
+  ThemeMetaDBInterface,
   ThemeMetaInterface,
 } from "@shared/types/theme.types";
 
 export interface ElectronAPIThemeInterface {
   getThemeListMeta(): Promise<Array<ThemeMetaInterface>>;
-  getThemeById(id: string): Promise<ThemeInterface | null>;
-  getThemePaletteById(id: string): Promise<ThemeInterface["palette"] | null>;
+  getActiveThemeMeta(): Promise<ThemeMetaInterface>;
+  getThemeById(id: string): Promise<ThemeMetaDBInterface | null>;
+  getThemePaletteById(
+    id: string,
+  ): Promise<ThemeMetaDBInterface["palette"] | null>;
   createTheme(payload: ThemeCreatePayloadInterface): Promise<boolean>;
   updateTheme(payload: Partial<ThemeCreatePayloadInterface>): Promise<boolean>;
+  installTheme(payload: ThemeMetaDBInterface): Promise<boolean>;
   deleteThemeById(id: string): Promise<boolean>;
-  saveThemePalette(palette: ThemeInterface["palette"]): Promise<boolean>;
-  importThemePaletteInEditor(): Promise<ThemeInterface["palette"] | null>;
+  saveThemePalette(palette: ThemeMetaDBInterface["palette"]): Promise<boolean>;
+  importThemePaletteInEditor(): Promise<ThemeMetaDBInterface["palette"] | null>;
 }

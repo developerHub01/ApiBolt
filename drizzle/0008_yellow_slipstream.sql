@@ -1,0 +1,1 @@
+ALTER TABLE `theme_table` DROP COLUMN `url`;

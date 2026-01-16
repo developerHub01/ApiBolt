@@ -6,13 +6,21 @@ import ImageWithFallback from "@/components/ui/image-with-fallback";
 import { DEFAULT_THUMBNAIL_FALLBACK } from "@/constant/theme.constant";
 import { ImageOff as ImageBroken } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { AspectRatio } from "@renderer/components/ui/aspect-ratio";
 
 interface Props extends ThemeMetaInterface {
   isActive: boolean;
   onClick: (e: MouseEvent<HTMLDivElement>) => void;
 }
 
-const ThemeCard = ({ id, name, thumbnail, type, isActive, onClick }: Props) => {
+const ThemeCard = ({
+  id,
+  name,
+  thumbnail,
+  type,
+  isActive,
+  onClick,
+}: Props) => {
   return (
     <motion.div
       whileHover={{
@@ -38,7 +46,10 @@ const ThemeCard = ({ id, name, thumbnail, type, isActive, onClick }: Props) => {
       id={id}
       onClick={onClick}
     >
-      <div className="w-full aspect-square bg-accent rounded-xl overflow-hidden border">
+      <AspectRatio
+        ratio={16 / 9}
+        className="w-full bg-accent rounded-xl overflow-hidden border"
+      >
         {thumbnail ? (
           <ImageWithFallback
             src={thumbnail}
@@ -51,7 +62,7 @@ const ThemeCard = ({ id, name, thumbnail, type, isActive, onClick }: Props) => {
             <ImageBroken size={40} />
           </div>
         )}
-      </div>
+      </AspectRatio>
       <div className="flex items-center justify-between gap-1.5 capitalize">
         <h4 className="text-base font-medium line-clamp-1">{name}</h4>
         <Badge variant={"outline"} className="text-muted-foreground text-sm">

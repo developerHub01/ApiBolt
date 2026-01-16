@@ -17,6 +17,7 @@ import { loadRequestList } from "@/context/redux/request-response/thunks/request
 import { loadFolder } from "@/context/redux/request-response/thunks/folder";
 import { loadLocalPassword } from "@/context/redux/local-password/thunks/local-password";
 import {
+  installTheme,
   loadThemesDetails,
   loadThemesSearchResult,
 } from "@/context/redux/theme-marketplace/thunks/theme-marketplace";
@@ -38,6 +39,7 @@ export interface StatusInterface {
   isFolderLoading: boolean;
   isThemesSearchResultLoading: boolean;
   isThemeMarketplaceThemeDetailsLoading: boolean;
+  isThemeInstallationLoading: boolean;
 }
 
 // Define the initial state using that type
@@ -58,6 +60,7 @@ const initialState: StatusInterface = {
   isFolderLoading: true,
   isThemesSearchResultLoading: true,
   isThemeMarketplaceThemeDetailsLoading: true,
+  isThemeInstallationLoading: false,
 };
 
 export const statusSlice = createSlice({
@@ -274,6 +277,16 @@ export const statusSlice = createSlice({
       })
       .addCase(loadThemesDetails.rejected, state => {
         state.isThemeMarketplaceThemeDetailsLoading = false;
+      })
+
+      .addCase(installTheme.pending, state => {
+        state.isThemeInstallationLoading = true;
+      })
+      .addCase(installTheme.fulfilled, state => {
+        state.isThemeInstallationLoading = false;
+      })
+      .addCase(installTheme.rejected, state => {
+        state.isThemeInstallationLoading = false;
       })
 
       /**

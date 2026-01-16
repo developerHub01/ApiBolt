@@ -11,6 +11,7 @@ interface Props extends ThemeMetaInterface {
   id: string;
   isSelected: boolean;
   onClick: () => void;
+  className?: string;
 }
 
 const ThemeCard = memo(
@@ -23,9 +24,10 @@ const ThemeCard = memo(
     install_count,
     type,
     thumbnail,
+    className = "",
   }: Props) => {
     const presentableDescription = useMemo(
-      () => description.slice(0, 150),
+      () => description?.slice(0, 150),
       [description],
     );
 
@@ -39,6 +41,7 @@ const ThemeCard = memo(
             "bg-accent/80 ring-2 ring-primary": isSelected,
             "bg-accent/20 hover:bg-accent/50": !isSelected,
           },
+          className,
         )}
       >
         <AspectRatio
@@ -55,9 +58,11 @@ const ThemeCard = memo(
 
         <div className="w-full flex-1 flex flex-col gap-2">
           <h3 className="line-clamp-1 font-medium capitalize">{name}</h3>
-          <p className="w-full line-clamp-2 text-xs text-muted-foreground leading-relaxed">
-            {presentableDescription}
-          </p>
+          {Boolean(presentableDescription) && (
+            <p className="w-full line-clamp-2 text-xs text-muted-foreground leading-relaxed">
+              {presentableDescription}
+            </p>
+          )}
           <div className="flex items-center gap-3">
             {Boolean(author) && (
               <p className="font-semibold text-xs py-0.5 underline">{author}</p>

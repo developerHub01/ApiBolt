@@ -2,18 +2,18 @@ import { eq } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { themeTable } from "@/main/db/schema.js";
 import { ElectronAPIThemeInterface } from "@shared/types/api/electron-theme";
-import { ThemeInterface } from "@shared/types/theme.types";
+import { ThemeInterface, ThemeMetaDBInterface } from "@shared/types/theme.types";
 
 export const getThemeListMeta: ElectronAPIThemeInterface["getThemeListMeta"] =
   async () => {
     try {
-      return await db
+     return await db
         .select({
           id: themeTable.id,
           name: themeTable.name,
           type: themeTable.type,
-          url: themeTable.url,
           author: themeTable.author,
+          authorUsername: themeTable.authorUsername,
           thumbnail: themeTable.thumbnail,
           createdAt: themeTable.createdAt,
         })
@@ -35,7 +35,7 @@ export const getThemeById: ElectronAPIThemeInterface["getThemeById"] =
         ...result,
         palette: (result.palette
           ? JSON.parse(result.palette)
-          : {}) as ThemeInterface["palette"],
+          : {}) as ThemeMetaDBInterface["palette"],
       };
     } catch (error) {
       console.error(error);
@@ -66,15 +66,17 @@ export const getThemePaletteById: ElectronAPIThemeInterface["getThemePaletteById
 export const createTheme: ElectronAPIThemeInterface["createTheme"] =
   async payload => {
     try {
-      let palette: string | null = null;
-      if ("palette" in payload && typeof payload.palette === "object")
-        palette = JSON.stringify(payload.palette);
-
       return (
         (
           await db.insert(themeTable).values({
             ...payload,
-            palette,
+            palette: JSON.stringify(payload.palette),
+          }).onConflictDoUpdate({
+            target: [themeTable.id],
+            set: {
+              ...payload,
+              palette: JSON.stringify(payload.palette),
+            }
           })
         ).rowsAffected > 0
       );

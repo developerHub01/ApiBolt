@@ -1,4 +1,7 @@
-import type { ThemeColorId } from "@shared/types/theme.types";
+import type {
+  ThemeColorId,
+  TThemeMarketplaceSearchFilter,
+} from "@shared/types/theme.types";
 
 export const DEFAULT_THEME_PALETTE: Record<ThemeColorId, string> = {
   background: "#000e14",
@@ -22,3 +25,6 @@ export const DEFAULT_THEME_PALETTE: Record<ThemeColorId, string> = {
 
 export const DEFAULT_THUMBNAIL_FALLBACK =
   "./theme-thumbnail/theme_thumbnail_placeholder.png";
+
+export const THEME_MARKETPLACE_FILTER_LOCAL =
+  new Set<TThemeMarketplaceSearchFilter>(["active", "installed"]);

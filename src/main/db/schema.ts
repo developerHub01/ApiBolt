@@ -9,7 +9,7 @@ import {
 } from "@shared/types/request-response.types";
 import { SettingsInterface } from "@shared/types/setting.types";
 import { TSidebarTab } from "@shared/types/sidebar.types";
-import { ThemeInterface } from "@shared/types/theme.types";
+import {  ThemeMetaDBInterface } from "@shared/types/theme.types";
 import { sql } from "drizzle-orm";
 import {
   int,
@@ -504,18 +504,18 @@ export const historyTable = sqliteTable("history_table", {
 });
 
 export const themeTable = sqliteTable("theme_table", {
-  id: text()
+  id: text().$type<ThemeMetaDBInterface["id"]>()
     .primaryKey()
     .$defaultFn(() => uuidv4()),
-  name: text().notNull().default("theme"),
+  name: text().$type<ThemeMetaDBInterface["name"]>().notNull().default("theme"),
   type: text()
-    .$type<ThemeInterface["type"]>()
+    .$type<ThemeMetaDBInterface["type"]>()
     .notNull()
     .default("dark") /* light | dark | custom */,
-  url: text().notNull().default(""),
-  author: text().notNull().default("system"),
-  thumbnail: text().notNull().default(""),
-  palette: text(),
+  author: text().$type<ThemeMetaDBInterface["author"]>().notNull().default("system"),
+  authorUsername: text().$type<ThemeMetaDBInterface["authorUsername"]>(),
+  thumbnail: text().$type<ThemeMetaDBInterface["thumbnail"]>().notNull().default(""),
+  palette: text().notNull(),
   createdAt: text()
     .notNull()
     .default(sql`(current_timestamp)`),

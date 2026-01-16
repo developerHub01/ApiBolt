@@ -6,6 +6,7 @@ import {
   handleChangeSelectedThemeDetails,
   handleLoadThemeList,
 } from "@/context/redux/theme-marketplace/theme-marketplace-slice";
+import { THEME_MARKETPLACE_FILTER_LOCAL } from "@renderer/constant/theme.constant";
 
 export const loadThemesSearchResult = createAsyncThunk<
   void,
@@ -14,17 +15,31 @@ export const loadThemesSearchResult = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->("theme-marketplace/loadThemesSearchResult", async (_, { dispatch }) => {
-  try {
-    const response = await axiosServerClient.get("/themes/meta");
-    const data = (response.data?.data ?? []) as Array<ThemeMetaInterface>;
+>(
+  "theme-marketplace/loadThemesSearchResult",
+  async (_, { dispatch, getState }) => {
+    try {
+      const state = getState() as RootState;
+      const filterType = state.themeMarketplace.searchFilter;
+      const isLocalSearch = THEME_MARKETPLACE_FILTER_LOCAL.has(filterType);
 
-    if (response.status !== 200 || !data) throw new Error();
-    dispatch(handleLoadThemeList(data));
-  } catch (error) {
-    console.error(error);
-  }
-});
+      if (!isLocalSearch) {
+        const response = await axiosServerClient.get("/themes/meta");
+        const data = (response.data?.data ?? []) as Array<ThemeMetaInterface>;
+
+        if (response.status !== 200 || !data) throw new Error();
+        dispatch(handleLoadThemeList(data));
+      } else if (filterType === "active") {
+        /*  */
+      } else {
+        const themeList = await window.electronAPITheme.getThemeListMeta();
+        dispatch(handleLoadThemeList(themeList));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  },
+);
 
 export const loadThemesDetails = createAsyncThunk<
   void,
@@ -45,6 +60,35 @@ export const loadThemesDetails = createAsyncThunk<
 
     if (response.status !== 200 || !data) throw new Error();
     dispatch(handleChangeSelectedThemeDetails(data));
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+export const installTheme = createAsyncThunk<
+  void,
+  string,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("theme-marketplace/installTheme", async id => {
+  try {
+    const response = await axiosServerClient.get(`/themes/details/${id}`);
+    const theme = response.data?.data as ThemeInterface;
+
+    if (response.status !== 200 || !theme) throw new Error();
+
+    await window.electronAPITheme.installTheme({
+      id: theme.id,
+      name: theme.name,
+      palette: theme.palette,
+      type: theme.type,
+      author: theme.author,
+      authorUsername: theme.authorUsername,
+      thumbnail: theme.thumbnail,
+      version: theme.version,
+    });
   } catch (error) {
     console.error(error);
   }

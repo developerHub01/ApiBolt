@@ -1,8 +1,8 @@
 import { memo } from "react";
 import { Button } from "@/components/ui/button";
-import { Loader as LoaderIcon } from "lucide-react";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectIsFetchApiLoading } from "@/context/redux/status/selectors/fetch-api";
+import { Spinner } from "@renderer/components/ui/spinner";
 
 const ApiCta = memo(() => {
   const isLoading = useAppSelector(selectIsFetchApiLoading);
@@ -11,9 +11,9 @@ const ApiCta = memo(() => {
     <Button
       type="submit"
       disabled={isLoading}
-      className="rounded-l-none uppercase"
+      className="rounded-l-none uppercase min-w-30"
     >
-      {isLoading && <LoaderIcon className="animate-spin" size={16} />}
+      {isLoading && <Spinner />}
       {isLoading ? "Sending" : "Send"}
     </Button>
   );

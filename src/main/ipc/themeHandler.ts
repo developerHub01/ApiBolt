@@ -12,6 +12,35 @@ import {
   saveThemePaletteLocal,
 } from "@/main/utils/theme.js";
 import { ElectronAPIThemeInterface } from "@shared/types/api/electron-theme";
+import { app } from "electron/main";
+import path, { dirname } from "node:path";
+import { mkdir, unlink, writeFile } from "node:fs/promises";
+import axios from "axios";
+import { getImageFileFromPath } from "@/main/utils/images";
+import { ThemeMetaInterface } from "@shared/types/theme.types";
+
+const getThemesWithApiProtocolThumbnail = async (
+  themes: Array<ThemeMetaInterface>,
+) => {
+  const results = await Promise.allSettled(
+    themes.map(async theme => {
+      let thumbnail = theme.thumbnail;
+      if (thumbnail) {
+        const processedPath = await getImageFileFromPath(thumbnail);
+        if (processedPath) thumbnail = processedPath;
+      }
+
+      return {
+        ...theme,
+        thumbnail,
+      };
+    }),
+  );
+
+  return results
+    .filter(res => res.status === "fulfilled")
+    .map(res => (res as PromiseFulfilledResult<ThemeMetaInterface>).value);
+};
 
 export const themeHandler = () => {
   ipcMain.handle(
@@ -20,7 +49,15 @@ export const themeHandler = () => {
       _,
       ...rest: Parameters<ElectronAPIThemeInterface["getThemeListMeta"]>
     ): ReturnType<ElectronAPIThemeInterface["getThemeListMeta"]> =>
-      await getThemeListMeta(...rest),
+      await getThemesWithApiProtocolThumbnail(await getThemeListMeta(...rest)),
+  );
+  ipcMain.handle(
+    "getActiveThemeMeta",
+    async (
+      _,
+      ...rest: Parameters<ElectronAPIThemeInterface["getActiveThemeMeta"]>
+    ): ReturnType<ElectronAPIThemeInterface["getActiveThemeMeta"]> =>
+      await getThemesWithApiProtocolThumbnail(await getThemeListMeta(...rest)),
   );
   ipcMain.handle(
     "getThemeById",
@@ -75,5 +112,53 @@ export const themeHandler = () => {
     async (): ReturnType<
       ElectronAPIThemeInterface["importThemePaletteInEditor"]
     > => await importThemePaletteInEditor(),
+  );
+  ipcMain.handle(
+    "installTheme",
+    async (
+      _,
+      ...rest: Parameters<ElectronAPIThemeInterface["installTheme"]>
+    ): ReturnType<ElectronAPIThemeInterface["installTheme"]> => {
+      const themeMeta = rest[0];
+
+      if (!themeMeta.id || !themeMeta.thumbnail) throw new Error();
+
+      const themeId = themeMeta.id;
+      const thumbnail = themeMeta.thumbnail;
+
+      /* handle fs context */
+      const userDataPath = app.getPath("userData");
+      const localPath = path.join(
+        userDataPath,
+        "theme_thumbnails",
+        `${themeId}.webp`,
+      );
+      const folderPath = dirname(localPath);
+
+      await mkdir(folderPath, {
+        recursive: true,
+      });
+
+      const response = await axios.get(thumbnail, {
+        responseType: "arraybuffer",
+      });
+
+      await writeFile(localPath, Buffer.from(response.data));
+
+      const createResponse = await createTheme({
+        ...themeMeta,
+        thumbnail: localPath,
+      });
+
+      if (!createResponse) {
+        try {
+          await unlink(localPath);
+        } catch {
+          /*  */
+        }
+      }
+
+      return createResponse;
+    },
   );
 };

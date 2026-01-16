@@ -13,12 +13,23 @@ import { useSetting } from "@/context/setting/SettingProvider";
 import ImageWithFallback from "@/components/ui/image-with-fallback";
 import { DEFAULT_THUMBNAIL_FALLBACK } from "@/constant/theme.constant";
 import ExternalLink from "@/components/ux/ExternalLink";
+import { AspectRatio } from "@renderer/components/ui/aspect-ratio";
+import useGetAuthorProfileByTheme from "@renderer/hooks/theme/use-get-author-profile-by-theme";
 
 const SettingThemeCard = memo(
-  ({ id, thumbnail, name, type, author, url }: ThemeMetaInterface) => {
+  ({
+    id,
+    thumbnail,
+    name,
+    type,
+    author,
+    authorUsername,
+  }: ThemeMetaInterface) => {
     const { activeThemeId, localThemeId, handleChangeActiveTheme } =
       useSettingTheme();
     const { activeTab } = useSetting();
+    const authorProfileUrl = useGetAuthorProfileByTheme(authorUsername ?? null);
+
     const isActive = activeThemeId === id;
     /**
      * if the active theme coming from global because of non-existing of local active theme
@@ -38,7 +49,10 @@ const SettingThemeCard = memo(
         isInheritedFrom={isInheritedFrom}
         onClick={handleClick}
       >
-        <div className="w-full aspect-square bg-accent rounded-xl overflow-hidden border">
+        <AspectRatio
+          ratio={16 / 9}
+          className="w-full bg-accent rounded-xl overflow-hidden border"
+        >
           {thumbnail ? (
             <ImageWithFallback
               src={thumbnail}
@@ -51,19 +65,21 @@ const SettingThemeCard = memo(
               <ImageBroken size={40} />
             </div>
           )}
-        </div>
-        <h4 className="capitalize text-base font-medium">{name}</h4>
+        </AspectRatio>
+        <h4 className="capitalize text-base font-medium line-clamp-1">
+          {name}
+        </h4>
         <div className="flex items-center gap-1.5 capitalize text-muted-foreground text-sm">
           {Boolean(author) && (
-            <p className="inline-flex items-center gap-1 mr-auto">
-              <UserIcon size={14} /> {author}
-            </p>
+            <div className="inline-flex items-center gap-1 mr-auto">
+              <UserIcon size={14} /> <p className="line-clamp-1">{author}</p>
+            </div>
           )}
           <Badge variant={"outline"} className="capitalize">
             {type}
           </Badge>
-          {Boolean(url) && (
-            <ExternalLink to={url!}>
+          {Boolean(authorProfileUrl) && (
+            <ExternalLink to={authorProfileUrl!}>
               <Button
                 size="iconXs"
                 variant={"ghost"}

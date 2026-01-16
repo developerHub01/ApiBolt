@@ -20,18 +20,24 @@ export type ThemeColorId =
 export interface ThemeInterface {
   id: string;
   name: string;
-  description: string;
+  description?: string;
   type: "light" | "dark" | "custom";
   author?: string;
+  authorUsername?: string | null;
   thumbnail?: string;
   preview?: string;
   install_count?: number;
-  version?: number;
+  version?: number | null;
   palette: Record<ThemeColorId, string>;
   createdAt?: string;
 }
 
 export type ThemeMetaInterface = Omit<ThemeInterface, "palette" | "createdAt">;
+
+export type ThemeMetaDBInterface = Omit<
+  ThemeInterface,
+  "createdAt" | "description" | "install_count" | "preview"
+>;
 
 export interface ActiveThemeInterface {
   activeTheme: string;

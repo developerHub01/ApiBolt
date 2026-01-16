@@ -3,7 +3,7 @@ import { selectSelectedThemeDetails } from "@/context/redux/theme-marketplace/se
 
 const ThemeDescription = () => {
   const themeDetails = useAppSelector(selectSelectedThemeDetails);
-  if (!themeDetails) return null;
+  if (!themeDetails || !themeDetails.description) return null;
 
   return (
     <p className="text-sm leading-relaxed text-accent-foreground">

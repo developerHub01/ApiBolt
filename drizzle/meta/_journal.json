@@ -43,6 +43,27 @@
       "when": 1767726006786,
       "tag": "0005_dazzling_maggott",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1768572242017,
+      "tag": "0006_dazzling_fabian_cortez",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1768577284998,
+      "tag": "0007_tired_supernaut",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1768586519997,
+      "tag": "0008_yellow_slipstream",
+      "breakpoints": true
     }
   ]
 }

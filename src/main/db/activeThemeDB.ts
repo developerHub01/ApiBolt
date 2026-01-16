@@ -9,6 +9,65 @@ import {
 import { ElectronAPIActiveThemeInterface } from "@shared/types/api/electron-active-theme";
 import { ActiveThemePaletteInterface } from "@shared/types/theme.types";
 
+export const getActiveTheme: ElectronAPIActiveThemeInterface["getActiveThemeId"] =
+  async () => {
+    // try {
+    //   const global =
+    //     (
+    //       await db
+    //         .select({
+    //           id: activeThemeTable.activeTheme,
+    //         })
+    //         .from(activeThemeTable)
+    //         .where(isNull(activeThemeTable.projectId))
+    //         .limit(1)
+    //     )?.[0]?.id ?? defaultActiveThemeId;
+
+    //   const activeProjectId = await getActiveProject();
+
+    //   let local: string | null = null;
+    //   if (activeProjectId)
+    //     local =
+    //       (
+    //         await db
+    //           .select({
+    //             id: activeThemeTable.activeTheme,
+    //           })
+    //           .from(activeThemeTable)
+    //           .where(eq(activeThemeTable.projectId, activeProjectId))
+    //           .limit(1)
+    //       )?.[0]?.id ?? null;
+
+    //   return {
+    //     global,
+    //     local,
+    //   };
+    // } catch (error) {
+    //   console.error(error);
+    //   return {
+    //     global: defaultActiveThemeId,
+    //     local: null,
+    //   };
+    // }
+
+     try {
+     return await db
+        .select({
+          id: themeTable.id,
+          name: themeTable.name,
+          type: themeTable.type,
+          author: themeTable.author,
+          authorUsername: themeTable.authorUsername,
+          thumbnail: themeTable.thumbnail,
+          createdAt: themeTable.createdAt,
+        })
+        .from(themeTable);
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  };
+
 export const getActiveThemeId: ElectronAPIActiveThemeInterface["getActiveThemeId"] =
   async () => {
     try {

@@ -5,50 +5,13 @@ import {
   getSettings,
   updateSettings,
 } from "@/main/db/settingsDB.js";
-import { access, readdir } from "fs/promises";
-import { constants } from "fs";
-import path from "path";
+
 import { ElectronAPISettingsInterface } from "@shared/types/api/electron-settings";
-import { pathToFileURL } from "url";
 import { mainWindow } from "@/main/index";
+import { getImageFilesFromFolder } from "@/main/utils/images";
 
 const BACKGROUND_IMAGES_NUMBER_LIMIT = 30;
 
-const imageExtensions = new Set<string>([
-  ".png",
-  ".jpg",
-  ".jpeg",
-  ".gif",
-  ".bmp",
-  ".webp",
-]);
-
-/** Get image URLs for renderer via api-bolt:// protocol */
-export const getImageFilesFromFolder = async (folderPath: string) => {
-  try {
-    await access(folderPath, constants.R_OK);
-
-    const files =
-      (await readdir(folderPath, { withFileTypes: true }))
-        ?.filter(
-          entry =>
-            entry.isFile() &&
-            imageExtensions.has(path.extname(entry.name).toLowerCase()),
-        )
-        ?.slice(0, BACKGROUND_IMAGES_NUMBER_LIMIT)
-        ?.map(file => {
-          const absolutePath = path.resolve(folderPath, file.name);
-          const url = pathToFileURL(absolutePath).toString();
-          return url.replace("file://", "api-bolt://");
-        }) ?? [];
-
-    const folderUrl = path.resolve(folderPath);
-    return [folderUrl, ...files];
-  } catch (error) {
-    console.error("getImageFilesFromFolder error:", error);
-    return null;
-  }
-};
 export const handleZoomLevel = async () => {
   /* getting access of focused window */
   const windows = BrowserWindow.getAllWindows();
@@ -69,7 +32,10 @@ const handleBackgroundImages = async (
   images: string | null | "default" = null,
 ) => {
   if (images && images !== "default") {
-    return await getImageFilesFromFolder(images);
+    return await getImageFilesFromFolder({
+      folderPath: images,
+      limit: BACKGROUND_IMAGES_NUMBER_LIMIT,
+    });
   }
   return images as null | "default";
 };

@@ -17,9 +17,7 @@ export const debounce = <Args extends Array<unknown>>(
     timeoutId = setTimeout(() => callback(...args), delay);
   };
 };
-console.log({
-  server_url: import.meta.env.VITE_SERVER_API_BASE_URL,
-});
+
 export const axiosServerClient = axios.create({
   baseURL: import.meta.env.VITE_SERVER_API_BASE_URL,
 });

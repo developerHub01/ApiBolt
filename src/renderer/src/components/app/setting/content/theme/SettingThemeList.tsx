@@ -30,7 +30,7 @@ const SettingThemeList = () => {
             opacity: 0,
             filter: "blur(5px)",
           }}
-          className="w-full h-full grid grid-cols-2 md:grid-cols-3 gap-5"
+          className="w-full h-full grid grid-cols-2 gap-5"
         >
           {activeTab === "project" && <SettingUseGlobalThemeCard />}
           {metaList.map(meta => (

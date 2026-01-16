@@ -4,8 +4,6 @@ import MarketPlaceNoThemeOpen from "@/components/app/themes/marketplace/[id]/Mar
 
 const ThemeMarketPlaceLayout = () => {
   const { id } = useParams<{ id?: string }>();
-  console.log({ id });
-
   return (
     <MarketPlaceResizable>
       {id ? <Outlet /> : <MarketPlaceNoThemeOpen />}

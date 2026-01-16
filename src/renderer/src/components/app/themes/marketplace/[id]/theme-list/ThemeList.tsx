@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ThemeCard from "@/components/app/themes/marketplace/[id]/theme-list/ThemeCard";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
@@ -8,12 +9,22 @@ import {
 import { handleChangeSelectedThemeId } from "@/context/redux/theme-marketplace/theme-marketplace-slice";
 import { selectThemesSearchResultLoading } from "@/context/redux/status/selectors/theme-marketplace";
 import ThemeCardSkeleton from "@/components/app/themes/marketplace/[id]/theme-list/ThemeCardSkeleton";
+import { ThemeMetaInterface } from "@shared/types/theme.types";
+import { cn } from "@renderer/lib/utils";
 
 const ThemeList = () => {
   const dispatch = useAppDispatch();
   const selectedThemeId = useAppSelector(selectThemeMarketplaceSelectedThemeId);
   const themesList = useAppSelector(selectThemeMarketplaceThemesList);
   const isLoading = useAppSelector(selectThemesSearchResultLoading);
+
+  const handleChangeSelectedTheme = useCallback(
+    (theme: ThemeMetaInterface) => {
+      if (theme.author === "system") return;
+      dispatch(handleChangeSelectedThemeId(theme.id));
+    },
+    [dispatch],
+  );
 
   return (
     <ScrollArea className="flex-1 w-full min-h-0">
@@ -31,7 +42,10 @@ const ThemeList = () => {
                 key={theme.id}
                 {...theme}
                 isSelected={selectedThemeId === theme.id}
-                onClick={() => dispatch(handleChangeSelectedThemeId(theme.id))}
+                onClick={() => handleChangeSelectedTheme(theme)}
+                className={cn({
+                  "cursor-auto": theme.author === "system",
+                })}
               />
             ))}
           </>

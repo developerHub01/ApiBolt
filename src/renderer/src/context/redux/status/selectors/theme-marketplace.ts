@@ -10,3 +10,8 @@ export const selectThemeMarketplaceThemeDetailsLoading = createSelector(
   [(state: RootState) => state.status.isThemeMarketplaceThemeDetailsLoading],
   isLoading => isLoading,
 );
+
+export const selectThemeInstallationLoading = createSelector(
+  [(state: RootState) => state.status.isThemeInstallationLoading],
+  isLoading => isLoading,
+);
