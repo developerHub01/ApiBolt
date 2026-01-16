@@ -39,6 +39,11 @@ export type ThemeMetaDBInterface = Omit<
   "createdAt" | "description" | "install_count" | "preview"
 >;
 
+export interface ActiveThemeMetaInterface {
+  global: ThemeMetaInterface;
+  local: ThemeMetaInterface | null;
+}
+
 export interface ActiveThemeInterface {
   activeTheme: string;
   projectId: string | null;

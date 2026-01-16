@@ -1,1 +1,0 @@
-ALTER TABLE `theme_table` ADD `authorUsername` text;

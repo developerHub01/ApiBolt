@@ -18,10 +18,11 @@ import { mkdir, unlink, writeFile } from "node:fs/promises";
 import axios from "axios";
 import { getImageFileFromPath } from "@/main/utils/images";
 import { ThemeMetaInterface } from "@shared/types/theme.types";
+import { getActiveThemeMeta } from "../db/activeThemeDB";
 
 const getThemesWithApiProtocolThumbnail = async (
   themes: Array<ThemeMetaInterface>,
-) => {
+): Promise<Array<ThemeMetaInterface>> => {
   const results = await Promise.allSettled(
     themes.map(async theme => {
       let thumbnail = theme.thumbnail;
@@ -42,7 +43,7 @@ const getThemesWithApiProtocolThumbnail = async (
     .map(res => (res as PromiseFulfilledResult<ThemeMetaInterface>).value);
 };
 
-export const themeHandler = () => {
+export const themeHandler = (): void => {
   ipcMain.handle(
     "getThemeListMeta",
     async (
@@ -53,11 +54,18 @@ export const themeHandler = () => {
   );
   ipcMain.handle(
     "getActiveThemeMeta",
-    async (
-      _,
-      ...rest: Parameters<ElectronAPIThemeInterface["getActiveThemeMeta"]>
-    ): ReturnType<ElectronAPIThemeInterface["getActiveThemeMeta"]> =>
-      await getThemesWithApiProtocolThumbnail(await getThemeListMeta(...rest)),
+    async (_): ReturnType<ElectronAPIThemeInterface["getActiveThemeMeta"]> => {
+      const themes = await getActiveThemeMeta();
+      themes.global = (
+        await getThemesWithApiProtocolThumbnail([themes.global])
+      )[0];
+      if (themes.local)
+        themes.local = (
+          await getThemesWithApiProtocolThumbnail([themes.local])
+        )[0];
+
+      return themes;
+    },
   );
   ipcMain.handle(
     "getThemeById",

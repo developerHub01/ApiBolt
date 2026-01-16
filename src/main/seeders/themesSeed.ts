@@ -1,4 +1,4 @@
-import { isNull } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { defaultThemeList, defaultActiveThemeId } from "@/data/themes.js";
 import { db } from "@/main/db/index.js";
 import {
@@ -20,7 +20,7 @@ export const generateThemesSeed = async () => {
       await db
         .select()
         .from(activeThemeTable)
-        .where(isNull(activeThemeTable.projectId))
+        .where(eq(activeThemeTable.projectId, GLOBAL_PROJECT_ID))
     )?.[0]?.activeTheme;
 
     if (!haveGlobalActiveTheme) {

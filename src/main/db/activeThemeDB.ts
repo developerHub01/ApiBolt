@@ -1,70 +1,87 @@
 import { eq } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
-import { activeThemeTable, GLOBAL_PROJECT_ID, themeTable } from "@/main/db/schema.js";
+import {
+  activeThemeTable,
+  GLOBAL_PROJECT_ID,
+  themeTable,
+} from "@/main/db/schema.js";
 import { getActiveProject } from "@/main/db/projectsDB.js";
 import {
+  defaultActiveTheme,
   defaultActiveThemeId,
   defaultActiveThemePalette,
 } from "@/data/themes.js";
 import { ElectronAPIActiveThemeInterface } from "@shared/types/api/electron-active-theme";
-import { ActiveThemePaletteInterface } from "@shared/types/theme.types";
+import {
+  ActiveThemePaletteInterface,
+  ThemeMetaInterface,
+} from "@shared/types/theme.types";
+import { ElectronAPIThemeInterface } from "@shared/types/api/electron-theme";
 
-export const getActiveTheme: ElectronAPIActiveThemeInterface["getActiveThemeId"] =
+const { palette, ...detaultActiveThemeMeta } = defaultActiveTheme;
+
+export const getActiveThemeMeta: ElectronAPIThemeInterface["getActiveThemeMeta"] =
   async () => {
-    // try {
-    //   const global =
-    //     (
-    //       await db
-    //         .select({
-    //           id: activeThemeTable.activeTheme,
-    //         })
-    //         .from(activeThemeTable)
-    //         .where(isNull(activeThemeTable.projectId))
-    //         .limit(1)
-    //     )?.[0]?.id ?? defaultActiveThemeId;
+    try {
+      const globalResult = (
+        await db
+          .select({
+            id: themeTable.id,
+            name: themeTable.name,
+            type: themeTable.type,
+            author: themeTable.author,
+            authorUsername: themeTable.authorUsername,
+            thumbnail: themeTable.thumbnail,
+            createdAt: themeTable.createdAt,
+          })
+          .from(activeThemeTable)
+          .leftJoin(themeTable, eq(activeThemeTable.activeTheme, themeTable.id))
 
-    //   const activeProjectId = await getActiveProject();
+          .where(eq(activeThemeTable.projectId, GLOBAL_PROJECT_ID))
+          .limit(1)
+      )?.[0];
 
-    //   let local: string | null = null;
-    //   if (activeProjectId)
-    //     local =
-    //       (
-    //         await db
-    //           .select({
-    //             id: activeThemeTable.activeTheme,
-    //           })
-    //           .from(activeThemeTable)
-    //           .where(eq(activeThemeTable.projectId, activeProjectId))
-    //           .limit(1)
-    //       )?.[0]?.id ?? null;
+      const global: ThemeMetaInterface = globalResult?.id
+        ? (globalResult as ThemeMetaInterface)
+        : detaultActiveThemeMeta;
 
-    //   return {
-    //     global,
-    //     local,
-    //   };
-    // } catch (error) {
-    //   console.error(error);
-    //   return {
-    //     global: defaultActiveThemeId,
-    //     local: null,
-    //   };
-    // }
+      const activeProjectId = await getActiveProject();
 
-     try {
-     return await db
-        .select({
-          id: themeTable.id,
-          name: themeTable.name,
-          type: themeTable.type,
-          author: themeTable.author,
-          authorUsername: themeTable.authorUsername,
-          thumbnail: themeTable.thumbnail,
-          createdAt: themeTable.createdAt,
-        })
-        .from(themeTable);
+      let local: ThemeMetaInterface | null = null;
+      if (activeProjectId) {
+        const localResult = (
+          await db
+            .select({
+              id: themeTable.id,
+              name: themeTable.name,
+              type: themeTable.type,
+              author: themeTable.author,
+              authorUsername: themeTable.authorUsername,
+              thumbnail: themeTable.thumbnail,
+              createdAt: themeTable.createdAt,
+            })
+            .from(activeThemeTable)
+            .leftJoin(
+              themeTable,
+              eq(activeThemeTable.activeTheme, themeTable.id),
+            )
+            .where(eq(activeThemeTable.projectId, activeProjectId))
+            .limit(1)
+        )?.[0];
+
+        if (localResult[0]?.id) local = localResult[0] as ThemeMetaInterface;
+      }
+
+      return {
+        global,
+        local,
+      };
     } catch (error) {
       console.error(error);
-      return [];
+      return {
+        global: detaultActiveThemeMeta,
+        local: null,
+      };
     }
   };
 
@@ -155,12 +172,12 @@ export const getActiveThemePalette: ElectronAPIActiveThemeInterface["getActiveTh
 
       try {
         if (theme.global) result.global = JSON.parse(theme.global);
-      } catch (error) {
+      } catch {
         result.global = defaultActiveThemePalette;
       }
       try {
         if (theme.local) result.global = JSON.parse(theme.local);
-      } catch (error) {
+      } catch {
         result.local = null;
       }
 
@@ -188,16 +205,23 @@ export const changeActiveTheme: ElectronAPIActiveThemeInterface["changeActiveThe
         await db
           .select()
           .from(activeThemeTable)
-          .where(eq(activeThemeTable.projectId, payload.projectId ?? GLOBAL_PROJECT_ID))
+          .where(
+            eq(
+              activeThemeTable.projectId,
+              payload.projectId ?? GLOBAL_PROJECT_ID,
+            ),
+          )
           .limit(1)
       )?.[0];
 
       if (!isExist)
         return (
-          (await db.insert(activeThemeTable).values({
-            ...payload,
-            projectId: payload.projectId ?? GLOBAL_PROJECT_ID
-          })).rowsAffected > 0
+          (
+            await db.insert(activeThemeTable).values({
+              ...payload,
+              projectId: payload.projectId ?? GLOBAL_PROJECT_ID,
+            })
+          ).rowsAffected > 0
         );
 
       return (
@@ -208,7 +232,10 @@ export const changeActiveTheme: ElectronAPIActiveThemeInterface["changeActiveThe
               activeTheme: payload.activeTheme,
             })
             .where(
-              eq(activeThemeTable.projectId, payload.projectId ?? GLOBAL_PROJECT_ID)
+              eq(
+                activeThemeTable.projectId,
+                payload.projectId ?? GLOBAL_PROJECT_ID,
+              ),
             )
         ).rowsAffected > 0
       );

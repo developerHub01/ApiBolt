@@ -5,6 +5,7 @@ export const defaultThemeList: Array<ThemeMetaDBInterface> = [
     id: "black_ocean",
     name: "black ocean",
     type: "dark",
+    author: "system",
     thumbnail: "./theme-thumbnail/black_ocean.png",
     palette: {
       background: "#151B25",
@@ -152,6 +153,8 @@ export const defaultThemeList: Array<ThemeMetaDBInterface> = [
   //   },
   // },
 ];
+
+export const defaultActiveTheme = defaultThemeList[0];
 
 export const defaultActiveThemeId = defaultThemeList[0].id;
 

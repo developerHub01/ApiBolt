@@ -1,4 +1,5 @@
 import {
+  ActiveThemeMetaInterface,
   ThemeCreatePayloadInterface,
   ThemeMetaDBInterface,
   ThemeMetaInterface,
@@ -6,7 +7,7 @@ import {
 
 export interface ElectronAPIThemeInterface {
   getThemeListMeta(): Promise<Array<ThemeMetaInterface>>;
-  getActiveThemeMeta(): Promise<ThemeMetaInterface>;
+  getActiveThemeMeta(): Promise<ActiveThemeMetaInterface>;
   getThemeById(id: string): Promise<ThemeMetaDBInterface | null>;
   getThemePaletteById(
     id: string,

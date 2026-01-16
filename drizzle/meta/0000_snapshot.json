@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "81282b29-2740-47ca-87f7-ac311584ccc4",
+  "id": "52322799-a54e-40b0-bb66-b8370ad5ed40",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "active_code_snippit_type_table": {
@@ -110,7 +110,7 @@
           "name": "projectId",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "activeTheme": {
@@ -122,6 +122,13 @@
         }
       },
       "indexes": {
+        "active_theme_table_projectId_unique": {
+          "name": "active_theme_table_projectId_unique",
+          "columns": [
+            "projectId"
+          ],
+          "isUnique": true
+        },
         "active_theme_unique_project": {
           "name": "active_theme_unique_project",
           "columns": [
@@ -1252,7 +1259,7 @@
           "name": "projectId",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         }
       },
@@ -1747,11 +1754,18 @@
           "name": "projectId",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         }
       },
       "indexes": {
+        "setting_request_table_projectId_unique": {
+          "name": "setting_request_table_projectId_unique",
+          "columns": [
+            "projectId"
+          ],
+          "isUnique": true
+        },
         "setting_request_unique_project": {
           "name": "setting_request_unique_project",
           "columns": [
@@ -1877,11 +1891,18 @@
           "name": "projectId",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         }
       },
       "indexes": {
+        "setting_table_projectId_unique": {
+          "name": "setting_table_projectId_unique",
+          "columns": [
+            "projectId"
+          ],
+          "isUnique": true
+        },
         "setting_unique_project": {
           "name": "setting_unique_project",
           "columns": [
@@ -2066,14 +2087,6 @@
           "autoincrement": false,
           "default": "'dark'"
         },
-        "url": {
-          "name": "url",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "''"
-        },
         "author": {
           "name": "author",
           "type": "text",
@@ -2081,6 +2094,13 @@
           "notNull": true,
           "autoincrement": false,
           "default": "'system'"
+        },
+        "authorUsername": {
+          "name": "authorUsername",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         },
         "thumbnail": {
           "name": "thumbnail",
@@ -2094,7 +2114,7 @@
           "name": "palette",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "createdAt": {

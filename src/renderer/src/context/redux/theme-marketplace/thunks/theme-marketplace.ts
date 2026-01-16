@@ -30,7 +30,8 @@ export const loadThemesSearchResult = createAsyncThunk<
         if (response.status !== 200 || !data) throw new Error();
         dispatch(handleLoadThemeList(data));
       } else if (filterType === "active") {
-        /*  */
+        const themes = await window.electronAPITheme.getActiveThemeMeta();
+        console.log(themes);
       } else {
         const themeList = await window.electronAPITheme.getThemeListMeta();
         dispatch(handleLoadThemeList(themeList));

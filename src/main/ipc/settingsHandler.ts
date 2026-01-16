@@ -4,10 +4,10 @@ import {
   getSettings,
   updateSettings,
 } from "@/main/db/settingsDB.js";
-
 import { ElectronAPISettingsInterface } from "@shared/types/api/electron-settings";
 import { mainWindow } from "@/main/index";
 import { getImageFilesFromFolder } from "@/main/utils/images";
+import { defaultSettings } from "@/data/settings";
 
 const BACKGROUND_IMAGES_NUMBER_LIMIT = 30;
 

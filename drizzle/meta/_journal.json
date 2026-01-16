@@ -5,43 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1768059600576,
-      "tag": "0000_absent_mad_thinker",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1768076811799,
-      "tag": "0001_square_cobalt_man",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1768078228647,
-      "tag": "0002_far_iceman",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "6",
-      "when": 1768572242017,
-      "tag": "0006_dazzling_fabian_cortez",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "6",
-      "when": 1768577284998,
-      "tag": "0007_tired_supernaut",
-      "breakpoints": true
-    },
-    {
-      "idx": 8,
-      "version": "6",
-      "when": 1768586519997,
-      "tag": "0008_yellow_slipstream",
+      "when": 1768595191342,
+      "tag": "0000_awesome_mikhail_rasputin",
       "breakpoints": true
     }
   ]

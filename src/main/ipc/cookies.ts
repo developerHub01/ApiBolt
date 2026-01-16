@@ -1,5 +1,5 @@
 import { ipcMain } from "electron";
-import { fetchApi } from "@/main/utils/api.js";
+import { fetchApi } from "@/main/utils/api-v1";
 import { jarManager } from "@/main/utils/cookieManager.js";
 import { ElectronAPIInterface } from "@shared/types/api/electron-api";
 

@@ -16,12 +16,13 @@ CREATE TABLE `active_sidebar_tab_table` (
 );
 --> statement-breakpoint
 CREATE TABLE `active_theme_table` (
-	`projectId` text,
+	`projectId` text NOT NULL,
 	`activeTheme` text,
 	FOREIGN KEY (`projectId`) REFERENCES `projects_table`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`activeTheme`) REFERENCES `theme_table`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
+CREATE UNIQUE INDEX `active_theme_table_projectId_unique` ON `active_theme_table` (`projectId`);--> statement-breakpoint
 CREATE UNIQUE INDEX `active_theme_unique_project` ON `active_theme_table` (`projectId`);--> statement-breakpoint
 CREATE TABLE `api_url_table` (
 	`id` text PRIMARY KEY NOT NULL,
@@ -177,7 +178,7 @@ CREATE TABLE `keyboard_shortcut_table` (
 	`id` text NOT NULL,
 	`label` text DEFAULT '' NOT NULL,
 	`key` text NOT NULL,
-	`projectId` text,
+	`projectId` text NOT NULL,
 	PRIMARY KEY(`id`, `projectId`),
 	FOREIGN KEY (`projectId`) REFERENCES `projects_table`(`id`) ON UPDATE no action ON DELETE cascade
 );
@@ -249,10 +250,11 @@ CREATE TABLE `setting_request_table` (
 	`maxResponseSize` integer,
 	`sslVerification` integer,
 	`cookieTracking` integer,
-	`projectId` text,
+	`projectId` text NOT NULL,
 	FOREIGN KEY (`projectId`) REFERENCES `projects_table`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
+CREATE UNIQUE INDEX `setting_request_table_projectId_unique` ON `setting_request_table` (`projectId`);--> statement-breakpoint
 CREATE UNIQUE INDEX `setting_request_unique_project` ON `setting_request_table` (`projectId`);--> statement-breakpoint
 CREATE TABLE `setting_table` (
 	`id` text PRIMARY KEY NOT NULL,
@@ -268,10 +270,11 @@ CREATE TABLE `setting_table` (
 	`layoutType` text,
 	`activityBarVisible` integer,
 	`tabListLayoutType` text,
-	`projectId` text,
+	`projectId` text NOT NULL,
 	FOREIGN KEY (`projectId`) REFERENCES `projects_table`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
+CREATE UNIQUE INDEX `setting_table_projectId_unique` ON `setting_table` (`projectId`);--> statement-breakpoint
 CREATE UNIQUE INDEX `setting_unique_project` ON `setting_table` (`projectId`);--> statement-breakpoint
 CREATE TABLE `show_hidden_meta_data_table` (
 	`id` text PRIMARY KEY NOT NULL,
@@ -296,9 +299,9 @@ CREATE TABLE `theme_table` (
 	`id` text PRIMARY KEY NOT NULL,
 	`name` text DEFAULT 'theme' NOT NULL,
 	`type` text DEFAULT 'dark' NOT NULL,
-	`url` text DEFAULT '' NOT NULL,
 	`author` text DEFAULT 'system' NOT NULL,
+	`authorUsername` text,
 	`thumbnail` text DEFAULT '' NOT NULL,
-	`palette` text,
+	`palette` text NOT NULL,
 	`createdAt` text DEFAULT (current_timestamp) NOT NULL
 );
