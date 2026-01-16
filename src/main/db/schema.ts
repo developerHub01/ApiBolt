@@ -10,7 +10,7 @@ import {
 import { SettingsRequestInterface } from "@shared/types/setting-request.types";
 import { SettingsInterface } from "@shared/types/setting.types";
 import { TSidebarTab } from "@shared/types/sidebar.types";
-import {  ThemeMetaDBInterface } from "@shared/types/theme.types";
+import { ThemeMetaDBInterface } from "@shared/types/theme.types";
 import { sql } from "drizzle-orm";
 import {
   int,
@@ -33,9 +33,7 @@ export const DEFAULT_ACTIVE_CODE_SNIPPIT_TYPE: TRequestCodeType =
   "javascript-fetch";
 
 export const localPasswordTable = sqliteTable("local_password_table", {
-  id: text("id")
-    .primaryKey()
-    .default(LOCAL_PASSWORD_ID),
+  id: text("id").primaryKey().default(LOCAL_PASSWORD_ID),
   password: text(),
 });
 
@@ -204,55 +202,53 @@ export const tabsTable = sqliteTable("tabs_table", {
     .default(sql`(current_timestamp)`),
 });
 
-export const settingTable = sqliteTable("setting_table", {
-  id: text()
-    .primaryKey()
-    .$defaultFn(() => uuidv4()),
-  backgroundImages: text(),
-  backgroundOpacity: real(),
-  backgroundBlur: int(),
-  maxNumberOfImages: int(),
-  slideInterval: int(),
-  zoomLevel: real(),
-  isZoomable: int(),
-  codeFontSize: int(),
-  indentationSize: int(),
-  layoutType: text()
-    .$type<SettingsInterface["layoutType"]>(),
-  activityBarVisible: int(),
-  tabListLayoutType: text()
-    .$type<SettingsInterface["tabListLayoutType"]>(),
-  projectId: text()
-    .notNull()
-    .unique()
-    .references(() => projectTable.id, {
-      onDelete: "cascade",
-    }),
-},  
-table => [
-  uniqueIndex("setting_unique_project").on(table.projectId)
-],
+export const settingTable = sqliteTable(
+  "setting_table",
+  {
+    id: text()
+      .primaryKey()
+      .$defaultFn(() => uuidv4()),
+    backgroundImages: text(),
+    backgroundOpacity: real(),
+    backgroundBlur: int(),
+    maxNumberOfImages: int(),
+    slideInterval: int(),
+    zoomLevel: real(),
+    isZoomable: int(),
+    codeFontSize: int(),
+    indentationSize: int(),
+    layoutType: text().$type<SettingsInterface["layoutType"]>(),
+    activityBarVisible: int(),
+    tabListLayoutType: text().$type<SettingsInterface["tabListLayoutType"]>(),
+    projectId: text()
+      .notNull()
+      .unique()
+      .references(() => projectTable.id, {
+        onDelete: "cascade",
+      }),
+  },
+  table => [uniqueIndex("setting_unique_project").on(table.projectId)],
 );
 
-export const settingRequestTable = sqliteTable("setting_request_table", {
-  id: text()
-    .primaryKey()
-    .$defaultFn(() => uuidv4()),
-  httpVersion: text() .$type<SettingsRequestInterface["httpVersion"]>(),
-  requestTimeout: int(),
-  maxResponseSize: int(),
-  sslVerification: int(),
-  cookieTracking: int(),
-  projectId: text()
-    .notNull()
-    .unique()
-    .references(() => projectTable.id, {
-      onDelete: "cascade",
-    }),
-},  
-table => [
-  uniqueIndex("setting_request_unique_project").on(table.projectId)
-],
+export const settingRequestTable = sqliteTable(
+  "setting_request_table",
+  {
+    id: text()
+      .primaryKey()
+      .$defaultFn(() => uuidv4()),
+    httpVersion: text().$type<SettingsRequestInterface["httpVersion"]>(),
+    requestTimeout: int(),
+    maxResponseSize: int(),
+    sslVerification: int(),
+    cookieTracking: int(),
+    projectId: text()
+      .notNull()
+      .unique()
+      .references(() => projectTable.id, {
+        onDelete: "cascade",
+      }),
+  },
+  table => [uniqueIndex("setting_request_unique_project").on(table.projectId)],
 );
 
 export const folderTable = sqliteTable("folder_table", {
@@ -529,7 +525,8 @@ export const historyTable = sqliteTable("history_table", {
 });
 
 export const themeTable = sqliteTable("theme_table", {
-  id: text().$type<ThemeMetaDBInterface["id"]>()
+  id: text()
+    .$type<ThemeMetaDBInterface["id"]>()
     .primaryKey()
     .$defaultFn(() => uuidv4()),
   name: text().$type<ThemeMetaDBInterface["name"]>().notNull().default("theme"),
@@ -537,9 +534,15 @@ export const themeTable = sqliteTable("theme_table", {
     .$type<ThemeMetaDBInterface["type"]>()
     .notNull()
     .default("dark") /* light | dark | custom */,
-  author: text().$type<ThemeMetaDBInterface["author"]>().notNull().default("system"),
+  author: text()
+    .$type<ThemeMetaDBInterface["author"]>()
+    .notNull()
+    .default("system"),
   authorUsername: text().$type<ThemeMetaDBInterface["authorUsername"]>(),
-  thumbnail: text().$type<ThemeMetaDBInterface["thumbnail"]>().notNull().default(""),
+  thumbnail: text()
+    .$type<ThemeMetaDBInterface["thumbnail"]>()
+    .notNull()
+    .default(""),
   palette: text().notNull(),
   createdAt: text()
     .notNull()
@@ -553,7 +556,7 @@ export const activeThemeTable = sqliteTable(
       .notNull()
       .unique()
       .references(() => projectTable.id, {
-         onDelete: "cascade",
+        onDelete: "cascade",
       }),
     activeTheme: text().references(() => themeTable.id, {
       onDelete: "cascade",

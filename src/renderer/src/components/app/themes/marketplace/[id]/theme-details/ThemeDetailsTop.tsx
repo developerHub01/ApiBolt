@@ -14,7 +14,9 @@ const ThemeDetailsTop = () => {
         {isLoading || !themeDetails ? (
           <Skeleton className="h-7 w-4/5 max-w-52" />
         ) : (
-          <p className="line-clamp-1 text-ellipsis capitalize">{themeDetails.name}</p>
+          <p className="line-clamp-1 text-ellipsis capitalize">
+            {themeDetails.name}
+          </p>
         )}
       </div>
     </AnimatedDialogTop>

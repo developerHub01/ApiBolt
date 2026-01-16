@@ -136,9 +136,9 @@ export const updateAuth: ElectronAPIAuthorizationInterface["updateAuth"] =
               eq(authorizationTable.projectId, activeProjectId),
               requestOrFolderId
                 ? eq(
-                  authorizationTable.requestOrFolderMetaId,
-                  requestOrFolderId,
-                )
+                    authorizationTable.requestOrFolderMetaId,
+                    requestOrFolderId,
+                  )
                 : isNull(authorizationTable.requestOrFolderMetaId),
             ),
           )
@@ -199,9 +199,9 @@ export const updateAuth: ElectronAPIAuthorizationInterface["updateAuth"] =
                 eq(authorizationTable.projectId, activeProjectId),
                 requestOrFolderId
                   ? eq(
-                    authorizationTable.requestOrFolderMetaId,
-                    requestOrFolderId,
-                  )
+                      authorizationTable.requestOrFolderMetaId,
+                      requestOrFolderId,
+                    )
                   : isNull(authorizationTable.requestOrFolderMetaId),
               ),
             )

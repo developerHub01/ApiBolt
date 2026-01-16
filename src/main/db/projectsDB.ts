@@ -29,7 +29,10 @@ import { ElectronAPIProjectsInterface } from "@shared/types/api/electron-project
 
 export const getProjects = async () => {
   try {
-    return await db.select().from(projectTable).where(ne(projectTable.id, GLOBAL_PROJECT_ID));
+    return await db
+      .select()
+      .from(projectTable)
+      .where(ne(projectTable.id, GLOBAL_PROJECT_ID));
   } catch (error) {
     console.error(error);
     return [];
@@ -63,9 +66,10 @@ export const createProjects = async (
 export const updateProjects: ElectronAPIProjectsInterface["updateProjects"] =
   async (id, payload) => {
     try {
-      if(id === GLOBAL_PROJECT_ID) throw new Error("can't edit global project")
-        
-        const updated = await db
+      if (id === GLOBAL_PROJECT_ID)
+        throw new Error("can't edit global project");
+
+      const updated = await db
         .update(projectTable)
         .set({
           ...payload,
@@ -82,23 +86,25 @@ export const updateProjects: ElectronAPIProjectsInterface["updateProjects"] =
 export const deleteProjects: ElectronAPIProjectsInterface["deleteProjects"] =
   async (id: string) => {
     try {
-      if(id === GLOBAL_PROJECT_ID) throw new Error("can't delete global project")
-        
-        const deleted = await db
+      if (id === GLOBAL_PROJECT_ID)
+        throw new Error("can't delete global project");
+
+      const deleted = await db
         .delete(projectTable)
         .where(eq(projectTable.id, id));
 
-        return deleted.rowsAffected > 0;
-      } catch (error) {
-        console.error(error);
-        return false;
+      return deleted.rowsAffected > 0;
+    } catch (error) {
+      console.error(error);
+      return false;
     }
   };
 
-  export const changeActiveProject: ElectronAPIProjectsInterface["changeActiveProject"] =
+export const changeActiveProject: ElectronAPIProjectsInterface["changeActiveProject"] =
   async id => {
     try {
-      if(id === GLOBAL_PROJECT_ID) throw new Error("can't activate global project")
+      if (id === GLOBAL_PROJECT_ID)
+        throw new Error("can't activate global project");
 
       const countResult = await db
         .select({
@@ -182,7 +188,8 @@ export const exportProject = async (id?: string | null) => {
   return await db.transaction(async tsx => {
     id = id ?? (await getActiveProject());
     if (!id) throw new Error("No project specified");
-    if (id === GLOBAL_PROJECT_ID) throw new Error("Can't export global project");
+    if (id === GLOBAL_PROJECT_ID)
+      throw new Error("Can't export global project");
 
     const project: ProjectExportFileInterface["project"] =
       (

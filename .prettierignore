@@ -1,10 +1,9 @@
-out
-dist
-db
-drizzle
-drizzle-backup
-resources
-test
+/out
+/dist
+/db
+/drizzle
+/drizzle-backup
+/resources
 src/renderer/public/**
 src/renderer/src/assets/**
 pnpm-lock.yaml

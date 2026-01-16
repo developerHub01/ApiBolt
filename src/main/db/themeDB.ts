@@ -2,12 +2,15 @@ import { eq } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { themeTable } from "@/main/db/schema.js";
 import { ElectronAPIThemeInterface } from "@shared/types/api/electron-theme";
-import { ThemeInterface, ThemeMetaDBInterface } from "@shared/types/theme.types";
+import {
+  ThemeInterface,
+  ThemeMetaDBInterface,
+} from "@shared/types/theme.types";
 
 export const getThemeListMeta: ElectronAPIThemeInterface["getThemeListMeta"] =
   async () => {
     try {
-     return await db
+      return await db
         .select({
           id: themeTable.id,
           name: themeTable.name,
@@ -68,16 +71,19 @@ export const createTheme: ElectronAPIThemeInterface["createTheme"] =
     try {
       return (
         (
-          await db.insert(themeTable).values({
-            ...payload,
-            palette: JSON.stringify(payload.palette),
-          }).onConflictDoUpdate({
-            target: [themeTable.id],
-            set: {
+          await db
+            .insert(themeTable)
+            .values({
               ...payload,
               palette: JSON.stringify(payload.palette),
-            }
-          })
+            })
+            .onConflictDoUpdate({
+              target: [themeTable.id],
+              set: {
+                ...payload,
+                palette: JSON.stringify(payload.palette),
+              },
+            })
         ).rowsAffected > 0
       );
     } catch (error) {

@@ -13,14 +13,7 @@ interface Props extends ThemeMetaInterface {
   onClick: (e: MouseEvent<HTMLDivElement>) => void;
 }
 
-const ThemeCard = ({
-  id,
-  name,
-  thumbnail,
-  type,
-  isActive,
-  onClick,
-}: Props) => {
+const ThemeCard = ({ id, name, thumbnail, type, isActive, onClick }: Props) => {
   return (
     <motion.div
       whileHover={{

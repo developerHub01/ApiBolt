@@ -8,14 +8,15 @@ import { defaultSettings } from "@/data/settings";
 export const getSettings = async () => {
   try {
     const activeProjectId = await getActiveProject();
-    let settings = activeProjectId ? (
-      await db
-        .select()
-        .from(settingTable)
-        .where(eq(settingTable.projectId, activeProjectId))
-        .limit(1)
-    )?.[0] : null;
-
+    let settings = activeProjectId
+      ? (
+          await db
+            .select()
+            .from(settingTable)
+            .where(eq(settingTable.projectId, activeProjectId))
+            .limit(1)
+        )?.[0]
+      : null;
 
     let globalSetting = (
       await db
@@ -48,7 +49,7 @@ export const getSettings = async () => {
     return {
       settings: null,
       globalSetting: defaultSettings,
-    }
+    };
   }
 };
 
@@ -56,17 +57,24 @@ export const getZoomLevel = async () => {
   try {
     const activeProjectId = await getActiveProject();
 
-    const zoomLevel = activeProjectId ? (await db
-      .select({
-        zoomLevel: settingTable.zoomLevel
-      })
-      .from(settingTable)
-      .where(eq(settingTable.projectId, activeProjectId ?? GLOBAL_PROJECT_ID)).limit(1))?.[0]?.zoomLevel : null;
+    const zoomLevel = activeProjectId
+      ? (
+          await db
+            .select({
+              zoomLevel: settingTable.zoomLevel,
+            })
+            .from(settingTable)
+            .where(
+              eq(settingTable.projectId, activeProjectId ?? GLOBAL_PROJECT_ID),
+            )
+            .limit(1)
+        )?.[0]?.zoomLevel
+      : null;
 
     return zoomLevel ?? 1;
   } catch (error) {
     console.error(error);
-    return 1
+    return 1;
   }
 };
 
@@ -104,14 +112,16 @@ export const getApplyingZoomLevel = async () => {
     return globalZoomLevel;
   } catch (error) {
     console.error(error);
-    return 1
+    return 1;
   }
 };
 
 /* must contain projectId */
-export const updateSettings = async (payload: Parameters<ElectronAPISettingsInterface["updateSettings"]>[0]) => {
-  const { projectId : pI, ...updatePayload } = payload;
-  const projectId = payload.projectId ?? GLOBAL_PROJECT_ID
+export const updateSettings = async (
+  payload: Parameters<ElectronAPISettingsInterface["updateSettings"]>[0],
+) => {
+  const { projectId: pI, ...updatePayload } = payload;
+  const projectId = payload.projectId ?? GLOBAL_PROJECT_ID;
 
   for (const key in updatePayload) {
     const value = updatePayload[key];
@@ -124,25 +134,45 @@ export const updateSettings = async (payload: Parameters<ElectronAPISettingsInte
   )
     updatePayload.isZoomable = 0; // reset to default if out of range
 
-  const isExist = Boolean((await db.select({
-    id: settingTable.id
-  }).from(settingTable).where(eq(settingTable.projectId, projectId)).limit(1))?.[0]?.id)
+  const isExist = Boolean(
+    (
+      await db
+        .select({
+          id: settingTable.id,
+        })
+        .from(settingTable)
+        .where(eq(settingTable.projectId, projectId))
+        .limit(1)
+    )?.[0]?.id,
+  );
 
-  if (!isExist) return (await db.insert(settingTable).values({
-    ...updatePayload,
-    projectId,
-  })).rowsAffected > 0
+  if (!isExist)
+    return (
+      (
+        await db.insert(settingTable).values({
+          ...updatePayload,
+          projectId,
+        })
+      ).rowsAffected > 0
+    );
 
-  return (await db.update(settingTable).set({
-    ...updatePayload,
-  }).where(eq(settingTable.projectId, projectId))).rowsAffected > 0
+  return (
+    (
+      await db
+        .update(settingTable)
+        .set({
+          ...updatePayload,
+        })
+        .where(eq(settingTable.projectId, projectId))
+    ).rowsAffected > 0
+  );
 };
 
 export const deleteSettings = async () => {
   try {
     return (await db.delete(settingTable))?.rowsAffected > 0;
   } catch (error) {
-    console.error(error)
-    return false
+    console.error(error);
+    return false;
   }
 };

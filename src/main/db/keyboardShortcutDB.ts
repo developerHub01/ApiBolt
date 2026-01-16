@@ -21,9 +21,9 @@ export const getKeyboardShortcuts: ElectronAPIKeyboardShortcutInterface["getKeyb
 
       const localShortCuts = projectId
         ? await db
-          .select()
-          .from(keyboardShortcutTable)
-          .where(eq(keyboardShortcutTable.projectId, projectId))
+            .select()
+            .from(keyboardShortcutTable)
+            .where(eq(keyboardShortcutTable.projectId, projectId))
         : [];
 
       const globalKeyMap: Record<string, KeybaordShortCutInterface> = (
@@ -66,7 +66,8 @@ export const getKeyboardShortcuts: ElectronAPIKeyboardShortcutInterface["getKeyb
 export const getKeyboardShortcutsById: ElectronAPIKeyboardShortcutInterface["getKeyboardShortcutsById"] =
   async ({ id, projectId }) => {
     try {
-      const activeProjectId = projectId ?? (await getActiveProject()) ?? GLOBAL_PROJECT_ID;
+      const activeProjectId =
+        projectId ?? (await getActiveProject()) ?? GLOBAL_PROJECT_ID;
 
       const result = (
         await db
@@ -76,7 +77,7 @@ export const getKeyboardShortcutsById: ElectronAPIKeyboardShortcutInterface["get
             and(
               eq(keyboardShortcutTable.id, id),
               eq(keyboardShortcutTable.projectId, activeProjectId),
-            )
+            ),
           )
           .limit(1)
       )?.[0];

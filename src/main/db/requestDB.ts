@@ -129,19 +129,22 @@ export const importRequest = async ({
     //     method,
     //   })
     //   .where(eq(requestOrFolderMetaTable.id, id));
-    await tsx.insert(requestOrFolderMetaTable).values({
-      id: requestId,
-      name,
-      method,
-      projectId,
-      parentId
-    }).onConflictDoUpdate({
-      target: [requestOrFolderMetaTable.id],
-      set: {
+    await tsx
+      .insert(requestOrFolderMetaTable)
+      .values({
+        id: requestId,
         name,
         method,
-      }
-    })
+        projectId,
+        parentId,
+      })
+      .onConflictDoUpdate({
+        target: [requestOrFolderMetaTable.id],
+        set: {
+          name,
+          method,
+        },
+      });
     // .update(requestOrFolderMetaTable)
     // .set({
     //   name,

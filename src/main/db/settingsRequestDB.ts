@@ -8,14 +8,15 @@ import { defaultSettingsRequest } from "@/data/settings_request";
 export const getSettingsRequest = async () => {
   try {
     const activeProjectId = await getActiveProject();
-    let settings = activeProjectId ? (
-      await db
-        .select()
-        .from(settingRequestTable)
-        .where(eq(settingRequestTable.projectId, activeProjectId))
-        .limit(1)
-    )?.[0] : null;
-
+    let settings = activeProjectId
+      ? (
+          await db
+            .select()
+            .from(settingRequestTable)
+            .where(eq(settingRequestTable.projectId, activeProjectId))
+            .limit(1)
+        )?.[0]
+      : null;
 
     let globalSetting = (
       await db
@@ -48,22 +49,24 @@ export const getSettingsRequest = async () => {
     return {
       settings: null,
       globalSetting: defaultSettingsRequest,
-    }
+    };
   }
 };
 
 export const getSettingsRequestByProjectId = async (id?: string | null) => {
   try {
     const activeProjectId = id ?? (await getActiveProject());
-    if (!activeProjectId) throw new Error()
+    if (!activeProjectId) throw new Error();
 
     return (
-      await db
-        .select()
-        .from(settingRequestTable)
-        .where(eq(settingRequestTable.projectId, activeProjectId))
-        .limit(1)
-    )?.[0] ?? null;
+      (
+        await db
+          .select()
+          .from(settingRequestTable)
+          .where(eq(settingRequestTable.projectId, activeProjectId))
+          .limit(1)
+      )?.[0] ?? null
+    );
   } catch (error) {
     console.error(error);
     return null;
@@ -73,12 +76,14 @@ export const getSettingsRequestByProjectId = async (id?: string | null) => {
 export const getSettingsRequestByGlobal = async () => {
   try {
     return (
-      await db
-        .select()
-        .from(settingRequestTable)
-        .where(eq(settingRequestTable.projectId, GLOBAL_PROJECT_ID))
-        .limit(1)
-    )?.[0] ?? defaultSettingsRequest;
+      (
+        await db
+          .select()
+          .from(settingRequestTable)
+          .where(eq(settingRequestTable.projectId, GLOBAL_PROJECT_ID))
+          .limit(1)
+      )?.[0] ?? defaultSettingsRequest
+    );
   } catch (error) {
     console.error(error);
     return defaultSettingsRequest;
@@ -86,36 +91,58 @@ export const getSettingsRequestByGlobal = async () => {
 };
 
 /* must contain projectId */
-export const updateSettingsRequest = async (payload: Parameters<ElectronAPISettingsRequestInterface["updateSettingsRequest"]>[0]) => {
+export const updateSettingsRequest = async (
+  payload: Parameters<
+    ElectronAPISettingsRequestInterface["updateSettingsRequest"]
+  >[0],
+) => {
   const { projectId: pI, ...updatePayload } = payload;
-  const projectId = payload.projectId ?? GLOBAL_PROJECT_ID
+  const projectId = payload.projectId ?? GLOBAL_PROJECT_ID;
 
   for (const key in updatePayload) {
     const value = updatePayload[key];
     if (value == undefined) updatePayload[key] = null;
   }
 
-  const isExist = Boolean((await db.select({
-    id: settingRequestTable.id
-  }).from(settingRequestTable).where(
-    eq(settingRequestTable.projectId, projectId))
-    .limit(1))?.[0]?.id)
+  const isExist = Boolean(
+    (
+      await db
+        .select({
+          id: settingRequestTable.id,
+        })
+        .from(settingRequestTable)
+        .where(eq(settingRequestTable.projectId, projectId))
+        .limit(1)
+    )?.[0]?.id,
+  );
 
-  if (!isExist) return (await db.insert(settingRequestTable).values({
-    ...updatePayload,
-    projectId,
-  }).returning())?.[0]
+  if (!isExist)
+    return (
+      await db
+        .insert(settingRequestTable)
+        .values({
+          ...updatePayload,
+          projectId,
+        })
+        .returning()
+    )?.[0];
 
-  return (await db.update(settingRequestTable).set({
-    ...updatePayload,
-  }).where(eq(settingRequestTable.projectId, projectId)).returning())?.[0]
+  return (
+    await db
+      .update(settingRequestTable)
+      .set({
+        ...updatePayload,
+      })
+      .where(eq(settingRequestTable.projectId, projectId))
+      .returning()
+  )?.[0];
 };
 
 export const deleteSettingsRequest = async () => {
   try {
     return (await db.delete(settingRequestTable))?.rowsAffected > 0;
   } catch (error) {
-    console.error(error)
-    return false
+    console.error(error);
+    return false;
   }
 };
