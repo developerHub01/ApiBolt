@@ -8,6 +8,7 @@ import {
 export interface ThemeMarketplaceInitialInterface {
   searchTerm: string;
   searchFilter: TThemeMarketplaceSearchFilter;
+  totalThemes: number;
   page: number;
   totalPages: number;
   selectedThemeId: string | null;
@@ -20,6 +21,7 @@ export interface ThemeMarketplaceInitialInterface {
 const initialState: ThemeMarketplaceInitialInterface = {
   searchTerm: "",
   searchFilter: "all",
+  totalThemes: 0,
   page: 1,
   totalPages: 1,
   selectedThemeId: null,
@@ -47,14 +49,20 @@ export const themeMarketplaceSlice = createSlice({
       state.searchFilter = action.payload ?? "all";
       state.page = 1;
     },
+    handleChangeTotalThemes: (
+      state,
+      action: PayloadAction<number | undefined | null>,
+    ) => {
+      state.totalThemes = action.payload ?? 0;
+    },
     handlePage: (state, action: PayloadAction<number | undefined | null>) => {
-      state.page = action.payload ?? 1;
+      state.page = Math.min(Math.max(1, action.payload ?? 1), state.totalPages);
     },
     handleIncrementPage: state => {
-      state.page += 1;
+      state.page = Math.min(state.page + 1, state.totalPages);
     },
     handleDecrementPage: state => {
-      state.page -= 1;
+      state.page = Math.max(1, state.page - 1);
     },
     handleChangeTotalPages: (
       state,
@@ -92,6 +100,7 @@ export const themeMarketplaceSlice = createSlice({
 export const {
   handleChangeSearchTerm,
   handleChangeSearchFilter,
+  handleChangeTotalThemes,
   handlePage,
   handleIncrementPage,
   handleDecrementPage,

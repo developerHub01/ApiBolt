@@ -6,6 +6,7 @@ import {
   handleChangeIsInstallMaxCountAlertOpen,
   handleChangeSelectedThemeDetails,
   handleChangeTotalPages,
+  handleChangeTotalThemes,
   handleLoadThemeList,
 } from "@/context/redux/theme-marketplace/theme-marketplace-slice";
 import {
@@ -66,6 +67,7 @@ export const loadThemesSearchResult = createAsyncThunk<
           ?.data as ThemesSearchResultInterface;
         dispatch(handleLoadThemeList(data));
         dispatch(handleChangeTotalPages(meta.totalPages));
+        dispatch(handleChangeTotalThemes(meta.total));
         return;
       } catch (error) {
         if (axios.isAxiosError(error)) {

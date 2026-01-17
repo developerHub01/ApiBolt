@@ -22,6 +22,11 @@ export const selectThemeMarketplaceSearchTotalPages = createSelector(
   totalPages => totalPages,
 );
 
+export const selectThemeMarketplaceSearchTotalThemes = createSelector(
+  [(state: RootState) => state.themeMarketplace.totalThemes],
+  totalThemes => totalThemes,
+);
+
 export const selectThemeMarketplaceSelectedThemeId = createSelector(
   [(state: RootState) => state.themeMarketplace.selectedThemeId],
   selectedThemeId => selectedThemeId,
@@ -30,6 +35,11 @@ export const selectThemeMarketplaceSelectedThemeId = createSelector(
 export const selectThemeMarketplaceDetailsOpen = createSelector(
   [(state: RootState) => state.themeMarketplace.selectedThemeId],
   selectedThemeId => Boolean(selectedThemeId),
+);
+
+export const selectThemeMarketplaceThemesListCount = createSelector(
+  [(state: RootState) => state.themeMarketplace.themesList],
+  themesList => themesList.length ?? 0,
 );
 
 export const selectThemeMarketplaceThemesList = createSelector(
