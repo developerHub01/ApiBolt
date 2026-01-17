@@ -1,5 +1,7 @@
 {
-  "extends": ["development"],
+  "extends": [
+    "development"
+  ],
   "hints": {
     "no-inline-styles": "off",
     "axe/parsing": [
@@ -12,6 +14,12 @@
       "default",
       {
         "label": "off"
+      }
+    ],
+    "axe/structure": [
+      "default",
+      {
+        "listitem": "off"
       }
     ]
   }
