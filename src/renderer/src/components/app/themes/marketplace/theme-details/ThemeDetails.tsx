@@ -1,16 +1,16 @@
+import { lazy, Suspense } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { selectThemeMarketplaceDetailsOpen } from "@/context/redux/theme-marketplace/selectors/theme-marketplace";
 import { handleChangeSelectedThemeId } from "@/context/redux/theme-marketplace/theme-marketplace-slice";
 import {
   AnimatedDialog,
-  AnimatedDialogContent,
-  AnimatedDialogContentScroll,
   AnimatedDialogContentWrapper,
 } from "@/components/ui/animated-dialog";
-import LoadThemeDetails from "@/components/app/themes/marketplace/theme-details/theme-content/LoadThemeDetails";
-import ThemeDetailsContent from "@/components/app/themes/marketplace/theme-details/theme-content/ThemeDetailsContent";
-import ThemeDetailsTop from "@/components/app/themes/marketplace/theme-details/ThemeDetailsTop";
-import ThemeDetailsBottom from "@/components/app/themes/marketplace/theme-details/ThemeDetailsBottom";
+import ThemeDetailsFallback from "@renderer/fallback/ThemeDetailsFallback";
+const ThemeDetailsRoot = lazy(
+  () =>
+    import("@/components/app/themes/marketplace/theme-details/ThemeDetailsRoot"),
+);
 
 const ThemeDetails = () => {
   const dispatch = useAppDispatch();
@@ -21,15 +21,10 @@ const ThemeDetails = () => {
   return (
     <AnimatedDialog isOpen={selectedThemeId} onClose={handleClose}>
       <AnimatedDialogContentWrapper className="max-w-3xl">
-        <ThemeDetailsTop />
-        <AnimatedDialogContent>
-          <AnimatedDialogContentScroll>
-            <ThemeDetailsContent />
-          </AnimatedDialogContentScroll>
-        </AnimatedDialogContent>
-        <ThemeDetailsBottom />
+        <Suspense fallback={<ThemeDetailsFallback />}>
+          <ThemeDetailsRoot />
+        </Suspense>
       </AnimatedDialogContentWrapper>
-      <LoadThemeDetails />
     </AnimatedDialog>
   );
 };
