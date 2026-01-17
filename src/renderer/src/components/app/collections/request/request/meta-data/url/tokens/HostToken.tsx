@@ -98,7 +98,7 @@ const HostToken = memo(({ hostType }: HostTokenProps) => {
 
   return (
     <FlexibleHightButtonLikeDiv
-      className={cn("min-w-[150px] w-fit p-0 gap-0 overflow-hidden ring", {
+      className={cn("min-w-37.5 w-fit p-0 gap-0 overflow-hidden ring", {
         "ring-transparent": !isError,
         "ring-destructive": isError,
       })}

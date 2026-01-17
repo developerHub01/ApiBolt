@@ -5,7 +5,6 @@ import {
   type DragEvent,
   type MouseEvent,
 } from "react";
-import RequestMethodTag from "@/components/app/RequestMethodTag";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { X as CloseIcon } from "lucide-react";

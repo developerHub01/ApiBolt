@@ -63,7 +63,7 @@ const BodyTypeSelector = () => {
           value={requestBodyType ?? bodyList[0].id}
           onValueChange={handleChange}
         >
-          <SelectTrigger className="min-w-[120px]" size="sm">
+          <SelectTrigger className="min-w-30" size="sm">
             <SelectValue placeholder="Select body type" />
           </SelectTrigger>
           <SelectContent>

@@ -61,7 +61,7 @@ const SizeDetails = memo(({ type, header = 0, body = 0 }: SizeDetailsProps) => {
     <div className="w-full flex gap-2">
       <span
         className={cn(
-          "w-[22px] h-[22px] bg-green-500 text-white grid place-items-center rounded-md shrink-0",
+          "w-5.5 h-5.5 bg-green-500 text-white grid place-items-center rounded-md shrink-0",
           {
             "bg-amber-500": type === "request",
             "bg-blue-500": type === "response",
