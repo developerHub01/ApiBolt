@@ -27,7 +27,7 @@ const RequestOrFolderNotFound = memo(({ type }: Props) => {
         description={CONTENT[type].description}
         animationData={animationData}
         showFallback
-        className="w-full h-full md:max-w-xl md:max-h-[450px]"
+        className="w-full h-full md:max-w-xl md:max-h-112.5"
       />
     </div>
   );

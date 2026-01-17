@@ -15,7 +15,7 @@ const HeaderWrapper = ({
   <motion.div
     layout
     className={cn(
-      "bg-accent/80 flex justify-center gap-2 min-h-[50px] items-center border-b",
+      "bg-accent/80 flex justify-center gap-2 min-h-12.5 items-center border-b",
       className,
     )}
     initial={{

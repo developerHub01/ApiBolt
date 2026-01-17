@@ -142,8 +142,8 @@ const Menu = ({ value, onChange }: MenuProps) => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className={cn("w-[150px]", {
-          "w-[200px]": value === "custom",
+        className={cn("w-37.5", {
+          "w-50": value === "custom",
         })}
         align="end"
         side="bottom"

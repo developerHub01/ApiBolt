@@ -42,7 +42,7 @@ const ProtocolToken = memo(() => {
   };
 
   return (
-    <FlexibleHightButtonLikeDiv className="min-w-[150px] w-fit p-0 gap-0 overflow-hidden">
+    <FlexibleHightButtonLikeDiv className="min-w-37.5 w-fit p-0 gap-0 overflow-hidden">
       <FlexibleHightButtonLikeDiv className="flex-1 rounded-none justify-start">
         {protocol ?? optionList[0].label}
       </FlexibleHightButtonLikeDiv>
@@ -64,7 +64,7 @@ const Menu = ({ value, onChange }: MenuProps) => {
           <DownArrowIcon />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-[150px]" align="end" side="bottom">
+      <DropdownMenuContent className="w-37.5" align="end" side="bottom">
         <DropdownMenuRadioGroup
           defaultValue={optionList[0].id}
           value={value}
