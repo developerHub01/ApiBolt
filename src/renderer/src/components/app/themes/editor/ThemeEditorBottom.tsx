@@ -7,6 +7,7 @@ import {
 import { useThemeEditor } from "@/context/theme/theme-editor/ThemeEditorProvider";
 import useCustomToast from "@/hooks/ui/use-custom-toast";
 import ExternalLink from "@/components/ux/ExternalLink";
+import { handleChangeThemePreviewMode } from "@renderer/context/redux/theme/theme-slice";
 
 const ThemeEditorBottom = () => {
   const dispatch = useAppDispatch();
@@ -20,6 +21,7 @@ const ThemeEditorBottom = () => {
       title: success ? "Apply success" : "Appy error",
       description: message,
     });
+    if (success) dispatch(handleChangeThemePreviewMode(true));
   };
 
   const handleApplyMain = async () => {

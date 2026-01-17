@@ -7,10 +7,12 @@ import {
   handleLoadThemeList,
 } from "@/context/redux/theme-marketplace/theme-marketplace-slice";
 import {
+  applyTestTheme,
   applyThemeInApp,
   loadActiveThemeId,
   loadThemeMetaList as loadInstalledThemeMetaList,
 } from "@/context/redux/theme/thunks/theme";
+import { handleChangeThemePreviewMode } from "../../theme/theme-slice";
 
 export const loadThemesSearchResult = createAsyncThunk<
   void,
@@ -124,6 +126,26 @@ export const unInstallTheme = createAsyncThunk<
       dispatch(loadActiveThemeId());
       dispatch(applyThemeInApp());
     }
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+export const previewTheme = createAsyncThunk<
+  void,
+  void,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("theme-marketplace/previewTheme", async (_, { dispatch, getState }) => {
+  try {
+    const state = getState() as RootState;
+    const palette = state.themeMarketplace.selectedThemeDetails?.palette;
+    if (!palette) return;
+
+    dispatch(applyTestTheme(palette));
+    dispatch(handleChangeThemePreviewMode(true));
   } catch (error) {
     console.error(error);
   }

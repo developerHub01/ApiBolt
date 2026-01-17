@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "@/components/app/sidebar/Sidebar";
-import CopyRight from "@/components/copy-right";
+// import CopyRight from "@/components/copy-right";
 import TabSidebarProvider from "@/context/tab-sidebar/TabSidebarProvider";
 import Header from "@/components/app/header/header/Header";
 import Setting from "@/components/app/setting/Setting";
@@ -16,6 +16,7 @@ import Cookies from "@/components/app/cookies/Cookies";
 import KeyboardShortcuts from "@/components/app/keyboard-shortcuts/KeyboardShortcuts";
 import History from "@/components/app/history-details/History";
 import LocalPassword from "@/components/app/local-password/LocalPassword";
+import ThemePreviewMode from "@renderer/components/ThemePreviewMode";
 
 const AppLayout = () => {
   return (
@@ -31,7 +32,8 @@ const AppLayout = () => {
             <DialogsAnchor />
           </div>
         </ProviderStack>
-        <CopyRight />
+        {/* <CopyRight /> */}
+        <ThemePreviewMode />
       </CustomizedBgWrapper>
       <LoadBasicReduxState />
     </>

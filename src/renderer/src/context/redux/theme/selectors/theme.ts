@@ -36,6 +36,11 @@ export const selectThemeHaveError = createSelector(
     ),
 );
 
+export const selectIsThemePreviewModeOn = createSelector(
+  [(state: RootState) => state.theme.isPreviewModeOn],
+  isPreviewModeOn => isPreviewModeOn,
+);
+
 export const selectActiveThemeType = createSelector(
   [
     (state: RootState) => state.theme.themeMetaList,

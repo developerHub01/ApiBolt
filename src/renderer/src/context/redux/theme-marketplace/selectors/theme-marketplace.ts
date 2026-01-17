@@ -84,6 +84,7 @@ export const selectSelectedThemeInstallationOrUpdationMeta = createSelector(
     needUpdate: boolean;
     oldVersion?: number;
     isActivable?: boolean;
+    isPreviewable?: boolean;
   } => {
     const { global: globalActiveThemeId, local: localActiveThemeId } =
       activeThemeId;
@@ -93,38 +94,46 @@ export const selectSelectedThemeInstallationOrUpdationMeta = createSelector(
       needUpdate: false,
       isActivable: false,
       isInActivable: false,
+      isPreviewable: false,
     };
 
-    try {
-      if (!selectedThemeId) throw new Error();
-      const installedTheme = installedThemes.find(
-        theme => theme.id === selectedThemeId,
-      );
-      if (!installedTheme) throw new Error();
-
-      const installedMeta = {
+    if (!selectedThemeId) return meta;
+    const installedTheme = installedThemes.find(
+      theme => theme.id === selectedThemeId,
+    );
+    if (!installedTheme)
+      return {
         ...meta,
-        isInstalled: true,
-        oldVersion: installedTheme.version ?? 1,
+        isPreviewable: true,
       };
 
-      /* checking version */
-      if ((installedTheme.version ?? 1) < (selectedThemeDetails!.version ?? 1))
-        installedMeta.needUpdate = true;
+    const installedMeta = {
+      ...meta,
+      isInstalled: true,
+      oldVersion: installedTheme.version ?? 1,
+    };
 
-      /**
-       * checking activable
-       * if have projectId then check local theme else check global theme
-       */
-      if (
-        (activeProjectId && installedTheme.id !== localActiveThemeId) ||
-        (!activeProjectId && installedTheme.id !== globalActiveThemeId)
-      )
-        installedMeta.isActivable = true;
+    /* checking version */
+    if ((installedTheme.version ?? 1) < (selectedThemeDetails!.version ?? 1))
+      installedMeta.needUpdate = true;
 
-      return installedMeta;
-    } catch {
-      return meta;
-    }
+    /**
+     * checking activable
+     * if have projectId then check local theme else check global theme
+     */
+    if (
+      (activeProjectId && installedTheme.id !== localActiveThemeId) ||
+      (!activeProjectId && installedTheme.id !== globalActiveThemeId)
+    )
+      installedMeta.isActivable = true;
+
+    /* check if the theme is enabled then no need to show the preview mode */
+    if (
+      (activeProjectId && installedTheme.id !== localActiveThemeId) ||
+      (!activeProjectId && installedTheme.id !== globalActiveThemeId)
+    )
+      installedMeta.isPreviewable = true;
+
+    return installedMeta;
   },
 );

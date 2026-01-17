@@ -1,10 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import {
+  handleChangeThemePreviewMode,
   handleLoadActiveThemeId,
   handleLoadThemeMetaList,
   handleReplaceThemePalette,
   handleUpdateActiveThemeId,
+  ThemeInitialInterface,
 } from "@/context/redux/theme/theme-slice";
 import type {
   ChangeActiveThemePayloadInterface,
@@ -145,9 +147,10 @@ export const applyThemeInApp = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->("theme/applyThemeInApp", async () => {
+>("theme/applyThemeInApp", async (_, { dispatch }) => {
   try {
     await window.electronAPI.applyTheme();
+    dispatch(handleChangeThemePreviewMode(false));
 
     return {
       success: true,
@@ -279,15 +282,15 @@ export const applyTestTheme = createAsyncThunk<
     success: boolean;
     message: string;
   },
-  void,
+  ThemeInitialInterface["palette"] | void,
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->("theme/applyTestTheme", async (_, { getState }) => {
+>("theme/applyTestTheme", async (palette, { getState }) => {
   try {
     const state = getState() as RootState;
-    const palette = state.theme.palette ?? DEFAULT_THEME_PALETTE;
+    palette = palette ?? state.theme.palette ?? DEFAULT_THEME_PALETTE;
 
     await window.electronAPI.applyTestTheme(palette);
 

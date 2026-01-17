@@ -15,6 +15,7 @@ export interface ThemeInitialInterface extends Pick<
   palette: Record<ThemeColorId, string> | null;
   themeMetaList: Array<ThemeMetaInterface>;
   activeThemeId: ActiveThemeIdInterface;
+  isPreviewModeOn: boolean;
 }
 
 // Define the initial state using that type
@@ -29,6 +30,7 @@ const initialState: ThemeInitialInterface = {
     global: "",
     local: null,
   },
+  isPreviewModeOn: false,
 };
 
 export const themeSlice = createSlice({
@@ -81,6 +83,12 @@ export const themeSlice = createSlice({
         ...action.payload,
       };
     },
+    handleChangeThemePreviewMode: (
+      state,
+      action: PayloadAction<boolean | undefined | null>,
+    ) => {
+      state.isPreviewModeOn = action.payload ?? false;
+    },
   },
 });
 
@@ -91,6 +99,7 @@ export const {
   handleLoadThemeMetaList,
   handleLoadActiveThemeId,
   handleUpdateActiveThemeId,
+  handleChangeThemePreviewMode,
 } = themeSlice.actions;
 
 export default themeSlice.reducer;

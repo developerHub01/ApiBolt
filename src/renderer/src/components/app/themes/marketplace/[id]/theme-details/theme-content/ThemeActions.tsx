@@ -12,6 +12,7 @@ import { Spinner } from "@renderer/components/ui/spinner";
 import { useAppDispatch, useAppSelector } from "@renderer/context/redux/hooks";
 import {
   installTheme,
+  previewTheme,
   unInstallTheme,
 } from "@renderer/context/redux/theme-marketplace/thunks/theme-marketplace";
 import { Button } from "@renderer/components/ui/button";
@@ -25,19 +26,27 @@ import {
   inActiveTheme,
 } from "@renderer/context/redux/theme/thunks/theme";
 import { ButtonLikeDiv } from "@renderer/components/ui/button-like-div";
+import { handleChangeThemePreviewMode } from "@renderer/context/redux/theme/theme-slice";
+import { selectIsThemePreviewModeOn } from "@renderer/context/redux/theme/selectors/theme";
 
 interface Props extends Pick<ThemeInterface, "id" | "version"> {}
 
-type TAction = "install" | "uninstall" | "update" | "activate" | "in-activate";
+type TAction =
+  | "install"
+  | "uninstall"
+  | "update"
+  | "activate"
+  | "in-activate"
+  | "preview";
 
 const ThemeActions = ({ id, version }: Props) => {
   const dispatch = useAppDispatch();
   const projectId = useAppSelector(selectActiveProjectId);
   const isInstalling = useAppSelector(selectThemeInstallationLoading);
   const isUnInstalling = useAppSelector(selectThemeUnInstallationLoading);
-  const { isInstalled, needUpdate, oldVersion, isActivable } = useAppSelector(
-    selectSelectedThemeInstallationOrUpdationMeta,
-  );
+  const { isInstalled, needUpdate, oldVersion, isActivable, isPreviewable } =
+    useAppSelector(selectSelectedThemeInstallationOrUpdationMeta);
+  const isOnPreviewMode = useAppSelector(selectIsThemePreviewModeOn);
 
   const handleAction = useCallback(
     (type: TAction) => () => {
@@ -63,6 +72,10 @@ const ThemeActions = ({ id, version }: Props) => {
         }
         case "in-activate": {
           dispatch(inActiveTheme());
+          return;
+        }
+        case "preview": {
+          dispatch(previewTheme());
           return;
         }
       }
@@ -114,6 +127,17 @@ const ThemeActions = ({ id, version }: Props) => {
         >
           {isInstalling ? <Spinner /> : <InstallIcon />}
           Install
+        </Button>
+      )}
+      {isPreviewable && (
+        <Button
+          type="button"
+          size={"sm"}
+          variant={"outline"}
+          onClick={handleAction("preview")}
+          disabled={isInstalling || isUnInstalling}
+        >
+          {isOnPreviewMode ? "Exit Preview" : "Check Preview"}
         </Button>
       )}
       <InfoTooltip
