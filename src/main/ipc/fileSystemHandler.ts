@@ -3,7 +3,7 @@ import { ipcMain, shell } from "electron";
 import { constants } from "fs";
 import { access } from "fs/promises";
 
-export const fileSystemHandler = () => {
+export const fileSystemHandler = (): void => {
   ipcMain.handle(
     "openFolder",
     async (

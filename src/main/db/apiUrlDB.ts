@@ -127,12 +127,15 @@ export const updateApiUrl: ElectronAPIApiUrlInterface["updateApiUrl"] =
 
 export const deleteApiUrlByRequestMetaId = async (
   requestOrFolderMetaId: string,
-) => {
+): Promise<boolean> => {
   try {
-    await db
-      .delete(apiUrlTable)
-      .where(eq(apiUrlTable.requestOrFolderMetaId, requestOrFolderMetaId));
-    return true;
+    return (
+      (
+        await db
+          .delete(apiUrlTable)
+          .where(eq(apiUrlTable.requestOrFolderMetaId, requestOrFolderMetaId))
+      )?.rowsAffected > 0
+    );
   } catch (error) {
     console.error(error);
     return false;

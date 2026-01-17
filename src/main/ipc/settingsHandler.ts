@@ -39,7 +39,7 @@ const handleBackgroundImages = async (
   return images as null | "default";
 };
 
-export const settingsHandler = () => {
+export const settingsHandler = (): void => {
   ipcMain.handle(
     "getSettings",
     async (_): ReturnType<ElectronAPISettingsInterface["getSettings"]> => {

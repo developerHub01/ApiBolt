@@ -8,7 +8,7 @@ import {
 } from "@/main/db/bodyRawDB.js";
 import { ElectronAPIBodyRawInterface } from "@shared/types/api/electron-body-raw";
 
-export const bodyRawHandler = () => {
+export const bodyRawHandler = (): void => {
   ipcMain.handle(
     "getBodyRaw",
     async (

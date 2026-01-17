@@ -8,7 +8,7 @@ import {
 } from "@/main/db/metaShowColumnDB.js";
 import { ElectronAPIMetaShowColumnInterface } from "@shared/types/api/electron-meta-show-column";
 
-export const metaShowColumnHandlers = () => {
+export const metaShowColumnHandlers = (): void => {
   ipcMain.handle(
     "getMetaShowColumn",
     async (

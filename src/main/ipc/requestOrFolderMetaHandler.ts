@@ -14,7 +14,7 @@ import {
 } from "@/main/db/requestOrFolderMetaDB.js";
 import { ElectronAPIRequestOrFolderMetaInterface } from "@shared/types/api/electron-request-or-folder-meta";
 
-export const requestOrFolderMetaHandler = () => {
+export const requestOrFolderMetaHandler = (): void => {
   ipcMain.handle(
     "getRequestOrFolderMeta",
     async (

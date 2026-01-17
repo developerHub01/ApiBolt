@@ -12,7 +12,7 @@ import {
 } from "@/main/db/bodyBinaryDB.js";
 import { mainWindow } from "@/main/index";
 
-export const bodyBinaryHandler = () => {
+export const bodyBinaryHandler = (): void => {
   ipcMain.handle(
     "getBodyBinary",
     async (

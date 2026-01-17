@@ -220,7 +220,7 @@ export const replaceAuth = async ({
 }: {
   requestOrFolderId?: string | null;
   payload: Partial<AuthorizationPayloadInterface>;
-}) => {
+}): Promise<boolean> => {
   try {
     const activeProjectId = await getActiveProject();
     if (!activeProjectId) return false;
@@ -345,7 +345,7 @@ export const deleteAuthByProjectId = async (id: string): Promise<boolean> => {
 
 export const deleteAuthByRequestMetaId = async (
   requestOrFolderMetaId?: string | null,
-) => {
+): Promise<boolean> => {
   try {
     if (!requestOrFolderMetaId)
       requestOrFolderMetaId = (await getTabList())?.selectedTab;

@@ -16,7 +16,7 @@ import { RequestExportFileInterface } from "@shared/types/export-import/request"
 import { FolderExportFileInterface } from "@shared/types/export-import/folder";
 import { v4 as uuidv4 } from "uuid";
 
-export const requestHandler = () => {
+export const requestHandler = (): void => {
   ipcMain.handle(
     "clearRequest",
     async (

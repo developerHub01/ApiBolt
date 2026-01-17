@@ -7,7 +7,7 @@ import {
 } from "@/main/db/tabsDB.js";
 import { ElectronAPITabsInterface } from "@shared/types/api/electron-tabs";
 
-export const tabsHandler = () => {
+export const tabsHandler = (): void => {
   ipcMain.handle(
     "getTabList",
     async (

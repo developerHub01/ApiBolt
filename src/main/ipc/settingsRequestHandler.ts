@@ -5,7 +5,7 @@ import {
   updateSettingsRequest,
 } from "@/main/db/settingsRequestDB";
 
-export const settingsRequestHandler = () => {
+export const settingsRequestHandler = (): void => {
   ipcMain.handle(
     "getSettingsRequest",
     async (

@@ -1,7 +1,7 @@
 import { ElectronAPIInterface } from "@shared/types/api/electron-api";
 import { BrowserWindow, ipcMain } from "electron";
 
-export const windowHandler = (mainWindow: BrowserWindow) => {
+export const windowHandler = (mainWindow: BrowserWindow): void => {
   ipcMain.handle(
     "windowIsMaximized",
     async (): ReturnType<ElectronAPIInterface["isWindowMaximized"]> => {

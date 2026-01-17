@@ -11,7 +11,7 @@ import {
 } from "@/main/db/bodyXWWWFormUrlencodedDB.js";
 import { ElectronAPIBodyXWWWFormUrlencodedInterface } from "@shared/types/api/electron-body-x-www-form-urlencoded";
 
-export const bodyXWWWFormUrlencodedHandlers = () => {
+export const bodyXWWWFormUrlencodedHandlers = (): void => {
   ipcMain.handle(
     "getBodyXWWWFormUrlencoded",
     async (

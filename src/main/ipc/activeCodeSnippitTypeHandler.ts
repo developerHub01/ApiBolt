@@ -7,7 +7,7 @@ import {
 } from "@/main/db/activeCodeSnippitTypeDB.js";
 import { ElectronAPIActiveCodeSnippitTypeInterface } from "@shared/types/api/electron-active-code-snippit-type.js";
 
-export const activeCodeSnippitTypeHandler = () => {
+export const activeCodeSnippitTypeHandler = (): void => {
   ipcMain.handle(
     "getActiveCodeSnippitType",
     async (

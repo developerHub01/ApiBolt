@@ -21,7 +21,7 @@ import {
 } from "@shared/types/request-response.types";
 import { mainWindow } from "@/main/index";
 
-export const bodyFormDataHandlers = () => {
+export const bodyFormDataHandlers = (): void => {
   ipcMain.handle(
     "getBodyFormData",
     async (

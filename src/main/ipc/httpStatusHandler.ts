@@ -6,7 +6,7 @@ import {
 } from "@/main/db/httpStatusDB.js";
 import { ElectronAPIHttpStatusInterface } from "@shared/types/api/electron-http-status";
 
-export const httpStatusHandler = () => {
+export const httpStatusHandler = (): void => {
   ipcMain.handle(
     "getHttpStatus",
     async (

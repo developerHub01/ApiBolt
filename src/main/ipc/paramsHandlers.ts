@@ -11,7 +11,7 @@ import {
 } from "@/main/db/paramsDB.js";
 import { ElectronAPIParamsInterface } from "@shared/types/api/electron-params";
 
-export const paramsHandlers = () => {
+export const paramsHandlers = (): void => {
   ipcMain.handle(
     "getParams",
     async (

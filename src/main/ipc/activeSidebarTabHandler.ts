@@ -7,7 +7,7 @@ import {
 } from "@/main/db/activeSidebarTabDB.js";
 import { ElectronAPIActiveSidebarTabInterface } from "@shared/types/api/electron-api-active-sidebar-tab";
 
-export const activeSidebarTabHandler = () => {
+export const activeSidebarTabHandler = (): void => {
   ipcMain.handle(
     "getActiveSidebarTab",
     async (

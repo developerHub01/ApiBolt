@@ -8,7 +8,7 @@ import {
 } from "@/main/db/historyDB";
 import { ElectronAPIHistoryInterface } from "@shared/types/api/electron-history";
 
-export const historyHandler = () => {
+export const historyHandler = (): void => {
   ipcMain.handle(
     "getHistoryById",
     async (

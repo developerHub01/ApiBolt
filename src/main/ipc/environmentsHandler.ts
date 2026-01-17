@@ -16,7 +16,7 @@ import { filterValidEnvironments } from "@/main/utils/environments.js";
 import { ElectronAPIEnvironmentsInterface } from "@shared/types/api/electron-environments";
 import { TEnvironmentFile } from "@shared/types/export-import/environments";
 
-export const enviromentsHandlers = () => {
+export const enviromentsHandlers = (): void => {
   ipcMain.handle(
     "getAllEnvironments",
     async (

@@ -7,7 +7,7 @@ import {
 } from "@/main/db/showHiddenMetaDataDB.js";
 import { ElectronAPIShowHiddenMetaDataInterface } from "@shared/types/api/electron-show-hidden-meta-data";
 
-export const showHiddenMetaDataHandler = () => {
+export const showHiddenMetaDataHandler = (): void => {
   ipcMain.handle(
     "getShowHiddenMetaData",
     async (

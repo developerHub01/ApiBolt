@@ -8,7 +8,7 @@ import bcrypt from "bcryptjs";
 
 export const PASSWORD_SALT = 12;
 
-export const localPasswordHandler = () => {
+export const localPasswordHandler = (): void => {
   ipcMain.handle(
     "getLocalPassword",
     async (

@@ -7,7 +7,7 @@ import {
 } from "@/main/db/hiddenHeadersCheckDB.js";
 import { ElectronAPIHiddenHeadersCheckInterface } from "@shared/types/api/electron-hidden-headers-check";
 
-export const hiddenHeadersCheckHandler = () => {
+export const hiddenHeadersCheckHandler = (): void => {
   ipcMain.handle(
     "getHiddenHeadersCheck",
     async (

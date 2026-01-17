@@ -6,14 +6,16 @@ import {
   DEFAULT_ACTIVE_CODE_SNIPPIT_TYPE,
 } from "@/main/db/schema";
 import { ElectronAPIActiveCodeSnippitTypeInterface } from "@shared/types/api/electron-active-code-snippit-type";
+import { TRequestCodeType } from "@shared/types/code-snippit.types";
 
-export const isExistActiveCodeSnippitType = async () =>
-  (
-    await db
-      .select()
-      .from(activeCodeSnippitTypeTable)
-      .where(eq(activeCodeSnippitTypeTable.id, ACTIVE_CODE_SNIPPIT_TYPE_ID))
-  )?.[0];
+export const isExistActiveCodeSnippitType =
+  async (): Promise<TRequestCodeType> =>
+    (
+      await db
+        .select()
+        .from(activeCodeSnippitTypeTable)
+        .where(eq(activeCodeSnippitTypeTable.id, ACTIVE_CODE_SNIPPIT_TYPE_ID))
+    )?.[0]?.languageId;
 
 export const getActiveCodeSnippitType: ElectronAPIActiveCodeSnippitTypeInterface["getActiveCodeSnippitType"] =
   async () => {

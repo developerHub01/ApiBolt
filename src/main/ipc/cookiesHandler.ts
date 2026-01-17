@@ -11,7 +11,7 @@ import {
 import { jarManager } from "@/main/utils/cookieManager.js";
 import { ElectronAPICookiesInterface } from "@shared/types/api/electron-cookies";
 
-export const cookiesHandler = () => {
+export const cookiesHandler = (): void => {
   ipcMain.handle(
     "getCookiesByProject",
     async (

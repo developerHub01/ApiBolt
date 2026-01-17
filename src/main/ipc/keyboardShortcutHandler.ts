@@ -7,7 +7,7 @@ import {
 } from "@/main/db/keyboardShortcutDB.js";
 import { ElectronAPIKeyboardShortcutInterface } from "@shared/types/api/electron-keyboard-shortcuts";
 
-export const keyboardShortcutHandler = () => {
+export const keyboardShortcutHandler = (): void => {
   ipcMain.handle(
     "getKeyboardShortcuts",
     async (

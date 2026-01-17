@@ -18,7 +18,7 @@ import { ElectronAPIProjectsInterface } from "@shared/types/api/electron-project
 import { ProjectExportFileInterface } from "@shared/types/export-import/project";
 import { SettingRequestState } from "../state/settingRequest";
 
-export const projectsHandlers = () => {
+export const projectsHandlers = (): void => {
   ipcMain.handle(
     "getProjects",
     async (): Promise<

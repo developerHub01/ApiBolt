@@ -3,7 +3,7 @@ import { fetchApi } from "@/main/utils/api-v1";
 import { jarManager } from "@/main/utils/cookieManager.js";
 import { ElectronAPIInterface } from "@shared/types/api/electron-api";
 
-export const registerCookieHandlers = () => {
+export const registerCookieHandlers = (): void => {
   ipcMain.handle(
     "fetchApi",
     async (

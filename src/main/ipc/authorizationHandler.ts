@@ -9,7 +9,7 @@ import {
 } from "@/main/db/authorizationDB.js";
 import { ElectronAPIAuthorizationInterface } from "@shared/types/api/electron-authorization";
 
-export const authorizationHandler = () => {
+export const authorizationHandler = (): void => {
   ipcMain.handle(
     "getAuth",
     async (

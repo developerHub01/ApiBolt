@@ -11,7 +11,7 @@ import {
 } from "@/main/db/headersDB.js";
 import { ElectronAPIHeadersInterface } from "@shared/types/api/electron-headers";
 
-export const headersHandlers = () => {
+export const headersHandlers = (): void => {
   ipcMain.handle(
     "getHeaders",
     async (

@@ -6,7 +6,7 @@ import {
 } from "@/main/db/folderDB.js";
 import { ElectronAPIFolderInterface } from "@shared/types/api/electron-folder";
 
-export const folderHandlers = () => {
+export const folderHandlers = (): void => {
   ipcMain.handle(
     "getFolder",
     async (

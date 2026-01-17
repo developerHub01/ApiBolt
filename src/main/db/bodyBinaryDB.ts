@@ -9,10 +9,12 @@ export const getBodyBinary = async (
   ...[requestOrFolderMetaId]: Parameters<
     ElectronAPIBodyBinaryInterface["getBodyBinary"]
   >
-) => {
+): Promise<{
+  requestOrFolderMetaId: string;
+  path: string | null;
+} | null> => {
   if (!requestOrFolderMetaId)
     requestOrFolderMetaId = (await getTabList())?.selectedTab;
-
   if (!requestOrFolderMetaId) throw new Error();
 
   try {
@@ -58,7 +60,7 @@ export const createBodyBinary: ElectronAPIBodyBinaryInterface["createBodyBinary"
 
 export const updateBodyBinary = async (
   payload: Partial<BodyBinaryInterface>,
-) => {
+): Promise<boolean> => {
   try {
     const requestOrFolderMetaId =
       payload?.requestOrFolderMetaId ?? (await getTabList())?.selectedTab;

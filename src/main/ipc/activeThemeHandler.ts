@@ -6,7 +6,7 @@ import {
   getActiveThemePalette,
 } from "@/main/db/activeThemeDB.js";
 import { ElectronAPIActiveThemeInterface } from "@shared/types/api/electron-active-theme";
-import { getActiveProject } from "../db/projectsDB";
+import { getActiveProject } from "@/main/db/projectsDB";
 import { defaultActiveThemeId } from "@/data/themes";
 
 export const activeThemeHandler = (): void => {

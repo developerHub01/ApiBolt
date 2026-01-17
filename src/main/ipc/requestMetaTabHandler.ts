@@ -9,7 +9,7 @@ import {
 } from "@/main/db/requestMetaTabDB.js";
 import { ElectronAPIRequestMetaTabInterface } from "@shared/types/api/electron-request-meta-tab";
 
-export const requestMetaTabHandler = () => {
+export const requestMetaTabHandler = (): void => {
   ipcMain.handle(
     "getRequestMetaTab",
     async (
