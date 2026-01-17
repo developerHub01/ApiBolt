@@ -1,6 +1,6 @@
 import { ElectronAPIBodyBinaryInterface } from "@shared/types/api/electron-body-binary";
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import { dialog, ipcMain } from "electron";
 import {
   createBodyBinary,

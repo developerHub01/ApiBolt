@@ -1,7 +1,7 @@
 import { Pool, FormData as UndiciFormData, Dispatcher } from "undici";
-import fs from "fs";
+import fs from "node:fs";
 import zlib from "zlib";
-import { promisify } from "util";
+import { promisify } from "node:util";
 import { getRawContentType } from "@/main/utils/utils.js";
 import { parseSetCookie } from "@/main/utils/cookies.js";
 import { jar } from "@/main/index.js";

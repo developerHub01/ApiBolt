@@ -4,17 +4,6 @@ import { metaShowColumnTable } from "@/main/db/schema.js";
 import { getTabList } from "@/main/db/tabsDB.js";
 import { ElectronAPIMetaShowColumnInterface } from "@shared/types/api/electron-meta-show-column";
 
-// const metaColumnList = [
-//   "paramsValue",
-//   "paramsDescription",
-//   "headersValue",
-//   "headersDescription",
-//   "formDataValue",
-//   "formDataDescription",
-//   "xWWWFormUrlencodedValue",
-//   "xWWWFormUrlencodedDescription"
-// ];
-
 export const getMetaShowColumn: ElectronAPIMetaShowColumnInterface["getMetaShowColumn"] =
   async requestOrFolderMetaId => {
     try {

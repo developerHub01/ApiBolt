@@ -1,6 +1,6 @@
 import { is } from "@electron-toolkit/utils";
 import { BrowserWindow, shell } from "electron";
-import path, { join } from "path";
+import path, { join } from "node:path";
 
 export const createSplashWindow = () => {
   const win = new BrowserWindow({

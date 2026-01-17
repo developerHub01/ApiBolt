@@ -10,9 +10,9 @@ import {
   updateProjects,
 } from "@/main/db/projectsDB";
 import { jarManager } from "@/main/utils/cookieManager";
-import path from "path";
+import path from "node:path";
 import { mainWindow } from "@/main/index";
-import { readFile, writeFile } from "fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import { CreateProjectPayloadInterface } from "@shared/types/project.types";
 import { ElectronAPIProjectsInterface } from "@shared/types/api/electron-projects";
 import { ProjectExportFileInterface } from "@shared/types/export-import/project";

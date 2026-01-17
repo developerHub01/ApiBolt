@@ -1,7 +1,7 @@
 import { net, protocol, session } from "electron";
-import { pathToFileURL } from "url";
-import path from "path";
-import os from "os";
+import { pathToFileURL } from "node:url";
+import path from "node:path";
+import os from "node:os";
 
 /* Register custom protocol as privileged */
 protocol.registerSchemesAsPrivileged([

@@ -1,7 +1,7 @@
 import { electronAPIFileSystemInterface } from "@shared/types/api/electron-filesystem";
 import { ipcMain, shell } from "electron";
-import { constants } from "fs";
-import { access } from "fs/promises";
+import { constants } from "node:fs";
+import { access } from "node:fs/promises";
 
 export const fileSystemHandler = (): void => {
   ipcMain.handle(

@@ -1,7 +1,7 @@
 import { app, dialog } from "electron";
 import { mainWindow } from "@/main/index";
-import path from "path";
-import { readFile, writeFile } from "fs/promises";
+import path from "node:path";
+import { readFile, writeFile } from "node:fs/promises";
 import { ThemeInterface } from "@shared/types/theme.types";
 
 export const saveThemePaletteLocal = async (palette: string) => {

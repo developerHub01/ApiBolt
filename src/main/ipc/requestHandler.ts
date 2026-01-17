@@ -7,8 +7,8 @@ import {
   importRequest,
 } from "@/main/db/requestDB.js";
 import { getRequestOrFolderMetaById } from "@/main/db/requestOrFolderMetaDB.js";
-import path from "path";
-import { readFile, writeFile } from "fs/promises";
+import path from "node:path";
+import { readFile, writeFile } from "node:fs/promises";
 import { mainWindow } from "@/main/index";
 import { getActiveProject } from "@/main/db/projectsDB.js";
 import { ElectronAPIRequestInterface } from "@shared/types/api/electron-request.js";

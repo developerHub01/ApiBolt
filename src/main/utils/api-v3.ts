@@ -1,8 +1,8 @@
-import http from "http";
-import https from "https";
-import fs, { constants } from "fs";
+import http from "node:http";
+import https from "node:https";
+import fs, { constants } from "node:fs";
 import zlib from "zlib";
-import { access } from "fs/promises";
+import { access } from "node:fs/promises";
 import FormData from "form-data";
 import { getRawContentType } from "@/main/utils/utils.js";
 import { parseSetCookie } from "@/main/utils/cookies.js";

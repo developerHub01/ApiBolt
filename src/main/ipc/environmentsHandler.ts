@@ -1,5 +1,5 @@
 import { app, dialog, ipcMain } from "electron";
-import path from "path";
+import path from "node:path";
 import {
   getAllEnvironments,
   getEnvironments,
@@ -11,7 +11,7 @@ import {
 } from "@/main/db/environmentsDB.js";
 import { mainWindow } from "@/main/index";
 import { getActiveProjectDetails } from "@/main/db/projectsDB.js";
-import { readFile, writeFile } from "fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import { filterValidEnvironments } from "@/main/utils/environments.js";
 import { ElectronAPIEnvironmentsInterface } from "@shared/types/api/electron-environments";
 import { TEnvironmentFile } from "@shared/types/export-import/environments";
