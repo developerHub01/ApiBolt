@@ -171,6 +171,8 @@ if (process.contextIsolated) {
           await ipcRenderer.invoke("getActiveThemePalette", ...payload),
         changeActiveTheme: async (...payload) =>
           await ipcRenderer.invoke("changeActiveTheme", ...payload),
+        inActiveTheme: async (...payload) =>
+          await ipcRenderer.invoke("inActiveTheme", ...payload),
       };
 
     /**

@@ -2,7 +2,7 @@ import { db } from "@/main/db/index.js";
 import { eq } from "drizzle-orm";
 import { ACTIVE_PROJECT_ID, activeProjectTable } from "@/main/db/schema.js";
 
-export const getActiveProject = async () => {
+export const getActiveProject = async (): Promise<string | null> => {
   try {
     return (
       await db

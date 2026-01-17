@@ -1,12 +1,15 @@
 import { ipcMain } from "electron";
 import {
   changeActiveTheme,
+  deleteActiveTheme,
   getActiveThemeId,
   getActiveThemePalette,
 } from "@/main/db/activeThemeDB.js";
 import { ElectronAPIActiveThemeInterface } from "@shared/types/api/electron-active-theme";
+import { getActiveProject } from "../db/projectsDB";
+import { defaultActiveThemeId } from "@/data/themes";
 
-export const activeThemeHandler = () => {
+export const activeThemeHandler = (): void => {
   ipcMain.handle(
     "getActiveThemeId",
     async (
@@ -32,5 +35,18 @@ export const activeThemeHandler = () => {
       ...rest: Parameters<ElectronAPIActiveThemeInterface["changeActiveTheme"]>
     ): ReturnType<ElectronAPIActiveThemeInterface["changeActiveTheme"]> =>
       await changeActiveTheme(...rest),
+  );
+  ipcMain.handle(
+    "inActiveTheme",
+    async (_): ReturnType<ElectronAPIActiveThemeInterface["inActiveTheme"]> => {
+      const projectId = await getActiveProject();
+
+      if (projectId) return await deleteActiveTheme(projectId);
+
+      return await changeActiveTheme({
+        activeTheme: defaultActiveThemeId,
+        projectId: null,
+      });
+    },
   );
 };

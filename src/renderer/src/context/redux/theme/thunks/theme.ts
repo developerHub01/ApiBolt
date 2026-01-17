@@ -110,7 +110,26 @@ export const changeActiveThemeId = createAsyncThunk<
       }),
     );
 
-    await dispatch(applyThemeInApp());
+    dispatch(applyThemeInApp());
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+export const inActiveTheme = createAsyncThunk<
+  void,
+  void,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("theme/inActiveTheme", async (_, { dispatch }) => {
+  try {
+    const response = await window.electronAPIActiveTheme.inActiveTheme();
+    if (!response) return;
+
+    dispatch(loadActiveThemeId());
+    dispatch(applyThemeInApp());
   } catch (error) {
     console.error(error);
   }

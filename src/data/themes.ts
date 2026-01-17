@@ -3,7 +3,7 @@ import { ThemeMetaDBInterface } from "@shared/types/theme.types";
 export const defaultThemeList: Array<ThemeMetaDBInterface> = [
   {
     id: "black_ocean",
-    name: "black ocean",
+    name: "black ocean (Default)",
     type: "dark",
     author: "system",
     thumbnail: "./theme-thumbnail/black_ocean.png",

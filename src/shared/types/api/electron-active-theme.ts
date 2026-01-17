@@ -10,4 +10,5 @@ export interface ElectronAPIActiveThemeInterface {
   changeActiveTheme(
     payload: ChangeActiveThemePayloadInterface,
   ): Promise<boolean>;
+  inActiveTheme(): Promise<boolean>;
 }

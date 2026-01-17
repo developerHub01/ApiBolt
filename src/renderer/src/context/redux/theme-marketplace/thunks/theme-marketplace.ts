@@ -58,7 +58,6 @@ export const loadThemesDetails = createAsyncThunk<
   try {
     const state = getState() as RootState;
     id = id ?? state.themeMarketplace.selectedThemeId;
-
     if (!id) throw new Error("Theme id not passed");
 
     const response = await axiosServerClient.get(`/themes/details/${id}`);

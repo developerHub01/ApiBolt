@@ -92,6 +92,7 @@ export const selectSelectedThemeInstallationOrUpdationMeta = createSelector(
       isInstalled: false,
       needUpdate: false,
       isActivable: false,
+      isInActivable: false,
     };
 
     try {

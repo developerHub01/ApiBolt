@@ -3,7 +3,11 @@ import {
   selectThemeInstallationLoading,
   selectThemeUnInstallationLoading,
 } from "@renderer/context/redux/status/selectors/theme-marketplace";
-import { Download as InstallIcon, Trash2 as UninstallIcon } from "lucide-react";
+import {
+  InfoIcon,
+  Download as InstallIcon,
+  Trash2 as UninstallIcon,
+} from "lucide-react";
 import { Spinner } from "@renderer/components/ui/spinner";
 import { useAppDispatch, useAppSelector } from "@renderer/context/redux/hooks";
 import {
@@ -16,11 +20,15 @@ import { selectSelectedThemeInstallationOrUpdationMeta } from "@renderer/context
 import { Separator } from "@renderer/components/ui/separator";
 import InfoTooltip from "@renderer/components/ui/InfoTooltip";
 import { selectActiveProjectId } from "@renderer/context/redux/project/selectors/project";
-import { changeActiveThemeId } from "@renderer/context/redux/theme/thunks/theme";
+import {
+  changeActiveThemeId,
+  inActiveTheme,
+} from "@renderer/context/redux/theme/thunks/theme";
+import { ButtonLikeDiv } from "@renderer/components/ui/button-like-div";
 
 interface Props extends Pick<ThemeInterface, "id" | "version"> {}
 
-type TAction = "install" | "uninstall" | "update" | "activate";
+type TAction = "install" | "uninstall" | "update" | "activate" | "in-activate";
 
 const ThemeActions = ({ id, version }: Props) => {
   const dispatch = useAppDispatch();
@@ -53,6 +61,10 @@ const ThemeActions = ({ id, version }: Props) => {
           );
           return;
         }
+        case "in-activate": {
+          dispatch(inActiveTheme());
+          return;
+        }
       }
     },
     [dispatch, id, projectId],
@@ -72,17 +84,15 @@ const ThemeActions = ({ id, version }: Props) => {
             {isUnInstalling ? <Spinner /> : <UninstallIcon />}
             Uninstall
           </Button>
-          {isActivable && (
-            <Button
-              type="button"
-              size={"sm"}
-              variant={"secondary"}
-              onClick={handleAction("activate")}
-              disabled={isUnInstalling}
-            >
-              Activate
-            </Button>
-          )}
+          <Button
+            type="button"
+            size={"sm"}
+            variant={"secondary"}
+            onClick={handleAction(isActivable ? "activate" : "in-activate")}
+            disabled={isUnInstalling}
+          >
+            {isActivable ? "Activate" : "In-activate"}
+          </Button>
           {needUpdate && (
             <Button
               type="button"
@@ -91,7 +101,7 @@ const ThemeActions = ({ id, version }: Props) => {
               disabled={isInstalling || isUnInstalling}
             >
               {isInstalling && <Spinner />}
-              Update to new version
+              Update Version
             </Button>
           )}
         </>
@@ -106,21 +116,29 @@ const ThemeActions = ({ id, version }: Props) => {
           Install
         </Button>
       )}
-      <div className="flex gap-2 ml-auto">
-        <p className="text-sm">version: {version}</p>
-        {needUpdate && (
-          <>
-            <Separator />
-            {oldVersion}
-            <InfoTooltip
-              label={`A new version of the theme available your old version is ${oldVersion} but new version is ${version}`}
-              align="end"
-              buttonVariant={"transparent"}
-              contentVariant={"outline"}
-            />
-          </>
-        )}
-      </div>
+      <InfoTooltip
+        label={`A new version of the theme available your current version is ${oldVersion} but new version ${version} is available now`}
+        align="end"
+        buttonVariant={"transparent"}
+        contentVariant={"outline"}
+        className="px-0 w-auto ml-auto"
+        contentClassName="max-w-55"
+      >
+        <ButtonLikeDiv
+          size={"sm"}
+          variant={"outline"}
+          className="flex items-center gap-2 rounded-full capitalize"
+        >
+          <p className="text-sm">version: {version}</p>
+          {needUpdate && (
+            <>
+              <span className="w-0.5 h-5 bg-border" />
+              <span>{oldVersion}</span>
+              <InfoIcon />
+            </>
+          )}
+        </ButtonLikeDiv>
+      </InfoTooltip>
     </div>
   );
 };

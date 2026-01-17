@@ -32,6 +32,7 @@ export const getActiveThemeMeta: ElectronAPIThemeInterface["getActiveThemeMeta"]
             author: themeTable.author,
             authorUsername: themeTable.authorUsername,
             thumbnail: themeTable.thumbnail,
+            version: themeTable.version,
             createdAt: themeTable.createdAt,
           })
           .from(activeThemeTable)
@@ -244,3 +245,20 @@ export const changeActiveTheme: ElectronAPIActiveThemeInterface["changeActiveThe
       return false;
     }
   };
+
+export const deleteActiveTheme = async (
+  projectId: string,
+): Promise<boolean> => {
+  try {
+    return (
+      (
+        await db
+          .delete(activeThemeTable)
+          .where(eq(activeThemeTable.projectId, projectId))
+      ).rowsAffected > 0
+    );
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};

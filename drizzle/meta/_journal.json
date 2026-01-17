@@ -8,6 +8,13 @@
       "when": 1768595191342,
       "tag": "0000_awesome_mikhail_rasputin",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1768612303631,
+      "tag": "0001_square_roxanne_simpson",
+      "breakpoints": true
     }
   ]
 }
