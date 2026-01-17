@@ -9,6 +9,7 @@ export interface ThemeMarketplaceInitialInterface {
   searchTerm: string;
   searchFilter: TThemeMarketplaceSearchFilter;
   page: number;
+  totalPages: number;
   selectedThemeId: string | null;
   themesList: Array<ThemeMetaInterface>;
   selectedThemeDetails: ThemeInterface | null;
@@ -20,6 +21,7 @@ const initialState: ThemeMarketplaceInitialInterface = {
   searchTerm: "",
   searchFilter: "all",
   page: 1,
+  totalPages: 1,
   selectedThemeId: null,
   themesList: [],
   selectedThemeDetails: null,
@@ -45,8 +47,17 @@ export const themeMarketplaceSlice = createSlice({
       state.searchFilter = action.payload ?? "all";
       state.page = 1;
     },
-    incrementPage: state => {
+    handleIncrementPage: state => {
       state.page += 1;
+    },
+    handleDecrementPage: state => {
+      state.page -= 1;
+    },
+    handleChangeTotalPages: (
+      state,
+      action: PayloadAction<number | undefined | null>,
+    ) => {
+      state.totalPages = action.payload ?? 1;
     },
     handleChangeSelectedThemeId: (
       state,
@@ -78,7 +89,9 @@ export const themeMarketplaceSlice = createSlice({
 export const {
   handleChangeSearchTerm,
   handleChangeSearchFilter,
-  incrementPage,
+  handleIncrementPage,
+  handleDecrementPage,
+  handleChangeTotalPages,
   handleChangeSelectedThemeId,
   handleLoadThemeList,
   handleChangeSelectedThemeDetails,

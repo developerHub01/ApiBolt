@@ -1,3 +1,4 @@
+import { MAX_INSTALLED_THEME_COUNT } from "@shared/constant/theme";
 import type {
   ThemeColorId,
   TThemeMarketplaceSearchFilter,
@@ -28,3 +29,5 @@ export const DEFAULT_THUMBNAIL_FALLBACK =
 
 export const THEME_MARKETPLACE_FILTER_LOCAL =
   new Set<TThemeMarketplaceSearchFilter>(["active", "installed"]);
+
+export const THEME_MARKETPLACE_PAGE_SIZE = MAX_INSTALLED_THEME_COUNT;

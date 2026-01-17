@@ -16,7 +16,6 @@ import {
 import { handleChangeThemePreviewMode } from "@/context/redux/theme/theme-slice";
 import { MAX_INSTALLED_THEME_COUNT } from "@shared/constant/theme";
 import axios from "axios";
-import { handleChangeThemesSearchResultError } from "@/context/redux/status/status-slice";
 
 export const loadThemesSearchResult = createAsyncThunk<
   void,
@@ -42,6 +41,8 @@ export const loadThemesSearchResult = createAsyncThunk<
       try {
         const response = await axiosServerClient.get("/themes/meta");
         const data = (response.data?.data ?? []) as Array<ThemeMetaInterface>;
+
+        console.log(data);
 
         if (response.status !== 200 || !data) throw new Error();
         dispatch(handleLoadThemeList(data));
@@ -152,6 +153,27 @@ export const unInstallTheme = createAsyncThunk<
   }
 });
 
+export const togglePreviewTheme = createAsyncThunk<
+  boolean,
+  void,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("theme-marketplace/togglePreviewTheme", async (_, { dispatch, getState }) => {
+  try {
+    const state = getState() as RootState;
+    const isPreviewOn = state.theme.isPreviewModeOn;
+
+    return await dispatch(
+      isPreviewOn ? exitPreviewTheme() : previewTheme(),
+    ).unwrap();
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+});
+
 export const previewTheme = createAsyncThunk<
   boolean,
   void,
@@ -166,7 +188,7 @@ export const previewTheme = createAsyncThunk<
     if (!palette) throw new Error();
 
     const response = await dispatch(applyTestTheme(palette)).unwrap();
-    dispatch(handleChangeThemePreviewMode());
+    dispatch(handleChangeThemePreviewMode(true));
     return response.success;
   } catch (error) {
     console.error(error);

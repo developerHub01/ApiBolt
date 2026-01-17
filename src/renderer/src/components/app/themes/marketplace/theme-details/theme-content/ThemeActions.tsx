@@ -12,7 +12,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
   installTheme,
-  previewTheme,
+  togglePreviewTheme,
   unInstallTheme,
 } from "@/context/redux/theme-marketplace/thunks/theme-marketplace";
 import { Button } from "@/components/ui/button";
@@ -95,7 +95,7 @@ const ThemeActions = ({ id, version }: Props) => {
           });
         }
         case "preview": {
-          const response = await dispatch(previewTheme()).unwrap();
+          const response = await dispatch(togglePreviewTheme()).unwrap();
           return toast({
             type: response ? "success" : "error",
             title: response

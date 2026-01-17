@@ -7,3 +7,5 @@ export const HTTP_VERSIONS: Array<THttpVersionSetting> = [
   "http/1.1",
   "http/2.0",
 ];
+
+export const API_BOLT_APP_ID = "com.api-bolt";
