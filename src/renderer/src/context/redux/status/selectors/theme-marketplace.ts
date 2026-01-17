@@ -16,6 +16,10 @@ export const selectThemeMarketplaceThemeDetailsLoading = createSelector(
   isLoading => isLoading,
 );
 
+export const selectThemeMarketplaceThemeDetailsError = createSelector(
+  [(state: RootState) => state.status.themeMarketplaceThemeDetailsError],
+  error => error,
+);
 export const selectThemeInstallationLoading = createSelector(
   [(state: RootState) => state.status.isThemeInstallationLoading],
   isLoading => isLoading,

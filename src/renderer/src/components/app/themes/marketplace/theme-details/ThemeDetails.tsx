@@ -6,7 +6,7 @@ import {
   AnimatedDialog,
   AnimatedDialogContentWrapper,
 } from "@/components/ui/animated-dialog";
-import ThemeDetailsFallback from "@renderer/fallback/ThemeDetailsFallback";
+import ThemeDetailsFallback from "@/fallback/ThemeDetailsFallback";
 const ThemeDetailsRoot = lazy(
   () =>
     import("@/components/app/themes/marketplace/theme-details/ThemeDetailsRoot"),

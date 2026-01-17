@@ -20,7 +20,7 @@ import {
   handleDecrementPage,
   handleIncrementPage,
 } from "@/context/redux/theme-marketplace/theme-marketplace-slice";
-import { ButtonLikeDiv } from "@renderer/components/ui/button-like-div";
+import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 
 const MarketplacePagination = memo(() => {
   const dispatch = useAppDispatch();

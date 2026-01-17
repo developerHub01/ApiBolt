@@ -71,9 +71,7 @@ export const loadThemesSearchResult = createAsyncThunk<
         return;
       } catch (error) {
         if (axios.isAxiosError(error)) {
-          if (error.code === "ERR_NETWORK") {
-            throw new Error("ERR_NETWORK");
-          }
+          if (error.code === "ERR_NETWORK") throw new Error("ERR_NETWORK");
         }
       }
     }
@@ -93,13 +91,17 @@ export const loadThemesDetails = createAsyncThunk<
     id = id ?? state.themeMarketplace.selectedThemeId;
     if (!id) throw new Error("Theme id not passed");
 
-    const response = await axiosServerClient.get(`/themes/details/${id}`);
-    const data = response.data?.data as ThemeInterface;
+    const response = await axiosServerClient.get(
+      `/themes/details/${id.slice(0, -1)}1`,
+    );
 
-    if (response.status !== 200 || !data) throw new Error();
+    const data = response.data?.data as ThemeInterface;
     dispatch(handleChangeSelectedThemeDetails(data));
   } catch (error) {
-    console.error(error);
+    if (axios.isAxiosError(error)) {
+      if (error.code === "ERR_NETWORK") throw new Error("ERR_NETWORK");
+      else if (error.status === 404) throw new Error("NOT_FOUND");
+    }
   }
 });
 

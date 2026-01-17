@@ -43,6 +43,8 @@ export interface StatusInterface {
   themesSearchResultError: string | null;
 
   isThemeMarketplaceThemeDetailsLoading: boolean;
+  themeMarketplaceThemeDetailsError: string | null;
+
   isThemeInstallationLoading: boolean;
   isThemeUnInstallationLoading: boolean;
 }
@@ -68,6 +70,8 @@ const initialState: StatusInterface = {
   themesSearchResultError: null,
 
   isThemeMarketplaceThemeDetailsLoading: true,
+  themeMarketplaceThemeDetailsError: null,
+
   isThemeInstallationLoading: false,
   isThemeUnInstallationLoading: false,
 };
@@ -289,12 +293,15 @@ export const statusSlice = createSlice({
 
       .addCase(loadThemesDetails.pending, state => {
         state.isThemeMarketplaceThemeDetailsLoading = true;
+        state.themeMarketplaceThemeDetailsError = null;
       })
       .addCase(loadThemesDetails.fulfilled, state => {
         state.isThemeMarketplaceThemeDetailsLoading = false;
+        state.themeMarketplaceThemeDetailsError = null;
       })
-      .addCase(loadThemesDetails.rejected, state => {
+      .addCase(loadThemesDetails.rejected, (state, action) => {
         state.isThemeMarketplaceThemeDetailsLoading = false;
+        state.themeMarketplaceThemeDetailsError = action.error?.message ?? null;
       })
 
       .addCase(installTheme.pending, state => {
