@@ -6,6 +6,11 @@ export const selectThemesSearchResultLoading = createSelector(
   isLoading => isLoading,
 );
 
+export const selectThemesSearchResultError = createSelector(
+  [(state: RootState) => state.status.themesSearchResultError],
+  error => error,
+);
+
 export const selectThemeMarketplaceThemeDetailsLoading = createSelector(
   [(state: RootState) => state.status.isThemeMarketplaceThemeDetailsLoading],
   isLoading => isLoading,

@@ -15,6 +15,8 @@ import {
 } from "@/context/redux/theme/thunks/theme";
 import { handleChangeThemePreviewMode } from "@/context/redux/theme/theme-slice";
 import { MAX_INSTALLED_THEME_COUNT } from "@shared/constant/theme";
+import axios from "axios";
+import { handleChangeThemesSearchResultError } from "@/context/redux/status/status-slice";
 
 export const loadThemesSearchResult = createAsyncThunk<
   void,
@@ -26,27 +28,31 @@ export const loadThemesSearchResult = createAsyncThunk<
 >(
   "theme-marketplace/loadThemesSearchResult",
   async (_, { dispatch, getState }) => {
-    try {
-      const state = getState() as RootState;
-      const filterType = state.themeMarketplace.searchFilter;
+    const state = getState() as RootState;
+    const filterType = state.themeMarketplace.searchFilter;
 
-      if (filterType === "active") {
-        dispatch(loadInstalledThemeMetaList());
-        dispatch(loadActiveThemeId());
-        return;
-      } else if (filterType === "installed") {
-        dispatch(loadInstalledThemeMetaList());
-        return;
-      } else {
+    if (filterType === "active") {
+      dispatch(loadInstalledThemeMetaList());
+      dispatch(loadActiveThemeId());
+      return;
+    } else if (filterType === "installed") {
+      dispatch(loadInstalledThemeMetaList());
+      return;
+    } else {
+      try {
         const response = await axiosServerClient.get("/themes/meta");
         const data = (response.data?.data ?? []) as Array<ThemeMetaInterface>;
 
         if (response.status !== 200 || !data) throw new Error();
         dispatch(handleLoadThemeList(data));
         return;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          if (error.code === "ERR_NETWORK") {
+            throw new Error("ERR_NETWORK");
+          }
+        }
       }
-    } catch (error) {
-      console.error(error);
     }
   },
 );

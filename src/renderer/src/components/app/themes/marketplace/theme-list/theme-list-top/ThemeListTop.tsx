@@ -10,7 +10,7 @@ import {
 import { X as ClearIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input-transparent";
-import ThemeFilter from "@renderer/components/app/themes/marketplace/theme-list/theme-list-top/ThemeFilter";
+import ThemeFilter from "@/components/app/themes/marketplace/theme-list/theme-list-top/ThemeFilter";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
   selectThemeMarketplaceSearchFilter,

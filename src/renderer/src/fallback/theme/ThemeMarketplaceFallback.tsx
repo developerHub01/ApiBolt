@@ -1,6 +1,6 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
-import ThemeCardSkeleton from "@renderer/components/app/themes/marketplace/theme-list/ThemeCardSkeleton";
+import ThemeCardSkeleton from "@/components/app/themes/marketplace/theme-list/ThemeCardSkeleton";
 
 const ThemeMarketplaceFallback = () => {
   return (

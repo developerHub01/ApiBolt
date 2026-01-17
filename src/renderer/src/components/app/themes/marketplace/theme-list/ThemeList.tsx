@@ -1,22 +1,30 @@
 import { useCallback } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import ThemeCard from "@renderer/components/app/themes/marketplace/theme-list/ThemeCard";
+import ThemeCard from "@/components/app/themes/marketplace/theme-list/ThemeCard";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
   selectThemeMarketplaceSelectedThemeId,
   selectThemeMarketplaceThemesList,
 } from "@/context/redux/theme-marketplace/selectors/theme-marketplace";
 import { handleChangeSelectedThemeId } from "@/context/redux/theme-marketplace/theme-marketplace-slice";
-import { selectThemesSearchResultLoading } from "@/context/redux/status/selectors/theme-marketplace";
-import ThemeCardSkeleton from "@renderer/components/app/themes/marketplace/theme-list/ThemeCardSkeleton";
+import {
+  selectThemesSearchResultError,
+  selectThemesSearchResultLoading,
+} from "@/context/redux/status/selectors/theme-marketplace";
+import ThemeCardSkeleton from "@/components/app/themes/marketplace/theme-list/ThemeCardSkeleton";
 import { ThemeMetaInterface } from "@shared/types/theme.types";
 import { cn } from "@/lib/utils";
+import ThemeListError from "@/components/app/themes/marketplace/theme-list/ThemeListError";
+import { motion, AnimatePresence } from "motion/react";
+import useShowSkeleton from "@/hooks/ui/use-show-skeleton";
 
 const ThemeList = () => {
   const dispatch = useAppDispatch();
   const selectedThemeId = useAppSelector(selectThemeMarketplaceSelectedThemeId);
   const themesList = useAppSelector(selectThemeMarketplaceThemesList);
   const isLoading = useAppSelector(selectThemesSearchResultLoading);
+  const showSkeleton = useShowSkeleton(isLoading);
+  const errorMessage = useAppSelector(selectThemesSearchResultError);
 
   const handleChangeSelectedTheme = useCallback(
     (theme: ThemeMetaInterface) => {
@@ -27,16 +35,18 @@ const ThemeList = () => {
   );
 
   return (
-    <ScrollArea className="flex-1 w-full min-h-0">
-      <section className="grid grid-cols-2 gap-3 p-1">
-        {isLoading ? (
-          <>
+    <ScrollArea className="flex-1 w-full min-h-0 h-full [&>div>div]:h-full">
+      <AnimatePresence>
+        {showSkeleton ? (
+          <Wrapper>
             {Array.from({ length: 6 }, (_, key) => (
               <ThemeCardSkeleton key={key} />
             ))}
-          </>
+          </Wrapper>
+        ) : errorMessage ? (
+          <ThemeListError />
         ) : (
-          <>
+          <Wrapper>
             {themesList.map(theme => (
               <ThemeCard
                 key={theme.id}
@@ -48,11 +58,35 @@ const ThemeList = () => {
                 })}
               />
             ))}
-          </>
+          </Wrapper>
         )}
-      </section>
+      </AnimatePresence>
     </ScrollArea>
   );
 };
+
+interface WrapperProps {
+  children: React.ReactNode;
+}
+
+const Wrapper = ({ children }: WrapperProps) => (
+  <motion.section
+    initial={{
+      opacity: 0,
+    }}
+    animate={{
+      opacity: 1,
+    }}
+    exit={{
+      opacity: 0,
+    }}
+    transition={{
+      duration: 0.3,
+    }}
+    className="grid grid-cols-2 gap-3 p-1"
+  >
+    {children}
+  </motion.section>
+);
 
 export default ThemeList;

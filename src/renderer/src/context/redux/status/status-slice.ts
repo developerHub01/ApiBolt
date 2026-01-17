@@ -38,7 +38,10 @@ export interface StatusInterface {
   isHistoryReplacingLoading: boolean;
   isThemeEditingPaletteLoading: boolean;
   isFolderLoading: boolean;
+
   isThemesSearchResultLoading: boolean;
+  themesSearchResultError: string | null;
+
   isThemeMarketplaceThemeDetailsLoading: boolean;
   isThemeInstallationLoading: boolean;
   isThemeUnInstallationLoading: boolean;
@@ -60,7 +63,10 @@ const initialState: StatusInterface = {
   isHistoryReplacingLoading: false,
   isThemeEditingPaletteLoading: false,
   isFolderLoading: true,
+
   isThemesSearchResultLoading: true,
+  themesSearchResultError: null,
+
   isThemeMarketplaceThemeDetailsLoading: true,
   isThemeInstallationLoading: false,
   isThemeUnInstallationLoading: false,
@@ -87,6 +93,12 @@ export const statusSlice = createSlice({
       if (action.payload.isLoading)
         state.isFetchApiLoading[action.payload.requestId] = true;
       else delete state.isFetchApiLoading[action.payload.requestId];
+    },
+    handleChangeThemesSearchResultError: (
+      state,
+      action: PayloadAction<string | null | undefined>,
+    ) => {
+      state.themesSearchResultError = action.payload ?? null;
     },
   },
 
@@ -264,12 +276,15 @@ export const statusSlice = createSlice({
        */
       .addCase(loadThemesSearchResult.pending, state => {
         state.isThemesSearchResultLoading = true;
+        state.themesSearchResultError = null;
       })
       .addCase(loadThemesSearchResult.fulfilled, state => {
         state.isThemesSearchResultLoading = false;
+        state.themesSearchResultError = null;
       })
-      .addCase(loadThemesSearchResult.rejected, state => {
+      .addCase(loadThemesSearchResult.rejected, (state, action) => {
         state.isThemesSearchResultLoading = false;
+        state.themesSearchResultError = action.error?.message ?? null;
       })
 
       .addCase(loadThemesDetails.pending, state => {
@@ -334,7 +349,10 @@ export const statusSlice = createSlice({
   },
 });
 
-export const { handleChangeIsCookiesError, handleIsFetchApiLoading } =
-  statusSlice.actions;
+export const {
+  handleChangeIsCookiesError,
+  handleIsFetchApiLoading,
+  handleChangeThemesSearchResultError,
+} = statusSlice.actions;
 
 export default statusSlice.reducer;
