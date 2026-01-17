@@ -9,7 +9,7 @@ import {
 import ThemeDescription from "@/components/app/themes/marketplace/theme-details/theme-content/ThemeDescription";
 import ThemePalette from "@/components/app/themes/marketplace/theme-details/theme-content/ThemePalette";
 import useShowSkeleton from "@/hooks/ui/use-show-skeleton";
-import Empty from "@renderer/components/ui/empty";
+import Empty from "@/components/ui/empty";
 import noInernetAnimationData from "@/assets/lottie/no-internet.json";
 import notFoundAnimationData from "@/assets/lottie/no-data-found.json";
 

@@ -1,7 +1,7 @@
 import ThemeListTop from "@/components/app/themes/marketplace/theme-list/theme-list-top/ThemeListTop";
 import ThemeList from "@/components/app/themes/marketplace/theme-list/ThemeList";
 import ThemeDetails from "@/components/app/themes/marketplace/theme-details/ThemeDetails";
-import MarketplacePagination from "@renderer/components/app/themes/marketplace/theme-list/MarketplacePagination";
+import MarketplacePagination from "@/components/app/themes/marketplace/theme-list/MarketplacePagination";
 import useLoadThemesSearchResult from "@/hooks/theme/use-load-themes-search-result";
 import ThemeInstallMaxSizeAlert from "@/components/app/themes/marketplace/ThemeInstallMaxSizeAlert";
 

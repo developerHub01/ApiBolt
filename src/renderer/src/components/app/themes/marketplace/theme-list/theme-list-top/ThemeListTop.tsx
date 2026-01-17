@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { X as ClearIcon } from "lucide-react";
+import { X as ClearIcon, RefreshCcw as RefetchIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input-transparent";
 import ThemeFilter from "@/components/app/themes/marketplace/theme-list/theme-list-top/ThemeFilter";
@@ -20,6 +20,12 @@ import { handleChangeSearchTerm } from "@/context/redux/theme-marketplace/theme-
 import { debounce } from "@/lib/utils";
 import { motion, AnimatePresence } from "motion/react";
 import { THEME_MARKETPLACE_FILTER_LOCAL } from "@/constant/theme.constant";
+import { loadThemesSearchResult } from "@/context/redux/theme-marketplace/thunks/theme-marketplace";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip-custom";
 
 const ThemeListTop = memo(() => {
   const dispatch = useAppDispatch();
@@ -73,6 +79,8 @@ const ThemeListTop = memo(() => {
     dispatch(handleChangeSearchTerm(""));
   };
 
+  const handleRefetch = () => dispatch(loadThemesSearchResult());
+
   return (
     <div className="w-full border-b-2 bg-accent/50 p-2 rounded-t-lg">
       <div className="w-full flex gap-1">
@@ -106,6 +114,16 @@ const ThemeListTop = memo(() => {
           )}
         </AnimatePresence>
         <ThemeFilter />
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant={"secondary"} size={"icon"} onClick={handleRefetch}>
+              <RefetchIcon />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent variant={"secondary"} align="end" side="bottom">
+            <p>Refetch theme list</p>
+          </TooltipContent>
+        </Tooltip>
       </div>
     </div>
   );

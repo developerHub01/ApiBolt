@@ -1,11 +1,11 @@
-import ThemeDetailsContentSkeleton from "@renderer/components/app/themes/marketplace/theme-details/theme-content/ThemeDetailsContentSkeleton";
+import ThemeDetailsContentSkeleton from "@/components/app/themes/marketplace/theme-details/theme-content/ThemeDetailsContentSkeleton";
 import {
   AnimatedDialogBottom,
   AnimatedDialogContent,
   AnimatedDialogContentScroll,
   AnimatedDialogTop,
-} from "@renderer/components/ui/animated-dialog";
-import { Skeleton } from "@renderer/components/ui/skeleton";
+} from "@/components/ui/animated-dialog";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const ThemeDetailsFallback = () => {
   return (
