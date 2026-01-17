@@ -17,6 +17,11 @@ export const selectThemeMarketplaceSearchPage = createSelector(
   page => page,
 );
 
+export const selectThemeMarketplaceSearchTotalPages = createSelector(
+  [(state: RootState) => state.themeMarketplace.totalPages],
+  totalPages => totalPages,
+);
+
 export const selectThemeMarketplaceSelectedThemeId = createSelector(
   [(state: RootState) => state.themeMarketplace.selectedThemeId],
   selectedThemeId => selectedThemeId,

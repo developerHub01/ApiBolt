@@ -5,6 +5,7 @@ import { ThemeInterface, ThemeMetaInterface } from "@shared/types/theme.types";
 import {
   handleChangeIsInstallMaxCountAlertOpen,
   handleChangeSelectedThemeDetails,
+  handleChangeTotalPages,
   handleLoadThemeList,
 } from "@/context/redux/theme-marketplace/theme-marketplace-slice";
 import {
@@ -16,6 +17,17 @@ import {
 import { handleChangeThemePreviewMode } from "@/context/redux/theme/theme-slice";
 import { MAX_INSTALLED_THEME_COUNT } from "@shared/constant/theme";
 import axios from "axios";
+import { THEME_MARKETPLACE_PAGE_SIZE } from "@/constant/theme.constant";
+
+interface ThemesSearchResultInterface {
+  data: Array<ThemeMetaInterface>;
+  meta: {
+    total: number;
+    page: number;
+    pageSize: number;
+    totalPages: number;
+  };
+}
 
 export const loadThemesSearchResult = createAsyncThunk<
   void,
@@ -39,13 +51,21 @@ export const loadThemesSearchResult = createAsyncThunk<
       return;
     } else {
       try {
-        const response = await axiosServerClient.get("/themes/meta");
-        const data = (response.data?.data ?? []) as Array<ThemeMetaInterface>;
+        const response = await axiosServerClient.get("/themes/meta", {
+          params: {
+            searchTerm: state.themeMarketplace.searchTerm,
+            searchFilter: state.themeMarketplace.searchFilter,
+            page: state.themeMarketplace.page,
+            pageSize: THEME_MARKETPLACE_PAGE_SIZE,
+          },
+        });
 
-        console.log(data);
+        if (response.status !== 200 || !response.data?.data) throw new Error();
 
-        if (response.status !== 200 || !data) throw new Error();
+        const { meta, data } = response.data
+          ?.data as ThemesSearchResultInterface;
         dispatch(handleLoadThemeList(data));
+        dispatch(handleChangeTotalPages(meta.totalPages));
         return;
       } catch (error) {
         if (axios.isAxiosError(error)) {

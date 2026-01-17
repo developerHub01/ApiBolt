@@ -47,6 +47,9 @@ export const themeMarketplaceSlice = createSlice({
       state.searchFilter = action.payload ?? "all";
       state.page = 1;
     },
+    handlePage: (state, action: PayloadAction<number | undefined | null>) => {
+      state.page = action.payload ?? 1;
+    },
     handleIncrementPage: state => {
       state.page += 1;
     },
@@ -89,6 +92,7 @@ export const themeMarketplaceSlice = createSlice({
 export const {
   handleChangeSearchTerm,
   handleChangeSearchFilter,
+  handlePage,
   handleIncrementPage,
   handleDecrementPage,
   handleChangeTotalPages,
