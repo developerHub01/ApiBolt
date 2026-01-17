@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectSelectedThemeDetails } from "@/context/redux/theme-marketplace/selectors/theme-marketplace";
-import ThemeActions from "@/components/app/themes/marketplace/[id]/theme-details/theme-content/ThemeActions";
+import ThemeActions from "@renderer/components/app/themes/marketplace/theme-details/theme-content/ThemeActions";
 
 const ThemeMeta = () => {
   const themeDetails = useAppSelector(selectSelectedThemeDetails);

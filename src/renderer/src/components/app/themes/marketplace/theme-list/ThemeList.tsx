@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import ThemeCard from "@/components/app/themes/marketplace/[id]/theme-list/ThemeCard";
+import ThemeCard from "@renderer/components/app/themes/marketplace/theme-list/ThemeCard";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
   selectThemeMarketplaceSelectedThemeId,
@@ -8,7 +8,7 @@ import {
 } from "@/context/redux/theme-marketplace/selectors/theme-marketplace";
 import { handleChangeSelectedThemeId } from "@/context/redux/theme-marketplace/theme-marketplace-slice";
 import { selectThemesSearchResultLoading } from "@/context/redux/status/selectors/theme-marketplace";
-import ThemeCardSkeleton from "@/components/app/themes/marketplace/[id]/theme-list/ThemeCardSkeleton";
+import ThemeCardSkeleton from "@renderer/components/app/themes/marketplace/theme-list/ThemeCardSkeleton";
 import { ThemeMetaInterface } from "@shared/types/theme.types";
 import { cn } from "@/lib/utils";
 

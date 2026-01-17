@@ -3,8 +3,8 @@ import { ApiBoltResizableLeftPanel } from "@/components/ui/api-bolt-resizable";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { handleToggleThemeListCollapsed } from "@/context/redux/theme/theme-slice";
 import { selectIsThemeListCollapsed } from "@/context/redux/theme/selectors/theme";
-import ThemeList from "@/components/app/themes/marketplace/[id]/theme-list/v1/ThemeList";
-import ThemeListTop from "@/components/app/themes/marketplace/[id]/theme-list/theme-list-top/ThemeListTop";
+import ThemeList from "@renderer/components/app/themes/marketplace/theme-list/v1/ThemeList";
+import ThemeListTop from "@renderer/components/app/themes/marketplace/theme-list/theme-list-top/ThemeListTop";
 
 const ThemeListPanelWrapper = memo(() => {
   const dispath = useAppDispatch();
