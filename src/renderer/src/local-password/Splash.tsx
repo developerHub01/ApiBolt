@@ -59,16 +59,25 @@ const Splash = () => {
           onSubmit={handleSubmit}
           className="w-full max-w-75 flex flex-col gap-5 justify-center items-center text-center"
         >
-          <div className="flex flex-col gap-2 items-center pb-3">
-            <motion.h1
-              className="text-3xl font-black text-primary tracking-wide"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              {APP_NAME}
-            </motion.h1>
-            <Separator className="bg-primary max-w-12 pb-1" />
+          <div className="flex flex-col gap-3 items-center pb-3">
+            <div className="flex items-center gap-2.5 pl-3">
+              <div className="shrink-0 size-8 rounded-lg overflow-hidden ring-1 ring-primary">
+                <img
+                  src="/logo/logo.svg"
+                  alt="api-bolt"
+                  className="size-full"
+                />
+              </div>
+              <motion.h1
+                className="text-3xl font-black text-primary tracking-wide"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+              >
+                {APP_NAME}
+              </motion.h1>
+            </div>
+            <Separator className="bg-primary max-w-40 pb-1" />
           </div>
           <span />
           <h1 className="text-xl font-bold pb-3">Enter your local password</h1>

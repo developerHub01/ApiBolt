@@ -57,7 +57,7 @@ const Splash = () => {
         <div className="relative z-10 flex flex-col items-center gap-3">
           {/* Logo Section */}
           <motion.div
-            className="flex flex-col items-center gap-2"
+            className="flex flex-col items-center gap-3"
             initial={{
               opacity: 0,
               y: -10,
@@ -83,20 +83,30 @@ const Splash = () => {
                 duration: 0.5,
               }}
             >
-              <div className="w-10 h-10 bg-secondary backdrop-blur-sm rounded-lg flex items-center justify-center border border-border shadow-lg">
-                <motion.div
-                  animate={{
-                    rotate: 360,
-                  }}
-                  transition={{
-                    duration: 20,
-                    repeat: Number.POSITIVE_INFINITY,
-                    ease: "linear",
-                  }}
-                >
-                  <Zap className="w-5 h-5 text-primary" />
-                </motion.div>
-              </div>
+              <motion.div
+                className="w-10 h-10 bg-secondary backdrop-blur-sm rounded-lg flex items-center justify-center ring-2 ring-primary shadow-lg transform-content"
+                initial={{
+                  scale: 0.8,
+                }}
+                animate={{
+                  scale: 1,
+                }}
+                exit={{
+                  scale: 0.5,
+                }}
+                transition={{
+                  duration: 0.8,
+                  repeat: Number.POSITIVE_INFINITY,
+                  ease: "easeInOut",
+                  repeatType: "reverse",
+                }}
+              >
+                <img
+                  src="/logo/logo.svg"
+                  alt="api-bolt"
+                  className="size-full"
+                />
+              </motion.div>
 
               {/* Subtle glow */}
               <motion.div

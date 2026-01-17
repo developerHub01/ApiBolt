@@ -6,7 +6,7 @@ export const createLocalPasswordWindow = () => {
   const win = new BrowserWindow({
     show: false,
     width: 400,
-    height: 450,
+    height: 480,
     frame: false,
     transparent: true,
     resizable: false,

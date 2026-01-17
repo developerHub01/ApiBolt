@@ -22,9 +22,18 @@ const Header = () => {
               "min-h-0 h-0 ": isFullscreen,
             })}
           >
-            <p className="justify-start flex-1 select-none text-lg md:text-xl font-black tracking-wide px-2.5 py-1.5">
-              {APP_NAME}
-            </p>
+            <div className="flex items-center pl-3">
+              <div className="shrink-0 size-6 md:size-7 rounded-lg overflow-hidden ring-1 ring-primary">
+                <img
+                  src="/logo/logo.svg"
+                  alt="api-bolt"
+                  className="size-full"
+                />
+              </div>
+              <p className="justify-start flex-1 select-none text-lg md:text-xl font-black tracking-wide pl-2 md:px-2.5 py-1.5">
+                {APP_NAME}
+              </p>
+            </div>
             <div className="w-full flex-2 flex justify-center items-center">
               <HeaderSearch />
             </div>
