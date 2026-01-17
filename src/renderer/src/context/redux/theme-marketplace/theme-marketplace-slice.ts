@@ -17,15 +17,22 @@ export interface ThemeMarketplaceInitialInterface {
   isInstallMaxCountAlertOpen: boolean;
 }
 
+const THEME_MARKET_THEME_LIST_DEFAULT: Pick<
+  ThemeMarketplaceInitialInterface,
+  "page" | "totalThemes" | "totalPages" | "themesList"
+> = {
+  page: 1,
+  totalThemes: 0,
+  totalPages: 1,
+  themesList: [],
+};
+
 // Define the initial state using that type
 const initialState: ThemeMarketplaceInitialInterface = {
   searchTerm: "",
   searchFilter: "all",
-  totalThemes: 0,
-  page: 1,
-  totalPages: 1,
+  ...THEME_MARKET_THEME_LIST_DEFAULT,
   selectedThemeId: null,
-  themesList: [],
   selectedThemeDetails: null,
   isInstallMaxCountAlertOpen: false,
 };
@@ -82,6 +89,9 @@ export const themeMarketplaceSlice = createSlice({
     ) => {
       state.themesList = action.payload;
     },
+    handleClearThemeMarketCache: state => {
+      Object.assign(state, THEME_MARKET_THEME_LIST_DEFAULT);
+    },
     handleChangeSelectedThemeDetails: (
       state,
       action: PayloadAction<ThemeInterface | undefined | null>,
@@ -107,6 +117,7 @@ export const {
   handleChangeTotalPages,
   handleChangeSelectedThemeId,
   handleLoadThemeList,
+  handleClearThemeMarketCache,
   handleChangeSelectedThemeDetails,
   handleChangeIsInstallMaxCountAlertOpen,
 } = themeMarketplaceSlice.actions;

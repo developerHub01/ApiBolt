@@ -21,6 +21,7 @@ import {
   handleIncrementPage,
 } from "@/context/redux/theme-marketplace/theme-marketplace-slice";
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
+import { selectThemesSearchResultError } from "@/context/redux/status/selectors/theme-marketplace";
 
 const MarketplacePagination = memo(() => {
   const dispatch = useAppDispatch();
@@ -31,6 +32,7 @@ const MarketplacePagination = memo(() => {
   const currentPage = useAppSelector(selectThemeMarketplaceSearchPage);
   const totalPages = useAppSelector(selectThemeMarketplaceSearchTotalPages);
   const totalThemes = useAppSelector(selectThemeMarketplaceSearchTotalThemes);
+  const errorMessage = useAppSelector(selectThemesSearchResultError);
 
   const isDisabled = useMemo(
     () => THEME_MARKETPLACE_FILTER_LOCAL.has(searchFilter),
@@ -54,6 +56,11 @@ const MarketplacePagination = memo(() => {
     [currentPage, totalThemeInCurrentPage],
   );
 
+  const showInfo = useMemo(
+    () => !errorMessage && totalThemes,
+    [errorMessage, totalThemes],
+  );
+
   const handleNavigation = useCallback(
     (type: "left" | "right") => () =>
       dispatch(type === "left" ? handleDecrementPage() : handleIncrementPage()),
@@ -70,7 +77,7 @@ const MarketplacePagination = memo(() => {
       >
         <ArrowLeftIcon /> Previous
       </Button>
-      {Boolean(totalPages) && (
+      {showInfo && (
         <div className="flex items-center gap-1 pointer-events-none">
           <ButtonLikeDiv size={"xs"} variant={"outline"}>
             Current Page: {currentPage}

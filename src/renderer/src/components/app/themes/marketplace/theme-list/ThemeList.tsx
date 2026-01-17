@@ -16,8 +16,9 @@ import { ThemeMetaInterface } from "@shared/types/theme.types";
 import { cn } from "@/lib/utils";
 import ThemeListError from "@/components/app/themes/marketplace/theme-list/ThemeListError";
 import { motion, AnimatePresence } from "motion/react";
+import Empty from "@/components/ui/empty";
+import notFoundAnimationData from "@/assets/lottie/no-data-found.json";
 import useShowSkeleton from "@/hooks/ui/use-show-skeleton";
-import ThemeListNotFound from "@/components/app/themes/marketplace/theme-list/ThemeListNotFound";
 
 const ThemeList = () => {
   const dispatch = useAppDispatch();
@@ -47,7 +48,16 @@ const ThemeList = () => {
         ) : errorMessage ? (
           <ThemeListError />
         ) : !themesList?.length ? (
-          <ThemeListNotFound />
+          <Empty
+            label="Not found"
+            description="No themes found for following search params. Try to adjust theme for better result."
+            animationData={notFoundAnimationData}
+            showFallback
+            innerClassName="w-80"
+            fallbackClassName="w-65"
+            className="h-full"
+            key="themes-not-found"
+          />
         ) : (
           <Wrapper>
             {themesList.map(theme => (

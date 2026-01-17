@@ -7,6 +7,7 @@ import {
   handleChangeSelectedThemeDetails,
   handleChangeTotalPages,
   handleChangeTotalThemes,
+  handleClearThemeMarketCache,
   handleLoadThemeList,
 } from "@/context/redux/theme-marketplace/theme-marketplace-slice";
 import {
@@ -73,6 +74,7 @@ export const loadThemesSearchResult = createAsyncThunk<
         if (axios.isAxiosError(error)) {
           if (error.code === "ERR_NETWORK") throw new Error("ERR_NETWORK");
         }
+        dispatch(handleClearThemeMarketCache());
       }
     }
   },
