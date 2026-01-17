@@ -17,6 +17,7 @@ import { cn } from "@/lib/utils";
 import ThemeListError from "@/components/app/themes/marketplace/theme-list/ThemeListError";
 import { motion, AnimatePresence } from "motion/react";
 import useShowSkeleton from "@/hooks/ui/use-show-skeleton";
+import ThemeListNotFound from "@/components/app/themes/marketplace/theme-list/ThemeListNotFound";
 
 const ThemeList = () => {
   const dispatch = useAppDispatch();
@@ -45,6 +46,8 @@ const ThemeList = () => {
           </Wrapper>
         ) : errorMessage ? (
           <ThemeListError />
+        ) : !themesList?.length ? (
+          <ThemeListNotFound />
         ) : (
           <Wrapper>
             {themesList.map(theme => (
