@@ -27,7 +27,7 @@ const ThemePreviewMode = memo(() => {
           transition={{
             duration: 0.3,
           }}
-          className="p-2 pt-1 bg-accent/50"
+          className="p-2 pt-1 bg-accent/50 border-t-2"
         >
           <div className="flex items-center justify-center gap-3 max-w-3xl mx-auto text-xs">
             <p className="text-accent-foreground">

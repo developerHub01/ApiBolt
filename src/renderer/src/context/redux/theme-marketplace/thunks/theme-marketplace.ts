@@ -154,7 +154,7 @@ export const previewTheme = createAsyncThunk<
     if (!palette) return;
 
     dispatch(applyTestTheme(palette));
-    dispatch(handleChangeThemePreviewMode(true));
+    dispatch(handleChangeThemePreviewMode());
   } catch (error) {
     console.error(error);
   }

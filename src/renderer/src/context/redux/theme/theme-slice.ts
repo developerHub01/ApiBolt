@@ -87,7 +87,7 @@ export const themeSlice = createSlice({
       state,
       action: PayloadAction<boolean | undefined | null>,
     ) => {
-      state.isPreviewModeOn = action.payload ?? false;
+      state.isPreviewModeOn = action.payload ?? !state.isPreviewModeOn;
     },
   },
 });

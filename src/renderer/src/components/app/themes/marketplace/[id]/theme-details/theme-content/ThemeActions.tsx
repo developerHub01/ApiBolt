@@ -18,7 +18,6 @@ import {
 import { Button } from "@renderer/components/ui/button";
 import { ThemeInterface } from "@shared/types/theme.types";
 import { selectSelectedThemeInstallationOrUpdationMeta } from "@renderer/context/redux/theme-marketplace/selectors/theme-marketplace";
-import { Separator } from "@renderer/components/ui/separator";
 import InfoTooltip from "@renderer/components/ui/InfoTooltip";
 import { selectActiveProjectId } from "@renderer/context/redux/project/selectors/project";
 import {
@@ -26,7 +25,6 @@ import {
   inActiveTheme,
 } from "@renderer/context/redux/theme/thunks/theme";
 import { ButtonLikeDiv } from "@renderer/components/ui/button-like-div";
-import { handleChangeThemePreviewMode } from "@renderer/context/redux/theme/theme-slice";
 import { selectIsThemePreviewModeOn } from "@renderer/context/redux/theme/selectors/theme";
 
 interface Props extends Pick<ThemeInterface, "id" | "version"> {}
