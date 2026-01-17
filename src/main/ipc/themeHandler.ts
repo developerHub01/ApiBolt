@@ -5,6 +5,7 @@ import {
   getThemeById,
   getThemeListMeta,
   getThemePaletteById,
+  getTotalInstalledThemeCount,
   updateTheme,
 } from "@/main/db/themeDB.js";
 import {
@@ -19,6 +20,7 @@ import axios from "axios";
 import { getImageFileFromPath } from "@/main/utils/images";
 import { ThemeMetaInterface } from "@shared/types/theme.types";
 import { getActiveThemeMeta } from "@/main/db/activeThemeDB";
+import { MAX_INSTALLED_THEME_COUNT } from "@shared/constant/theme";
 
 const getNewThumbnailPath = (id: string): string => {
   const userDataPath = app.getPath("userData");
@@ -133,6 +135,10 @@ export const themeHandler = (): void => {
       ...rest: Parameters<ElectronAPIThemeInterface["installTheme"]>
     ): ReturnType<ElectronAPIThemeInterface["installTheme"]> => {
       const themeMeta = rest[0];
+      const totalInstalledTheme = await getTotalInstalledThemeCount();
+
+      if (totalInstalledTheme >= MAX_INSTALLED_THEME_COUNT)
+        throw new Error("theme installation limit exit");
 
       if (!themeMeta.id || !themeMeta.thumbnail) throw new Error();
 

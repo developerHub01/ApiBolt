@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { themeTable } from "@/main/db/schema.js";
 import { ElectronAPIThemeInterface } from "@shared/types/api/electron-theme";
@@ -6,6 +6,21 @@ import {
   ThemeInterface,
   ThemeMetaDBInterface,
 } from "@shared/types/theme.types";
+
+export const getTotalInstalledThemeCount = async () => {
+  try {
+    return (
+      await db
+        .select({
+          count: count(),
+        })
+        .from(themeTable)
+    )?.[0]?.count;
+  } catch (error) {
+    console.error(error);
+    return 1;
+  }
+};
 
 export const getThemeListMeta: ElectronAPIThemeInterface["getThemeListMeta"] =
   async () => {
