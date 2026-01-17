@@ -59,6 +59,11 @@ export const selectSelectedThemeDetails = createSelector(
   details => details,
 );
 
+export const selectIsInstallMaxCountAlertOpen = createSelector(
+  [(state: RootState) => state.themeMarketplace.isInstallMaxCountAlertOpen],
+  isOpen => isOpen,
+);
+
 /**
  * Checking the selected theme details with installed themes
  * is the selected theme installed or not

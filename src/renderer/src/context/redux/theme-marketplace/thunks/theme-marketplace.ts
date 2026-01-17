@@ -3,6 +3,7 @@ import type { AppDispatch, RootState } from "@/context/redux/store";
 import { axiosServerClient } from "@/lib/utils";
 import { ThemeInterface, ThemeMetaInterface } from "@shared/types/theme.types";
 import {
+  handleChangeIsInstallMaxCountAlertOpen,
   handleChangeSelectedThemeDetails,
   handleLoadThemeList,
 } from "@/context/redux/theme-marketplace/theme-marketplace-slice";
@@ -13,6 +14,7 @@ import {
   loadThemeMetaList as loadInstalledThemeMetaList,
 } from "@/context/redux/theme/thunks/theme";
 import { handleChangeThemePreviewMode } from "../../theme/theme-slice";
+import { MAX_INSTALLED_THEME_COUNT } from "@shared/constant/theme";
 
 export const loadThemesSearchResult = createAsyncThunk<
   void,
@@ -79,8 +81,15 @@ export const installTheme = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->("theme-marketplace/installTheme", async (id, { dispatch }) => {
+>("theme-marketplace/installTheme", async (id, { dispatch, getState }) => {
   try {
+    const state = getState() as RootState;
+
+    if (state.theme.themeMetaList.length >= MAX_INSTALLED_THEME_COUNT) {
+      dispatch(handleChangeIsInstallMaxCountAlertOpen(true));
+      return;
+    }
+
     const response = await axiosServerClient.get(`/themes/details/${id}`);
     const theme = response.data?.data as ThemeInterface;
 

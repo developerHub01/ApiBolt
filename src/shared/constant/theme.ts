@@ -36,3 +36,5 @@ export const THEME_PALETTE_PROPERTIES = new Set<ThemeColorId>([
   "ring",
   "line",
 ]);
+
+export const MAX_INSTALLED_THEME_COUNT = 6;

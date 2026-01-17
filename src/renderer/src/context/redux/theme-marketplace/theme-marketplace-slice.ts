@@ -12,6 +12,7 @@ export interface ThemeMarketplaceInitialInterface {
   selectedThemeId: string | null;
   themesList: Array<ThemeMetaInterface>;
   selectedThemeDetails: ThemeInterface | null;
+  isInstallMaxCountAlertOpen: boolean;
 }
 
 // Define the initial state using that type
@@ -22,6 +23,7 @@ const initialState: ThemeMarketplaceInitialInterface = {
   selectedThemeId: null,
   themesList: [],
   selectedThemeDetails: null,
+  isInstallMaxCountAlertOpen: false,
 };
 
 export const themeMarketplaceSlice = createSlice({
@@ -64,6 +66,12 @@ export const themeMarketplaceSlice = createSlice({
     ) => {
       state.selectedThemeDetails = action.payload ?? null;
     },
+    handleChangeIsInstallMaxCountAlertOpen: (
+      state,
+      action: PayloadAction<boolean | undefined | null>,
+    ) => {
+      state.isInstallMaxCountAlertOpen = action.payload ?? false;
+    },
   },
 });
 
@@ -74,6 +82,7 @@ export const {
   handleChangeSelectedThemeId,
   handleLoadThemeList,
   handleChangeSelectedThemeDetails,
+  handleChangeIsInstallMaxCountAlertOpen,
 } = themeMarketplaceSlice.actions;
 
 export default themeMarketplaceSlice.reducer;

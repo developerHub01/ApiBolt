@@ -52,7 +52,10 @@ const ThemeActions = ({ id, version }: Props) => {
     (type: TAction) => () => {
       if (!id) return;
       switch (type) {
-        case "install":
+        case "install": {
+          dispatch(installTheme(id));
+          return;
+        }
         case "update": {
           dispatch(installTheme(id));
           return;
