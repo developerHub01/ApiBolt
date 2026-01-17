@@ -1,30 +1,18 @@
-import { useCallback, useMemo } from "react";
+import { useMemo } from "react";
 import ExternalLink from "@/components/ux/ExternalLink";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   User as AuthorIcon,
-  Download as InstallIcon,
   CloudDownload as TotalInstallIcon,
   Palette as ThemeCategoryIcon,
 } from "lucide-react";
-import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import { useAppSelector } from "@/context/redux/hooks";
 import { selectSelectedThemeDetails } from "@/context/redux/theme-marketplace/selectors/theme-marketplace";
-import { installTheme } from "@renderer/context/redux/theme-marketplace/thunks/theme-marketplace";
-import { selectThemeInstallationLoading } from "@renderer/context/redux/status/selectors/theme-marketplace";
-import { Spinner } from "@renderer/components/ui/spinner";
+import ThemeActions from "@/components/app/themes/marketplace/[id]/theme-details/theme-content/ThemeActions";
 
 const ThemeMeta = () => {
-  const dispatch = useAppDispatch();
   const themeDetails = useAppSelector(selectSelectedThemeDetails);
-  const isInstalling = useAppSelector(selectThemeInstallationLoading);
-
-  const themeId = useMemo(() => themeDetails?.id, [themeDetails?.id]);
-
-  const handleInstall = useCallback(() => {
-    if (!themeId) return;
-    dispatch(installTheme(themeId));
-  }, [dispatch, themeId]);
 
   const authorProfileUrl = useMemo(
     () =>
@@ -35,7 +23,8 @@ const ThemeMeta = () => {
   );
 
   if (!themeDetails) return null;
-  const { type, author, authorUsername, version, install_count } = themeDetails;
+  const { id, type, author, authorUsername, version, install_count } =
+    themeDetails;
 
   return (
     <>
@@ -63,13 +52,7 @@ const ThemeMeta = () => {
           <TotalInstallIcon /> {install_count}
         </Badge>
       </div>
-      <div className="flex items-center gap-4">
-        <Button size={"sm"} onClick={handleInstall} disabled={isInstalling}>
-          {isInstalling ? <Spinner /> : <InstallIcon />}
-          Install
-        </Button>
-        <p className="text-sm">version: {version}</p>
-      </div>
+      <ThemeActions id={id} version={version} />
     </>
   );
 };

@@ -14,8 +14,9 @@ export interface ElectronAPIThemeInterface {
   ): Promise<ThemeMetaDBInterface["palette"] | null>;
   createTheme(payload: ThemeCreatePayloadInterface): Promise<boolean>;
   updateTheme(payload: Partial<ThemeCreatePayloadInterface>): Promise<boolean>;
-  installTheme(payload: ThemeMetaDBInterface): Promise<boolean>;
   deleteThemeById(id: string): Promise<boolean>;
   saveThemePalette(palette: ThemeMetaDBInterface["palette"]): Promise<boolean>;
   importThemePaletteInEditor(): Promise<ThemeMetaDBInterface["palette"] | null>;
+  installTheme(payload: ThemeMetaDBInterface): Promise<boolean>;
+  unInstallTheme(id: string): Promise<boolean>;
 }

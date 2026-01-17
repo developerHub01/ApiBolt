@@ -18,7 +18,12 @@ import { mkdir, unlink, writeFile } from "node:fs/promises";
 import axios from "axios";
 import { getImageFileFromPath } from "@/main/utils/images";
 import { ThemeMetaInterface } from "@shared/types/theme.types";
-import { getActiveThemeMeta } from "../db/activeThemeDB";
+import { getActiveThemeMeta } from "@/main/db/activeThemeDB";
+
+const getNewThumbnailPath = (id: string): string => {
+  const userDataPath = app.getPath("userData");
+  return path.join(userDataPath, "theme_thumbnails", `${id}.webp`);
+};
 
 const getThemesWithApiProtocolThumbnail = async (
   themes: Array<ThemeMetaInterface>,
@@ -167,6 +172,28 @@ export const themeHandler = (): void => {
       }
 
       return createResponse;
+    },
+  );
+  ipcMain.handle(
+    "unInstallTheme",
+    async (
+      _,
+      ...rest: Parameters<ElectronAPIThemeInterface["unInstallTheme"]>
+    ): ReturnType<ElectronAPIThemeInterface["unInstallTheme"]> => {
+      const themeId = rest[0];
+      if (!themeId) throw new Error();
+
+      const deletedResponse = await deleteThemeById(themeId);
+
+      if (!deletedResponse) {
+        try {
+          await unlink(getNewThumbnailPath(themeId));
+        } catch {
+          /*  */
+        }
+      }
+
+      return deletedResponse;
     },
   );
 };

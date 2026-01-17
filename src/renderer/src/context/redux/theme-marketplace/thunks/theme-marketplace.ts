@@ -7,6 +7,7 @@ import {
   handleLoadThemeList,
 } from "@/context/redux/theme-marketplace/theme-marketplace-slice";
 import {
+  applyThemeInApp,
   loadActiveThemeId,
   loadThemeMetaList as loadInstalledThemeMetaList,
 } from "@/context/redux/theme/thunks/theme";
@@ -35,7 +36,7 @@ export const loadThemesSearchResult = createAsyncThunk<
       } else {
         const response = await axiosServerClient.get("/themes/meta");
         const data = (response.data?.data ?? []) as Array<ThemeMetaInterface>;
-        
+
         if (response.status !== 200 || !data) throw new Error();
         dispatch(handleLoadThemeList(data));
         return;
@@ -77,7 +78,7 @@ export const installTheme = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->("theme-marketplace/installTheme", async id => {
+>("theme-marketplace/installTheme", async (id, { dispatch }) => {
   try {
     const response = await axiosServerClient.get(`/themes/details/${id}`);
     const theme = response.data?.data as ThemeInterface;
@@ -94,6 +95,36 @@ export const installTheme = createAsyncThunk<
       thumbnail: theme.thumbnail,
       version: theme.version,
     });
+
+    dispatch(loadInstalledThemeMetaList());
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+export const unInstallTheme = createAsyncThunk<
+  void,
+  string,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("theme-marketplace/unInstallTheme", async (id, { dispatch, getState }) => {
+  try {
+    const state = getState() as RootState;
+
+    const response = await window.electronAPITheme.deleteThemeById(id);
+    if (!response) return;
+
+    dispatch(loadInstalledThemeMetaList());
+
+    if (
+      state.theme.activeThemeId.global === id ||
+      state.theme.activeThemeId.local === id
+    ) {
+      dispatch(loadActiveThemeId());
+      dispatch(applyThemeInApp());
+    }
   } catch (error) {
     console.error(error);
   }

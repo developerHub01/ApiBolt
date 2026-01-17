@@ -1,7 +1,5 @@
 import { createSelector } from "@reduxjs/toolkit";
 import type { RootState } from "@/context/redux/store";
-import { THEME_MARKETPLACE_FILTER_LOCAL } from "@renderer/constant/theme.constant";
-import ThemeList from "@renderer/components/app/themes/marketplace/[id]/theme-list/ThemeList";
 import { ThemeMetaInterface } from "@shared/types/theme.types";
 
 export const selectThemeMarketplaceSearchTerm = createSelector(
@@ -59,4 +57,73 @@ export const selectThemeMarketplaceThemesList = createSelector(
 export const selectSelectedThemeDetails = createSelector(
   [(state: RootState) => state.themeMarketplace.selectedThemeDetails],
   details => details,
+);
+
+/**
+ * Checking the selected theme details with installed themes
+ * is the selected theme installed or not
+ * if installed do need update or not
+ * so that we can show CTAs perfectly
+ */
+export const selectSelectedThemeInstallationOrUpdationMeta = createSelector(
+  [
+    (state: RootState) => state.project.activeProjectId,
+    (state: RootState) => state.themeMarketplace.selectedThemeId,
+    (state: RootState) => state.themeMarketplace.selectedThemeDetails,
+    (state: RootState) => state.theme.themeMetaList,
+    (state: RootState) => state.theme.activeThemeId,
+  ],
+  (
+    activeProjectId,
+    selectedThemeId,
+    selectedThemeDetails,
+    installedThemes,
+    activeThemeId,
+  ): {
+    isInstalled: boolean;
+    needUpdate: boolean;
+    oldVersion?: number;
+    isActivable?: boolean;
+  } => {
+    const { global: globalActiveThemeId, local: localActiveThemeId } =
+      activeThemeId;
+
+    const meta = {
+      isInstalled: false,
+      needUpdate: false,
+      isActivable: false,
+    };
+
+    try {
+      if (!selectedThemeId) throw new Error();
+      const installedTheme = installedThemes.find(
+        theme => theme.id === selectedThemeId,
+      );
+      if (!installedTheme) throw new Error();
+
+      const installedMeta = {
+        ...meta,
+        isInstalled: true,
+        oldVersion: installedTheme.version ?? 1,
+      };
+
+      /* checking version */
+      if ((installedTheme.version ?? 1) < (selectedThemeDetails!.version ?? 1))
+        installedMeta.needUpdate = true;
+
+      /**
+       * checking activable
+       * if have projectId then check local theme else check global theme
+       */
+      if (
+        (activeProjectId && installedTheme.id !== localActiveThemeId) ||
+        (!activeProjectId && installedTheme.id !== globalActiveThemeId)
+      )
+        installedMeta.isActivable = true;
+
+      return installedMeta;
+    } catch {
+      return meta;
+    }
+  },
 );

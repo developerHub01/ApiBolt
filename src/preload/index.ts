@@ -1,13 +1,13 @@
 import { contextBridge, ipcRenderer, webFrame } from "electron";
 import { WindowElectronAPIInterface } from "@shared/types";
 
-const handleApplyThemeInDocument = (theme: Record<string, string>) => {
+const handleApplyThemeInDocument = (theme: Record<string, string>): void => {
   Object.entries(theme).forEach(([key, value]) => {
     document.documentElement.style.setProperty(`--${key}`, value);
   });
 };
 
-const handleApplyTheme = async () => {
+const handleApplyTheme = async (): Promise<void> => {
   try {
     const activeTheme = await ipcRenderer.invoke("getActiveThemePalette");
     const theme = {
@@ -154,6 +154,8 @@ if (process.contextIsolated) {
           await ipcRenderer.invoke("importThemePaletteInEditor", ...payload),
         installTheme: async (...payload) =>
           await ipcRenderer.invoke("installTheme", ...payload),
+        unInstallTheme: async (...payload) =>
+          await ipcRenderer.invoke("unInstallTheme", ...payload),
       };
 
     /**

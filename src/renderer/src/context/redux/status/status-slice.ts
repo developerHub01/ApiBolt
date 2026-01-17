@@ -20,6 +20,7 @@ import {
   installTheme,
   loadThemesDetails,
   loadThemesSearchResult,
+  unInstallTheme,
 } from "@/context/redux/theme-marketplace/thunks/theme-marketplace";
 
 export interface StatusInterface {
@@ -40,6 +41,7 @@ export interface StatusInterface {
   isThemesSearchResultLoading: boolean;
   isThemeMarketplaceThemeDetailsLoading: boolean;
   isThemeInstallationLoading: boolean;
+  isThemeUnInstallationLoading: boolean;
 }
 
 // Define the initial state using that type
@@ -61,6 +63,7 @@ const initialState: StatusInterface = {
   isThemesSearchResultLoading: true,
   isThemeMarketplaceThemeDetailsLoading: true,
   isThemeInstallationLoading: false,
+  isThemeUnInstallationLoading: false,
 };
 
 export const statusSlice = createSlice({
@@ -287,6 +290,16 @@ export const statusSlice = createSlice({
       })
       .addCase(installTheme.rejected, state => {
         state.isThemeInstallationLoading = false;
+      })
+
+      .addCase(unInstallTheme.pending, state => {
+        state.isThemeUnInstallationLoading = true;
+      })
+      .addCase(unInstallTheme.fulfilled, state => {
+        state.isThemeUnInstallationLoading = false;
+      })
+      .addCase(unInstallTheme.rejected, state => {
+        state.isThemeUnInstallationLoading = false;
       })
 
       /**
