@@ -161,7 +161,7 @@ const routes = [
               //   ],
               // },
               {
-                path: "marketplace?",
+                path: "marketplace",
                 element: (
                   <Suspense fallback={<ThemeMarketplaceFallback />}>
                     <ThemeMarketPlaceLayout />
