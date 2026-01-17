@@ -75,7 +75,7 @@ export const loadThemesDetails = createAsyncThunk<
 });
 
 export const installTheme = createAsyncThunk<
-  void,
+  boolean,
   string,
   {
     dispatch: AppDispatch;
@@ -87,15 +87,15 @@ export const installTheme = createAsyncThunk<
 
     if (state.theme.themeMetaList.length >= MAX_INSTALLED_THEME_COUNT) {
       dispatch(handleChangeIsInstallMaxCountAlertOpen(true));
-      return;
+      throw new Error();
     }
 
-    const response = await axiosServerClient.get(`/themes/details/${id}`);
-    const theme = response.data?.data as ThemeInterface;
+    const themeResponse = await axiosServerClient.get(`/themes/details/${id}`);
+    const theme = themeResponse.data?.data as ThemeInterface;
 
-    if (response.status !== 200 || !theme) throw new Error();
+    if (themeResponse.status !== 200 || !theme) throw new Error();
 
-    await window.electronAPITheme.installTheme({
+    const response = await window.electronAPITheme.installTheme({
       id: theme.id,
       name: theme.name,
       palette: theme.palette,
@@ -107,13 +107,16 @@ export const installTheme = createAsyncThunk<
     });
 
     dispatch(loadInstalledThemeMetaList());
+
+    return response;
   } catch (error) {
     console.error(error);
+    return false;
   }
 });
 
 export const unInstallTheme = createAsyncThunk<
-  void,
+  boolean,
   string,
   {
     dispatch: AppDispatch;
@@ -124,7 +127,7 @@ export const unInstallTheme = createAsyncThunk<
     const state = getState() as RootState;
 
     const response = await window.electronAPITheme.deleteThemeById(id);
-    if (!response) return;
+    if (!response) throw new Error();
 
     dispatch(loadInstalledThemeMetaList());
 
@@ -135,13 +138,16 @@ export const unInstallTheme = createAsyncThunk<
       dispatch(loadActiveThemeId());
       dispatch(applyThemeInApp());
     }
+
+    return response;
   } catch (error) {
     console.error(error);
+    return false;
   }
 });
 
 export const previewTheme = createAsyncThunk<
-  void,
+  boolean,
   void,
   {
     dispatch: AppDispatch;
@@ -151,11 +157,31 @@ export const previewTheme = createAsyncThunk<
   try {
     const state = getState() as RootState;
     const palette = state.themeMarketplace.selectedThemeDetails?.palette;
-    if (!palette) return;
+    if (!palette) throw new Error();
 
-    dispatch(applyTestTheme(palette));
+    const response = await dispatch(applyTestTheme(palette)).unwrap();
     dispatch(handleChangeThemePreviewMode());
+    return response.success;
   } catch (error) {
     console.error(error);
+    return false;
+  }
+});
+
+export const exitPreviewTheme = createAsyncThunk<
+  boolean,
+  void,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("theme-marketplace/exitPreviewTheme", async (_, { dispatch }) => {
+  try {
+    const response = await dispatch(applyThemeInApp()).unwrap();
+    dispatch(handleChangeThemePreviewMode(false));
+    return response.success;
+  } catch (error) {
+    console.error(error);
+    return false;
   }
 });

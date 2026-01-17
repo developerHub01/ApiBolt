@@ -26,6 +26,7 @@ import {
 } from "@renderer/context/redux/theme/thunks/theme";
 import { ButtonLikeDiv } from "@renderer/components/ui/button-like-div";
 import { selectIsThemePreviewModeOn } from "@renderer/context/redux/theme/selectors/theme";
+import useCustomToast from "@renderer/hooks/ui/use-custom-toast";
 
 interface Props extends Pick<ThemeInterface, "id" | "version"> {}
 
@@ -39,6 +40,7 @@ type TAction =
 
 const ThemeActions = ({ id, version }: Props) => {
   const dispatch = useAppDispatch();
+  const toast = useCustomToast();
   const projectId = useAppSelector(selectActiveProjectId);
   const isInstalling = useAppSelector(selectThemeInstallationLoading);
   const isUnInstalling = useAppSelector(selectThemeUnInstallationLoading);
@@ -47,41 +49,66 @@ const ThemeActions = ({ id, version }: Props) => {
   const isOnPreviewMode = useAppSelector(selectIsThemePreviewModeOn);
 
   const handleAction = useCallback(
-    (type: TAction) => () => {
+    (type: TAction) => async () => {
       if (!id) return;
       switch (type) {
         case "install": {
-          dispatch(installTheme(id));
-          return;
+          const response = await dispatch(installTheme(id)).unwrap();
+          return toast({
+            type: response ? "success" : "error",
+            title: response ? "Installed successfully" : "Installation failed",
+          });
         }
         case "update": {
-          dispatch(installTheme(id));
-          return;
+          const response = await dispatch(installTheme(id)).unwrap();
+          return toast({
+            type: response ? "success" : "error",
+            title: response ? "Updated successfully" : "Updation failed",
+          });
         }
         case "uninstall": {
-          dispatch(unInstallTheme(id));
-          return;
+          const response = await dispatch(unInstallTheme(id)).unwrap();
+          return toast({
+            type: response ? "success" : "error",
+            title: response ? "Updated successfully" : "Updation failed",
+          });
         }
         case "activate": {
-          dispatch(
+          const response = await dispatch(
             changeActiveThemeId({
               activeTheme: id ?? null,
               projectId: projectId,
             }),
-          );
-          return;
+          ).unwrap();
+          return toast({
+            type: response ? "success" : "error",
+            title: response ? "Activated successfully" : "Activation failed",
+          });
         }
         case "in-activate": {
-          dispatch(inActiveTheme());
-          return;
+          const response = await dispatch(inActiveTheme()).unwrap();
+          return toast({
+            type: response ? "success" : "error",
+            title: response
+              ? "Un-activated successfully"
+              : "Un-activation failed",
+          });
         }
         case "preview": {
-          dispatch(previewTheme());
-          return;
+          const response = await dispatch(previewTheme()).unwrap();
+          return toast({
+            type: response ? "success" : "error",
+            title: response
+              ? "Preview toggled successfully"
+              : "Preview toggle failed",
+            description: response
+              ? "theme preview toggled"
+              : "something went wrong while toggle theme preview",
+          });
         }
       }
     },
-    [dispatch, id, projectId],
+    [dispatch, id, projectId, toast],
   );
 
   return (

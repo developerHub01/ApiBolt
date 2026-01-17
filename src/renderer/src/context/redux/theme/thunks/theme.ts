@@ -94,7 +94,7 @@ export const loadActiveThemeId = createAsyncThunk<
 });
 
 export const changeActiveThemeId = createAsyncThunk<
-  void,
+  boolean,
   ChangeActiveThemePayloadInterface,
   {
     dispatch: AppDispatch;
@@ -104,7 +104,7 @@ export const changeActiveThemeId = createAsyncThunk<
   try {
     const response =
       await window.electronAPIActiveTheme.changeActiveTheme(payload);
-    if (!response) return;
+    if (!response) throw new Error();
 
     dispatch(
       handleUpdateActiveThemeId({
@@ -113,13 +113,15 @@ export const changeActiveThemeId = createAsyncThunk<
     );
 
     dispatch(applyThemeInApp());
+    return response;
   } catch (error) {
     console.error(error);
+    return false;
   }
 });
 
 export const inActiveTheme = createAsyncThunk<
-  void,
+  boolean,
   void,
   {
     dispatch: AppDispatch;
@@ -128,12 +130,14 @@ export const inActiveTheme = createAsyncThunk<
 >("theme/inActiveTheme", async (_, { dispatch }) => {
   try {
     const response = await window.electronAPIActiveTheme.inActiveTheme();
-    if (!response) return;
+    if (!response) throw new Error();
 
     dispatch(loadActiveThemeId());
     dispatch(applyThemeInApp());
+    return response;
   } catch (error) {
     console.error(error);
+    return false;
   }
 });
 

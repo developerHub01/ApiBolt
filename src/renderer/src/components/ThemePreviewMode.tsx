@@ -1,15 +1,28 @@
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@renderer/context/redux/hooks";
 import { selectIsThemePreviewModeOn } from "@renderer/context/redux/theme/selectors/theme";
 import { motion, AnimatePresence } from "motion/react";
-import { handleChangeThemePreviewMode } from "@renderer/context/redux/theme/theme-slice";
+import { exitPreviewTheme } from "@renderer/context/redux/theme-marketplace/thunks/theme-marketplace";
+import useCustomToast from "@renderer/hooks/ui/use-custom-toast";
 
 const ThemePreviewMode = memo(() => {
   const dispatch = useAppDispatch();
+  const toast = useCustomToast();
   const isOn = useAppSelector(selectIsThemePreviewModeOn);
 
-  const handleClose = () => dispatch(handleChangeThemePreviewMode(false));
+  const handleClose = useCallback(async () => {
+    const response = await dispatch(exitPreviewTheme()).unwrap();
+    return toast({
+      type: response ? "success" : "error",
+      title: response
+        ? "Preview toggled successfully"
+        : "Preview toggle failed",
+      description: response
+        ? "theme preview toggled"
+        : "something went wrong while toggle theme preview",
+    });
+  }, [dispatch, toast]);
 
   return (
     <AnimatePresence>
