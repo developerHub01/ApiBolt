@@ -1,14 +1,13 @@
 import { memo } from "react";
 import {
   AlertDialog,
-  AlertDialogCancel,
+  AlertDialogAction,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { selectIsInstallMaxCountAlertOpen } from "@/context/redux/theme-marketplace/selectors/theme-marketplace";
 import { handleChangeIsInstallMaxCountAlertOpen } from "@/context/redux/theme-marketplace/theme-marketplace-slice";
@@ -31,11 +30,7 @@ const ThemeInstallMaxSizeAlert = memo(() => {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel asChild>
-            <Button variant={"default"} onClick={handleClose}>
-              Ok
-            </Button>
-          </AlertDialogCancel>
+          <AlertDialogAction onClick={handleClose}>Ok</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
