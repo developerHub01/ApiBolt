@@ -19,7 +19,7 @@ import {
 import { handleChangeSearchTerm } from "@/context/redux/theme-marketplace/theme-marketplace-slice";
 import { debounce } from "@/lib/utils";
 import { motion, AnimatePresence } from "motion/react";
-import { THEME_MARKETPLACE_FILTER_LOCAL } from "@renderer/constant/theme.constant";
+import { THEME_MARKETPLACE_FILTER_LOCAL } from "@/constant/theme.constant";
 
 const ThemeListTop = memo(() => {
   const dispatch = useAppDispatch();

@@ -3,7 +3,7 @@ import ThemeList from "@/components/app/themes/marketplace/[id]/theme-list/Theme
 import ThemeDetails from "@/components/app/themes/marketplace/[id]/theme-details/ThemeDetails";
 import MarketplacePagination from "@/components/app/themes/marketplace/MarketplacePagination";
 import useLoadThemesSearchResult from "@/hooks/theme/use-load-themes-search-result";
-import ThemeInstallMaxSizeAlert from "@renderer/components/app/themes/marketplace/ThemeInstallMaxSizeAlert";
+import ThemeInstallMaxSizeAlert from "@/components/app/themes/marketplace/ThemeInstallMaxSizeAlert";
 
 const ThemeMarketPlacePage = () => {
   useLoadThemesSearchResult();

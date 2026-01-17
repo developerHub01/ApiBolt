@@ -16,7 +16,7 @@ import Cookies from "@/components/app/cookies/Cookies";
 import KeyboardShortcuts from "@/components/app/keyboard-shortcuts/KeyboardShortcuts";
 import History from "@/components/app/history-details/History";
 import LocalPassword from "@/components/app/local-password/LocalPassword";
-import ThemePreviewMode from "@renderer/components/ThemePreviewMode";
+import ThemePreviewMode from "@/components/ThemePreviewMode";
 
 const AppLayout = () => {
   return (

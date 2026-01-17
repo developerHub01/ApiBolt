@@ -1,10 +1,10 @@
 import { memo, useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import { useAppDispatch, useAppSelector } from "@renderer/context/redux/hooks";
-import { selectIsThemePreviewModeOn } from "@renderer/context/redux/theme/selectors/theme";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
+import { selectIsThemePreviewModeOn } from "@/context/redux/theme/selectors/theme";
 import { motion, AnimatePresence } from "motion/react";
-import { exitPreviewTheme } from "@renderer/context/redux/theme-marketplace/thunks/theme-marketplace";
-import useCustomToast from "@renderer/hooks/ui/use-custom-toast";
+import { exitPreviewTheme } from "@/context/redux/theme-marketplace/thunks/theme-marketplace";
+import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 const ThemePreviewMode = memo(() => {
   const dispatch = useAppDispatch();

@@ -18,7 +18,7 @@ import { UpdateSettingsRequestInterface } from "@shared/types/setting-request.ty
 import useCheckApplyingSetting from "@/hooks/setting/request/use-check-applyingSetting";
 import SettingRequestInput from "@/components/app/setting/content/request/SettingRequestInput";
 import { cn } from "@/lib/utils";
-import InfoTooltip from "@renderer/components/ui/InfoTooltip";
+import InfoTooltip from "@/components/ui/InfoTooltip";
 
 const localOptions = ["default", "global", "custom"];
 const globalOptions = ["default", "custom"];

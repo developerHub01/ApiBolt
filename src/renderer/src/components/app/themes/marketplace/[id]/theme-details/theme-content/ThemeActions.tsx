@@ -2,31 +2,31 @@ import { useCallback } from "react";
 import {
   selectThemeInstallationLoading,
   selectThemeUnInstallationLoading,
-} from "@renderer/context/redux/status/selectors/theme-marketplace";
+} from "@/context/redux/status/selectors/theme-marketplace";
 import {
   InfoIcon,
   Download as InstallIcon,
   Trash2 as UninstallIcon,
 } from "lucide-react";
-import { Spinner } from "@renderer/components/ui/spinner";
-import { useAppDispatch, useAppSelector } from "@renderer/context/redux/hooks";
+import { Spinner } from "@/components/ui/spinner";
+import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import {
   installTheme,
   previewTheme,
   unInstallTheme,
-} from "@renderer/context/redux/theme-marketplace/thunks/theme-marketplace";
-import { Button } from "@renderer/components/ui/button";
+} from "@/context/redux/theme-marketplace/thunks/theme-marketplace";
+import { Button } from "@/components/ui/button";
 import { ThemeInterface } from "@shared/types/theme.types";
-import { selectSelectedThemeInstallationOrUpdationMeta } from "@renderer/context/redux/theme-marketplace/selectors/theme-marketplace";
-import InfoTooltip from "@renderer/components/ui/InfoTooltip";
-import { selectActiveProjectId } from "@renderer/context/redux/project/selectors/project";
+import { selectSelectedThemeInstallationOrUpdationMeta } from "@/context/redux/theme-marketplace/selectors/theme-marketplace";
+import InfoTooltip from "@/components/ui/InfoTooltip";
+import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 import {
   changeActiveThemeId,
   inActiveTheme,
-} from "@renderer/context/redux/theme/thunks/theme";
-import { ButtonLikeDiv } from "@renderer/components/ui/button-like-div";
-import { selectIsThemePreviewModeOn } from "@renderer/context/redux/theme/selectors/theme";
-import useCustomToast from "@renderer/hooks/ui/use-custom-toast";
+} from "@/context/redux/theme/thunks/theme";
+import { ButtonLikeDiv } from "@/components/ui/button-like-div";
+import { selectIsThemePreviewModeOn } from "@/context/redux/theme/selectors/theme";
+import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 interface Props extends Pick<ThemeInterface, "id" | "version"> {}
 

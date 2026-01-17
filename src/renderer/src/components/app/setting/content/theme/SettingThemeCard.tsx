@@ -13,8 +13,8 @@ import { useSetting } from "@/context/setting/SettingProvider";
 import ImageWithFallback from "@/components/ui/image-with-fallback";
 import { DEFAULT_THUMBNAIL_FALLBACK } from "@/constant/theme.constant";
 import ExternalLink from "@/components/ux/ExternalLink";
-import { AspectRatio } from "@renderer/components/ui/aspect-ratio";
-import useGetAuthorProfileByTheme from "@renderer/hooks/theme/use-get-author-profile-by-theme";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import useGetAuthorProfileByTheme from "@/hooks/theme/use-get-author-profile-by-theme";
 
 const SettingThemeCard = memo(
   ({

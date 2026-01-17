@@ -6,7 +6,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip-custom";
 import { Info as InfoIcon, LucideIcon } from "lucide-react";
-import { cn } from "@renderer/lib/utils";
+import { cn } from "@/lib/utils";
 
 interface Props {
   Icon?: LucideIcon;

@@ -6,7 +6,7 @@ import ImageWithFallback from "@/components/ui/image-with-fallback";
 import { DEFAULT_THUMBNAIL_FALLBACK } from "@/constant/theme.constant";
 import { ImageOff as ImageBroken } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { AspectRatio } from "@renderer/components/ui/aspect-ratio";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 interface Props extends ThemeMetaInterface {
   isActive: boolean;

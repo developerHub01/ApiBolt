@@ -7,7 +7,7 @@ import {
 import { useThemeEditor } from "@/context/theme/theme-editor/ThemeEditorProvider";
 import useCustomToast from "@/hooks/ui/use-custom-toast";
 import ExternalLink from "@/components/ux/ExternalLink";
-import { handleChangeThemePreviewMode } from "@renderer/context/redux/theme/theme-slice";
+import { handleChangeThemePreviewMode } from "@/context/redux/theme/theme-slice";
 
 const ThemeEditorBottom = () => {
   const dispatch = useAppDispatch();

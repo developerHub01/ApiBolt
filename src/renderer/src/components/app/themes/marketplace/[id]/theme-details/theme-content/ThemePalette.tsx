@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectSelectedThemeDetails } from "@/context/redux/theme-marketplace/selectors/theme-marketplace";
-import { cn } from "@renderer/lib/utils";
+import { cn } from "@/lib/utils";
 
 const ThemePalette = () => {
   const themeDetails = useAppSelector(selectSelectedThemeDetails);

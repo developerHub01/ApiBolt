@@ -16,7 +16,7 @@ import { readFile, writeFile } from "fs/promises";
 import { CreateProjectPayloadInterface } from "@shared/types/project.types";
 import { ElectronAPIProjectsInterface } from "@shared/types/api/electron-projects";
 import { ProjectExportFileInterface } from "@shared/types/export-import/project";
-import { SettingRequestState } from "../state/settingRequest";
+import { SettingRequestState } from "@/main/state/settingRequest";
 
 export const projectsHandlers = (): void => {
   ipcMain.handle(

@@ -10,8 +10,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { selectIsInstallMaxCountAlertOpen } from "@renderer/context/redux/theme-marketplace/selectors/theme-marketplace";
-import { handleChangeIsInstallMaxCountAlertOpen } from "@renderer/context/redux/theme-marketplace/theme-marketplace-slice";
+import { selectIsInstallMaxCountAlertOpen } from "@/context/redux/theme-marketplace/selectors/theme-marketplace";
+import { handleChangeIsInstallMaxCountAlertOpen } from "@/context/redux/theme-marketplace/theme-marketplace-slice";
 
 const ThemeInstallMaxSizeAlert = memo(() => {
   const dispatch = useAppDispatch();

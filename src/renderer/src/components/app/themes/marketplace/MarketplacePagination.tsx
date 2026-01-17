@@ -4,9 +4,9 @@ import {
   ChevronLeft as ArrowLeftIcon,
   ChevronRight as ArrowRightIcon,
 } from "lucide-react";
-import { useAppSelector } from "@renderer/context/redux/hooks";
-import { selectThemeMarketplaceSearchFilter } from "@renderer/context/redux/theme-marketplace/selectors/theme-marketplace";
-import { THEME_MARKETPLACE_FILTER_LOCAL } from "@renderer/constant/theme.constant";
+import { useAppSelector } from "@/context/redux/hooks";
+import { selectThemeMarketplaceSearchFilter } from "@/context/redux/theme-marketplace/selectors/theme-marketplace";
+import { THEME_MARKETPLACE_FILTER_LOCAL } from "@/constant/theme.constant";
 
 const MarketplacePagination = memo(() => {
   const searchFilter = useAppSelector(selectThemeMarketplaceSearchFilter);

@@ -10,7 +10,7 @@ import { handleChangeSelectedThemeId } from "@/context/redux/theme-marketplace/t
 import { selectThemesSearchResultLoading } from "@/context/redux/status/selectors/theme-marketplace";
 import ThemeCardSkeleton from "@/components/app/themes/marketplace/[id]/theme-list/ThemeCardSkeleton";
 import { ThemeMetaInterface } from "@shared/types/theme.types";
-import { cn } from "@renderer/lib/utils";
+import { cn } from "@/lib/utils";
 
 const ThemeList = () => {
   const dispatch = useAppDispatch();

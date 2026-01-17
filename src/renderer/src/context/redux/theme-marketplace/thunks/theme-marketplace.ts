@@ -13,7 +13,7 @@ import {
   loadActiveThemeId,
   loadThemeMetaList as loadInstalledThemeMetaList,
 } from "@/context/redux/theme/thunks/theme";
-import { handleChangeThemePreviewMode } from "../../theme/theme-slice";
+import { handleChangeThemePreviewMode } from "@/context/redux/theme/theme-slice";
 import { MAX_INSTALLED_THEME_COUNT } from "@shared/constant/theme";
 
 export const loadThemesSearchResult = createAsyncThunk<

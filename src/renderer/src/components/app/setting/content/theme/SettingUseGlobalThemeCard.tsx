@@ -2,7 +2,7 @@ import { memo } from "react";
 import { Palette as GlobalThemeIcon } from "lucide-react";
 import { useSettingTheme } from "@/context/setting/theme/SettingThemeProvider";
 import SettingThemeCardWrapper from "@/components/app/setting/content/theme/SettingThemeCardWrapper";
-import { AspectRatio } from "@renderer/components/ui/aspect-ratio";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 const SettingUseGlobalThemeCard = memo(() => {
   const { localThemeId, handleChangeActiveTheme } = useSettingTheme();
