@@ -13,6 +13,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { StatusAlert } from "@/components/ui/status-alert";
 import SplashScreenBg from "@/components/splash/SplashScreenBg";
 import { APP_NAME } from "@/constant";
+import Logo from "@/components/ui/logo";
 
 const dragableStyle = {
   appRegion: "drag",
@@ -62,11 +63,7 @@ const Splash = () => {
           <div className="flex flex-col gap-3 items-center pb-3">
             <div className="flex items-center gap-2.5 pl-3">
               <div className="shrink-0 size-8 rounded-lg overflow-hidden ring-1 ring-primary">
-                <img
-                  src="/logo/logo.svg"
-                  alt="api-bolt"
-                  className="size-full"
-                />
+                <Logo />
               </div>
               <motion.h1
                 className="text-3xl font-black text-primary tracking-wide"

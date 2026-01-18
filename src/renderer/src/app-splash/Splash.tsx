@@ -1,9 +1,10 @@
 import { useEffect, useState, type CSSProperties } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Zap, Activity, Code, Database } from "lucide-react";
+import { Activity, Code, Database } from "lucide-react";
 import SplashScreenBg from "@/components/splash/SplashScreenBg";
 import { APP_NAME } from "@/constant";
 import { SPLASH_MIN_DURATION } from "@shared/constant";
+import Logo from "@/components/ui/logo";
 
 const dragableStyle = {
   appRegion: "drag",
@@ -83,30 +84,11 @@ const Splash = () => {
                 duration: 0.5,
               }}
             >
-              <motion.div
+              <div
                 className="w-10 h-10 bg-secondary backdrop-blur-sm rounded-lg flex items-center justify-center ring-2 ring-primary shadow-lg transform-content"
-                initial={{
-                  scale: 0.8,
-                }}
-                animate={{
-                  scale: 1,
-                }}
-                exit={{
-                  scale: 0.5,
-                }}
-                transition={{
-                  duration: 0.8,
-                  repeat: Number.POSITIVE_INFINITY,
-                  ease: "easeInOut",
-                  repeatType: "reverse",
-                }}
               >
-                <img
-                  src="/logo/logo.svg"
-                  alt="api-bolt"
-                  className="size-full"
-                />
-              </motion.div>
+                <Logo />
+              </div>
 
               {/* Subtle glow */}
               <motion.div
