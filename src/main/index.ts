@@ -56,6 +56,7 @@ import { handleExternalUrl } from "@/main/utils/externalUrl";
 import { handleProtocol } from "@/main/utils/custom-protocol";
 import { getLocalPassword } from "@/main/db/localPasswordDB";
 import { applyingThemeBackground } from "@/main/utils/applyingTheme";
+import { runMigrations } from "@/main/db";
 
 /***
  * App basic setup declaration
@@ -119,10 +120,16 @@ const enterMainApp = () => {
 
   closeLocalPassword();
 };
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(async () => {
+  /***
+   * First migrate the db
+   */
+  await runMigrations();
+
   /***
    * App basic setup start on app statup.
    * cookies | axios-client | protocols | app-model-id | splash
