@@ -1,5 +1,7 @@
 import { useCallback } from "react";
 import {
+  selectThemeActivatingLoading,
+  selectThemeInActivatingLoading,
   selectThemeInstallationLoading,
   selectThemeUnInstallationLoading,
 } from "@/context/redux/status/selectors/theme-marketplace";
@@ -44,6 +46,8 @@ const ThemeActions = ({ id, version }: Props) => {
   const projectId = useAppSelector(selectActiveProjectId);
   const isInstalling = useAppSelector(selectThemeInstallationLoading);
   const isUnInstalling = useAppSelector(selectThemeUnInstallationLoading);
+  const isActivating = useAppSelector(selectThemeActivatingLoading);
+  const isInActivating = useAppSelector(selectThemeInActivatingLoading);
   const { isInstalled, needUpdate, oldVersion, isActivable, isPreviewable } =
     useAppSelector(selectSelectedThemeInstallationOrUpdationMeta);
   const isOnPreviewMode = useAppSelector(selectIsThemePreviewModeOn);
@@ -132,6 +136,7 @@ const ThemeActions = ({ id, version }: Props) => {
             onClick={handleAction(isActivable ? "activate" : "in-activate")}
             disabled={isUnInstalling}
           >
+            {(isActivating || isInActivating) && <Spinner />}
             {isActivable ? "Activate" : "In-activate"}
           </Button>
           {needUpdate && (

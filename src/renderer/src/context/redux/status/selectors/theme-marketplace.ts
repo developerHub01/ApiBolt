@@ -29,3 +29,13 @@ export const selectThemeUnInstallationLoading = createSelector(
   [(state: RootState) => state.status.isThemeUnInstallationLoading],
   isLoading => isLoading,
 );
+
+export const selectThemeActivatingLoading = createSelector(
+  [(state: RootState) => state.status.isThemeActivatingLoading],
+  isLoading => isLoading,
+);
+
+export const selectThemeInActivatingLoading = createSelector(
+  [(state: RootState) => state.status.isThemeInActivatingLoading],
+  isLoading => isLoading,
+);

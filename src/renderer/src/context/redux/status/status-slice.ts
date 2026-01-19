@@ -12,7 +12,11 @@ import {
   loadRequestHistoryMeta,
   replaceCurrentByHistory,
 } from "@/context/redux/history/thunks/history";
-import { loadThemePalette } from "@/context/redux/theme/thunks/theme";
+import {
+  changeActiveThemeId,
+  inActiveTheme,
+  loadThemePalette,
+} from "@/context/redux/theme/thunks/theme";
 import { loadRequestList } from "@/context/redux/request-response/thunks/request-list";
 import { loadFolder } from "@/context/redux/request-response/thunks/folder";
 import { loadLocalPassword } from "@/context/redux/local-password/thunks/local-password";
@@ -47,6 +51,9 @@ export interface StatusInterface {
 
   isThemeInstallationLoading: boolean;
   isThemeUnInstallationLoading: boolean;
+
+  isThemeActivatingLoading: boolean;
+  isThemeInActivatingLoading: boolean;
 }
 
 // Define the initial state using that type
@@ -74,6 +81,9 @@ const initialState: StatusInterface = {
 
   isThemeInstallationLoading: false,
   isThemeUnInstallationLoading: false,
+
+  isThemeActivatingLoading: false,
+  isThemeInActivatingLoading: false,
 };
 
 export const statusSlice = createSlice({
@@ -322,6 +332,26 @@ export const statusSlice = createSlice({
       })
       .addCase(unInstallTheme.rejected, state => {
         state.isThemeUnInstallationLoading = false;
+      })
+
+      .addCase(changeActiveThemeId.pending, state => {
+        state.isThemeActivatingLoading = true;
+      })
+      .addCase(changeActiveThemeId.fulfilled, state => {
+        state.isThemeActivatingLoading = false;
+      })
+      .addCase(changeActiveThemeId.rejected, state => {
+        state.isThemeActivatingLoading = false;
+      })
+
+      .addCase(inActiveTheme.pending, state => {
+        state.isThemeInActivatingLoading = true;
+      })
+      .addCase(inActiveTheme.fulfilled, state => {
+        state.isThemeInActivatingLoading = false;
+      })
+      .addCase(inActiveTheme.rejected, state => {
+        state.isThemeInActivatingLoading = false;
       })
 
       /**
