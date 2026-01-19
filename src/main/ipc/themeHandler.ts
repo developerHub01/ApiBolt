@@ -27,27 +27,42 @@ const getNewThumbnailPath = (id: string): string => {
   return path.join(userDataPath, "theme_thumbnails", `${id}.webp`);
 };
 
-const getThemesWithApiProtocolThumbnail = async (
-  themes: Array<ThemeMetaInterface>,
-): Promise<Array<ThemeMetaInterface>> => {
+const getNewPreviewPath = (id: string): string => {
+  const userDataPath = app.getPath("userData");
+  return path.join(userDataPath, "theme_previews", `${id}.webp`);
+};
+
+const getThemesWithApiProtocolAssets = async <
+  T extends Partial<Pick<ThemeMetaInterface, "thumbnail" | "preview">>,
+>(
+  themes: Array<T>,
+  addPreview: boolean = false,
+): Promise<Array<T>> => {
   const results = await Promise.allSettled(
     themes.map(async theme => {
       let thumbnail = theme.thumbnail;
+      let preview = addPreview ? theme.preview : undefined;
+
       if (thumbnail) {
         const processedPath = await getImageFileFromPath(thumbnail);
         if (processedPath) thumbnail = processedPath;
+      }
+      if (preview) {
+        const processedPath = await getImageFileFromPath(preview);
+        if (processedPath) preview = processedPath;
       }
 
       return {
         ...theme,
         thumbnail,
+        preview,
       };
     }),
   );
 
   return results
     .filter(res => res.status === "fulfilled")
-    .map(res => (res as PromiseFulfilledResult<ThemeMetaInterface>).value);
+    .map(res => (res as PromiseFulfilledResult<T>).value) as Array<T>;
 };
 
 export const themeHandler = (): void => {
@@ -57,18 +72,18 @@ export const themeHandler = (): void => {
       _,
       ...rest: Parameters<ElectronAPIThemeInterface["getThemeListMeta"]>
     ): ReturnType<ElectronAPIThemeInterface["getThemeListMeta"]> =>
-      await getThemesWithApiProtocolThumbnail(await getThemeListMeta(...rest)),
+      await getThemesWithApiProtocolAssets(await getThemeListMeta(...rest)),
   );
   ipcMain.handle(
     "getActiveThemeMeta",
     async (_): ReturnType<ElectronAPIThemeInterface["getActiveThemeMeta"]> => {
       const themes = await getActiveThemeMeta();
       themes.global = (
-        await getThemesWithApiProtocolThumbnail([themes.global])
+        await getThemesWithApiProtocolAssets([themes.global])
       )[0];
       if (themes.local)
         themes.local = (
-          await getThemesWithApiProtocolThumbnail([themes.local])
+          await getThemesWithApiProtocolAssets([themes.local])
         )[0];
 
       return themes;
@@ -79,8 +94,19 @@ export const themeHandler = (): void => {
     async (
       _,
       ...rest: Parameters<ElectronAPIThemeInterface["getThemeById"]>
-    ): ReturnType<ElectronAPIThemeInterface["getThemeById"]> =>
-      await getThemeById(...rest),
+    ): ReturnType<ElectronAPIThemeInterface["getThemeById"]> => {
+      const response = await getThemeById(...rest);
+      if (!response) return response;
+      return (
+        await getThemesWithApiProtocolAssets<
+          /* removing promise and null from the type */
+          Exclude<
+            Awaited<ReturnType<ElectronAPIThemeInterface["getThemeById"]>>,
+            null
+          >
+        >([response], true)
+      )[0];
+    },
   );
   ipcMain.handle(
     "getThemePaletteById",
@@ -144,34 +170,68 @@ export const themeHandler = (): void => {
 
       const themeId = themeMeta.id;
       const thumbnail = themeMeta.thumbnail;
+      const preview = themeMeta.preview;
 
       /* handle fs context */
       const userDataPath = app.getPath("userData");
-      const localPath = path.join(
+      const thumbnailLocalPath = path.join(
         userDataPath,
         "theme_thumbnails",
         `${themeId}.webp`,
       );
-      const folderPath = dirname(localPath);
+      const previewlLocalPath = path.join(
+        userDataPath,
+        "theme_previews",
+        `${themeId}.webp`,
+      );
 
-      await mkdir(folderPath, {
-        recursive: true,
-      });
+      await Promise.allSettled([
+        mkdir(dirname(thumbnailLocalPath), {
+          recursive: true,
+        }),
+        mkdir(dirname(previewlLocalPath), {
+          recursive: true,
+        }),
+      ]);
 
-      const response = await axios.get(thumbnail, {
-        responseType: "arraybuffer",
-      });
+      /* getting images from server */
+      const [thumbnailRes, previewRes] = await Promise.allSettled([
+        axios.get(thumbnail, {
+          responseType: "arraybuffer",
+        }),
+        axios.get(preview, {
+          responseType: "arraybuffer",
+        }),
+      ]);
 
-      await writeFile(localPath, Buffer.from(response.data));
+      /* storing buffer saving operation */
+      const writeBufferPromises: Array<Promise<void>> = [];
+
+      if (thumbnailRes.status === "fulfilled")
+        writeBufferPromises.push(
+          writeFile(thumbnailLocalPath, Buffer.from(thumbnailRes.value.data)),
+        );
+
+      if (previewRes.status === "fulfilled")
+        writeBufferPromises.push(
+          writeFile(previewlLocalPath, Buffer.from(previewRes.value.data)),
+        );
+
+      /* writting all buffter images */
+      await Promise.all(writeBufferPromises);
 
       const createResponse = await createTheme({
         ...themeMeta,
-        thumbnail: localPath,
+        thumbnail: thumbnailLocalPath,
+        preview: previewlLocalPath,
       });
 
       if (!createResponse) {
         try {
-          await unlink(localPath);
+          await Promise.allSettled([
+            unlink(thumbnailLocalPath),
+            unlink(previewlLocalPath),
+          ]);
         } catch {
           /*  */
         }
@@ -191,9 +251,12 @@ export const themeHandler = (): void => {
 
       const deletedResponse = await deleteThemeById(themeId);
 
-      if (!deletedResponse) {
+      if (deletedResponse) {
         try {
-          await unlink(getNewThumbnailPath(themeId));
+          await Promise.allSettled([
+            unlink(getNewThumbnailPath(themeId)),
+            unlink(getNewPreviewPath(themeId)),
+          ]);
         } catch {
           /*  */
         }

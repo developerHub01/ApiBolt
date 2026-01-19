@@ -88,9 +88,9 @@ export const loadThemesDetails = createAsyncThunk<
     state: RootState;
   }
 >("theme-marketplace/loadThemesDetails", async (id, { dispatch, getState }) => {
+  const state = getState() as RootState;
+  id = id ?? state.themeMarketplace.selectedThemeId;
   try {
-    const state = getState() as RootState;
-    id = id ?? state.themeMarketplace.selectedThemeId;
     if (!id) throw new Error("Theme id not passed");
 
     const response = await axiosServerClient.get(`/themes/details/${id}`);
@@ -99,6 +99,9 @@ export const loadThemesDetails = createAsyncThunk<
     dispatch(handleChangeSelectedThemeDetails(data));
   } catch (error) {
     if (axios.isAxiosError(error)) {
+      if (!id) throw new Error();
+      const themeDetails = await window.electronAPITheme.getThemeById(id);
+      dispatch(handleChangeSelectedThemeDetails(themeDetails));
       if (error.code === "ERR_NETWORK") throw new Error("ERR_NETWORK");
       else if (error.status === 404) throw new Error("NOT_FOUND");
     }
@@ -134,6 +137,7 @@ export const installTheme = createAsyncThunk<
       author: theme.author,
       authorUsername: theme.authorUsername,
       thumbnail: theme.thumbnail,
+      preview: theme.preview,
       version: theme.version,
     });
 
@@ -157,7 +161,7 @@ export const unInstallTheme = createAsyncThunk<
   try {
     const state = getState() as RootState;
 
-    const response = await window.electronAPITheme.deleteThemeById(id);
+    const response = await window.electronAPITheme.unInstallTheme(id);
     if (!response) throw new Error();
 
     dispatch(loadInstalledThemeMetaList());

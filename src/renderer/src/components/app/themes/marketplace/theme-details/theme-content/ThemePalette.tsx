@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectSelectedThemeDetails } from "@/context/redux/theme-marketplace/selectors/theme-marketplace";
 import { cn } from "@/lib/utils";
+import ThemeDetailsSectionWrapper from "@/components/app/themes/marketplace/theme-details/theme-content/ThemeDetailsSectionWrapper";
 
 const ThemePalette = () => {
   const themeDetails = useAppSelector(selectSelectedThemeDetails);
@@ -12,8 +13,7 @@ const ThemePalette = () => {
   if (!themeDetails) return null;
 
   return (
-    <section className="flex flex-col gap-2">
-      <h3 className="text-lg font-bold">Palette</h3>
+    <ThemeDetailsSectionWrapper title="Palette:">
       <div className="flex flex-col border-2 border-dashed p-4 rounded-lg bg-background divide-y-2 divide-dashed">
         {colorList.map(([key, value], index) => (
           <div key={key} className="flex divide-x-2 divide-dashed">
@@ -44,7 +44,7 @@ const ThemePalette = () => {
           </div>
         ))}
       </div>
-    </section>
+    </ThemeDetailsSectionWrapper>
   );
 };
 

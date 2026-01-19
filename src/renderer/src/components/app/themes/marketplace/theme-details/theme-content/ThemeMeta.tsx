@@ -23,8 +23,7 @@ const ThemeMeta = () => {
   );
 
   if (!themeDetails) return null;
-  const { id, type, author, authorUsername, version, install_count } =
-    themeDetails;
+  const { type, author, authorUsername, version, install_count } = themeDetails;
 
   return (
     <>
@@ -52,7 +51,7 @@ const ThemeMeta = () => {
           <TotalInstallIcon /> {install_count}
         </Badge>
       </div>
-      <ThemeActions id={id} version={version} />
+      <ThemeActions version={version} />
     </>
   );
 };

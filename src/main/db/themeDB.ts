@@ -33,6 +33,7 @@ export const getThemeListMeta: ElectronAPIThemeInterface["getThemeListMeta"] =
           author: themeTable.author,
           authorUsername: themeTable.authorUsername,
           thumbnail: themeTable.thumbnail,
+          preview: themeTable.preview,
           version: themeTable.version,
           createdAt: themeTable.createdAt,
         })

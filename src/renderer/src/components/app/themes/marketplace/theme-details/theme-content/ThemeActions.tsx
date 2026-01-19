@@ -1,8 +1,8 @@
-import { useCallback } from "react";
 import {
   selectThemeActivatingLoading,
   selectThemeInActivatingLoading,
   selectThemeInstallationLoading,
+  selectThemeMarketplaceThemeDetailsHaveError,
   selectThemeUnInstallationLoading,
 } from "@/context/redux/status/selectors/theme-marketplace";
 import {
@@ -11,39 +11,18 @@ import {
   Trash2 as UninstallIcon,
 } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
-import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import {
-  installTheme,
-  togglePreviewTheme,
-  unInstallTheme,
-} from "@/context/redux/theme-marketplace/thunks/theme-marketplace";
+import { useAppSelector } from "@/context/redux/hooks";
 import { Button } from "@/components/ui/button";
 import { ThemeInterface } from "@shared/types/theme.types";
 import { selectSelectedThemeInstallationOrUpdationMeta } from "@/context/redux/theme-marketplace/selectors/theme-marketplace";
 import InfoTooltip from "@/components/ui/InfoTooltip";
-import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
-import {
-  changeActiveThemeId,
-  inActiveTheme,
-} from "@/context/redux/theme/thunks/theme";
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 import { selectIsThemePreviewModeOn } from "@/context/redux/theme/selectors/theme";
-import useCustomToast from "@/hooks/ui/use-custom-toast";
+import useThemeDetailsAction from "@/hooks/theme/use-theme-details-action";
 
-interface Props extends Pick<ThemeInterface, "id" | "version"> {}
+interface Props extends Pick<ThemeInterface, "version"> {}
 
-type TAction =
-  | "install"
-  | "uninstall"
-  | "update"
-  | "activate"
-  | "in-activate"
-  | "preview";
-
-const ThemeActions = ({ id, version }: Props) => {
-  const dispatch = useAppDispatch();
-  const toast = useCustomToast();
-  const projectId = useAppSelector(selectActiveProjectId);
+const ThemeActions = ({ version }: Props) => {
   const isInstalling = useAppSelector(selectThemeInstallationLoading);
   const isUnInstalling = useAppSelector(selectThemeUnInstallationLoading);
   const isActivating = useAppSelector(selectThemeActivatingLoading);
@@ -52,83 +31,24 @@ const ThemeActions = ({ id, version }: Props) => {
     useAppSelector(selectSelectedThemeInstallationOrUpdationMeta);
   const isOnPreviewMode = useAppSelector(selectIsThemePreviewModeOn);
 
-  const handleAction = useCallback(
-    (type: TAction) => async () => {
-      if (!id) return;
-      switch (type) {
-        case "install": {
-          const response = await dispatch(installTheme(id)).unwrap();
-          return toast({
-            type: response ? "success" : "error",
-            title: response ? "Installed successfully" : "Installation failed",
-          });
-        }
-        case "update": {
-          const response = await dispatch(installTheme(id)).unwrap();
-          return toast({
-            type: response ? "success" : "error",
-            title: response ? "Updated successfully" : "Updation failed",
-          });
-        }
-        case "uninstall": {
-          const response = await dispatch(unInstallTheme(id)).unwrap();
-          return toast({
-            type: response ? "success" : "error",
-            title: response ? "Updated successfully" : "Updation failed",
-          });
-        }
-        case "activate": {
-          const response = await dispatch(
-            changeActiveThemeId({
-              activeTheme: id ?? null,
-              projectId: projectId,
-            }),
-          ).unwrap();
-          return toast({
-            type: response ? "success" : "error",
-            title: response ? "Activated successfully" : "Activation failed",
-          });
-        }
-        case "in-activate": {
-          const response = await dispatch(inActiveTheme()).unwrap();
-          return toast({
-            type: response ? "success" : "error",
-            title: response
-              ? "Un-activated successfully"
-              : "Un-activation failed",
-          });
-        }
-        case "preview": {
-          const response = await dispatch(togglePreviewTheme()).unwrap();
-          return toast({
-            type: response ? "success" : "error",
-            title: response
-              ? "Preview toggled successfully"
-              : "Preview toggle failed",
-            description: response
-              ? "theme preview toggled"
-              : "something went wrong while toggle theme preview",
-          });
-        }
-      }
-    },
-    [dispatch, id, projectId, toast],
-  );
+  const handleAction = useThemeDetailsAction();
 
   return (
     <div className="flex items-center gap-2">
       {isInstalled ? (
         <>
-          <Button
-            type="button"
-            size={"sm"}
-            variant={"destructiveSecondary"}
-            onClick={handleAction("uninstall")}
-            disabled={isUnInstalling}
-          >
-            {isUnInstalling ? <Spinner /> : <UninstallIcon />}
-            Uninstall
-          </Button>
+          <OnlyShowWhenNoError>
+            <Button
+              type="button"
+              size={"sm"}
+              variant={"destructiveSecondary"}
+              onClick={handleAction("uninstall")}
+              disabled={isUnInstalling}
+            >
+              {isUnInstalling ? <Spinner /> : <UninstallIcon />}
+              Uninstall
+            </Button>
+          </OnlyShowWhenNoError>
           <Button
             type="button"
             size={"sm"}
@@ -139,28 +59,32 @@ const ThemeActions = ({ id, version }: Props) => {
             {(isActivating || isInActivating) && <Spinner />}
             {isActivable ? "Activate" : "In-activate"}
           </Button>
-          {needUpdate && (
-            <Button
-              type="button"
-              size={"sm"}
-              onClick={handleAction("update")}
-              disabled={isInstalling || isUnInstalling}
-            >
-              {isInstalling && <Spinner />}
-              Update Version
-            </Button>
-          )}
+          <OnlyShowWhenNoError>
+            {needUpdate && (
+              <Button
+                type="button"
+                size={"sm"}
+                onClick={handleAction("update")}
+                disabled={isInstalling || isUnInstalling}
+              >
+                {isInstalling && <Spinner />}
+                Update Version
+              </Button>
+            )}
+          </OnlyShowWhenNoError>
         </>
       ) : (
-        <Button
-          type="button"
-          size={"sm"}
-          onClick={handleAction("install")}
-          disabled={isInstalling}
-        >
-          {isInstalling ? <Spinner /> : <InstallIcon />}
-          Install
-        </Button>
+        <OnlyShowWhenNoError>
+          <Button
+            type="button"
+            size={"sm"}
+            onClick={handleAction("install")}
+            disabled={isInstalling}
+          >
+            {isInstalling ? <Spinner /> : <InstallIcon />}
+            Install
+          </Button>
+        </OnlyShowWhenNoError>
       )}
       {isPreviewable && (
         <Button
@@ -187,17 +111,29 @@ const ThemeActions = ({ id, version }: Props) => {
           className="flex items-center gap-2 rounded-full capitalize"
         >
           <p className="text-sm">version: {version}</p>
-          {needUpdate && (
-            <>
-              <span className="w-0.5 h-5 bg-border" />
-              <span>{oldVersion}</span>
-              <InfoIcon />
-            </>
-          )}
+          <OnlyShowWhenNoError>
+            {needUpdate && (
+              <>
+                <span className="w-0.5 h-5 bg-border" />
+                <span>{oldVersion}</span>
+                <InfoIcon />
+              </>
+            )}
+          </OnlyShowWhenNoError>
         </ButtonLikeDiv>
       </InfoTooltip>
     </div>
   );
+};
+
+interface OnlyShowWhenNoErrorProps {
+  children: React.ReactNode;
+}
+
+const OnlyShowWhenNoError = ({ children }: OnlyShowWhenNoErrorProps) => {
+  const haveError = useAppSelector(selectThemeMarketplaceThemeDetailsHaveError);
+  if (haveError) return null;
+  return children;
 };
 
 export default ThemeActions;

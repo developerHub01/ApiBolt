@@ -77,7 +77,7 @@ const MarketplacePagination = memo(() => {
       >
         <ArrowLeftIcon /> Previous
       </Button>
-      {showInfo && (
+      {Boolean(showInfo) && (
         <div className="flex items-center gap-1 pointer-events-none">
           <ButtonLikeDiv size={"xs"} variant={"outline"}>
             Current Page: {currentPage}

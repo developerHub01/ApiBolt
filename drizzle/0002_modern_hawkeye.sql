@@ -1,0 +1,1 @@
+ALTER TABLE `theme_table` ADD `preview` text DEFAULT '' NOT NULL;

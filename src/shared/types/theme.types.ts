@@ -24,8 +24,8 @@ export interface ThemeInterface {
   type: "light" | "dark" | "custom";
   author?: string;
   authorUsername?: string | null;
-  thumbnail?: string;
-  preview?: string;
+  thumbnail: string;
+  preview: string;
   install_count?: number;
   version?: number | null;
   palette: Record<ThemeColorId, string>;
@@ -36,7 +36,7 @@ export type ThemeMetaInterface = Omit<ThemeInterface, "palette" | "createdAt">;
 
 export type ThemeMetaDBInterface = Omit<
   ThemeInterface,
-  "createdAt" | "description" | "install_count" | "preview"
+  "createdAt" | "description" | "install_count"
 >;
 
 export interface ActiveThemeMetaInterface {
@@ -59,7 +59,7 @@ export interface ChangeActiveThemePayloadInterface extends Omit<
 export type ThemeCreatePayloadInterface = Required<
   Pick<ThemeInterface, "name" | "palette">
 > &
-  Partial<Pick<ThemeInterface, "type" | "thumbnail">>;
+  Partial<Pick<ThemeInterface, "type" | "thumbnail" | "preview">>;
 
 export interface ActiveThemeIdInterface {
   global: string;

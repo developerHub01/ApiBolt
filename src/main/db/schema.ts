@@ -543,6 +543,10 @@ export const themeTable = sqliteTable("theme_table", {
     .$type<ThemeMetaDBInterface["thumbnail"]>()
     .notNull()
     .default(""),
+  preview: text()
+    .$type<ThemeMetaDBInterface["preview"]>()
+    .notNull()
+    .default(""),
   version: int().$type<ThemeMetaDBInterface["version"]>().notNull().default(1),
   palette: text().notNull(),
   createdAt: text()
