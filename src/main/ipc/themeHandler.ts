@@ -18,7 +18,7 @@ import path, { dirname } from "node:path";
 import { mkdir, unlink, writeFile } from "node:fs/promises";
 import axios from "axios";
 import { getImageFileFromPath } from "@/main/utils/images";
-import { ThemeMetaInterface } from "@shared/types/theme.types";
+import { ThemeInterface } from "@shared/types/theme.types";
 import { getActiveThemeMeta } from "@/main/db/activeThemeDB";
 import { MAX_INSTALLED_THEME_COUNT } from "@shared/constant/theme";
 
@@ -33,7 +33,7 @@ const getNewPreviewPath = (id: string): string => {
 };
 
 const getThemesWithApiProtocolAssets = async <
-  T extends Partial<Pick<ThemeMetaInterface, "thumbnail" | "preview">>,
+  T extends Partial<Pick<ThemeInterface, "thumbnail" | "preview">>,
 >(
   themes: Array<T>,
   addPreview: boolean = false,

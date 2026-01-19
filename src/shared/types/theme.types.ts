@@ -32,7 +32,10 @@ export interface ThemeInterface {
   createdAt?: string;
 }
 
-export type ThemeMetaInterface = Omit<ThemeInterface, "palette" | "createdAt">;
+export type ThemeMetaInterface = Omit<
+  ThemeInterface,
+  "palette" | "createdAt" | "preview"
+>;
 
 export type ThemeMetaDBInterface = Omit<
   ThemeInterface,
