@@ -74,7 +74,6 @@ const ThemeListTop = memo(() => {
     dispatch(handleChangeSearchTerm(""));
   };
 
-
   return (
     <div className="w-full border-b-2 bg-accent/50 p-2 rounded-t-lg">
       <div className="w-full flex gap-1">

@@ -13,7 +13,13 @@ const Logo = ({ ...props }: Props) => {
       {...props}
     >
       <g clipPath="url(#clip0_14_2)">
-        <rect x="-39" y="-35" width="589" height="589" fill="var(--background)" />
+        <rect
+          x="-39"
+          y="-35"
+          width="589"
+          height="589"
+          fill="var(--background)"
+        />
         <path
           d="M191.19 364.083L50.5863 550H182.337L315.688 234.284L151.351 334.204L226.603 158.8L18 453.722L191.19 364.083Z"
           fill="var(--primary)"
