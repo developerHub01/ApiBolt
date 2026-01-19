@@ -14,21 +14,14 @@ import ImageWithFallback from "@/components/ui/image-with-fallback";
 import { DEFAULT_THUMBNAIL_FALLBACK } from "@/constant/theme.constant";
 import ExternalLink from "@/components/ux/ExternalLink";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import useGetAuthorProfileByTheme from "@/hooks/theme/use-get-author-profile-by-theme";
+import useGetThemeWebLinkByThemeId from "@/hooks/theme/use-get-theme-web-link-by-theme-id";
 
 const SettingThemeCard = memo(
-  ({
-    id,
-    thumbnail,
-    name,
-    type,
-    author,
-    authorUsername,
-  }: ThemeMetaInterface) => {
+  ({ id, thumbnail, name, type, author }: ThemeMetaInterface) => {
     const { activeThemeId, localThemeId, handleChangeActiveTheme } =
       useSettingTheme();
     const { activeTab } = useSetting();
-    const authorProfileUrl = useGetAuthorProfileByTheme(authorUsername ?? null);
+    const themeWebUrl = useGetThemeWebLinkByThemeId(id ?? null);
 
     const isActive = activeThemeId === id;
     /**
@@ -51,7 +44,7 @@ const SettingThemeCard = memo(
       >
         <AspectRatio
           ratio={16 / 9}
-          className="w-full bg-accent rounded-xl overflow-hidden border"
+          className="w-full bg-accent rounded-xl overflow-hidden border mb-1"
         >
           {thumbnail ? (
             <ImageWithFallback
@@ -78,8 +71,8 @@ const SettingThemeCard = memo(
           <Badge variant={"outline"} className="capitalize">
             {type}
           </Badge>
-          {Boolean(authorProfileUrl) && (
-            <ExternalLink to={authorProfileUrl!}>
+          {Boolean(themeWebUrl) && (
+            <ExternalLink to={themeWebUrl!}>
               <Button
                 size="iconXs"
                 variant={"ghost"}

@@ -17,7 +17,7 @@ const SettingUseGlobalThemeCard = memo(() => {
     <SettingThemeCardWrapper isActive={isActive} onClick={handleClick}>
       <AspectRatio
         ratio={16 / 9}
-        className="w-full bg-accent rounded-xl overflow-hidden border"
+        className="w-full bg-accent rounded-xl overflow-hidden border mb-1"
       >
         <div className="w-full h-full flex justify-center items-center">
           <GlobalThemeIcon size={40} />
