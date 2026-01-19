@@ -13,7 +13,6 @@ import {
 } from "@/context/redux/status/selectors/theme-marketplace";
 import ThemeCardSkeleton from "@/components/app/themes/marketplace/theme-list/ThemeCardSkeleton";
 import { ThemeMetaInterface } from "@shared/types/theme.types";
-import { cn } from "@/lib/utils";
 import ThemeListError from "@/components/app/themes/marketplace/theme-list/ThemeListError";
 import { motion, AnimatePresence } from "motion/react";
 import Empty from "@/components/ui/empty";
@@ -29,10 +28,8 @@ const ThemeList = () => {
   const errorMessage = useAppSelector(selectThemesSearchResultError);
 
   const handleChangeSelectedTheme = useCallback(
-    (theme: ThemeMetaInterface) => {
-      if (theme.author === "system") return;
-      dispatch(handleChangeSelectedThemeId(theme.id));
-    },
+    (theme: ThemeMetaInterface) =>
+      dispatch(handleChangeSelectedThemeId(theme.id)),
     [dispatch],
   );
 
@@ -66,9 +63,6 @@ const ThemeList = () => {
                 {...theme}
                 isSelected={selectedThemeId === theme.id}
                 onClick={() => handleChangeSelectedTheme(theme)}
-                className={cn({
-                  "cursor-auto": theme.author === "system",
-                })}
               />
             ))}
           </Wrapper>

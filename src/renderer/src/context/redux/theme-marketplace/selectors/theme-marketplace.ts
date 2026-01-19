@@ -1,6 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit";
 import type { RootState } from "@/context/redux/store";
 import { ThemeMetaInterface } from "@shared/types/theme.types";
+import { DEFAULT_THEME_ID } from "@shared/constant/theme";
 
 export const selectThemeMarketplaceSearchTerm = createSelector(
   [(state: RootState) => state.themeMarketplace.searchTerm],
@@ -104,7 +105,9 @@ export const selectSelectedThemeInstallationOrUpdationMeta = createSelector(
     needUpdate: boolean;
     oldVersion?: number;
     isActivable?: boolean;
+    isInActivable?: boolean;
     isPreviewable?: boolean;
+    unInstallable?: boolean;
   } => {
     const { global: globalActiveThemeId, local: localActiveThemeId } =
       activeThemeId;
@@ -115,9 +118,13 @@ export const selectSelectedThemeInstallationOrUpdationMeta = createSelector(
       isActivable: false,
       isInActivable: false,
       isPreviewable: false,
+      unInstallable: true,
     };
 
     if (!selectedThemeId) return meta;
+
+    if (selectedThemeId === DEFAULT_THEME_ID) meta.unInstallable = false;
+
     const installedTheme = installedThemes.find(
       theme => theme.id === selectedThemeId,
     );
@@ -144,8 +151,13 @@ export const selectSelectedThemeInstallationOrUpdationMeta = createSelector(
     if (
       (activeProjectId && installedTheme.id !== localActiveThemeId) ||
       (!activeProjectId && installedTheme.id !== globalActiveThemeId)
-    )
+    ) {
       installedMeta.isActivable = true;
+      installedMeta.isInActivable = false;
+    } else {
+      installedMeta.isActivable = false;
+      installedMeta.isInActivable = true;
+    }
 
     /* check if the theme is enabled then no need to show the preview mode */
     if (

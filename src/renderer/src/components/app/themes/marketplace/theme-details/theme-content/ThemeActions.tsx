@@ -27,8 +27,15 @@ const ThemeActions = ({ version }: Props) => {
   const isUnInstalling = useAppSelector(selectThemeUnInstallationLoading);
   const isActivating = useAppSelector(selectThemeActivatingLoading);
   const isInActivating = useAppSelector(selectThemeInActivatingLoading);
-  const { isInstalled, needUpdate, oldVersion, isActivable, isPreviewable } =
-    useAppSelector(selectSelectedThemeInstallationOrUpdationMeta);
+  const {
+    isInstalled,
+    needUpdate,
+    oldVersion,
+    isActivable,
+    isInActivable,
+    isPreviewable,
+    unInstallable,
+  } = useAppSelector(selectSelectedThemeInstallationOrUpdationMeta);
   const isOnPreviewMode = useAppSelector(selectIsThemePreviewModeOn);
 
   const handleAction = useThemeDetailsAction();
@@ -38,27 +45,43 @@ const ThemeActions = ({ version }: Props) => {
       {isInstalled ? (
         <>
           <OnlyShowWhenNoError>
+            {unInstallable && (
+              <Button
+                type="button"
+                size={"sm"}
+                variant={"destructiveSecondary"}
+                onClick={handleAction("uninstall")}
+                disabled={isUnInstalling}
+              >
+                {isUnInstalling ? <Spinner /> : <UninstallIcon />}
+                Uninstall
+              </Button>
+            )}
+          </OnlyShowWhenNoError>
+          {isActivable && (
             <Button
               type="button"
               size={"sm"}
-              variant={"destructiveSecondary"}
-              onClick={handleAction("uninstall")}
+              variant={"default"}
+              onClick={handleAction("activate")}
               disabled={isUnInstalling}
             >
-              {isUnInstalling ? <Spinner /> : <UninstallIcon />}
-              Uninstall
+              {isActivating && <Spinner />}
+              Activate
             </Button>
-          </OnlyShowWhenNoError>
-          <Button
-            type="button"
-            size={"sm"}
-            variant={"secondary"}
-            onClick={handleAction(isActivable ? "activate" : "in-activate")}
-            disabled={isUnInstalling}
-          >
-            {(isActivating || isInActivating) && <Spinner />}
-            {isActivable ? "Activate" : "In-activate"}
-          </Button>
+          )}
+          {isInActivable && (
+            <Button
+              type="button"
+              size={"sm"}
+              variant={"secondary"}
+              onClick={handleAction("in-activate")}
+              disabled={isUnInstalling}
+            >
+              {isInActivating && <Spinner />}
+              In-activate
+            </Button>
+          )}
           <OnlyShowWhenNoError>
             {needUpdate && (
               <Button
@@ -98,7 +121,11 @@ const ThemeActions = ({ version }: Props) => {
         </Button>
       )}
       <InfoTooltip
-        label={`A new version of the theme available your current version is ${oldVersion} but new version ${version} is available now`}
+        label={
+          needUpdate
+            ? `A new version of the theme available your current version is ${oldVersion} but new version ${version} is available now`
+            : undefined
+        }
         align="end"
         buttonVariant={"transparent"}
         contentVariant={"outline"}

@@ -49,7 +49,9 @@ const useThemeDetailsAction = () => {
           const response = await dispatch(unInstallTheme(id)).unwrap();
           return toast({
             type: response ? "success" : "error",
-            title: response ? "Updated successfully" : "Updation failed",
+            title: response
+              ? "Uninstalled successfully"
+              : "Uninstallation failed",
           });
         }
         case "activate": {

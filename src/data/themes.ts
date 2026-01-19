@@ -1,12 +1,14 @@
+import { DEFAULT_THEME_ID } from "@shared/constant/theme";
 import { ThemeMetaDBInterface } from "@shared/types/theme.types";
 
 export const defaultThemeList: Array<ThemeMetaDBInterface> = [
   {
-    id: "black_ocean",
+    id: DEFAULT_THEME_ID,
     name: "black ocean (Default)",
     type: "dark",
     author: "system",
     thumbnail: "./theme-thumbnail/black_ocean.png",
+    preview: "./theme-thumbnail/black_ocean.png",
     palette: {
       background: "#151B25",
       foreground: "#fafafa",

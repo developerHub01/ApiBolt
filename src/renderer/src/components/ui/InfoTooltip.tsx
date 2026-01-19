@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 
 interface Props {
   Icon?: LucideIcon;
-  label: string;
+  label?: string;
   side?: ComponentProps<typeof TooltipContent>["side"];
   align?: ComponentProps<typeof TooltipContent>["align"];
   size?: ComponentProps<typeof Button>["size"];
@@ -40,14 +40,16 @@ const InfoTooltip = ({
           {children ? children : <Icon />}
         </Button>
       </TooltipTrigger>
-      <TooltipContent
-        side={side}
-        align={align}
-        variant={contentVariant}
-        className={cn(contentClassName)}
-      >
-        <p>{label}</p>
-      </TooltipContent>
+      {Boolean(label) && (
+        <TooltipContent
+          side={side}
+          align={align}
+          variant={contentVariant}
+          className={cn(contentClassName)}
+        >
+          <p>{label}</p>
+        </TooltipContent>
+      )}
     </Tooltip>
   );
 };

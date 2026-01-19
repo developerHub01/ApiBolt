@@ -10,6 +10,7 @@ import {
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectSelectedThemeDetails } from "@/context/redux/theme-marketplace/selectors/theme-marketplace";
 import ThemeActions from "@/components/app/themes/marketplace/theme-details/theme-content/ThemeActions";
+import { DEFAULT_THEME_ID } from "@shared/constant/theme";
 
 const ThemeMeta = () => {
   const themeDetails = useAppSelector(selectSelectedThemeDetails);
@@ -20,6 +21,11 @@ const ThemeMeta = () => {
         ? `${import.meta.env.VITE_WEBSITE_BASE_URL}/profile/${themeDetails?.authorUsername}`
         : null,
     [themeDetails?.authorUsername],
+  );
+
+  const isDefaultTheme = useMemo(
+    () => themeDetails?.id === DEFAULT_THEME_ID,
+    [themeDetails?.id],
   );
 
   if (!themeDetails) return null;
@@ -34,12 +40,12 @@ const ThemeMeta = () => {
             <ExternalLink
               to={`${import.meta.env.VITE_WEBSITE_BASE_URL}/profile/${authorUsername}`}
             >
-              <Button variant={"link"} className="px-0 underline">
+              <Button variant={"link"} className="px-0 underline capitalize">
                 {author}
               </Button>
             </ExternalLink>
           ) : (
-            <Button variant={"link"} className="px-0">
+            <Button variant={"link"} className="px-0 capitalize">
               {author}
             </Button>
           )}
@@ -47,9 +53,11 @@ const ThemeMeta = () => {
         <Badge variant={"secondary"} className="capitalize ml-auto">
           <ThemeCategoryIcon /> {type}
         </Badge>
-        <Badge variant={"secondary"} className="capitalize">
-          <TotalInstallIcon /> {install_count}
-        </Badge>
+        {isDefaultTheme || (
+          <Badge variant={"secondary"} className="capitalize">
+            <TotalInstallIcon /> {install_count}
+          </Badge>
+        )}
       </div>
       <ThemeActions version={version} />
     </>

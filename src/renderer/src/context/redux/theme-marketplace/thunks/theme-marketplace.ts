@@ -17,7 +17,10 @@ import {
   loadThemeMetaList as loadInstalledThemeMetaList,
 } from "@/context/redux/theme/thunks/theme";
 import { handleChangeThemePreviewMode } from "@/context/redux/theme/theme-slice";
-import { MAX_INSTALLED_THEME_COUNT } from "@shared/constant/theme";
+import {
+  DEFAULT_THEME_ID,
+  MAX_INSTALLED_THEME_COUNT,
+} from "@shared/constant/theme";
 import axios from "axios";
 import { THEME_MARKETPLACE_PAGE_SIZE } from "@/constant/theme.constant";
 
@@ -92,16 +95,17 @@ export const loadThemesDetails = createAsyncThunk<
   id = id ?? state.themeMarketplace.selectedThemeId;
   try {
     if (!id) throw new Error("Theme id not passed");
+    if (id === DEFAULT_THEME_ID) throw new Error("it is the default theme");
 
     const response = await axiosServerClient.get(`/themes/details/${id}`);
 
     const data = response.data?.data as ThemeInterface;
     dispatch(handleChangeSelectedThemeDetails(data));
   } catch (error) {
+    if (!id) throw new Error();
+    const themeDetails = await window.electronAPITheme.getThemeById(id);
+    dispatch(handleChangeSelectedThemeDetails(themeDetails));
     if (axios.isAxiosError(error)) {
-      if (!id) throw new Error();
-      const themeDetails = await window.electronAPITheme.getThemeById(id);
-      dispatch(handleChangeSelectedThemeDetails(themeDetails));
       if (error.code === "ERR_NETWORK") throw new Error("ERR_NETWORK");
       else if (error.status === 404) throw new Error("NOT_FOUND");
     }
@@ -160,6 +164,8 @@ export const unInstallTheme = createAsyncThunk<
 >("theme-marketplace/unInstallTheme", async (id, { dispatch, getState }) => {
   try {
     const state = getState() as RootState;
+    if (id === DEFAULT_THEME_ID)
+      throw new Error("default theme cant uninstall");
 
     const response = await window.electronAPITheme.unInstallTheme(id);
     if (!response) throw new Error();

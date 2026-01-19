@@ -37,4 +37,6 @@ export const THEME_PALETTE_PROPERTIES = new Set<ThemeColorId>([
   "line",
 ]);
 
+export const DEFAULT_THEME_ID = "system";
+
 export const MAX_INSTALLED_THEME_COUNT = 6;
