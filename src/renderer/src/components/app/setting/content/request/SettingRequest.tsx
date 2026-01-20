@@ -8,6 +8,8 @@ import SettingSslVerification from "@/components/app/setting/content/request/boo
 import SettingCookieTracking from "@/components/app/setting/content/request/boolean-based-select/SettingCookieTracking";
 
 const SettingRequest = () => {
+  return null;
+
   return (
     <SettingItem id="request" title="Request Settings">
       <SettingItemContentWrapper>
