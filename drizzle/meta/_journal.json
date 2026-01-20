@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1768595191342,
-      "tag": "0000_awesome_mikhail_rasputin",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1768612303631,
-      "tag": "0001_square_roxanne_simpson",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1768828502423,
-      "tag": "0002_modern_hawkeye",
+      "when": 1768861083479,
+      "tag": "0000_mean_solo",
       "breakpoints": true
     }
   ]

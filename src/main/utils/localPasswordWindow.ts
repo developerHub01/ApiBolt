@@ -41,7 +41,7 @@ export const createLocalPasswordWindow = () => {
     win.loadURL(`${process.env["ELECTRON_RENDERER_URL"]}/local-password.html`);
   } else {
     // win.loadFile(path.join(app.getAppPath(), "src", "renderer", "local-password.html"));
-    win.loadFile(join(__dirname, "../../renderer/local-password.html"));
+    win.loadFile(join(__dirname, "../renderer/local-password.html"));
   }
 
   return win;

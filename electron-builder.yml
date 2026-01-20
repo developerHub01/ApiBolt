@@ -5,10 +5,16 @@ directories:
 files:
   - "!**/.vscode/*"
   - "!src/*"
+  - "!node_modules"
   - "!electron.vite.config.{js,ts,mjs,cjs}"
   - "!{.eslintcache,eslint.config.mjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}"
   - "!{.env,.env.*,.npmrc,pnpm-lock.yaml}"
   - "!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}"
+extraResources:
+  - from: "drizzle"
+    to: "drizzle"
+  - from: "resources"
+    to: "resources"
 asarUnpack:
   - resources/**
 win:

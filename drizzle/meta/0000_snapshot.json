@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "52322799-a54e-40b0-bb66-b8370ad5ed40",
+  "id": "c10c3faa-d938-44fd-8148-b1232e9709cd",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "active_code_snippit_type_table": {
@@ -2109,6 +2109,22 @@
           "notNull": true,
           "autoincrement": false,
           "default": "''"
+        },
+        "preview": {
+          "name": "preview",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "version": {
+          "name": "version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 1
         },
         "palette": {
           "name": "palette",

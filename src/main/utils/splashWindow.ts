@@ -30,6 +30,8 @@ export const createSplashWindow = () => {
 
   // win.webContents.openDevTools();
 
+  // win.resizable = true;
+
   win.webContents.setWindowOpenHandler(details => {
     shell.openExternal(details.url);
     return { action: "deny" };
@@ -41,7 +43,7 @@ export const createSplashWindow = () => {
     win.loadURL(`${process.env["ELECTRON_RENDERER_URL"]}/splash.html`);
   } else {
     // win.loadFile(path.join(app.getAppPath(), "src", "renderer", "splash.html"));
-    win.loadFile(join(__dirname, "../../renderer/splash.html"));
+    win.loadFile(join(__dirname, "../renderer/splash.html"));
   }
 
   return win;

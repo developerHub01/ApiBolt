@@ -302,6 +302,8 @@ CREATE TABLE `theme_table` (
 	`author` text DEFAULT 'system' NOT NULL,
 	`authorUsername` text,
 	`thumbnail` text DEFAULT '' NOT NULL,
+	`preview` text DEFAULT '' NOT NULL,
+	`version` integer DEFAULT 1 NOT NULL,
 	`palette` text NOT NULL,
 	`createdAt` text DEFAULT (current_timestamp) NOT NULL
 );
