@@ -30,6 +30,7 @@ import { ElectronAPIThemeInterface } from "@shared/types/api/electron-theme";
 import { ElectronAPILocalPasswordInterface } from "@shared/types/api/electron-local-password";
 import { ElectronAPISplashWindowInterface } from "@shared/types/api/electron-api-splash-window";
 import { ElectronAPISettingsRequestInterface } from "@shared/types/api/electron-settings-request";
+import { ElectronAPIResponseInterface } from "@shared/types/api/electron-response";
 
 export interface ElectronResponseInterface {
   success: boolean;
@@ -79,6 +80,7 @@ export interface WindowElectronAPIInterface {
   electronAPIMetaShowColumn: ElectronAPIMetaShowColumnInterface;
   electronAPIApiUrl: ElectronAPIApiUrlInterface;
   electronAPIRequest: ElectronAPIRequestInterface;
+  electronAPIResponse: ElectronAPIResponseInterface;
   electronAPIKeyboardShortcut: ElectronAPIKeyboardShortcutInterface;
   electronAPIHistory: ElectronAPIHistoryInterface;
 }

@@ -4,6 +4,8 @@ import ResponsCollapseButton from "@/components/app/collections/request/response
 import ResponseInfo from "@/components/app/collections/request/response/meta-data/response-info/ResponseInfo";
 import { Separator } from "@/components/ui/separator";
 import ResponseMetaWrapper from "@/components/app/collections/request/response/meta-data/ResponseMetaWrapper";
+import ResponseTopThreeDot from "@/components/app/collections/request/response/meta-data/ResponseTopThreeDot";
+import { ButtonGroup } from "@/components/ui/button-group";
 
 const ResponseMetaData = memo(() => {
   return (
@@ -13,9 +15,12 @@ const ResponseMetaData = memo(() => {
         <Separator orientation="vertical" />
       </div>
       <MetaDataTab />
-      <span className="ml-auto"></span>
+      <span className="ml-auto" />
       <ResponseInfo />
-      <ResponsCollapseButton />
+      <ButtonGroup>
+        <ResponsCollapseButton />
+        <ResponseTopThreeDot />
+      </ButtonGroup>
     </ResponseMetaWrapper>
   );
 });

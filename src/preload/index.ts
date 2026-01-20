@@ -694,6 +694,16 @@ if (process.contextIsolated) {
         importFolder: async (...payload) =>
           await ipcRenderer.invoke("importFolder", ...payload),
       };
+    /**
+     * ====================
+     * Response
+     * ====================
+     */
+    const electronAPIResponseBridge: WindowElectronAPIInterface["electronAPIResponse"] =
+      {
+        saveResponse: async (...payload) =>
+          await ipcRenderer.invoke("saveResponse", ...payload),
+      };
 
     /**
      * ====================
@@ -842,6 +852,10 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld(
       "electronAPIRequest",
       electronAPIRequestBridge,
+    );
+    contextBridge.exposeInMainWorld(
+      "electronAPIResponse",
+      electronAPIResponseBridge,
     );
     contextBridge.exposeInMainWorld(
       "electronAPIKeyboardShortcut",

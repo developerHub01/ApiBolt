@@ -57,6 +57,7 @@ import { handleProtocol } from "@/main/utils/custom-protocol";
 import { getLocalPassword } from "@/main/db/localPasswordDB";
 import { applyingThemeBackground } from "@/main/utils/applyingTheme";
 import { runMigrations } from "@/main/db";
+import { responseHandler } from "@/main/ipc/responseHandler";
 
 /***
  * App basic setup declaration
@@ -258,6 +259,7 @@ app.whenReady().then(async () => {
   metaShowColumnHandlers();
   apiUrlHandler();
   requestHandler();
+  responseHandler();
   fileSystemHandler();
   keyboardShortcutHandler();
   historyHandler();

@@ -19,7 +19,7 @@ export const runMigrations = async () => {
 
   try {
     await migrate(db, { migrationsFolder: migrationsPath });
-    console.log("✅ Migrations successful");
+    console.info("✅ Migrations successful");
   } catch (err) {
     console.error("❌ Migration error:", err);
   }
