@@ -1,7 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import {
   ThemeInterface,
-  ThemeMetaDBInterface,
   ThemeMetaInterface,
   TThemeMarketplaceSearchFilter,
 } from "@shared/types/theme.types";

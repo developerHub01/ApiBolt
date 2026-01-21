@@ -19,6 +19,7 @@ import InfoTooltip from "@/components/ui/InfoTooltip";
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 import { selectIsThemePreviewModeOn } from "@/context/redux/theme/selectors/theme";
 import useThemeDetailsAction from "@/hooks/theme/use-theme-details-action";
+import { Badge } from "@/components/ui/badge";
 
 interface Props extends Pick<ThemeInterface, "version"> {}
 
@@ -58,7 +59,7 @@ const ThemeActions = ({ version }: Props) => {
               </Button>
             )}
           </OnlyShowWhenNoError>
-          {isActivable && (
+          {isActivable ? (
             <Button
               type="button"
               size={"sm"}
@@ -69,8 +70,7 @@ const ThemeActions = ({ version }: Props) => {
               {isActivating && <Spinner />}
               Activate
             </Button>
-          )}
-          {isInActivable && (
+          ) : isInActivable ? (
             <Button
               type="button"
               size={"sm"}
@@ -81,6 +81,8 @@ const ThemeActions = ({ version }: Props) => {
               {isInActivating && <Spinner />}
               In-activate
             </Button>
+          ) : (
+            <Badge>Currently activated as default</Badge>
           )}
           <OnlyShowWhenNoError>
             {needUpdate && (

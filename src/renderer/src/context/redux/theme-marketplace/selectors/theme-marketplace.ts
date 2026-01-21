@@ -86,6 +86,17 @@ export const selectIsInstallMaxCountAlertOpen = createSelector(
  * if installed do need update or not
  * so that we can show CTAs perfectly
  */
+
+interface SelectedThemeInstallationOrUpdationMetaInterface {
+  isInstalled: boolean;
+  needUpdate: boolean;
+  oldVersion?: number;
+  isActivable?: boolean;
+  isInActivable?: boolean;
+  isPreviewable?: boolean;
+  unInstallable?: boolean;
+}
+
 export const selectSelectedThemeInstallationOrUpdationMeta = createSelector(
   [
     (state: RootState) => state.project.activeProjectId,
@@ -100,19 +111,11 @@ export const selectSelectedThemeInstallationOrUpdationMeta = createSelector(
     selectedThemeDetails,
     installedThemes,
     activeThemeId,
-  ): {
-    isInstalled: boolean;
-    needUpdate: boolean;
-    oldVersion?: number;
-    isActivable?: boolean;
-    isInActivable?: boolean;
-    isPreviewable?: boolean;
-    unInstallable?: boolean;
-  } => {
+  ): SelectedThemeInstallationOrUpdationMetaInterface => {
     const { global: globalActiveThemeId, local: localActiveThemeId } =
       activeThemeId;
 
-    const meta = {
+    const meta: SelectedThemeInstallationOrUpdationMetaInterface = {
       isInstalled: false,
       needUpdate: false,
       isActivable: false,
@@ -140,13 +143,26 @@ export const selectSelectedThemeInstallationOrUpdationMeta = createSelector(
       oldVersion: installedTheme.version ?? 1,
     };
 
-    /* checking version */
+    console.log({
+      activeProjectId,
+      localActiveThemeId,
+      globalActiveThemeId,
+      DEFAULT_THEME_ID,
+    });
+
+    /**
+     * ============================
+     * checking version
+     * ============================
+     */
     if ((installedTheme.version ?? 1) < (selectedThemeDetails!.version ?? 1))
       installedMeta.needUpdate = true;
 
     /**
+     * =====================
      * checking activable
      * if have projectId then check local theme else check global theme
+     * =====================
      */
     if (
       (activeProjectId && installedTheme.id !== localActiveThemeId) ||
@@ -154,12 +170,16 @@ export const selectSelectedThemeInstallationOrUpdationMeta = createSelector(
     ) {
       installedMeta.isActivable = true;
       installedMeta.isInActivable = false;
-    } else {
-      installedMeta.isActivable = false;
-      installedMeta.isInActivable = true;
     }
 
-    /* check if the theme is enabled then no need to show the preview mode */
+    if (activeProjectId || installedTheme.id !== DEFAULT_THEME_ID)
+      installedMeta.isInActivable = true;
+
+    /**
+     * ======================
+     * check if the theme is enabled then no need to show the preview mode
+     * ======================
+     */
     if (
       (activeProjectId && installedTheme.id !== localActiveThemeId) ||
       (!activeProjectId && installedTheme.id !== globalActiveThemeId)

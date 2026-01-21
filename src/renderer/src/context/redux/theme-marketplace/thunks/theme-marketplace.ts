@@ -164,8 +164,15 @@ export const unInstallTheme = createAsyncThunk<
 >("theme-marketplace/unInstallTheme", async (id, { dispatch, getState }) => {
   try {
     const state = getState() as RootState;
+    const activeProjectId = state.project.activeProjectId;
+
     if (id === DEFAULT_THEME_ID)
       throw new Error("default theme cant uninstall");
+
+    const isDeletingRootTheme =
+      !activeProjectId &&
+      state.theme.activeThemeId.global ===
+        state.themeMarketplace.selectedThemeId;
 
     const response = await window.electronAPITheme.unInstallTheme(id);
     if (!response) throw new Error();
@@ -173,6 +180,7 @@ export const unInstallTheme = createAsyncThunk<
     dispatch(loadInstalledThemeMetaList());
 
     if (
+      isDeletingRootTheme ||
       state.theme.activeThemeId.global === id ||
       state.theme.activeThemeId.local === id
     ) {

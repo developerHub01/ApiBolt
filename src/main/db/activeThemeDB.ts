@@ -17,6 +17,7 @@ import {
   ThemeMetaInterface,
 } from "@shared/types/theme.types";
 import { ElectronAPIThemeInterface } from "@shared/types/api/electron-theme";
+import { generateThemesSeed } from "@/main/seeders/themesSeed";
 
 const { palette, ...detaultActiveThemeMeta } = defaultActiveTheme;
 
@@ -85,6 +86,39 @@ export const getActiveThemeMeta: ElectronAPIThemeInterface["getActiveThemeMeta"]
       };
     }
   };
+
+export const getActiveGlobalThemeId = async (): Promise<boolean> => {
+  try {
+    return Boolean(
+      (
+        await db
+          .select({
+            id: activeThemeTable.activeTheme,
+          })
+          .from(activeThemeTable)
+          .where(eq(activeThemeTable.projectId, GLOBAL_PROJECT_ID))
+          .limit(1)
+      )?.[0]?.id,
+    );
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};
+
+export const createActiveGlobalThemeIfNotExist = async (): Promise<boolean> => {
+  try {
+    const doHave = await getActiveGlobalThemeId();
+    if (doHave) return true;
+
+    await generateThemesSeed();
+
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};
 
 export const getActiveThemeId: ElectronAPIActiveThemeInterface["getActiveThemeId"] =
   async () => {

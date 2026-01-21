@@ -1,6 +1,7 @@
 import { ipcMain } from "electron";
 import {
   changeActiveTheme,
+  createActiveGlobalThemeIfNotExist,
   deleteActiveTheme,
   getActiveThemeId,
   getActiveThemePalette,
@@ -43,10 +44,14 @@ export const activeThemeHandler = (): void => {
 
       if (projectId) return await deleteActiveTheme(projectId);
 
-      return await changeActiveTheme({
+      const response = await changeActiveTheme({
         activeTheme: defaultActiveThemeId,
         projectId: null,
       });
+
+      if (response) await createActiveGlobalThemeIfNotExist();
+
+      return response;
     },
   );
 };

@@ -19,7 +19,10 @@ import { mkdir, unlink, writeFile } from "node:fs/promises";
 import axios from "axios";
 import { getImageFileFromPath } from "@/main/utils/images";
 import { ThemeInterface } from "@shared/types/theme.types";
-import { getActiveThemeMeta } from "@/main/db/activeThemeDB";
+import {
+  createActiveGlobalThemeIfNotExist,
+  getActiveThemeMeta,
+} from "@/main/db/activeThemeDB";
 import { MAX_INSTALLED_THEME_COUNT } from "@shared/constant/theme";
 
 const getNewThumbnailPath = (id: string): string => {
@@ -262,6 +265,7 @@ export const themeHandler = (): void => {
         }
       }
 
+      await createActiveGlobalThemeIfNotExist();
       return deletedResponse;
     },
   );
