@@ -57,8 +57,13 @@ const MarketplacePagination = memo(() => {
   );
 
   const showInfo = useMemo(
-    () => !errorMessage && totalThemes,
-    [errorMessage, totalThemes],
+    () =>
+      Boolean(
+        !errorMessage &&
+        totalThemes &&
+        !THEME_MARKETPLACE_FILTER_LOCAL.has(searchFilter),
+      ),
+    [errorMessage, searchFilter, totalThemes],
   );
 
   const handleNavigation = useCallback(
@@ -77,7 +82,7 @@ const MarketplacePagination = memo(() => {
       >
         <ArrowLeftIcon /> Previous
       </Button>
-      {Boolean(showInfo) && (
+      {showInfo && (
         <div className="flex items-center gap-1 pointer-events-none">
           <ButtonLikeDiv size={"xs"} variant={"outline"}>
             Current Page: {currentPage}
