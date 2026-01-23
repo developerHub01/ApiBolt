@@ -143,13 +143,6 @@ export const selectSelectedThemeInstallationOrUpdationMeta = createSelector(
       oldVersion: installedTheme.version ?? 1,
     };
 
-    console.log({
-      activeProjectId,
-      localActiveThemeId,
-      globalActiveThemeId,
-      DEFAULT_THEME_ID,
-    });
-
     /**
      * ============================
      * checking version
