@@ -30,3 +30,5 @@ export const MONTHS = [
   "Nov",
   "Dec",
 ];
+
+export const MAX_REQUEST_RESPONSE_WINDOW_SIZE = 30;

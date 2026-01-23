@@ -15,6 +15,8 @@ import requestUrlReducer from "@/context/redux/request-url/request-url-slice";
 import httpStatusReducer from "@/context/redux/http-status/http-status-slice";
 import statusReducer from "@/context/redux/status/status-slice";
 import historyReducer from "@/context/redux/history/history-slice";
+import requestResponseWindowReducer from "@/context/redux/request-response-window/request-response-window-slice";
+import { requestResponseWindowMiddleware } from "@/context/redux/middleware/request-response-window";
 
 export const store = configureStore({
   reducer: {
@@ -34,7 +36,10 @@ export const store = configureStore({
     httpStatus: httpStatusReducer,
     status: statusReducer,
     history: historyReducer,
+    requestResponseWindow: requestResponseWindowReducer,
   },
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware().concat(requestResponseWindowMiddleware),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

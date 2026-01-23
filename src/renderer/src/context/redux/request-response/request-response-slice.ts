@@ -35,7 +35,7 @@ import type {
   TBinaryData,
   HiddenHeadersCheckInterface,
 } from "@shared/types/request-response.types";
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, current, type PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 import type {
   APIKeyInterface,
@@ -1387,6 +1387,65 @@ export const requestResponseSlice = createSlice({
       state.folderDescriptionActiveTab = {};
       state.folderDescriptionLineWrap = {};
     },
+
+    handleKeepOnlyWindowedRequests: (
+      state,
+      action: PayloadAction<Array<string>>,
+    ) => {
+      const windowedRequest = new Set(action.payload);
+      const extraRequest = Object.keys(state.requestList).filter(
+        id => !windowedRequest.has(id),
+      );
+
+      const keysToDelete = [
+        "loadedRequestList",
+        "isResponseCollapsed",
+        "activeMetaTab",
+        "metaShowColumn",
+        "paramsBulkEditOpen",
+        "headersBulkEditOpen",
+        "formDataBulkEditOpen",
+        "xWWWFormEncodedBulkEditOpen",
+        "rawData",
+        "rawDataLineWrap",
+        "response",
+        "isResposneError",
+        "requestBodyType",
+        "rawRequestBodyType",
+        "params",
+        "showHiddenParams",
+        "headers",
+        "hiddenCookie",
+        "hiddenHeaders",
+        "authorizationHeader",
+        "authorizationParam",
+        "showHiddenHeaders",
+        "binaryData",
+        "formData",
+        "xWWWFormUrlencodedData",
+        "isDownloadRequestWithBase64",
+        "authType",
+        "authInheritedId",
+        "apiKeyAuth",
+        "basicAuth",
+        "bearerTokenAuth",
+        "jwtBearerAuth",
+        "activeResponseMetaTab",
+        "activeResponseDataTab",
+        "responseCodeWrap",
+        "folderTitle",
+        "folderDescription",
+        "folderDescriptionActiveTab",
+        "folderDescriptionLineWrap",
+      ];
+
+      extraRequest.forEach(requestId => {
+        keysToDelete.forEach(key => {
+          if (state[key as keyof typeof state]?.[requestId])
+            delete state[key as keyof typeof state]?.[requestId];
+        });
+      });
+    },
   },
 });
 
@@ -1490,7 +1549,9 @@ export const {
   handleUpdateFolder,
   handleChangeFolderDescriptionActiveTab,
   handleToggleFolderDescriptionLineWrap,
+
   handleClearRequestResponse,
+  handleKeepOnlyWindowedRequests,
 } = requestResponseSlice.actions;
 
 export default requestResponseSlice.reducer;
