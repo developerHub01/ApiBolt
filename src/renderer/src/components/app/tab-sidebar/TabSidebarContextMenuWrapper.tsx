@@ -125,7 +125,7 @@ const TabSidebarContextMenuWrapper = memo(({ children }: Props) => {
             {submenu.map(({ id, label, shortcut }) => (
               <ContextMenuItem
                 key={id}
-                className="capitalize"
+                className="capitalize text-xs"
                 onSelect={() => handleAction(id)}
               >
                 {label}

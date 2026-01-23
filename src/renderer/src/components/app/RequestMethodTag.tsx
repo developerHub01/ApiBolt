@@ -22,7 +22,7 @@ const RequestMethodTag = memo(
     return (
       <Badge
         className={cn(
-          "uppercase text-[10px] px-1 font-semibold rounded-md border select-none",
+          "uppercase text-[10px] px-1 font-semibold rounded-md border select-none flex justify-center items-center",
           {
             "bg-green-500/80 text-white backdrop-blur-lg": method === "get",
             "bg-blue-500/80 text-white backdrop-blur-lg": method === "post",

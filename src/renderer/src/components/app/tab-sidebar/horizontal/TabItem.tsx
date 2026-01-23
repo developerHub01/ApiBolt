@@ -156,7 +156,7 @@ const TabItem = memo(({ id, index }: Props) => {
           key={id}
           transition={{ duration: 0.3, ease: "easeInOut" }}
         >
-          <p className="w-full text-sm line-clamp-1">{name}</p>
+          <p className="w-full text-xs line-clamp-1">{name}</p>
         </motion.div>
         <Tooltip>
           <TooltipTrigger asChild>
