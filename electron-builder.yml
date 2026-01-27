@@ -21,12 +21,14 @@ asarUnpack:
   - resources/**
 win:
   executableName: api-bolt
+  icon: "build/icons/win/icon.ico"
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
 mac:
+  icon: "build/icons/mac/icon.icns"
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:
     - NSCameraUsageDescription: Application requests access to the device's camera.
@@ -37,6 +39,7 @@ mac:
 dmg:
   artifactName: ${name}-${version}.${ext}
 linux:
+  icon: "build/icons/png"
   target:
     - AppImage
     - snap
