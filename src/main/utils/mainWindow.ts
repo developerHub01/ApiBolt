@@ -1,10 +1,17 @@
+import { is } from "@electron-toolkit/utils";
 import { BrowserWindow, shell } from "electron";
 import path, { join } from "node:path";
 
-import icon from "../../../resources/icon.png?asset";
-import { is } from "@electron-toolkit/utils";
+import linuxIcon from "../../../resources/icons/png/256x256.png?asset";
 
 export const createMainWindow = () => {
+  const iconPath =
+    process.platform === "linux"
+      ? linuxIcon
+      : process.platform === "win32"
+        ? join(__dirname, "../../../resources/icons/win/icon.ico")
+        : join(__dirname, "../../../resources/icons/mac/icon.icns");
+
   const win = new BrowserWindow({
     show: false,
     minHeight: 600,
@@ -16,7 +23,7 @@ export const createMainWindow = () => {
     visualEffectState: "active",
     title: "ApiBolt",
     autoHideMenuBar: true,
-    ...(process.platform === "linux" ? { icon } : {}),
+    icon: iconPath,
 
     webPreferences: {
       preload: path.join(__dirname, "../", "preload", "index.js"),

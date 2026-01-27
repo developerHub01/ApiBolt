@@ -2,7 +2,16 @@ import { is } from "@electron-toolkit/utils";
 import { BrowserWindow, shell } from "electron";
 import path, { join } from "node:path";
 
+import linuxIcon from "../../../resources/icons/png/256x256.png?asset";
+
 export const createSplashWindow = () => {
+  const iconPath =
+    process.platform === "linux"
+      ? linuxIcon
+      : process.platform === "win32"
+        ? join(__dirname, "../../../resources/icons/win/icon.ico")
+        : join(__dirname, "../../../resources/icons/mac/icon.icns");
+
   const win = new BrowserWindow({
     show: false,
     width: 330,
@@ -15,6 +24,7 @@ export const createSplashWindow = () => {
     vibrancy: "under-window",
     visualEffectState: "active",
     alwaysOnTop: true,
+    icon: iconPath,
 
     webPreferences: {
       // preload: path.join(app.getAppPath(), "src", "preload", "index.js"),

@@ -1,5 +1,5 @@
 appId: com.electron.app
-productName: api-bolt
+productName: API Bolt
 directories:
   buildResources: build
 files:
@@ -48,7 +48,7 @@ linux:
   category: Utility
 appImage:
   artifactName: ${name}-${version}.${ext}
-npmRebuild: false
+compression: maximum
 publish:
   provider: generic
   url: https://example.com/auto-updates
