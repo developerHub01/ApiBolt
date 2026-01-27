@@ -82,3 +82,13 @@ export type TThemeMarketplaceSearchFilter =
   | "light"
   | "custom"
   | "id";
+
+export interface ThemesSearchResultInterface {
+  data: Array<ThemeMetaInterface>;
+  meta: {
+    total: number;
+    page: number;
+    pageSize: number;
+    totalPages: number;
+  };
+}

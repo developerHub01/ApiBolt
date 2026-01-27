@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import { axiosServerClient } from "@/lib/utils";
-import { ThemeInterface, ThemeMetaInterface } from "@shared/types/theme.types";
+import { ThemeInterface, ThemeMetaInterface, ThemesSearchResultInterface } from "@shared/types/theme.types";
 import {
   handleChangeIsInstallMaxCountAlertOpen,
   handleChangeSelectedThemeDetails,
@@ -23,16 +23,6 @@ import {
 } from "@shared/constant/theme";
 import axios from "axios";
 import { THEME_MARKETPLACE_PAGE_SIZE } from "@/constant/theme.constant";
-
-interface ThemesSearchResultInterface {
-  data: Array<ThemeMetaInterface>;
-  meta: {
-    total: number;
-    page: number;
-    pageSize: number;
-    totalPages: number;
-  };
-}
 
 export const loadThemesSearchResult = createAsyncThunk<
   void,
