@@ -1,7 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import { axiosServerClient } from "@/lib/utils";
-import { ThemeInterface, ThemeMetaInterface, ThemesSearchResultInterface } from "@shared/types/theme.types";
+import {
+  ThemeInterface,
+  ThemeMetaInterface,
+  ThemesSearchResultInterface,
+} from "@shared/types/theme.types";
 import {
   handleChangeIsInstallMaxCountAlertOpen,
   handleChangeSelectedThemeDetails,

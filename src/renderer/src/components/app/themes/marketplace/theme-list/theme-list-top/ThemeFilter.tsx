@@ -75,8 +75,14 @@ const ThemeFilter = memo(() => {
       defaultValue={filterType}
       onValueChange={handleChange}
     >
-      <ButtonLikeDiv variant={"secondary"} className="overflow-hidden w-25 px-0">
-        <SelectTrigger showIcon={false} className="bg-transparent justify-between flex-1">
+      <ButtonLikeDiv
+        variant={"secondary"}
+        className="overflow-hidden w-25 px-0"
+      >
+        <SelectTrigger
+          showIcon={false}
+          className="bg-transparent justify-between flex-1"
+        >
           <SelectValue />
           <FilterIcon />
         </SelectTrigger>
