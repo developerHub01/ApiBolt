@@ -80,4 +80,5 @@ export type TThemeMarketplaceSearchFilter =
   | "active"
   | "dark"
   | "light"
-  | "custom";
+  | "custom"
+  | "id";

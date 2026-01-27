@@ -69,6 +69,9 @@ export const loadThemesSearchResult = createAsyncThunk<
 
         const { meta, data } = response.data
           ?.data as ThemesSearchResultInterface;
+
+        console.log(data);
+
         dispatch(handleLoadThemeList(data));
         dispatch(handleChangeTotalPages(meta.totalPages));
         dispatch(handleChangeTotalThemes(meta.total));

@@ -6,6 +6,7 @@ import {
   SelectItem,
   SelectLabel,
   SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { ListFilter as FilterIcon } from "lucide-react";
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
@@ -40,6 +41,10 @@ const MENU_LIST: Array<{
         id: "custom",
         label: "Custom",
       },
+      {
+        id: "id",
+        label: "Id",
+      },
     ],
   },
   {
@@ -70,12 +75,9 @@ const ThemeFilter = memo(() => {
       defaultValue={filterType}
       onValueChange={handleChange}
     >
-      <ButtonLikeDiv
-        variant={"secondary"}
-        size={"icon"}
-        className="overflow-hidden"
-      >
-        <SelectTrigger showIcon={false} className="bg-transparent">
+      <ButtonLikeDiv variant={"secondary"} className="overflow-hidden w-25 px-0">
+        <SelectTrigger showIcon={false} className="bg-transparent justify-between flex-1">
+          <SelectValue />
           <FilterIcon />
         </SelectTrigger>
       </ButtonLikeDiv>
