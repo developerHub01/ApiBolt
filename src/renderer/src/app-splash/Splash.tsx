@@ -84,8 +84,8 @@ const Splash = () => {
                 duration: 0.5,
               }}
             >
-              <div className="w-10 h-10 bg-secondary backdrop-blur-sm rounded-lg flex items-center justify-center ring-2 ring-primary shadow-lg transform-content">
-                <Logo />
+              <div className="w-10 h-10 bg-secondary backdrop-blur-sm rounded-lg flex items-center justify-center shadow-lg transform-content">
+                <Logo className="w-full h-full" />
               </div>
 
               {/* Subtle glow */}

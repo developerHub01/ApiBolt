@@ -62,8 +62,8 @@ const Splash = () => {
         >
           <div className="flex flex-col gap-3 items-center pb-3">
             <div className="flex items-center gap-2.5 pl-3">
-              <div className="shrink-0 size-8 rounded-lg overflow-hidden ring-1 ring-primary">
-                <Logo />
+              <div className="shrink-0 size-8 overflow-hidden">
+                <Logo className="w-full h-full" />
               </div>
               <motion.h1
                 className="text-3xl font-black text-primary tracking-wide"

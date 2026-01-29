@@ -14,8 +14,8 @@ const Header = () => {
       <AnimatePresence>
         <HeaderWrapper>
           <div className="flex items-center pl-3">
-            <div className="shrink-0 size-6 md:size-7 rounded-lg overflow-hidden ring-1 ring-primary">
-              <Logo />
+            <div className="shrink-0 size-6 md:size-7 overflow-hidden">
+              <Logo className="w-full h-full" />
             </div>
             <p className="justify-start flex-1 select-none text-lg md:text-xl font-black tracking-wide pl-2 md:px-2.5 py-1.5">
               {APP_NAME}

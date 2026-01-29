@@ -1,37 +1,69 @@
-import { SVGProps } from "react";
+import { SVGProps, useMemo } from "react";
 
-interface Props extends SVGProps<SVGSVGElement> {}
+type TMutedColors =
+  | "background"
+  | "foreground"
+  | "popover"
+  | "popover-foreground"
+  | "primary"
+  | "primary-foreground"
+  | "secondary"
+  | "secondary-foreground"
+  | "muted"
+  | "muted-foreground"
+  | "accent"
+  | "accent-foreground"
+  | "destructive"
+  | "border"
+  | "input"
+  | "ring"
+  | "line";
 
-const Logo = ({ ...props }: Props) => {
+interface Props extends Omit<SVGProps<SVGSVGElement>, "color"> {
+  color?: TMutedColors;
+}
+
+const Logo = ({ color = "primary", ...props }: Props) => {
+  const primaryColor = useMemo(() => `var(--${color})`, [color]);
+
   return (
     <svg
-      width="100%"
-      height="100%"
-      viewBox="0 0 512 512"
+      width="1024"
+      height="1024"
+      viewBox="0 0 1024 1024"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      <g clipPath="url(#clip0_14_2)">
+      <g clipPath="url(#clip0_24_7)">
         <rect
-          x="-39"
-          y="-35"
-          width="589"
-          height="589"
+          x="-78"
+          y="-70"
+          width="1178"
+          height="1178"
           fill="var(--background)"
         />
         <path
-          d="M191.19 364.083L50.5863 550H182.337L315.688 234.284L151.351 334.204L226.603 158.8L18 453.722L191.19 364.083Z"
-          fill="var(--primary)"
+          d="M416 668.042L206.544 945H402.811L601.463 474.68L356.652 623.53L468.754 362.233L158 801.575L416 668.042Z"
+          fill={primaryColor}
         />
         <path
-          d="M319.706 153.917L460.31 -32H328.559L195.208 283.716L359.545 183.796L284.293 359.2L492.896 64.2783L319.706 153.917Z"
-          fill="var(--primary)"
+          d="M607.449 354.958L816.905 78H620.637L421.986 548.32L666.797 399.47L554.695 660.767L865.449 221.425L607.449 354.958Z"
+          fill={primaryColor}
         />
       </g>
+      <rect
+        x="40"
+        y="40"
+        width="944"
+        height="944"
+        rx="155"
+        stroke={primaryColor}
+        strokeWidth="80"
+      />
       <defs>
-        <clipPath id="clip0_14_2">
-          <rect width="512" height="512" rx="34" fill="white" />
+        <clipPath id="clip0_24_7">
+          <rect width="1024" height="1024" rx="195" fill="white" />
         </clipPath>
       </defs>
     </svg>
