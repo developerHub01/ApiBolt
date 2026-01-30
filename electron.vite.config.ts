@@ -6,6 +6,9 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   main: {
     plugins: [externalizeDepsPlugin()],
+    esbuild: {
+      drop: ["console", "debugger"],
+    },
     resolve: {
       alias: {
         "@/main": resolve("src/main"),
@@ -20,10 +23,16 @@ export default defineConfig({
     },
   },
   preload: {
+    esbuild: {
+      drop: ["console", "debugger"],
+    },
     plugins: [externalizeDepsPlugin()],
   },
   renderer: {
     assetsInclude: "src/renderer/assets/**",
+    esbuild: {
+      drop: ["console", "debugger"],
+    },
     resolve: {
       alias: {
         "@renderer": resolve("src/renderer/src"),
