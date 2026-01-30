@@ -85,6 +85,11 @@ if (process.contextIsolated) {
       applyTestTheme: theme => {
         return handleApplyThemeInDocument(theme);
       },
+
+      /**
+       * Matchine level utils
+       */
+      getMachineId: () => ipcRenderer.invoke("getMachineId"),
     };
 
     /**

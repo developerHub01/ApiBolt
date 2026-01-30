@@ -58,6 +58,7 @@ import { getLocalPassword } from "@/main/db/localPasswordDB";
 import { applyingThemeBackground } from "@/main/utils/applyingTheme";
 import { runMigrations } from "@/main/db";
 import { responseHandler } from "@/main/ipc/responseHandler";
+import { sysmteHandler } from "@/main/ipc/sysmteHandler";
 
 /***
  * App basic setup declaration
@@ -229,6 +230,7 @@ app.whenReady().then(async () => {
   /***
    * Initiallizing all IPC handlers
    */
+  sysmteHandler();
   localPasswordHandler();
   httpStatusHandler();
   registerCookieHandlers();

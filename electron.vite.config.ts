@@ -15,7 +15,7 @@ export default defineConfig({
     },
     build: {
       rollupOptions: {
-        external: ["@libsql/client"],
+        external: ["@libsql/client", "node-machine-id"],
       },
     },
   },

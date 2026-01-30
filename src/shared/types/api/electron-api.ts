@@ -38,4 +38,6 @@ export interface ElectronAPIInterface {
    */
   applyTheme(): Promise<void>;
   applyTestTheme(palette: ThemeInterface["palette"]): void;
+
+  getMachineId(): Promise<string>;
 }

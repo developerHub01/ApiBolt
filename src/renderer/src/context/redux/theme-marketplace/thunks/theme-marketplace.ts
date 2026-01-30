@@ -142,6 +142,17 @@ export const installTheme = createAsyncThunk<
       version: theme.version,
     });
 
+    try {
+      const matchineId = await window.electronAPI.getMachineId();
+      await axiosServerClient.post("/themes/install", {
+        themeId: theme.id,
+        deviceId: matchineId,
+        actionType: "install",
+      });
+    } catch (error) {
+      /*  console.error(error); */
+    }
+
     dispatch(loadInstalledThemeMetaList());
 
     return response;
@@ -183,6 +194,17 @@ export const unInstallTheme = createAsyncThunk<
     ) {
       dispatch(loadActiveThemeId());
       dispatch(applyThemeInApp());
+    }
+
+    try {
+      const matchineId = await window.electronAPI.getMachineId();
+      await axiosServerClient.post("/themes/install", {
+        themeId: id,
+        deviceId: matchineId,
+        actionType: "uninstall",
+      });
+    } catch (error) {
+      /* console.error(error); */
     }
 
     return response;
