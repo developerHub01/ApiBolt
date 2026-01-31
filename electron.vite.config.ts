@@ -18,7 +18,11 @@ export default defineConfig({
     },
     build: {
       rollupOptions: {
-        external: ["@libsql/client", "node-machine-id"],
+        external: [
+          "@libsql/client",
+          "@libsql/win32-x64-msvc",
+          "node-machine-id",
+        ],
       },
     },
   },

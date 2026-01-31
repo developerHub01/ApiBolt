@@ -18,7 +18,9 @@ extraResources:
     to: "resources"
 asarUnpack:
   - "**/*.node"
-  - resources/**
+  - "resources/**"
+  - "node_modules/@libsql/client/**/*.node"
+  - "node_modules/@libsql/win32-x64-msvc/**/*.node"
 win:
   executableName: api-bolt
   icon: "build/icons/win/icon.ico"
