@@ -25,7 +25,7 @@ const Header = () => {
             <HeaderSearch />
           </div>
           <div
-            className="justify-end flex-1 flex items-center h-full"
+            className="justify-end flex items-center h-full"
             style={
               isElectron() ? ({ appRegion: "no-drag" } as CSSProperties) : {}
             }
