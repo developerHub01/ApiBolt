@@ -2,6 +2,20 @@
 
 ApiBolt is a powerful, modern REST API client built for developers who need an efficient and user-friendly way to test, debug, and interact with APIs. Built with Electron and React, ApiBolt delivers a seamless desktop application experience with an intuitive and polished interface. Whether you're building new integrations or troubleshooting existing endpoints, ApiBolt provides all the tools you need to streamline your API development workflow.
 
+## Tech stack
+  - Electron
+  - Electron-vite
+  - React
+  - Redux
+  - Typescript
+  - Tailwind
+  - Shadcn
+  - Framer-motion/motion
+  - Nodejs
+  - Sqlite
+  - Drizzle
+  - Supabase with Nuxt (for marketplace and theme API)
+
 ## Preview
 
 ![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/01.png "APIBolt splash screen")
