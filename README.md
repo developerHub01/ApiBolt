@@ -4,41 +4,44 @@ ApiBolt is a powerful, modern REST API client built for developers who need an e
 
 ## Preview
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/01.png "Optional title")
+![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/01.png "APIBolt splash screen")
 
 `optional, only if enabled local-password`
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/02.png "Optional title")
+![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/02.png "APIBolt local-password")
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/03.png "Optional title")
+![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/03.png "APIBolt project screen")
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/04.png "Optional title")
+![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/04.png "APIBolt create project")
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/05.png "Optional title")
+![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/05.png "APIBolt project screen. projects list")
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/06.png "Optional title")
+![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/06.png "APIBolt collection screen")
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/07.png "Optional title")
+![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/07.png "APIBolt collection request screen")
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/08.png "Optional title")
+![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/08.png "APIBolt collection search")
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/09.png "Optional title")
+![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/09.png "APIBolt collection request")
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/10.png "Optional title")
+![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/10.png "APIBolt collection folder")
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/11.png "Optional title")
+![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/11.png "APIBolt request history")
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/12.png "Optional title")
+![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/12.png "APIBolt environments screen")
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/13.png "Optional title")
+![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/13.png "APIBolt Auth screen")
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/14.png "Optional title")
+![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/14.png "APIBolt marketplace screen")
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/15.png "Optional title")
+![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/15.png "APIBolt theme editor")
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/16.png "Optional title")
+![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/16.png "APIBolt cookies")
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/17.png "Optional title")
+![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/17.png "APIBolt shortcuts")
 
+![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/18.png "APIBolt settings")
+
+![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/19.png "APIBolt local-password")
 
 ## Installation
 
