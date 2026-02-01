@@ -25,11 +25,25 @@ asarUnpack:
 win:
   executableName: api-bolt
   icon: "build/icons/win/icon.ico"
+  target: 
+    - target: "nsis"
+      arch: ["x64"]
+    - target: "appx"
+      arch: ["x64"]
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  license: "build/license.txt"
+# --- MICROSOFT STORE CONFIGURATION ---
+appx:
+  identityName: com.apibolt.app
+  publisher: CN=ReplaceWithMicrosoftID 
+  publisherDisplayName: "SHAKIL LAB"
+  languages: ["en-US"]
 mac:
   icon: "build/icons/mac/icon.icns"
   entitlementsInherit: build/entitlements.mac.plist
