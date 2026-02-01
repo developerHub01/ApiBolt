@@ -1,5 +1,6 @@
-appId: com.electron.app
+appId: com.api-bolt
 productName: API Bolt
+executableName: api-bolt
 directories:
   buildResources: build
 files:
