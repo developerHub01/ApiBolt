@@ -2,52 +2,40 @@
 
 ApiBolt is a powerful, modern REST API client built for developers who need an efficient and user-friendly way to test, debug, and interact with APIs. Built with Electron and React, ApiBolt delivers a seamless desktop application experience with an intuitive and polished interface. Whether you're building new integrations or troubleshooting existing endpoints, ApiBolt provides all the tools you need to streamline your API development workflow.
 
+## Preview
+
+![Alt text](image-url.jpg "Optional title")
+
+
 ## Installation
 
-### Step 1: Install Dependencies
+### Install Dependencies
 
 ```
-npm install
+pnpm install
 ```
 
-### Step 2: Rebuild Native Modules
+### Run project
 
 ```
-npm rebuild
+pnpm dev
 ```
 
-### Step 3: Run Database Migrations
+### Run project on preview mode
 
 ```
-npm run db:migrate
+pnpm start
 ```
 
-## Development
-
-### Build the Project
+### Build project
 
 ```
-npm run build
+pnpm build
 ```
 
-### Run Desktop Application
+### Build project based on OS
 
 ```
-npm run electron
-```
-
-## Troubleshooting
-
-If you encounter issues, try a clean reinstall:
-
-### Remove Dependencies
-
-```
-rm -rf node_modules package-lock.json
-```
-
-### Reinstall Dependencies
-
-```
-npm install
+pnpm build:win
+pnpm build:linux
 ```
