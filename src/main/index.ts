@@ -123,160 +123,178 @@ const enterMainApp = () => {
   closeLocalPassword();
 };
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.whenReady().then(async () => {
-  /***
-   * First migrate the db
-   */
-  await runMigrations();
+const gotTheLock = app.requestSingleInstanceLock();
 
-  /***
-   * App basic setup start on app statup.
-   * cookies | axios-client | protocols | app-model-id | splash
-   */
-  jar = await jarManager.init();
-  // axios client with cookie jar support
-  client = wrapper(axios.create({ jar }));
-  /* handle protocol ex: api-bolt:// */
-  handleProtocol();
-  // Set app user model id for windows
-  electronApp.setAppUserModelId("com.api-bolt");
-
-  /***
-   * flag to check do have local password or not
-   */
-  const haveLocalPassword = Boolean(await getLocalPassword());
-  /***
-   * getting background color from theme palette
-   */
-  const backgroundColor = await applyingThemeBackground();
-
-  /***
-   * create all windows
-   */
-  splashWindow = createSplashWindow();
-  localPasswordWindow = createLocalPasswordWindow();
-  mainWindow = createMainWindow();
-  mainWindow.setBackgroundColor(backgroundColor);
-
-  /***
-   * by default setting all windows closing reasone as "user"
-   */
-  windowCloseReason.set(splashWindow, "user");
-  windowCloseReason.set(localPasswordWindow, "user");
-  windowCloseReason.set(mainWindow, "user");
-
-  /***
-   * handling splash and other windows opening
-   */
-  splashWindow.show();
-
-  // Default open or close DevTools by F12 in development
-  // and ignore CommandOrControl + R in production.
-  // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
-  app.on("browser-window-created", (_, window) => {
-    optimizer.watchWindowShortcuts(window);
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on("second-instance", () => {
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore();
+      else mainWindow.focus();
+    } else if (localPasswordWindow) localPasswordWindow.focus();
+    else if (splashWindow) splashWindow.focus();
   });
 
-  // IPC test
-  ipcMain.on("ping", () => console.info("pong"));
+  // This method will be called when Electron has finished
+  // initialization and is ready to create browser windows.
+  // Some APIs can only be used after this event occurs.
+  app.whenReady().then(async () => {
+    /**
+     * setting app id
+     */
+    if (process.platform === "win32") app.setAppUserModelId("com.api-bolt");
+    else electronApp.setAppUserModelId("com.api-bolt");
 
-  /***
-   * Render main window or local-password window if splash loading finished
-   */
-  ipcMain.on("splash-window-complete-end", () => {
-    if (haveLocalPassword) {
-      showLocalPasswordWindow();
-      closeSplash();
-    } else {
+    /***
+     * First migrate the db
+     */
+    await runMigrations();
+
+    /***
+     * App basic setup start on app statup.
+     * cookies | axios-client | protocols | app-model-id | splash
+     */
+    jar = await jarManager.init();
+    // axios client with cookie jar support
+    client = wrapper(axios.create({ jar }));
+    /* handle protocol ex: api-bolt:// */
+    handleProtocol();
+
+    /***
+     * flag to check do have local password or not
+     */
+    const haveLocalPassword = Boolean(await getLocalPassword());
+    /***
+     * getting background color from theme palette
+     */
+    const backgroundColor = await applyingThemeBackground();
+
+    /***
+     * create all windows
+     */
+    splashWindow = createSplashWindow();
+    localPasswordWindow = createLocalPasswordWindow();
+    mainWindow = createMainWindow();
+    mainWindow.setBackgroundColor(backgroundColor);
+
+    /***
+     * by default setting all windows closing reasone as "user"
+     */
+    windowCloseReason.set(splashWindow, "user");
+    windowCloseReason.set(localPasswordWindow, "user");
+    windowCloseReason.set(mainWindow, "user");
+
+    /***
+     * handling splash and other windows opening
+     */
+    splashWindow.show();
+
+    // Default open or close DevTools by F12 in development
+    // and ignore CommandOrControl + R in production.
+    // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
+    app.on("browser-window-created", (_, window) => {
+      optimizer.watchWindowShortcuts(window);
+    });
+
+    // IPC test
+    ipcMain.on("ping", () => console.info("pong"));
+
+    /***
+     * Render main window or local-password window if splash loading finished
+     */
+    ipcMain.on("splash-window-complete-end", () => {
+      if (haveLocalPassword) {
+        showLocalPasswordWindow();
+        closeSplash();
+      } else {
+        enterMainApp();
+        setTimeout(() => closeSplash(), 200);
+      }
+    });
+
+    /***
+     * Render main window after local password matched
+     * that will only call if local password have and local-password-window open and can validate the password
+     */
+    ipcMain.on("local-password-valid", () => {
       enterMainApp();
-      setTimeout(() => closeSplash(), 200);
-    }
+    });
+
+    // mainWindow.once("ready-to-show", () => {});
+
+    /***
+     * on mainWindow loading finish then handle the zoom-level of the window
+     */
+    mainWindow.webContents.on("did-finish-load", async () => {
+      await handleZoomLevel();
+    });
+
+    app.on("activate", function () {
+      // On macOS it's common to re-create a window in the app when the
+      // dock icon is clicked and there are no other windows open.
+      if (BrowserWindow.getAllWindows().length === 0) createMainWindow();
+    });
+
+    /***
+     * handling external links in mainWindow. to forcefully open external link outside the app instead of in
+     */
+    mainWindow?.webContents.setWindowOpenHandler(details => {
+      handleExternalUrl(details.url);
+      return { action: "deny" };
+    });
+
+    /***
+     * Initiallizing all IPC handlers
+     */
+    sysmteHandler();
+    localPasswordHandler();
+    httpStatusHandler();
+    registerCookieHandlers();
+    windowHandler(mainWindow);
+    jsonWebTokenHandlers();
+    activeSidebarTabHandler();
+    activeCodeSnippitTypeHandler();
+    projectsHandlers();
+    themeHandler();
+    activeThemeHandler();
+    cookiesHandler();
+    enviromentsHandlers();
+    authorizationHandler();
+    requestOrFolderMetaHandler();
+    tabsHandler();
+    settingsHandler();
+    settingsRequestHandler();
+    folderHandlers();
+    paramsHandlers();
+    headersHandlers();
+    hiddenHeadersCheckHandler();
+    showHiddenMetaDataHandler();
+    bodyRawHandler();
+    bodyBinaryHandler();
+    requestMetaTabHandler();
+    bodyXWWWFormUrlencodedHandlers();
+    bodyFormDataHandlers();
+    metaShowColumnHandlers();
+    apiUrlHandler();
+    requestHandler();
+    responseHandler();
+    fileSystemHandler();
+    keyboardShortcutHandler();
+    historyHandler();
+
+    /***
+     * Initiallizing all seeds
+     */
+    await generateProjectSeed();
+    await generateHttpStatusSeed();
+    await generateKeyboardBindingsSeed();
+    await generateThemesSeed();
+    await generateSettingsSeed();
+    await settingRequestSeed();
+    await SettingRequestState.loadGlobalFromDB();
   });
-
-  /***
-   * Render main window after local password matched
-   * that will only call if local password have and local-password-window open and can validate the password
-   */
-  ipcMain.on("local-password-valid", () => {
-    enterMainApp();
-  });
-
-  // mainWindow.once("ready-to-show", () => {});
-
-  /***
-   * on mainWindow loading finish then handle the zoom-level of the window
-   */
-  mainWindow.webContents.on("did-finish-load", async () => {
-    await handleZoomLevel();
-  });
-
-  app.on("activate", function () {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createMainWindow();
-  });
-
-  /***
-   * handling external links in mainWindow. to forcefully open external link outside the app instead of in
-   */
-  mainWindow?.webContents.setWindowOpenHandler(details => {
-    handleExternalUrl(details.url);
-    return { action: "deny" };
-  });
-
-  /***
-   * Initiallizing all IPC handlers
-   */
-  sysmteHandler();
-  localPasswordHandler();
-  httpStatusHandler();
-  registerCookieHandlers();
-  windowHandler(mainWindow);
-  jsonWebTokenHandlers();
-  activeSidebarTabHandler();
-  activeCodeSnippitTypeHandler();
-  projectsHandlers();
-  themeHandler();
-  activeThemeHandler();
-  cookiesHandler();
-  enviromentsHandlers();
-  authorizationHandler();
-  requestOrFolderMetaHandler();
-  tabsHandler();
-  settingsHandler();
-  settingsRequestHandler();
-  folderHandlers();
-  paramsHandlers();
-  headersHandlers();
-  hiddenHeadersCheckHandler();
-  showHiddenMetaDataHandler();
-  bodyRawHandler();
-  bodyBinaryHandler();
-  requestMetaTabHandler();
-  bodyXWWWFormUrlencodedHandlers();
-  bodyFormDataHandlers();
-  metaShowColumnHandlers();
-  apiUrlHandler();
-  requestHandler();
-  responseHandler();
-  fileSystemHandler();
-  keyboardShortcutHandler();
-  historyHandler();
-
-  /***
-   * Initiallizing all seeds
-   */
-  await generateProjectSeed();
-  await generateHttpStatusSeed();
-  await generateKeyboardBindingsSeed();
-  await generateThemesSeed();
-  await generateSettingsSeed();
-  await settingRequestSeed();
-  await SettingRequestState.loadGlobalFromDB();
-});
+}
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
