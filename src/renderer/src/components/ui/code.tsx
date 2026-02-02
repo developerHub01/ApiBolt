@@ -113,6 +113,7 @@ const Code = ({
   const isMounted = useMounted();
   const themeType = useAppSelector(selectActiveThemeType);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setFontSizeState(fontSize), [fontSize]);
 
   const extensions: Array<Extension> = [
