@@ -39,11 +39,13 @@ import ThemeMarketplaceFallback from "@/fallback/theme/ThemeMarketplaceFallback"
 import ThemeEditorFallback from "@/fallback/theme/ThemeEditorFallback";
 import AuthorizationFallback from "@/fallback/AuthorizationFallback";
 import EnvironmentFallback from "@/fallback/EnvironmentFallback";
+import ErrorBoundary from "@/pages/error-boundary";
 
 const routes = [
   {
     path: "/",
     element: <RootLayout />,
+    errorElement: <ErrorBoundary />,
     children: [
       {
         /* app layout */
