@@ -61,5 +61,5 @@ export const getImageFileFromPath = async (filePath: string) => {
 export const getApiBoltFileProtocolBasedPath = (...paths: Array<string>) => {
   const absolutePath = path.resolve(...paths);
   const url = pathToFileURL(absolutePath).toString();
-  return url.replace("file://", "api-bolt://");
+  return url.replace(/^file:\/\/\//, "api-bolt://");
 };
