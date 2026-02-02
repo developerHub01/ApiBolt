@@ -11,10 +11,12 @@ import useCodeKeybaordShortcut from "@/hooks/code/use-code-keybaord-shortcut";
 import useCheckApplyingCodeFontSize from "@/hooks/setting/use-check-applying-code-font-size";
 import useCheckApplyingCodeIndentationSize from "@/hooks/setting/use-check-applying-code-indentation-size";
 import { indentUnit } from "@codemirror/language";
-import { getLangExtension } from "@/utils/code";
 import useCustomToast from "@/hooks/ui/use-custom-toast";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectActiveThemeType } from "@/context/redux/theme/selectors/theme";
+import { langMap } from "@/constant/code.constant";
+import type { LangFactory } from "@shared/types/code";
+import { langs } from "@uiw/codemirror-extensions-langs";
 
 export type TLanguageType =
   | TContentType
@@ -24,6 +26,16 @@ export type TLanguageType =
   | "php"
   | "python"
   | "java";
+
+/**
+ * Returns the language factory for a given content type
+ */
+export const getLangExtension = (contentType: string): LangFactory => {
+  const key = (langMap?.[contentType] ??
+    contentType ??
+    "text") as keyof typeof langs;
+  return langs[key] || (() => []);
+};
 
 const getEditableOptions = ({
   editable,
