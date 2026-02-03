@@ -1,3 +1,4 @@
+import { SERVER_API_BASE_URL } from "@shared/constant/api-bolt";
 import axios from "axios";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -19,5 +20,5 @@ export const debounce = <Args extends Array<unknown>>(
 };
 
 export const axiosServerClient = axios.create({
-  baseURL: import.meta.env.VITE_SERVER_API_BASE_URL,
+  baseURL: SERVER_API_BASE_URL,
 });
