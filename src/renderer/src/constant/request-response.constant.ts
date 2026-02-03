@@ -1,3 +1,4 @@
+import { APP_NAME, APP_VERSION } from "@shared/constant/api-bolt";
 import type { TMetaTableType } from "@shared/types/request-response.types";
 import { v4 as uuidv4 } from "uuid";
 
@@ -44,7 +45,7 @@ export const INITIAL_HIDDEN_HEADERS_DATA = [
   {
     id: "userAgent",
     key: "User-Agent",
-    value: `${import.meta.env.VITE_APP_NAME}/${import.meta.env.VITE_APP_VERSION}`,
+    value: `${APP_NAME}/${APP_VERSION}`,
     prevent: true,
     isCheck: true,
   },

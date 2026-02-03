@@ -11,6 +11,7 @@ import { useAppSelector } from "@/context/redux/hooks";
 import { selectSelectedThemeDetails } from "@/context/redux/theme-marketplace/selectors/theme-marketplace";
 import ThemeActions from "@/components/app/themes/marketplace/theme-details/theme-content/ThemeActions";
 import { DEFAULT_THEME_ID } from "@shared/constant/theme";
+import { WEBSITE_BASE_URL } from "@shared/constant/api-bolt";
 
 const ThemeMeta = () => {
   const themeDetails = useAppSelector(selectSelectedThemeDetails);
@@ -18,7 +19,7 @@ const ThemeMeta = () => {
   const authorProfileUrl = useMemo(
     () =>
       themeDetails?.authorUsername
-        ? `${import.meta.env.VITE_WEBSITE_BASE_URL}/profile/${themeDetails?.authorUsername}`
+        ? `${WEBSITE_BASE_URL}/profile/${themeDetails?.authorUsername}`
         : null,
     [themeDetails?.authorUsername],
   );
@@ -37,9 +38,7 @@ const ThemeMeta = () => {
         <div className="flex items-center gap-2">
           <AuthorIcon size={18} />
           {authorProfileUrl ? (
-            <ExternalLink
-              to={`${import.meta.env.VITE_WEBSITE_BASE_URL}/profile/${authorUsername}`}
-            >
+            <ExternalLink to={`${WEBSITE_BASE_URL}/profile/${authorUsername}`}>
               <Button variant={"link"} className="px-0 underline capitalize">
                 {author}
               </Button>

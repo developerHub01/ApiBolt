@@ -15,6 +15,7 @@ import {
 import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 import { selectThemeActiveId } from "@/context/redux/theme/selectors/theme";
 import { DEFAULT_THEME_ID } from "@shared/constant/theme";
+import { WEBSITE_BASE_URL } from "@shared/constant/api-bolt";
 
 const ThemeDetailsTop = memo(() => {
   const isLoading = useAppSelector(selectThemeMarketplaceThemeDetailsLoading);
@@ -25,7 +26,7 @@ const ThemeDetailsTop = memo(() => {
   const themeUrl = useMemo(() => {
     if (!themeDetails?.id) return null;
 
-    return `${import.meta.env.VITE_WEBSITE_BASE_URL}/theme/${themeDetails.id}`;
+    return `${WEBSITE_BASE_URL}/theme/${themeDetails.id}`;
   }, [themeDetails?.id]);
 
   const suffix = useMemo(() => {

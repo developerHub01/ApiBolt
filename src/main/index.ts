@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain, session } from "electron";
 import { electronApp, optimizer } from "@electron-toolkit/utils";
 
 import { httpStatusHandler } from "@/main/ipc/httpStatusHandler";
@@ -59,11 +59,14 @@ import { applyingThemeBackground } from "@/main/utils/applyingTheme";
 import { runMigrations } from "@/main/db";
 import { responseHandler } from "@/main/ipc/responseHandler";
 import { sysmteHandler } from "@/main/ipc/sysmteHandler";
+import { WEBSITE_BASE_URL } from "@shared/constant/api-bolt";
 
 /***
  * App basic setup declaration
  */
 export const userDataDir = app.getPath("userData");
+
+const serverAPIUrl = WEBSITE_BASE_URL;
 
 export let jar: CookieJar | null = null;
 export let client: AxiosInstance | null = null;
@@ -150,6 +153,34 @@ if (!gotTheLock) {
      * First migrate the db
      */
     await runMigrations();
+
+    /***
+     *  sessions security ===========
+     */
+    session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+      const connectSources = [
+        "'self'",
+        // "http://localhost:3000",
+        // "http://localhost:5173",
+        // "https://*.vercel.app",
+        serverAPIUrl,
+      ]
+        .filter(Boolean)
+        .join(" ");
+
+      callback({
+        responseHeaders: {
+          ...details.responseHeaders,
+          "Content-Security-Policy": [
+            `default-src 'self'; ` +
+              `script-src 'self' 'unsafe-inline' 'unsafe-eval'; ` +
+              `style-src 'self' 'unsafe-inline'; ` +
+              `img-src 'self' data: api-bolt: https://*.supabase.co; ` +
+              `connect-src 'self'${connectSources ? " " + connectSources : ""};`,
+          ],
+        },
+      });
+    });
 
     /***
      * App basic setup start on app statup.
@@ -286,13 +317,26 @@ if (!gotTheLock) {
     /***
      * Initiallizing all seeds
      */
-    await generateProjectSeed();
-    await generateHttpStatusSeed();
-    await generateKeyboardBindingsSeed();
-    await generateThemesSeed();
-    await generateSettingsSeed();
-    await settingRequestSeed();
-    await SettingRequestState.loadGlobalFromDB();
+    (async () => {
+      try {
+        (
+          await Promise.allSettled([
+            generateProjectSeed(),
+            generateHttpStatusSeed(),
+            generateKeyboardBindingsSeed(),
+            generateThemesSeed(),
+            generateSettingsSeed(),
+            settingRequestSeed(),
+            SettingRequestState.loadGlobalFromDB(),
+          ])
+        ).forEach((result, index) => {
+          if (result.status === "rejected")
+            console.error(`Seed at index ${index} failed:`, result.reason);
+        });
+      } catch (err) {
+        console.error("Critical error during seeding sequence:", err);
+      }
+    })();
   });
 }
 
@@ -300,9 +344,7 @@ if (!gotTheLock) {
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
-    app.quit();
-  }
+  if (process.platform !== "darwin") app.quit();
 });
 
 /***
