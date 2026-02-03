@@ -40,8 +40,6 @@ export const createSplashWindow = () => {
 
   // win.webContents.openDevTools();
 
-  // win.resizable = true;
-
   win.webContents.setWindowOpenHandler(details => {
     shell.openExternal(details.url);
     return { action: "deny" };

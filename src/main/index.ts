@@ -88,8 +88,12 @@ const windowCloseReason = new WeakMap<BrowserWindow, "user" | "programmatic">();
  */
 export const showMainWindow = () => {
   if (!mainWindow) return;
+  if (mainWindow.isMinimized()) mainWindow.restore();
   mainWindow.show();
+  mainWindow.focus();
   mainWindow.maximize();
+  mainWindow.setAlwaysOnTop(true);
+  mainWindow.setAlwaysOnTop(false);
 };
 
 export const showLocalPasswordWindow = () => {
