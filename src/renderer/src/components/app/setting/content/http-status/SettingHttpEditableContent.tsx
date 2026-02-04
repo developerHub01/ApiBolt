@@ -1,5 +1,5 @@
 import {
-  useEffect,
+  useMemo,
   useState,
   type ClipboardEvent,
   type FocusEvent,
@@ -33,23 +33,21 @@ const SettingHttpEditableContent = ({
   editedValue,
 }: SettingHttpEditableContentProps) => {
   const dispatch = useAppDispatch();
-  const [valueState, setValueState] = useState<string>(
-    (editedValue || value).slice(
-      0,
-      type === "description" ? DESCRIPTION_MAX_LENGTH : REASON_MAX_LENGTH,
-    ),
-  );
-
-  useEffect(
+  const sourceValue = useMemo(
     () =>
-      setValueState(
-        (editedValue || value).slice(
-          0,
-          type === "description" ? DESCRIPTION_MAX_LENGTH : REASON_MAX_LENGTH,
-        ),
+      (editedValue || value).slice(
+        0,
+        type === "description" ? DESCRIPTION_MAX_LENGTH : REASON_MAX_LENGTH,
       ),
-    [editedValue, type, value],
+    [value, editedValue, type],
   );
+  const [valueState, setValueState] = useState<string>(sourceValue);
+  const [prevValueState, setPrevValueState] = useState<string>(sourceValue);
+
+  if (sourceValue !== prevValueState) {
+    setPrevValueState(sourceValue);
+    setValueState(sourceValue);
+  }
 
   const handleUpdate = (value: string | null) => {
     const filteredValue =
