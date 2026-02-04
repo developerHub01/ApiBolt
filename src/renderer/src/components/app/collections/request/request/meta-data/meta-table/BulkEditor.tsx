@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import Code from "@/components/ui/code";
 import { cn } from "@/lib/utils";
@@ -90,15 +90,29 @@ const metaDataToText = (data: Array<MetaDataInterface> = []) => {
 };
 
 const BulkEditor = memo(() => {
-  const dispatch = useAppDispatch();
-  const [value, setValue] = useState<string>("");
   const metaData = useAppSelector(selectMetaBulkData);
+  const metaDataText = useMemo(
+    () => metaDataToText(metaData as Array<MetaDataInterface>),
+    [metaData],
+  );
 
-  const handleChange = useCallback((code: string) => {
-    setValue(code);
-  }, []);
+  return <Editor metaDataText={metaDataText} />;
+});
+
+interface EditorProps {
+  metaDataText: string;
+}
+
+const Editor = memo(({ metaDataText }: EditorProps) => {
+  const dispatch = useAppDispatch();
+  const [value, setValue] = useState<string>(metaDataText);
+  const [prevValue, setPrevValue] = useState<string>(metaDataText);
+
+  const handleChange = useCallback((code: string) => setValue(code), []);
 
   const handleBlur = useCallback(() => {
+    if (value === metaDataText) return;
+
     const metaArray = textToMetaData(value);
     const payload = metaArray.map(param => ({
       key: param.key as string,
@@ -109,11 +123,12 @@ const BulkEditor = memo(() => {
       valueType: param.valueType as TParamContentType,
     }));
     dispatch(replaceMetaTableData(payload));
-  }, [dispatch, value]);
+  }, [dispatch, value, metaDataText]);
 
-  useEffect(() => {
-    setValue(metaDataToText(metaData as Array<MetaDataInterface>));
-  }, [metaData]);
+  if (metaDataText !== prevValue) {
+    setPrevValue(metaDataText);
+    setValue(metaDataText);
+  }
 
   return (
     <ScrollArea
