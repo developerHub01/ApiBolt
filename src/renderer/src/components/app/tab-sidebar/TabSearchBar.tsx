@@ -23,20 +23,14 @@ const TabSearchBar = memo(({ isOpen, className, ...props }: Props) => {
   const tabListLayoutType = useCheckApplyingTabListLayoutDirection();
   const { handleSearch, isTabListOpen } = useTabSidebar();
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [skipEffect, setSkipEffect] = useState<boolean>(false);
 
   useEffect(() => {
-    if (skipEffect) {
-      setSkipEffect(false);
-      return;
-    }
-
     const timeout = setTimeout(() => {
       handleSearch(searchTerm);
     }, DEBOUNCE_DELAY);
 
     return () => clearTimeout(timeout);
-  }, [searchTerm, handleSearch, skipEffect]);
+  }, [searchTerm, handleSearch]);
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value),
@@ -44,7 +38,6 @@ const TabSearchBar = memo(({ isOpen, className, ...props }: Props) => {
   );
 
   const handleClear = useCallback(() => {
-    setSkipEffect(true);
     setSearchTerm("");
     handleSearch("");
   }, [handleSearch]);
