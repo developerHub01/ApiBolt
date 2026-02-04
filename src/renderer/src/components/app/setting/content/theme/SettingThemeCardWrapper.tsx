@@ -15,21 +15,9 @@ const SettingThemeCardWrapper = ({
   ...props
 }: Props) => {
   return (
-    <motion.div
-      whileHover={{
-        padding: 15,
-      }}
-      animate={{
-        padding: isActive ? 15 : 0,
-        scale: isActive ? 0.98 : 1,
-      }}
-      transition={{
-        type: "spring",
-        stiffness: 260,
-        damping: 20,
-      }}
+    <div
       className={cn(
-        "w-full flex flex-col gap-2 rounded-xl bg-transparent cursor-pointer",
+        "w-full rounded-xl bg-transparent cursor-pointer group",
         "hover:bg-secondary/40 transition-all duration-100",
         {
           "bg-secondary/80 shadow-2xl": isActive,
@@ -37,10 +25,20 @@ const SettingThemeCardWrapper = ({
         },
         className,
       )}
-      {...props}
     >
-      {children}
-    </motion.div>
+      <motion.div
+        className={cn(
+          "w-full flex flex-col gap-2 group-hover:scale-90 transition-all duration-150",
+          {
+            "scale-95 p-4": isActive,
+          },
+          className,
+        )}
+        {...props}
+      >
+        {children}
+      </motion.div>
+    </div>
   );
 };
 
