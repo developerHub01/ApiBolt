@@ -6,7 +6,10 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import ActionButton from "@/components/app/keyboard-shortcuts/keyboard-content/keyboard-search/ActionButton";
-import { useKeyboardShortcuts } from "@/context/keyboard-shortcuts/KeyboardShortcutsProvider";
+import {
+  TSearchByType,
+  useKeyboardShortcuts,
+} from "@/context/keyboard-shortcuts/KeyboardShortcutsProvider";
 import KeyboardActionSearchBar from "@/components/app/keyboard-shortcuts/keyboard-content/keyboard-search/KeyboardActionSearchBar";
 import KeyboardKeyboardSearchBar from "@/components/app/keyboard-shortcuts/keyboard-content/keyboard-search/KeyboardKeyboardSearchBar";
 
@@ -48,28 +51,30 @@ const KeyboardShortcutSearch = () => {
   } = useKeyboardShortcuts();
 
   const menuList = useMemo(() => {
-    if (searchByType === "action") {
-      actionList[0].isActive = true;
-      actionList[1].isActive = false;
-    } else {
-      actionList[0].isActive = false;
-      actionList[1].isActive = true;
-    }
-
-    actionList[0].onClick = () => handleChangeSearchByType("action");
-    actionList[1].onClick = () => handleChangeSearchByType("keyboard");
-    clearAction.onClick = () =>
-      searchByType === "action"
-        ? handleChangeSearchTerm()
-        : handleChangeSearchKeyList([]);
+    const actionListMenu = actionList.map((item, index) => ({
+      ...item,
+      isActive:
+        (searchByType === "action" && index === 0) ||
+        (searchByType === "keyboard" && index === 1),
+      onClick: () => handleChangeSearchByType(item.id as TSearchByType),
+    }));
 
     if (
       (searchByType === "action" && !searchTerm) ||
       (searchByType === "keyboard" && !searchKeyList.length)
     )
-      return actionList as Array<Required<ActionItemInterface>>;
+      return actionListMenu as Array<Required<ActionItemInterface>>;
 
-    return [...actionList, clearAction] as Array<Required<ActionItemInterface>>;
+    return [
+      ...actionListMenu,
+      {
+        ...clearAction,
+        onClick: () =>
+          searchByType === "action"
+            ? handleChangeSearchTerm()
+            : handleChangeSearchKeyList([]),
+      },
+    ] as Array<Required<ActionItemInterface>>;
   }, [
     handleChangeSearchByType,
     handleChangeSearchKeyList,
