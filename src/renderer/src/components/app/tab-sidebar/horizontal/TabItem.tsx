@@ -1,15 +1,13 @@
 import {
+  ComponentProps,
   memo,
   useCallback,
   useState,
   type DragEvent,
   type MouseEvent,
 } from "react";
-import RequestMethodTag from "@/components/app/RequestMethodTag";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { X as CloseIcon } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { handleMoveTab } from "@/context/redux/request-response/request-response-slice";
 import {
@@ -27,13 +25,14 @@ import {
 } from "@/components/ui/tooltip-custom";
 import CollectionTabType from "@/components/app/tab-sidebar/CollectionTabType";
 import ShortcutText from "@/components/app/tab-sidebar/ShortcutText";
+import TabCloseButton from "@/components/app/tab-sidebar/TabCloseButton";
 
-interface Props {
+interface Props extends ComponentProps<"div"> {
   id: string;
   index: number;
 }
 
-const TabItem = memo(({ id, index }: Props) => {
+const TabItem = memo(({ id, index, className, ...props }: Props) => {
   const dispatch = useAppDispatch();
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
@@ -122,6 +121,7 @@ const TabItem = memo(({ id, index }: Props) => {
 
           "border-l-2 border-l-border": index,
         },
+        className,
       )}
       onClick={handleClick}
       draggable
@@ -129,6 +129,7 @@ const TabItem = memo(({ id, index }: Props) => {
       onDragOver={handleDragOver}
       onDrop={handleDrop}
       onDragLeave={handleDragLeave}
+      {...props}
     >
       <div
         className={cn(
@@ -160,14 +161,7 @@ const TabItem = memo(({ id, index }: Props) => {
         </motion.div>
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button
-              size={"iconXs"}
-              variant={"secondary"}
-              onClick={handleCloseBtnClick}
-              className="absolute top-1/2 -translate-y-1/2 right-1 opacity-0 group-hover:opacity-100"
-            >
-              <CloseIcon />
-            </Button>
+            <TabCloseButton onClick={handleCloseBtnClick} />
           </TooltipTrigger>
           <TooltipContent align="end" side="bottom" variant={"secondary"}>
             <ShortcutText />

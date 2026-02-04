@@ -5,9 +5,7 @@ import {
   type DragEvent,
   type MouseEvent,
 } from "react";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { X as CloseIcon } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { handleMoveTab } from "@/context/redux/request-response/request-response-slice";
@@ -26,6 +24,7 @@ import {
 } from "@/components/ui/tooltip-custom";
 import CollectionTabType from "@/components/app/tab-sidebar/CollectionTabType";
 import ShortcutText from "@/components/app/tab-sidebar/ShortcutText";
+import TabCloseButton from "@/components/app/tab-sidebar/TabCloseButton";
 
 interface Props {
   id: string;
@@ -180,13 +179,7 @@ const TabItem = memo(({ id, index }: Props) => {
               >
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button
-                      size={"iconXs"}
-                      variant={"ghost"}
-                      onClick={handleCloseBtnClick}
-                    >
-                      <CloseIcon />
-                    </Button>
+                    <TabCloseButton onClick={handleCloseBtnClick} />
                   </TooltipTrigger>
                   <TooltipContent
                     align="end"
