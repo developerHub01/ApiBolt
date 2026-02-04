@@ -2,7 +2,7 @@ import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import TabItem from "@/components/app/tab-sidebar/horizontal/TabItem";
-import { cn } from "@renderer/lib/utils";
+import { cn } from "@/lib/utils";
 
 const TabSearchResult = () => {
   const { localTabList } = useTabSidebar();
