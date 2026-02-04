@@ -3,31 +3,27 @@
 ApiBolt is a powerful, modern REST API client built for developers who need an efficient and user-friendly way to test, debug, and interact with APIs. Built with Electron and React, ApiBolt delivers a seamless desktop application experience with an intuitive and polished interface. Whether you're building new integrations or troubleshooting existing endpoints, ApiBolt provides all the tools you need to streamline your API development workflow.
 
 ## Tech stack
-  - Electron
-  - Electron-vite
-  - React
-  - Redux
-  - Typescript
-  - Tailwind
-  - Shadcn
-  - Framer-motion/motion
-  - Nodejs
-  - Sqlite
-  - Drizzle
-  - Supabase with Nuxt (for marketplace and theme API)
+
+- Electron
+- Electron-vite
+- React
+- Redux
+- Typescript
+- Tailwind
+- Shadcn
+- Framer-motion/motion
+- Nodejs
+- Sqlite
+- Drizzle
+- Supabase with Nuxt (for marketplace and theme API)
 
 ## Website
 
 [Website](https://apibolt.vercel.app/)
 
-<a href="https://apibolt.vercel.app/" target="_blank">
-  <img src="https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/website.png" alt="APIBolt Website" />
-</a>
+[![Website](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/website.png)](https://apibolt.vercel.app/)
 
-<a href="https://apibolt.vercel.app/" target="_blank">
-  <img src="https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/og.png" alt="APIBolt OG" />
-</a>
-
+[![OG Image](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/og.png)](https://apibolt.vercel.app/)
 
 ## Preview
 
