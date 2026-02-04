@@ -8,7 +8,7 @@ import TabSidebarContextMenuWrapper from "@/components/app/tab-sidebar/TabSideba
 
 const TabList = () => {
   const dispatch = useAppDispatch();
-  const { localTabList } = useTabSidebar();
+  const { tabList } = useTabSidebar();
 
   const handleDragOver = useCallback((e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -36,7 +36,7 @@ const TabList = () => {
         onDrop={handleDrop}
         onDragOver={handleDragOver}
       >
-        {localTabList.map((tabId, index) => (
+        {tabList.map((tabId, index) => (
           <TabItem key={tabId} id={tabId} index={index} />
         ))}
       </TabListAutoScrollWrapper>

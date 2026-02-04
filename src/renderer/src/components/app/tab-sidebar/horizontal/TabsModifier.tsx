@@ -9,6 +9,7 @@ import ClearAllTabs from "@/components/app/tab-sidebar/ClearAllTabs";
 import AddNewTab from "@/components/app/tab-sidebar/AddNewTab";
 import TabSearchBar from "@/components/app/tab-sidebar/TabSearchBar";
 import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
+import TabSearchResult from "@/components/app/tab-sidebar/horizontal/TabSearchResult";
 
 const TabsModifier = () => {
   const { haveAnyTabsOpen } = useTabSidebar();
@@ -33,7 +34,9 @@ const TabsModifier = () => {
             <TabSearchBar isOpen />
           </>
         )}
+        <TabSearchResult />
       </PopoverContent>
+      <span className="h-full w-2 bg-border"></span>
     </Popover>
   );
 };
