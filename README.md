@@ -19,8 +19,10 @@ ApiBolt is a powerful, modern REST API client built for developers who need an e
 ## Website
 
 [Website](https://apibolt.vercel.app/)
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/website.png "APIBolt website")
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/og.png "APIBolt og")
+
+[![Website](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/website.png)](https://apibolt.vercel.app/)
+
+[![OG Image](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/og.png)](https://apibolt.vercel.app/)
 
 
 ## Preview
