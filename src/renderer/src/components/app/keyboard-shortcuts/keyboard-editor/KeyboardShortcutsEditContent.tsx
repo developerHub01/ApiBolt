@@ -3,6 +3,7 @@ import {
   memo,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -25,8 +26,17 @@ const KeyboardShortcutsEditContent = memo(({ shortcutId }: Props) => {
   const toast = useCustomToast();
   const { activeTab, applyingKeybindingMap } = useKeyboardShortcuts();
   const keyboardShortcutPanelRef = useRef<HTMLDivElement>(null);
-  const [isExisting, setIsExisting] = useState<boolean>(false);
   const [keyList, setKeyList] = useState<Array<string>>([]);
+
+  const isExisting = useMemo(() => {
+    const keyString = keyList.join("+");
+    const matchedKey =
+      Object.values(applyingKeybindingMap).findIndex(
+        item => item.key?.join("+") === keyString && item.id !== shortcutId,
+      ) >= 0;
+
+    return matchedKey;
+  }, [keyList, applyingKeybindingMap, shortcutId]);
 
   const handleClose = useCallback(
     () => dispatch(handleChangeEditingId()),
@@ -58,19 +68,7 @@ const KeyboardShortcutsEditContent = memo(({ shortcutId }: Props) => {
     onChange: setKeyList,
   });
 
-  useEffect(() => {
-    keyboardShortcutPanelRef.current?.focus();
-  }, []);
-
-  useEffect(() => {
-    const keyString = keyList.join("+");
-    const matchedKey =
-      Object.values(applyingKeybindingMap).findIndex(
-        item => item.key?.join("+") === keyString && item.id !== shortcutId,
-      ) >= 0;
-
-    setIsExisting(matchedKey);
-  }, [keyList, activeTab, applyingKeybindingMap, shortcutId]);
+  useEffect(() => keyboardShortcutPanelRef.current?.focus(), []);
 
   return (
     <div
