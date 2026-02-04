@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useState } from "react";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 
@@ -25,10 +25,14 @@ const SettingSlider = memo(
     longSuffixLable = "",
   }: SettingSliderProps) => {
     const [stateValue, setStateValue] = useState<number>(defaultValue);
+    const [prevStatValue, setPrevStateValue] = useState<number>(defaultValue);
 
     const handleOnChange = (value: Array<number>) => setStateValue(value[0]);
 
-    useEffect(() => setStateValue(value), [value]);
+    if (value !== prevStatValue) {
+      setPrevStateValue(value);
+      setStateValue(value);
+    }
 
     return (
       <div className="w-full max-w-96 flex flex-col justify-center items-center p-4 gap-3">
