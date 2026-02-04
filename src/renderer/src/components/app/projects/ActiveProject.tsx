@@ -1,7 +1,6 @@
 import {
   memo,
   useCallback,
-  useEffect,
   useMemo,
   useRef,
   useState,
@@ -18,9 +17,7 @@ import { updateProject } from "@/context/redux/project/thunks/projects";
 const ActiveProject = memo(() => {
   const dispatch = useAppDispatch();
   const { handleChangeDeletionCandidate } = useProject();
-  const [name, setName] = useState("");
   const nameRef = useRef<HTMLInputElement>(null);
-
   const activeProjectId = useAppSelector(
     state => state.project.activeProjectId,
   );
@@ -33,15 +30,18 @@ const ActiveProject = memo(() => {
   }, [activeProjectId, projectList]);
 
   /* to intitialize local name with redux state */
-  useEffect(() => {
-    if (!activeProject) return;
+  const nameSource = useMemo(() => activeProject?.name, [activeProject?.name]);
+  const [name, setName] = useState(nameSource);
+  const [prevName, setPrevName] = useState(nameSource);
 
-    setName(activeProject.name);
-  }, [activeProject]);
+  if (nameSource !== prevName) {
+    setPrevName(nameSource);
+    setName(nameSource);
+  }
 
   const handleDispatchName = useCallback(
     (name: string) => {
-      if (!activeProject) return;
+      if (!activeProject || name === nameSource) return;
 
       dispatch(
         updateProject({
@@ -50,7 +50,7 @@ const ActiveProject = memo(() => {
         }),
       );
     },
-    [dispatch, activeProject],
+    [dispatch, activeProject, nameSource],
   );
 
   const handleKeydownName = useCallback(
