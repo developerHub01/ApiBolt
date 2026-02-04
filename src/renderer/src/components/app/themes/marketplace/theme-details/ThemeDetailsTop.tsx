@@ -50,7 +50,7 @@ const ThemeDetailsTop = memo(() => {
     if (source === "global") return activeProjectId ? "Global" : "Active";
 
     return "Default";
-  }, [activeProjectId, activeThemesId, themeDetails?.id]);
+  }, [activeProjectId, activeThemesId, themeDetails]);
 
   return (
     <AnimatedDialogTop>
