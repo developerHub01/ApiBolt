@@ -35,7 +35,7 @@ const SelectV1 = ({
         value={value}
         onValueChange={value => handleChange(value)}
       >
-        <SelectTrigger size="sm" className="min-w-[120px]">
+        <SelectTrigger size="sm" className="min-w-30">
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>

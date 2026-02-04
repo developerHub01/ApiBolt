@@ -1,8 +1,8 @@
+import { useState, useCallback } from "react";
 import { useRouteError, isRouteErrorResponse } from "react-router-dom";
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 import { Button } from "@/components/ui/button";
 import { OctagonX as ErrorIcon, Terminal, XCircle, LogOut } from "lucide-react";
-import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 
 const ErrorBoundary = () => {

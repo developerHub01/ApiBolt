@@ -1,6 +1,6 @@
+import { useEffect } from "react";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { loadThemePalette } from "@/context/redux/theme/thunks/theme";
-import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 
 const ThemeEditorLayout = () => {
