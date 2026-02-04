@@ -90,9 +90,16 @@ const TabSidebarRoot = () => {
 
   return (
     <motion.div
-      initial={{ width: 60 }}
-      animate={{ width: isTabListOpen ? 280 : 60 }}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
+      initial={{
+        width: 60,
+      }}
+      animate={{
+        width: isTabListOpen ? 280 : 60,
+      }}
+      transition={{
+        duration: 0.3,
+        ease: "easeInOut",
+      }}
       className={cn(
         "h-full flex flex-col absolute right-0 top-0 z-40 gap-0.5 pt-1 shadow-2xl border-l border-muted-foreground/20",
         "bg-secondary/30",

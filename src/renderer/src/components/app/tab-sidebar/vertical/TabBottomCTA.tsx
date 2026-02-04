@@ -37,14 +37,19 @@ const TabBottomCTA = memo(
         {Icon && <Icon />}
         <motion.span
           className="transition-all duration-300 text-left"
-          style={{ transformOrigin: "left" }}
+          style={{
+            transformOrigin: "left",
+          }}
           animate={{
             opacity: isOpen ? 1 : 0,
             width: isOpen ? "100%" : "0px",
             paddingLeft: isOpen ? "8px" : "0px",
             scaleX: isOpen ? 1 : 0,
           }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
+          transition={{
+            duration: 0.3,
+            ease: "easeInOut",
+          }}
         >
           {label}
         </motion.span>

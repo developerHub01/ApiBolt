@@ -106,7 +106,7 @@ const TabItem = memo(({ id, index }: Props) => {
       data-tab-id={id}
       data-active={selectedTab === id}
       className={cn(
-        "w-full h-9 cursor-pointer px-1 border-x-2 border-transparent",
+        "w-full h-9 cursor-pointer px-1 border-x-2 border-transparent group",
         {
           /* active tab style */
           "bg-accent/80 hover:bg-accent/60": selectedTab === id,
@@ -151,7 +151,9 @@ const TabItem = memo(({ id, index }: Props) => {
               "flex-1": isTabListOpen,
             },
           )}
-          style={{ transformOrigin: "left" }}
+          style={{
+            transformOrigin: "left",
+          }}
           key={id}
           animate={{
             opacity: isTabListOpen ? 1 : 0,
@@ -159,7 +161,10 @@ const TabItem = memo(({ id, index }: Props) => {
             paddingLeft: isTabListOpen ? "8px" : "0px",
             scaleX: isTabListOpen ? 1 : 0.8,
           }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
+          transition={{
+            duration: 0.3,
+            ease: "easeInOut",
+          }}
         >
           <input
             type="text"
@@ -172,14 +177,30 @@ const TabItem = memo(({ id, index }: Props) => {
           <AnimatePresence>
             {isTabHovering && (
               <motion.div
-                initial={{ opacity: 0, scale: 0.85 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.85 }}
-                transition={{ duration: 0.15, ease: "easeInOut" }}
+                initial={{
+                  opacity: 0,
+                  scale: 0.85,
+                }}
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                }}
+                exit={{
+                  opacity: 0,
+                  scale: 0.85,
+                }}
+                transition={{
+                  duration: 0.15,
+                  ease: "easeInOut",
+                }}
+                className="flex justify-center items-center"
               >
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <TabCloseButton onClick={handleCloseBtnClick} />
+                    <TabCloseButton
+                      onClick={handleCloseBtnClick}
+                      className="relative translate-y-0 right-auto"
+                    />
                   </TooltipTrigger>
                   <TooltipContent
                     align="end"
