@@ -16,8 +16,8 @@ const KeyboardShortcutPreview = () => {
   return (
     <>
       {searchResultCount ? (
-        <div className="w-full h-full border rounded-lg">
-          <Table className="w-full table-fixed overflow-hidden">
+        <div className="w-full h-full border rounded-lg overflow-hidden">
+          <Table className="w-full table-fixed overflow-hidden border-b">
             <TableHeader className="bg-secondary/80 font-bold">
               <TableRow className="[&>th]:border-r [&>th]:last:border-r-0">
                 {["Action", "Keyboard Shortcut"].map(label => (
