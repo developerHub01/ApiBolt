@@ -1,9 +1,8 @@
-import { useCallback, useEffect, useRef, useState, type JSX } from "react";
+import { useCallback, useRef, useState, type JSX } from "react";
 import CodeMirror, { EditorState } from "@uiw/react-codemirror";
 import type { Extension } from "@uiw/react-codemirror";
 import { EditorView } from "@codemirror/view";
 import { cn } from "@/lib/utils";
-import useMounted from "@/hooks/use-mounted";
 import { Button } from "@/components/ui/button";
 import { Copy as CopyIcon } from "lucide-react";
 import type { TContentType } from "@shared/types/request-response.types";
@@ -121,12 +120,14 @@ const Code = ({
   const fontSize = useCheckApplyingCodeFontSize();
   const indentationSize = useCheckApplyingCodeIndentationSize();
   const [fontSizeState, setFontSizeState] = useState(fontSize);
+  const [prevFontSizeState, setPrevFontSizeState] = useState(fontSize);
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const isMounted = useMounted();
   const themeType = useAppSelector(selectActiveThemeType);
 
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  useEffect(() => setFontSizeState(fontSize), [fontSize]);
+  if (fontSize !== prevFontSizeState) {
+    setPrevFontSizeState(fontSize);
+    setFontSizeState(fontSize);
+  }
 
   const extensions: Array<Extension> = [
     getLangExtension(contentType)(),
@@ -162,8 +163,6 @@ const Code = ({
       });
     }
   }, [code, toast]);
-
-  if (!isMounted) return null;
 
   const theme = themeType !== "custom" ? themeType : "dark";
 
