@@ -26,7 +26,7 @@ const Authorization = memo(() => {
     return (
       AUTH_LIST.find(item => item.id === authorization?.type) ?? INHERIT_AUTH
     ).label;
-  }, [authorization?.inheritedId, authorization?.type]);
+  }, [authorization]);
 
   const { basicAuth, apiKeyAuth, bearerAuth, jwtAuth, type } = authorization!;
 
