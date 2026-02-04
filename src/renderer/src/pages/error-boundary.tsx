@@ -1,13 +1,17 @@
-import { useState, useCallback } from "react";
+import { useCallback } from "react";
 import { useRouteError, isRouteErrorResponse } from "react-router-dom";
 import { ButtonLikeDiv } from "@/components/ui/button-like-div";
 import { Button } from "@/components/ui/button";
-import { OctagonX as ErrorIcon, Terminal, XCircle, LogOut } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import {
+  OctagonX as ErrorIcon,
+  Terminal as TerminalIcon,
+  XCircle as ErrorIcon2,
+  LogOut,
+} from "lucide-react";
 
 const ErrorBoundary = () => {
   const error = useRouteError();
-  const [showStack, setShowStack] = useState<boolean>(false);
+  // const [showStack, setShowStack] = useState<boolean>(false);
 
   let errorMessage = "An unknown error has occurred within the application.";
   let stack: string | undefined;
@@ -56,7 +60,7 @@ const ErrorBoundary = () => {
 
           <div className="p-5 bg-muted/20 rounded-xl border border-border/50 backdrop-blur-md">
             <div className="flex items-center gap-2 mb-3">
-              <XCircle size={15} className="text-destructive/60" />
+              <ErrorIcon2 size={15} className="text-destructive/60" />
               <span className="text-[10px] font-black uppercase tracking-[0.25em] text-muted-foreground/80">
                 Crash Report
               </span>
@@ -67,25 +71,25 @@ const ErrorBoundary = () => {
           </div>
 
           <div className="flex items-center justify-between gap-4">
-            {stack && (
+            {/* {stack && (
               <button
                 type="button"
                 onClick={() => setShowStack(!showStack)}
                 className="text-[10px] font-black text-muted-foreground/50 hover:text-primary flex items-center gap-2 transition-all uppercase tracking-[0.2em] group"
               >
-                <Terminal
+                <TerminalIcon
                   size={14}
                   className="group-hover:scale-110 transition-transform"
                 />
                 {showStack ? "Collapse Logs" : "Trace Stack"}
               </button>
-            )}
+            )} */}
 
             <Button
               onClick={handleQuit}
               variant="destructiveSecondary"
-              size="sm"
-              className="h-10 rounded-xl px-5 font-bold text-[11px] uppercase tracking-widest gap-2 shadow-md shadow-destructive/5"
+              size="lg"
+              className="ml-auto rounded-lg uppercase tracking-widest gap-2 shadow-md shadow-destructive/5"
             >
               <LogOut size={16} />
               Quit App
@@ -93,7 +97,7 @@ const ErrorBoundary = () => {
           </div>
         </section>
 
-        <AnimatePresence>
+        {/* <AnimatePresence>
           {showStack && stack && (
             <motion.div
               initial={{
@@ -124,7 +128,7 @@ const ErrorBoundary = () => {
               </div>
             </motion.div>
           )}
-        </AnimatePresence>
+        </AnimatePresence> */}
       </div>
     </div>
   );
