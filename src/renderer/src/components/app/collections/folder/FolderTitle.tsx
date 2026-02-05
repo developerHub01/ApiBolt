@@ -11,12 +11,14 @@ import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { updateFolder } from "@/context/redux/request-response/thunks/folder";
 import { cn } from "@/lib/utils";
 import { selectRequestFolderTitle } from "@/context/redux/request-response/selectors/folder";
+import { DEFAULT_FOLDER_TITLE } from "@/constant/folder.constant";
 
 const MAX_TITLE_LENGTH = 50;
 
 const FolderTitle = memo(() => {
   const dispatch = useAppDispatch();
-  const title = useAppSelector(selectRequestFolderTitle) ?? "New Folder";
+  const title =
+    useAppSelector(selectRequestFolderTitle) ?? DEFAULT_FOLDER_TITLE;
   const [titleState, setTitleState] = useState<string>(title);
   const [titleLength, setTitleLength] = useState<number>(title.length ?? 0);
 

@@ -27,7 +27,7 @@ const RequestMethodTag = memo(
             "bg-http-get-500/80 text-white backdrop-blur-lg": method === "get",
             "bg-http-post-500/80 text-white backdrop-blur-lg":
               method === "post",
-            "bg-http-put-500/80 text-black backdrop-blur-lg": method === "put",
+            "bg-http-put-500/80 text-white backdrop-blur-lg": method === "put",
             "bg-http-patch-500/80 text-white backdrop-blur-lg":
               method === "patch",
             "bg-http-delete-500/80 text-white backdrop-blur-lg":

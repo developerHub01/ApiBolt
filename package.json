@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "An REST API testing platform.",
   "main": "./out/main/index.js",
-  "author": "example.com",
-  "homepage": "https://electron-vite.org",
+  "author": "https://github.com/developerHub01",
+  "homepage": "https://apibolt.vercel.app",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint --cache .",
