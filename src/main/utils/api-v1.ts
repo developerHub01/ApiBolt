@@ -21,15 +21,8 @@ import {
 } from "@shared/types/request-response.types.js";
 import { ElectronAPIInterface } from "@shared/types/api/electron-api";
 
-/* 
-
-  const updatedPayload = {
-    withCredentials: true,
-    url: payload.url,
-    method: payload.method ?? "get",
-    headers: payload.headers
-  };
-*/
+const noResponseBodyMethods = new Set(["get", "head", "options", "delete"]);
+const noRequestBodyHeaderMethods = new Set(["get", "head", "options"]);
 
 interface APIPayloadInterface extends Pick<
   APIPayloadBody,
@@ -88,7 +81,7 @@ export const fetchApi: ElectronAPIInterface["fetchApi"] = async (
         res.statusText ?? (statusDetails.editedReason || statusDetails.reason),
       statusDescription:
         statusDetails.editedDescription || statusDetails.description,
-      data: res.data,
+      data: payload.method?.toLowerCase() === "head" ? null : res.data,
       cookies,
       responseSize: {
         header:
@@ -99,7 +92,10 @@ export const fetchApi: ElectronAPIInterface["fetchApi"] = async (
               value: String(value),
             })),
           ) ?? 0,
-        body: getPayloadSize(res.data) ?? 0,
+        body:
+          payload.method?.toLowerCase() === "head"
+            ? 0
+            : (getPayloadSize(res.data) ?? 0),
       },
     };
   } catch (error: unknown) {
@@ -173,9 +169,8 @@ export const fetchApi: ElectronAPIInterface["fetchApi"] = async (
       };
     }
   } finally {
-    if (!["get", "option"].includes(payload.method)) {
+    if (!noResponseBodyMethods.has(payload.method)) {
       responsePayload.requestSize = {
-        ...responsePayload,
         header:
           getPayloadSize(
             Object.entries(payload.headers).map(([key, value]) => ({
@@ -203,8 +198,21 @@ export const fetchApi: ElectronAPIInterface["fetchApi"] = async (
           ),
         }),
       };
+    } else {
+      responsePayload.requestSize = {
+        header:
+          getPayloadSize(
+            Object.entries(payload.headers).map(([key, value]) => ({
+              id: key,
+              key,
+              value: String(value),
+            })),
+          ) ?? 0,
+        body: 0,
+      };
     }
   }
+
   return responsePayload;
 };
 
@@ -264,7 +272,7 @@ const apiPayloadHandler = async (payload: APIPayloadBody) => {
     }
   }
 
-  if (["get", "head"].includes(updatedPayload.method?.toLowerCase())) {
+  if (noRequestBodyHeaderMethods.has(updatedPayload.method?.toLowerCase())) {
     delete updatedPayload.data;
     delete updatedPayload.headers["Content-Type"];
   }
