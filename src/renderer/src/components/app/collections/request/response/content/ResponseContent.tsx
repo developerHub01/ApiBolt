@@ -21,7 +21,7 @@ import ResposneBodyFallback from "@/fallback/collection/request/response/Resposn
 import ResposneCookiesFallback from "@/fallback/collection/request/response/ResposneCookiesFallback";
 import ResposneHeadersFallback from "@/fallback/collection/request/response/ResposneHeadersFallback";
 
-const ResposneContent = memo(() => {
+const ResponseContent = memo(() => {
   const { activeMetaTab } = useResponse();
   const response = useAppSelector(selectResponse);
 
@@ -61,6 +61,6 @@ const ResposneContent = memo(() => {
     </div>
   );
 });
-ResposneContent.displayName = "Resposne content";
+ResponseContent.displayName = "Response content";
 
-export default ResposneContent;
+export default ResponseContent;

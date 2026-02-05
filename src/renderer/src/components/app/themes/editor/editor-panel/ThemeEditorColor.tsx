@@ -65,7 +65,6 @@ const ColorPicker = ({ id, color }: ColorPickerProps) => {
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim();
-    console.log({ value });
     setColorState(value);
   };
 

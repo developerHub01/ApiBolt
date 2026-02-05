@@ -2,7 +2,7 @@ import ResponseProvider from "@/context/collections/request/ResponseProvider";
 import ResponsePanelWrapper from "@/components/app/collections/request/response/ResponsePanelWrapper";
 import ResponseLoader from "@/components/app/collections/request/ResponseLoader";
 import ResponseMetaData from "@/components/app/collections/request/response/meta-data/ResponseMetaData";
-import ResposneContent from "@/components/app/collections/request/response/content/ResposneContent";
+import ResponseContent from "@/components/app/collections/request/response/content/ResponseContent";
 
 const ResponsePanel = () => {
   return (
@@ -11,7 +11,7 @@ const ResponsePanel = () => {
         <ResponseLoader />
         <div className="flex flex-col h-full">
           <ResponseMetaData />
-          <ResposneContent />
+          <ResponseContent />
         </div>
       </ResponsePanelWrapper>
     </ResponseProvider>

@@ -12,7 +12,6 @@ const TabSearchResult = () => {
 
   useLayoutEffect(() => {
     const element = scrollRef?.current;
-    console.log(element);
     if (!element) return;
 
     const hasScroll = element.scrollHeight > element.clientHeight;
