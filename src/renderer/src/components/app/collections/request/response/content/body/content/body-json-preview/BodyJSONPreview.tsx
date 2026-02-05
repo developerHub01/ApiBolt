@@ -8,6 +8,8 @@ interface BodyJSONPreviewProps {
 }
 
 const BodyJSONPreview = ({ data }: BodyJSONPreviewProps) => {
+  if (!data) return null;
+
   return (
     <ScrollArea className="flex-1 min-h-0 h-full overflow-hidden">
       <div className={cn("w-full h-full select-text")}>

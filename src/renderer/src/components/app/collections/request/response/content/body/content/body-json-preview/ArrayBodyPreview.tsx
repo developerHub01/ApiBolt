@@ -9,7 +9,7 @@ interface ArrayBodyPreviewProps {
 }
 
 const ArrayBodyPreview = ({ data, lavel }: ArrayBodyPreviewProps) => {
-  if (!data.length) return null;
+  if (!data?.length) return null;
 
   return (
     <Table
