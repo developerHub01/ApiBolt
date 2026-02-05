@@ -24,11 +24,18 @@ const RequestMethodTag = memo(
         className={cn(
           "uppercase text-[10px] px-1 font-semibold rounded-md border select-none flex justify-center items-center",
           {
-            "bg-green-500/80 text-white backdrop-blur-lg": method === "get",
-            "bg-blue-500/80 text-white backdrop-blur-lg": method === "post",
-            "bg-yellow-500/80 text-black backdrop-blur-lg": method === "put",
-            "bg-orange-500/80 text-white backdrop-blur-lg": method === "patch",
-            "bg-red-500/80 text-white backdrop-blur-lg": method === "delete",
+            "bg-http-get-500/80 text-white backdrop-blur-lg": method === "get",
+            "bg-http-post-500/80 text-white backdrop-blur-lg":
+              method === "post",
+            "bg-http-put-500/80 text-black backdrop-blur-lg": method === "put",
+            "bg-http-patch-500/80 text-white backdrop-blur-lg":
+              method === "patch",
+            "bg-http-delete-500/80 text-white backdrop-blur-lg":
+              method === "delete",
+            "bg-http-head-500/80 text-white backdrop-blur-lg":
+              method === "head",
+            "bg-http-options-500/80 text-white backdrop-blur-lg":
+              method === "options",
           },
           className,
         )}

@@ -5,13 +5,12 @@ import SplashScreenBg from "@/components/splash/SplashScreenBg";
 import { APP_NAME } from "@/constant";
 import { SPLASH_MIN_DURATION } from "@shared/constant";
 import Logo from "@/components/ui/logo";
+import { methodList } from "@shared/constant/request-response";
+import { cn } from "@/lib/utils";
 
 const dragableStyle = {
   appRegion: "drag",
 } as CSSProperties;
-
-const apiMethods = ["GET", "POST", "PUT", "DELETE"];
-const methodColors = ["#10b981", "#3b82f6", "#f59e0b", "#ef4444"];
 
 const Splash = () => {
   const [loadingProgress, setLoadingProgress] = useState<number>(0);
@@ -40,7 +39,7 @@ const Splash = () => {
 
     requestAnimationFrame(raf);
     const methodInterval = setInterval(() => {
-      setCurrentMethod(prev => (prev + 1) % apiMethods.length);
+      setCurrentMethod(prev => (prev + 1) % methodList.length);
     }, 800);
 
     return () => {
@@ -191,10 +190,20 @@ const Splash = () => {
             <AnimatePresence mode="wait">
               <motion.span
                 key={currentMethod}
-                className="px-2 py-0.5 rounded text-xs font-semibold text-white"
-                style={{
-                  backgroundColor: methodColors[currentMethod],
-                }}
+                className={cn(
+                  "px-2 py-0.5 rounded text-xs font-semibold text-white uppercase",
+                  {
+                    "bg-http-get-500": methodList[currentMethod] === "get",
+                    "bg-http-post-500": methodList[currentMethod] === "post",
+                    "bg-http-put-500": methodList[currentMethod] === "put",
+                    "bg-http-patch-500": methodList[currentMethod] === "patch",
+                    "bg-http-delete-500":
+                      methodList[currentMethod] === "delete",
+                    "bg-http-head-500": methodList[currentMethod] === "head",
+                    "bg-http-options-500":
+                      methodList[currentMethod] === "options",
+                  },
+                )}
                 initial={{
                   opacity: 0,
                   y: 5,
@@ -211,7 +220,7 @@ const Splash = () => {
                   duration: 0.2,
                 }}
               >
-                {apiMethods[currentMethod]}
+                {methodList[currentMethod]}
               </motion.span>
             </AnimatePresence>
           </motion.div>

@@ -3,14 +3,7 @@ import * as SelectPrimitive from "@radix-ui/react-select";
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { THTTPMethods } from "@shared/types/request-response.types";
-
-const methodList: Array<THTTPMethods> = [
-  "get",
-  "post",
-  "put",
-  "patch",
-  "delete",
-];
+import { methodList } from "@shared/constant/request-response";
 
 function ApiMethodSelect({
   ...props
@@ -42,14 +35,20 @@ function ApiMethodSelectTrigger({
       className={cn(
         "w-full flex items-center justify-between gap-2 px-3 py-2 text-sm whitespace-nowrap outline-0 focus:outline-0 font-semibold cursor-pointer border-x-2",
         {
-          "border-green-500 bg-green-500/5 text-green-500":
+          "border-http-get-500 bg-http-get-500/5 text-http-get-500":
             methodType === "get",
-          "border-blue-500 bg-blue-500/5 text-blue-500": methodType === "post",
-          "border-yellow-500 bg-yellow-500/5 text-yellow-500":
+          "border-http-post-500 bg-http-post-500/5 text-http-post-500":
+            methodType === "post",
+          "border-http-put-500 bg-http-put-500/5 text-http-put-500":
             methodType === "put",
-          "border-orange-500 bg-orange-500/5 text-orange-500":
+          "border-http-patch-500 bg-http-patch-500/5 text-http-patch-500":
             methodType === "patch",
-          "border-red-500 bg-red-500/5 text-red-500": methodType === "delete",
+          "border-http-delete-500 bg-http-delete-500/5 text-http-delete-500":
+            methodType === "delete",
+          "border-http-head-500 bg-http-head-500/5 text-http-head-500":
+            methodType === "head",
+          "border-http-options-500 bg-http-options-500/5 text-http-options-500":
+            methodType === "options",
         },
         className,
       )}
@@ -125,26 +124,41 @@ function ApiMethodSelectItem({
       className={cn(
         "focus:bg-accent focus:text-accent-foreground [&_svg:not([class*='text-'])]:text-muted-foreground relative w-full cursor-pointer items-center rounded-none p-1 text-sm outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2 border-x-2 border-transparent",
         {
-          "hover:bg-green-500/5": value === "get",
-          "hover:bg-blue-500/5": value === "post",
-          "hover:bg-yellow-500/5": value === "put",
-          "hover:bg-orange-500/5": value === "patch",
-          "hover:bg-red-500/5": value === "delete",
+          "hover:bg-http-get-500/5": value === "get",
+          "hover:bg-http-post-500/5": value === "post",
+          "hover:bg-http-put-500/5": value === "put",
+          "hover:http-patch-500/5": value === "patch",
+          "hover:bg-http-delete-500/5": value === "delete",
+          "hover:bg-http-head-500/5": value === "head",
+          "hover:bg-options-500/5": value === "options",
 
-          "border-green-500": activeValue === "get" && value === activeValue,
-          "border-blue-500": activeValue === "post" && value === activeValue,
-          "border-yellow-500": activeValue === "put" && value === activeValue,
-          "border-orange-500": activeValue === "patch" && value === activeValue,
-          "border-red-500": activeValue === "delete" && value === activeValue,
+          "border-http-get-500": activeValue === "get" && value === activeValue,
+          "border-http-post-500":
+            activeValue === "post" && value === activeValue,
+          "border-http-put-500": activeValue === "put" && value === activeValue,
+          "border-http-patch-500":
+            activeValue === "patch" && value === activeValue,
+          "border-http-delete-500":
+            activeValue === "delete" && value === activeValue,
+          "border-http-head-500":
+            activeValue === "head" && value === activeValue,
+          "border-options-500":
+            activeValue === "options" && value === activeValue,
 
-          "hover:border-green-500/80": value === "get" && value !== activeValue,
-          "hover:border-blue-500/80": value === "post" && value !== activeValue,
-          "hover:border-yellow-500/80":
+          "hover:border-http-get-500/80":
+            value === "get" && value !== activeValue,
+          "hover:border-http-post-500/80":
+            value === "post" && value !== activeValue,
+          "hover:border-http-put-500/80":
             value === "put" && value !== activeValue,
-          "hover:border-orange-500/80":
+          "hover:border-http-patch-500/80":
             value === "patch" && value !== activeValue,
-          "hover:border-red-500/80":
+          "hover:border-http-delete-500/80":
             value === "delete" && value !== activeValue,
+          "hover:border-http-head-500/80":
+            value === "head" && value !== activeValue,
+          "hover:border-http-options-500/80":
+            value === "options" && value !== activeValue,
         },
         className,
       )}
@@ -155,11 +169,13 @@ function ApiMethodSelectItem({
           className={cn(
             "w-full h-7 text-sm flex justify-start items-center px-2 py-1 uppercase rounded-md font-bold",
             {
-              "text-green-500": value === "get",
-              "text-blue-500": value === "post",
-              "text-yellow-500": value === "put",
-              "text-orange-500": value === "patch",
-              "text-red-500": value === "delete",
+              "text-http-get-500": value === "get",
+              "text-http-post-500": value === "post",
+              "text-http-put-500": value === "put",
+              "text-http-patch-500": value === "patch",
+              "text-http-delete-500": value === "delete",
+              "text-http-head-500": value === "head",
+              "text-http-options-500": value === "options",
             },
           )}
         >

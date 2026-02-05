@@ -40,6 +40,91 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* HTTP METHODS =============== */
+   --color-http-get-50: oklch(0.958 0.07 149.29);
+  --color-http-get-100: oklch(0.925 0.131 149.01);
+  --color-http-get-200: oklch(0.854 0.247 147.99);
+  --color-http-get-300: oklch(0.785 0.228 147.93);
+  --color-http-get-400: oklch(0.729 0.211 147.97);
+  --color-http-get-500: oklch(0.627 0.181 148.03);
+  --color-http-get-600: oklch(0.526 0.153 147.93);
+  --color-http-get-700: oklch(0.436 0.126 147.99);
+  --color-http-get-800: oklch(0.334 0.097 148.05);
+  --color-http-get-900: oklch(0.234 0.068 147.97);
+  --color-http-get-950: oklch(0.182 0.053 147.64);
+  
+  --color-http-post-50: oklch(0.957 0.02 277);
+  --color-http-post-100: oklch(0.925 0.036 273.72);
+  --color-http-post-200: oklch(0.848 0.075 271.41);
+  --color-http-post-300: oklch(0.771 0.116 268.99);
+  --color-http-post-400: oklch(0.695 0.159 265.1);
+  --color-http-post-500: oklch(0.619 0.207 259.23);
+  --color-http-post-600: oklch(0.524 0.19 257.49);
+  --color-http-post-700: oklch(0.427 0.156 257.73);
+  --color-http-post-800: oklch(0.331 0.121 257.73);
+  --color-http-post-900: oklch(0.235 0.085 257.39);
+  --color-http-post-950: oklch(0.18 0.064 257.25);
+
+  --color-http-put-50: oklch(0.967 0.025 73.18);
+  --color-http-put-100: oklch(0.933 0.053 72.66);
+  --color-http-put-200: oklch(0.866 0.127 79.4);
+  --color-http-put-300: oklch(0.797 0.164 83.1);
+  --color-http-put-400: oklch(0.702 0.144 83.06);
+  --color-http-put-500: oklch(0.607 0.125 83.19);
+  --color-http-put-600: oklch(0.512 0.105 83.6);
+  --color-http-put-700: oklch(0.424 0.087 83.32);
+  --color-http-put-800: oklch(0.329 0.068 82.44);
+  --color-http-put-900: oklch(0.234 0.048 81.82);
+  --color-http-put-950: oklch(0.177 0.037 81.57);
+
+  --color-http-patch-50: oklch(0.96 0.02 28.97);
+  --color-http-patch-100: oklch(0.926 0.038 30.04);
+  --color-http-patch-200: oklch(0.845 0.086 32.27);
+  --color-http-patch-300: oklch(0.773 0.137 36.99);
+  --color-http-patch-400: oklch(0.7 0.202 44.44);
+  --color-http-patch-500: oklch(0.604 0.175 44.4);
+  --color-http-patch-600: oklch(0.514 0.148 44.46);
+  --color-http-patch-700: oklch(0.417 0.121 44.21);
+  --color-http-patch-800: oklch(0.329 0.096 44.08);
+  --color-http-patch-900: oklch(0.231 0.066 44.92);
+  --color-http-patch-950: oklch(0.182 0.053 44.03);
+
+  --color-http-delete-50: oklch(0.96 0.018 17.57);
+  --color-http-delete-100: oklch(0.927 0.036 17.86);
+  --color-http-delete-200: oklch(0.855 0.075 17.75);
+  --color-http-delete-300: oklch(0.782 0.122 18.95);
+  --color-http-delete-400: oklch(0.71 0.174 20.93);
+  --color-http-delete-500: oklch(0.638 0.237 25.44);
+  --color-http-delete-600: oklch(0.543 0.214 26.39);
+  --color-http-delete-700: oklch(0.444 0.175 26.41);
+  --color-http-delete-800: oklch(0.344 0.136 26.18);
+  --color-http-delete-900: oklch(0.243 0.096 26.56);
+  --color-http-delete-950: oklch(0.187 0.073 26.28);
+
+  --color-http-head-50: oklch(0.957 0.09 134.42);
+  --color-http-head-100: oklch(0.914 0.211 132.9);
+  --color-http-head-200: oklch(0.842 0.236 132.49);
+  --color-http-head-300: oklch(0.771 0.216 132.45);
+  --color-http-head-400: oklch(0.683 0.191 132.37);
+  --color-http-head-500: oklch(0.59 0.165 132.36);
+  --color-http-head-600: oklch(0.498 0.139 132.42);
+  --color-http-head-700: oklch(0.406 0.113 132.37);
+  --color-http-head-800: oklch(0.321 0.09 132.56);
+  --color-http-head-900: oklch(0.227 0.064 132.42);
+  --color-http-head-950: oklch(0.173 0.048 131.66);
+
+  --color-http-options-50: oklch(0.968 0.023 317.23);
+  --color-http-options-100: oklch(0.929 0.052 319.07);
+  --color-http-options-200: oklch(0.865 0.104 319.49);
+  --color-http-options-300: oklch(0.796 0.164 320.38);
+  --color-http-options-400: oklch(0.727 0.23 321.09);
+  --color-http-options-500: oklch(0.666 0.295 322.09);
+  --color-http-options-600: oklch(0.561 0.257 322.33);
+  --color-http-options-700: oklch(0.46 0.211 322.13);
+  --color-http-options-800: oklch(0.358 0.165 321.84);
+  --color-http-options-900: oklch(0.248 0.114 321.99);
+  --color-http-options-950: oklch(0.201 0.092 322.17);
 }
 :root {
   --radius: 0.3rem;

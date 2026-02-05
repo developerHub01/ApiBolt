@@ -71,7 +71,14 @@ export type TRequestBodyType =
   | "raw"
   | "binary";
 
-export type THTTPMethods = "get" | "post" | "put" | "patch" | "delete";
+export type THTTPMethods =
+  | "get"
+  | "post"
+  | "put"
+  | "patch"
+  | "delete"
+  | "head"
+  | "options";
 
 export interface ParamHeaderPayloadInterface<T = string> {
   id: string;
