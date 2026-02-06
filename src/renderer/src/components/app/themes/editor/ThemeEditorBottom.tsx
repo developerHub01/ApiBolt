@@ -8,6 +8,7 @@ import { useThemeEditor } from "@/context/theme/theme-editor/ThemeEditorProvider
 import useCustomToast from "@/hooks/ui/use-custom-toast";
 import ExternalLink from "@/components/ux/ExternalLink";
 import { handleChangeThemePreviewMode } from "@/context/redux/theme/theme-slice";
+import { WEBSITE_BASE_URL } from "@shared/constant/api-bolt";
 
 const ThemeEditorBottom = () => {
   const dispatch = useAppDispatch();
@@ -35,7 +36,7 @@ const ThemeEditorBottom = () => {
 
   return (
     <div className="flex items-center gap-2">
-      <ExternalLink to={"https://jsonplaceholder.typicode.com/"}>
+      <ExternalLink to={`${WEBSITE_BASE_URL}/marketplace`}>
         <Button variant={"link"} className="pl-0">
           Upload theme in marketplace
         </Button>

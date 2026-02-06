@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const AuthorizationFallback = () => {
   return (
-    <section className="p-4 w-full flex justify-center items-center">
+    <section className="p-4 w-full h-full flex justify-center items-center">
       <div className="flex flex-col gap-4 w-full h-full max-w-3xl mx-auto p-5">
         <div className="flex flex-col gap-1.5">
           <Skeleton className="w-72 h-12 mb-3.5" />

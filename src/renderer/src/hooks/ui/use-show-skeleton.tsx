@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 const useShowSkeleton = (isLoading: boolean, delay = 300) => {
-  const [showLoading, setShowLoading] = useState<boolean>(false);
+  const [showLoading, setShowLoading] = useState<boolean>(true);
   const [prevIsLoading, setPrevIsLoading] = useState<boolean>(isLoading);
 
   useEffect(() => {

@@ -5,6 +5,7 @@ import { selectIsThemePreviewModeOn } from "@/context/redux/theme/selectors/them
 import { motion, AnimatePresence } from "motion/react";
 import { exitPreviewTheme } from "@/context/redux/theme-marketplace/thunks/theme-marketplace";
 import useCustomToast from "@/hooks/ui/use-custom-toast";
+import { handleChangeThemePreviewMode } from "@/context/redux/theme/theme-slice";
 
 const ThemePreviewMode = memo(() => {
   const dispatch = useAppDispatch();
@@ -24,6 +25,11 @@ const ThemePreviewMode = memo(() => {
     });
   }, [dispatch, toast]);
 
+  const handleHide = useCallback(
+    () => dispatch(handleChangeThemePreviewMode(false)),
+    [dispatch],
+  );
+
   return (
     <AnimatePresence>
       {isOn && (
@@ -40,7 +46,7 @@ const ThemePreviewMode = memo(() => {
           transition={{
             duration: 0.3,
           }}
-          className="p-2 pt-1 bg-accent/50 border-t-2"
+          className="p-2 bg-accent/50 border-t-2"
         >
           <div className="flex items-center justify-center gap-3 max-w-3xl mx-auto text-xs">
             <p className="text-accent-foreground">
@@ -53,6 +59,15 @@ const ThemePreviewMode = memo(() => {
               onClick={handleClose}
             >
               Exit preview mode
+            </Button>
+            <Button
+              type="button"
+              size={"xs"}
+              variant={"outline"}
+              className="px-3 h-6 rounded-md capitalize"
+              onClick={handleHide}
+            >
+              Hide the preview bar
             </Button>
           </div>
         </motion.div>
