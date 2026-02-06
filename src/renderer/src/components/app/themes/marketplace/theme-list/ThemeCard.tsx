@@ -53,6 +53,7 @@ const ThemeCard = memo(
             src={thumbnail}
             alt=""
             className="size-full object-cover"
+            width={316}
           />
         </AspectRatio>
 

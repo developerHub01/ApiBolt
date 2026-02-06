@@ -45,20 +45,18 @@ const ThemeActions = ({ version }: Props) => {
     <div className="flex items-center gap-2">
       {isInstalled ? (
         <>
-          <OnlyShowWhenNoError>
-            {unInstallable && (
-              <Button
-                type="button"
-                size={"sm"}
-                variant={"destructiveSecondary"}
-                onClick={handleAction("uninstall")}
-                disabled={isUnInstalling}
-              >
-                {isUnInstalling ? <Spinner /> : <UninstallIcon />}
-                Uninstall
-              </Button>
-            )}
-          </OnlyShowWhenNoError>
+          {unInstallable && (
+            <Button
+              type="button"
+              size={"sm"}
+              variant={"destructiveSecondary"}
+              onClick={handleAction("uninstall")}
+              disabled={isUnInstalling}
+            >
+              {isUnInstalling ? <Spinner /> : <UninstallIcon />}
+              Uninstall
+            </Button>
+          )}
           {isActivable ? (
             <Button
               type="button"

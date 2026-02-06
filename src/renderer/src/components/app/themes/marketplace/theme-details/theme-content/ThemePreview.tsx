@@ -11,7 +11,7 @@ const ThemePreview = () => {
   return (
     <AspectRatio
       ratio={16 / 9}
-      className="rounded-lg overflow-hidden shrink-0 border-3"
+      className="rounded-lg overflow-hidden shrink-0 border-3 bg-background"
     >
       <ImageWithFallback
         fallback="./theme-thumbnail/theme_thumbnail_placeholder.png"
