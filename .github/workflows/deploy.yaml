@@ -52,5 +52,6 @@ jobs:
           files: |
             dist/*.exe
             dist/*.AppImage
+            dist/*.deb
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
