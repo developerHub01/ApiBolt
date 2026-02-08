@@ -55,7 +55,8 @@ mac:
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
   notarize: false
 dmg:
-  artifactName: ${name}-${version}.${ext}
+  # artifactName: ${name}-${version}.${ext}
+  artifactName: ${name}.${ext}
 linux:
   icon: "build/icons/png"
   target:
@@ -65,7 +66,8 @@ linux:
   maintainer: electronjs.org
   category: Utility
 appImage:
-  artifactName: ${name}-${version}.${ext}
+  # artifactName: ${name}-${version}.${ext}
+  artifactName: ${name}.${ext}
 compression: maximum
 publish:
   provider: generic
