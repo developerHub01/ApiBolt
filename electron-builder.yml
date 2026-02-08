@@ -31,7 +31,8 @@ win:
     - target: "appx"
       arch: ["x64"]
 nsis:
-  artifactName: ${name}-${version}-setup.${ext}
+  # artifactName: ${name}-${version}-setup.${ext}
+  artifactName: ${name}-setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
