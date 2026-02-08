@@ -7,6 +7,9 @@ on:
     tags:
       - "v*"
 
+permissions:
+  contents: write
+
 jobs:
   build:
     strategy:
@@ -41,7 +44,10 @@ jobs:
 
       - name: Build-Linux
         if: matrix.os == 'ubuntu-latest'
-        run: pnpm run build:linux
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y icnsutils graphicsmagick xz-utils
+          pnpm run build:linux
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -53,5 +59,6 @@ jobs:
             dist/*.exe
             dist/*.AppImage
             dist/*.deb
+            dist/*.snap
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
