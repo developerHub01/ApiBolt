@@ -1,7 +1,7 @@
 {
   "name": "api-bolt",
   "version": "1.0.0",
-  "description": "An REST API testing platform.",
+  "description": "A REST API testing platform.",
   "main": "./out/main/index.js",
   "author": "https://github.com/developerHub01",
   "homepage": "https://apibolt.vercel.app",
