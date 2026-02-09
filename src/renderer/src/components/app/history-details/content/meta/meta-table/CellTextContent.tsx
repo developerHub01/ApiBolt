@@ -4,7 +4,7 @@ interface Props {
 
 const CellTextContent = ({ children }: Props) => {
   return (
-    <p className="w-full whitespace-normal wrap-break-word text-sm leading-relaxed">
+    <p className="w-full whitespace-normal wrap-break-word text-sm leading-relaxed select-all!">
       {children}
     </p>
   );

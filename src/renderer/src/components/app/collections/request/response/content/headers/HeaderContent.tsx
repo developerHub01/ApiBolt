@@ -27,7 +27,7 @@ const HeaderContent = ({ headers }: HeaderContentProps) => {
             {[key, value].map((value, index) => (
               <TableCell
                 key={index}
-                className={cn("whitespace-normal wrap-break-word", {
+                className={cn("whitespace-normal wrap-break-word select-all!", {
                   capitalize: !index,
                 })}
               >
