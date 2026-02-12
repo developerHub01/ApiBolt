@@ -30,12 +30,18 @@ const SettingBackgroundImage = memo(
         )}
         whileHover={{ scale: 0.95 }}
         whileTap={{ scale: 0.85 }}
+        style={{
+          aspectRatio: 1,
+        }}
       >
         <ImageWithFallback
           src={src}
-          alt=""
-          loading="lazy"
+          alt="thumnail"
           className="w-full h-full object-cover blur-sm pointer-events-none"
+          width="200"
+          height="200"
+          decoding="async"
+          loading="lazy"
           onLoad={e => e.currentTarget.classList.remove("blur-sm")}
         />
       </motion.div>

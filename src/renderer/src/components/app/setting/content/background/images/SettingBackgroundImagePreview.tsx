@@ -60,9 +60,12 @@ const SettingBackgroundImagePreview = memo(
                     key={selectedIndex}
                     src={backgroundList[selectedIndex]}
                     alt="background-preview"
-                    className="max-w-full max-h-full object-contain rounded-lg shadow-xl blur-sm"
-                    style={{ transformStyle: "preserve-3d" }}
+                    className="max-w-full max-h-full w-full h-full object-contain rounded-lg shadow-xl blur-sm"
+                    style={{
+                      transformStyle: "preserve-3d",
+                    }}
                     loading="lazy"
+                    decoding="async"
                     onLoad={e => e.currentTarget.classList.remove("blur-sm")}
                     initial={{
                       scale: 0.6,
@@ -82,9 +85,16 @@ const SettingBackgroundImagePreview = memo(
                       filter: "blur(5px)",
                       rotateX: -50,
                     }}
-                    transition={{ duration: 0.5, ease: "easeInOut" }}
-                    whileHover={{ scale: 0.97 }}
-                    whileTap={{ scale: 0.9 }}
+                    transition={{
+                      duration: 0.5,
+                      ease: "easeInOut",
+                    }}
+                    whileHover={{
+                      scale: 0.97,
+                    }}
+                    whileTap={{
+                      scale: 0.9,
+                    }}
                   />
                 </AnimatePresence>
               </div>
