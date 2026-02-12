@@ -38,9 +38,7 @@ export interface SettingsTotalInterface {
 
 export type UpdateSettingsInterface = Partial<
   Omit<SettingsInterface, "backgroundImages"> & {
-    backgroundImages:
-      | Exclude<SettingsInterface["backgroundImages"], Array<string>>
-      | string;
+    backgroundImages: string | null;
   }
 >;
 
