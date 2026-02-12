@@ -25,7 +25,7 @@ asarUnpack:
 win:
   executableName: api-bolt
   icon: "build/icons/win/icon.ico"
-  target: 
+  target:
     - target: "nsis"
       arch: ["x64"]
     - target: "appx"
@@ -42,7 +42,7 @@ nsis:
 # --- MICROSOFT STORE CONFIGURATION ---
 appx:
   identityName: com.apibolt.app
-  publisher: CN=ReplaceWithMicrosoftID 
+  publisher: CN=ReplaceWithMicrosoftID
   publisherDisplayName: "SHAKIL LAB"
   languages: ["en-US"]
 mac:
