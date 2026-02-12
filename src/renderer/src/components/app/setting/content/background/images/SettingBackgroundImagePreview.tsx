@@ -74,7 +74,7 @@ const SettingBackgroundImagePreview = memo(
                     key={selectedBackground}
                     src={selectedBackground}
                     alt="background-preview"
-                    className="max-w-full max-h-full w-full h-full object-contain rounded-lg shadow-xl blur-sm"
+                    className="max-w-full max-h-full object-contain rounded-lg shadow-xl blur-sm"
                     style={{
                       transformStyle: "preserve-3d",
                     }}
