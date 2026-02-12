@@ -1,11 +1,4 @@
-import {
-  type FormEvent,
-  memo,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { type FormEvent, memo, useCallback, useEffect, useState } from "react";
 import ApiMethodSelector from "@/components/app/collections/request/request/api-url/ApiMethodSelector";
 import ApiInput from "@/components/app/collections/request/request/api-url/ApiInput";
 import ApiCta from "@/components/app/collections/request/request/api-url/ApiCta";
@@ -22,14 +15,14 @@ import { fetchApi } from "@/context/redux/request-response/thunks/rest-api";
 const ApiUrl = memo(() => {
   const dispatch = useAppDispatch();
   const apiUrl = useAppSelector(selectRequestUrl);
-  const apiUrlRef = useRef<string>(apiUrl);
   const [url, setUrl] = useState<string>(apiUrl);
-  const [isError, setIsError] = useState<boolean>(false);
+  const [prevApiUrl, setPrevApiUrl] = useState<string>(apiUrl);
+  const isError = !isStrictApiUrl(url);
 
-  useEffect(() => {
+  if (apiUrl !== prevApiUrl) {
     setUrl(apiUrl);
-    apiUrlRef.current = apiUrl;
-  }, [apiUrl]);
+    setPrevApiUrl(apiUrl);
+  }
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -40,8 +33,7 @@ const ApiUrl = memo(() => {
   }, [dispatch]);
 
   useEffect(() => {
-    setIsError(!isStrictApiUrl(url));
-    if (url === apiUrlRef.current) return;
+    if (url === apiUrl) return;
     const timeout = setTimeout(() => {
       dispatch(
         changeRequestApiUrl({
@@ -50,7 +42,7 @@ const ApiUrl = memo(() => {
       );
     }, 500);
     return () => clearTimeout(timeout);
-  }, [dispatch, url]);
+  }, [apiUrl, dispatch, url]);
 
   const handleApiUrlChange = (value: string) => setUrl(value);
 

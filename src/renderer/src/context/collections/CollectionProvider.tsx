@@ -10,6 +10,7 @@ import { DEFAULT_AUTHORIZATION_ID } from "@/constant/authorization.constant";
 import { loadInheritParentAuthorization } from "@/context/redux/request-response/thunks/auth";
 import type { TAuthContextType } from "@shared/types/authorization.types";
 import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
+import { selectIsLoadingInheritParentAuthorization } from "@/context/redux/status/selectors/authorization";
 
 interface CollectionContext {
   isLoading: boolean;
@@ -34,16 +35,14 @@ interface CollectionProviderProps {
 
 const CollectionProvider = ({ children, type }: CollectionProviderProps) => {
   const dispatch = useAppDispatch();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const isLoading = useAppSelector(selectIsLoadingInheritParentAuthorization);
   const selectedTab = useAppSelector(selectSelectedTab);
   const id = type === "global" ? DEFAULT_AUTHORIZATION_ID : selectedTab;
 
   const handleLoadInheritParentAuthorization = useCallback(
     async (id?: string | null) => {
       if (!id) return;
-      setIsLoading(true);
       await dispatch(loadInheritParentAuthorization(id));
-      setIsLoading(false);
     },
     [dispatch],
   );

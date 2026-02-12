@@ -35,7 +35,7 @@ const SettingHttpList = memo(() => {
   const statusList = useAppSelector(selectHttpStatusList);
 
   const list = useMemo(() => {
-    const categorizedList = statusSectionListObj;
+    const categorizedList = structuredClone(statusSectionListObj);
     Object.keys(statusList).forEach(code => {
       const index = Number(code[0]) - 1;
       categorizedList[index].value[code] = {

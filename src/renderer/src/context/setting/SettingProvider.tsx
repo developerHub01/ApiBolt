@@ -2,7 +2,6 @@ import React, {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useState,
 } from "react";
 import { useAppSelector } from "@/context/redux/hooks";
@@ -37,8 +36,12 @@ const SettingProvider = ({ children }: SettingProviderProps) => {
   const [activeTab, setActiveTab] = useState<TSettingTab>(
     projectId ? "project" : "global",
   );
+  const [prevProjectId, setPrevProjectId] = useState<string | null>(projectId);
 
-  useEffect(() => setActiveTab(projectId ? "project" : "global"), [projectId]);
+  if (projectId !== prevProjectId) {
+    setPrevProjectId(projectId);
+    setActiveTab(projectId ? "project" : "global");
+  }
 
   const handleChangeActiveTab = useCallback((value?: TSettingTab) => {
     setActiveTab(prev => value ?? (prev === "global" ? "project" : "global"));

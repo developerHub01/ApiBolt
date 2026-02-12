@@ -26,6 +26,7 @@ import {
   loadThemesSearchResult,
   unInstallTheme,
 } from "@/context/redux/theme-marketplace/thunks/theme-marketplace";
+import { loadInheritParentAuthorization } from "@/context/redux/request-response/thunks/auth";
 
 export interface StatusInterface {
   isLocalPasswordLoading: boolean;
@@ -42,6 +43,8 @@ export interface StatusInterface {
   isHistoryReplacingLoading: boolean;
   isThemeEditingPaletteLoading: boolean;
   isFolderLoading: boolean;
+
+  isLoadingInheritParentAuthorization: boolean;
 
   isThemesSearchResultLoading: boolean;
   themesSearchResultError: string | null;
@@ -72,6 +75,8 @@ const initialState: StatusInterface = {
   isHistoryReplacingLoading: false,
   isThemeEditingPaletteLoading: false,
   isFolderLoading: true,
+
+  isLoadingInheritParentAuthorization: true,
 
   isThemesSearchResultLoading: true,
   themesSearchResultError: null,
@@ -382,6 +387,21 @@ export const statusSlice = createSlice({
     });
     builder.addCase(loadFolder.rejected, state => {
       state.isFolderLoading = false;
+    });
+
+    /**
+     * =======================
+     * load authorization
+     * =======================
+     */
+    builder.addCase(loadInheritParentAuthorization.pending, state => {
+      state.isLoadingInheritParentAuthorization = true;
+    });
+    builder.addCase(loadInheritParentAuthorization.fulfilled, state => {
+      state.isLoadingInheritParentAuthorization = false;
+    });
+    builder.addCase(loadInheritParentAuthorization.rejected, state => {
+      state.isLoadingInheritParentAuthorization = false;
     });
   },
 });

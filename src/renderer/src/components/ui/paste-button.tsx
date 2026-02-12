@@ -57,6 +57,7 @@ const PasteButton = memo(
     };
 
     useEffect(() => {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       checkClipboard();
 
       window.addEventListener("focus", checkClipboard);

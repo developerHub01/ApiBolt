@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { createContext, useContext, useState } from "react";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectHaveLocalPassword } from "@/context/redux/local-password/selectors/local-password";
 import { selectLocalPasswordIsLoading } from "@/context/redux/status/selectors/local-password";
@@ -39,20 +33,19 @@ interface LocalPasswordProviderProps {
 const LocalPasswordProvider = ({ children }: LocalPasswordProviderProps) => {
   const haveLocalPassword = useAppSelector(selectHaveLocalPassword);
   const isLocalPasswordLoading = useAppSelector(selectLocalPasswordIsLoading);
-  const [stage, setStage] = useState<TLocalPasswordStage | null>(null);
+  const [stage, setStage] = useState<TLocalPasswordStage | null>(() => {
+    if (isLocalPasswordLoading) return null;
+    return haveLocalPassword ? "protect" : "change";
+  });
   const [isDisableRequest, setIsDisableRequest] = useState<boolean>(false);
-  const initialized = useRef<boolean>(false);
 
   const handleChangeStage = (level: TLocalPasswordStage) => setStage(level);
 
   const handleChangeDisableRequest = (value: boolean) =>
     setIsDisableRequest(value);
 
-  useEffect(() => {
-    if (isLocalPasswordLoading || initialized.current) return;
+  if (stage === null && !isLocalPasswordLoading)
     setStage(haveLocalPassword ? "protect" : "change");
-    initialized.current = true;
-  }, [haveLocalPassword, isLocalPasswordLoading]);
 
   return (
     <LocalPasswordContext.Provider

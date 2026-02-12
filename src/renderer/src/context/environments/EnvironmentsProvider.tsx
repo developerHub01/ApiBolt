@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -56,50 +57,43 @@ const EnvironmentsProvider = ({ children }: EnvironmentsProviderProps) => {
   const environmentsListFromStore = useAppSelector(
     state => state.environments.environmentsList ?? {},
   );
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [debouncedQuery, setDebouncedQuery] = useState<string>("");
 
-  const [environmentsListState, setEnvironmentsListState] = useState<
-    Record<string, EnvironmentInterface>
-  >({});
-  const [searchQuery, setSearchQuery] = useState("");
-
-  /* Update the list whenever the main list or search query changes */
-  const updateFilteredEnvironments = useCallback(
-    (query: string) => {
-      setEnvironmentsListState(
-        searchFilteredEnvironments({
-          searchQuery: query,
-          environmentsList: environmentsListFromStore,
-        }),
-      );
-    },
-    [environmentsListFromStore],
+  const environmentsListState = useMemo(
+    () =>
+      searchFilteredEnvironments({
+        searchQuery: debouncedQuery,
+        environmentsList: environmentsListFromStore,
+      }),
+    [debouncedQuery, environmentsListFromStore],
   );
 
   /* Debounced search */
-  const handleSearch = useCallback(
-    (value: string) => {
-      if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
+  const handleSearch = useCallback((value: string) => {
+    if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
 
-      debounceTimeout.current = setTimeout(() => {
-        updateFilteredEnvironments(value);
-      }, DEBOUNCE_DELAY);
-    },
-    [updateFilteredEnvironments],
-  );
+    debounceTimeout.current = setTimeout(
+      () => setDebouncedQuery(value),
+      DEBOUNCE_DELAY,
+    );
+  }, []);
 
   /* Handle input change */
   const handleChangeSearchQuery = useCallback(
     (value: string) => {
       setSearchQuery(value);
+
+      if (!value) {
+        if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
+        setDebouncedQuery("");
+        return;
+      }
+
       handleSearch(value);
     },
     [handleSearch],
   );
-
-  /* Initialize environments list on mount and whenever the store updates */
-  useEffect(() => {
-    updateFilteredEnvironments(searchQuery);
-  }, [environmentsListFromStore, searchQuery, updateFilteredEnvironments]);
 
   /* Clean up debounce on unmount */
   useEffect(() => {

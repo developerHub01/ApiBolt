@@ -58,6 +58,7 @@ const HistoryDetailsProvider = ({ children }: HistoryDetailsProviderProps) => {
     selectHistoryReplacingIsLoading,
   );
   const isLoading = isHistoryDetailsLoading || isHistoryReplacinglsLoading;
+  const [prevHistoryId, setPrevHistoryId] = useState<string | null>(historyId);
   const [activeMetaTab, setActiveMetaTab] = useState<TActiveTabType>("params");
   const [codeWrap, setCodeWrap] = useState<boolean>(false);
   const [isReplaceAlertOpen, setIsReplaceAlertOpen] = useState<boolean>(false);
@@ -80,9 +81,10 @@ const HistoryDetailsProvider = ({ children }: HistoryDetailsProviderProps) => {
     dispatch(loadRequestHistory());
   }, [dispatch, isOpen]);
 
-  useEffect(() => {
+  if (prevHistoryId !== historyId) {
     setActiveMetaTab("params");
-  }, [historyId]);
+    setPrevHistoryId(historyId);
+  }
 
   return (
     <HistoryDetailsContext.Provider

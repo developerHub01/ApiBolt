@@ -86,6 +86,7 @@ const KeyboardShortcutsProvider = ({
   children,
 }: KeyboardShortcutsProviderProps) => {
   const projectId = useAppSelector(selectActiveProjectId);
+  const [prevProjectId, setPrevProjectId] = useState<string | null>(projectId);
   const [activeTab, setActiveTab] = useState<TKeyboardShortcutsTab>(
     projectId ? "local" : "global",
   );
@@ -97,9 +98,6 @@ const KeyboardShortcutsProvider = ({
     useState<SearchKeyListInterface>(searchKeyListInitial);
   const [selectedSearchByType, setSelectedSearchByType] =
     useState<SelectedSearchByTypeInterface>(selectedSearchByTypeInitial);
-  const [searchResult, setSearchResult] = useState<
-    Record<string, KeybaordShortCutInterface>
-  >({});
 
   const applyingKeybindingMap = useMemo(() => {
     if (activeTab === "global") return globalMap;
@@ -110,7 +108,7 @@ const KeyboardShortcutsProvider = ({
     };
   }, [activeTab, globalMap, localMap]);
 
-  useEffect(() => {
+  const searchResult = useMemo(() => {
     const keybindingMap: Record<string, KeybaordShortCutInterface> = {};
 
     /* if search term or search keys are emtpy then render whole list */
@@ -120,7 +118,7 @@ const KeyboardShortcutsProvider = ({
       (selectedSearchByType[activeTab] === "keyboard" &&
         !searchKeyList[activeTab].length)
     )
-      return setSearchResult(applyingKeybindingMap);
+      return applyingKeybindingMap;
 
     Object.entries(applyingKeybindingMap).map(([id, data]) => {
       const isSearchTermMatched =
@@ -142,8 +140,7 @@ const KeyboardShortcutsProvider = ({
         };
       }
     });
-
-    setSearchResult(keybindingMap);
+    return keybindingMap;
   }, [
     activeTab,
     applyingKeybindingMap,
@@ -152,11 +149,27 @@ const KeyboardShortcutsProvider = ({
     selectedSearchByType,
   ]);
 
-  useEffect(() => setActiveTab(projectId ? "local" : "global"), [projectId]);
+  useEffect(() => {}, [
+    activeTab,
+    applyingKeybindingMap,
+    searchKeyList,
+    searchTerm,
+    selectedSearchByType,
+  ]);
 
-  const handleChangeActiveTab = useCallback((value?: TKeyboardShortcutsTab) => {
-    setActiveTab(prev => value ?? (prev === "global" ? "local" : "global"));
-  }, []);
+  if (
+    prevProjectId !== projectId &&
+    (projectId ? "local" : "global") !== activeTab
+  ) {
+    setActiveTab(projectId ? "local" : "global");
+    setPrevProjectId(projectId);
+  }
+
+  const handleChangeActiveTab = useCallback(
+    (value?: TKeyboardShortcutsTab) =>
+      setActiveTab(prev => value ?? (prev === "global" ? "local" : "global")),
+    [],
+  );
 
   const handleChangeSearchTerm = useCallback(
     (value?: string) => {
