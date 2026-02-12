@@ -4,20 +4,27 @@ import {
   selectBackgroundImagesLocal,
 } from "@/context/redux/setting/selectors/setting";
 import { useSetting } from "@/context/setting/SettingProvider";
+import { SettingsInterface } from "@shared/types/setting.types";
 
 const useCheckApplyingSettingScopeBackgroundImages = () => {
   const { activeTab } = useSetting();
   const backgroundImagesGlobal = useAppSelector(selectBackgroundImagesGlobal);
   const backgroundImagesLocal = useAppSelector(selectBackgroundImagesLocal);
 
-  let backgroundImages = (
+  const backgroundImages = (
     activeTab === "project"
       ? (backgroundImagesLocal ?? backgroundImagesGlobal)
       : backgroundImagesGlobal
-  ) as Array<string> | string;
+  ) as SettingsInterface["backgroundImages"];
 
-  if (backgroundImages === "default" || !backgroundImages)
-    backgroundImages = [];
+  if (
+    backgroundImages &&
+    typeof backgroundImages === "object" &&
+    "thumbnails" in backgroundImages
+  )
+    return backgroundImages["thumbnails"];
+
+  if (backgroundImages === "default" || !backgroundImages) return [];
 
   return backgroundImages;
 };

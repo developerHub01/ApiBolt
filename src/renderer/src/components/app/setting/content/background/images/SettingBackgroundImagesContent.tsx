@@ -42,8 +42,11 @@ const SettingBackgroundImagesContent = memo(
                 />
                 {/* RIGHT PREVIEW */}
                 <SettingBackgroundImagePreview
-                  selectedIndex={selectedBackgroundImageIndex}
-                  backgroundList={backgroundList}
+                  selectedBackground={
+                    typeof selectedBackgroundImageIndex === "number"
+                      ? backgroundList[selectedBackgroundImageIndex]
+                      : null
+                  }
                   className={cn({
                     "h-80": height === "short",
                   })}

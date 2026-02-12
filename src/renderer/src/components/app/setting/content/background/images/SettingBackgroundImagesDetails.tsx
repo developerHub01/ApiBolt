@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from "motion/react";
 
 interface Props {
   folderPath: string | null;
-  senitizedValue: Array<string>;
+  thumbnails: Array<string>;
   activeTab: TSettingTab;
   settingType: SettingType;
   isOpen: boolean;
@@ -15,7 +15,7 @@ interface Props {
 
 const SettingBackgroundImagesDetails = ({
   folderPath,
-  senitizedValue,
+  thumbnails,
   activeTab,
   settingType,
   isOpen,
@@ -39,7 +39,7 @@ const SettingBackgroundImagesDetails = ({
           <SettingItemHorizontalLayout className="flex-col justify-center items-center gap-4">
             <SettingBackgroundImagesFolderPath path={folderPath} />
             <SettingBackgroundImagesContent
-              backgroundList={senitizedValue}
+              backgroundList={thumbnails}
               /* if images showing from project and global then short height */
               height={
                 activeTab === "project" && settingType === "global"

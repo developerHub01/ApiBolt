@@ -11,13 +11,12 @@ import { useSettingBackground } from "@/context/setting/background/SettingBackgr
 import ImageWithFallback from "@/components/ui/image-with-fallback";
 
 interface Props {
-  backgroundList: Array<string>;
-  selectedIndex: number | null;
+  selectedBackground: string | null;
   className?: string;
 }
 
 const SettingBackgroundImagePreview = memo(
-  ({ backgroundList, selectedIndex, className = "" }: Props) => {
+  ({ selectedBackground, className = "" }: Props) => {
     const {
       handleChangeSelectedBackgroundImageIndex,
       handleNavigateSelectedBackgroundImageIndex,
@@ -25,16 +24,31 @@ const SettingBackgroundImagePreview = memo(
 
     return (
       <AnimatePresence mode="wait">
-        {selectedIndex !== null && (
+        {selectedBackground !== null && (
           <motion.div
             className={cn(
               "bg-accent/50 col-span-1 h-90 origin-center overflow-hidden rounded-lg relative flex flex-col p-3",
               className,
             )}
-            initial={{ scale: 0.6, opacity: 0, filter: "blur(10px)" }}
-            animate={{ scale: 1, opacity: 1, filter: "blur(0)" }}
-            exit={{ scale: 0.8, opacity: 0, filter: "blur(10px)" }}
-            transition={{ duration: 0.4, ease: "easeInOut" }}
+            initial={{
+              scale: 0.6,
+              opacity: 0,
+              filter: "blur(10px)",
+            }}
+            animate={{
+              scale: 1,
+              opacity: 1,
+              filter: "blur(0)",
+            }}
+            exit={{
+              scale: 0.8,
+              opacity: 0,
+              filter: "blur(10px)",
+            }}
+            transition={{
+              duration: 0.4,
+              ease: "easeInOut",
+            }}
           >
             {/* Close Button */}
             <Button
@@ -57,8 +71,8 @@ const SettingBackgroundImagePreview = memo(
                 <AnimatePresence mode="wait">
                   <ImageWithFallback
                     isAnimated
-                    key={selectedIndex}
-                    src={backgroundList[selectedIndex]}
+                    key={selectedBackground}
+                    src={selectedBackground}
                     alt="background-preview"
                     className="max-w-full max-h-full w-full h-full object-contain rounded-lg shadow-xl blur-sm"
                     style={{

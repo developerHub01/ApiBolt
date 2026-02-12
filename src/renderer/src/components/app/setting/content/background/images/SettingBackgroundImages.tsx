@@ -24,6 +24,7 @@ const SettingBackgroundContent = memo(() => {
     settingType,
     senitizedValue,
     folderPath,
+    thumbnails,
     isHideMoreData,
     handleChange,
     handleChangeSettingType,
@@ -52,7 +53,7 @@ const SettingBackgroundContent = memo(() => {
           }
           activeTab={activeTab}
           folderPath={folderPath}
-          senitizedValue={senitizedValue as Array<string>}
+          thumbnails={thumbnails}
           settingType={settingType}
         />
         {settingType === "custom" && (

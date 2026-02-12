@@ -14,6 +14,7 @@ interface SettingBackgroundContext {
   ) => void;
   settingType: SettingType;
   senitizedValue: string | Array<string> | undefined;
+  thumbnails: Array<string>;
   folderPath: string | null;
   handleChange: (
     method?: UpdateBackgroundImagePayloadMethodType | undefined,
@@ -49,6 +50,7 @@ const SettingBackgroundProvider = ({
   const {
     settingType,
     senitizedValue,
+    thumbnails,
     folderPath,
     handleChange,
     isHideMoreData,
@@ -69,11 +71,11 @@ const SettingBackgroundProvider = ({
           ? 0
           : Math.abs(
               direction === "left"
-                ? (senitizedValue?.length ?? 0) + prev - 1
+                ? (thumbnails?.length ?? 0) + prev - 1
                 : prev + 1,
-            ) % (senitizedValue?.length ?? 0),
+            ) % (thumbnails?.length ?? 0),
       ),
-    [senitizedValue?.length],
+    [thumbnails?.length],
   );
 
   return (
@@ -84,6 +86,7 @@ const SettingBackgroundProvider = ({
         handleNavigateSelectedBackgroundImageIndex,
         settingType,
         senitizedValue,
+        thumbnails,
         folderPath,
         handleChange,
         isHideMoreData,

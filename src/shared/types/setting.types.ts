@@ -5,8 +5,14 @@ export type TTabsLayoutSetting = "top" | "right";
 export type TLayoutSettingNoSenitize = TLayoutSetting | "default";
 export type TTabsLayoutSettingNoSenitize = TTabsLayoutSetting | "default";
 
+export interface BackgroundImagesInterface {
+  folderUrl: string;
+  thumbnails: Array<string>;
+  images: Array<string>;
+}
+
 export interface SettingsInterface {
-  backgroundImages: Array<string> | "default" | null;
+  backgroundImages: BackgroundImagesInterface | "default" | null;
   backgroundOpacity: number | null;
   backgroundBlur: number | null;
   slideInterval?: number | null; // in milliseconds

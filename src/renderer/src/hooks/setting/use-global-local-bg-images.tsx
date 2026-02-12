@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type {
+  BackgroundImagesInterface,
+  SettingsInterface,
   SettingType,
   UpdateBackgroundImagePayloadMethodType,
 } from "@shared/types/setting.types";
@@ -12,23 +14,17 @@ const checkIsDefaultType = (value: unknown) =>
   [-1, "default"].includes(value as number | string);
 
 interface UseGlobalLocalBgImagesProps {
-  globalSetting: SettingBackgroundImagesValueType;
-  localSetting: SettingBackgroundImagesValueType;
+  globalSetting: SettingsInterface["backgroundImages"];
+  localSetting: SettingsInterface["backgroundImages"];
   activeTab: TSettingTab;
 }
-
-export type SettingBackgroundImagesValueType =
-  | Array<string>
-  | string
-  | null
-  | undefined;
 
 const useGlobalLocalBgImages = ({
   globalSetting,
   localSetting,
   activeTab,
 }: UseGlobalLocalBgImagesProps): {
-  value: SettingBackgroundImagesValueType;
+  value: SettingsInterface["backgroundImages"];
   handleChange: (method?: UpdateBackgroundImagePayloadMethodType) => void;
   handleChangeSettingType: (value: SettingType) => void;
   settingType: SettingType;
@@ -67,7 +63,7 @@ const useGlobalLocalBgImages = ({
     if (settingType === "default")
       return localSetting ?? globalSetting ?? DEFAULT_SETTINGS.backgroundImages;
 
-    return localSetting ?? [];
+    return localSetting;
   }, [activeTab, globalSetting, localSetting, settingType]);
 
   const handleChange = useCallback(

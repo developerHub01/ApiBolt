@@ -1,10 +1,10 @@
-export const senitizeValue = (
+export const senitizeValue = <T = number | string>(
   value: unknown,
   defaultValue: unknown,
-): number | string =>
-  ([-1, "default"].includes(value as string | number)
+): T =>
+  (([-1, "default"] as Array<unknown>).includes(value)
     ? defaultValue
-    : value) as string | number;
+    : value) as T;
 
 export const checkApplyingZoomable = ({
   activeProjectId,

@@ -2,6 +2,8 @@ import { access, readdir, stat } from "node:fs/promises";
 import { constants } from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+import { nativeImage } from "electron";
+import { BackgroundImagesInterface } from "@shared/types/setting.types";
 
 const imageExtensions = new Set<string>([
   ".png",
@@ -19,23 +21,49 @@ export const getImageFilesFromFolder = async ({
 }: {
   folderPath: string;
   limit?: number;
-}) => {
+}): Promise<BackgroundImagesInterface | null> => {
   try {
     await access(folderPath, constants.R_OK);
 
-    const files =
-      (await readdir(folderPath, { withFileTypes: true }))
+    const imageEntries =
+      (
+        await readdir(folderPath, {
+          withFileTypes: true,
+        })
+      )
         ?.filter(
           entry =>
             entry.isFile() &&
             imageExtensions.has(path.extname(entry.name).toLowerCase()),
         )
-        ?.slice(0, limit)
-        ?.map(file => getApiBoltFileProtocolBasedPath(folderPath, file.name)) ??
-      [];
+        ?.slice(0, limit) ?? [];
+
+    const thumbnails = (
+      await Promise.allSettled(
+        imageEntries.map(entry => {
+          const fullPath = path.join(folderPath, entry.name);
+          return nativeImage.createThumbnailFromPath(fullPath, {
+            width: 300,
+            height: 300,
+          });
+        }),
+      )
+    )
+      .filter(res => res.status === "fulfilled")
+      .map(res => res.value.toDataURL());
+
+    const images =
+      imageEntries?.map(file =>
+        getApiBoltFileProtocolBasedPath(folderPath, file.name),
+      ) ?? [];
 
     const folderUrl = path.resolve(folderPath);
-    return [folderUrl, ...files];
+
+    return {
+      folderUrl,
+      thumbnails,
+      images,
+    };
   } catch (error) {
     console.error("getImageFilesFromFolder error:", error);
     return null;

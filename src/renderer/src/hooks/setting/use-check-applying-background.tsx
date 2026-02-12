@@ -5,6 +5,7 @@ import { selectSettingBackground } from "@/context/redux/setting/selectors/setti
 
 const useCheckApplyingBackground = (): {
   backgroundImages: Array<string> | string;
+  backgroundThumbnails: Array<string> | null;
   backgroundOpacity: number;
   backgroundBlur: number;
   slideInterval: number;
@@ -44,10 +45,13 @@ const useCheckApplyingBackground = (): {
       : global.slideInterval) ?? DEFAULT_SETTINGS.slideInterval!;
   if (slideInterval < 0) slideInterval = DEFAULT_SETTINGS.slideInterval!;
 
-  if (!backgroundImages?.length) return null;
+  if (typeof backgroundImages !== "object" || !backgroundImages.images?.length)
+    return null;
 
   return {
-    backgroundImages: backgroundImages.slice(1, maxNumberOfImages),
+    backgroundImages: backgroundImages?.images.slice(1, maxNumberOfImages),
+    backgroundThumbnails:
+      backgroundImages?.thumbnails?.slice(1, maxNumberOfImages) ?? null,
     backgroundOpacity,
     backgroundBlur,
     maxNumberOfImages,

@@ -6,9 +6,9 @@ import {
 import { useSetting } from "@/context/setting/SettingProvider";
 import { DEFAULT_SETTINGS } from "@/constant/settings.constant";
 import { senitizeValue } from "@/utils/settings.utils";
-import type { SettingBackgroundImagesValueType } from "@/hooks/setting/use-global-local-bg-images";
 import useCheckApplyingSettingScopeBackgroundImages from "@/hooks/setting/use-check-applying-setting-scope-background-images";
 import useGlobalLocalBgImages from "@/hooks/setting/use-global-local-bg-images";
+import { SettingsInterface } from "@shared/types/setting.types";
 
 const useCheckBackgroundSettingImages = () => {
   const { activeTab } = useSetting();
@@ -23,24 +23,32 @@ const useCheckBackgroundSettingImages = () => {
       activeTab,
     });
 
-  const senitizedValue = senitizeValue(
-    value,
-    DEFAULT_SETTINGS.backgroundImages,
-  ) as SettingBackgroundImagesValueType;
+  const senitizedValue = senitizeValue<
+    Exclude<SettingsInterface["backgroundImages"], "default">
+  >(value, DEFAULT_SETTINGS.backgroundImages);
 
-  const folderPath = Array.isArray(senitizedValue) ? senitizedValue[0] : null;
+  const folderPath =
+    (typeof senitizedValue === "object" ? senitizedValue?.folderUrl : null) ??
+    null;
+
+  const images =
+    (typeof senitizedValue === "object" ? senitizedValue?.images : []) ?? [];
+
+  const thumbnails =
+    (typeof senitizedValue === "object" ? senitizedValue?.thumbnails : []) ??
+    [];
 
   const isHideMoreData =
     !Array.isArray(backgroundImages) || !backgroundImages.length;
 
   return {
     value,
+    images,
+    thumbnails,
     handleChange,
     handleChangeSettingType,
     settingType,
-    senitizedValue: Array.isArray(senitizedValue)
-      ? senitizedValue?.slice(1)
-      : [],
+    senitizedValue: Array.isArray(senitizedValue) ? senitizedValue : [],
     folderPath,
     activeTab,
     isHideMoreData,
