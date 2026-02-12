@@ -14,6 +14,8 @@ import { updateSettings } from "@/context/redux/setting/thunks/setting";
 import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 import { selectApplyingKeyboardShortcuts } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
 import { keyListStringify } from "@/utils/keyboard-shortcut.utils";
+import { TLayoutSetting } from "@shared/types/setting.types";
+import useCheckApplyingLayoutDirection from "@/hooks/setting/use-check-applying-layout-direction";
 
 interface SidebarContextMenuWrapperProps {
   children: React.ReactNode;
@@ -24,16 +26,17 @@ const SidebarContextMenuWrapper = ({
 }: SidebarContextMenuWrapperProps) => {
   const dispatch = useAppDispatch();
   const activeProjectId = useAppSelector(selectActiveProjectId);
-  // const layoutTypes: TLayoutSetting = useCheckApplyingLayoutDirection();
-  // const handleChangeLayout = useCallback(
-  //   () =>
-  //     dispatch(
-  //       updateSettings({
-  //         layoutType: layoutTypes === "rtl" ? "ltr" : "rtl",
-  //       })
-  //     ),
-  //   [dispatch, layoutTypes]
-  // );
+  const layoutTypes: TLayoutSetting = useCheckApplyingLayoutDirection();
+  const handleChangeLayout = useCallback(
+    () =>
+      dispatch(
+        updateSettings({
+          layoutType: layoutTypes === "rtl" ? "ltr" : "rtl",
+          projectId: activeProjectId,
+        }),
+      ),
+    [activeProjectId, dispatch, layoutTypes],
+  );
 
   const requestListCollapsed = useAppSelector(selectIsRequestListCollapsed);
   const activeSidebarTab = useAppSelector(selectSidebarActiveTab);
@@ -66,11 +69,11 @@ const SidebarContextMenuWrapper = ({
      * This setting is under development so we are not rendering it for now
      * ===========================================================
      * ***/
-    // list.push({
-    //   id: "layout",
-    //   label: `Move Primary Sidebar ${layoutTypes === "rtl" ? "Left" : "Right"}`,
-    //   onClick: handleChangeLayout,
-    // });
+    list.push({
+      id: "layout",
+      label: `Move Primary Sidebar ${layoutTypes === "rtl" ? "Left" : "Right"}`,
+      onClick: handleChangeLayout,
+    });
 
     /* toggle request list sidebar  */
     if (activeSidebarTab === "navigate_collections") {
@@ -96,8 +99,10 @@ const SidebarContextMenuWrapper = ({
     return list;
   }, [
     activeSidebarTab,
+    handleChangeLayout,
     handleHideActivityBar,
     handleToggleRequestListBar,
+    layoutTypes,
     requestListCollapsed,
     shortcuts,
   ]);

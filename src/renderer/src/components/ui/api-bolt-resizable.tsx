@@ -22,6 +22,7 @@ interface AppMainContentLayoutWrapperProps {
 
 const ApiBoltResizableWrapper = memo(
   ({ children, leftPanel }: AppMainContentLayoutWrapperProps) => {
+    const layoutTypes: TLayoutSetting = useCheckApplyingLayoutDirection();
     const panelGroupRef = useRef<ImperativePanelGroupHandle>(null);
 
     return (
@@ -33,11 +34,21 @@ const ApiBoltResizableWrapper = memo(
         }}
         ref={panelGroupRef}
       >
-        {leftPanel}
-        <ResizableHandle />
+        {layoutTypes === "ltr" && (
+          <>
+            {leftPanel}
+            <ResizableHandle />
+          </>
+        )}
         <ResizablePanel defaultSize={70}>
           <section className="flex w-full h-full">{children}</section>
         </ResizablePanel>
+        {layoutTypes === "rtl" && (
+          <>
+            <ResizableHandle />
+            {leftPanel}
+          </>
+        )}
       </ResizablePanelGroup>
     );
   },
@@ -63,6 +74,7 @@ const ApiBoltResizableLeftPanel = memo(
     minSize = 20,
     maxSize = 50,
   }: ApiBoltResizableLeftPanelProps) => {
+    const layoutTypes: TLayoutSetting = useCheckApplyingLayoutDirection();
     const isSmallDevice = useIsSmallDevice(1100);
     const resizablePanelRef = useRef<ImperativePanelHandle>(null);
 
@@ -94,8 +106,8 @@ const ApiBoltResizableLeftPanel = memo(
           "backdrop-blur-xs w-full bg-background/30 border-r-3 transition-all duration-75",
           {
             "border-r-0": isCollapsed,
-            // "border-r-4 border-l-0": layoutTypes === "ltr",
-            // "border-l-4 border-r-0": layoutTypes === "rtl",
+            "border-r-4 border-l-0": layoutTypes === "ltr",
+            "border-l-4 border-r-0": layoutTypes === "rtl",
           },
         )}
         style={{
