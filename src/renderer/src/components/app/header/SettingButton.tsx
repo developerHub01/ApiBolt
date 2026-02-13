@@ -24,6 +24,7 @@ import type { TShortcutKey } from "@shared/types/keyboard-shortcut.types";
 import { handleChangeIsLocalPasswordOpen } from "@/context/redux/local-password/local-password-slice";
 import ExternalLink from "@/components/ux/ExternalLink";
 import { Link } from "react-router-dom";
+import { FAKE_API_BASE_URL, WEBSITE_BASE_URL } from "@shared/constant/api-bolt";
 
 const SettingButton = () => {
   const dispatch = useAppDispatch();
@@ -84,7 +85,13 @@ const SettingButton = () => {
       id: "navigate_official_website",
       label: "Official Website",
       isSeparatorAbove: true,
-      link: "https://jsonplaceholder.typicode.com/",
+      link: WEBSITE_BASE_URL,
+      isExternalLink: true,
+    },
+    {
+      id: "navigate_fake_api",
+      label: "Explore Fake APIs",
+      link: FAKE_API_BASE_URL,
       isExternalLink: true,
     },
   ];
