@@ -106,7 +106,7 @@ const TabItem = memo(({ id, index }: Props) => {
       data-tab-id={id}
       data-active={selectedTab === id}
       className={cn(
-        "w-full h-9 cursor-pointer px-1 border-x-2 border-transparent group",
+        "flex-1 cursor-pointer border-x-2 border-transparent group",
         {
           /* active tab style */
           "bg-accent/80 hover:bg-accent/60": selectedTab === id,
@@ -131,7 +131,7 @@ const TabItem = memo(({ id, index }: Props) => {
     >
       <div
         className={cn(
-          "w-full h-full flex items-center justify-center px-1 ring-2",
+          "w-full h-9 flex items-center justify-center px-1.5 ring-2",
           {
             "ring-primary/50": isDragging,
             "ring-transparent": !isDragging,

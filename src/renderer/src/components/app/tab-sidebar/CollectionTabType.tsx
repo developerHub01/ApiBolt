@@ -24,8 +24,8 @@ const CollectionTabType = ({
             isFlexibleSize
               ? "w-fit"
               : {
-                  "w-11": isShort,
-                  "w-10": !isShort,
+                  "w-10": isShort,
+                  "w-11": !isShort,
                 },
           )}
         >
