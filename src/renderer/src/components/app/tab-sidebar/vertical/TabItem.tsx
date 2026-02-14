@@ -105,21 +105,18 @@ const TabItem = memo(({ id, index }: Props) => {
       key={id}
       data-tab-id={id}
       data-active={selectedTab === id}
-      className={cn(
-        "cursor-pointer border-x-2 border-transparent group",
-        {
-          /* active tab style */
-          "bg-accent/80 hover:bg-accent/60": selectedTab === id,
-          /* active tab border color */
-          "bg-transparent hover:bg-accent/60": selectedTab !== id,
-          "border-green-500": selectedTab === id && method === "get",
-          "border-blue-500": selectedTab === id && method === "post",
-          "border-yellow-500": selectedTab === id && method === "put",
-          "border-orange-500": selectedTab === id && method === "patch",
-          "border-red-500": selectedTab === id && method === "delete",
-          "border-primary": selectedTab === id && !method,
-        },
-      )}
+      className={cn("cursor-pointer border-x-2 border-transparent group", {
+        /* active tab style */
+        "bg-accent/80 hover:bg-accent/60": selectedTab === id,
+        /* active tab border color */
+        "bg-transparent hover:bg-accent/60": selectedTab !== id,
+        "border-green-500": selectedTab === id && method === "get",
+        "border-blue-500": selectedTab === id && method === "post",
+        "border-yellow-500": selectedTab === id && method === "put",
+        "border-orange-500": selectedTab === id && method === "patch",
+        "border-red-500": selectedTab === id && method === "delete",
+        "border-primary": selectedTab === id && !method,
+      })}
       onMouseEnter={() => setIsTabHovering(true)}
       onMouseLeave={() => setIsTabHovering(false)}
       onClick={handleClick}
