@@ -142,22 +142,27 @@ const TabItem = memo(({ id, index, className, ...props }: Props) => {
       >
         <CollectionTabType
           haveChildren={Boolean(children)}
-          isShort={false}
+          isShort={true}
           method={method}
         />
         <motion.div
           className={cn(
-            "shrink-0 flex-1",
-            "cursor-pointer flex items-center transition-all duration-300",
+            "flex-1",
+            "cursor-pointer flex items-center transition-all duration-300 overflow-hidden",
             {
               "flex-1": isTabListOpen,
             },
           )}
-          style={{ transformOrigin: "left" }}
+          style={{
+            transformOrigin: "left",
+          }}
           key={id}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
+          transition={{
+            duration: 0.3,
+            ease: "easeInOut",
+          }}
         >
-          <p className="w-full text-xs line-clamp-1">{name}</p>
+          <p className="w-full text-xs truncate line-clamp-1">{name}</p>
         </motion.div>
         <Tooltip>
           <TooltipTrigger asChild>

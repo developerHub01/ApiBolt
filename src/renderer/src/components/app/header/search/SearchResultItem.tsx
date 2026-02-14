@@ -1,14 +1,10 @@
 import { useCallback } from "react";
 import { cn } from "@/lib/utils";
-import type {
-  RequestListItemInterface,
-  THTTPMethods,
-} from "@shared/types/request-response.types";
-import { FolderClosed as FolderIcon } from "lucide-react";
-import RequestMethodTag from "@/components/app/RequestMethodTag";
+import type { RequestListItemInterface } from "@shared/types/request-response.types";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { handleChangeSelectedTab } from "@/context/redux/request-response/request-response-slice";
 import { expendParentsOnSelectedChangeTabsData } from "@/context/redux/request-response/thunks/tab-list";
+import CollectionTabType from "@/components/app/tab-sidebar/CollectionTabType";
 
 interface Props extends RequestListItemInterface {
   selectedTab?: string | null;
@@ -35,7 +31,7 @@ const SearchResultItem = ({
   return (
     <div
       className={cn(
-        "w-full h-8 cursor-pointer px-3 shrink-0 border-b border-accent",
+        "w-full h-9 cursor-pointer px-3 shrink-0 border-b border-accent",
         {
           "bg-accent hover:bg-accent/80": selectedTab === id,
           "bg-transparent hover:bg-accent/50": selectedTab !== id,
@@ -52,16 +48,12 @@ const SearchResultItem = ({
     >
       <div className="w-full h-full flex items-center gap-2 px-1">
         {(children || method) && (
-          <div className="flex justify-center items-center w-12 shrink-0">
-            {children && <FolderIcon size={16} />}
-            {method && (
-              <RequestMethodTag
-                method={method as THTTPMethods}
-                shortCut={true}
-                className={"w-full"}
-              />
-            )}
-          </div>
+          <CollectionTabType
+            haveChildren={Boolean(children)}
+            isShort={true}
+            method={method}
+            isFlexibleSize={false}
+          />
         )}
         <div className="flex items-center w-full min-w-0">
           <span className="w-full text-sm whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer select-none">

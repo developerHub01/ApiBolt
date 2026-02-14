@@ -137,7 +137,7 @@ const TabItem = memo(({ id, index }: Props) => {
       >
         <CollectionTabType
           haveChildren={Boolean(children)}
-          isShort={!isTabListOpen}
+          isShort={true}
           method={method}
           isFlexibleSize={false}
         />
