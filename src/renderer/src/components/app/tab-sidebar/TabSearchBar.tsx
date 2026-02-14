@@ -54,7 +54,7 @@ const TabSearchBar = memo(({ isOpen, className, ...props }: Props) => {
       variant={"background"}
       size={"sm"}
       className={cn(
-        "overflow-hidden gap-0",
+        "overflow-hidden gap-0 shadow-2xl border-2 border-border/20",
         {
           "pr-0.5!": tabListLayoutType === "top",
         },

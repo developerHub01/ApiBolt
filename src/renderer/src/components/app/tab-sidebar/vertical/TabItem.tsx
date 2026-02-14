@@ -106,7 +106,7 @@ const TabItem = memo(({ id, index }: Props) => {
       data-tab-id={id}
       data-active={selectedTab === id}
       className={cn(
-        "flex-1 cursor-pointer border-x-2 border-transparent group",
+        "cursor-pointer border-x-2 border-transparent group",
         {
           /* active tab style */
           "bg-accent/80 hover:bg-accent/60": selectedTab === id,

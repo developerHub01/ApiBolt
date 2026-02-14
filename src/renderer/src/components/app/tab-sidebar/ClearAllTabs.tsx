@@ -1,5 +1,5 @@
 import { ButtonHTMLAttributes } from "react";
-import TabBottomCTA from "@/components/app/tab-sidebar/vertical/TabBottomCTA";
+import TabBottomCTA from "@renderer/components/app/tab-sidebar/TabBottomCTA";
 import { Trash2 as ClearIcon } from "lucide-react";
 import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 

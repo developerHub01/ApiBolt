@@ -21,7 +21,7 @@ const ArrayHeaderPreview = ({ data = [] }: ArrayHeaderPreviewProps) => {
       >
         <TableHead></TableHead>
         {headerList.map(key => (
-          <TableHead key={key} className="font-semibold">
+          <TableHead key={key} className="font-semibold select-text">
             {key}
           </TableHead>
         ))}

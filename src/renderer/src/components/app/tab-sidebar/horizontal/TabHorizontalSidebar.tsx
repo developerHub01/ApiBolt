@@ -102,7 +102,6 @@ const TabHorizontalSidebar = () => {
       >
         <TabList />
       </div>
-      {/* Right Arrow with Gradient */}
       {isOverflowing && (
         <Button
           variant="secondary"

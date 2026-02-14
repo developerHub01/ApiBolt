@@ -163,7 +163,7 @@
 }
 
 .dark {
-  --background: oklch(1 0 0);
+  /* --background: oklch(1 0 0);
   --foreground: oklch(0.141 0.005 285.823);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.141 0.005 285.823);
@@ -179,7 +179,7 @@
   --border: oklch(0.92 0.004 286.32);
   --input: oklch(0.92 0.004 286.32);
   --ring: oklch(0.705 0.015 286.067);
-  --line: #00416cb3;
+  --line: #00416cb3; */
 
   /* --background: #000e14;
   --foreground: #fafafa;
@@ -199,7 +199,7 @@
   --border: #295a7e;
   --input: #001b29;
   --ring: #295a7e; */
-  --chart-1: oklch(0.488 0.243 264.376);
+  /* --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
@@ -211,7 +211,7 @@
   --sidebar-accent: oklch(0.274 0.006 286.033);
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.552 0.016 285.938);
+  --sidebar-ring: oklch(0.552 0.016 285.938); */
 }
 
 @font-face {

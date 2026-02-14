@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useAppDispatch } from "@/context/redux/hooks";
-import TabBottomCTA from "@/components/app/tab-sidebar/vertical/TabBottomCTA";
+import TabBottomCTA from "@renderer/components/app/tab-sidebar/TabBottomCTA";
 import { handleToggleTabListCollapse } from "@/context/redux/request-response/request-response-slice";
 import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 

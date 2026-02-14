@@ -33,7 +33,7 @@ const CookieList = ({ cookies }: CookieListProps) => {
       <TableHeader className="[&>tr>th]:border-r [&>tr>th]:last:border-r-0 bg-secondary/80">
         <TableRow>
           {colList.map(item => (
-            <TableHead key={item} className="capitalize">
+            <TableHead key={item} className="capitalize select-text">
               {item}
             </TableHead>
           ))}

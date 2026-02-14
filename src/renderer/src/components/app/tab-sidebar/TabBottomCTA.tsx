@@ -24,7 +24,7 @@ const TabBottomCTA = memo(
         variant={"background"}
         size={"sm"}
         className={cn(
-          "w-full gap-0 overflow-hidden",
+          "w-full gap-0 overflow-hidden shadow-2xl border-2 border-border/20",
           {
             "justify-start": isOpen,
             "justify-center": !isOpen,

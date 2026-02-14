@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, type DragEvent } from "react";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import TabItem from "@/components/app/tab-sidebar/vertical/TabItem";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
@@ -112,13 +111,13 @@ const TabSidebarRoot = () => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <ScrollArea
-        className="w-full h-full min-h-0 flex-1 pb-0 [&>div>div]:w-full [&>div>div]:h-full"
+      <div
+        className="flex overflow-x-auto no-scrollbar scroll-smooth flex-1"
         onDrop={handleDrop}
         onDragOver={handleDragOver}
       >
-        <TabSidebarContextMenuWrapper>
-          <TabListAutoScrollWrapper>
+        <TabSidebarContextMenuWrapper className="no-scrollbar scroll-smooth">
+          <TabListAutoScrollWrapper className="no-scrollbar scroll-smooth">
             {!totalTabsOpen ? (
               <>
                 {/* if no tabs open */}
@@ -143,7 +142,7 @@ const TabSidebarRoot = () => {
             )}
           </TabListAutoScrollWrapper>
         </TabSidebarContextMenuWrapper>
-      </ScrollArea>
+      </div>
       <TabActionWrapper />
     </motion.div>
   );

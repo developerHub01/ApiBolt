@@ -17,8 +17,8 @@ const HeaderContent = ({ headers }: HeaderContentProps) => {
     <Table className="w-full h-full border select-text table-fixed">
       <TableHeader className="[&>tr>th]:border-r [&>tr>th]:last:border-r-0 bg-secondary/80">
         <TableRow>
-          <TableHead>Key</TableHead>
-          <TableHead>Value</TableHead>
+          <TableHead className="select-text">Key</TableHead>
+          <TableHead className="select-text">Value</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody className="[&>tr>td]:border-r [&>tr>td]:last:border-r-0">
@@ -27,12 +27,9 @@ const HeaderContent = ({ headers }: HeaderContentProps) => {
             {[key, value].map((value, index) => (
               <TableCell
                 key={index}
-                className={cn(
-                  "whitespace-normal wrap-break-word select-text!",
-                  {
-                    capitalize: !index,
-                  },
-                )}
+                className={cn("whitespace-normal wrap-break-word select-text", {
+                  capitalize: !index,
+                })}
               >
                 {value}
               </TableCell>
