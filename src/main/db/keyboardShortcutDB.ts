@@ -95,8 +95,8 @@ export const getKeyboardShortcutsById: ElectronAPIKeyboardShortcutInterface["get
   };
 
 export const updateKeyboardShortcuts: ElectronAPIKeyboardShortcutInterface["updateKeyboardShortcuts"] =
-  async ({ id, projectId, key, ...payload }) => {
-    if (!("projectId" in payload)) payload["projectId"] = null;
+  async ({ id, key, projectId, ...payload }) => {
+    if (!projectId) projectId = GLOBAL_PROJECT_ID;
     const keyList = key ? JSON.stringify(key) : undefined;
 
     try {
@@ -119,6 +119,7 @@ export const updateKeyboardShortcuts: ElectronAPIKeyboardShortcutInterface["upda
         ...defaultPayload,
         ...payload,
         key: keyList ?? defaultPayload["key"],
+        projectId,
       };
 
       const result = await db
@@ -143,7 +144,7 @@ export const updateKeyboardShortcuts: ElectronAPIKeyboardShortcutInterface["upda
 
 export const resetKeyboardShortcuts: ElectronAPIKeyboardShortcutInterface["resetKeyboardShortcuts"] =
   async ({ id, projectId }) => {
-    projectId = projectId ?? null;
+    projectId = projectId ?? GLOBAL_PROJECT_ID;
 
     try {
       const defaultPayload =
@@ -167,6 +168,7 @@ export const resetKeyboardShortcuts: ElectronAPIKeyboardShortcutInterface["reset
 
       const insertPayload = {
         ...defaultPayload,
+        projectId,
         key: newKeyList,
       };
       const { id: _, projectId: __, ...updatePayload } = insertPayload;
@@ -188,6 +190,8 @@ export const resetKeyboardShortcuts: ElectronAPIKeyboardShortcutInterface["reset
 
       return {
         ...result,
+        projectId:
+          result.projectId === GLOBAL_PROJECT_ID ? null : result.projectId,
         key: JSON.parse(result.key) as TShortcutKey,
       };
     } catch (error) {

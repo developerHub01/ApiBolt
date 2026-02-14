@@ -54,6 +54,7 @@ export const keyboardShortcutsSlice = createSlice({
 
       if (payload.projectId) {
         state.localShortcuts[payload.id] = {
+          ...(state.globalShortcuts[payload.id] ?? {}),
           ...(state.localShortcuts[payload.id] ?? {}),
           ...payload,
         };

@@ -14,4 +14,4 @@ export interface KeybaordShortCutReceivePayloadInterface {
 
 export type KeybaordShortCutUpdatePayloadInterface =
   Partial<KeybaordShortCutInterface> &
-    Pick<KeybaordShortCutInterface, "id" | "projectId">;
+    Required<Pick<KeybaordShortCutInterface, "id" | "projectId">>;
