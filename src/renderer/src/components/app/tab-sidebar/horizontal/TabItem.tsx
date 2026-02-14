@@ -106,20 +106,21 @@ const TabItem = memo(({ id, index, className, ...props }: Props) => {
       data-tab-id={id}
       data-active={selectedTab === id}
       className={cn(
-        "h-9 w-fit min-w-32 max-w-52 shrink-0 cursor-pointer px-1 border-y-2 border-transparent group relative",
+        "h-9 w-fit min-w-32 max-w-52 shrink-0 cursor-pointer px-1 group relative",
+        "before:content-[''] before:absolute before:inset-0 before:bg-transparent before:border-y-2 before:border-y-transparent before:pointer-events-none",
+        "after:content-[''] after:absolute after:top-0 after:right-0 after:h-full after:w-0.5 after:bg-border",
         {
           /* active tab style */
           "bg-accent/80 hover:bg-accent/60": selectedTab === id,
           /* active tab border color */
           "bg-transparent hover:bg-accent/60": selectedTab !== id,
-          "border-y-green-500": selectedTab === id && method === "get",
-          "border-y-blue-500": selectedTab === id && method === "post",
-          "border-y-yellow-500": selectedTab === id && method === "put",
-          "border-y-orange-500": selectedTab === id && method === "patch",
-          "border-y-red-500": selectedTab === id && method === "delete",
-          "border-y-primary": selectedTab === id && !method,
-
-          "border-l-2 border-l-border": index,
+          "before:border-y-green-500": selectedTab === id && method === "get",
+          "before:border-y-blue-500": selectedTab === id && method === "post",
+          "before:border-y-yellow-500": selectedTab === id && method === "put",
+          "before:border-y-orange-500":
+            selectedTab === id && method === "patch",
+          "before:border-y-red-500": selectedTab === id && method === "delete",
+          "before:border-y-primary": selectedTab === id && !method,
         },
         className,
       )}
