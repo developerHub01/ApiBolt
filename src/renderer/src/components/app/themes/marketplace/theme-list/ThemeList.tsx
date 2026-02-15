@@ -90,7 +90,7 @@ const Wrapper = ({ children }: WrapperProps) => (
     transition={{
       duration: 0.3,
     }}
-    className="grid grid-cols-2 gap-3 p-1"
+    className="grid grid-cols-2 gap-4 md:gap-5 p-1"
   >
     {children}
   </motion.section>
