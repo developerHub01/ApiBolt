@@ -76,9 +76,10 @@ const TabItem = memo(({ id, index, className, ...props }: Props) => {
   const method = useAppSelector(
     state => state.requestResponse.requestList[id]?.method ?? tabDetails.method,
   );
-  const name = useAppSelector(
-    state =>
-      state.requestResponse.requestList[id]?.name ?? tabDetails.name ?? "",
+  const name = useAppSelector(state =>
+    (state.requestResponse.requestList[id]?.name ?? tabDetails.name ?? method)
+      ? "Request"
+      : "Folder",
   );
 
   const handleCloseBtnClick = (e: MouseEvent<HTMLButtonElement>) => {

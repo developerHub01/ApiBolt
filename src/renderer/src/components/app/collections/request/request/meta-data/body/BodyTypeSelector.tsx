@@ -90,7 +90,7 @@ const BodyTypeSelector = () => {
             className="whitespace-nowrap inline-flex items-center justify-center gap-2 cursor-pointer [&>button]:cursor-pointer"
           >
             <RadioGroupItem value={id} id={id} />
-            <p className="pb-1">{label}</p>
+            <p>{label}</p>
           </Label>
         ))}
       </RadioGroup>
