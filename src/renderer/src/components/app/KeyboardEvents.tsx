@@ -30,6 +30,7 @@ import {
   handleToggleTabListCollapse,
 } from "@/context/redux/request-response/request-response-slice";
 import { handleChangeIsLocalPasswordOpen } from "@/context/redux/local-password/local-password-slice";
+import { keyboardNormalizedKey } from "@/utils/keyboard-shortcut.utils";
 
 const KeyboardEvents = () => {
   const dispatch = useAppDispatch();
@@ -49,7 +50,8 @@ const KeyboardEvents = () => {
       MODIFIER_KEY_TRACK_ORDER.forEach(({ eventProperty, key }) => {
         if (e[eventProperty]) keyList.push(key);
       });
-      if (e.key) keyList.push(e.key.toLowerCase());
+      const key = keyboardNormalizedKey(e.code, e.key).toLowerCase();
+      if (key) keyList.push(key);
 
       const keyString = keyList.join("+");
       const actionId = Object.entries(keybindingMap).find(

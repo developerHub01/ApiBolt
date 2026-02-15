@@ -1,5 +1,6 @@
 import { useCallback, type KeyboardEvent } from "react";
 import { MODIFIER_KEY_TRACK_ORDER } from "@/constant/keyboard-shortcut.constant";
+import { keyboardNormalizedKey } from "@/utils/keyboard-shortcut.utils";
 
 const modifierKeys = new Set(["control", "shift", "alt", "meta"]);
 
@@ -18,7 +19,7 @@ const useTrackKeyTyped = <T extends HTMLElement>({
     (e: KeyboardEvent<T>) => {
       e.preventDefault();
       e.stopPropagation();
-      let key = e.key.toLowerCase();
+      const key = keyboardNormalizedKey(e.code, e.key).toLowerCase();
 
       if (key === "escape") return onEscape?.();
       if (key === "enter") return onEnter?.();
@@ -28,7 +29,6 @@ const useTrackKeyTyped = <T extends HTMLElement>({
       MODIFIER_KEY_TRACK_ORDER.forEach(({ eventProperty, key }) => {
         if (e[eventProperty]) list.push(key);
       });
-      if (key === " ") key = "space";
       /* handle normal keys */
       if (key && !modifierKeys.has(key)) list.push(key);
 

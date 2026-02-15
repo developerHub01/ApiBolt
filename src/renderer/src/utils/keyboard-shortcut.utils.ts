@@ -22,3 +22,43 @@ export const areKeyListMatched = (
 
 export const keyListStringify = (keyList: Array<string>) =>
   keyList.map(key => key[0].toUpperCase() + key.slice(1)).join("+");
+
+export const keyboardNormalizedKey = (code: string, key: string) => {
+  /* Letters: KeyA → A */
+  if (code.startsWith("Key")) return code.slice(3).toLowerCase();
+
+  /* Digits: Digit0 → 0 */
+  if (code.startsWith("Digit")) return code.slice(5);
+
+  /* Numpad: Numpad1 → 1, NumpadAdd → + */
+  if (code.startsWith("Numpad")) {
+    const num = code.slice(6);
+    const numMap: Record<string, string> = {
+      Add: "+",
+      Subtract: "-",
+      Multiply: "*",
+      Divide: "/",
+      Decimal: ".",
+    };
+    return numMap[num] ?? num;
+  }
+
+  /* function keys */
+  const specialKeys: Record<string, string> = {
+    Backquote: "`",
+    Minus: "-",
+    Equal: "+",
+    BracketLeft: "[",
+    BracketRight: "]",
+    Backslash: "\\",
+    Semicolon: ";",
+    Quote: "'",
+    Comma: ",",
+    Period: ".",
+    Slash: "/",
+    Space: "Space",
+  };
+
+  if (specialKeys[code]) return specialKeys[code];
+  return key;
+};
