@@ -24,7 +24,11 @@ import type { TShortcutKey } from "@shared/types/keyboard-shortcut.types";
 import { handleChangeIsLocalPasswordOpen } from "@/context/redux/local-password/local-password-slice";
 import ExternalLink from "@/components/ux/ExternalLink";
 import { Link } from "react-router-dom";
-import { FAKE_API_BASE_URL, WEBSITE_BASE_URL } from "@shared/constant/api-bolt";
+import {
+  FAKE_API_DOCS_URL,
+  MARKETPLACE_URL,
+  WEBSITE_BASE_URL,
+} from "@shared/constant/api-bolt";
 
 const SettingButton = () => {
   const dispatch = useAppDispatch();
@@ -91,7 +95,13 @@ const SettingButton = () => {
     {
       id: "navigate_fake_api",
       label: "Explore Fake APIs",
-      link: FAKE_API_BASE_URL,
+      link: FAKE_API_DOCS_URL,
+      isExternalLink: true,
+    },
+    {
+      id: "navigate_theme_market_website",
+      label: "Explore Theme market",
+      link: MARKETPLACE_URL,
       isExternalLink: true,
     },
   ];
@@ -134,7 +144,7 @@ const SettingButton = () => {
                 <>
                   {isSeparatorAbove && <MenubarSeparator />}
                   <MenubarItem onClick={onClick} className="cursor-pointer">
-                    <p className="line-clamp-1">{label}</p>
+                    <p className="line-clamp-1 capitalize">{label}</p>
                     {shortcutString && (
                       <MenubarShortcut>{shortcutString}</MenubarShortcut>
                     )}
