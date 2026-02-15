@@ -2,6 +2,7 @@ import { ipcMain } from "electron";
 import {
   getKeyboardShortcuts,
   getKeyboardShortcutsById,
+  inheritGlobalKeyboardShortcuts,
   resetKeyboardShortcuts,
   updateKeyboardShortcuts,
 } from "@/main/db/keyboardShortcutDB.js";
@@ -51,5 +52,16 @@ export const keyboardShortcutHandler = (): void => {
     ): ReturnType<
       ElectronAPIKeyboardShortcutInterface["resetKeyboardShortcuts"]
     > => await resetKeyboardShortcuts(...rest),
+  );
+  ipcMain.handle(
+    "inheritGlobalKeyboardShortcuts",
+    async (
+      _,
+      ...rest: Parameters<
+        ElectronAPIKeyboardShortcutInterface["inheritGlobalKeyboardShortcuts"]
+      >
+    ): ReturnType<
+      ElectronAPIKeyboardShortcutInterface["inheritGlobalKeyboardShortcuts"]
+    > => await inheritGlobalKeyboardShortcuts(...rest),
   );
 };

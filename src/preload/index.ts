@@ -725,6 +725,11 @@ if (process.contextIsolated) {
           await ipcRenderer.invoke("updateKeyboardShortcuts", ...payload),
         resetKeyboardShortcuts: async (...payload) =>
           await ipcRenderer.invoke("resetKeyboardShortcuts", ...payload),
+        inheritGlobalKeyboardShortcuts: async (...payload) =>
+          await ipcRenderer.invoke(
+            "inheritGlobalKeyboardShortcuts",
+            ...payload,
+          ),
       };
 
     /**

@@ -17,4 +17,7 @@ export interface ElectronAPIKeyboardShortcutInterface {
   resetKeyboardShortcuts(
     payload: Pick<KeybaordShortCutInterface, "id" | "projectId">,
   ): Promise<KeybaordShortCutInterface | null>;
+  inheritGlobalKeyboardShortcuts(
+    payload: Pick<KeybaordShortCutInterface, "id" | "projectId">,
+  ): Promise<boolean>;
 }

@@ -1,5 +1,5 @@
 import { ButtonHTMLAttributes, memo } from "react";
-import TabBottomCTA from "@renderer/components/app/tab-sidebar/TabBottomCTA";
+import TabBottomCTA from "@/components/app/tab-sidebar/TabBottomCTA";
 import { Plus as AddIcon } from "lucide-react";
 import { useTabSidebar } from "@/context/tab-sidebar/TabSidebarProvider";
 

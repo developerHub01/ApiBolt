@@ -199,3 +199,24 @@ export const resetKeyboardShortcuts: ElectronAPIKeyboardShortcutInterface["reset
       return null;
     }
   };
+
+export const inheritGlobalKeyboardShortcuts: ElectronAPIKeyboardShortcutInterface["inheritGlobalKeyboardShortcuts"] =
+  async ({ id, projectId }) => {
+    try {
+      if (!id || !projectId) throw new Error();
+
+      await db
+        .delete(keyboardShortcutTable)
+        .where(
+          and(
+            eq(keyboardShortcutTable.id, id),
+            eq(keyboardShortcutTable.projectId, projectId),
+          ),
+        );
+
+      return true;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };

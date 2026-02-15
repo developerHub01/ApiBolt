@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import {
+  handleRemoveLocalKeyboardShortcuts,
   handleReplaceShortcuts,
   handleUpdateKeyboardShortcuts,
 } from "@/context/redux/keyboard-shortcuts/keyboard-shortcuts-slice";
@@ -106,14 +107,11 @@ export const resetKeyboardShortcuts = createAsyncThunk<
       const state = getState() as RootState;
       const activeProjectId = state.project.activeProjectId;
 
-      const payload = {
-        id,
-        projectId: type === "local" && activeProjectId ? activeProjectId : null,
-      };
-
       const response =
         await window.electronAPIKeyboardShortcut.resetKeyboardShortcuts({
-          ...payload,
+          id,
+          projectId:
+            type === "local" && activeProjectId ? activeProjectId : null,
         });
       if (!response) return false;
 
@@ -122,6 +120,42 @@ export const resetKeyboardShortcuts = createAsyncThunk<
           ...response,
         }),
       );
+
+      return true;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+);
+
+export const inheritGlobalKeyboardShortcuts = createAsyncThunk<
+  boolean,
+  {
+    id: string;
+  },
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>(
+  "keyboard-shortcuts/inheritGlobalKeyboardShortcuts",
+  async ({ id }, { dispatch, getState }) => {
+    try {
+      const state = getState() as RootState;
+      const activeProjectId = state.project.activeProjectId;
+      if (!activeProjectId) throw new Error();
+
+      const response =
+        await window.electronAPIKeyboardShortcut.inheritGlobalKeyboardShortcuts(
+          {
+            id,
+            projectId: activeProjectId,
+          },
+        );
+      if (!response) return false;
+
+      dispatch(handleRemoveLocalKeyboardShortcuts(id));
 
       return true;
     } catch (error) {

@@ -65,6 +65,14 @@ export const keyboardShortcutsSlice = createSlice({
         };
       }
     },
+    handleRemoveLocalKeyboardShortcuts: (
+      state,
+      action: PayloadAction<string>,
+    ) => {
+      if (state.editingId) state.editingId = null;
+
+      delete state.localShortcuts[action.payload];
+    },
   },
 });
 
@@ -73,6 +81,7 @@ export const {
   handleReplaceShortcuts,
   handleChangeEditingId,
   handleUpdateKeyboardShortcuts,
+  handleRemoveLocalKeyboardShortcuts,
 } = keyboardShortcutsSlice.actions;
 
 export default keyboardShortcutsSlice.reducer;

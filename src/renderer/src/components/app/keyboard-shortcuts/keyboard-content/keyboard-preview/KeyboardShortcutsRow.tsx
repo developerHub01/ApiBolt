@@ -7,7 +7,10 @@ import KeyboardKeyCellContent from "@/components/app/keyboard-shortcuts/keyboard
 import KeyboardCell from "@/components/app/keyboard-shortcuts/keyboard-content/keyboard-preview/KeyboardCell";
 import type { TShortcutKey } from "@shared/types/keyboard-shortcut.types";
 import { useKeyboardShortcuts } from "@/context/keyboard-shortcuts/KeyboardShortcutsProvider";
-import { resetKeyboardShortcuts } from "@/context/redux/keyboard-shortcuts/thunks/keyboard-shortcuts";
+import {
+  inheritGlobalKeyboardShortcuts,
+  resetKeyboardShortcuts,
+} from "@/context/redux/keyboard-shortcuts/thunks/keyboard-shortcuts";
 import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 interface KeyboardShortcutsRowProps {
@@ -43,6 +46,22 @@ const KeyboardShortcutsRow = memo(
       });
     }, [activeTab, dispatch, id, toast]);
 
+    const handleResetToGlobal = useCallback(async () => {
+      const response = await dispatch(
+        inheritGlobalKeyboardShortcuts({
+          id,
+        }),
+      ).unwrap();
+
+      toast({
+        type: response ? "success" : "error",
+        title: response ? "Inherit success" : "Inherit error",
+        description: response
+          ? "Keyboard shortcut inherit global successfully"
+          : "Failed to inherit global keyboard shortcut. Please try again.",
+      });
+    }, [dispatch, id, toast]);
+
     return (
       <TableRow
         key={id}
@@ -58,6 +77,7 @@ const KeyboardShortcutsRow = memo(
             keyMap={keyMap}
             onEdit={handleEdit}
             onReset={handleReset}
+            onGlobal={activeTab === "local" ? handleResetToGlobal : undefined}
           />
         </KeyboardCell>
       </TableRow>
