@@ -70,7 +70,7 @@ const RequestListItemName = memo(() => {
           id={`request_list_item_${id}`}
           value={name}
           readOnly
-          className="w-full h-full outline-0 text-sm py-1 whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer select-none border-b border-transparent pointer-events-none"
+          className="w-full h-full outline-0 text-sm py-1 whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer select-none border-y border-transparent pointer-events-none"
         />
       )}
     </>
