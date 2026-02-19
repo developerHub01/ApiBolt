@@ -1,4 +1,4 @@
-import { type FormEvent, memo, useCallback, useEffect, useState } from "react";
+import { memo, SubmitEvent, useCallback, useEffect, useState } from "react";
 import ApiMethodSelector from "@/components/app/collections/request/request/api-url/ApiMethodSelector";
 import ApiInput from "@/components/app/collections/request/request/api-url/ApiInput";
 import ApiCta from "@/components/app/collections/request/request/api-url/ApiCta";
@@ -46,7 +46,7 @@ const ApiUrl = memo(() => {
 
   const handleApiUrlChange = (value: string) => setUrl(value);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(fetchApi());
   };

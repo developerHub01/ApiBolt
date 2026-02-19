@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "bb93e34d-c899-42cd-9170-de1f38b4aa70",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "06919420-4080-4481-aa5f-4a3bd1be706f",
+  "prevId": "228ba9af-7420-40ab-9af6-fc67b40d7a14",
   "tables": {
     "active_code_snippit_type_table": {
       "name": "active_code_snippit_type_table",
@@ -1349,6 +1349,22 @@
           "autoincrement": false,
           "default": false
         },
+        "pathParamsValue": {
+          "name": "pathParamsValue",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": true
+        },
+        "pathParamsDescription": {
+          "name": "pathParamsDescription",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": false
+        },
         "headersValue": {
           "name": "headersValue",
           "type": "integer",
@@ -2193,7 +2209,9 @@
   "_meta": {
     "schemas": {},
     "tables": {},
-    "columns": {}
+    "columns": {
+      "\"meta_show_column_table\".\"patParamsDescription\"": "\"meta_show_column_table\".\"pathParamsDescription\""
+    }
   },
   "internal": {
     "indexes": {}

@@ -27,6 +27,8 @@ export const selectMetaData = createSelector(
     (state: RootState) => state.requestResponse.authInheritedId,
     (state: RootState) => state.requestResponse.authorizationHeader,
     (state: RootState) => state.requestResponse.authorizationParam,
+    (state: RootState) => state.requestResponse.pathParams,
+    (state: RootState) => state.requestUrl.tokens,
     (
       _,
       payload: {
@@ -47,6 +49,8 @@ export const selectMetaData = createSelector(
     authInheritedIds,
     authorizationHeaders,
     authorizationParams,
+    pathParams,
+    tokens,
     { id, type },
   ) => {
     const metaId = id ?? selectedTab;
@@ -60,10 +64,32 @@ export const selectMetaData = createSelector(
     const authorizationParam = authApplyingMetaId
       ? authorizationParams[authApplyingMetaId]
       : null;
+    const pathParamsKeys = [
+      ...new Set(
+        (tokens[metaId] ?? [])
+          .filter(({ type }) => type === "path-params")
+          .map(({ value }) => value),
+      ),
+    ];
+
+    const pathParamsList = pathParamsKeys.reduce(
+      (acc, key) => {
+        acc.push({
+          id: key,
+          key,
+          value: pathParams[metaId]?.[key]?.value ?? "",
+          description: pathParams[metaId]?.[key]?.description ?? "",
+        });
+        return acc;
+      },
+      [] as Array<ParamInterface<string>>,
+    );
 
     switch (type) {
       case "params":
         return (params[metaId] ?? []) as Array<ParamInterface>;
+      case "path-params":
+        return pathParamsList;
       case "hiddenParams":
         return (
           authorizationParam ? [authorizationParam] : []

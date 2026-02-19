@@ -14,6 +14,10 @@ const tabList: Array<TabInterface> = [
     label: "Params",
   },
   {
+    id: "path-params",
+    label: "Path Params",
+  },
+  {
     id: "authorization",
     label: "Authorization",
   },

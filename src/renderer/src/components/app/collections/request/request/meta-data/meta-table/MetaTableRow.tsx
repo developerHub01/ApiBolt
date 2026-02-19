@@ -1,7 +1,5 @@
 import { memo, useCallback, useMemo } from "react";
-import { TableCell, TableRow } from "@/components/ui/table";
-import { Trash2 as DeleteIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { TableRow } from "@/components/ui/table";
 import MetaTableCell from "@/components/app/collections/request/request/meta-data/meta-table/MetaTableCell";
 import { cn } from "@/lib/utils";
 import type {
@@ -13,6 +11,8 @@ import type {
 } from "@shared/types/request-response.types";
 import { AUTHORIZATION_DATA_ID } from "@/constant/authorization.constant";
 import CheckCell from "@/components/app/collections/request/request/meta-data/meta-table/CheckCell";
+import MetaDeleteButton from "@/components/app/collections/request/request/meta-data/meta-table/MetaDeleteButton";
+import { useRequestMetaTable } from "@/context/collections/request/RequestMetaTableProvider";
 
 const calculateDynamicText = "<calculated when request is sent>";
 
@@ -61,6 +61,8 @@ const MetaTableRow = memo(
     handleCheckToggle,
     cellList,
   }: MetaTableRowProps) => {
+    const { preventKey, showCheck } = useRequestMetaTable();
+
     const data: Record<string, string | Array<FileDataInterface>> = useMemo(
       () => ({
         key: keyName,
@@ -96,8 +98,8 @@ const MetaTableRow = memo(
       >
         <CheckCell
           id={`${type}-check-${id}`}
-          checked={isCheck || preventCheck}
-          disabled={preventCheck || id === AUTHORIZATION_DATA_ID}
+          checked={isCheck || preventCheck || type === "path-params"}
+          disabled={preventCheck || id === AUTHORIZATION_DATA_ID || !showCheck}
           onChange={handleCheckChange}
         />
         {cellList.map(cellType => {
@@ -122,19 +124,12 @@ const MetaTableRow = memo(
                   : value
               }
               prevent={prevent}
+              disabled={preventKey && cellType === "key"}
               onBlur={handleChangeItem}
             />
           );
         })}
-        <TableCell className="p-0">
-          {!prevent && (
-            <div className="flex justify-center items-center">
-              <Button size={"iconXs"} variant={"ghost"} onClick={handleDelete}>
-                <DeleteIcon size={16} />
-              </Button>
-            </div>
-          )}
-        </TableCell>
+        <MetaDeleteButton prevent={prevent} handleDelete={handleDelete} />
       </TableRow>
     );
   },

@@ -19,7 +19,9 @@ const ResponseError = memo(() => {
         <p className="text-sm font-medium">{statusText}</p>
         <ButtonLikeDiv variant={"destructiveSecondary"} className="h-auto">
           <AlertIcon size={14} />
-          <p className="text-xs font-normal">{statusDescription}</p>
+          <p className="text-xs font-normal">
+            {statusDescription || "Something went wrong"}
+          </p>
         </ButtonLikeDiv>
       </BorderedWrapper>
     </ScrollArea>

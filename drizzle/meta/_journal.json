@@ -5,8 +5,29 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1768861083479,
-      "tag": "0000_mean_solo",
+      "when": 1771445380746,
+      "tag": "0000_lazy_grandmaster",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1771464264469,
+      "tag": "0001_abandoned_red_hulk",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1771464973140,
+      "tag": "0002_panoramic_vision",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1771465845005,
+      "tag": "0003_lying_war_machine",
       "breakpoints": true
     }
   ]

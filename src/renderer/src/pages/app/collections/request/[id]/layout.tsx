@@ -18,6 +18,7 @@ import { loadAuthorization } from "@/context/redux/request-response/thunks/auth"
 import { loadShowHiddenMetaData } from "@/context/redux/request-response/thunks/show-hidden-meta-data";
 import { selectIsRequestOrFolderExist } from "@/context/redux/request-response/selectors/request-list";
 import RequestOrFolderNotFound from "@/components/app/collections/RequestOrFolderNotFound";
+import { loadPathParams } from "@/context/redux/request-response/thunks/path-params";
 
 const RequestLayout = () => {
   const dispatch = useAppDispatch();
@@ -35,6 +36,7 @@ const RequestLayout = () => {
     [
       loadAuthorization,
       loadParams,
+      loadPathParams,
       loadHeaders,
       loadHiddenHeaders,
       loadRequestMetaTab,

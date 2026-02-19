@@ -12,13 +12,16 @@ export const selectRequestUrlTokens = createSelector(
     tokens ?? [...INITIAL_URL_TOKENS_VALUE],
 );
 
-export const selectRequestUrlTokenById = createSelector(
+export const selectRequestUrlPathParams = createSelector(
   [
     (state: RootState) =>
       state.requestUrl.tokens[state.requestResponse.selectedTab ?? ""],
-    (_, id: string) => id,
   ],
-  (tokens: Array<UrlTokenInterface>, id): string | null => {
-    return (tokens ?? []).find(token => token.id === id)?.value ?? null;
-  },
+  (tokens: Array<UrlTokenInterface>): Array<string> => [
+    ...new Set(
+      (tokens ?? [])
+        .filter(({ type }) => type === "path-params")
+        .map(({ value }) => value),
+    ),
+  ],
 );

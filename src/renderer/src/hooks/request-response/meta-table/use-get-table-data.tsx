@@ -35,7 +35,9 @@ import type {
   HiddenHeadersCheckInterface,
   MetaShowColumnInterface,
   ParamInterface,
+  TActiveTabType,
   TMetaTableType,
+  TRequestBodyType,
 } from "@shared/types/request-response.types";
 import { handleCheckToggleMetaData } from "@/context/redux/request-response/request-response-slice";
 import {
@@ -44,6 +46,18 @@ import {
   selectRequestMetaShowColumn,
 } from "@/context/redux/request-response/selectors/meta-request";
 import { selectRequestBodyType } from "@/context/redux/request-response/selectors/body-raw";
+import { updatePathParams } from "@/context/redux/request-response/thunks/path-params";
+
+const metaTabTypes = new Set<TActiveTabType>([
+  "params",
+  "headers",
+  "path-params",
+]);
+
+const bodyMetaTabTypes = new Set<TRequestBodyType>([
+  "x-www-form-urlencoded",
+  "form-data",
+]);
 
 export const useGetTableData = () => {
   const dispatch = useAppDispatch();
@@ -52,13 +66,9 @@ export const useGetTableData = () => {
   const metaShowColumn = useAppSelector(selectRequestMetaShowColumn);
 
   const type: TMetaTableType = useMemo(() => {
-    if (["params", "headers"].includes(activeMetaTab))
-      return activeMetaTab as TMetaTableType;
+    if (metaTabTypes.has(activeMetaTab)) return activeMetaTab as TMetaTableType;
 
-    if (
-      activeMetaTab === "body" &&
-      ["x-www-form-urlencoded", "form-data"].includes(requestBodyType)
-    )
+    if (activeMetaTab === "body" && bodyMetaTabTypes.has(requestBodyType))
       return requestBodyType as TMetaTableType;
 
     return "params";
@@ -79,24 +89,28 @@ export const useGetTableData = () => {
             value: metaShowColumn
               ? type === "params"
                 ? metaShowColumn?.paramsValue
-                : type === "headers"
-                  ? metaShowColumn?.headersValue
-                  : type === "form-data"
-                    ? metaShowColumn?.formDataValue
-                    : type === "x-www-form-urlencoded"
-                      ? metaShowColumn?.xWWWFormUrlencodedValue
-                      : true
+                : type === "path-params"
+                  ? metaShowColumn.pathParamsValue
+                  : type === "headers"
+                    ? metaShowColumn?.headersValue
+                    : type === "form-data"
+                      ? metaShowColumn?.formDataValue
+                      : type === "x-www-form-urlencoded"
+                        ? metaShowColumn?.xWWWFormUrlencodedValue
+                        : true
               : true,
             description: metaShowColumn
               ? type === "params"
                 ? metaShowColumn?.paramsDescription
-                : type === "headers"
-                  ? metaShowColumn?.headersDescription
-                  : type === "form-data"
-                    ? metaShowColumn?.formDataDescription
-                    : type === "x-www-form-urlencoded"
-                      ? metaShowColumn?.xWWWFormUrlencodedDescription
-                      : true
+                : type === "path-params"
+                  ? metaShowColumn.pathParamsDescription
+                  : type === "headers"
+                    ? metaShowColumn?.headersDescription
+                    : type === "form-data"
+                      ? metaShowColumn?.formDataDescription
+                      : type === "x-www-form-urlencoded"
+                        ? metaShowColumn?.xWWWFormUrlencodedDescription
+                        : true
               : false,
           },
     [metaShowColumn, type],
@@ -124,13 +138,15 @@ export const useGetTableData = () => {
       const handler =
         type === "params"
           ? updateParams
-          : type === "headers"
-            ? updateHeaders
-            : type === "x-www-form-urlencoded"
-              ? updateBodyXWWWFormUrlencoded
-              : type === "form-data"
-                ? updateBodyFormData
-                : updateBodyFormData;
+          : type === "path-params"
+            ? updatePathParams
+            : type === "headers"
+              ? updateHeaders
+              : type === "x-www-form-urlencoded"
+                ? updateBodyXWWWFormUrlencoded
+                : type === "form-data"
+                  ? updateBodyFormData
+                  : updateBodyFormData;
       dispatch(
         handler({
           paramId: id,
@@ -233,17 +249,21 @@ export const useGetTableData = () => {
             ? keyName === "value"
               ? "paramsValue"
               : "paramsDescription"
-            : type === "headers"
+            : type === "path-params"
               ? keyName === "value"
-                ? "headersValue"
-                : "headersDescription"
-              : type === "form-data"
+                ? "pathParamsValue"
+                : "pathParamsDescription"
+              : type === "headers"
                 ? keyName === "value"
-                  ? "formDataValue"
-                  : "formDataDescription"
-                : keyName === "value"
-                  ? "xWWWFormUrlencodedValue"
-                  : "xWWWFormUrlencodedDescription";
+                  ? "headersValue"
+                  : "headersDescription"
+                : type === "form-data"
+                  ? keyName === "value"
+                    ? "formDataValue"
+                    : "formDataDescription"
+                  : keyName === "value"
+                    ? "xWWWFormUrlencodedValue"
+                    : "xWWWFormUrlencodedDescription";
 
       if (!key) return;
 

@@ -33,9 +33,9 @@ const TabV1 = ({ list, activeTab, handleSelect, className }: TabV1Props) => {
           onClick={() => handleSelect(id)}
         >
           {label}
-          {Boolean(count) && <p className="text-primary">({count})</p>}
+          {Boolean(count) && <p className="text-primary text-xs">({count})</p>}
           {isActive && (
-            <span className="inline-block size-1.5 rounded-full bg-green-500 mt-1"></span>
+            <span className="inline-block size-1.5 rounded-full bg-green-500"></span>
           )}
         </Button>
       ))}

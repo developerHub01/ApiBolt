@@ -22,17 +22,12 @@ export const getHistoryById: ElectronAPIHistoryInterface["getHistoryById"] =
           .limit(1)
       )?.[0];
 
-      /*       const keys = [
-        "params",
-        "headers",
-        "authorization",
-        "body",
-        "responseSize"
-      ]; */
-
       return {
         ...response,
         params: response.params ? JSON.parse(response.params) : response.params,
+        pathParams: response.pathParams
+          ? JSON.parse(response.pathParams)
+          : response.pathParams,
         headers: response.headers
           ? JSON.parse(response.headers)
           : response.headers,
@@ -83,6 +78,7 @@ export const createHistory: ElectronAPIHistoryInterface["createHistory"] =
       /* stringify all object type data */
       const keys = [
         "params",
+        "pathParams",
         "headers",
         "authorization",
         "body",

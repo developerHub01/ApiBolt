@@ -1,5 +1,6 @@
 import type {
   ParamInterface,
+  PathParamInterface,
   RequestResponseSizeInterface,
   TBinaryData,
   TContentType,
@@ -21,6 +22,7 @@ export interface HistoryItemInterface {
   name: string;
   request: string;
   params?: Array<ParamInterface> | null;
+  pathParams?: PathParamInterface | null;
   headers?: Array<ParamInterface> | null;
   authorization?: {
     type: TAuthType;

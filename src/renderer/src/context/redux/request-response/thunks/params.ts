@@ -14,7 +14,10 @@ import { detectAndCleanVariable } from "@/utils/request-response.utils";
 ================================= */
 export const loadParams = createAsyncThunk<
   void,
-  void | { requestOrFolderId?: string | null | undefined; once?: boolean },
+  void | {
+    requestOrFolderId?: string | null | undefined;
+    once?: boolean;
+  },
   {
     dispatch: AppDispatch;
     state: RootState;

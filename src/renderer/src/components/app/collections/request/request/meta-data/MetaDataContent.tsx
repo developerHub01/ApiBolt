@@ -8,6 +8,10 @@ const Params = lazy(
   () =>
     import("@/components/app/collections/request/request/meta-data/params/Params"),
 );
+const PathParams = lazy(
+  () =>
+    import("@/components/app/collections/request/request/meta-data/path-params/PathParams"),
+);
 const Headers = lazy(
   () =>
     import("@/components/app/collections/request/request/meta-data/headers/Headers"),
@@ -34,6 +38,8 @@ import RequestParamsFallback from "@/fallback/collection/request/request/Request
 import RequestHeadersFallback from "@/fallback/collection/request/request/RequestHeadersFallback";
 import RequestApiUrlFallback from "@/fallback/collection/request/request/RequestApiUrlFallback";
 import RequestAuthorizationFallback from "@/fallback/collection/request/request/RequestAuthorizationFallback";
+import RequestPathParamsFallback from "@/fallback/collection/request/request/RequestPathParamsFallback";
+import RequestMetaTableProvider from "@/context/collections/request/RequestMetaTableProvider";
 
 const MetaDataContent = memo(() => {
   const activeMetaTab = useAppSelector(selectActiveMetaTab) ?? "url";
@@ -42,48 +48,73 @@ const MetaDataContent = memo(() => {
     <RequestMetaDataProvider>
       <AnimatePresence>
         {activeMetaTab === "url" && (
-          <TabMotionWrapper id="url">
-            <Suspense fallback={<RequestApiUrlFallback />}>
-              <Url />
-            </Suspense>
-          </TabMotionWrapper>
+          <RequestMetaTableProvider>
+            <TabMotionWrapper id="url">
+              <Suspense fallback={<RequestApiUrlFallback />}>
+                <Url />
+              </Suspense>
+            </TabMotionWrapper>
+          </RequestMetaTableProvider>
         )}
         {activeMetaTab === "params" && (
-          <TabMotionWrapper id="params">
-            <Suspense fallback={<RequestParamsFallback />}>
-              <Params />
-            </Suspense>
-          </TabMotionWrapper>
+          <RequestMetaTableProvider>
+            <TabMotionWrapper id="params">
+              <Suspense fallback={<RequestParamsFallback />}>
+                <Params />
+              </Suspense>
+            </TabMotionWrapper>
+          </RequestMetaTableProvider>
+        )}
+        {activeMetaTab === "path-params" && (
+          <RequestMetaTableProvider
+            showCheck={false}
+            showDelete={false}
+            preventKey={true}
+            showBulkEdit={false}
+            showThreeDotAction={false}
+          >
+            <TabMotionWrapper id="path-params">
+              <Suspense fallback={<RequestPathParamsFallback />}>
+                <PathParams />
+              </Suspense>
+            </TabMotionWrapper>
+          </RequestMetaTableProvider>
         )}
         {activeMetaTab === "authorization" && (
-          <TabMotionWrapper id="authorization">
-            <Suspense fallback={<RequestAuthorizationFallback />}>
-              <RequestAuthorization />
-            </Suspense>
-          </TabMotionWrapper>
+          <RequestMetaTableProvider>
+            <TabMotionWrapper id="authorization">
+              <Suspense fallback={<RequestAuthorizationFallback />}>
+                <RequestAuthorization />
+              </Suspense>
+            </TabMotionWrapper>
+          </RequestMetaTableProvider>
         )}
         {activeMetaTab === "headers" && (
-          <TabMotionWrapper id="headers">
-            <Suspense fallback={<RequestHeadersFallback />}>
-              <Headers />
-            </Suspense>
-          </TabMotionWrapper>
+          <RequestMetaTableProvider>
+            <TabMotionWrapper id="headers">
+              <Suspense fallback={<RequestHeadersFallback />}>
+                <Headers />
+              </Suspense>
+            </TabMotionWrapper>
+          </RequestMetaTableProvider>
         )}
         {activeMetaTab === "body" && (
-          <TabMotionWrapper id="body">
+          <RequestMetaTableProvider>
             <TabMotionWrapper id="body">
               <Suspense fallback={<RequestBodyFallback />}>
                 <Body />
               </Suspense>
             </TabMotionWrapper>
-          </TabMotionWrapper>
+          </RequestMetaTableProvider>
         )}
         {activeMetaTab === "code" && (
-          <TabMotionWrapper id="code">
-            <Suspense fallback={<RequestCodeSnippitFallback />}>
-              <RequestCode />
-            </Suspense>
-          </TabMotionWrapper>
+          <RequestMetaTableProvider>
+            <TabMotionWrapper id="code">
+              <Suspense fallback={<RequestCodeSnippitFallback />}>
+                <RequestCode />
+              </Suspense>
+            </TabMotionWrapper>
+          </RequestMetaTableProvider>
         )}
       </AnimatePresence>
     </RequestMetaDataProvider>

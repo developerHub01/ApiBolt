@@ -3,6 +3,7 @@ import type { UrlTokenInterface } from "@shared/types/request-url.types";
 import VariableToken from "@/components/app/collections/request/request/meta-data/url/tokens/VariableToken";
 import AddUrlPart from "@/components/app/collections/request/request/meta-data/url/AddUrlPart";
 import TextToken from "@/components/app/collections/request/request/meta-data/url/tokens/TextToken";
+import PathVariableToken from "@/components/app/collections/request/request/meta-data/url/tokens/PathVariableToken";
 
 interface Props {
   token: UrlTokenInterface;
@@ -14,6 +15,9 @@ const ReorderableToken = memo(({ token }: Props) => {
       {token.type === "text" && <TextToken id={token.id} value={token.value} />}
       {token.type === "env" && (
         <VariableToken id={token.id} value={token.value} />
+      )}
+      {token.type === "path-params" && (
+        <PathVariableToken id={token.id} value={token.value} />
       )}
       <AddUrlPart id={token.id} />
     </Fragment>

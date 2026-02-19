@@ -21,6 +21,7 @@ export const isStrictApiUrl = (apiUrl: string) => {
     return false;
   }
 };
+
 export const filterUrl = (apiUrl: string): string => {
   const url = new URL(apiUrl);
   const protocol = url.protocol ?? "http:";
@@ -46,9 +47,9 @@ export const encodeApiUrl = (apiUrl: string): Array<UrlTokenInterface> => {
   ];
 
   let lastIndex = 0;
-  let match;
+  const matches = [...requestUri.matchAll(URL_VARIABLE_REGEX)];
 
-  while ((match = URL_VARIABLE_REGEX.exec(requestUri)) !== null) {
+  for (const match of matches) {
     // text before variable
     if (match.index > lastIndex) {
       tokens.push({
@@ -58,12 +59,24 @@ export const encodeApiUrl = (apiUrl: string): Array<UrlTokenInterface> => {
       });
     }
 
-    // variable itself
-    tokens.push({
-      id: uuidv4(),
-      value: match[1],
-      type: "env",
-    });
+    const envValue = match[1];
+    const pathVarValue = match[2];
+
+    if (envValue) {
+      // variable itself
+      tokens.push({
+        id: uuidv4(),
+        value: envValue,
+        type: "env",
+      });
+    } else if (pathVarValue) {
+      // path parameter
+      tokens.push({
+        id: uuidv4(),
+        value: pathVarValue,
+        type: "path-params",
+      });
+    }
 
     lastIndex = match.index + match[0].length;
   }
@@ -91,7 +104,13 @@ export const decodeApiUrl = (tokens: Array<UrlTokenInterface> = []): string => {
 
   let pathname = tokens
     .slice(3)
-    .map(token => (token.type === "text" ? token.value : `{{${token.value}}}`))
+    .map(token =>
+      token.type === "text"
+        ? token.value
+        : token.type === "path-params"
+          ? `:${token.value}`
+          : `{{${token.value}}}`,
+    )
     .join("");
   if (pathname && !pathname.startsWith("/")) pathname = `/${pathname}`;
 

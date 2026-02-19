@@ -56,7 +56,7 @@ const VariableToken = memo(({ id, value }: VariableTokenProps) => {
         },
       )}
     >
-      <TokenDragHandler />
+      {/* <TokenDragHandler /> */}
       <EnvVariableSelector
         value={value}
         onChange={handleChangeVariable}

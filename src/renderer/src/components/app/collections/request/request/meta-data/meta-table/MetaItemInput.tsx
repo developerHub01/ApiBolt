@@ -2,7 +2,7 @@ import {
   type ChangeEvent,
   type FocusEvent,
   memo,
-  type RefObject,
+  Ref,
   useCallback,
   useEffect,
   useState,
@@ -18,7 +18,7 @@ interface MetaItemInputProps extends Omit<
   "id" | "value" | "onBlur" | "className" | "ref"
 > {
   id: string;
-  ref: RefObject<HTMLInputElement | null>;
+  ref: Ref<HTMLInputElement>;
   cellType: string;
   value?: string;
   type: "text" | "password";
@@ -84,7 +84,7 @@ const MetaItemInput = memo(
           onBlur={handleBlur}
           className={cn(
             "w-full p-0.5 outline-none md:text-sm",
-            "border-b border-transparent focus:border-primary",
+            "border-y border-transparent focus:border-b-primary",
             "placeholder:capitalize placeholder:opacity-50",
             "disabled:opacity-95",
             className,

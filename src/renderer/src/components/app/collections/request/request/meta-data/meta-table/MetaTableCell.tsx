@@ -1,4 +1,11 @@
-import { memo, useCallback, useRef, useState, type MouseEvent } from "react";
+import {
+  ComponentProps,
+  memo,
+  useCallback,
+  useRef,
+  useState,
+  type MouseEvent,
+} from "react";
 import { TableCell } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import MetaItemInput from "@/components/app/collections/request/request/meta-data/meta-table/MetaItemInput";
@@ -17,7 +24,10 @@ import {
   updateBodyFormDataFile,
 } from "@/context/redux/request-response/thunks/body-form-data";
 
-interface MetaTableCellProps {
+interface MetaTableCellProps extends Omit<
+  ComponentProps<"input">,
+  "value" | "onBlur"
+> {
   cellType: string;
   type?: TMetaTableType;
   id: string;
@@ -38,6 +48,8 @@ const MetaTableCell = memo(
     onBlur,
     inputType = "text",
     prevent = false,
+    disabled = false,
+    ...props
   }: MetaTableCellProps) => {
     const dispatch = useAppDispatch();
     const addButtonRef = useRef<HTMLButtonElement>(null);
@@ -99,8 +111,9 @@ const MetaTableCell = memo(
                     id={id}
                     value={Array.isArray(value) ? "" : value}
                     onBlur={onBlur}
-                    disabled={prevent}
                     type={inputType}
+                    disabled={prevent || disabled}
+                    {...props}
                   />
                 </ParamCell>
               ) : (
@@ -110,8 +123,9 @@ const MetaTableCell = memo(
                   id={id}
                   value={Array.isArray(value) ? "" : value}
                   onBlur={onBlur}
-                  disabled={prevent}
                   type={inputType}
+                  disabled={prevent || disabled}
+                  {...props}
                 />
               )}
             </>

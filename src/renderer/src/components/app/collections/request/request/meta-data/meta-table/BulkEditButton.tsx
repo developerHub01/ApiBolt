@@ -3,8 +3,10 @@ import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { handleToggleMetaBulkEditOpen } from "@/context/redux/request-response/request-response-slice";
 import { selectMetaBulkEditOpen } from "@/context/redux/request-response/selectors/meta-request";
+import { useRequestMetaTable } from "@/context/collections/request/RequestMetaTableProvider";
 
 const BulkEditButton = memo(() => {
+  const { showBulkEdit } = useRequestMetaTable();
   const dispatch = useAppDispatch();
   const isBulkEditorOpen = useAppSelector(selectMetaBulkEditOpen);
 
@@ -12,6 +14,8 @@ const BulkEditButton = memo(() => {
     () => dispatch(handleToggleMetaBulkEditOpen()),
     [dispatch],
   );
+
+  if (!showBulkEdit) return null;
 
   return (
     <Button

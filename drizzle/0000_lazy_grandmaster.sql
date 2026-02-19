@@ -217,6 +217,12 @@ CREATE TABLE `params_table` (
 	FOREIGN KEY (`requestOrFolderMetaId`) REFERENCES `request_or_folder_meta_table`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
+CREATE TABLE `path_params_table` (
+	`requestOrFolderMetaId` text PRIMARY KEY NOT NULL,
+	`map` text DEFAULT '{}' NOT NULL,
+	FOREIGN KEY (`requestOrFolderMetaId`) REFERENCES `request_or_folder_meta_table`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
 CREATE TABLE `projects_table` (
 	`id` text PRIMARY KEY NOT NULL,
 	`name` text DEFAULT 'Project' NOT NULL

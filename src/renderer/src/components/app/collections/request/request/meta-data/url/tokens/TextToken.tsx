@@ -59,7 +59,7 @@ const TextToken = memo(({ id, value }: TextTokenProps) => {
 
   return (
     <div className="flex p-0 gap-0">
-      <TokenDragHandler />
+      {/* <TokenDragHandler /> */}
       <FlexibleHightButtonLikeDiv className="flex-1 rounded-none">
         <p
           contentEditable

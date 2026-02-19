@@ -17,6 +17,7 @@ import type {
   TMetaTableType,
 } from "@shared/types/request-response.types";
 import { useRequestMetaData } from "@/context/collections/request/RequestMetaDataProvider";
+import { useRequestMetaTable } from "@/context/collections/request/RequestMetaTableProvider";
 
 interface MetaTableThreeDotActionProps {
   type: TMetaTableType;
@@ -30,6 +31,8 @@ const MetaTableThreeDotAction = memo(
       handleDeleteAllData,
       handleUpdateMetaShowColumn,
     } = useRequestMetaData();
+
+    const { showThreeDotAction } = useRequestMetaTable();
 
     return (
       <Popover>
@@ -62,25 +65,29 @@ const MetaTableThreeDotAction = memo(
               onChange={() => handleUpdateMetaShowColumn("description")}
             />
           </div>
-          <span className="text-xs px-2 pb-1">Actions</span>
-          <div className="flex flex-col pl-3">
-            <Button
-              size={"sm"}
-              variant={"ghost"}
-              onClick={handleAddNewData}
-              className="justify-start"
-            >
-              <AddIcon /> Add New
-            </Button>
-            <Button
-              size={"sm"}
-              variant={"ghost"}
-              onClick={handleDeleteAllData}
-              className="justify-start"
-            >
-              <DeleteIcon /> Delete All
-            </Button>
-          </div>
+          {showThreeDotAction && (
+            <>
+              <span className="text-xs px-2 pb-1">Actions</span>
+              <div className="flex flex-col pl-3">
+                <Button
+                  size={"sm"}
+                  variant={"ghost"}
+                  onClick={handleAddNewData}
+                  className="justify-start"
+                >
+                  <AddIcon /> Add New
+                </Button>
+                <Button
+                  size={"sm"}
+                  variant={"ghost"}
+                  onClick={handleDeleteAllData}
+                  className="justify-start"
+                >
+                  <DeleteIcon /> Delete All
+                </Button>
+              </div>
+            </>
+          )}
         </PopoverContent>
       </Popover>
     );

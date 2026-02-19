@@ -446,6 +446,26 @@ if (process.contextIsolated) {
         duplicateParams: async (...payload) =>
           await ipcRenderer.invoke("duplicateParams", ...payload),
       };
+    /**
+     * ====================
+     * Params
+     * ====================
+     */
+
+    const electronAPIPathParamsBridge: WindowElectronAPIInterface["electronAPIPathParams"] =
+      {
+        getPathParams: async (...payload) =>
+          await ipcRenderer.invoke("getPathParams", ...payload),
+        deletePathParamsByRequestMetaId: async (...payload) =>
+          await ipcRenderer.invoke(
+            "deletePathParamsByRequestMetaId",
+            ...payload,
+          ),
+        createPathParams: async (...payload) =>
+          await ipcRenderer.invoke("createPathParams", ...payload),
+        updatePathParams: async (...payload) =>
+          await ipcRenderer.invoke("updatePathParams", ...payload),
+      };
 
     /**
      * ====================
@@ -822,6 +842,10 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld(
       "electronAPIParams",
       electronAPIParamsBridge,
+    );
+    contextBridge.exposeInMainWorld(
+      "electronAPIPathParams",
+      electronAPIPathParamsBridge,
     );
     contextBridge.exposeInMainWorld(
       "electronAPIHeaders",

@@ -18,6 +18,7 @@ export type TContentType = "text" | "html" | "xml" | "json" | "javascript";
 export type TActiveTabType =
   | "url"
   | "params"
+  | "path-params"
   | "authorization"
   | "headers"
   | "body"
@@ -25,6 +26,7 @@ export type TActiveTabType =
 
 export type TMetaTableType =
   | "params"
+  | "path-params"
   | "hiddenParams"
   | "headers"
   | "hiddenHeaders"
@@ -89,6 +91,11 @@ export interface ParamHeaderPayloadInterface<T = string> {
   requestOrFolderMetaId: string;
   createdAt: string;
 }
+
+export type PathParamInterface = Record<
+  string,
+  Pick<ParamHeaderPayloadInterface<string>, "value" | "description">
+>;
 
 export type TParamContentType = "text" | "env";
 
@@ -274,6 +281,8 @@ export interface MetaShowColumnInterface {
   requestOrFolderMetaId: string;
   paramsValue: boolean;
   paramsDescription: boolean;
+  pathParamsValue: boolean;
+  pathParamsDescription: boolean;
   headersValue: boolean;
   headersDescription: boolean;
   formDataValue: boolean;

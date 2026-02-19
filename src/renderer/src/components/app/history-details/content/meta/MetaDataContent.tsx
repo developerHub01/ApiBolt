@@ -5,6 +5,7 @@ import Authorization from "@/components/app/history-details/content/meta/authori
 import Body from "@/components/app/history-details/content/meta/body/Body";
 import Params from "@/components/app/history-details/content/meta/params/Params";
 import Headers from "@/components/app/history-details/content/meta/headers/Headers";
+import PathParams from "@/components/app/history-details/content/meta/path-params/PathParams";
 
 const MetaDataContent = () => {
   const { activeMetaTab } = useHistoryDetails();
@@ -14,6 +15,11 @@ const MetaDataContent = () => {
       {activeMetaTab === "params" && (
         <MetaWrapper id="params">
           <Params />
+        </MetaWrapper>
+      )}
+      {activeMetaTab === "path-params" && (
+        <MetaWrapper id="path-params">
+          <PathParams />
         </MetaWrapper>
       )}
       {activeMetaTab === "authorization" && (

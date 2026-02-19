@@ -25,6 +25,10 @@ const tabList: Array<{
     label: "Params",
   },
   {
+    id: "path-params",
+    label: "Path Params",
+  },
+  {
     id: "authorization",
     label: "Authorization",
   },
@@ -56,6 +60,11 @@ const MetaDataTab = memo(() => {
       type: "hiddenParams",
     }),
   );
+  const pathParams = useAppSelector(state =>
+    selectMetaData(state, {
+      type: "path-params",
+    }),
+  );
   const headers = useAppSelector(state =>
     selectMetaData(state, {
       type: "headers",
@@ -70,6 +79,7 @@ const MetaDataTab = memo(() => {
   const tabListWithActivity = useMemo(() => {
     const hiddenParamsCount = hiddenParams?.length ?? 0;
     const paramsCount = params?.filter(param => param.isCheck)?.length ?? 0;
+    const pathParamsCount = pathParams?.length ?? 0;
 
     const headersCount = headers?.filter(header => header.isCheck)?.length ?? 0;
     const hiddenHeadersCount = hiddenHeaders?.length ?? 0;
@@ -87,6 +97,10 @@ const MetaDataTab = memo(() => {
             if (item.count && !totalParams) delete item.count;
             else if (item.count !== totalParams) item.count = totalParams;
           }
+        }
+        if (item.id === "path-params") {
+          if (item.count && !pathParamsCount) delete item.count;
+          else if (item.count !== pathParamsCount) item.count = pathParamsCount;
         } else if (item.id === "headers") {
           const totalHeaders = headersCount + hiddenHeadersCount;
           if (item.count && !totalHeaders) delete item.count;
@@ -98,6 +112,7 @@ const MetaDataTab = memo(() => {
   }, [
     hiddenParams?.length,
     params,
+    pathParams?.length,
     headers,
     hiddenHeaders?.length,
     activeTabList,

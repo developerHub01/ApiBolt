@@ -309,6 +309,16 @@ export const paramsTable = sqliteTable("params_table", {
     .default(sql`(current_timestamp)`),
 });
 
+export const pathParamsTable = sqliteTable("path_params_table", {
+  requestOrFolderMetaId: text()
+    .notNull()
+    .references(() => requestOrFolderMetaTable.id, {
+      onDelete: "cascade",
+    })
+    .primaryKey(),
+  map: text().notNull().default("{}"),
+});
+
 export const headersTable = sqliteTable("headers_table", {
   id: text()
     .primaryKey()
@@ -469,6 +479,8 @@ export const metaShowColumnTable = sqliteTable("meta_show_column_table", {
     }),
   paramsValue: int({ mode: "boolean" }).notNull().default(true),
   paramsDescription: int({ mode: "boolean" }).notNull().default(false),
+  pathParamsValue: int({ mode: "boolean" }).notNull().default(true),
+  pathParamsDescription: int({ mode: "boolean" }).notNull().default(false),
   headersValue: int({ mode: "boolean" }).notNull().default(true),
   headersDescription: int({ mode: "boolean" }).notNull().default(false),
   formDataValue: int({ mode: "boolean" }).notNull().default(true),
@@ -514,6 +526,7 @@ export const historyTable = sqliteTable("history_table", {
   method: text().$type<THTTPMethods>().notNull().default("get"),
   name: text().notNull(),
   params: text(),
+  pathParams: text(),
   headers: text(),
   authorization: text(),
   body: text(),

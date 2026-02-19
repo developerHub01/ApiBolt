@@ -31,6 +31,7 @@ import { ElectronAPILocalPasswordInterface } from "@shared/types/api/electron-lo
 import { ElectronAPISplashWindowInterface } from "@shared/types/api/electron-api-splash-window";
 import { ElectronAPISettingsRequestInterface } from "@shared/types/api/electron-settings-request";
 import { ElectronAPIResponseInterface } from "@shared/types/api/electron-response";
+import { ElectronAPIPathParamsInterface } from "@shared/types/api/electron-path-params";
 
 export interface ElectronResponseInterface {
   success: boolean;
@@ -69,6 +70,7 @@ export interface WindowElectronAPIInterface {
   electronAPITabs: ElectronAPITabsInterface;
   electronAPIFolder: ElectronAPIFolderInterface;
   electronAPIParams: ElectronAPIParamsInterface;
+  electronAPIPathParams: ElectronAPIPathParamsInterface;
   electronAPIHeaders: ElectronAPIHeadersInterface;
   electronAPIHiddenHeadersCheck: ElectronAPIHiddenHeadersCheckInterface;
   electronAPIShowHiddenMetaData: ElectronAPIShowHiddenMetaDataInterface;

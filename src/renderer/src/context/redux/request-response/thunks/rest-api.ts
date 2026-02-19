@@ -140,6 +140,7 @@ export const fetchApi = createAsyncThunk<
       method: payload.method,
       name: state.requestResponse.requestList[requestId].name,
       params: state.requestResponse.params[requestId],
+      pathParams: state.requestResponse.pathParams[requestId],
       headers: rawHeaderData,
       responseStatus: `${response.status} ${response.statusText}`,
       responseSize: {

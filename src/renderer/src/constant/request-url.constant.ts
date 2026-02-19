@@ -27,5 +27,5 @@ export const INITIAL_URL_TOKENS_VALUE: Array<UrlTokenInterface> = [
   },
 ];
 
-export const URL_VARIABLE_REGEX = /\{\{([^{}]+)\}\}/g;
+export const URL_VARIABLE_REGEX = /\{\{([^{}]+)\}\}|:([a-zA-Z0-9_]+)/g;
 export const URL_PURE_VARIABLE_REGEX = /^\{\{([^{}]+)\}\}$/;

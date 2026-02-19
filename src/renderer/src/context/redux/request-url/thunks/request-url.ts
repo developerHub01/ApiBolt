@@ -20,6 +20,13 @@ import {
 } from "@/utils/request-url.utils";
 import { updateParamsFromSearchParams } from "@/context/redux/request-response/thunks/params";
 import { paramsTableToString } from "@/utils/request-response.utils";
+import { TActiveTabType } from "@shared/types/request-response.types";
+
+const urlBlockDependentTabs = new Set<TActiveTabType>([
+  "url",
+  "params",
+  "path-params",
+]);
 
 export const loadApiUrl = createAsyncThunk<
   void,
@@ -60,7 +67,9 @@ export const loadApiUrl = createAsyncThunk<
 
 export const changeRequestApiUrl = createAsyncThunk<
   boolean,
-  { url: string },
+  {
+    url: string;
+  },
   {
     dispatch: AppDispatch;
     state: RootState;
@@ -85,7 +94,7 @@ export const changeRequestApiUrl = createAsyncThunk<
 
       /* if tab is only url or params then update params.   */
       if (
-        !["url", "params"].includes(
+        !urlBlockDependentTabs.has(
           state.requestResponse.activeMetaTab[
             state.requestResponse.selectedTab!
           ],

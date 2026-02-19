@@ -34,6 +34,7 @@ import type {
   TResponseMetaTab,
   TBinaryData,
   HiddenHeadersCheckInterface,
+  PathParamInterface,
 } from "@shared/types/request-response.types";
 import { createSlice, current, type PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
@@ -79,6 +80,7 @@ export interface RequestResponseState {
   requestBodyType: Record<string, TRequestBodyType>;
   rawRequestBodyType: Record<string, TContentType>;
   params: Record<string, Array<ParamInterface>>;
+  pathParams: Record<string, PathParamInterface>;
   showHiddenParams: Record<string, boolean>;
   headers: Record<string, Array<ParamInterface>>;
   hiddenCookie: ParamInterface;
@@ -157,6 +159,7 @@ const initialState: RequestResponseState = {
   requestBodyType: {},
   rawRequestBodyType: {},
   params: {},
+  pathParams: {},
   showHiddenParams: {},
   headers: {},
   hiddenCookie: initialHiddenCookie(),
@@ -726,6 +729,14 @@ export const requestResponseSlice = createSlice({
 
       state.params[state.selectedTab] = action.payload;
     },
+    handleLoadPathParams: (
+      state,
+      action: PayloadAction<PathParamInterface>,
+    ) => {
+      if (!state.selectedTab) return;
+
+      state.pathParams[state.selectedTab] = action.payload;
+    },
     handleSetParams: (
       state,
       action: PayloadAction<{
@@ -738,6 +749,18 @@ export const requestResponseSlice = createSlice({
       if (!id) return;
 
       state.params[id] = params;
+    },
+    handleUpdatePathParams: (
+      state,
+      action: PayloadAction<{
+        requestOfFolderId: string;
+        payload: PathParamInterface;
+      }>,
+    ) => {
+      const { requestOfFolderId = state.selectedTab, payload } = action.payload;
+      if (!requestOfFolderId) return;
+
+      state.pathParams[requestOfFolderId] = payload;
     },
     handleUpdateHiddenAuthorizationParams: (
       state,
@@ -1497,7 +1520,13 @@ export const {
 
   /* params start =========== */
   handleLoadParams,
+  handleSetParams,
   /* params end =========== */
+
+  /* path params start =========== */
+  handleLoadPathParams,
+  handleUpdatePathParams,
+  /* path params end =========== */
 
   /* headers start =========== */
   handleLoadHeaders,
@@ -1506,7 +1535,6 @@ export const {
   handleToggleCollapse,
   handleUpdateRequestResponseSelectedTab,
   handleChangeActiveMetaTab,
-  handleSetParams,
   handleUpdateHiddenAuthorizationParams,
   handleClearHiddenAuthorizationParams,
   handleSetHeaders,
