@@ -8,7 +8,10 @@ import { handleSetShowHiddenMetaData } from "@/context/redux/request-response/re
 ================================= */
 export const loadShowHiddenMetaData = createAsyncThunk<
   void,
-  void | { requestOrFolderId?: string | null | undefined; once?: boolean },
+  void | {
+    requestOrFolderId?: string | null | undefined;
+    once?: boolean;
+  },
   {
     dispatch: AppDispatch;
     state: RootState;
@@ -51,7 +54,10 @@ export const loadShowHiddenMetaData = createAsyncThunk<
 
 export const updateShowHiddenMetaData = createAsyncThunk<
   boolean,
-  { id?: string; payload: Partial<ShowHiddenMetaInterface> },
+  {
+    id?: string;
+    payload: Partial<ShowHiddenMetaInterface>;
+  },
   {
     dispatch: AppDispatch;
     state: RootState;
@@ -90,7 +96,10 @@ export const updateShowHiddenMetaData = createAsyncThunk<
 
 export const toggleShowHiddenMetaData = createAsyncThunk<
   boolean,
-  { id?: string; type: "header" | "param" },
+  {
+    id?: string;
+    type: "header" | "param";
+  },
   {
     dispatch: AppDispatch;
     state: RootState;

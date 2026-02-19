@@ -24,7 +24,10 @@ import type { AuthorizationPayloadInterface } from "@shared/types/authorization.
 ================================= */
 export const loadAuthorization = createAsyncThunk<
   void,
-  { requestOrFolderId?: string; once?: boolean } | void,
+  {
+    requestOrFolderId?: string;
+    once?: boolean;
+  } | void,
   {
     dispatch: AppDispatch;
     state: RootState;

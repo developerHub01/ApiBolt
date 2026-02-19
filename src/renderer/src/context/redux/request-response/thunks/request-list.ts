@@ -459,7 +459,10 @@ export const expendRequestOrFolder = createAsyncThunk<
 
 export const moveRequestOrFolder = createAsyncThunk<
   boolean,
-  { requestId: string; parentId?: string | null },
+  {
+    requestId: string;
+    parentId?: string | null;
+  },
   {
     dispatch: AppDispatch;
     state: RootState;

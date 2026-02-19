@@ -15,7 +15,10 @@ import {
 ================================= */
 export const loadHeaders = createAsyncThunk<
   void,
-  void | { requestOrFolderId?: string | null | undefined; once?: boolean },
+  void | {
+    requestOrFolderId?: string | null | undefined;
+    once?: boolean;
+  },
   {
     dispatch: AppDispatch;
     state: RootState;
@@ -43,7 +46,10 @@ export const loadHeaders = createAsyncThunk<
 
 export const loadHiddenHeaders = createAsyncThunk<
   void,
-  void | { requestOrFolderId?: string | null | undefined; once?: boolean },
+  void | {
+    requestOrFolderId?: string | null | undefined;
+    once?: boolean;
+  },
   {
     dispatch: AppDispatch;
     state: RootState;

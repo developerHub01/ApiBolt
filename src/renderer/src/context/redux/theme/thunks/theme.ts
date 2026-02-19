@@ -36,7 +36,10 @@ export const loadThemeMetaList = createAsyncThunk<
 
 export const loadThemePalette = createAsyncThunk<
   boolean,
-  void | { once?: boolean; themeId?: string },
+  void | {
+    once?: boolean;
+    themeId?: string;
+  },
   {
     dispatch: AppDispatch;
     state: RootState;

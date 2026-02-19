@@ -11,7 +11,10 @@ import { handleLoadMetaShowColumn } from "@/context/redux/request-response/reque
 ================================= */
 export const loadMetaShowColumn = createAsyncThunk<
   void,
-  void | { requestOrFolderId?: string | null | undefined; once?: boolean },
+  void | {
+    requestOrFolderId?: string | null | undefined;
+    once?: boolean;
+  },
   {
     dispatch: AppDispatch;
     state: RootState;

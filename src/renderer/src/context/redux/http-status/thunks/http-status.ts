@@ -9,7 +9,9 @@ import type { HttpStatusUpdatePayloadInterface } from "@shared/types/http-status
 
 export const loadHttpStatus = createAsyncThunk<
   void,
-  void | { once?: boolean },
+  void | {
+    once?: boolean;
+  },
   {
     dispatch: AppDispatch;
     state: RootState;

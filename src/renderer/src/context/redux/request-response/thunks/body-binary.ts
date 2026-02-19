@@ -7,7 +7,10 @@ import { handleLoadBodyBinary } from "@/context/redux/request-response/request-r
 ================================= */
 export const loadRequestBodyBinary = createAsyncThunk<
   void,
-  void | { requestOrFolderId?: string | null | undefined; once?: boolean },
+  void | {
+    requestOrFolderId?: string | null | undefined;
+    once?: boolean;
+  },
   {
     dispatch: AppDispatch;
     state: RootState;

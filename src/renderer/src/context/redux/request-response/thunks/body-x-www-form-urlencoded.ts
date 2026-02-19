@@ -8,7 +8,10 @@ import { handleLoadBodyXWWWFormUrlencoded } from "@/context/redux/request-respon
 ================================= */
 export const loadBodyXWWWFormUrlencoded = createAsyncThunk<
   void,
-  void | { requestOrFolderId?: string | null | undefined; once?: boolean },
+  void | {
+    requestOrFolderId?: string | null | undefined;
+    once?: boolean;
+  },
   {
     dispatch: AppDispatch;
     state: RootState;

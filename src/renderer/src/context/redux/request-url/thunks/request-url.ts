@@ -30,7 +30,10 @@ const urlBlockDependentTabs = new Set<TActiveTabType>([
 
 export const loadApiUrl = createAsyncThunk<
   void,
-  void | { requestOrFolderId?: string | null | undefined; once?: boolean },
+  void | {
+    requestOrFolderId?: string | null | undefined;
+    once?: boolean;
+  },
   {
     dispatch: AppDispatch;
     state: RootState;
@@ -127,7 +130,9 @@ export const changeRequestApiUrl = createAsyncThunk<
 
 export const changeRequestApiUrlWithBackend = createAsyncThunk<
   boolean,
-  { url: string },
+  {
+    url: string;
+  },
   {
     dispatch: AppDispatch;
     state: RootState;
