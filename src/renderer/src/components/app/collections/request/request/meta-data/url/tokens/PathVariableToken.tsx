@@ -56,13 +56,13 @@ const PathVariableToken = memo(({ value: key }: Props) => {
   return (
     <ButtonLikeDiv
       variant={"secondary"}
-      className={cn("w-fit h-auto min-w-30 flex rounded-md py-0")}
+      className={cn("w-fit h-auto min-w-40 flex rounded-md py-0")}
     >
-      <div className="w-full min-w-9 max-w-96 text-center wrap-break-word break-all whitespace-normal font-normal py-2">
+      <div className="w-fit min-w-9 text-center wrap-break-word break-all whitespace-normal font-normal py-2">
         <p className="w-full">:{key}</p>
       </div>
       <Separator orientation="vertical" />
-      <div className="w-full min-w-9 max-w-96 text-center wrap-break-word break-all whitespace-normal font-normal py-2">
+      <div className="w-full min-w-9 text-center wrap-break-word break-all whitespace-normal font-normal py-2">
         <p
           contentEditable
           suppressContentEditableWarning
