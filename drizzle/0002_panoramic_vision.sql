@@ -1,1 +1,0 @@
-ALTER TABLE `meta_show_column_table` RENAME COLUMN "patParamsDescription" TO "pathParamsDescription";

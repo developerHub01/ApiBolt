@@ -18,7 +18,9 @@ export const runMigrations = async () => {
     : path.join(process.cwd(), "drizzle");
 
   try {
-    await migrate(db, { migrationsFolder: migrationsPath });
+    await migrate(db, {
+      migrationsFolder: migrationsPath,
+    });
     console.info("✅ Migrations successful");
   } catch (err) {
     console.error("❌ Migration error:", err);

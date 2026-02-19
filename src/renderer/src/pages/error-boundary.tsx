@@ -11,7 +11,6 @@ import {
 
 const ErrorBoundary = () => {
   const error = useRouteError();
-  // const [showStack, setShowStack] = useState<boolean>(false);
 
   let errorMessage = "An unknown error has occurred within the application.";
   let stack: string | undefined;
@@ -71,20 +70,6 @@ const ErrorBoundary = () => {
           </div>
 
           <div className="flex items-center justify-between gap-4">
-            {/* {stack && (
-              <button
-                type="button"
-                onClick={() => setShowStack(!showStack)}
-                className="text-[10px] font-black text-muted-foreground/50 hover:text-primary flex items-center gap-2 transition-all uppercase tracking-[0.2em] group"
-              >
-                <TerminalIcon
-                  size={14}
-                  className="group-hover:scale-110 transition-transform"
-                />
-                {showStack ? "Collapse Logs" : "Trace Stack"}
-              </button>
-            )} */}
-
             <Button
               onClick={handleQuit}
               variant="destructiveSecondary"
@@ -96,39 +81,6 @@ const ErrorBoundary = () => {
             </Button>
           </div>
         </section>
-
-        {/* <AnimatePresence>
-          {showStack && stack && (
-            <motion.div
-              initial={{
-                opacity: 0,
-                scale: 0.98,
-                y: -10,
-              }}
-              animate={{
-                opacity: 1,
-                scale: 1,
-                y: 0,
-              }}
-              exit={{
-                opacity: 0,
-                scale: 0.98,
-                y: -10,
-              }}
-              transition={{
-                duration: 0.4,
-                ease: [0.23, 1, 0.32, 1],
-              }}
-              className="w-full"
-            >
-              <div className="p-6 bg-zinc-950/95 rounded-4xl border border-white/5 font-mono text-[9px] text-zinc-600 leading-[1.8] overflow-auto max-h-62.5 scrollbar-none shadow-2xl selection:bg-primary/20 backdrop-blur-2xl">
-                <pre className="whitespace-pre-wrap select-text selection:text-zinc-200">
-                  {stack}
-                </pre>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence> */}
       </div>
     </div>
   );

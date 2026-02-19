@@ -1,1 +1,0 @@
-ALTER TABLE `history_table` ADD `pathParams` text;

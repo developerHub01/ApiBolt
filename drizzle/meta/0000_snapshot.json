@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "bb93e34d-c899-42cd-9170-de1f38b4aa70",
+  "id": "877abd67-03ed-446c-9bb5-7300a73db034",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "active_code_snippit_type_table": {
@@ -1119,6 +1119,13 @@
           "notNull": false,
           "autoincrement": false
         },
+        "pathParams": {
+          "name": "pathParams",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "headers": {
           "name": "headers",
           "type": "text",
@@ -1343,6 +1350,22 @@
         },
         "paramsDescription": {
           "name": "paramsDescription",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": false
+        },
+        "pathParamsValue": {
+          "name": "pathParamsValue",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": true
+        },
+        "pathParamsDescription": {
+          "name": "pathParamsDescription",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,

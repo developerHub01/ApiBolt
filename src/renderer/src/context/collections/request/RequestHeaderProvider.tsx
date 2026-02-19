@@ -1,9 +1,6 @@
 import React, { createContext, useContext } from "react";
 import { useParams } from "react-router-dom";
 
-// interface RequestHeaderContext {
-// }
-
 const RequestHeaderContext = createContext<undefined | null>(null);
 
 export const useRequestHeader = () => {

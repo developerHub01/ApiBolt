@@ -1,6 +1,6 @@
 {
   "name": "api-bolt",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A REST API testing platform.",
   "main": "./out/main/index.js",
   "author": "https://github.com/developerHub01",

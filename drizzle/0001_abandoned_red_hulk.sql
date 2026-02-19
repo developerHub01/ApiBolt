@@ -1,2 +1,0 @@
-ALTER TABLE `meta_show_column_table` ADD `pathParamsValue` integer DEFAULT true NOT NULL;--> statement-breakpoint
-ALTER TABLE `meta_show_column_table` ADD `patParamsDescription` integer DEFAULT false NOT NULL;
