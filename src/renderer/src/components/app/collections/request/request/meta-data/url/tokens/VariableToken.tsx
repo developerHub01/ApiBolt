@@ -49,7 +49,7 @@ const VariableToken = memo(({ id, value }: VariableTokenProps) => {
   return (
     <ButtonLikeDiv
       className={cn(
-        "w-fit min-w-40 flex gap-0 p-0 rounded-md bg-transparent hover:bg-transparent ring",
+        "w-fit min-w-40 flex gap-0 p-0 rounded-md overflow-hidden bg-transparent hover:bg-transparent ring",
         {
           "ring-green-500/60": isExist,
           "ring-red-500/60": isNotExist,

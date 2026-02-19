@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from "react";
+import { Fragment, memo, useMemo, useState } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -79,55 +79,61 @@ const EnvVariableSelector = memo(
           </Button>
         </PopoverTrigger>
         <PopoverContent
-          className="w-full max-w-96 p-0"
+          className="w-full max-w-96 h-auto p-0"
           align="start"
           sideOffset={8}
         >
           <Command>
             <CommandInput placeholder="Search variable..." className="h-9" />
-            <CommandList>
+            <CommandList className="max-h-56">
               <CommandEmpty>No variable found.</CommandEmpty>
-              <CommandGroup>
-                {variableList.map(variable => (
-                  <CommandItem
-                    key={variable.variable}
-                    value={variable.variable}
-                    onSelect={handleChange}
-                    className="w-full"
-                  >
-                    <p className="flex-1 overflow-hidden">
-                      {variable.variable}
-                    </p>
-                    <Check
-                      className={cn(
-                        "ml-auto",
-                        value === variable.variable
-                          ? "opacity-100"
-                          : "opacity-0",
-                      )}
-                    />
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-              <CommandSeparator />
-              <CommandGroup>
-                {GLOBAL_ENVS.map(variable => (
-                  <CommandItem
-                    key={variable}
-                    value={variable}
-                    onSelect={handleChange}
-                    className="w-full"
-                  >
-                    <p className="flex-1 overflow-hidden">{variable}</p>
-                    <Check
-                      className={cn(
-                        "ml-auto",
-                        value === variable ? "opacity-100" : "opacity-0",
-                      )}
-                    />
-                  </CommandItem>
-                ))}
-              </CommandGroup>
+              {Boolean(variableList.length) && (
+                <>
+                  <CommandGroup>
+                    {variableList.map(variable => (
+                      <CommandItem
+                        key={variable.variable}
+                        value={variable.variable}
+                        onSelect={handleChange}
+                        className="w-full"
+                      >
+                        <p className="flex-1 overflow-hidden">
+                          {variable.variable}
+                        </p>
+                        <Check
+                          className={cn(
+                            "ml-auto",
+                            value === variable.variable
+                              ? "opacity-100"
+                              : "opacity-0",
+                          )}
+                        />
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                  <CommandSeparator />
+                </>
+              )}
+              {Boolean(GLOBAL_ENVS.length) && (
+                <CommandGroup>
+                  {GLOBAL_ENVS.map(variable => (
+                    <CommandItem
+                      key={variable}
+                      value={variable}
+                      onSelect={handleChange}
+                      className="w-full"
+                    >
+                      <p className="flex-1 overflow-hidden">{variable}</p>
+                      <Check
+                        className={cn(
+                          "ml-auto",
+                          value === variable ? "opacity-100" : "opacity-0",
+                        )}
+                      />
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              )}
             </CommandList>
           </Command>
         </PopoverContent>

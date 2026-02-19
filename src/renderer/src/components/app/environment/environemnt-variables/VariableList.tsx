@@ -9,6 +9,7 @@ import {
   deleteEnvironments,
   updateEnvironments,
 } from "@/context/redux/environments/thunks/environments";
+import EnvironmentVariableListWrapper from "@/components/app/environment/environemnt-variables/EnvironmentVariableListWrapper";
 import animationData from "@/assets/lottie/no-search-item-available.json";
 
 const VariableList = memo(() => {
@@ -61,38 +62,44 @@ const VariableList = memo(() => {
   /* search result not found */
   if (searchQuery && !list.length)
     return (
-      <Empty
-        label="No item matched"
-        animationData={animationData}
-        showFallback
-        innerClassName="w-56"
-      />
+      <EnvironmentVariableListWrapper>
+        <Empty
+          label="No item matched"
+          animationData={animationData}
+          showFallback
+          innerClassName="w-56"
+        />
+      </EnvironmentVariableListWrapper>
     );
 
   /* not variables found */
   if (!Object.keys(environmentsList).length)
     return (
-      <Empty
-        label="No variables available. Create one."
-        description="Your currently have no variables. You can start by clicking on the '+ Add New Variable' button or from right side tab list."
-        showFallback
-      />
+      <EnvironmentVariableListWrapper className="border-0">
+        <Empty
+          label="No variables available. Create one."
+          description="Your currently have no variables. You can start by clicking on the '+ Add New Variable' button or from right side tab list."
+          showFallback
+        />
+      </EnvironmentVariableListWrapper>
     );
 
   return (
-    <Table className="border-b">
-      <VariableListHeader />
-      <TableBody>
-        {list.map(data => (
-          <VariableRow
-            key={data.id}
-            {...data}
-            onChange={(...rest) => handleChange(data.id, ...rest)}
-            onDelete={() => handleDelete(data.id)}
-          />
-        ))}
-      </TableBody>
-    </Table>
+    <EnvironmentVariableListWrapper>
+      <Table className="border-b">
+        <VariableListHeader />
+        <TableBody>
+          {list.map(data => (
+            <VariableRow
+              key={data.id}
+              {...data}
+              onChange={(...rest) => handleChange(data.id, ...rest)}
+              onDelete={() => handleDelete(data.id)}
+            />
+          ))}
+        </TableBody>
+      </Table>
+    </EnvironmentVariableListWrapper>
   );
 });
 
