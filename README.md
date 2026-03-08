@@ -6,6 +6,7 @@
   **A powerful, modern REST API client for efficient API development.**
 
   [![Release](https://img.shields.io/github/v/release/developerHub01/ApiBolt?style=for-the-badge&logo=github&color=FF5733)](https://github.com/developerHub01/ApiBolt/releases)
+  [![Website](https://img.shields.io/badge/Website-apibolt.com-blue?style=for-the-badge&logo=world&logoColor=white)](https://apibolt.com)
   [![License](https://img.shields.io/github/license/developerHub01/ApiBolt?style=for-the-badge&color=2E86C1)](/LICENSE)
   [![Issues](https://img.shields.io/github/issues/developerHub01/ApiBolt?style=for-the-badge&logo=github&color=C70039)](https://github.com/developerHub01/ApiBolt/issues)
   [![Stars](https://img.shields.io/github/stars/developerHub01/ApiBolt?style=for-the-badge&logo=github&color=FFC300)](https://github.com/developerHub01/ApiBolt/stargazers)
@@ -31,6 +32,12 @@ ApiBolt comes packed with a wide range of features to supercharge your API devel
 -   **Keyboard Shortcuts**: Boost your efficiency with a comprehensive set of keyboard shortcuts.
 -   **Local Password Protection**: Secure your projects with an optional local password.
 -   **Cross-Platform**: Available for Windows, macOS, and Linux.
+
+## 🌐 Website
+
+The official website for ApiBolt is available at [apibolt.com](https://apibolt.com). Here you can find more information about the application, download the latest version, and stay up-to-date with the latest news and announcements.
+
+The source code for the website is available on GitHub: [ApiBolt-web](https://github.com/developerHub01/ApiBolt-web)
 
 ## 🗺️ Roadmap
 
