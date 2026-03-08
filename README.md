@@ -1,100 +1,158 @@
-# ApiBolt - REST API Client
+<div align="center">
+  <img src="https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/og.png" alt="ApiBolt Banner" width="400"/>
 
-ApiBolt is a powerful, modern REST API client built for developers who need an efficient and user-friendly way to test, debug, and interact with APIs. Built with Electron and React, ApiBolt delivers a seamless desktop application experience with an intuitive and polished interface. Whether you're building new integrations or troubleshooting existing endpoints, ApiBolt provides all the tools you need to streamline your API development workflow.
+  # ApiBolt
 
-## Tech stack
+  **A powerful, modern REST API client for efficient API development.**
 
-- Electron
-- Electron-vite
-- React
-- Redux
-- Typescript
-- Tailwind
-- Shadcn
-- Framer-motion/motion
-- Nodejs
-- Sqlite
-- Drizzle
-- Supabase with Nuxt (for marketplace and theme API)
+  [![Release](https://img.shields.io/github/v/release/developerHub01/ApiBolt?style=for-the-badge&logo=github&color=FF5733)](https://github.com/developerHub01/ApiBolt/releases)
+  [![License](https://img.shields.io/github/license/developerHub01/ApiBolt?style=for-the-badge&color=2E86C1)](/LICENSE)
+  [![Issues](https://img.shields.io/github/issues/developerHub01/ApiBolt?style=for-the-badge&logo=github&color=C70039)](https://github.com/developerHub01/ApiBolt/issues)
+  [![Stars](https://img.shields.io/github/stars/developerHub01/ApiBolt?style=for-the-badge&logo=github&color=FFC300)](https://github.com/developerHub01/ApiBolt/stargazers)
 
-## Website
+</div>
 
-[Website](https://apibolt.vercel.app/)
+ApiBolt is a feature-rich REST API client designed to streamline the workflow of developers. Built with Electron and React, it offers a seamless and intuitive desktop experience for testing, debugging, and interacting with APIs. Whether you are building new integrations or troubleshooting existing endpoints, ApiBolt provides a comprehensive suite of tools to enhance your productivity.
 
-[![Website](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/website.png)](https://apibolt.vercel.app/)
+The application is currently in active development, with many more exciting features planned for the future.
 
-[![OG Image](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/og.png)](https://apibolt.vercel.app/)
+## ✨ Features
 
-## Preview
+ApiBolt comes packed with a wide range of features to supercharge your API development:
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/01.png "APIBolt splash screen")
+-   **Full Request Customization**: Craft complex API requests with support for various methods (GET, POST, PUT, DELETE, etc.), headers, and body types (JSON, form-data, x-www-form-urlencoded).
+-   **Organized Collections**: Group your API requests into folders and collections for better organization and management.
+-   **Environment Variables**: Manage different environments (e.g., development, staging, production) with ease, using environment-specific variables in your requests.
+-   **Detailed Response Viewer**: Inspect API responses with a clear and organized viewer, including status codes, headers, and formatted JSON.
+-   **Request History**: Keep track of all your past requests for easy access and re-execution.
+-   **Authentication Helpers**: Simplified authentication with support for various methods like Bearer Token and Basic Auth.
+-   **Code Snippet Generation**: Generate client-side code snippets for your requests in various languages and frameworks.
+-   **Customizable Themes**: Personalize your workspace with a theme editor and a marketplace for community-created themes.
+-   **Keyboard Shortcuts**: Boost your efficiency with a comprehensive set of keyboard shortcuts.
+-   **Local Password Protection**: Secure your projects with an optional local password.
+-   **Cross-Platform**: Available for Windows, macOS, and Linux.
 
-`optional, only if enabled local-password`
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/02.png "APIBolt local-password")
+## 🗺️ Roadmap
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/03.png "APIBolt project screen")
+ApiBolt is under active development, and we have many exciting features planned for the future. Here's a glimpse of what's coming:
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/04.png "APIBolt create project")
+-   **WebSocket and gRPC Support**: Expanding beyond REST to support other popular API protocols.
+-   **Advanced Scripting**: Adding pre-request and post-request scripting capabilities for more complex workflows.
+-   **Plugin Architecture**: Introducing a plugin system to allow the community to extend the functionality of ApiBolt.
+-   **Team Collaboration**: Features to allow teams to share collections and collaborate on API development.
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/05.png "APIBolt project screen. projects list")
+Stay tuned for more updates as we continue to improve and expand the capabilities of ApiBolt.
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/06.png "APIBolt collection screen")
+## 🚀 Getting Started
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/07.png "APIBolt collection request screen")
+Follow these instructions to get ApiBolt up and running on your local machine.
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/08.png "APIBolt collection search")
+### Prerequisites
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/09.png "APIBolt collection request")
+-   [Node.js](https://nodejs.org/) (v18.x or later recommended)
+-   [pnpm](https://pnpm.io/)
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/10.png "APIBolt collection folder")
+### Installation
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/11.png "APIBolt request history")
+1.  **Clone the repository:**
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/12.png "APIBolt environments screen")
+    ```bash
+    git clone https://github.com/developerHub01/ApiBolt.git
+    cd ApiBolt
+    ```
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/13.png "APIBolt Auth screen")
+2.  **Install dependencies:**
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/14.png "APIBolt marketplace screen")
+    ```bash
+    pnpm install
+    ```
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/15.png "APIBolt theme editor")
+### Running the Application
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/16.png "APIBolt cookies")
+-   **Development Mode:**
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/17.png "APIBolt shortcuts")
+    To run the app in development mode with hot-reloading:
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/18.png "APIBolt settings")
+    ```bash
+    pnpm dev
+    ```
 
-![Alt text](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/19.png "APIBolt local-password")
+-   **Preview Mode:**
 
-## Installation
+    To preview the production build locally:
 
-### Install Dependencies
+    ```bash
+    pnpm start
+    ```
 
-```
-pnpm install
-```
+## 🖥️ Building the Application
 
-### Run project
+You can build the application for different operating systems using the following commands:
 
-```
-pnpm dev
-```
+-   **Build for your current OS:**
 
-### Run project on preview mode
+    ```bash
+    pnpm build
+    ```
 
-```
-pnpm start
-```
+-   **Build for a specific OS:**
 
-### Build project
+    ```bash
+    pnpm build:win
+    pnpm build:mac
+    pnpm build:linux
+    ```
 
-```
-pnpm build
-```
+## 🛠️ Tech Stack
 
-### Build project based on OS
+ApiBolt is built with a modern and powerful tech stack to ensure a robust and scalable application:
 
-```
-pnpm build:win
-pnpm build:linux
-```
+-   **[Electron](https://www.electronjs.org/)**: The foundation of our desktop app, allowing us to build a cross-platform application with web technologies.
+-   **[React](https://react.dev/)**: Powers the user interface, providing a reactive and component-based architecture for a dynamic user experience.
+-   **[TypeScript](https://www.typescriptlang.org/)**: Brings static typing to JavaScript, enhancing code quality and developer productivity.
+-   **[Redux Toolkit](https://redux-toolkit.js.org/)**: Manages the application's state in a predictable and centralized way.
+-   **[Tailwind CSS](https://tailwindcss.com/)**: A utility-first CSS framework that allows for rapid UI development and easy customization.
+-   **[Shadcn UI](https://ui.shadcn.com/)**: A collection of beautifully designed and accessible UI components that form the backbone of our design system.
+-   **[Drizzle ORM](https://orm.drizzle.team/)**: A modern TypeScript ORM used to interact with the local SQLite database, ensuring type safety and ease of use.
+-   **[Vite](https://vitejs.dev/)**: Provides a blazing-fast development server and build tool, significantly improving the development workflow.
+
+## 🗂️ Database Schema
+
+The database schema for ApiBolt is designed to be simple and efficient. You can view the Entity-Relationship Diagram (ERD) to understand the relationships between the different tables.
+
+-   **[View the ERD (PDF)](/ERD.pdf)**
+-   **[View the Live ERD on Lucidchart](https://lucid.app/lucidchart/66e0b917-b198-4138-86c7-2c5d74893695/edit?viewport_loc=-3418%2C-1135%2C539%2C255%2C0_0&invitationId=inv_4381e06e-813c-4228-9e8c-7596006b186f)**
+
+## 🤝 Contributing
+
+Contributions are welcome! If you have ideas for new features, bug fixes, or improvements, feel free to open an issue or submit a pull request. Please read our contributing guidelines before getting started. (Note: A formal `CONTRIBUTING.md` file is yet to be created).
+
+## 📜 License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## 🖼️ Preview
+
+<div align="center">
+
+| Splash Screen | Local Password |
+| :-----------: | :------------: |
+| ![Splash Screen](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/01.png) | ![Local Password](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/02.png) |
+
+| Projects | Collections |
+| :------: | :-----------: |
+| ![Projects](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/03.png) | ![Collections](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/06.png) |
+
+| Request Interface | History |
+| :---------------: | :-------: |
+| ![Request Interface](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/09.png) | ![History](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/11.png) |
+
+| Environments | Marketplace |
+| :------------: | :-----------: |
+| ![Environments](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/12.png) | ![Marketplace](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/14.png) |
+
+| Theme Editor | Settings |
+| :----------: | :--------: |
+| ![Theme Editor](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/15.png) | ![Settings](https://raw.githubusercontent.com/developerHub01/ApiBolt/refs/heads/development/preview/18.png) |
+
+</div>
