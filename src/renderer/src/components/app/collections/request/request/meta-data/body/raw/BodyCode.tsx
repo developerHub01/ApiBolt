@@ -1,5 +1,4 @@
 import { memo, useCallback, useEffect, useState } from "react";
-import { formatCode, getParser } from "@/utils/prettier.utils";
 import { useRequestBody } from "@/context/collections/request/RequestBodyProvider";
 import Code from "@/components/ui/code";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -12,7 +11,8 @@ import {
 } from "@/context/redux/request-response/selectors/body-raw";
 import { codeFormatter } from "@/utils/code";
 import useCheckApplyingCodeIndentationSize from "@/hooks/setting/use-check-applying-code-indentation-size";
-import ErrorAlert1 from "@/components/ui/error-alert1";
+import CodeErrorWrapper from "@/components/ui/code-error-wrapper";
+import useCodeError from "@/hooks/code/use-code-error";
 
 const bodyTypeLabel = (type: TContentType) =>
   type === "html"
@@ -35,7 +35,11 @@ const BodyCode = memo(() => {
   const rawRequestBodyType = useAppSelector(selectRawRequestBodyType);
   const indentationSize = useCheckApplyingCodeIndentationSize();
   const [code, setCode] = useState<string>(rawData);
-  const [isError, setIsError] = useState<boolean>(false);
+  const { isError } = useCodeError({
+    code,
+    contentType: rawRequestBodyType,
+    indentationSize,
+  });
 
   const handleFormat = useCallback(
     async () =>
@@ -52,31 +56,6 @@ const BodyCode = memo(() => {
     setCode(rawData);
   }, [rawData]);
 
-  useEffect(() => {
-    const controller = new AbortController();
-    const timeout = setTimeout(async () => {
-      const parser = getParser(rawRequestBodyType);
-      const codeString = code.trim();
-      if (!codeString) {
-        /* if empty then no need to show error */
-        setIsError(false);
-        return;
-      }
-      const { success = false } = await formatCode(
-        codeString,
-        parser,
-        indentationSize,
-      );
-      // Only update if different
-      setIsError(prev => (prev !== !success ? !success : prev));
-    }, 500); // debounce for 500ms
-
-    return () => {
-      clearTimeout(timeout);
-      controller.abort();
-    };
-  }, [code, indentationSize, rawRequestBodyType]);
-
   const handleChange = useCallback((value: string) => setCode(value), []);
 
   const handleBlur = useCallback(
@@ -85,33 +64,34 @@ const BodyCode = memo(() => {
   );
 
   return (
-    <ScrollArea
-      className={cn(
-        "flex-1 min-h-0 h-full overflow-hidden [&>div>div]:h-full relative",
-        "rounded-md border",
-        "bg-background/10",
-        "backdrop-blur-xs",
-        {
-          "border-destructive/50 ring-1 ring-destructive/50": isError,
-        },
-      )}
+    <CodeErrorWrapper
+      isError={isError}
+      errorLabel="Request body have some errors."
+      className="rounded-md border"
     >
-      <Code
-        fontSize={16}
-        code={code}
-        contentType={rawRequestBodyType}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        zoomable={true}
-        lineWrap={codeLineWrap}
-        handleLineWrap={handleToggleCodeLineWrap}
-        handleFormat={handleFormat}
-        placeholder={placeholderLabel(rawRequestBodyType)}
-        className="static"
-      />
-      <ErrorAlert1 isError={isError} message="Request body have some errors." />
-      <ScrollBar orientation="horizontal" />
-    </ScrollArea>
+      <ScrollArea
+        className={cn(
+          "flex-1 min-h-0 h-full overflow-hidden [&>div>div]:h-full",
+          "bg-background/10",
+          "backdrop-blur-xs",
+        )}
+      >
+        <Code
+          fontSize={16}
+          code={code}
+          contentType={rawRequestBodyType}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          zoomable={true}
+          lineWrap={codeLineWrap}
+          handleLineWrap={handleToggleCodeLineWrap}
+          handleFormat={handleFormat}
+          placeholder={placeholderLabel(rawRequestBodyType)}
+          className="static"
+        />
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
+    </CodeErrorWrapper>
   );
 });
 BodyCode.displayName = "Request data code area";
