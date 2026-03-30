@@ -44,6 +44,10 @@ const tabList: Array<{
     id: "code",
     label: "Code",
   },
+  {
+    id: "script",
+    label: "Script",
+  },
 ];
 
 const MetaDataTab = memo(() => {

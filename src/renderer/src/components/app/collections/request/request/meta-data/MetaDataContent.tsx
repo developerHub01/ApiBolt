@@ -28,6 +28,10 @@ const RequestCode = lazy(
   () =>
     import("@/components/app/collections/request/request/meta-data/code/RequestCode"),
 );
+const RequestScript = lazy(
+  () =>
+    import("@/components/app/collections/request/request/meta-data/script/RequestScript"),
+);
 import { useAppSelector } from "@/context/redux/hooks";
 import RequestMetaDataProvider from "@/context/collections/request/RequestMetaDataProvider";
 import TabMotionWrapper from "@/components/app/collections/request/request/meta-data/TabMotionWrapper";
@@ -112,6 +116,15 @@ const MetaDataContent = memo(() => {
             <TabMotionWrapper id="code">
               <Suspense fallback={<RequestCodeSnippitFallback />}>
                 <RequestCode />
+              </Suspense>
+            </TabMotionWrapper>
+          </RequestMetaTableProvider>
+        )}
+        {activeMetaTab === "script" && (
+          <RequestMetaTableProvider>
+            <TabMotionWrapper id="script">
+              <Suspense fallback={<RequestCodeSnippitFallback />}>
+                <RequestScript />
               </Suspense>
             </TabMotionWrapper>
           </RequestMetaTableProvider>

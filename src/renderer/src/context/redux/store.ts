@@ -12,6 +12,7 @@ import settingReducer from "@/context/redux/setting/setting-slice";
 import settingRequestReducer from "@/context/redux/setting-request/setting-request-slice";
 import cookiesReducer from "@/context/redux/cookies/cookies-slice";
 import requestUrlReducer from "@/context/redux/request-url/request-url-slice";
+import scriptReducer from "@/context/redux/script/script-slice";
 import httpStatusReducer from "@/context/redux/http-status/http-status-slice";
 import statusReducer from "@/context/redux/status/status-slice";
 import historyReducer from "@/context/redux/history/history-slice";
@@ -33,6 +34,7 @@ export const store = configureStore({
     settingRequest: settingRequestReducer,
     cookies: cookiesReducer,
     requestUrl: requestUrlReducer,
+    script: scriptReducer,
     httpStatus: httpStatusReducer,
     status: statusReducer,
     history: historyReducer,
