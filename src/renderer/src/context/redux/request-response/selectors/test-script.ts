@@ -4,7 +4,7 @@ import type { RootState } from "@/context/redux/store";
 export const selectSelectedScript = createSelector(
   [
     (state: RootState) =>
-      state.script.script[state.requestResponse.selectedTab ?? ""],
+      state.script.testScript[state.requestResponse.selectedTab ?? ""],
   ],
   script => script,
 );

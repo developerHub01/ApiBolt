@@ -16,6 +16,7 @@ import KeyboardShortcuts from "@/components/app/keyboard-shortcuts/KeyboardShort
 import History from "@/components/app/history-details/History";
 import LocalPassword from "@/components/app/local-password/LocalPassword";
 import ThemePreviewMode from "@/components/ThemePreviewMode";
+import ClearnRequestWarningDialog from "@/components/app/collections/request/ClearnRequestWarningDialog";
 
 const AppLayout = () => {
   return (
@@ -86,6 +87,7 @@ const DialogsAnchor = memo(() => {
       <Cookies />
       <KeyboardShortcuts />
       <History />
+      <ClearnRequestWarningDialog />
     </>
   );
 });

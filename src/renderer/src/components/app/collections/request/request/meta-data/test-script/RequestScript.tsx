@@ -1,6 +1,6 @@
 import { memo } from "react";
-import RequestTestScriptProvider from "@/context/collections/request/meta-data/script/RequestTestScriptProvider";
-import RequestScriptContent from "@/components/app/collections/request/request/meta-data/script/RequestScriptContent";
+import RequestTestScriptProvider from "@/context/collections/request/meta-data/test-script/RequestTestScriptProvider";
+import RequestScriptContent from "@/components/app/collections/request/request/meta-data/test-script/RequestScriptContent";
 
 const RequestScript = memo(() => {
   return (

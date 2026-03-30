@@ -2,7 +2,7 @@ import { memo } from "react";
 import Code from "@/components/ui/code";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
-import { useRequestTestScript } from "@/context/collections/request/meta-data/script/RequestTestScriptProvider";
+import { useRequestTestScript } from "@/context/collections/request/meta-data/test-script/RequestTestScriptProvider";
 import useCodeError from "@/hooks/code/use-code-error";
 import CodeErrorWrapper from "@/components/ui/code-error-wrapper";
 

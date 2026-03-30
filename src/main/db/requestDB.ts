@@ -13,6 +13,7 @@ import {
   paramsTable,
   requestMetaTabTable,
   requestOrFolderMetaTable,
+  testScriptTable,
 } from "@/main/db/schema.js";
 import { db } from "@/main/db/index.js";
 import { getActiveProject } from "@/main/db/projectsDB.js";
@@ -63,6 +64,9 @@ export const clearRequest = async (id: string) => {
     await tsx
       .delete(bodyRawTable)
       .where(eq(bodyRawTable.requestOrFolderMetaId, id));
+
+    /* clear test script */
+    await tsx.delete(testScriptTable).where(eq(testScriptTable.requestId, id));
 
     /* clear request meta tab data */
     await tsx

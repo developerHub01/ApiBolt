@@ -21,6 +21,7 @@ import {
 } from "@/context/redux/request-response/thunks/request";
 import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
 import useCustomToast from "@/hooks/ui/use-custom-toast";
+import { handleChangeIsClearingRequestOrFolderId } from "@/context/redux/request-response/request-response-slice";
 
 const RequestTopRight = () => {
   const dispatch = useAppDispatch();
@@ -47,14 +48,11 @@ const RequestTopRight = () => {
     });
   }, [dispatch, toast]);
 
-  const handleClear = useCallback(async () => {
-    const { success, message } = await dispatch(clearRequest()).unwrap();
-    toast({
-      type: success ? "success" : "error",
-      title: success ? "Cleared" : "Clear Error",
-      description: message,
-    });
-  }, [dispatch, toast]);
+  const handleClear = useCallback(() => {
+    if (!selectedTab) return;
+
+    dispatch(handleChangeIsClearingRequestOrFolderId(selectedTab));
+  }, [dispatch, selectedTab]);
 
   const actionList = [
     {

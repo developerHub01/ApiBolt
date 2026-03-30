@@ -304,6 +304,13 @@ CREATE TABLE `tabs_table` (
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `tabs_table_projectId_unique` ON `tabs_table` (`projectId`);--> statement-breakpoint
+CREATE TABLE `test_script_table` (
+	`requestId` text PRIMARY KEY NOT NULL,
+	`script` text DEFAULT '' NOT NULL,
+	FOREIGN KEY (`requestId`) REFERENCES `request_or_folder_meta_table`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
+CREATE UNIQUE INDEX `test_script_table_requestId_unique` ON `test_script_table` (`requestId`);--> statement-breakpoint
 CREATE TABLE `theme_table` (
 	`id` text PRIMARY KEY NOT NULL,
 	`name` text DEFAULT 'theme' NOT NULL,

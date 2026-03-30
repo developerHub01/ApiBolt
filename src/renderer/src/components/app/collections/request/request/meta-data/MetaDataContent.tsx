@@ -30,7 +30,7 @@ const RequestCode = lazy(
 );
 const RequestScript = lazy(
   () =>
-    import("@/components/app/collections/request/request/meta-data/script/RequestScript"),
+    import("@/components/app/collections/request/request/meta-data/test-script/RequestScript"),
 );
 import { useAppSelector } from "@/context/redux/hooks";
 import RequestMetaDataProvider from "@/context/collections/request/RequestMetaDataProvider";

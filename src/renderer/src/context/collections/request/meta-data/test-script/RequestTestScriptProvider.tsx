@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { updateScript } from "@/context/redux/script/thunks/script";
-import { selectSelectedScript } from "@/context/redux/script/selectors/theme";
+import { updateTestScript } from "@renderer/context/redux/request-response/thunks/test-script";
+import { selectSelectedScript } from "@renderer/context/redux/request-response/selectors/test-script";
 
 interface RequestTestScriptContext {
   code: string;
@@ -45,7 +45,7 @@ const RequestTestScriptProvider = ({
 
   const handleBlurScript = () =>
     dispatch(
-      updateScript({
+      updateTestScript({
         script: code ?? "",
       }),
     );

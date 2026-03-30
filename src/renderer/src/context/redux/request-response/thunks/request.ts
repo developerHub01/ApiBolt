@@ -10,6 +10,7 @@ import {
   handleSetParams,
   handleSetResponse,
   handleUpdateRequestOrFolderMeta,
+  handleClearTestScript,
 } from "@/context/redux/request-response/request-response-slice";
 import { handleRequestUrlClearTokens } from "@/context/redux/request-url/request-url-slice";
 import { loadAuthorization } from "@/context/redux/request-response/thunks/auth";
@@ -34,80 +35,88 @@ import {
 
 export const clearRequest = createAsyncThunk<
   ElectronResponseInterface,
-  void | string,
+  void | {
+    id?: string;
+    clearTestScript?: boolean;
+  },
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->("request-response/clearRequest", async (id, { getState, dispatch }) => {
-  try {
-    const state = getState() as RootState;
-    const requestId = id ?? state.requestResponse.selectedTab;
-    if (!requestId || !state.requestResponse.requestList[requestId].method)
+>(
+  "request-response/clearRequest",
+  async ({ id, clearTestScript = false } = {}, { getState, dispatch }) => {
+    try {
+      const state = getState() as RootState;
+      const requestId = id ?? state.requestResponse.selectedTab;
+
+      if (!requestId || !state.requestResponse.requestList[requestId].method)
+        return {
+          success: false,
+          message: "No request active",
+        };
+
+      const response = await window.electronAPIRequest.clearRequest(requestId);
+      if (!response) return response;
+
+      dispatch(
+        handleSetParams({
+          id: requestId,
+          params: [],
+        }),
+      );
+      dispatch(
+        handleSetHeaders({
+          id: requestId,
+          headers: [],
+        }),
+      );
+      dispatch(
+        handleSetBodyFormData({
+          id: requestId,
+          formData: [],
+        }),
+      );
+      dispatch(
+        handleSetBodyXWWWFormUrlencoded({
+          id: requestId,
+          bodyXWWWFormUrlencoded: [],
+        }),
+      );
+      dispatch(handleClearBodyRaw(requestId));
+      dispatch(handleClearBodyBinary(requestId));
+      if (clearTestScript) dispatch(handleClearTestScript(requestId));
+      dispatch(handleClearReqestMetaTab(requestId));
+      dispatch(
+        handleUpdateRequestOrFolderMeta({
+          id: requestId,
+          name: undefined,
+          method: "get",
+        }),
+      );
+      dispatch(handleRequestUrlClearTokens(requestId));
+      dispatch(
+        handleSetResponse({
+          id: requestId,
+          response: null,
+        }),
+      );
+      await dispatch(
+        loadAuthorization({
+          requestOrFolderId: requestId,
+        }),
+      );
+
+      return response;
+    } catch (error) {
+      console.error(error);
       return {
         success: false,
-        message: "No request active",
+        message: "Something went wrong while clearing the request.",
       };
-
-    const response = await window.electronAPIRequest.clearRequest(requestId);
-    if (!response) return response;
-
-    dispatch(
-      handleSetParams({
-        id: requestId,
-        params: [],
-      }),
-    );
-    dispatch(
-      handleSetHeaders({
-        id: requestId,
-        headers: [],
-      }),
-    );
-    dispatch(
-      handleSetBodyFormData({
-        id: requestId,
-        formData: [],
-      }),
-    );
-    dispatch(
-      handleSetBodyXWWWFormUrlencoded({
-        id: requestId,
-        bodyXWWWFormUrlencoded: [],
-      }),
-    );
-    dispatch(handleClearBodyRaw(requestId));
-    dispatch(handleClearBodyBinary(requestId));
-    dispatch(handleClearReqestMetaTab(requestId));
-    dispatch(
-      handleUpdateRequestOrFolderMeta({
-        id: requestId,
-        name: undefined,
-        method: "get",
-      }),
-    );
-    dispatch(handleRequestUrlClearTokens(requestId));
-    dispatch(
-      handleSetResponse({
-        id: requestId,
-        response: null,
-      }),
-    );
-    await dispatch(
-      loadAuthorization({
-        requestOrFolderId: requestId,
-      }),
-    );
-
-    return response;
-  } catch (error) {
-    console.error(error);
-    return {
-      success: false,
-      message: "Something went wrong while clearing the request.",
-    };
-  }
-});
+    }
+  },
+);
 
 export const exportRequest = createAsyncThunk<
   ElectronResponseInterface,

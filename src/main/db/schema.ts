@@ -495,14 +495,14 @@ export const metaShowColumnTable = sqliteTable("meta_show_column_table", {
 });
 
 export const testScriptTable = sqliteTable("test_script_table", {
-  requestOrFolderMetaId: text()
+  requestId: text()
     .primaryKey()
     .notNull()
     .unique()
     .references(() => requestOrFolderMetaTable.id, {
       onDelete: "cascade",
     }),
-  script: text(),
+  script: text().notNull().default(""),
 });
 
 export const keyboardShortcutTable = sqliteTable(

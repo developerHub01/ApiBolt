@@ -51,6 +51,7 @@ import {
   DEFAULT_FOLDER_TITLE,
 } from "@/constant/folder.constant";
 import type { TRequestCodeType } from "@shared/types/code-snippit.types";
+import { TestScriptPayloadInterface } from "@shared/types/test-script.types";
 
 export interface RequestResponseState {
   codeSnippitType: TRequestCodeType | null;
@@ -58,6 +59,7 @@ export interface RequestResponseState {
   loadedRequestList: Record<string, boolean>;
   isRequestListLoaded: boolean;
   deleteFolderOrRequestId: string;
+  isClearingRequestOrFolderId: string | null;
   requestListCollapsed: boolean;
 
   tabList: Array<string>;
@@ -123,6 +125,8 @@ export interface RequestResponseState {
   activeResponseDataTab: Record<string, TResponseDataTab>;
   responseCodeWrap: Record<string, boolean>;
 
+  testScript: Record<string, string>;
+
   folderTitle: Record<string, string>;
   folderDescription: Record<string, string>;
   folderDescriptionActiveTab: Record<string, TRequestFolderDescriptionTab>;
@@ -137,6 +141,7 @@ const initialState: RequestResponseState = {
   loadedRequestList: {},
   isRequestListLoaded: false,
   deleteFolderOrRequestId: "",
+  isClearingRequestOrFolderId: null,
   requestListCollapsed: false,
 
   tabList: [],
@@ -182,6 +187,8 @@ const initialState: RequestResponseState = {
   activeResponseMetaTab: {},
   activeResponseDataTab: {},
   responseCodeWrap: {},
+
+  testScript: {},
 
   folderTitle: {},
   folderDescription: {},
@@ -476,6 +483,12 @@ export const requestResponseSlice = createSlice({
       action: PayloadAction<string>,
     ) => {
       state.deleteFolderOrRequestId = action.payload;
+    },
+    handleChangeIsClearingRequestOrFolderId: (
+      state,
+      action: PayloadAction<string | null | undefined>,
+    ) => {
+      state.isClearingRequestOrFolderId = action.payload ?? null;
     },
     handleChangeCollapseAllRequestOrFolder: state => {
       Object.keys(state.requestList).forEach(id => {
@@ -1262,6 +1275,29 @@ export const requestResponseSlice = createSlice({
         action.payload ?? !state.responseCodeWrap[selectedTab];
     },
 
+    /* ================ Test Script start =================== */
+    handleLoadTestScript: (
+      state,
+      action: PayloadAction<TestScriptPayloadInterface>,
+    ) => {
+      state.testScript[action.payload.requestId] = action.payload.script;
+    },
+    handleUpdateTestScript: (
+      state,
+      action: PayloadAction<{
+        id: string;
+        script: string;
+      }>,
+    ) => {
+      const script = action.payload.script ?? undefined;
+      state.testScript[action.payload.id] = script;
+    },
+    handleClearTestScript: (state, action: PayloadAction<string>) => {
+      delete state.testScript[action.payload];
+    },
+
+    /* ================ Test Script end =================== */
+
     /* ================ Request Folder start =================== */
     handleLoadFolder: (
       state,
@@ -1490,6 +1526,7 @@ export const {
   handleUpdateRequestOrFolder,
   handleDeleteAllRequestOrFolder,
   handleChangeDeleteFolderOrRequestId,
+  handleChangeIsClearingRequestOrFolderId,
   handleChangeCollapseAllRequestOrFolder,
   handleCreateSingleRequest,
   handleCreateRestApiBasic,
@@ -1572,6 +1609,10 @@ export const {
   handleActiveResponseMetaTab,
   handleActiveResponseDataTab,
   handleToggleResponseCodeWrap,
+
+  handleLoadTestScript,
+  handleUpdateTestScript,
+  handleClearTestScript,
 
   handleLoadFolder,
   handleUpdateFolder,

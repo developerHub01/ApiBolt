@@ -5,13 +5,10 @@ import { getTabList } from "@/main/db/tabsDB.js";
 import { ElectronAPITestScriptInterface } from "@shared/types/api/electron-test-script";
 
 export const getTestScript = async (
-  ...[requestOrFolderMetaId]: Parameters<
-    ElectronAPITestScriptInterface["getTestScript"]
-  >
+  ...[requestId]: Parameters<ElectronAPITestScriptInterface["getTestScript"]>
 ): ReturnType<ElectronAPITestScriptInterface["getTestScript"]> => {
-  if (!requestOrFolderMetaId)
-    requestOrFolderMetaId = (await getTabList())?.selectedTab;
-  if (!requestOrFolderMetaId) throw new Error();
+  if (!requestId) requestId = (await getTabList())?.selectedTab;
+  if (!requestId) throw new Error();
 
   try {
     return (
@@ -19,15 +16,13 @@ export const getTestScript = async (
         await db
           .select()
           .from(testScriptTable)
-          .where(
-            eq(testScriptTable.requestOrFolderMetaId, requestOrFolderMetaId),
-          )
+          .where(eq(testScriptTable.requestId, requestId))
           .limit(1)
-      )?.[0]?.script ?? ""
+      )?.[0] ?? null
     );
   } catch (error) {
     console.error(error);
-    return "";
+    return null;
   }
 };
 
@@ -43,7 +38,7 @@ export const createTestScript = async (
     await db
       .insert(testScriptTable)
       .values({
-        requestOrFolderMetaId: requestId,
+        requestId,
         script,
       })
       .onConflictDoNothing();
@@ -66,11 +61,11 @@ export const updateTestScript = async (
     await db
       .insert(testScriptTable)
       .values({
-        requestOrFolderMetaId: requestId,
+        requestId,
         script,
       })
       .onConflictDoUpdate({
-        target: [testScriptTable.requestOrFolderMetaId],
+        target: [testScriptTable.requestId],
         set: {
           script,
         },
@@ -83,22 +78,17 @@ export const updateTestScript = async (
 };
 
 export const deleteTestScript = async (
-  ...[requestOrFolderMetaId]: Parameters<
-    ElectronAPITestScriptInterface["deleteTestScript"]
-  >
+  ...[requestId]: Parameters<ElectronAPITestScriptInterface["deleteTestScript"]>
 ): ReturnType<ElectronAPITestScriptInterface["deleteTestScript"]> => {
-  if (!requestOrFolderMetaId)
-    requestOrFolderMetaId = (await getTabList())?.selectedTab;
-  if (!requestOrFolderMetaId) throw new Error();
+  if (!requestId) requestId = (await getTabList())?.selectedTab;
+  if (!requestId) throw new Error();
 
   try {
     return (
       (
         await db
           .delete(testScriptTable)
-          .where(
-            eq(testScriptTable.requestOrFolderMetaId, requestOrFolderMetaId),
-          )
+          .where(eq(testScriptTable.requestId, requestId))
       ).rowsAffected > 0
     );
   } catch (error) {

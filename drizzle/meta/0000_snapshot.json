@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "877abd67-03ed-446c-9bb5-7300a73db034",
+  "id": "4f852a6a-77e1-4dbf-8203-3dd31ee41397",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "active_code_snippit_type_table": {
@@ -2111,6 +2111,53 @@
           "tableTo": "projects_table",
           "columnsFrom": [
             "projectId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "test_script_table": {
+      "name": "test_script_table",
+      "columns": {
+        "requestId": {
+          "name": "requestId",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "script": {
+          "name": "script",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        }
+      },
+      "indexes": {
+        "test_script_table_requestId_unique": {
+          "name": "test_script_table_requestId_unique",
+          "columns": [
+            "requestId"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "test_script_table_requestId_request_or_folder_meta_table_id_fk": {
+          "name": "test_script_table_requestId_request_or_folder_meta_table_id_fk",
+          "tableFrom": "test_script_table",
+          "tableTo": "request_or_folder_meta_table",
+          "columnsFrom": [
+            "requestId"
           ],
           "columnsTo": [
             "id"
