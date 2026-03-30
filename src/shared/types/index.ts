@@ -32,6 +32,7 @@ import { ElectronAPISplashWindowInterface } from "@shared/types/api/electron-api
 import { ElectronAPISettingsRequestInterface } from "@shared/types/api/electron-settings-request";
 import { ElectronAPIResponseInterface } from "@shared/types/api/electron-response";
 import { ElectronAPIPathParamsInterface } from "@shared/types/api/electron-path-params";
+import { ElectronAPITestScriptInterface } from "@shared/types/api/electron-test-script";
 
 export interface ElectronResponseInterface {
   success: boolean;
@@ -76,6 +77,7 @@ export interface WindowElectronAPIInterface {
   electronAPIShowHiddenMetaData: ElectronAPIShowHiddenMetaDataInterface;
   electronAPIBodyRaw: ElectronAPIBodyRawInterface;
   electronAPIBodyBinary: ElectronAPIBodyBinaryInterface;
+  electronAPITestScript: ElectronAPITestScriptInterface;
   electronAPIRequestMetaTab: ElectronAPIRequestMetaTabInterface;
   electronAPIBodyXWWWFormUrlencoded: ElectronAPIBodyXWWWFormUrlencodedInterface;
   electronAPIBodyFormData: ElectronAPIBodyFormDataInterface;

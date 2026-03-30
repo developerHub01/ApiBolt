@@ -575,6 +575,23 @@ if (process.contextIsolated) {
 
     /**
      * ====================
+     * Body binary data
+     * ====================
+     */
+    const electronAPITestScriptBridge: WindowElectronAPIInterface["electronAPITestScript"] =
+      {
+        getTestScript: async (...payload) =>
+          await ipcRenderer.invoke("getTestScript", ...payload),
+        createTestScript: async (...payload) =>
+          await ipcRenderer.invoke("createTestScript", ...payload),
+        updateTestScript: async (...payload) =>
+          await ipcRenderer.invoke("updateTestScript", ...payload),
+        deleteTestScript: async (...payload) =>
+          await ipcRenderer.invoke("deleteTestScript", ...payload),
+      };
+
+    /**
+     * ====================
      * Request meta tab
      * ====================
      */
@@ -862,6 +879,10 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld(
       "electronAPIBodyBinary",
       electronAPIBodyBinaryBridge,
+    );
+    contextBridge.exposeInMainWorld(
+      "electronAPITestScript",
+      electronAPITestScriptBridge,
     );
     contextBridge.exposeInMainWorld(
       "electronAPIRequestMetaTab",

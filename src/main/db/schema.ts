@@ -494,6 +494,17 @@ export const metaShowColumnTable = sqliteTable("meta_show_column_table", {
     .default(sql`(current_timestamp)`),
 });
 
+export const testScriptTable = sqliteTable("test_script_table", {
+  requestOrFolderMetaId: text()
+    .primaryKey()
+    .notNull()
+    .unique()
+    .references(() => requestOrFolderMetaTable.id, {
+      onDelete: "cascade",
+    }),
+  script: text(),
+});
+
 export const keyboardShortcutTable = sqliteTable(
   "keyboard_shortcut_table",
   {

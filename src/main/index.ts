@@ -61,6 +61,7 @@ import { responseHandler } from "@/main/ipc/responseHandler";
 import { sysmteHandler } from "@/main/ipc/sysmteHandler";
 import { WEBSITE_BASE_URL } from "@shared/constant/api-bolt";
 import { pathParamsHandlers } from "@/main/ipc/pathParamsHandlers";
+import { testScriptHandler } from "@/main/ipc/testScriptHandler";
 
 /***
  * App basic setup declaration
@@ -309,6 +310,7 @@ if (!gotTheLock) {
     showHiddenMetaDataHandler();
     bodyRawHandler();
     bodyBinaryHandler();
+    testScriptHandler();
     requestMetaTabHandler();
     bodyXWWWFormUrlencodedHandlers();
     bodyFormDataHandlers();
