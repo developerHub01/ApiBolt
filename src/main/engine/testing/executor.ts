@@ -1,5 +1,5 @@
 import { VM } from "vm2";
-import { ABTestEngine } from "@/main/enginee/testing/enginee";
+import { ABTestEngine } from "@/main/engine/testing/engine";
 import { ResponseInterface } from "@shared/types/request-response.types";
 
 export const executeTest = (code: string, response: ResponseInterface) => {

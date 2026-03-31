@@ -6,7 +6,7 @@ import {
   getTestScript,
   updateTestScript,
 } from "@/main/db/testScriptDB";
-import { executeTest } from "../enginee/testing/executor";
+import { executeTest } from "../engine/testing/executor";
 
 export const testScriptHandler = (): void => {
   ipcMain.handle(
