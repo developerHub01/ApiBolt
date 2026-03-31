@@ -19,6 +19,7 @@ import { loadShowHiddenMetaData } from "@/context/redux/request-response/thunks/
 import { selectIsRequestOrFolderExist } from "@/context/redux/request-response/selectors/request-list";
 import RequestOrFolderNotFound from "@/components/app/collections/RequestOrFolderNotFound";
 import { loadPathParams } from "@/context/redux/request-response/thunks/path-params";
+import { loadTestScript } from "@/context/redux/request-response/thunks/test-script";
 
 const RequestLayout = () => {
   const dispatch = useAppDispatch();
@@ -46,6 +47,7 @@ const RequestLayout = () => {
       loadBodyXWWWFormUrlencoded,
       loadRequestBodyRaw,
       loadRequestBodyBinary,
+      loadTestScript,
       loadApiUrl,
     ].forEach(action => dispatch(action(payload)));
   }, [dispatch, isExist, requestOrFolderId]);
