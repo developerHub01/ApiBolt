@@ -27,6 +27,10 @@ import {
   unInstallTheme,
 } from "@/context/redux/theme-marketplace/thunks/theme-marketplace";
 import { loadInheritParentAuthorization } from "@/context/redux/request-response/thunks/auth";
+import {
+  loadTestScript,
+  runTestScript,
+} from "@/context/redux/request-response/thunks/test-script";
 
 export interface StatusInterface {
   isLocalPasswordLoading: boolean;
@@ -45,6 +49,10 @@ export interface StatusInterface {
   isFolderLoading: boolean;
 
   isLoadingInheritParentAuthorization: boolean;
+
+  isTestScriptLoading: boolean;
+  isTestScriptRunning: boolean;
+  testScriptError: string | null;
 
   isThemesSearchResultLoading: boolean;
   themesSearchResultError: string | null;
@@ -77,6 +85,10 @@ const initialState: StatusInterface = {
   isFolderLoading: true,
 
   isLoadingInheritParentAuthorization: true,
+
+  isTestScriptLoading: true,
+  isTestScriptRunning: false,
+  testScriptError: null,
 
   isThemesSearchResultLoading: true,
   themesSearchResultError: null,
@@ -402,6 +414,33 @@ export const statusSlice = createSlice({
     });
     builder.addCase(loadInheritParentAuthorization.rejected, state => {
       state.isLoadingInheritParentAuthorization = false;
+    });
+
+    /**
+     * =======================
+     * run test script
+     * =======================
+     */
+
+    builder.addCase(loadTestScript.pending, state => {
+      state.isTestScriptLoading = true;
+    });
+    builder.addCase(loadTestScript.fulfilled, state => {
+      state.isTestScriptLoading = false;
+    });
+    builder.addCase(loadTestScript.rejected, state => {
+      state.isTestScriptLoading = false;
+    });
+
+    builder.addCase(runTestScript.pending, state => {
+      state.isTestScriptRunning = true;
+    });
+    builder.addCase(runTestScript.fulfilled, state => {
+      state.isTestScriptRunning = false;
+    });
+    builder.addCase(runTestScript.rejected, (state, action) => {
+      state.isTestScriptRunning = false;
+      state.testScriptError = action.error?.message ?? null;
     });
   },
 });

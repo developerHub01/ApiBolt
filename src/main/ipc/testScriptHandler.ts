@@ -6,7 +6,8 @@ import {
   getTestScript,
   updateTestScript,
 } from "@/main/db/testScriptDB";
-import { executeTest } from "../engine/testing/executor";
+import { executeTest } from "@/main/engine/testing/executor";
+import { TEST_SCRIPT_DEFAULT_ERROR_MESSAGE } from "@shared/constant/test-script";
 
 export const testScriptHandler = (): void => {
   ipcMain.handle(
@@ -49,10 +50,20 @@ export const testScriptHandler = (): void => {
         ElectronAPITestScriptInterface["runTestScript"]
       >
     ): ReturnType<ElectronAPITestScriptInterface["runTestScript"]> => {
-      const script = (await getTestScript(requestId))?.script ?? "";
-      if (!script) return;
+      try {
+        const script = (await getTestScript(requestId))?.script ?? "";
+        if (!script) throw new Error("Script not found");
 
-      executeTest(script, response);
+        return executeTest(script, response);
+      } catch (error) {
+        return {
+          success: false,
+          message:
+            error instanceof Error
+              ? error.message
+              : TEST_SCRIPT_DEFAULT_ERROR_MESSAGE,
+        };
+      }
     },
   );
 };

@@ -26,6 +26,10 @@ const TAB_LIST: Array<TabItemInterface> = [
     id: "headers",
     label: "Headers",
   },
+  {
+    id: "test",
+    label: "Test Result",
+  },
 ];
 
 const historyTab: TabItemInterface = {

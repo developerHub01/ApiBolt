@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { updateTestScript } from "@renderer/context/redux/request-response/thunks/test-script";
-import { selectSelectedScript } from "@renderer/context/redux/request-response/selectors/test-script";
+import { updateTestScript } from "@/context/redux/request-response/thunks/test-script";
+import { selectSelectedScript } from "@/context/redux/request-response/selectors/test-script";
 
 interface RequestTestScriptContext {
   code: string;

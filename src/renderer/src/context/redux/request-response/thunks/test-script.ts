@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import {
+  handleLoadTestResult,
   handleLoadTestScript,
   handleUpdateTestScript,
 } from "@/context/redux/request-response/request-response-slice";
@@ -108,7 +109,12 @@ export const runTestScript = createAsyncThunk<
         response: responseBody,
       });
 
-      console.log(response);
+      dispatch(
+        handleLoadTestResult({
+          id,
+          payload: response,
+        }),
+      );
     } catch (error) {
       console.error(error);
     }

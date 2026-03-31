@@ -3,7 +3,7 @@ import { ABTestEngine } from "@/main/engine/testing/engine";
 import { ResponseInterface } from "@shared/types/request-response.types";
 
 export const executeTest = (code: string, response: ResponseInterface) => {
-  const ab = new ABTestEngine(code);
+  const ab = new ABTestEngine(response);
 
   const vm = new VM({
     timeout: 1000,
@@ -12,10 +12,16 @@ export const executeTest = (code: string, response: ResponseInterface) => {
 
   try {
     vm.run(`"use strict";\n${code}`);
-    console.log(ab.getResults());
+    return {
+      success: true,
+      result: ab.getResults(),
+    };
   } catch (error) {
-    // console.error(error);
     const message = error instanceof Error ? error.message : "Unknown error";
     console.error(message);
+    return {
+      success: false,
+      message,
+    };
   }
 };

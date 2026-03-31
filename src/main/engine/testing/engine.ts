@@ -1,19 +1,14 @@
-export interface TestResultInterface {
-  name: string;
-  success: boolean;
-  message: string;
-}
-
-export type TTestResults = Array<TestResultInterface>;
+import { ResponseInterface } from "@shared/types/request-response.types";
+import { TTestResults } from "@shared/types/test-script.types";
 
 export class ABTestEngine {
   private results: TTestResults = [];
 
-  constructor(private response: unknown) {
+  constructor(private response: ResponseInterface) {
     this.response = response;
   }
 
-  addDemoResults = (results: TTestResults) => {
+  addDemoResults = () => {
     this.results = [
       {
         name: "Test 1",
@@ -38,7 +33,195 @@ export class ABTestEngine {
     ];
   };
 
+  status = (name: string) => {
+    const actual = this.response.status;
+
+    const push = (success: boolean, message: string) =>
+      this.results.push({
+        name,
+        success,
+        message,
+      });
+
+    const api = {
+      toBe: (expected: number) =>
+        push(actual === expected, `Expected ${actual} to be ${expected}`),
+
+      toBeOneOf: (list: Array<number>) =>
+        push(
+          list.includes(actual),
+          `Expected ${actual} to be one of ${list.join(", ")}`,
+        ),
+
+      toBeGreaterThan: (num: number) =>
+        push(actual > num, `Expected ${actual} > ${num}`),
+
+      toBeLessThan: (num: number) =>
+        push(actual < num, `Expected ${actual} < ${num}`),
+
+      toBeBetween: (min: number, max: number) =>
+        push(
+          actual >= min && actual <= max,
+          `Expected ${actual} between ${min}-${max}`,
+        ),
+
+      /* categories */
+      toBeSuccess: () =>
+        push(actual >= 200 && actual < 300, `Expected ${actual} to be 2xx`),
+
+      toBeClientError: () =>
+        push(actual >= 400 && actual < 500, `Expected ${actual} to be 4xx`),
+
+      toBeServerError: () =>
+        push(actual >= 500 && actual < 600, `Expected ${actual} to be 5xx`),
+
+      toBeRedirect: () =>
+        push(actual >= 300 && actual < 400, `Expected ${actual} to be 3xx`),
+
+      /* shortcuts */
+      toBeOK: () => push(actual === 200, `Expected 200`),
+      toBeCreated: () => push(actual === 201, `Expected 201`),
+      toBeNoContent: () => push(actual === 204, `Expected 204`),
+      toBeBadRequest: () => push(actual === 400, `Expected 400`),
+      toBeUnauthorized: () => push(actual === 401, `Expected 401`),
+      toBeForbidden: () => push(actual === 403, `Expected 403`),
+      toBeNotFound: () => push(actual === 404, `Expected 404`),
+      toBeInternalServerError: () => push(actual === 500, `Expected 500`),
+    };
+
+    return {
+      ...api,
+      not: Object.fromEntries(
+        Object.entries(api).map(([key, fn]) => [
+          key,
+          <T extends (...args: Array<unknown>) => unknown>(
+            ...args: Parameters<T>
+          ) => {
+            (fn as T)(...args);
+
+            const last = this.results[this.results.length - 1];
+            if (!last) return;
+            last.success = !last.success;
+            last.message = "NOT: " + last.message;
+          },
+        ]),
+      ),
+    };
+  };
+
   getResults = () => {
     return this.results;
   };
 }
+
+/*===================================
+============= DOCS ==================
+=====================================*/
+// // ===============================
+// // ApiBolt STATUS ASSERTION CHEATSHEET (FULL)
+// // ===============================
+
+// // 🔹 1. Basic Assertions
+// ab.status("Status is 200").toBe(200)
+// ab.status("Status is not 500").not.toBe(500)
+
+// // 🔹 2. Multiple Values
+// ab.status("Status is valid success").toBeOneOf([200, 201, 204])
+// ab.status("Status is not allowed").not.toBeOneOf([400, 401, 403])
+
+// // 🔹 3. Comparison Assertions
+// ab.status("Greater than 199").toBeGreaterThan(199)
+// ab.status("Less than 300").toBeLessThan(300)
+
+// ab.status("Not greater than 500").not.toBeGreaterThan(500)
+// ab.status("Not less than 100").not.toBeLessThan(100)
+
+// // 🔹 4. Range Assertions
+// ab.status("2xx range").toBeBetween(200, 299)
+// ab.status("Not in 4xx range").not.toBeBetween(400, 499)
+
+// // 🔹 5. Category Assertions
+// ab.status("Success response").toBeSuccess()        // 200–299
+// ab.status("Client error").toBeClientError()        // 400–499
+// ab.status("Server error").toBeServerError()        // 500–599
+// ab.status("Redirect").toBeRedirect()               // 300–399
+
+// ab.status("Not server error").not.toBeServerError()
+// ab.status("Not redirect").not.toBeRedirect()
+
+// // 🔹 6. Exact Status Shortcuts
+// ab.status("OK").toBeOK()                          // 200
+// ab.status("Created").toBeCreated()                // 201
+// ab.status("Accepted").toBeAccepted()              // 202
+// ab.status("No Content").toBeNoContent()           // 204
+
+// ab.status("Bad Request").toBeBadRequest()         // 400
+// ab.status("Unauthorized").toBeUnauthorized()      // 401
+// ab.status("Forbidden").toBeForbidden()            // 403
+// ab.status("Not Found").toBeNotFound()             // 404
+
+// ab.status("Internal Error").toBeInternalServerError() // 500
+// ab.status("Bad Gateway").toBeBadGateway()         // 502
+// ab.status("Service Down").toBeServiceUnavailable() // 503
+
+// // 🔹 7. Edge / Advanced Cases
+// ab.status("Valid HTTP range").toBeBetween(100, 599)
+// ab.status("Invalid status check").not.toBeBetween(600, 999)
+
+// // ===============================
+// // INTERNAL METHODS YOU MUST IMPLEMENT
+// // ===============================
+
+// /*
+// Core:
+// - toBe(number)
+// - toBeOneOf(number[])
+
+// Comparison:
+// - toBeGreaterThan(number)
+// - toBeLessThan(number)
+
+// Range:
+// - toBeBetween(min, max)
+
+// Category:
+// - toBeSuccess()
+// - toBeClientError()
+// - toBeServerError()
+// - toBeRedirect()
+
+// Shortcuts:
+// - toBeOK()
+// - toBeCreated()
+// - toBeAccepted()
+// - toBeNoContent()
+// - toBeBadRequest()
+// - toBeUnauthorized()
+// - toBeForbidden()
+// - toBeNotFound()
+// - toBeInternalServerError()
+// - toBeBadGateway()
+// - toBeServiceUnavailable()
+
+// Modifier:
+// - .not
+// */
+
+// // ===============================
+// // ENGINE RULE
+// // ===============================
+
+// /*
+// Every assertion must call:
+
+// this.push(name, success, message)
+// */
+
+// // ===============================
+// // REAL WORLD EXAMPLE
+// // ===============================
+
+// ab.status("API should succeed").toBeSuccess()
+// ab.status("Should not be server error").not.toBeServerError()
+// ab.status("Valid success codes").toBeOneOf([200, 201, 204])
+// ab.status("Exact OK").toBeOK()

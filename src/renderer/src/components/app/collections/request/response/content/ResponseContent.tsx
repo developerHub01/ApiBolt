@@ -12,6 +12,10 @@ const Headers = lazy(
   () =>
     import("@/components/app/collections/request/response/content/headers/Headers"),
 );
+const TestResult = lazy(
+  () =>
+    import("@/components/app/collections/request/response/content/test-result/TestResult"),
+);
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectResponse } from "@/context/redux/request-response/selectors/response";
 import History from "@/components/app/collections/request/response/content/history/History";
@@ -49,6 +53,11 @@ const ResponseContent = memo(() => {
               {activeMetaTab === "headers" && (
                 <Suspense fallback={<ResposneHeadersFallback />}>
                   <Headers />
+                </Suspense>
+              )}
+              {activeMetaTab === "test" && (
+                <Suspense fallback={<ResposneHeadersFallback />}>
+                  <TestResult />
                 </Suspense>
               )}
               {activeMetaTab === "error" && !response?.status && (

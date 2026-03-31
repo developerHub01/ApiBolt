@@ -298,6 +298,7 @@ export type TResponseMetaTab =
   | "headers"
   | "history"
   | "error"
+  | "test"
   | null;
 
 export type TResponseDataTab = "raw" | "preview";

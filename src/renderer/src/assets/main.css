@@ -41,6 +41,10 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
+  --color-success: oklch(72.3% 0.219 149.579);
+  --color-error: oklch(63.7% 0.237 25.331);
+
+
   /* HTTP METHODS =============== */
    --color-http-get-50: oklch(0.958 0.07 149.29);
   --color-http-get-100: oklch(0.925 0.131 149.01);

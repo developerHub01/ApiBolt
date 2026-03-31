@@ -1,4 +1,8 @@
 import {
+  RunTestScriptResultPayload,
+  TTestResults,
+} from "@shared/types/test-script.types";
+import {
   AUTHORIZATION_AUTH_HEADER_KEY,
   DEFAULT_API_KEY,
   DEFAULT_AUTHORIZATION_ID,
@@ -52,6 +56,7 @@ import {
 } from "@/constant/folder.constant";
 import type { TRequestCodeType } from "@shared/types/code-snippit.types";
 import { TestScriptPayloadInterface } from "@shared/types/test-script.types";
+import { TEST_SCRIPT_DEFAULT_ERROR_MESSAGE } from "@shared/constant/test-script";
 
 export interface RequestResponseState {
   codeSnippitType: TRequestCodeType | null;
@@ -126,6 +131,9 @@ export interface RequestResponseState {
   responseCodeWrap: Record<string, boolean>;
 
   testScript: Record<string, string>;
+  testResult: Record<string, TTestResults>;
+  testIsSuccess: Record<string, boolean>;
+  testError: Record<string, string>;
 
   folderTitle: Record<string, string>;
   folderDescription: Record<string, string>;
@@ -189,6 +197,9 @@ const initialState: RequestResponseState = {
   responseCodeWrap: {},
 
   testScript: {},
+  testResult: {},
+  testIsSuccess: {},
+  testError: {},
 
   folderTitle: {},
   folderDescription: {},
@@ -1295,6 +1306,34 @@ export const requestResponseSlice = createSlice({
     handleClearTestScript: (state, action: PayloadAction<string>) => {
       delete state.testScript[action.payload];
     },
+    handleLoadTestResult: (
+      state,
+      action: PayloadAction<{
+        id: string;
+        payload: RunTestScriptResultPayload;
+      }>,
+    ) => {
+      const { id, payload } = action.payload;
+      state.testIsSuccess[id] = payload.success;
+      if (payload.success) {
+        state.testResult[id] = payload.result ?? [];
+        delete state.testError[id];
+      } else {
+        state.testError[id] =
+          payload.message ?? TEST_SCRIPT_DEFAULT_ERROR_MESSAGE;
+        delete state.testResult[id];
+      }
+    },
+    handleClearTestResult: (
+      state,
+      action: PayloadAction<string | null | undefined>,
+    ) => {
+      const id = action.payload ?? state.selectedTab;
+      if (!id) return;
+      delete state.testIsSuccess[id];
+      delete state.testResult[id];
+      delete state.testError[id];
+    },
 
     /* ================ Test Script end =================== */
 
@@ -1613,6 +1652,8 @@ export const {
   handleLoadTestScript,
   handleUpdateTestScript,
   handleClearTestScript,
+  handleLoadTestResult,
+  handleClearTestResult,
 
   handleLoadFolder,
   handleUpdateFolder,
