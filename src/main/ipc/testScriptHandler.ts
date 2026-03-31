@@ -6,6 +6,7 @@ import {
   getTestScript,
   updateTestScript,
 } from "@/main/db/testScriptDB";
+import { executeTest } from "../enginee/testing/executor";
 
 export const testScriptHandler = (): void => {
   ipcMain.handle(
@@ -39,5 +40,19 @@ export const testScriptHandler = (): void => {
       ...rest: Parameters<ElectronAPITestScriptInterface["deleteTestScript"]>
     ): ReturnType<ElectronAPITestScriptInterface["deleteTestScript"]> =>
       await deleteTestScript(...rest),
+  );
+  ipcMain.handle(
+    "runTestScript",
+    async (
+      _,
+      ...[{ requestId, response }]: Parameters<
+        ElectronAPITestScriptInterface["runTestScript"]
+      >
+    ): ReturnType<ElectronAPITestScriptInterface["runTestScript"]> => {
+      const script = (await getTestScript(requestId))?.script ?? "";
+      if (!script) return;
+
+      executeTest(script, response);
+    },
   );
 };

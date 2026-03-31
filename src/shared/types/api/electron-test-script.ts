@@ -1,5 +1,6 @@
 import {
   CreateTestScriptInterface,
+  RunTestScriptPayload,
   TestScriptPayloadInterface,
   UpdateTestScriptInterface,
 } from "@shared/types/test-script.types";
@@ -11,4 +12,5 @@ export interface ElectronAPITestScriptInterface {
   createTestScript(payload: CreateTestScriptInterface): Promise<boolean>;
   updateTestScript(payload: UpdateTestScriptInterface): Promise<boolean>;
   deleteTestScript(requestId?: string | null): Promise<boolean>;
+  runTestScript(payload: RunTestScriptPayload): Promise<void>;
 }

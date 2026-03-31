@@ -26,6 +26,7 @@ import {
   handleReplaceHistory,
 } from "@/context/redux/history/history-slice";
 import { handleIsFetchApiLoading } from "@/context/redux/status/status-slice";
+import { runTestScript } from "@/context/redux/request-response/thunks/test-script";
 
 export const fetchApi = createAsyncThunk<
   void,
@@ -246,6 +247,11 @@ export const fetchApi = createAsyncThunk<
       }
     }
 
+    /******************************
+     * ********* TODO *************
+     * have to make that async and stop blocking the flow.
+     ******************************
+     ******************************/
     const historyResponse = await window.electronAPIHistory.createHistory({
       ...historyPayload,
     });
@@ -276,6 +282,13 @@ export const fetchApi = createAsyncThunk<
       handleIsFetchApiLoading({
         requestId,
         isLoading: false,
+      }),
+    );
+
+    dispatch(
+      runTestScript({
+        id: requestId,
+        response: response,
       }),
     );
   } catch (error) {

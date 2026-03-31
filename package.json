@@ -31,7 +31,8 @@
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.45.1",
     "electron-squirrel-startup": "^1.0.1",
-    "node-machine-id": "^1.1.12"
+    "node-machine-id": "^1.1.12",
+    "vm2": "^3.10.5"
   },
   "devDependencies": {
     "@babel/parser": "^7.29.0",

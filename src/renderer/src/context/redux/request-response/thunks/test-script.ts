@@ -4,6 +4,7 @@ import {
   handleLoadTestScript,
   handleUpdateTestScript,
 } from "@/context/redux/request-response/request-response-slice";
+import { ResponseInterface } from "@shared/types/request-response.types";
 
 /* ==============================
 ======== Script start ===========
@@ -33,7 +34,6 @@ export const loadTestScript = createAsyncThunk<
 
     const response =
       await window.electronAPITestScript.getTestScript(selectedTab);
-    console.log(response);
     if (!response) throw new Error();
 
     dispatch(handleLoadTestScript(response));
@@ -83,3 +83,34 @@ export const updateTestScript = createAsyncThunk<
     return false;
   }
 });
+
+export const runTestScript = createAsyncThunk<
+  void,
+  {
+    id?: string;
+    response: ResponseInterface;
+  },
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>(
+  "test-script/runTestScript",
+  async ({ id, response: responseBody }, { dispatch, getState }) => {
+    try {
+      const state = getState() as RootState;
+      id = id ?? state.requestResponse.selectedTab ?? undefined;
+
+      if (!id) throw new Error();
+
+      const response = await window.electronAPITestScript.runTestScript({
+        requestId: id,
+        response: responseBody,
+      });
+
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  },
+);

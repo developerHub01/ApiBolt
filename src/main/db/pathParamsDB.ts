@@ -18,6 +18,8 @@ export const getPathParams: ElectronAPIPathParamsInterface["getPathParams"] =
           .where(eq(pathParamsTable.requestOrFolderMetaId, id))
       )?.[0];
 
+      if (!result) throw new Error();
+
       return JSON.parse(result.map);
     } catch (error) {
       console.error(error);
