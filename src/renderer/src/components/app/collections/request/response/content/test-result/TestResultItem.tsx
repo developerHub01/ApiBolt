@@ -16,7 +16,7 @@ const TestResultItem = memo(({ success, name, message }: Props) => {
   return (
     <motion.button
       onClick={handleToggle}
-      className="flex flex-col gap-3 min-h-9 hover:bg-secondary/50 transition-colors py-2.5 cursor-pointer text-start"
+      className="flex flex-col gap-3 min-h-9 hover:bg-secondary/50 transition-colors py-2 cursor-pointer text-start"
       animate={{
         height: "auto",
       }}

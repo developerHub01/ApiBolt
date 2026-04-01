@@ -78,6 +78,7 @@ const HistoryItem = memo(({ id, method, createdAt, responseStatus }: Props) => {
             exit={{ opacity: 0, scale: 0.5, width: "0" }}
             transition={{ duration: 0.2 }}
             onClick={e => e.stopPropagation()}
+            className="flex justify-center items-center"
           >
             <Button
               variant={"destructive"}
