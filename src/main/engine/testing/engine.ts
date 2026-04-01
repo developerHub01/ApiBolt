@@ -565,7 +565,6 @@ export class ABTestEngine {
 // ab.status("Client error").toBeClientError()
 // ab.status("Server error").toBeServerError()
 // ab.status("Redirect").toBeRedirect()
-
 // ab.status("Not server error").not.toBeServerError()
 // ab.status("Not redirect").not.toBeRedirect()
 
@@ -581,13 +580,12 @@ export class ABTestEngine {
 // ab.status("Internal Server Error").toBeInternalServerError()
 // ab.status("Bad Gateway").toBeBadGateway()
 // ab.status("Service Unavailable").toBeServiceUnavailable()
-
 // ab.status("Not OK").not.toBeOK()
 // ab.status("Not Created").not.toBeCreated()
 // ab.status("Not Internal Error").not.toBeInternalServerError()
 
 // /*=============================
-// ========= BODY ASSERTIONS ======
+// ======== BODY ASSERTIONS ======
 // ==============================*/
 
 // // Equality
@@ -606,7 +604,6 @@ export class ABTestEngine {
 // ab.body("Check boolean").toBeType("boolean")
 // ab.body("Check object").toBeType("object")
 // ab.body("Check array").toBeType("array")
-
 // ab.body("Type is not string").not.toBeType("string")
 // ab.body("Type is not array").not.toBeType("array")
 
@@ -647,6 +644,44 @@ export class ABTestEngine {
 // ab.headers("Header missing").not.toHaveProperty("x-custom-header")
 
 // /*=============================
+// ======= COOKIES ASSERTIONS =====
+// ==============================*/
+
+// // Existence
+// ab.cookies("session_id").toExist()
+// ab.cookies("session_id").not.toExist()
+// ab.cookies().toExist() // checks that at least one cookie exists
+
+// // Value
+// ab.cookies("session_id").toBe("123456")
+// ab.cookies("session_id").not.toBe("abcdef")
+// ab.cookies("session_id").toEqual({ key: "session_id", value: "123456", path: "/", secure: true })
+
+// // Containment
+// ab.cookies("session_id").toContain("123")
+// ab.cookies("session_id").not.toContain("xyz")
+
+// // Property / Key
+// ab.cookies("session_id").toHaveProperty("path")
+// ab.cookies("session_id").toHaveProperty("secure")
+// ab.cookies("session_id").not.toHaveProperty("domain")
+
+// // Path / Domain / Secure / HttpOnly
+// ab.cookies("session_id").toHavePath("/")
+// ab.cookies("session_id").toHaveDomain("example.com")
+// ab.cookies("session_id").toBeSecure()
+// ab.cookies("session_id").toBeHttpOnly()
+
+// // SameSite
+// ab.cookies("session_id").toBeSameSite("lax")
+// ab.cookies("session_id").toBeSameSite("strict")
+// ab.cookies("session_id").toBeSameSite("none")
+
+// // Expiry / MaxAge
+// ab.cookies("session_id").toExpireAfter(3600) // expires after at least 3600 seconds
+// ab.cookies("session_id").toExpireBefore(7200) // expires before 7200 seconds
+
+// /*=============================
 // ======= FULL EXAMPLES =========
 // ==============================*/
 
@@ -671,3 +706,17 @@ export class ABTestEngine {
 // ab.headers("Check content-type").toHaveProperty("content-type")
 // ab.headers("Check existence").toExist()
 // ab.headers("Check missing header").not.toHaveProperty("x-missing")
+
+// // Cookies Examples
+// ab.cookies("auth_token").toExist()
+// ab.cookies("auth_token").toBe("abcdef123456")
+// ab.cookies("auth_token").toContain("123")
+// ab.cookies("auth_token").toHaveProperty("path")
+// ab.cookies("auth_token").toHavePath("/")
+// ab.cookies("auth_token").toBeSecure()
+// ab.cookies("auth_token").toBeHttpOnly()
+// ab.cookies("auth_token").toBeSameSite("strict")
+// ab.cookies("auth_token").toExpireAfter(1800)
+// ab.cookies("auth_token").toExpireBefore(3600)
+// ab.cookies().toExist()
+// ab.cookies().toHaveLength(3)
