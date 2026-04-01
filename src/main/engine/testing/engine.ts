@@ -921,3 +921,126 @@ export class ABTestEngine {
 // ab.cookies("auth_token").toExpireBefore(3600)
 // ab.cookies().toExist()
 // ab.cookies().toHaveLength(3)
+
+
+/*=============================
+======== EXPECT ASSERTIONS =====
+=============================*/
+
+// // =============================
+// // STATUS (same as status())
+// // =============================
+
+// // Basic
+// ab.expect("Status is 200").toBe(200)
+// ab.expect("Status is not 500").not.toBe(500)
+
+// // Multiple
+// ab.expect("Valid success").toBeOneOf([200, 201, 204])
+// ab.expect("Invalid status").not.toBeOneOf([400, 401, 403])
+
+// // Comparison
+// ab.expect("Greater than 199").toBeGreaterThan(199)
+// ab.expect("Less than 300").toBeLessThan(300)
+
+// // Range
+// ab.expect("2xx range").toBeBetween(200, 299)
+// ab.expect("Not in 4xx").not.toBeBetween(400, 499)
+
+// // Category
+// ab.expect("Success response").toBeSuccess()
+// ab.expect("Client error").toBeClientError()
+// ab.expect("Server error").toBeServerError()
+// ab.expect("Redirect").toBeRedirect()
+
+// // Shortcuts
+// ab.expect("OK").toBeOK()
+// ab.expect("Created").toBeCreated()
+// ab.expect("Accepted").toBeAccepted()
+// ab.expect("No Content").toBeNoContent()
+// ab.expect("Bad Request").toBeBadRequest()
+// ab.expect("Unauthorized").toBeUnauthorized()
+// ab.expect("Forbidden").toBeForbidden()
+// ab.expect("Not Found").toBeNotFound()
+// ab.expect("Internal Server Error").toBeInternalServerError()
+
+// // =============================
+// // BODY (same as body())
+// // =============================
+
+// // Equality
+// ab.expect("Body equals").toEqual({ success: true })
+// ab.expect("Body not equal").not.toEqual({ success: false })
+
+// // Existence
+// ab.expect("Body exists").toExist()
+// ab.expect("Body does not exist").not.toExist()
+
+// // Type
+// ab.expect("Is object").toBeType("object")
+// ab.expect("Is array").toBeType("array")
+// ab.expect("Not string").not.toBeType("string")
+
+// // Containment
+// ab.expect("Contains item").toContain("apple")
+// ab.expect("Does not contain").not.toContain("banana")
+
+// // Property
+// ab.expect("Has property").toHaveProperty("user.name")
+// ab.expect("Nested exists").toHaveProperty("data.user.id")
+// ab.expect("Missing property").not.toHaveProperty("user.age")
+
+// // Length
+// ab.expect("Length 3").toHaveLength(3)
+// ab.expect("Not length 5").not.toHaveLength(5)
+
+// // Numbers (body)
+// ab.expect("Greater than 10").toBeGreaterThanNumber(10)
+// ab.expect("Less than 50").toBeLessThanNumber(50)
+// ab.expect("Between 10-20").toBeBetweenNumber(10, 20)
+
+// // =============================
+// // HEADERS (same as headers())
+// // =============================
+
+// // Existence
+// ab.expect("Header exists").toHaveHeader("content-type")
+// ab.expect("Header missing").not.toHaveHeader("x-custom")
+
+// // Value
+// ab.expect("Header value exact")
+//   .toHaveHeaderValue("content-type", "application/json")
+
+// ab.expect("Header matches regex")
+//   .toHaveHeaderValue("content-type", /json/)
+
+// // Content-Type shortcut
+// ab.expect("JSON response").toHaveContentType("application/json")
+
+// // =============================
+// // COOKIES (same as cookies())
+// // =============================
+
+// // Existence
+// ab.expect("Session exists").toExistCookie("session_id")
+
+// // Value
+// ab.expect("Session value").toBeCookie("session_id", "123456")
+
+// // =============================
+// // MIXED REAL USE CASES
+// // =============================
+
+// // Full API validation
+// ab.expect("User API success").toBeSuccess()
+// ab.expect("User has id").toHaveProperty("data.user.id")
+// ab.expect("Response is JSON").toHaveContentType("application/json")
+
+// // Auth flow
+// ab.expect("Login success").toBeOK()
+// ab.expect("Token exists").toExistCookie("auth_token")
+// ab.expect("Token valid").toBeCookie("auth_token", "abcdef")
+
+// // Error case
+// ab.expect("Invalid request").toBeBadRequest()
+// ab.expect("Error message exists").toHaveProperty("error.message")
