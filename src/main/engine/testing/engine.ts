@@ -1,6 +1,7 @@
 import { isDeepStrictEqual } from "node:util";
 import { ResponseInterface } from "@shared/types/request-response.types";
 import { TTestResults } from "@shared/types/test-script.types";
+import { CookieInterface } from "@shared/types/cookies.types";
 
 export class ABTestEngine {
   private results: TTestResults = [];
@@ -355,6 +356,170 @@ export class ABTestEngine {
           "Expected headers to be empty",
         ),
     } as Record<string, (...args: Array<unknown>) => unknown>;
+
+    return {
+      ...api,
+      not: this.applyNegation(api),
+    };
+  };
+
+  cookies = (cookieKey?: string) => {
+    const cookies = this.response.cookies || [];
+    const actual: CookieInterface | undefined = cookieKey
+      ? cookies.find(c => c.key === cookieKey)
+      : undefined;
+
+    const api = {
+      toExist: () =>
+        this.push(
+          cookieKey || "cookies",
+          cookieKey ? Boolean(actual) : Boolean(cookies.length),
+          `Expected cookie${cookieKey ? ` '${cookieKey}'` : "s"} to exist`,
+        ),
+
+      toBe: (expected: string) => {
+        if (!actual) {
+          this.push(cookieKey || "cookies", false, "Cookie not found");
+          return;
+        }
+        this.push(
+          cookieKey || "cookies",
+          actual.value === expected,
+          `Expected cookie '${cookieKey}' to have value '${expected}', got '${actual.value}'`,
+        );
+      },
+
+      toEqual: (expected: CookieInterface) => {
+        if (!actual) {
+          this.push(cookieKey || "cookies", false, "Cookie not found");
+          return;
+        }
+        this.push(
+          cookieKey || "cookies",
+          isDeepStrictEqual(actual, expected),
+          `Expected cookie '${cookieKey}' to equal ${JSON.stringify(
+            expected,
+            null,
+            2,
+          )}, got ${JSON.stringify(actual, null, 2)}`,
+        );
+      },
+
+      toContain: (substring: string) => {
+        if (!actual) {
+          this.push(cookieKey || "cookies", false, "Cookie not found");
+          return;
+        }
+        this.push(
+          cookieKey || "cookies",
+          actual.value.includes(substring),
+          `Expected cookie '${cookieKey}' to contain '${substring}'`,
+        );
+      },
+
+      toHaveProperty: (prop: keyof CookieInterface) => {
+        if (!actual) {
+          this.push(cookieKey || "cookies", false, "Cookie not found");
+          return;
+        }
+        this.push(
+          cookieKey || "cookies",
+          prop in actual,
+          `Expected cookie '${cookieKey}' to have property '${prop}'`,
+        );
+      },
+
+      toHaveLength: (len: number) => {
+        if (cookieKey) {
+          this.push(cookieKey, false, "Cannot check length on single cookie");
+          return;
+        }
+        this.push(
+          "cookies",
+          cookies.length === len,
+          `Expected cookies array length ${len}, got ${cookies.length}`,
+        );
+      },
+
+      toExpireAfter: (seconds: number) => {
+        if (!actual || (!actual.maxAge && !actual.expires)) {
+          this.push(cookieKey || "cookies", false, "Cookie expiry not found");
+          return;
+        }
+        const expirySeconds =
+          actual.maxAge ?? 0; /* only check maxAge for simplicity */
+        this.push(
+          cookieKey || "cookies",
+          expirySeconds >= seconds,
+          `Expected cookie '${cookieKey}' to expire after ${seconds}s, got ${expirySeconds}`,
+        );
+      },
+
+      toExpireBefore: (seconds: number) => {
+        if (!actual || (!actual.maxAge && !actual.expires)) {
+          this.push(cookieKey || "cookies", false, "Cookie expiry not found");
+          return;
+        }
+        const expirySeconds = actual.maxAge ?? 0;
+        this.push(
+          cookieKey || "cookies",
+          expirySeconds <= seconds,
+          `Expected cookie '${cookieKey}' to expire before ${seconds}s, got ${expirySeconds}`,
+        );
+      },
+
+      toHavePath: (path: string) => {
+        if (!actual) {
+          this.push(cookieKey || "cookies", false, "Cookie not found");
+          return;
+        }
+        this.push(
+          cookieKey || "cookies",
+          actual.path === path,
+          `Expected cookie '${cookieKey}' path '${path}', got '${actual.path}'`,
+        );
+      },
+
+      toHaveDomain: (domain: string) => {
+        if (!actual) {
+          this.push(cookieKey || "cookies", false, "Cookie not found");
+          return;
+        }
+        this.push(
+          cookieKey || "cookies",
+          actual.domain === domain,
+          `Expected cookie '${cookieKey}' domain '${domain}', got '${actual.domain}'`,
+        );
+      },
+
+      toBeSecure: () => {
+        this.push(
+          cookieKey || "cookies",
+          Boolean(actual?.secure),
+          `Expected cookie '${cookieKey}' to be secure`,
+        );
+      },
+
+      toBeHttpOnly: () => {
+        this.push(
+          cookieKey || "cookies",
+          Boolean(actual?.httpOnly),
+          `Expected cookie '${cookieKey}' to be httpOnly`,
+        );
+      },
+
+      toBeSameSite: (sameSite: "lax" | "strict" | "none") => {
+        if (!actual) {
+          this.push(cookieKey || "cookies", false, "Cookie not found");
+          return;
+        }
+        this.push(
+          cookieKey || "cookies",
+          actual.sameSite === sameSite,
+          `Expected cookie '${cookieKey}' sameSite to be '${sameSite}', got '${actual.sameSite}'`,
+        );
+      },
+    } as Record<string, (...args: Array<unknown>) => void>;
 
     return {
       ...api,
