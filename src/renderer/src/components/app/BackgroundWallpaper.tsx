@@ -37,7 +37,7 @@ const BackgroundWallpaper = () => {
 };
 
 interface BackgroundImageSliderProps {
-  list: string[];
+  list: Array<string>;
   blur?: number;
   slideInterval: number;
 }

@@ -91,9 +91,15 @@ const MetaDataTab = memo(() => {
       <AnimatePresence>
         {activeMetaTab ? (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={{
+              opacity: 0,
+            }}
+            animate={{
+              opacity: 1,
+            }}
+            exit={{
+              opacity: 0,
+            }}
             className="block md:hidden"
           >
             <SelectV1
@@ -105,9 +111,15 @@ const MetaDataTab = memo(() => {
           </motion.div>
         ) : (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={{
+              opacity: 0,
+            }}
+            animate={{
+              opacity: 1,
+            }}
+            exit={{
+              opacity: 0,
+            }}
             className="block md:hidden"
           >
             <TabV1

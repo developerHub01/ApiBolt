@@ -8,7 +8,11 @@ const BodyHTMLPreview = ({ data }: BodyHTMLPreviewProps) => {
       <iframe
         title="reesponse body preview"
         srcDoc={data}
-        style={{ width: "100%", height: "100%", border: "none" }}
+        style={{
+          width: "100%",
+          height: "100%",
+          border: "none",
+        }}
         sandbox="allow-scripts allow-same-origin"
       />
     </div>

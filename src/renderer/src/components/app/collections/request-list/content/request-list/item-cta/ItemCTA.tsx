@@ -267,7 +267,9 @@ const ItemCTA = memo(() => {
       animate={{
         opacity: 1,
       }}
-      exit={{ opacity: 0 }}
+      exit={{
+        opacity: 0,
+      }}
     >
       <DropdownMenu
         open={isContextMenuOpen}

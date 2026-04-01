@@ -30,21 +30,22 @@ const Splash = () => {
       else {
         setTimeout(() => {
           setIsReady(true);
-          setTimeout(async () => {
-            await window.electronAPISplashWindow.splashWindowCompleteEnd();
-          }, 300);
+          setTimeout(
+            async () =>
+              await window.electronAPISplashWindow.splashWindowCompleteEnd(),
+            300,
+          );
         }, 200);
       }
     };
 
     requestAnimationFrame(raf);
-    const methodInterval = setInterval(() => {
-      setCurrentMethod(prev => (prev + 1) % methodList.length);
-    }, 800);
+    const methodInterval = setInterval(
+      () => setCurrentMethod(prev => (prev + 1) % methodList.length),
+      800,
+    );
 
-    return () => {
-      clearInterval(methodInterval);
-    };
+    return () => clearInterval(methodInterval);
   }, []);
 
   return (

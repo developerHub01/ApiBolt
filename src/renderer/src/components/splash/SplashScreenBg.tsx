@@ -11,12 +11,19 @@ const SplashScreenBg = ({ children }: Props) => {
       {/* Subtle Light Effects */}
       <motion.div
         className="absolute top-6 right-6 w-1 h-1 bg-foreground/40 rounded-full"
-        animate={{ opacity: [0.4, 0.8, 0.4] }}
-        transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+        animate={{
+          opacity: [0.4, 0.8, 0.4],
+        }}
+        transition={{
+          duration: 2,
+          repeat: Number.POSITIVE_INFINITY,
+        }}
       />
       <motion.div
         className="absolute top-10 right-10 w-0.5 h-0.5 bg-primary/30 rounded-full"
-        animate={{ opacity: [0.3, 0.6, 0.3] }}
+        animate={{
+          opacity: [0.3, 0.6, 0.3],
+        }}
         transition={{
           duration: 1.5,
           repeat: Number.POSITIVE_INFINITY,
@@ -25,13 +32,25 @@ const SplashScreenBg = ({ children }: Props) => {
       />
       <motion.div
         className="absolute bottom-8 left-8 w-1 h-1 bg-primary/20 rounded-full"
-        animate={{ opacity: [0.2, 0.5, 0.2] }}
-        transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, delay: 1 }}
+        animate={{
+          opacity: [0.2, 0.5, 0.2],
+        }}
+        transition={{
+          duration: 3,
+          repeat: Number.POSITIVE_INFINITY,
+          delay: 1,
+        }}
       />
       <motion.div
         className="absolute bottom-8 left-10 w-1 h-1 bg-secondary/20 rounded-full"
-        animate={{ opacity: [0.2, 0.5, 0.2] }}
-        transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, delay: 1 }}
+        animate={{
+          opacity: [0.2, 0.5, 0.2],
+        }}
+        transition={{
+          duration: 3,
+          repeat: Number.POSITIVE_INFINITY,
+          delay: 1,
+        }}
       />
       {children}
       {/* Professional corner accents */}

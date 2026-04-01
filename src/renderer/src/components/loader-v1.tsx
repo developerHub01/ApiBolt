@@ -20,7 +20,10 @@ const LoaderV1 = ({
         <motion.div
           className={cn("relative w-full h-1.5 bg-foreground/5", className)}
           key={id}
-          exit={{ opacity: 0, height: 0 }}
+          exit={{
+            opacity: 0,
+            height: 0,
+          }}
           {...props}
         >
           <span className="absolute top-0 left-0 h-full w-16 rounded-full animate-loader-v1 bg-primary/80"></span>

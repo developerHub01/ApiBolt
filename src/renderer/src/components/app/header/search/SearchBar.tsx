@@ -27,10 +27,22 @@ const SearchBar = memo(
         <AnimatePresence>
           {value && (
             <motion.span
-              initial={{ opacity: 0, scale: 0 }}
-              exit={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4, type: "spring" }}
+              initial={{
+                opacity: 0,
+                scale: 0,
+              }}
+              exit={{
+                opacity: 0,
+                scale: 0,
+              }}
+              animate={{
+                opacity: 1,
+                scale: 1,
+              }}
+              transition={{
+                duration: 0.4,
+                type: "spring",
+              }}
             >
               <Button
                 size={"iconXs"}

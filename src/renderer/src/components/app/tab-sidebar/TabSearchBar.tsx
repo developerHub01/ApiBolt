@@ -66,14 +66,19 @@ const TabSearchBar = memo(({ isOpen, className, ...props }: Props) => {
         <SearchIcon size={16} />
         {/* show input of expended mode else hide */}
         <motion.div
-          style={{ transformOrigin: "left" }}
+          style={{
+            transformOrigin: "left",
+          }}
           animate={{
             opacity: isExpended ? 1 : 0,
             width: isExpended ? "100%" : "0px",
             paddingLeft: isExpended ? "8px" : "0px",
             scaleX: isExpended ? 1 : 0,
           }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
+          transition={{
+            duration: 0.3,
+            ease: "easeInOut",
+          }}
           className="flex items-center gap-1 pl-1"
         >
           <input

@@ -10,10 +10,21 @@ const TabMotionWrapper = ({ children, id }: TabMotionWrapperProps) => {
   return (
     <motion.div
       key={id}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.2 }}
+      initial={{
+        opacity: 0,
+        y: 20,
+      }}
+      animate={{
+        opacity: 1,
+        y: 0,
+      }}
+      exit={{
+        opacity: 0,
+        y: -20,
+      }}
+      transition={{
+        duration: 0.2,
+      }}
       className="h-full flex flex-1 flex-col gap-3 relative"
     >
       {children}

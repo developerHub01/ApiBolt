@@ -67,9 +67,16 @@ const Splash = () => {
               </div>
               <motion.h1
                 className="text-3xl font-black text-primary tracking-wide"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
+                initial={{
+                  opacity: 0,
+                }}
+                animate={{
+                  opacity: 1,
+                }}
+                transition={{
+                  duration: 0.6,
+                  delay: 0.2,
+                }}
               >
                 {APP_NAME}
               </motion.h1>

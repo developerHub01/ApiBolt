@@ -28,8 +28,12 @@ const SettingBackgroundImage = memo(
             "border-primary": isActive,
           },
         )}
-        whileHover={{ scale: 0.95 }}
-        whileTap={{ scale: 0.85 }}
+        whileHover={{
+          scale: 0.95,
+        }}
+        whileTap={{
+          scale: 0.85,
+        }}
         style={{
           aspectRatio: 1,
         }}

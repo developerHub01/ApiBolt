@@ -48,7 +48,10 @@ const HistoryItem = memo(({ id, method, createdAt, responseStatus }: Props) => {
         paddingRight: 8,
       }}
       transition={{
-        layout: { duration: 0.3, ease: "easeInOut" },
+        layout: {
+          duration: 0.3,
+          ease: "easeInOut",
+        },
         duration: 0.3,
         ease: "easeInOut",
       }}
@@ -61,7 +64,12 @@ const HistoryItem = memo(({ id, method, createdAt, responseStatus }: Props) => {
       <motion.div
         layout
         className="ml-auto text-xs text-muted-foreground flex items-center gap-2"
-        transition={{ layout: { duration: 0.3, ease: "easeInOut" } }}
+        transition={{
+          layout: {
+            duration: 0.3,
+            ease: "easeInOut",
+          },
+        }}
       >
         <p>{createdAt}</p>
         <HttpStatus
@@ -73,10 +81,24 @@ const HistoryItem = memo(({ id, method, createdAt, responseStatus }: Props) => {
       <AnimatePresence>
         {isHovered && (
           <motion.span
-            initial={{ opacity: 0, scale: 0.5, width: "0" }}
-            animate={{ opacity: 1, scale: 1, width: "auto" }}
-            exit={{ opacity: 0, scale: 0.5, width: "0" }}
-            transition={{ duration: 0.2 }}
+            initial={{
+              opacity: 0,
+              scale: 0.5,
+              width: "0",
+            }}
+            animate={{
+              opacity: 1,
+              scale: 1,
+              width: "auto",
+            }}
+            exit={{
+              opacity: 0,
+              scale: 0.5,
+              width: "0",
+            }}
+            transition={{
+              duration: 0.2,
+            }}
             onClick={e => e.stopPropagation()}
             className="flex justify-center items-center"
           >
