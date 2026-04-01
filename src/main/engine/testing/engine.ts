@@ -363,6 +363,9 @@ export class ABTestEngine {
     };
   };
 
+  /*========================
+   COOKIES ASSERTIONS
+  ========================*/
   cookies = (cookieKey?: string) => {
     const cookies = this.response.cookies || [];
     const actual: CookieInterface | undefined = cookieKey
@@ -520,6 +523,204 @@ export class ABTestEngine {
         );
       },
     } as Record<string, (...args: Array<unknown>) => void>;
+
+    return {
+      ...api,
+      not: this.applyNegation(api),
+    };
+  };
+
+  /*========================
+   EXPECT ASSERTIONS
+  ========================*/
+  expect = (name: string) => {
+    const status = this.response.status;
+    const body = this.response.data;
+    const headers = this.response.headers;
+    const cookies = this.response.cookies || [];
+
+    const api = {
+      toBe: (expected: number) =>
+        this.push(
+          name,
+          status === expected,
+          `Expected ${status} to be ${expected}`,
+        ),
+      toBeOneOf: (list: Array<number>) =>
+        this.push(
+          name,
+          list.includes(status),
+          `Expected ${status} to be one of ${list.join(", ")}`,
+        ),
+      toBeGreaterThan: (num: number) =>
+        this.push(name, status > num, `Expected ${status} > ${num}`),
+      toBeLessThan: (num: number) =>
+        this.push(name, status < num, `Expected ${status} < ${num}`),
+      toBeBetween: (min: number, max: number) =>
+        this.push(
+          name,
+          status >= min && status <= max,
+          `Expected ${status} between ${min}-${max}`,
+        ),
+      toBeSuccess: () =>
+        this.push(
+          name,
+          status >= 200 && status < 300,
+          `Expected ${status} to be 2xx`,
+        ),
+      toBeClientError: () =>
+        this.push(
+          name,
+          status >= 400 && status < 500,
+          `Expected ${status} to be 4xx`,
+        ),
+      toBeServerError: () =>
+        this.push(
+          name,
+          status >= 500 && status < 600,
+          `Expected ${status} to be 5xx`,
+        ),
+      toBeRedirect: () =>
+        this.push(
+          name,
+          status >= 300 && status < 400,
+          `Expected ${status} to be 3xx`,
+        ),
+      toBeOK: () => this.push(name, status === 200, `Expected 200`),
+      toBeCreated: () => this.push(name, status === 201, `Expected 201`),
+      toBeAccepted: () => this.push(name, status === 202, `Expected 202`),
+      toBeNoContent: () => this.push(name, status === 204, `Expected 204`),
+      toBeBadRequest: () => this.push(name, status === 400, `Expected 400`),
+      toBeUnauthorized: () => this.push(name, status === 401, `Expected 401`),
+      toBeForbidden: () => this.push(name, status === 403, `Expected 403`),
+      toBeNotFound: () => this.push(name, status === 404, `Expected 404`),
+      toBeInternalServerError: () =>
+        this.push(name, status === 500, `Expected 500`),
+      toBeBadGateway: () => this.push(name, status === 502, `Expected 502`),
+      toBeServiceUnavailable: () =>
+        this.push(name, status === 503, `Expected 503`),
+
+      toEqual: (expected: unknown) =>
+        this.push(
+          name,
+          isDeepStrictEqual(body, expected),
+          `Expected ${JSON.stringify(body)} to equal ${JSON.stringify(expected)}`,
+        ),
+      toExist: () =>
+        this.push(
+          name,
+          body !== undefined && body !== null,
+          `Expected value to exist`,
+        ),
+      toBeType: (
+        type: "string" | "number" | "boolean" | "object" | "array",
+      ) => {
+        const actualType = Array.isArray(body) ? "array" : typeof body;
+        this.push(
+          name,
+          actualType === type,
+          `Expected type ${type}, got ${actualType}`,
+        );
+      },
+      toContain: (item: unknown) => {
+        let success = false;
+        if (typeof body === "string") success = body.includes(item as string);
+        else if (Array.isArray(body))
+          success = (body as Array<unknown>).includes(item);
+        this.push(
+          name,
+          success,
+          `Expected ${JSON.stringify(body)} to contain ${JSON.stringify(item)}`,
+        );
+      },
+      toHaveProperty: (key: string) => {
+        const keys = key.split(".");
+        let val: unknown = body;
+        for (const k of keys) {
+          if (
+            val &&
+            typeof val === "object" &&
+            k in (val as Record<string, unknown>)
+          )
+            val = (val as Record<string, unknown>)[k];
+          else {
+            this.push(name, false, `Expected property '${key}' not found`);
+            return;
+          }
+        }
+        this.push(name, true, `Property '${key}' exists`);
+      },
+      toHaveLength: (len: number) =>
+        this.push(
+          name,
+          Array.isArray(body) && (body as Array<unknown>).length === len,
+          `Expected length ${len}, got ${Array.isArray(body) ? (body as Array<unknown>).length : "not array"}`,
+        ),
+      toBeGreaterThanNumber: (num: number) =>
+        this.push(
+          name,
+          typeof body === "number" && body > num,
+          `Expected ${body} > ${num}`,
+        ),
+      toBeLessThanNumber: (num: number) =>
+        this.push(
+          name,
+          typeof body === "number" && body < num,
+          `Expected ${body} < ${num}`,
+        ),
+      toBeBetweenNumber: (min: number, max: number) =>
+        this.push(
+          name,
+          typeof body === "number" && body >= min && body <= max,
+          `Expected ${body} between ${min}-${max}`,
+        ),
+
+      toHaveHeader: (key: string) =>
+        this.push(
+          name,
+          headers && key.toLowerCase() in headers,
+          `Expected header '${key}' to exist`,
+        ),
+      toHaveHeaderValue: (key: string, value: string | RegExp) => {
+        const val = headers
+          ? (headers as Record<string, unknown>)[key.toLowerCase()]
+          : undefined;
+        let success = false;
+        if (typeof val === "string")
+          success = value instanceof RegExp ? value.test(val) : val === value;
+        this.push(
+          name,
+          success,
+          `Expected header '${key}' value to be ${value}, got ${val}`,
+        );
+      },
+      toHaveContentType: (type: string) => {
+        const val = headers
+          ? (headers as Record<string, unknown>)["content-type"]
+          : undefined;
+        this.push(
+          name,
+          typeof val === "string" && val.includes(type),
+          `Expected Content-Type to include '${type}', got ${val}`,
+        );
+      },
+
+      toExistCookie: (cookieKey: string) => {
+        this.push(
+          name,
+          cookies.some(c => c.key === cookieKey),
+          `Expected cookie '${cookieKey}' to exist`,
+        );
+      },
+      toBeCookie: (cookieKey: string, value: string) => {
+        const c = cookies.find(c => c.key === cookieKey);
+        this.push(
+          name,
+          c?.value === value,
+          `Expected cookie '${cookieKey}' to be '${value}', got '${c?.value}'`,
+        );
+      },
+    } as Record<string, (...args: Array<unknown>) => unknown>;
 
     return {
       ...api,
