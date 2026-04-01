@@ -146,53 +146,53 @@ export class ABTestEngine {
 ============= DOCS ==================
 =====================================*/
 // // ===============================
-// // ApiBolt STATUS ASSERTION CHEATSHEET (FULL)
+// // ApiBolt STATUS ASSERTION CHEATSHEET
 // // ===============================
 
-// // 🔹 1. Basic Assertions
+// // 1. Basic Assertions
 // ab.status("Status is 200").toBe(200)
 // ab.status("Status is not 500").not.toBe(500)
 
-// // 🔹 2. Multiple Values
+// // 2. Multiple Values
 // ab.status("Status is valid success").toBeOneOf([200, 201, 204])
 // ab.status("Status is not allowed").not.toBeOneOf([400, 401, 403])
 
-// // 🔹 3. Comparison Assertions
+// // 3. Comparison Assertions
 // ab.status("Greater than 199").toBeGreaterThan(199)
 // ab.status("Less than 300").toBeLessThan(300)
 
 // ab.status("Not greater than 500").not.toBeGreaterThan(500)
 // ab.status("Not less than 100").not.toBeLessThan(100)
 
-// // 🔹 4. Range Assertions
+// // 4. Range Assertions
 // ab.status("2xx range").toBeBetween(200, 299)
 // ab.status("Not in 4xx range").not.toBeBetween(400, 499)
 
-// // 🔹 5. Category Assertions
+// // 5. Category Assertions
 // ab.status("Success response").toBeSuccess()        // 200–299
-// ab.status("Client error").toBeClientError()        // 400–499
-// ab.status("Server error").toBeServerError()        // 500–599
-// ab.status("Redirect").toBeRedirect()               // 300–399
+// ab.status("Client error").toBeClientError()       // 400–499
+// ab.status("Server error").toBeServerError()       // 500–599
+// ab.status("Redirect").toBeRedirect()              // 300–399
 
 // ab.status("Not server error").not.toBeServerError()
 // ab.status("Not redirect").not.toBeRedirect()
 
-// // 🔹 6. Exact Status Shortcuts
+// // 6. Exact Status Shortcuts
 // ab.status("OK").toBeOK()                          // 200
 // ab.status("Created").toBeCreated()                // 201
 // ab.status("Accepted").toBeAccepted()              // 202
 // ab.status("No Content").toBeNoContent()           // 204
 
 // ab.status("Bad Request").toBeBadRequest()         // 400
-// ab.status("Unauthorized").toBeUnauthorized()      // 401
-// ab.status("Forbidden").toBeForbidden()            // 403
-// ab.status("Not Found").toBeNotFound()             // 404
+// ab.status("Unauthorized").toBeUnauthorized()     // 401
+// ab.status("Forbidden").toBeForbidden()           // 403
+// ab.status("Not Found").toBeNotFound()            // 404
 
 // ab.status("Internal Error").toBeInternalServerError() // 500
-// ab.status("Bad Gateway").toBeBadGateway()         // 502
+// ab.status("Bad Gateway").toBeBadGateway()        // 502
 // ab.status("Service Down").toBeServiceUnavailable() // 503
 
-// // 🔹 7. Edge / Advanced Cases
+// // 7. Edge / Advanced Cases
 // ab.status("Valid HTTP range").toBeBetween(100, 599)
 // ab.status("Invalid status check").not.toBeBetween(600, 999)
 
@@ -200,53 +200,41 @@ export class ABTestEngine {
 // // INTERNAL METHODS YOU MUST IMPLEMENT
 // // ===============================
 
-// /*
-// Core:
-// - toBe(number)
-// - toBeOneOf(number[])
+// // Core:
+// // - toBe(expected: number)
+// // - toBeOneOf(list: Array<number>)
 
-// Comparison:
-// - toBeGreaterThan(number)
-// - toBeLessThan(number)
+// // Comparison:
+// // - toBeGreaterThan(num: number)
+// // - toBeLessThan(num: number)
 
-// Range:
-// - toBeBetween(min, max)
+// // Range:
+// // - toBeBetween(min: number, max: number)
 
-// Category:
-// - toBeSuccess()
-// - toBeClientError()
-// - toBeServerError()
-// - toBeRedirect()
+// // Category:
+// // - toBeSuccess()
+// // - toBeClientError()
+// // - toBeServerError()
+// // - toBeRedirect()
 
-// Shortcuts:
-// - toBeOK()
-// - toBeCreated()
-// - toBeAccepted()
-// - toBeNoContent()
-// - toBeBadRequest()
-// - toBeUnauthorized()
-// - toBeForbidden()
-// - toBeNotFound()
-// - toBeInternalServerError()
-// - toBeBadGateway()
-// - toBeServiceUnavailable()
+// // Shortcuts:
+// // - toBeOK()
+// // - toBeCreated()
+// // - toBeAccepted()
+// // - toBeNoContent()
+// // - toBeBadRequest()
+// // - toBeUnauthorized()
+// // - toBeForbidden()
+// // - toBeNotFound()
+// // - toBeInternalServerError()
+// // - toBeBadGateway()
+// // - toBeServiceUnavailable()
 
-// Modifier:
-// - .not
-// */
+// // Modifier:
+// // - .not (negates the last test result)
 
 // // ===============================
-// // ENGINE RULE
-// // ===============================
-
-// /*
-// Every assertion must call:
-
-// this.push(name, success, message)
-// */
-
-// // ===============================
-// // REAL WORLD EXAMPLE
+// // REAL WORLD EXAMPLES
 // // ===============================
 
 // ab.status("API should succeed").toBeSuccess()
