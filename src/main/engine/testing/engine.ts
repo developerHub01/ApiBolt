@@ -8,6 +8,13 @@ export class ABTestEngine {
     this.response = response;
   }
 
+  private push = (name: string, success: boolean, message: string) =>
+    this.results.push({
+      name,
+      success,
+      message,
+    });
+
   addDemoResults = () => {
     this.results = [
       {
@@ -33,79 +40,100 @@ export class ABTestEngine {
     ];
   };
 
+  private applyNegation = <
+    T extends Record<string, (...args: Array<unknown>) => unknown>,
+  >(
+    api: T,
+  ) =>
+    Object.fromEntries(
+      Object.entries(api).map(([key, fn]) => [
+        key,
+        (...args: Parameters<T[keyof T]>) => {
+          const beforeLength = this.results.length;
+          fn(...args);
+
+          const last = this.results[this.results.length - 1];
+          if (!last || this.results.length === beforeLength) return;
+          last.success = !last.success;
+          last.message = "NOT: " + last.message;
+        },
+      ]),
+    );
+
   status = (name: string) => {
     const actual = this.response.status;
 
-    const push = (success: boolean, message: string) =>
-      this.results.push({
-        name,
-        success,
-        message,
-      });
-
     const api = {
       toBe: (expected: number) =>
-        push(actual === expected, `Expected ${actual} to be ${expected}`),
+        this.push(
+          name,
+          actual === expected,
+          `Expected ${actual} to be ${expected}`,
+        ),
 
       toBeOneOf: (list: Array<number>) =>
-        push(
+        this.push(
+          name,
           list.includes(actual),
           `Expected ${actual} to be one of ${list.join(", ")}`,
         ),
 
       toBeGreaterThan: (num: number) =>
-        push(actual > num, `Expected ${actual} > ${num}`),
+        this.push(name, actual > num, `Expected ${actual} > ${num}`),
 
       toBeLessThan: (num: number) =>
-        push(actual < num, `Expected ${actual} < ${num}`),
+        this.push(name, actual < num, `Expected ${actual} < ${num}`),
 
       toBeBetween: (min: number, max: number) =>
-        push(
+        this.push(
+          name,
           actual >= min && actual <= max,
           `Expected ${actual} between ${min}-${max}`,
         ),
 
-      /* categories */
       toBeSuccess: () =>
-        push(actual >= 200 && actual < 300, `Expected ${actual} to be 2xx`),
-
+        this.push(
+          name,
+          actual >= 200 && actual < 300,
+          `Expected ${actual} to be 2xx`,
+        ),
       toBeClientError: () =>
-        push(actual >= 400 && actual < 500, `Expected ${actual} to be 4xx`),
-
+        this.push(
+          name,
+          actual >= 400 && actual < 500,
+          `Expected ${actual} to be 4xx`,
+        ),
       toBeServerError: () =>
-        push(actual >= 500 && actual < 600, `Expected ${actual} to be 5xx`),
-
+        this.push(
+          name,
+          actual >= 500 && actual < 600,
+          `Expected ${actual} to be 5xx`,
+        ),
       toBeRedirect: () =>
-        push(actual >= 300 && actual < 400, `Expected ${actual} to be 3xx`),
+        this.push(
+          name,
+          actual >= 300 && actual < 400,
+          `Expected ${actual} to be 3xx`,
+        ),
 
-      /* shortcuts */
-      toBeOK: () => push(actual === 200, `Expected 200`),
-      toBeCreated: () => push(actual === 201, `Expected 201`),
-      toBeNoContent: () => push(actual === 204, `Expected 204`),
-      toBeBadRequest: () => push(actual === 400, `Expected 400`),
-      toBeUnauthorized: () => push(actual === 401, `Expected 401`),
-      toBeForbidden: () => push(actual === 403, `Expected 403`),
-      toBeNotFound: () => push(actual === 404, `Expected 404`),
-      toBeInternalServerError: () => push(actual === 500, `Expected 500`),
-    };
+      toBeOK: () => this.push(name, actual === 200, `Expected 200`),
+      toBeCreated: () => this.push(name, actual === 201, `Expected 201`),
+      toBeAccepted: () => this.push(name, actual === 202, `Expected 202`),
+      toBeNoContent: () => this.push(name, actual === 204, `Expected 204`),
+      toBeBadRequest: () => this.push(name, actual === 400, `Expected 400`),
+      toBeUnauthorized: () => this.push(name, actual === 401, `Expected 401`),
+      toBeForbidden: () => this.push(name, actual === 403, `Expected 403`),
+      toBeNotFound: () => this.push(name, actual === 404, `Expected 404`),
+      toBeInternalServerError: () =>
+        this.push(name, actual === 500, `Expected 500`),
+      toBeBadGateway: () => this.push(name, actual === 502, `Expected 502`),
+      toBeServiceUnavailable: () =>
+        this.push(name, actual === 503, `Expected 503`),
+    } as Record<string, (...args: Array<unknown>) => unknown>;
 
     return {
       ...api,
-      not: Object.fromEntries(
-        Object.entries(api).map(([key, fn]) => [
-          key,
-          <T extends (...args: Array<unknown>) => unknown>(
-            ...args: Parameters<T>
-          ) => {
-            (fn as T)(...args);
-
-            const last = this.results[this.results.length - 1];
-            if (!last) return;
-            last.success = !last.success;
-            last.message = "NOT: " + last.message;
-          },
-        ]),
-      ),
+      not: this.applyNegation(api),
     };
   };
 
