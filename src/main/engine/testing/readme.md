@@ -2,19 +2,20 @@
 
 A lightweight, powerful testing utility for validating API responses inside **ApiBolt**.
 
----
-
 # 🔥 Core Idea
 
 `ABTestEngine` provides multiple assertion layers:
 
-* `status()` → HTTP status testing
-* `body()` → response body validation
-* `headers()` → headers validation
-* `cookies()` → cookies validation
-* **`expect()` → 🔥 ALL-IN-ONE (recommended)**
+- `status()` → HTTP status testing
+- `body()` → response body validation
+- `headers()` → headers validation
+- `cookies()` → cookies validation
 
----
+* `group()` → organize tests into blocks
+* `print()` → log values to the test console
+* `summary()` → generate a visual test summary
+
+- **`expect()` → 🔥 ALL-IN-ONE (recommended)**
 
 # ⭐ Why `expect()`?
 
@@ -22,10 +23,10 @@ A lightweight, powerful testing utility for validating API responses inside **Ap
 
 It combines:
 
-* ✅ Status assertions
-* ✅ Body assertions
-* ✅ Headers assertions
-* ✅ Cookies assertions
+- ✅ Status assertions
+- ✅ Body assertions
+- ✅ Headers assertions
+- ✅ Cookies assertions
 
 👉 You can test everything from a single interface.
 
@@ -76,6 +77,8 @@ ab.expect("Unauthorized").toBeUnauthorized();
 ab.expect("Forbidden").toBeForbidden();
 ab.expect("Not Found").toBeNotFound();
 ab.expect("Internal Server Error").toBeInternalServerError();
+ab.expect("Bad Gateway").toBeBadGateway();
+ab.expect("Service Unavailable").toBeServiceUnavailable();
 ```
 
 ---
@@ -116,11 +119,9 @@ ab.expect("Between 10-20").toBeBetweenNumber(10, 20);
 ab.expect("Header exists").toHaveHeader("content-type");
 ab.expect("Header missing").not.toHaveHeader("x-custom");
 
-ab.expect("Header exact")
-  .toHaveHeaderValue("content-type", "application/json");
+ab.expect("Header exact").toHaveHeaderValue("content-type", "application/json");
 
-ab.expect("Header regex")
-  .toHaveHeaderValue("content-type", /json/);
+ab.expect("Header regex").toHaveHeaderValue("content-type", /json/);
 
 ab.expect("JSON response").toHaveContentType("application/json");
 ```
@@ -173,6 +174,7 @@ ab.status("Internal Server Error").toBeInternalServerError();
 ## BODY (body())
 
 ```ts
+ab.body("Primitive match").toBe("OK");
 ab.body("Value is 10").toBe(10);
 ab.body("Deep equality").toEqual({ key: "value" });
 
@@ -197,10 +199,13 @@ ab.body("Between 10 and 20").toBeBetween(10, 20);
 
 ```ts
 ab.headers("Headers exist").toExist();
+ab.headers("Is Empty").toBeEmpty();
 
 ab.headers("Header 'content-type' exists").toHaveProperty("content-type");
-
 ab.headers("Header missing").not.toHaveProperty("x-custom-header");
+
+ab.headers("Value check").toHaveHeaderValue("server", "nginx");
+ab.headers("JSON check").toHaveContentType("application/json");
 ```
 
 ---
@@ -223,6 +228,8 @@ ab.cookies("session_id").toBeHttpOnly();
 ab.cookies("session_id").toBeSameSite("strict");
 
 ab.cookies("session_id").toExpireAfter(1800);
+ab.cookies("session_id").toExpireBefore(3600);
+ab.cookies("session_id").toHaveDomain("example.com");
 
 ab.cookies().toExist();
 ```
@@ -237,22 +244,6 @@ Every assertion supports `.not`
 ab.expect("Not 500").not.toBe(500);
 ab.expect("No error").not.toBeServerError();
 ab.expect("No password field").not.toHaveProperty("password");
-```
-
----
-
-# 📊 Results Format
-
-```ts
-type TTestResult = {
-  name: string;
-  success: boolean;
-  message: string;
-};
-```
-
-```ts
-const results = ab.getResults();
 ```
 
 ---
@@ -274,10 +265,10 @@ const results = ab.getResults();
 If you are using:
 
 ```ts
-ab.status()
-ab.body()
-ab.headers()
-ab.cookies()
+ab.status();
+ab.body();
+ab.headers();
+ab.cookies();
 ```
 
 👉 You are doing **more work than needed**
@@ -285,7 +276,7 @@ ab.cookies()
 ✅ Just use:
 
 ```ts
-ab.expect()
+ab.expect();
 ```
 
 ---
@@ -297,3 +288,115 @@ ab.expect()
 `expect()` is designed to behave like a **mini Jest for API testing inside ApiBolt**.
 
 ---
+
+# 📂 ORGANIZING TESTS (group())
+
+Use `group()` to create logical boundaries for your tests. This is essential for large API suites.
+
+```ts
+// 1. Basic Grouping
+ab.group("Profile Module", () => {
+  ab.expect("Status is 200").toBeOK();
+  ab.expect("Valid JSON Body").toBeType("object");
+});
+
+// 2. Functional Segregation
+ab.group("Authentication Security", () => {
+  ab.expect("HSTS Header").toHaveHeader("strict-transport-security");
+  ab.expect("XSS Protection").toHaveHeaderValue(
+    "x-xss-protection",
+    "1; mode=block",
+  );
+  ab.expect("No sensitive data in body").not.toHaveProperty("user.password");
+});
+```
+
+---
+
+# 📝 DEBUGGING & LOGGING (print())
+
+Use `print()` to inspect the state of your response or environment variables during test execution.
+
+```ts
+// Log raw values
+ab.print("Status Code", ab.getResponse().status);
+
+// Log objects (auto-stringified)
+ab.print("Response Payload", ab.getResponse().body);
+
+// Log specific parts of the response
+const user = ab.getResponse().body.user;
+if (user) {
+  ab.print("User ID detected", user.id);
+}
+```
+
+---
+
+# 📊 TEST SUMMARY (summary())
+
+The summary methods allow you to generate a final report at the end of your script.
+
+```ts
+ab.group("Final Audit", () => {
+  // Perform some tests
+  ab.expect("Final check").toBeOK();
+
+  // Push summary into results
+  ab.summary();
+
+  // Print summary to debug console
+  ab.printSummary();
+});
+```
+
+---
+
+# 🔥 PRO EXAMPLES (EVERYTHING POSSIBLE)
+
+### 1. Complex Pagination Check
+
+```ts
+ab.group("Pagination Tests", () => {
+  ab.expect("Is Array").toBeType("array");
+  ab.expect("Has 10 items").toHaveLength(10);
+
+  const firstItem = ab.getResponse().body[0];
+  ab.print("First Item ID", firstItem.id);
+
+  ab.expect("Has ID").toHaveProperty("0.id");
+  ab.expect("Has Metadata").toHaveHeader("x-total-count");
+});
+```
+
+### 2. Deep Cookie & Security Audit
+
+```ts
+ab.group("Strict Security Check", () => {
+  const sid = ab.cookies("session_id");
+
+  sid.toExist();
+  sid.toBeSecure();
+  sid.toBeHttpOnly();
+  sid.toBeSameSite("strict");
+  sid.toExpireAfter(3600); // 1 hour
+  sid.toHavePath("/api");
+  sid.toHaveDomain("api.production.com");
+});
+```
+
+### 3. Conditional Custom Logic (using getResponse)
+
+```ts
+const res = ab.response;
+
+if (res.status === 201) {
+  ab.group("Resource Created Verification", () => {
+    ab.expect("Has Location Header").toHaveHeader("location");
+    ab.expect("Body has ID").toHaveProperty("id");
+  });
+} else {
+  ab.print("Warning", "Resource was not created, skipping deep checks.");
+  ab.expect("Fallback Status").toBeOK();
+}
+```
