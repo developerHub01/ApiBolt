@@ -20,6 +20,7 @@ export const executeTest = (
     getSummary: ab.getSummary.bind(ab),
     summary: ab.summary.bind(ab),
     group: ab.group.bind(ab),
+    code: ab.code.bind(ab),
     response: ab.getResponse(),
   });
 
@@ -33,7 +34,6 @@ export const executeTest = (
   try {
     vm.run(`"use strict";\n${code}`);
     const result = ab.getResults();
-    console.log(result);
     return {
       success: true,
       result,

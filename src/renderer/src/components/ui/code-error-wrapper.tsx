@@ -3,13 +3,13 @@ import { cn } from "@/lib/utils";
 import ErrorAlert1 from "@/components/ui/error-alert1";
 
 interface Props extends ComponentProps<"div"> {
-  isError: boolean;
+  isError?: boolean;
   children: React.ReactNode;
   errorLabel?: string;
 }
 
 const CodeErrorWrapper = ({
-  isError,
+  isError = false,
   children,
   errorLabel = "Code have some errors",
   className = "",

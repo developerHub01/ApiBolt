@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import TestResultSummary from "@/components/app/collections/request/response/content/test-result/TestResultSummary";
 import TestResultContentWrapper from "@/components/app/collections/request/response/content/test-result/TestResultContentWrapper";
 import Empty from "@/components/ui/empty";
+import TestResultCode from "@/components/app/collections/request/response/content/test-result/TestResultCode";
 
 const plainPayload = new Set<TTestResultType>(["test", "print"]);
 
@@ -25,29 +26,9 @@ const TestResultItem = memo((props: TestResultInterface) => {
   const handleToggle = () => setIsOpen(prev => !prev);
 
   return (
-    <motion.div
+    <div
       onClick={handleToggle}
-      className="flex flex-col gap-3 min-h-9 hover:bg-secondary/50 transition-colors py-2 cursor-pointer text-start"
-      animate={{
-        height: "auto",
-      }}
-      initial={{
-        paddingLeft: 0,
-        paddingRight: 0,
-        height: "0",
-      }}
-      whileHover={{
-        paddingLeft: 8,
-        paddingRight: 8,
-      }}
-      transition={{
-        layout: {
-          duration: 0.3,
-          ease: "easeInOut",
-        },
-        duration: 0.3,
-        ease: "easeInOut",
-      }}
+      className="flex flex-col gap-3 min-h-9 hover:bg-secondary/50 transition-colors p-3 cursor-pointer text-start"
     >
       <div className="flex-1 min-w-0 flex gap-3 items-center">
         {props.type === "test" ? (
@@ -97,14 +78,20 @@ const TestResultItem = memo((props: TestResultInterface) => {
             transition={{
               duration: 0.2,
             }}
-            className="origin-left"
+            className="origin-left cursor-auto"
           >
             {plainPayload.has(props.type) && "message" in props ? (
-              <p className="text-sm text-muted-foreground">{props.message}</p>
+              <pre className="w-full whitespace-pre-wrap break-all cursor-auto select-text">
+                <p className="w-full text-sm text-muted-foreground">
+                  {props.message}
+                </p>
+              </pre>
+            ) : props.type === "code" ? (
+              <TestResultCode code={props.code} language={props.language} />
             ) : props.type === "summary" ? (
               <TestResultSummary summary={props.summary} />
             ) : props.type === "group" ? (
-              <div className="pl-5 md:pl-10">
+              <div className="pl-5 pr-2 md:pl-10 md:pr-4 select-all!">
                 {props.children?.length ? (
                   <TestResultContentWrapper>
                     {props.children.map((child, index) => (
@@ -125,7 +112,7 @@ const TestResultItem = memo((props: TestResultInterface) => {
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </div>
   );
 });
 

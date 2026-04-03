@@ -1,3 +1,4 @@
+import { TestResultCodePayloadInterface } from "@shared/types/test-script.types";
 import { isDeepStrictEqual } from "node:util";
 import { ResponseInterface } from "@shared/types/request-response.types";
 import {
@@ -783,6 +784,25 @@ export class ABTestEngine {
         typeof value === "object"
           ? JSON.stringify(value, null, 2)
           : String(value),
+    });
+  };
+
+  /*========================
+   CODE 
+  ========================*/
+  code = (
+    name: string,
+    value: unknown,
+    language: TestResultCodePayloadInterface["language"] = "markdown",
+  ) => {
+    this.push({
+      type: "code",
+      name,
+      code:
+        typeof value === "object"
+          ? JSON.stringify(value, null, 2)
+          : String(value),
+      language,
     });
   };
 

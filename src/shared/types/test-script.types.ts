@@ -19,7 +19,7 @@ export interface RunTestScriptPayload {
   response: ResponseInterface;
 }
 
-export type TTestResultType = "test" | "print" | "group" | "summary";
+export type TTestResultType = "test" | "print" | "group" | "summary" | "code";
 
 export interface TestResultTestPayloadInterface {
   type: "test";
@@ -32,6 +32,13 @@ export interface TestResultPrintPayloadInterface {
   type: "print";
   name: string;
   message: string;
+}
+
+export interface TestResultCodePayloadInterface {
+  type: "code";
+  name: string;
+  code: string;
+  language: "javascript" | "markdown" | "json";
 }
 
 export interface TestResultSummaryPayloadInterface {
@@ -57,7 +64,8 @@ export type TestResultInterface =
   | TestResultTestPayloadInterface
   | TestResultPrintPayloadInterface
   | TestResultSummaryPayloadInterface
-  | TestResultGroupPayloadInterface;
+  | TestResultGroupPayloadInterface
+  | TestResultCodePayloadInterface;
 
 export type TTestResults = Array<TestResultInterface>;
 
