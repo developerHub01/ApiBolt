@@ -2,13 +2,13 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import HistoryItem from "@/components/app/collections/request/response/content/history/HistoryItem";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectHistoryMetaCount } from "@/context/redux/history/selectors/history";
-import HistorySkeleton from "@/components/app/collections/request/response/content/history/skeleton/HistorySkeleton";
 import HistoryTop from "@/components/app/collections/request/response/content/history/HistoryTop";
 import Empty from "@/components/ui/empty";
 import { useHistoryMetaList } from "@/context/history/HistoryMetaListProvider";
 import { selectHistoryMetaListIsLoading } from "@/context/redux/status/selectors/history";
 import useShowSkeleton from "@/hooks/ui/use-show-skeleton";
 import animationData from "@/assets/lottie/no-search-item-available.json";
+import HistorySkeletonFallback from "@/fallback/collection/request/response/HistorySkeletonFallback";
 
 const HistoryContent = () => {
   const isLoading = useAppSelector(selectHistoryMetaListIsLoading);
@@ -16,7 +16,7 @@ const HistoryContent = () => {
   const { metaList } = useHistoryMetaList();
   const showSkeleton = useShowSkeleton(isLoading);
 
-  if (showSkeleton) return <HistorySkeleton />;
+  if (showSkeleton) return <HistorySkeletonFallback />;
 
   return (
     <section className="flex-1 flex flex-col gap-2">

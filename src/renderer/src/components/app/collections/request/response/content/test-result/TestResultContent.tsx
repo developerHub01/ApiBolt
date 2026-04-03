@@ -1,6 +1,5 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAppSelector } from "@/context/redux/hooks";
-import HistorySkeleton from "@/components/app/collections/request/response/content/history/skeleton/HistorySkeleton";
 import Empty from "@/components/ui/empty";
 import useShowSkeleton from "@/hooks/ui/use-show-skeleton";
 import animationData from "@/assets/lottie/no-search-item-available.json";
@@ -17,6 +16,7 @@ import {
 import { useTestResult } from "@/context/test-result/TestResultProvider";
 import ErrorBlock from "@/components/app/collections/request/response/content/ErrorBlock";
 import TestResultContentWrapper from "@/components/app/collections/request/response/content/test-result/TestResultContentWrapper";
+import ResposneTestResultFallback from "@/fallback/collection/request/response/ResposneTestResultFallback";
 
 const TestResultContent = () => {
   const isLoading = useAppSelector(selectTestScriptIsLoading);
@@ -26,7 +26,7 @@ const TestResultContent = () => {
   const { result } = useTestResult();
   const showSkeleton = useShowSkeleton(isLoading || isRunning);
 
-  if (showSkeleton) return <HistorySkeleton />;
+  if (showSkeleton) return <ResposneTestResultFallback />;
 
   return (
     <section className="flex-1 flex flex-col gap-2">
