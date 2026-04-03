@@ -32,17 +32,47 @@ interface TestResultProviderProps {
   children: React.ReactNode;
 }
 
+const getResultBasedOnTab = (result: TTestResults, tab: TTestResultTab) => {
+  const run = (result: TTestResults) => {
+    if (tab === "all") return result;
+    return result.filter(item => {
+      console.log({ item });
+      switch (item.type) {
+        case "print":
+        case "summary":
+          return true;
+        case "test":
+          // console.log({
+          //   name: item.name,
+          //   success: item.success,
+          //   reallity:
+          //     (tab === "success" && item.success) ||
+          //     (tab === "failed" && !item.success),
+          // });
+          return (
+            (tab === "success" && item.success) ||
+            (tab === "failed" && !item.success)
+          );
+        case "group": {
+          const filteredChildren = run(item.children ?? []);
+          item.children = filteredChildren;
+          return true;
+        }
+        default:
+          return false;
+      }
+    });
+  };
+
+  return run(structuredClone(result));
+};
+
 const TestResultProvider = ({ children }: TestResultProviderProps) => {
   const [resultTab, setResultTab] = useState<TTestResultTab>("all");
   const testResult = useAppSelector(selectTestResult);
 
   const result = useMemo(
-    () =>
-      resultTab === "all"
-        ? testResult
-        : resultTab === "success"
-          ? testResult.filter(item => item.success)
-          : testResult.filter(item => !item.success),
+    () => getResultBasedOnTab(testResult, resultTab),
     [resultTab, testResult],
   );
 

@@ -155,7 +155,7 @@ export interface FormDataInterface extends ParamInterface<
 export type FormDataPayloadInterface = Omit<FormDataInterface, "contentType">;
 
 export interface ResponseInterface {
-  data: unknown;
+  body: unknown;
   headers: Record<string, unknown>;
   cookies?: Array<CookieInterface>;
   status: number;

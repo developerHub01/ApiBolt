@@ -148,7 +148,7 @@ export const fetchApi: ElectronAPIInterface["fetchApi"] = async (
       return {
         status: response.statusCode,
         headers: response.headers as Record<string, string>,
-        data: finalData,
+        body: finalData,
         cookies,
         statusText: statusDetails?.reason ?? "OK",
         statusDescription: statusDetails?.description ?? "",
@@ -166,7 +166,7 @@ export const fetchApi: ElectronAPIInterface["fetchApi"] = async (
       return {
         status: 0,
         headers: {},
-        data: null,
+        body: null,
         cookies: [],
         statusText: getDetailedErrorStatus(error),
         statusDescription: error.message,

@@ -1,46 +1,41 @@
 import { isDeepStrictEqual } from "node:util";
 import { ResponseInterface } from "@shared/types/request-response.types";
-import { TTestResults } from "@shared/types/test-script.types";
+import {
+  TestResultInterface,
+  TestResultSummaryPayloadInterface,
+  TTestResults,
+} from "@shared/types/test-script.types";
 import { CookieInterface } from "@shared/types/cookies.types";
 
 export class ABTestEngine {
   private results: TTestResults = [];
+  private currentInsideGroup: boolean = false;
 
   constructor(private response: ResponseInterface) {
     this.response = response;
   }
 
-  private push = (name: string, success: boolean, message: string) =>
-    this.results.push({
+  private push = (result: TestResultInterface) => {
+    const last = this.results.at(-1);
+    if (
+      result.type !== "group" &&
+      this.currentInsideGroup &&
+      last?.type === "group"
+    )
+      return last.children.push(result);
+
+    return this.results.push(result);
+  };
+
+  getResponse = () => this.response;
+
+  private pushTest = (name: string, success: boolean, message: string) =>
+    this.push({
+      type: "test",
       name,
       success,
       message,
     });
-
-  addDemoResults = () => {
-    this.results = [
-      {
-        name: "Test 1",
-        success: true,
-        message: "Message 1",
-      },
-      {
-        name: "Test 2",
-        success: true,
-        message: "Message 2",
-      },
-      {
-        name: "Test 3",
-        success: false,
-        message: "Message 3",
-      },
-      {
-        name: "Test 4",
-        success: true,
-        message: "Message 4",
-      },
-    ];
-  };
 
   private applyNegation = <
     T extends Record<string, (...args: Array<unknown>) => unknown>,
@@ -55,12 +50,47 @@ export class ABTestEngine {
           fn(...args);
 
           const last = this.results[this.results.length - 1];
-          if (!last || this.results.length === beforeLength) return;
+          if (
+            !last ||
+            this.results.length === beforeLength ||
+            last.type !== "test"
+          )
+            return;
+
           last.success = !last.success;
           last.message = "NOT: " + last.message;
         },
       ]),
     );
+
+  addDemoResults = () => {
+    this.results = [
+      {
+        type: "test",
+        name: "Test 1",
+        success: true,
+        message: "Message 1",
+      },
+      {
+        type: "test",
+        name: "Test 2",
+        success: true,
+        message: "Message 2",
+      },
+      {
+        type: "test",
+        name: "Test 3",
+        success: false,
+        message: "Message 3",
+      },
+      {
+        type: "test",
+        name: "Test 4",
+        success: true,
+        message: "Message 4",
+      },
+    ];
+  };
 
   /**
    * ===============================
@@ -72,70 +102,71 @@ export class ABTestEngine {
 
     const api = {
       toBe: (expected: number) =>
-        this.push(
+        this.pushTest(
           name,
           actual === expected,
           `Expected ${actual} to be ${expected}`,
         ),
 
       toBeOneOf: (list: Array<number>) =>
-        this.push(
+        this.pushTest(
           name,
           list.includes(actual),
           `Expected ${actual} to be one of ${list.join(", ")}`,
         ),
 
       toBeGreaterThan: (num: number) =>
-        this.push(name, actual > num, `Expected ${actual} > ${num}`),
+        this.pushTest(name, actual > num, `Expected ${actual} > ${num}`),
 
       toBeLessThan: (num: number) =>
-        this.push(name, actual < num, `Expected ${actual} < ${num}`),
+        this.pushTest(name, actual < num, `Expected ${actual} < ${num}`),
 
       toBeBetween: (min: number, max: number) =>
-        this.push(
+        this.pushTest(
           name,
           actual >= min && actual <= max,
           `Expected ${actual} between ${min}-${max}`,
         ),
 
       toBeSuccess: () =>
-        this.push(
+        this.pushTest(
           name,
           actual >= 200 && actual < 300,
           `Expected ${actual} to be 2xx`,
         ),
       toBeClientError: () =>
-        this.push(
+        this.pushTest(
           name,
           actual >= 400 && actual < 500,
           `Expected ${actual} to be 4xx`,
         ),
       toBeServerError: () =>
-        this.push(
+        this.pushTest(
           name,
           actual >= 500 && actual < 600,
           `Expected ${actual} to be 5xx`,
         ),
       toBeRedirect: () =>
-        this.push(
+        this.pushTest(
           name,
           actual >= 300 && actual < 400,
           `Expected ${actual} to be 3xx`,
         ),
 
-      toBeOK: () => this.push(name, actual === 200, `Expected 200`),
-      toBeCreated: () => this.push(name, actual === 201, `Expected 201`),
-      toBeAccepted: () => this.push(name, actual === 202, `Expected 202`),
-      toBeNoContent: () => this.push(name, actual === 204, `Expected 204`),
-      toBeBadRequest: () => this.push(name, actual === 400, `Expected 400`),
-      toBeUnauthorized: () => this.push(name, actual === 401, `Expected 401`),
-      toBeForbidden: () => this.push(name, actual === 403, `Expected 403`),
-      toBeNotFound: () => this.push(name, actual === 404, `Expected 404`),
+      toBeOK: () => this.pushTest(name, actual === 200, `Expected 200`),
+      toBeCreated: () => this.pushTest(name, actual === 201, `Expected 201`),
+      toBeAccepted: () => this.pushTest(name, actual === 202, `Expected 202`),
+      toBeNoContent: () => this.pushTest(name, actual === 204, `Expected 204`),
+      toBeBadRequest: () => this.pushTest(name, actual === 400, `Expected 400`),
+      toBeUnauthorized: () =>
+        this.pushTest(name, actual === 401, `Expected 401`),
+      toBeForbidden: () => this.pushTest(name, actual === 403, `Expected 403`),
+      toBeNotFound: () => this.pushTest(name, actual === 404, `Expected 404`),
       toBeInternalServerError: () =>
-        this.push(name, actual === 500, `Expected 500`),
-      toBeBadGateway: () => this.push(name, actual === 502, `Expected 502`),
+        this.pushTest(name, actual === 500, `Expected 500`),
+      toBeBadGateway: () => this.pushTest(name, actual === 502, `Expected 502`),
       toBeServiceUnavailable: () =>
-        this.push(name, actual === 503, `Expected 503`),
+        this.pushTest(name, actual === 503, `Expected 503`),
     } as Record<string, (...args: Array<unknown>) => unknown>;
 
     return {
@@ -150,25 +181,25 @@ export class ABTestEngine {
    * ===============================
    */
   body = (name: string) => {
-    const actual = this.response.data;
+    const actual = this.response.body;
 
     const api = {
       toBe: (expected: unknown) =>
-        this.push(
+        this.pushTest(
           name,
           actual === expected,
           `Expected ${JSON.stringify(actual, null, 2)} to be ${JSON.stringify(expected, null, 2)}`,
         ),
 
       toEqual: (expected: unknown) =>
-        this.push(
+        this.pushTest(
           name,
           isDeepStrictEqual(actual, expected),
           `Expected ${JSON.stringify(actual, null, 2)} to equal ${JSON.stringify(expected, null, 2)}`,
         ),
 
       toExist: () =>
-        this.push(
+        this.pushTest(
           name,
           actual !== undefined && actual !== null,
           `Expected value to exist`,
@@ -178,7 +209,7 @@ export class ABTestEngine {
         type: "string" | "number" | "boolean" | "object" | "array",
       ) => {
         const actualType = Array.isArray(actual) ? "array" : typeof actual;
-        this.push(
+        this.pushTest(
           name,
           actualType === type,
           `Expected type ${type}, got ${actualType}`,
@@ -191,7 +222,7 @@ export class ABTestEngine {
           success = actual.includes(item as string);
         else if (Array.isArray(actual))
           success = (actual as Array<unknown>).includes(item);
-        this.push(
+        this.pushTest(
           name,
           success,
           `Expected ${JSON.stringify(actual)} to contain ${JSON.stringify(item)}`,
@@ -209,15 +240,15 @@ export class ABTestEngine {
           )
             val = (val as Record<string, unknown>)[k];
           else {
-            this.push(name, false, `Expected property '${key}' not found`);
+            this.pushTest(name, false, `Expected property '${key}' not found`);
             return;
           }
         }
-        this.push(name, true, `Property '${key}' exists`);
+        this.pushTest(name, true, `Property '${key}' exists`);
       },
 
       toHaveLength: (len: number) =>
-        this.push(
+        this.pushTest(
           name,
           Array.isArray(actual) && (actual as Array<unknown>).length === len,
           `Expected length ${len}, got ${Array.isArray(actual) ? (actual as Array<unknown>).length : "not array"}`,
@@ -226,26 +257,26 @@ export class ABTestEngine {
       /* numbers */
       toBeGreaterThan: (num: number) => {
         if (typeof actual !== "number" || isNaN(actual)) {
-          this.push(name, false, `Expected a number, got ${typeof actual}`);
+          this.pushTest(name, false, `Expected a number, got ${typeof actual}`);
           return;
         }
-        this.push(name, actual > num, `Expected ${actual} > ${num}`);
+        this.pushTest(name, actual > num, `Expected ${actual} > ${num}`);
       },
 
       toBeLessThan: (num: number) => {
         if (typeof actual !== "number" || isNaN(actual)) {
-          this.push(name, false, `Expected a number, got ${typeof actual}`);
+          this.pushTest(name, false, `Expected a number, got ${typeof actual}`);
           return;
         }
-        this.push(name, actual < num, `Expected ${actual} < ${num}`);
+        this.pushTest(name, actual < num, `Expected ${actual} < ${num}`);
       },
 
       toBeBetween: (min: number, max: number) => {
         if (typeof actual !== "number" || isNaN(actual)) {
-          this.push(name, false, `Expected a number, got ${typeof actual}`);
+          this.pushTest(name, false, `Expected a number, got ${typeof actual}`);
           return;
         }
-        this.push(
+        this.pushTest(
           name,
           actual >= min && actual <= max,
           `Expected ${actual} between ${min} - ${max}`,
@@ -267,7 +298,7 @@ export class ABTestEngine {
 
     const api = {
       toHaveHeader: (key: string) =>
-        this.push(
+        this.pushTest(
           name,
           actual !== null &&
             typeof actual === "object" &&
@@ -277,17 +308,17 @@ export class ABTestEngine {
 
       toHaveHeaderValue: (key: string, value: string | RegExp) => {
         if (!actual) {
-          this.push(name, false, "Headers are null");
+          this.pushTest(name, false, "Headers are null");
           return;
         }
         if (typeof actual !== "object") {
-          this.push(name, false, "Headers are not an object");
+          this.pushTest(name, false, "Headers are not an object");
           return;
         }
 
         const val = (actual as Record<string, unknown>)[key.toLowerCase()];
         if (val === undefined || val === null) {
-          this.push(name, false, `Expected header '${key}' to exist`);
+          this.pushTest(name, false, `Expected header '${key}' to exist`);
           return;
         }
 
@@ -295,7 +326,7 @@ export class ABTestEngine {
         if (typeof val === "string") {
           success = value instanceof RegExp ? value.test(val) : val === value;
         } else {
-          this.push(
+          this.pushTest(
             name,
             false,
             `Header '${key}' value is not a string: ${typeof val}`,
@@ -303,7 +334,7 @@ export class ABTestEngine {
           return;
         }
 
-        this.push(
+        this.pushTest(
           name,
           success,
           `Expected header '${key}' value to be ${
@@ -314,17 +345,17 @@ export class ABTestEngine {
 
       toHaveContentType: (type: string) => {
         if (!actual) {
-          this.push(name, false, "Headers are null");
+          this.pushTest(name, false, "Headers are null");
           return;
         }
         if (typeof actual !== "object") {
-          this.push(name, false, "Headers are not an object");
+          this.pushTest(name, false, "Headers are not an object");
           return;
         }
 
         const val = (actual as Record<string, unknown>)["content-type"];
         if (typeof val !== "string") {
-          this.push(
+          this.pushTest(
             name,
             false,
             `Content-Type header not found or not a string`,
@@ -333,7 +364,7 @@ export class ABTestEngine {
         }
 
         const success = val.includes(type);
-        this.push(
+        this.pushTest(
           name,
           success,
           `Expected 'Content-Type' to include '${type}', got ${val}`,
@@ -341,14 +372,14 @@ export class ABTestEngine {
       },
 
       toExist: () =>
-        this.push(
+        this.pushTest(
           name,
           actual !== undefined && actual !== null,
           "Expected headers object to exist",
         ),
 
       toBeEmpty: () =>
-        this.push(
+        this.pushTest(
           name,
           actual !== null &&
             typeof actual === "object" &&
@@ -374,7 +405,7 @@ export class ABTestEngine {
 
     const api = {
       toExist: () =>
-        this.push(
+        this.pushTest(
           cookieKey || "cookies",
           cookieKey ? Boolean(actual) : Boolean(cookies.length),
           `Expected cookie${cookieKey ? ` '${cookieKey}'` : "s"} to exist`,
@@ -382,10 +413,10 @@ export class ABTestEngine {
 
       toBe: (expected: string) => {
         if (!actual) {
-          this.push(cookieKey || "cookies", false, "Cookie not found");
+          this.pushTest(cookieKey || "cookies", false, "Cookie not found");
           return;
         }
-        this.push(
+        this.pushTest(
           cookieKey || "cookies",
           actual.value === expected,
           `Expected cookie '${cookieKey}' to have value '${expected}', got '${actual.value}'`,
@@ -394,10 +425,10 @@ export class ABTestEngine {
 
       toEqual: (expected: CookieInterface) => {
         if (!actual) {
-          this.push(cookieKey || "cookies", false, "Cookie not found");
+          this.pushTest(cookieKey || "cookies", false, "Cookie not found");
           return;
         }
-        this.push(
+        this.pushTest(
           cookieKey || "cookies",
           isDeepStrictEqual(actual, expected),
           `Expected cookie '${cookieKey}' to equal ${JSON.stringify(
@@ -410,10 +441,10 @@ export class ABTestEngine {
 
       toContain: (substring: string) => {
         if (!actual) {
-          this.push(cookieKey || "cookies", false, "Cookie not found");
+          this.pushTest(cookieKey || "cookies", false, "Cookie not found");
           return;
         }
-        this.push(
+        this.pushTest(
           cookieKey || "cookies",
           actual.value.includes(substring),
           `Expected cookie '${cookieKey}' to contain '${substring}'`,
@@ -422,10 +453,10 @@ export class ABTestEngine {
 
       toHaveProperty: (prop: keyof CookieInterface) => {
         if (!actual) {
-          this.push(cookieKey || "cookies", false, "Cookie not found");
+          this.pushTest(cookieKey || "cookies", false, "Cookie not found");
           return;
         }
-        this.push(
+        this.pushTest(
           cookieKey || "cookies",
           prop in actual,
           `Expected cookie '${cookieKey}' to have property '${prop}'`,
@@ -434,10 +465,14 @@ export class ABTestEngine {
 
       toHaveLength: (len: number) => {
         if (cookieKey) {
-          this.push(cookieKey, false, "Cannot check length on single cookie");
+          this.pushTest(
+            cookieKey,
+            false,
+            "Cannot check length on single cookie",
+          );
           return;
         }
-        this.push(
+        this.pushTest(
           "cookies",
           cookies.length === len,
           `Expected cookies array length ${len}, got ${cookies.length}`,
@@ -446,12 +481,16 @@ export class ABTestEngine {
 
       toExpireAfter: (seconds: number) => {
         if (!actual || (!actual.maxAge && !actual.expires)) {
-          this.push(cookieKey || "cookies", false, "Cookie expiry not found");
+          this.pushTest(
+            cookieKey || "cookies",
+            false,
+            "Cookie expiry not found",
+          );
           return;
         }
         const expirySeconds =
           actual.maxAge ?? 0; /* only check maxAge for simplicity */
-        this.push(
+        this.pushTest(
           cookieKey || "cookies",
           expirySeconds >= seconds,
           `Expected cookie '${cookieKey}' to expire after ${seconds}s, got ${expirySeconds}`,
@@ -460,11 +499,15 @@ export class ABTestEngine {
 
       toExpireBefore: (seconds: number) => {
         if (!actual || (!actual.maxAge && !actual.expires)) {
-          this.push(cookieKey || "cookies", false, "Cookie expiry not found");
+          this.pushTest(
+            cookieKey || "cookies",
+            false,
+            "Cookie expiry not found",
+          );
           return;
         }
         const expirySeconds = actual.maxAge ?? 0;
-        this.push(
+        this.pushTest(
           cookieKey || "cookies",
           expirySeconds <= seconds,
           `Expected cookie '${cookieKey}' to expire before ${seconds}s, got ${expirySeconds}`,
@@ -473,10 +516,10 @@ export class ABTestEngine {
 
       toHavePath: (path: string) => {
         if (!actual) {
-          this.push(cookieKey || "cookies", false, "Cookie not found");
+          this.pushTest(cookieKey || "cookies", false, "Cookie not found");
           return;
         }
-        this.push(
+        this.pushTest(
           cookieKey || "cookies",
           actual.path === path,
           `Expected cookie '${cookieKey}' path '${path}', got '${actual.path}'`,
@@ -485,10 +528,10 @@ export class ABTestEngine {
 
       toHaveDomain: (domain: string) => {
         if (!actual) {
-          this.push(cookieKey || "cookies", false, "Cookie not found");
+          this.pushTest(cookieKey || "cookies", false, "Cookie not found");
           return;
         }
-        this.push(
+        this.pushTest(
           cookieKey || "cookies",
           actual.domain === domain,
           `Expected cookie '${cookieKey}' domain '${domain}', got '${actual.domain}'`,
@@ -496,7 +539,7 @@ export class ABTestEngine {
       },
 
       toBeSecure: () => {
-        this.push(
+        this.pushTest(
           cookieKey || "cookies",
           Boolean(actual?.secure),
           `Expected cookie '${cookieKey}' to be secure`,
@@ -504,7 +547,7 @@ export class ABTestEngine {
       },
 
       toBeHttpOnly: () => {
-        this.push(
+        this.pushTest(
           cookieKey || "cookies",
           Boolean(actual?.httpOnly),
           `Expected cookie '${cookieKey}' to be httpOnly`,
@@ -513,10 +556,10 @@ export class ABTestEngine {
 
       toBeSameSite: (sameSite: "lax" | "strict" | "none") => {
         if (!actual) {
-          this.push(cookieKey || "cookies", false, "Cookie not found");
+          this.pushTest(cookieKey || "cookies", false, "Cookie not found");
           return;
         }
-        this.push(
+        this.pushTest(
           cookieKey || "cookies",
           actual.sameSite === sameSite,
           `Expected cookie '${cookieKey}' sameSite to be '${sameSite}', got '${actual.sameSite}'`,
@@ -535,79 +578,80 @@ export class ABTestEngine {
   ========================*/
   expect = (name: string) => {
     const status = this.response.status;
-    const body = this.response.data;
+    const body = this.response.body;
     const headers = this.response.headers;
     const cookies = this.response.cookies || [];
 
     const api = {
       toBe: (expected: number) =>
-        this.push(
+        this.pushTest(
           name,
           status === expected,
           `Expected ${status} to be ${expected}`,
         ),
       toBeOneOf: (list: Array<number>) =>
-        this.push(
+        this.pushTest(
           name,
           list.includes(status),
           `Expected ${status} to be one of ${list.join(", ")}`,
         ),
       toBeGreaterThan: (num: number) =>
-        this.push(name, status > num, `Expected ${status} > ${num}`),
+        this.pushTest(name, status > num, `Expected ${status} > ${num}`),
       toBeLessThan: (num: number) =>
-        this.push(name, status < num, `Expected ${status} < ${num}`),
+        this.pushTest(name, status < num, `Expected ${status} < ${num}`),
       toBeBetween: (min: number, max: number) =>
-        this.push(
+        this.pushTest(
           name,
           status >= min && status <= max,
           `Expected ${status} between ${min}-${max}`,
         ),
       toBeSuccess: () =>
-        this.push(
+        this.pushTest(
           name,
           status >= 200 && status < 300,
           `Expected ${status} to be 2xx`,
         ),
       toBeClientError: () =>
-        this.push(
+        this.pushTest(
           name,
           status >= 400 && status < 500,
           `Expected ${status} to be 4xx`,
         ),
       toBeServerError: () =>
-        this.push(
+        this.pushTest(
           name,
           status >= 500 && status < 600,
           `Expected ${status} to be 5xx`,
         ),
       toBeRedirect: () =>
-        this.push(
+        this.pushTest(
           name,
           status >= 300 && status < 400,
           `Expected ${status} to be 3xx`,
         ),
-      toBeOK: () => this.push(name, status === 200, `Expected 200`),
-      toBeCreated: () => this.push(name, status === 201, `Expected 201`),
-      toBeAccepted: () => this.push(name, status === 202, `Expected 202`),
-      toBeNoContent: () => this.push(name, status === 204, `Expected 204`),
-      toBeBadRequest: () => this.push(name, status === 400, `Expected 400`),
-      toBeUnauthorized: () => this.push(name, status === 401, `Expected 401`),
-      toBeForbidden: () => this.push(name, status === 403, `Expected 403`),
-      toBeNotFound: () => this.push(name, status === 404, `Expected 404`),
+      toBeOK: () => this.pushTest(name, status === 200, `Expected 200`),
+      toBeCreated: () => this.pushTest(name, status === 201, `Expected 201`),
+      toBeAccepted: () => this.pushTest(name, status === 202, `Expected 202`),
+      toBeNoContent: () => this.pushTest(name, status === 204, `Expected 204`),
+      toBeBadRequest: () => this.pushTest(name, status === 400, `Expected 400`),
+      toBeUnauthorized: () =>
+        this.pushTest(name, status === 401, `Expected 401`),
+      toBeForbidden: () => this.pushTest(name, status === 403, `Expected 403`),
+      toBeNotFound: () => this.pushTest(name, status === 404, `Expected 404`),
       toBeInternalServerError: () =>
-        this.push(name, status === 500, `Expected 500`),
-      toBeBadGateway: () => this.push(name, status === 502, `Expected 502`),
+        this.pushTest(name, status === 500, `Expected 500`),
+      toBeBadGateway: () => this.pushTest(name, status === 502, `Expected 502`),
       toBeServiceUnavailable: () =>
-        this.push(name, status === 503, `Expected 503`),
+        this.pushTest(name, status === 503, `Expected 503`),
 
       toEqual: (expected: unknown) =>
-        this.push(
+        this.pushTest(
           name,
           isDeepStrictEqual(body, expected),
           `Expected ${JSON.stringify(body)} to equal ${JSON.stringify(expected)}`,
         ),
       toExist: () =>
-        this.push(
+        this.pushTest(
           name,
           body !== undefined && body !== null,
           `Expected value to exist`,
@@ -616,7 +660,7 @@ export class ABTestEngine {
         type: "string" | "number" | "boolean" | "object" | "array",
       ) => {
         const actualType = Array.isArray(body) ? "array" : typeof body;
-        this.push(
+        this.pushTest(
           name,
           actualType === type,
           `Expected type ${type}, got ${actualType}`,
@@ -627,7 +671,7 @@ export class ABTestEngine {
         if (typeof body === "string") success = body.includes(item as string);
         else if (Array.isArray(body))
           success = (body as Array<unknown>).includes(item);
-        this.push(
+        this.pushTest(
           name,
           success,
           `Expected ${JSON.stringify(body)} to contain ${JSON.stringify(item)}`,
@@ -644,39 +688,39 @@ export class ABTestEngine {
           )
             val = (val as Record<string, unknown>)[k];
           else {
-            this.push(name, false, `Expected property '${key}' not found`);
+            this.pushTest(name, false, `Expected property '${key}' not found`);
             return;
           }
         }
-        this.push(name, true, `Property '${key}' exists`);
+        this.pushTest(name, true, `Property '${key}' exists`);
       },
       toHaveLength: (len: number) =>
-        this.push(
+        this.pushTest(
           name,
           Array.isArray(body) && (body as Array<unknown>).length === len,
           `Expected length ${len}, got ${Array.isArray(body) ? (body as Array<unknown>).length : "not array"}`,
         ),
       toBeGreaterThanNumber: (num: number) =>
-        this.push(
+        this.pushTest(
           name,
           typeof body === "number" && body > num,
           `Expected ${body} > ${num}`,
         ),
       toBeLessThanNumber: (num: number) =>
-        this.push(
+        this.pushTest(
           name,
           typeof body === "number" && body < num,
           `Expected ${body} < ${num}`,
         ),
       toBeBetweenNumber: (min: number, max: number) =>
-        this.push(
+        this.pushTest(
           name,
           typeof body === "number" && body >= min && body <= max,
           `Expected ${body} between ${min}-${max}`,
         ),
 
       toHaveHeader: (key: string) =>
-        this.push(
+        this.pushTest(
           name,
           headers && key.toLowerCase() in headers,
           `Expected header '${key}' to exist`,
@@ -688,7 +732,7 @@ export class ABTestEngine {
         let success = false;
         if (typeof val === "string")
           success = value instanceof RegExp ? value.test(val) : val === value;
-        this.push(
+        this.pushTest(
           name,
           success,
           `Expected header '${key}' value to be ${value}, got ${val}`,
@@ -698,7 +742,7 @@ export class ABTestEngine {
         const val = headers
           ? (headers as Record<string, unknown>)["content-type"]
           : undefined;
-        this.push(
+        this.pushTest(
           name,
           typeof val === "string" && val.includes(type),
           `Expected Content-Type to include '${type}', got ${val}`,
@@ -706,7 +750,7 @@ export class ABTestEngine {
       },
 
       toExistCookie: (cookieKey: string) => {
-        this.push(
+        this.pushTest(
           name,
           cookies.some(c => c.key === cookieKey),
           `Expected cookie '${cookieKey}' to exist`,
@@ -714,7 +758,7 @@ export class ABTestEngine {
       },
       toBeCookie: (cookieKey: string, value: string) => {
         const c = cookies.find(c => c.key === cookieKey);
-        this.push(
+        this.pushTest(
           name,
           c?.value === value,
           `Expected cookie '${cookieKey}' to be '${value}', got '${c?.value}'`,
@@ -728,7 +772,108 @@ export class ABTestEngine {
     };
   };
 
-  getResults = () => {
-    return this.results;
+  /*========================
+   PRINT 
+  ========================*/
+  print = (name: string, value: unknown) => {
+    this.push({
+      type: "print",
+      name,
+      message:
+        typeof value === "object"
+          ? JSON.stringify(value, null, 2)
+          : String(value),
+    });
   };
+
+  /*========================
+   SUMMARY
+  ========================*/
+  getSummary = () => {
+    const walk = (results: TTestResults) =>
+      results.reduce(
+        (acc, curr) => {
+          acc.total++;
+
+          switch (curr.type) {
+            case "test": {
+              acc.tests++;
+              if (curr.success) acc.passed++;
+              else acc.failed++;
+              break;
+            }
+
+            case "print":
+              acc.prints++;
+              break;
+
+            case "group": {
+              const child = walk(curr.children);
+              acc.total += child.total;
+              acc.tests += child.tests;
+              acc.prints += child.prints;
+              acc.passed += child.passed;
+              acc.failed += child.failed;
+              break;
+            }
+
+            case "summary":
+              break;
+          }
+
+          return acc;
+        },
+        {
+          total: 0,
+          tests: 0,
+          prints: 0,
+          passed: 0,
+          failed: 0,
+          successRate: 0,
+        } as TestResultSummaryPayloadInterface["summary"],
+      );
+
+    const summary = walk(this.results);
+
+    return {
+      ...summary,
+      successRate: Math.round(
+        summary.tests ? (summary.passed / summary.tests) * 100 : 0,
+      ),
+    };
+  };
+
+  printSummary = () =>
+    this.print(
+      "Summary",
+      `=================================
+===== HERE ARE TEST SUMMARY =====
+${JSON.stringify(this.getSummary(), null, 2)}
+=================================`,
+    );
+
+  summary = () =>
+    this.push({
+      type: "summary",
+      name: "Summary",
+      summary: this.getSummary(),
+    });
+
+  /*========================
+   GROUPING
+  ========================*/
+  group = (name: string, callback: () => void) => {
+    if (this.currentInsideGroup) return callback();
+
+    this.currentInsideGroup = true;
+    this.push({
+      type: "group",
+      name,
+      children: [],
+    });
+    callback();
+    this.currentInsideGroup = false;
+  };
+
+  getResults = () => this.results;
 }

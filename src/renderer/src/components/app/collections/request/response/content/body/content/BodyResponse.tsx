@@ -25,8 +25,8 @@ const BodyResponse = memo(() => {
 
     const stringCode =
       parser === "json"
-        ? JSON.stringify(response.data, null, 2)
-        : String(response.data);
+        ? JSON.stringify(response.body, null, 2)
+        : String(response.body);
 
     const format = async () => {
       const { success, data } = await formatCode(stringCode, parser);

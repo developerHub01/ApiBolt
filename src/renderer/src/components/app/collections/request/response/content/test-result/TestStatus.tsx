@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 
@@ -6,7 +7,7 @@ interface TestStatusInterface {
   className?: string;
 }
 
-const TestStatus = ({ success, className }: TestStatusInterface) => (
+const TestStatus = memo(({ success, className }: TestStatusInterface) => (
   <Badge
     className={cn(
       "uppercase text-xs px-1 font-medium rounded-md border select-none flex justify-center items-center text-white w-15 tracking-wider",
@@ -19,6 +20,6 @@ const TestStatus = ({ success, className }: TestStatusInterface) => (
   >
     {success ? "passed" : "failed"}
   </Badge>
-);
+));
 
 export default TestStatus;

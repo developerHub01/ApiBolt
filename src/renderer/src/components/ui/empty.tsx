@@ -17,6 +17,7 @@ interface EmptyProps {
   showFallback?: boolean;
   centered?: boolean;
   innerClassName?: string;
+  oriantation?: "vertical" | "horizontal";
 }
 
 const Empty: React.FC<EmptyProps> = ({
@@ -30,21 +31,39 @@ const Empty: React.FC<EmptyProps> = ({
   showFallback = false,
   centered = true,
   innerClassName = "",
+  oriantation = "vertical",
 }) => {
   return (
     <BorderedWrapper
       className={cn(
-        centered && "flex flex-col justify-center items-center text-center",
+        {
+          "flex flex-col justify-center items-center text-center": centered,
+          "flex-col": oriantation === "vertical",
+          "flex-row": oriantation === "horizontal",
+        },
         className,
       )}
     >
-      {icon && <div className="mb-2">{icon}</div>}
+      {icon && (
+        <div
+          className={cn({
+            "mr-2": oriantation === "horizontal",
+            "mb-2": oriantation === "vertical",
+          })}
+        >
+          {icon}
+        </div>
+      )}
 
       <AnimatePresence>
         {showFallback && (
           <AnimationWrapper
             className={cn(
-              "w-32 mb-2 flex justify-center items-center [&_canvas]:object-contain!",
+              "w-32 flex justify-center items-center [&_canvas]:object-contain!",
+              {
+                "mr-2": oriantation === "horizontal",
+                "mb-2": oriantation === "vertical",
+              },
               fallbackClassName,
             )}
           >
@@ -56,6 +75,9 @@ const Empty: React.FC<EmptyProps> = ({
       <div
         className={cn(
           "mx-auto w-full max-w-md flex flex-col gap-2",
+          {
+            "mx-0 text-left": oriantation === "horizontal",
+          },
           innerClassName,
         )}
       >

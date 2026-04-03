@@ -19,18 +19,52 @@ export interface RunTestScriptPayload {
   response: ResponseInterface;
 }
 
-export interface RunTestScriptResultPayload {
-  success: boolean;
-  result?: TTestResults;
-  message?: string;
-}
+export type TTestResultType = "test" | "print" | "group" | "summary";
 
-export interface TestResultInterface {
+export interface TestResultTestPayloadInterface {
+  type: "test";
   name: string;
   success: boolean;
   message: string;
 }
 
+export interface TestResultPrintPayloadInterface {
+  type: "print";
+  name: string;
+  message: string;
+}
+
+export interface TestResultSummaryPayloadInterface {
+  type: "summary";
+  name: string;
+  summary: {
+    total: number;
+    tests: number;
+    prints: number;
+    passed: number;
+    failed: number;
+    successRate: number;
+  };
+}
+
+export interface TestResultGroupPayloadInterface {
+  type: "group";
+  name: string;
+  children: Array<Exclude<TestResultInterface, "group">>;
+}
+
+export type TestResultInterface =
+  | TestResultTestPayloadInterface
+  | TestResultPrintPayloadInterface
+  | TestResultSummaryPayloadInterface
+  | TestResultGroupPayloadInterface;
+
 export type TTestResults = Array<TestResultInterface>;
+
+export interface RunTestScriptResultPayload {
+  success: boolean;
+  result?: TTestResults;
+  message?: string;
+}
 
 export type TTestResultTab = "all" | "success" | "failed";

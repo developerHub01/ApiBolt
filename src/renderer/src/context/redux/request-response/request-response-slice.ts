@@ -207,7 +207,7 @@ const initialState: RequestResponseState = {
   folderDescriptionLineWrap: {},
 };
 
-export const requestResponseSlice = createSlice({
+const requestResponseSlice = createSlice({
   name: "request-response",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,

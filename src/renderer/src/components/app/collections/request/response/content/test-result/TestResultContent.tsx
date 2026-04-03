@@ -16,6 +16,7 @@ import {
 } from "@/context/redux/request-response/selectors/test-script";
 import { useTestResult } from "@/context/test-result/TestResultProvider";
 import ErrorBlock from "@/components/app/collections/request/response/content/ErrorBlock";
+import TestResultContentWrapper from "@/components/app/collections/request/response/content/test-result/TestResultContentWrapper";
 
 const TestResultContent = () => {
   const isLoading = useAppSelector(selectTestScriptIsLoading);
@@ -40,11 +41,11 @@ const TestResultContent = () => {
               innerClassName="w-56"
             />
           ) : (
-            <div className="flex flex-col divide-y divide-border/50">
+            <TestResultContentWrapper>
               {result.map((meta, index) => (
                 <TestResultItem key={index} {...meta} />
               ))}
-            </div>
+            </TestResultContentWrapper>
           )
         ) : (
           <ErrorBlock

@@ -43,7 +43,7 @@ export const fetchApi: ElectronAPIInterface["fetchApi"] = async (
     status: 0,
     statusText: "",
     statusDescription: "",
-    data: null,
+    body: null,
     requestSize: {
       header: 0,
       body: 0,
@@ -81,7 +81,7 @@ export const fetchApi: ElectronAPIInterface["fetchApi"] = async (
         res.statusText ?? (statusDetails.editedReason || statusDetails.reason),
       statusDescription:
         statusDetails.editedDescription || statusDetails.description,
-      data: payload.method?.toLowerCase() === "head" ? null : res.data,
+      body: payload.method?.toLowerCase() === "head" ? null : res.data,
       cookies,
       responseSize: {
         header:
@@ -107,7 +107,7 @@ export const fetchApi: ElectronAPIInterface["fetchApi"] = async (
         const statusDetails = await getHttpStatusByCode(String(errRes.status));
         responsePayload = {
           ...responsePayload,
-          data: errRes.data,
+          body: errRes.data,
           headers: errRes.headers,
           status: errRes.status,
           statusText:
@@ -134,7 +134,7 @@ export const fetchApi: ElectronAPIInterface["fetchApi"] = async (
       } else if (error.request) {
         responsePayload = {
           ...responsePayload,
-          data: null,
+          body: null,
           headers: {},
           status: 0,
           statusText: "Network Error",
@@ -144,7 +144,7 @@ export const fetchApi: ElectronAPIInterface["fetchApi"] = async (
       } else {
         responsePayload = {
           ...responsePayload,
-          data: null,
+          body: null,
           headers: {},
           status: 0,
           statusText: "Request Error",
@@ -156,7 +156,7 @@ export const fetchApi: ElectronAPIInterface["fetchApi"] = async (
       /* Something else happened (error in request setup, etc.) */
       responsePayload = {
         ...responsePayload,
-        data: null,
+        body: null,
         headers: {},
         status: 0,
         statusText: "Request Error",

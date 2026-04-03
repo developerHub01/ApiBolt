@@ -47,7 +47,7 @@ export const saveResponse = createAsyncThunk<
     const response = state.requestResponse.response[requestId];
 
     return await window.electronAPIResponse.saveResponse({
-      data: response?.data,
+      data: response?.body,
       contentType: response?.headers["content-type"] as string,
     });
   } catch (error) {

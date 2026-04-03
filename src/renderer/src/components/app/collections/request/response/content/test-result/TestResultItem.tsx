@@ -1,20 +1,31 @@
 import { memo, useState } from "react";
-import { TestResultInterface } from "@shared/types/test-script.types";
+import {
+  TestResultInterface,
+  TTestResultType,
+} from "@shared/types/test-script.types";
 import TestStatus from "@/components/app/collections/request/response/content/test-result/TestStatus";
 import { AnimatePresence, motion } from "motion/react";
-import { ChevronDown as ChevronDownIcon } from "lucide-react";
+import {
+  Boxes as GroupIcon,
+  ChevronDown as ChevronDownIcon,
+  Printer as PrintIcon,
+  ListChevronsDownUp as SummaryIcon,
+} from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import TestResultSummary from "@/components/app/collections/request/response/content/test-result/TestResultSummary";
+import TestResultContentWrapper from "@/components/app/collections/request/response/content/test-result/TestResultContentWrapper";
+import Empty from "@/components/ui/empty";
 
-interface Props extends TestResultInterface {}
+const plainPayload = new Set<TTestResultType>(["test", "print"]);
 
-const TestResultItem = memo(({ success, name, message }: Props) => {
+const TestResultItem = memo((props: TestResultInterface) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleToggle = () => setIsOpen(prev => !prev);
 
   return (
-    <motion.button
+    <motion.div
       onClick={handleToggle}
       className="flex flex-col gap-3 min-h-9 hover:bg-secondary/50 transition-colors py-2 cursor-pointer text-start"
       animate={{
@@ -39,9 +50,17 @@ const TestResultItem = memo(({ success, name, message }: Props) => {
       }}
     >
       <div className="flex-1 min-w-0 flex gap-3 items-center">
-        <TestStatus success={success} />
+        {props.type === "test" ? (
+          <TestStatus success={props.success} />
+        ) : props.type === "print" ? (
+          <PrintIcon size={22} />
+        ) : props.type === "group" ? (
+          <GroupIcon size={22} />
+        ) : (
+          <SummaryIcon size={22} />
+        )}
         <h3 className="flex-1 font-medium text-foreground text-sm leading-tight">
-          {name}
+          {props.name}
         </h3>
         <div
           className={buttonVariants({
@@ -59,6 +78,7 @@ const TestResultItem = memo(({ success, name, message }: Props) => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            onClick={e => e.stopPropagation()}
             initial={{
               opacity: 0,
               scale: 0.5,
@@ -79,11 +99,33 @@ const TestResultItem = memo(({ success, name, message }: Props) => {
             }}
             className="origin-left"
           >
-            <p className="text-sm text-muted-foreground">{message}</p>
+            {plainPayload.has(props.type) && "message" in props ? (
+              <p className="text-sm text-muted-foreground">{props.message}</p>
+            ) : props.type === "summary" ? (
+              <TestResultSummary summary={props.summary} />
+            ) : props.type === "group" ? (
+              <div className="pl-5 md:pl-10">
+                {props.children?.length ? (
+                  <TestResultContentWrapper>
+                    {props.children.map((child, index) => (
+                      <TestResultItem key={index} {...child} />
+                    ))}
+                  </TestResultContentWrapper>
+                ) : (
+                  <Empty
+                    label="Empty group."
+                    description="This group is empty try to add script inside callback to see result."
+                    showFallback
+                    fallbackClassName="w-20"
+                    oriantation="horizontal"
+                  />
+                )}
+              </div>
+            ) : null}
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.button>
+    </motion.div>
   );
 });
 

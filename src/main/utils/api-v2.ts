@@ -61,7 +61,7 @@
 //     status: 0,
 //     statusText: "",
 //     statusDescription: "",
-//     data: null,
+//     body: null,
 //     requestSize: {
 //       header: 0,
 //       body: 0,
@@ -192,7 +192,7 @@
 //             ...responsePayload,
 //             status: statusCode,
 //             headers: resHeaders,
-//             data: finalData,
+//             body: finalData,
 //             cookies,
 //             statusText: statusDetails?.reason ?? "OK",
 //             statusDescription: statusDetails?.description ?? "",

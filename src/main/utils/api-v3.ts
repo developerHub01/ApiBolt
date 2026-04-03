@@ -70,7 +70,7 @@ const fetchInternal = async (
     status: 0,
     statusText: "",
     statusDescription: "",
-    data: null,
+    body: null,
     requestSize: {
       header: 0,
       body: 0,
@@ -174,7 +174,7 @@ const fetchInternal = async (
 
         const buffer = Buffer.concat(chunks);
         const rawString = buffer.toString();
-        let finalData: ResponseInterface["data"] = rawString;
+        let finalData: ResponseInterface["body"] = rawString;
 
         const isJson = resHeaders["content-type"]?.includes("application/json");
         if (isJson && rawString.trim().length) {
@@ -191,7 +191,7 @@ const fetchInternal = async (
           ...responsePayload,
           status: res.statusCode || 0,
           headers: resHeaders,
-          data: finalData,
+          body: finalData,
           cookies,
           statusText: statusDetails?.reason ?? "OK",
           statusDescription: statusDetails?.description ?? "",
@@ -354,7 +354,7 @@ const errorResponse = (
     status: 0,
     statusText: statusText,
     statusDescription: description,
-    data: null,
+    body: null,
     cookies: [],
     requestSize: {
       header: 0,

@@ -34,8 +34,6 @@ It combines:
 # 📦 Basic Usage
 
 ```ts
-const ab = new ABTestEngine(response);
-
 // simple test
 ab.expect("Status OK").toBe(200);
 
