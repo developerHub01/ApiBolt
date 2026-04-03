@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState, type JSX } from "react";
+import { useCallback, useEffect, useRef, useState, type JSX } from "react";
 import CodeMirror, { EditorState } from "@uiw/react-codemirror";
 import type { Extension } from "@uiw/react-codemirror";
 import { EditorView } from "@codemirror/view";
@@ -163,6 +163,15 @@ const Code = ({
       });
     }
   }, [code, toast]);
+
+  useEffect(() => {
+    const handleKeybaordEvent = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.code === "ENTER") onBlur?.();
+    };
+
+    window.addEventListener("keydown", handleKeybaordEvent);
+    return () => window.removeEventListener("keydown", handleKeybaordEvent);
+  }, [onBlur]);
 
   const theme = themeType !== "custom" ? themeType : "dark";
 
