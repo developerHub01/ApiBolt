@@ -4,12 +4,12 @@ const HistoryContent = lazy(
   () =>
     import("@/components/app/collections/request/response/content/history/HistoryContent"),
 );
-import HistorySkeleton from "@/components/app/collections/request/response/content/history/skeleton/HistorySkeleton";
+import HistorySkeletonFallback from "@/fallback/collection/request/response/HistorySkeletonFallback";
 
 const History = () => {
   return (
     <HistoryMetaListProvider>
-      <Suspense fallback={<HistorySkeleton />}>
+      <Suspense fallback={<HistorySkeletonFallback />}>
         <HistoryContent />
       </Suspense>
     </HistoryMetaListProvider>

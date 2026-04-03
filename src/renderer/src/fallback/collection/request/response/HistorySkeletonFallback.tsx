@@ -1,7 +1,7 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const HistorySkeleton = () => {
+const HistorySkeletonFallback = () => {
   return (
     <ScrollArea className="flex-1 min-h-0 h-full overflow-hidden [&>div>div]:h-full">
       <div className="flex flex-col divide-y divide-border/20">
@@ -22,4 +22,4 @@ const HistorySkeleton = () => {
   );
 };
 
-export default HistorySkeleton;
+export default HistorySkeletonFallback;
