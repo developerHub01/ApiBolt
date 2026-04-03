@@ -44,6 +44,7 @@ import RequestApiUrlFallback from "@/fallback/collection/request/request/Request
 import RequestAuthorizationFallback from "@/fallback/collection/request/request/RequestAuthorizationFallback";
 import RequestPathParamsFallback from "@/fallback/collection/request/request/RequestPathParamsFallback";
 import RequestMetaTableProvider from "@/context/collections/request/RequestMetaTableProvider";
+import RequestTestScriptFallback from "@/fallback/collection/request/request/RequestTestScriptFallback";
 
 const MetaDataContent = memo(() => {
   const activeMetaTab = useAppSelector(selectActiveMetaTab) ?? "url";
@@ -123,7 +124,7 @@ const MetaDataContent = memo(() => {
         {activeMetaTab === "script" && (
           <RequestMetaTableProvider>
             <TabMotionWrapper id="script">
-              <Suspense fallback={<RequestCodeSnippitFallback />}>
+              <Suspense fallback={<RequestTestScriptFallback />}>
                 <RequestScript />
               </Suspense>
             </TabMotionWrapper>

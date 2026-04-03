@@ -1330,11 +1330,8 @@ const requestResponseSlice = createSlice({
     ) => {
       const id = action.payload ?? state.selectedTab;
       if (!id) return;
-      delete state.testIsSuccess[id];
       delete state.testResult[id];
-      delete state.testError[id];
     },
-
     /* ================ Test Script end =================== */
 
     /* ================ Request Folder start =================== */

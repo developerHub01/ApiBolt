@@ -24,6 +24,7 @@ import ResponseError from "@/components/app/collections/request/response/content
 import ResposneBodyFallback from "@/fallback/collection/request/response/ResposneBodyFallback";
 import ResposneCookiesFallback from "@/fallback/collection/request/response/ResposneCookiesFallback";
 import ResposneHeadersFallback from "@/fallback/collection/request/response/ResposneHeadersFallback";
+import ResposneTestResultFallback from "@/fallback/collection/request/response/ResposneTestResultFallback";
 
 const ResponseContent = memo(() => {
   const { activeMetaTab } = useResponse();
@@ -56,7 +57,7 @@ const ResponseContent = memo(() => {
                 </Suspense>
               )}
               {activeMetaTab === "test" && (
-                <Suspense fallback={<ResposneHeadersFallback />}>
+                <Suspense fallback={<ResposneTestResultFallback />}>
                   <TestResult />
                 </Suspense>
               )}
