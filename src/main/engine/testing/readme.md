@@ -13,6 +13,7 @@ A lightweight, powerful testing utility for validating API responses inside **Ap
 
 * `group()` → organize tests into blocks
 * `print()` → log values to the test console
+* `code()` → log values to the test with code block
 * `summary()` → generate a visual test summary
 
 - **`expect()` → 🔥 ALL-IN-ONE (recommended)**
@@ -363,6 +364,8 @@ ab.group("Pagination Tests", () => {
 
   const firstItem = ab.getResponse().body[0];
   ab.print("First Item ID", firstItem.id);
+  ab.code("First Item ID", response.body, "javascript");
+  ab.code("First Item ID", response, "json");
 
   ab.expect("Has ID").toHaveProperty("0.id");
   ab.expect("Has Metadata").toHaveHeader("x-total-count");
