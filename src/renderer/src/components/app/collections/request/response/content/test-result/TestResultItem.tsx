@@ -10,6 +10,7 @@ import {
   ChevronDown as ChevronDownIcon,
   Printer as PrintIcon,
   ListChevronsDownUp as SummaryIcon,
+  Code as CodeIcon,
 } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -29,7 +30,10 @@ interface Props {
 const TestResultItem = memo(({ result, level, isLast = false }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const handleToggle = () => setIsOpen(prev => !prev);
+  const handleToggle = () => {
+    if (window.getSelection()?.toString()) return;
+    setIsOpen(prev => !prev);
+  };
 
   return (
     <div
@@ -48,6 +52,8 @@ const TestResultItem = memo(({ result, level, isLast = false }: Props) => {
               <GroupIcon size={22} />
             ) : result.type === "summary" ? (
               <SummaryIcon size={22} />
+            ) : result.type === "code" ? (
+              <CodeIcon size={22} />
             ) : null}
           </div>
         )}
@@ -92,7 +98,10 @@ const TestResultItem = memo(({ result, level, isLast = false }: Props) => {
             className="origin-left cursor-auto"
           >
             {plainPayload.has(result.type) && "message" in result ? (
-              <pre className="w-full whitespace-pre-wrap break-all cursor-auto select-text">
+              <pre
+                className="w-full whitespace-pre-wrap break-all cursor-text select-text"
+                onClick={e => e.stopPropagation()}
+              >
                 <p className="w-full text-sm text-muted-foreground">
                   {result.message}
                 </p>
@@ -102,7 +111,7 @@ const TestResultItem = memo(({ result, level, isLast = false }: Props) => {
             ) : result.type === "summary" ? (
               <TestResultSummary summary={result.summary} />
             ) : result.type === "group" ? (
-              <div className="pl-10 pr-4 select-all! relative">
+              <div className="pl-10 pr-4 select-text relative">
                 {result.children?.length ? (
                   <TestResultContentWrapper>
                     {result.children.map((child, index) => (
