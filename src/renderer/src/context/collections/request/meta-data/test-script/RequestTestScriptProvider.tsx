@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { updateTestScript } from "@/context/redux/request-response/thunks/test-script";
 import { selectSelectedScript } from "@/context/redux/request-response/selectors/test-script";
@@ -33,7 +39,6 @@ const RequestTestScriptProvider = ({
   children,
 }: RequestTestScriptProviderProps) => {
   const dispatch = useAppDispatch();
-  const [lineWrap, setLineWrap] = useState<boolean>(false);
   const [code, setCode] = useState<string | null>(null);
   const codeScript = useAppSelector(selectSelectedScript) ?? "";
 
@@ -41,14 +46,19 @@ const RequestTestScriptProvider = ({
     setCode(codeScript);
   }, [codeScript]);
 
-  const handleChangeScript = (newCode: string) => setCode(newCode);
+  const handleChangeScript = useCallback(
+    () => (newCode: string) => setCode(newCode),
+    [],
+  );
 
-  const handleBlurScript = () =>
+  const handleBlurScript = useCallback(() => {
+    if (code?.trim() === codeScript) return;
     dispatch(
       updateTestScript({
-        script: code ?? "",
+        script: code?.trim() ?? "",
       }),
     );
+  }, [code, codeScript, dispatch]);
 
   return (
     <RequestTestScriptContext.Provider
