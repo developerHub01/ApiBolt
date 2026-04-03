@@ -1,10 +1,5 @@
 import { memo, useMemo } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { TestResultSummaryPayloadInterface } from "@shared/types/test-script.types";
 
 interface Props {
@@ -15,6 +10,7 @@ const TestResultSummary = memo(({ summary }: Props) => {
   const summaryContent = useMemo(
     () => ({
       total: summary.total,
+      tests: summary.tests,
       prints: summary.prints,
       success: summary.passed,
       failed: summary.failed,

@@ -36,19 +36,11 @@ const getResultBasedOnTab = (result: TTestResults, tab: TTestResultTab) => {
   const run = (result: TTestResults) => {
     if (tab === "all") return result;
     return result.filter(item => {
-      console.log({ item });
       switch (item.type) {
         case "print":
         case "summary":
           return true;
         case "test":
-          // console.log({
-          //   name: item.name,
-          //   success: item.success,
-          //   reallity:
-          //     (tab === "success" && item.success) ||
-          //     (tab === "failed" && !item.success),
-          // });
           return (
             (tab === "success" && item.success) ||
             (tab === "failed" && !item.success)
@@ -67,6 +59,28 @@ const getResultBasedOnTab = (result: TTestResults, tab: TTestResultTab) => {
   return run(structuredClone(result));
 };
 
+const getResultCountBasedOnTab = (
+  result: TTestResults,
+  tab: TTestResultTab,
+) => {
+  const run = (result: TTestResults, count = 0) => {
+    result.forEach(item => {
+      if (
+        item.type === "test" &&
+        ((tab === "success" && item.success) ||
+          (tab === "failed" && !item.success) ||
+          tab === "all")
+      )
+        count++;
+      else if (item.type === "group") count = run(item.children ?? [], count);
+    });
+
+    return count;
+  };
+
+  return run(result);
+};
+
 const TestResultProvider = ({ children }: TestResultProviderProps) => {
   const [resultTab, setResultTab] = useState<TTestResultTab>("all");
   const testResult = useAppSelector(selectTestResult);
@@ -76,7 +90,10 @@ const TestResultProvider = ({ children }: TestResultProviderProps) => {
     [resultTab, testResult],
   );
 
-  const resultCount = useMemo(() => result.length, [result]);
+  const resultCount = useMemo(
+    () => getResultCountBasedOnTab(result, resultTab),
+    [result, resultTab],
+  );
 
   const handleChangeResultTab = useCallback(
     (value: TTestResultTab) => setResultTab(value),

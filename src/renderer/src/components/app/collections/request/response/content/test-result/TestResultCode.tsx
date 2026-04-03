@@ -27,8 +27,8 @@ const TestResultCode = memo(({ code, language }: Props) => {
         );
         if (!formattedCode?.success || !formattedCode?.data) return;
         setCodeState(formattedCode.data);
-      } catch {
-        /*  */
+      } catch (error) {
+        console.error(error);
       }
     })();
   }, [code, language]);

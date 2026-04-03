@@ -1,10 +1,11 @@
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import Code from "@/components/ui/code";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { useRequestTestScript } from "@/context/collections/request/meta-data/test-script/RequestTestScriptProvider";
 import useCodeError from "@/hooks/code/use-code-error";
 import CodeErrorWrapper from "@/components/ui/code-error-wrapper";
+import { codeFormatter } from "@/utils/code";
 
 const RequestScriptContent = memo(() => {
   const { code, handleChangeScript, handleBlurScript } = useRequestTestScript();
@@ -13,6 +14,17 @@ const RequestScriptContent = memo(() => {
     code,
     contentType: "javascript",
   });
+
+  const handleFormat = useCallback(
+    async () =>
+      await codeFormatter({
+        rawRequestBodyType: "javascript",
+        code,
+        callback: handleChangeScript,
+        showErrorToast: true,
+      }),
+    [code, handleChangeScript],
+  );
 
   return (
     <CodeErrorWrapper
@@ -34,7 +46,8 @@ const RequestScriptContent = memo(() => {
           editable={true}
           zoomable={true}
           lineWrap={true}
-          copy={false}
+          copy={true}
+          handleFormat={handleFormat}
           // handleLineWrap={handleToggleLineWrap}
           onChange={handleChangeScript}
           onBlur={handleBlurScript}
