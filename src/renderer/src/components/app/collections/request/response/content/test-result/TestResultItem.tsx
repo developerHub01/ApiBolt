@@ -20,7 +20,13 @@ import TestResultCode from "@/components/app/collections/request/response/conten
 
 const plainPayload = new Set<TTestResultType>(["test", "print"]);
 
-const TestResultItem = memo((props: TestResultInterface) => {
+interface Props {
+  level: number;
+  isLast?: boolean;
+  result: TestResultInterface;
+}
+
+const TestResultItem = memo(({ result, level, isLast = false }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleToggle = () => setIsOpen(prev => !prev);
@@ -28,20 +34,25 @@ const TestResultItem = memo((props: TestResultInterface) => {
   return (
     <div
       onClick={handleToggle}
-      className="flex flex-col gap-3 min-h-9 hover:bg-secondary/50 transition-colors p-3 cursor-pointer text-start"
+      className="flex flex-col gap-3 min-h-9 hover:bg-secondary/50 transition-colors p-3 cursor-pointer text-start relative"
     >
+      <LineIndicator level={level} isLast={isLast} />
       <div className="flex-1 min-w-0 flex gap-3 items-center">
-        {props.type === "test" ? (
-          <TestStatus success={props.success} />
-        ) : props.type === "print" ? (
-          <PrintIcon size={22} />
-        ) : props.type === "group" ? (
-          <GroupIcon size={22} />
+        {result.type === "test" ? (
+          <TestStatus success={result.success} />
         ) : (
-          <SummaryIcon size={22} />
+          <div className="h-full w-10 flex justify-center items-center">
+            {result.type === "print" ? (
+              <PrintIcon size={22} />
+            ) : result.type === "group" ? (
+              <GroupIcon size={22} />
+            ) : result.type === "summary" ? (
+              <SummaryIcon size={22} />
+            ) : null}
+          </div>
         )}
         <h3 className="flex-1 font-medium text-foreground text-sm leading-tight">
-          {props.name}
+          {result.name}
         </h3>
         <div
           className={buttonVariants({
@@ -80,22 +91,27 @@ const TestResultItem = memo((props: TestResultInterface) => {
             }}
             className="origin-left cursor-auto"
           >
-            {plainPayload.has(props.type) && "message" in props ? (
+            {plainPayload.has(result.type) && "message" in result ? (
               <pre className="w-full whitespace-pre-wrap break-all cursor-auto select-text">
                 <p className="w-full text-sm text-muted-foreground">
-                  {props.message}
+                  {result.message}
                 </p>
               </pre>
-            ) : props.type === "code" ? (
-              <TestResultCode code={props.code} language={props.language} />
-            ) : props.type === "summary" ? (
-              <TestResultSummary summary={props.summary} />
-            ) : props.type === "group" ? (
-              <div className="pl-5 pr-2 md:pl-10 md:pr-4 select-all!">
-                {props.children?.length ? (
+            ) : result.type === "code" ? (
+              <TestResultCode code={result.code} language={result.language} />
+            ) : result.type === "summary" ? (
+              <TestResultSummary summary={result.summary} />
+            ) : result.type === "group" ? (
+              <div className="pl-10 pr-4 select-all! relative">
+                {result.children?.length ? (
                   <TestResultContentWrapper>
-                    {props.children.map((child, index) => (
-                      <TestResultItem key={index} {...child} />
+                    {result.children.map((child, index) => (
+                      <TestResultItem
+                        key={index}
+                        level={1}
+                        result={child}
+                        isLast={result.children.length - 1 === index}
+                      />
                     ))}
                   </TestResultContentWrapper>
                 ) : (
@@ -117,3 +133,33 @@ const TestResultItem = memo((props: TestResultInterface) => {
 });
 
 export default TestResultItem;
+
+interface LineIndicatorProps {
+  level: number;
+  isLast?: boolean;
+}
+
+const LineIndicator = ({ level, isLast }: LineIndicatorProps) => {
+  if (!level) return null;
+
+  return (
+    <>
+      {/* horizontal */}
+      <span
+        className="absolute bg-line w-1 h-0.5 left-0 -translate-x-full top-1/2 -translate-y-1/2"
+        style={{
+          width: `${level * 20}px`,
+        }}
+      />
+      {/* vertical */}
+      <span
+        className={cn("absolute bg-line w-0.5 h-full left-0 top-0", {
+          "h-1/2": isLast,
+        })}
+        style={{
+          transform: `translate(-${level * 20}px)`,
+        }}
+      />
+    </>
+  );
+};

@@ -43,7 +43,12 @@ const TestResultContent = () => {
           ) : (
             <TestResultContentWrapper>
               {result.map((meta, index) => (
-                <TestResultItem key={index} {...meta} />
+                <TestResultItem
+                  key={index}
+                  result={meta}
+                  level={0}
+                  isLast={result.length - 1 === index}
+                />
               ))}
             </TestResultContentWrapper>
           )
