@@ -7,7 +7,10 @@ const TestResultContentWrapper = memo(
   ({ className, children, ...props }: Props) => {
     return (
       <div
-        className={cn("flex flex-col divide-y divide-border/50 relative", className)}
+        className={cn(
+          "flex flex-col divide-y divide-border/50 relative",
+          className,
+        )}
         {...props}
       >
         {children}

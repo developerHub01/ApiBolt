@@ -103,7 +103,11 @@ export const environmentTable = sqliteTable("environments_table", {
     .notNull()
     .default("default") /* "default" | "secret" */,
   value: text().notNull().default(""),
-  isCheck: int({ mode: "boolean" }).notNull().default(true),
+  isCheck: int({
+    mode: "boolean",
+  })
+    .notNull()
+    .default(true),
   projectId: text()
     .notNull()
     .references(() => projectTable.id, {
@@ -178,7 +182,11 @@ export const requestOrFolderMetaTable = sqliteTable(
     parentId: text().references(() => requestOrFolderMetaTable.id, {
       onDelete: "cascade",
     }),
-    isExpended: int({ mode: "boolean" }).notNull().default(false),
+    isExpended: int({
+      mode: "boolean",
+    })
+      .notNull()
+      .default(false),
     createdAt: text()
       .notNull()
       .default(sql`(current_timestamp)`),
@@ -290,7 +298,11 @@ export const paramsTable = sqliteTable("params_table", {
   id: text()
     .primaryKey()
     .$defaultFn(() => uuidv4()),
-  isCheck: int({ mode: "boolean" }).notNull().default(true),
+  isCheck: int({
+    mode: "boolean",
+  })
+    .notNull()
+    .default(true),
   key: text().notNull().default(""),
   value: text().notNull().default(""),
   keyType: text().$type<ParamInterface["keyType"]>().notNull().default("text"), // text | env
@@ -323,7 +335,11 @@ export const headersTable = sqliteTable("headers_table", {
   id: text()
     .primaryKey()
     .$defaultFn(() => uuidv4()),
-  isCheck: int({ mode: "boolean" }).notNull().default(true),
+  isCheck: int({
+    mode: "boolean",
+  })
+    .notNull()
+    .default(true),
   key: text().notNull().default(""),
   value: text().notNull().default(""),
   description: text().notNull().default(""),
@@ -349,12 +365,36 @@ export const hiddenHeadersCheckTable = sqliteTable(
       .references(() => requestOrFolderMetaTable.id, {
         onDelete: "cascade",
       }),
-    authorization: int({ mode: "boolean" }).notNull().default(true),
-    userAgent: int({ mode: "boolean" }).notNull().default(true),
-    contentLength: int({ mode: "boolean" }).notNull().default(true),
-    accept: int({ mode: "boolean" }).notNull().default(true),
-    acceptEncoding: int({ mode: "boolean" }).notNull().default(true),
-    connection: int({ mode: "boolean" }).notNull().default(true),
+    authorization: int({
+      mode: "boolean",
+    })
+      .notNull()
+      .default(true),
+    userAgent: int({
+      mode: "boolean",
+    })
+      .notNull()
+      .default(true),
+    contentLength: int({
+      mode: "boolean",
+    })
+      .notNull()
+      .default(true),
+    accept: int({
+      mode: "boolean",
+    })
+      .notNull()
+      .default(true),
+    acceptEncoding: int({
+      mode: "boolean",
+    })
+      .notNull()
+      .default(true),
+    connection: int({
+      mode: "boolean",
+    })
+      .notNull()
+      .default(true),
   },
 );
 
@@ -370,8 +410,16 @@ export const showHiddenMetaDataTable = sqliteTable(
       .references(() => requestOrFolderMetaTable.id, {
         onDelete: "cascade",
       }),
-    showHiddenParams: int({ mode: "boolean" }).notNull().default(false),
-    showHiddenHeaders: int({ mode: "boolean" }).notNull().default(false),
+    showHiddenParams: int({
+      mode: "boolean",
+    })
+      .notNull()
+      .default(false),
+    showHiddenHeaders: int({
+      mode: "boolean",
+    })
+      .notNull()
+      .default(false),
   },
 );
 
@@ -412,7 +460,11 @@ export const bodyRawTable = sqliteTable("body_raw_table", {
     .notNull()
     .default("json") /* text, javascript, json, html, xml */,
   rawData: text().notNull().default(""),
-  lineWrap: int({ mode: "boolean" }).notNull().default(true),
+  lineWrap: int({
+    mode: "boolean",
+  })
+    .notNull()
+    .default(true),
 });
 
 export const bodyBinaryTable = sqliteTable("body_binary_table", {
@@ -434,7 +486,11 @@ export const bodyXWWWFormUrlencodedTable = sqliteTable(
     id: text()
       .primaryKey()
       .$defaultFn(() => uuidv4()),
-    isCheck: int({ mode: "boolean" }).notNull().default(true),
+    isCheck: int({
+      mode: "boolean",
+    })
+      .notNull()
+      .default(true),
     key: text().notNull().default(""),
     value: text().notNull().default(""),
     description: text().notNull().default(""),
@@ -453,7 +509,11 @@ export const bodyFormDataTable = sqliteTable("body_form_data_table", {
   id: text()
     .primaryKey()
     .$defaultFn(() => uuidv4()),
-  isCheck: int({ mode: "boolean" }).notNull().default(true),
+  isCheck: int({
+    mode: "boolean",
+  })
+    .notNull()
+    .default(true),
   key: text().notNull().default(""),
   value: text().notNull().default(""),
   description: text().notNull().default(""),
@@ -477,16 +537,54 @@ export const metaShowColumnTable = sqliteTable("meta_show_column_table", {
     .references(() => requestOrFolderMetaTable.id, {
       onDelete: "cascade",
     }),
-  paramsValue: int({ mode: "boolean" }).notNull().default(true),
-  paramsDescription: int({ mode: "boolean" }).notNull().default(false),
-  pathParamsValue: int({ mode: "boolean" }).notNull().default(true),
-  pathParamsDescription: int({ mode: "boolean" }).notNull().default(false),
-  headersValue: int({ mode: "boolean" }).notNull().default(true),
-  headersDescription: int({ mode: "boolean" }).notNull().default(false),
-  formDataValue: int({ mode: "boolean" }).notNull().default(true),
-  formDataDescription: int({ mode: "boolean" }).notNull().default(false),
-  xWWWFormUrlencodedValue: int({ mode: "boolean" }).notNull().default(true),
-  xWWWFormUrlencodedDescription: int({ mode: "boolean" })
+  paramsValue: int({
+    mode: "boolean",
+  })
+    .notNull()
+    .default(true),
+  paramsDescription: int({
+    mode: "boolean",
+  })
+    .notNull()
+    .default(false),
+  pathParamsValue: int({
+    mode: "boolean",
+  })
+    .notNull()
+    .default(true),
+  pathParamsDescription: int({
+    mode: "boolean",
+  })
+    .notNull()
+    .default(false),
+  headersValue: int({
+    mode: "boolean",
+  })
+    .notNull()
+    .default(true),
+  headersDescription: int({
+    mode: "boolean",
+  })
+    .notNull()
+    .default(false),
+  formDataValue: int({
+    mode: "boolean",
+  })
+    .notNull()
+    .default(true),
+  formDataDescription: int({
+    mode: "boolean",
+  })
+    .notNull()
+    .default(false),
+  xWWWFormUrlencodedValue: int({
+    mode: "boolean",
+  })
+    .notNull()
+    .default(true),
+  xWWWFormUrlencodedDescription: int({
+    mode: "boolean",
+  })
     .notNull()
     .default(false),
   createdAt: text()
