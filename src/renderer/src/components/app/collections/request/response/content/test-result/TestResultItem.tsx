@@ -1,4 +1,4 @@
-import { KeyboardEvent, memo, useState } from "react";
+import { KeyboardEvent, memo, useMemo, useState } from "react";
 import {
   TestResultInterface,
   TTestResultType,
@@ -31,8 +31,18 @@ interface Props {
 const TestResultItem = memo(({ result, level, isLast = false }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
+  const showDetails = useMemo(
+    () =>
+      (result.type === "test" && Boolean(result.message)) ||
+      (result.type === "print" && Boolean(result.message)) ||
+      (result.type === "summary" && Boolean(result.summary)) ||
+      (result.type === "code" && Boolean(result.code)) ||
+      (result.type === "group" && Boolean(result.children)),
+    [result],
+  );
+
   const handleToggle = () => {
-    if (window.getSelection()?.toString()) return;
+    if (window.getSelection()?.toString() || !showDetails) return;
     setIsOpen(prev => !prev);
   };
 
@@ -76,21 +86,23 @@ const TestResultItem = memo(({ result, level, isLast = false }: Props) => {
         <h3 className="flex-1 font-medium text-foreground text-sm leading-tight">
           {result.name}
         </h3>
-        <div
-          className={buttonVariants({
-            variant: "ghost",
-            size: "iconXs",
-          })}
-        >
-          <ChevronDownIcon
-            className={cn("transition-transform duration-75", {
-              "rotate-180": isOpen,
+        {showDetails && (
+          <div
+            className={buttonVariants({
+              variant: "ghost",
+              size: "iconXs",
             })}
-          />
-        </div>
+          >
+            <ChevronDownIcon
+              className={cn("transition-transform duration-75", {
+                "rotate-180": isOpen,
+              })}
+            />
+          </div>
+        )}
       </div>
       <AnimatePresence>
-        {isOpen && (
+        {isOpen && showDetails && (
           <motion.div
             onClick={e => e.stopPropagation()}
             initial={{
