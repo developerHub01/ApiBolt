@@ -226,7 +226,7 @@ export class ABTestEngine {
         this.pushTest(
           name,
           success,
-          `Expected ${JSON.stringify(actual)} to contain ${JSON.stringify(item)}`,
+          `Expected ${JSON.stringify(actual, null, 2)} to contain ${JSON.stringify(item, null, 2)}`,
         );
       },
 
@@ -649,7 +649,7 @@ export class ABTestEngine {
         this.pushTest(
           name,
           isDeepStrictEqual(body, expected),
-          `Expected ${JSON.stringify(body)} to equal ${JSON.stringify(expected)}`,
+          `Expected ${JSON.stringify(body, null, 2)} to equal ${JSON.stringify(expected, null, 2)}`,
         ),
       toExist: () =>
         this.pushTest(
@@ -675,7 +675,7 @@ export class ABTestEngine {
         this.pushTest(
           name,
           success,
-          `Expected ${JSON.stringify(body)} to contain ${JSON.stringify(item)}`,
+          `Expected ${JSON.stringify(body, null, 2)} to contain ${JSON.stringify(item, null, 2)}`,
         );
       },
       toHaveProperty: (key: string) => {
@@ -705,19 +705,19 @@ export class ABTestEngine {
         this.pushTest(
           name,
           typeof body === "number" && body > num,
-          `Expected ${body} > ${num}`,
+          `Expected ${typeof body === "object" ? JSON.stringify(body, null, 2) : body} > ${num}`,
         ),
       toBeLessThanNumber: (num: number) =>
         this.pushTest(
           name,
           typeof body === "number" && body < num,
-          `Expected ${body} < ${num}`,
+          `Expected ${typeof body === "object" ? JSON.stringify(body, null, 2) : body} < ${num}`,
         ),
       toBeBetweenNumber: (min: number, max: number) =>
         this.pushTest(
           name,
           typeof body === "number" && body >= min && body <= max,
-          `Expected ${body} between ${min}-${max}`,
+          `Expected ${typeof body === "object" ? JSON.stringify(body, null, 2) : body} between ${min}-${max}`,
         ),
 
       toHaveHeader: (key: string) =>
