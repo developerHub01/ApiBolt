@@ -6,7 +6,7 @@ const initialState: SidebarState = {
   activeTab: "navigate_collections",
 };
 
-export const sidebarSlice = createSlice({
+const sidebarSlice = createSlice({
   name: "sidebar",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,

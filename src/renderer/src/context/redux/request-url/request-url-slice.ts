@@ -15,7 +15,7 @@ const initialState: RequestUrlStateInterface = {
   tokens: {},
 };
 
-export const requestUrlSlice = createSlice({
+const requestUrlSlice = createSlice({
   name: "request-url",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,

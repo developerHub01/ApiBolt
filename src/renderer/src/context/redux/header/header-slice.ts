@@ -11,7 +11,7 @@ const initialState: InitialStateInterface = {
   searchTerm: "",
 };
 
-export const headerSlice = createSlice({
+const headerSlice = createSlice({
   name: "header",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,

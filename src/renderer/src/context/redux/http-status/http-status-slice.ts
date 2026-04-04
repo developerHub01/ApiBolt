@@ -16,7 +16,7 @@ const initialState: HttpStatusStateInterface = {
   selectedSettingHttpStatusCode: null,
 };
 
-export const httpStatusSlice = createSlice({
+const httpStatusSlice = createSlice({
   name: "http-status",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,

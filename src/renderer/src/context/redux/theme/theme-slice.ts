@@ -33,7 +33,7 @@ const initialState: ThemeInitialInterface = {
   isPreviewModeOn: false,
 };
 
-export const themeSlice = createSlice({
+const themeSlice = createSlice({
   name: "theme",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,

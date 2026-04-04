@@ -11,7 +11,7 @@ const initialState: LocalPasswordInterface = {
   haveLocalPassword: false,
 };
 
-export const localPasswordSlice = createSlice({
+const localPasswordSlice = createSlice({
   name: "local-password",
   initialState,
   reducers: {

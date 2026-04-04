@@ -24,7 +24,7 @@ const initialState: HistoryInterface = {
   historyDetails: null,
 };
 
-export const historySlice = createSlice({
+const historySlice = createSlice({
   name: "history",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,

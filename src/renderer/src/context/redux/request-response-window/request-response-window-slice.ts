@@ -10,7 +10,7 @@ const initialState: RequestResponseWindowInterface = {
   requestTimeLine: [],
 };
 
-export const requestResponseWindowSlice = createSlice({
+const requestResponseWindowSlice = createSlice({
   name: "request-response-window",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,

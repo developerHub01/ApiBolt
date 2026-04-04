@@ -247,11 +247,6 @@ export const fetchApi = createAsyncThunk<
       }
     }
 
-    /******************************
-     * ********* TODO *************
-     * have to make that async and stop blocking the flow.
-     ******************************
-     ******************************/
     const historyResponse = await window.electronAPIHistory.createHistory({
       ...historyPayload,
     });

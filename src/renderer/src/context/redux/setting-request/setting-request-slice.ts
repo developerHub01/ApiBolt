@@ -18,7 +18,7 @@ const initialState: SettingRequestStateInterface = {
   settings: null,
 };
 
-export const settingRequestSlice = createSlice({
+const settingRequestSlice = createSlice({
   name: "setting-request",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,

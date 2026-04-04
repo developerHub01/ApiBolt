@@ -12,7 +12,7 @@ const initialState: RequestResponseState = {
   activeProjectId: null,
 };
 
-export const projectSlice = createSlice({
+const projectSlice = createSlice({
   name: "project",
   initialState,
   reducers: {

@@ -19,7 +19,7 @@ const initialState: SettingStateInterface = {
   settings: null,
 };
 
-export const settingSlice = createSlice({
+const settingSlice = createSlice({
   name: "setting",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,

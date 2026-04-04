@@ -37,7 +37,7 @@ const initialState: ThemeMarketplaceInitialInterface = {
   isInstallMaxCountAlertOpen: false,
 };
 
-export const themeMarketplaceSlice = createSlice({
+const themeMarketplaceSlice = createSlice({
   name: "theme-marketplace",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,

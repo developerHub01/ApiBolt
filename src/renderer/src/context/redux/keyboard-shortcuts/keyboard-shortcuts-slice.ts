@@ -20,7 +20,7 @@ const initialState: KeyboardShortcutsStateInterface = {
   editingId: null,
 };
 
-export const keyboardShortcutsSlice = createSlice({
+const keyboardShortcutsSlice = createSlice({
   name: "keyboard-shortcuts",
   initialState,
   reducers: {

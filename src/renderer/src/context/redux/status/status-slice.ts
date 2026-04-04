@@ -103,7 +103,7 @@ const initialState: StatusInterface = {
   isThemeInActivatingLoading: false,
 };
 
-export const statusSlice = createSlice({
+const statusSlice = createSlice({
   name: "status",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,

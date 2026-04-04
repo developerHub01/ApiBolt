@@ -38,7 +38,7 @@ const initialState: CookiesStateInterface = {
   editingCookies: {},
 };
 
-export const cookiesSlice = createSlice({
+const cookiesSlice = createSlice({
   name: "cookies",
   initialState,
   reducers: {

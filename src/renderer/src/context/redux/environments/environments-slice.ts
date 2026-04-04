@@ -10,7 +10,7 @@ const initialState: RequestResponseState = {
   environmentsList: {},
 };
 
-export const requesEnvironmentsSlice = createSlice({
+const requesEnvironmentsSlice = createSlice({
   name: "environments",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
