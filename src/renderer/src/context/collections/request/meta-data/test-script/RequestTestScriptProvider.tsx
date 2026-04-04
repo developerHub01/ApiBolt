@@ -47,7 +47,7 @@ const RequestTestScriptProvider = ({
   }, [codeScript]);
 
   const handleChangeScript = useCallback(
-    () => (newCode: string) => setCode(newCode),
+    (newCode: string) => setCode(newCode),
     [],
   );
 
