@@ -1,4 +1,4 @@
-import { memo, useMemo } from "react";
+import { KeyboardEvent, memo, useMemo } from "react";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { TestResultSummaryPayloadInterface } from "@shared/types/test-script.types";
 
@@ -19,12 +19,31 @@ const TestResultSummary = memo(({ summary }: Props) => {
     [summary],
   );
 
+  const handleTableContentKeydown = (e: KeyboardEvent) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === "a") {
+      e.preventDefault();
+
+      const selection = window.getSelection();
+      const range = document.createRange();
+
+      if (selection) {
+        range.selectNodeContents(e.currentTarget);
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
+    }
+  };
+
   return (
-    <Table className="w-full h-full border select-text">
+    <Table
+      className="w-full h-full border select-text"
+      tabIndex={0}
+      onKeyDown={handleTableContentKeydown}
+    >
       <TableBody className="[&>tr>td]:border-r [&>tr>td]:last:border-r-0">
         {Object.entries(summaryContent).map(([key, value]) => (
           <TableRow key={key} className="wrap-break-word whitespace-pre-wrap">
-            <TableCell className="whitespace-normal wrap-break-word select-text font-bold first-letter:uppercase">
+            <TableCell className="whitespace-normal wrap-break-word select-text font-bold first-letter:uppercase w-1/2">
               {key}
             </TableCell>
             <TableCell className="whitespace-normal wrap-break-word select-text">

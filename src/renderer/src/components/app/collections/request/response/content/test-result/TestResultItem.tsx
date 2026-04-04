@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { KeyboardEvent, memo, useState } from "react";
 import {
   TestResultInterface,
   TTestResultType,
@@ -18,6 +18,7 @@ import TestResultSummary from "@/components/app/collections/request/response/con
 import TestResultContentWrapper from "@/components/app/collections/request/response/content/test-result/TestResultContentWrapper";
 import Empty from "@/components/ui/empty";
 import TestResultCode from "@/components/app/collections/request/response/content/test-result/TestResultCode";
+import LineIndicator from "@/components/app/collections/request/response/content/test-result/LineIndicator";
 
 const plainPayload = new Set<TTestResultType>(["test", "print"]);
 
@@ -33,6 +34,21 @@ const TestResultItem = memo(({ result, level, isLast = false }: Props) => {
   const handleToggle = () => {
     if (window.getSelection()?.toString()) return;
     setIsOpen(prev => !prev);
+  };
+
+  const handlePreContentKeydown = (e: KeyboardEvent) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === "a") {
+      e.preventDefault();
+
+      const selection = window.getSelection();
+      const range = document.createRange();
+
+      if (selection) {
+        range.selectNodeContents(e.currentTarget);
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
+    }
   };
 
   return (
@@ -99,10 +115,12 @@ const TestResultItem = memo(({ result, level, isLast = false }: Props) => {
           >
             {plainPayload.has(result.type) && "message" in result ? (
               <pre
-                className="w-full whitespace-pre-wrap break-all cursor-text select-text"
+                tabIndex={0}
+                className="w-full whitespace-pre-wrap break-all"
                 onClick={e => e.stopPropagation()}
+                onKeyDown={handlePreContentKeydown}
               >
-                <p className="w-full text-sm text-muted-foreground">
+                <p className="w-full text-sm text-muted-foreground cursor-text select-text">
                   {result.message}
                 </p>
               </pre>
@@ -142,33 +160,3 @@ const TestResultItem = memo(({ result, level, isLast = false }: Props) => {
 });
 
 export default TestResultItem;
-
-interface LineIndicatorProps {
-  level: number;
-  isLast?: boolean;
-}
-
-const LineIndicator = ({ level, isLast }: LineIndicatorProps) => {
-  if (!level) return null;
-
-  return (
-    <>
-      {/* horizontal */}
-      <span
-        className="absolute bg-line w-1 h-0.5 left-0 -translate-x-full top-1/2 -translate-y-1/2"
-        style={{
-          width: `${level * 20}px`,
-        }}
-      />
-      {/* vertical */}
-      <span
-        className={cn("absolute bg-line w-0.5 h-full left-0 top-0", {
-          "h-1/2": isLast,
-        })}
-        style={{
-          transform: `translate(-${level * 20}px)`,
-        }}
-      />
-    </>
-  );
-};
