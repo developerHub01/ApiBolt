@@ -6,7 +6,7 @@
 **A powerful, modern REST API client for efficient API development.**
 
 [![Release](https://img.shields.io/github/v/release/developerHub01/ApiBolt?style=for-the-badge&logo=github&color=FF5733)](https://github.com/developerHub01/ApiBolt/releases)
-[![Website](https://img.shields.io/badge/Website-apibolt.com-blue?style=for-the-badge&logo=world&logoColor=white)](https://apibolt.com)
+[![Website](https://img.shields.io/badge/Website-apibolt.com-blue?style=for-the-badge&logo=world&logoColor=white)](https://apibolt.vercel.app)
 [![License](https://img.shields.io/github/license/developerHub01/ApiBolt?style=for-the-badge&color=2E86C1)](/LICENSE)
 [![Issues](https://img.shields.io/github/issues/developerHub01/ApiBolt?style=for-the-badge&logo=github&color=C70039)](https://github.com/developerHub01/ApiBolt/issues)
 [![Stars](https://img.shields.io/github/stars/developerHub01/ApiBolt?style=for-the-badge&logo=github&color=FFC300)](https://github.com/developerHub01/ApiBolt/stargazers)
@@ -128,6 +128,7 @@ ApiBolt is built with a modern and powerful tech stack to ensure a robust and sc
 The database schema for ApiBolt is designed to be simple and efficient. You can view the Entity-Relationship Diagram (ERD) to understand the relationships between the different tables.
 
 - **[View the ERD (PDF)](/ERD.pdf)**
+- **[View the ERD (SVG)](/ERD.svg)**
 - **[View the Live ERD on Lucidchart](https://lucid.app/lucidchart/66e0b917-b198-4138-86c7-2c5d74893695/edit?viewport_loc=-3418%2C-1135%2C539%2C255%2C0_0&invitationId=inv_4381e06e-813c-4228-9e8c-7596006b186f)**
 
 ## 🤝 Contributing
