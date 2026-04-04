@@ -776,7 +776,7 @@ export class ABTestEngine {
   /*========================
    PRINT 
   ========================*/
-  print = (name: string, value: unknown) => {
+  print = (name: string, value: unknown = "") => {
     this.push({
       type: "print",
       name,
@@ -792,7 +792,7 @@ export class ABTestEngine {
   ========================*/
   code = (
     name: string,
-    value: unknown,
+    value: unknown = "",
     language: TestResultCodePayloadInterface["language"] = "markdown",
   ) => {
     this.push({
@@ -882,7 +882,7 @@ ${JSON.stringify(this.getSummary(), null, 2)}
   /*========================
    GROUPING
   ========================*/
-  group = (name: string, callback: () => void) => {
+  group = (name: string, callback: () => void = () => {}) => {
     if (this.currentInsideGroup) return callback();
 
     this.currentInsideGroup = true;
