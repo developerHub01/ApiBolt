@@ -1,8 +1,8 @@
 import { useCallback, type KeyboardEvent, type SetStateAction } from "react";
 import { useAppSelector } from "@/context/redux/hooks";
 import { selectApplyingKeyboardShortcutsStrFormated } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
-import { MODIFIER_KEY_TRACK_ORDER } from "@/constant/keyboard-shortcut.constant";
 import { fontSizeLimit } from "@/constant/code.constant";
+import { getKeyboardTriggerKeyShortcutId } from "@/utils/keyboard-shortcut.utils";
 
 interface Props {
   handleLineWrap?: () => void;
@@ -23,21 +23,12 @@ const useCodeKeybaordShortcut = <T extends HTMLElement>({
 
   const handlerKeydown = useCallback(
     (e: KeyboardEvent<T>) => {
-      const keyList: Array<string> = [];
-
-      MODIFIER_KEY_TRACK_ORDER.forEach(({ eventProperty, key }) => {
-        if (e[eventProperty]) keyList.push(key);
-      });
-      if (e.key) keyList.push(e.key.toLowerCase());
-
-      const keyString = keyList.join("+");
-      const actionId = Object.entries(keybindingMap)
-        .filter(([id]) => id.startsWith("code"))
-        .find(
-          ([, keyBindingString]) =>
-            keyBindingString && keyBindingString === keyString,
-        )?.[0];
-
+      const { actionId } = getKeyboardTriggerKeyShortcutId(
+        e,
+        Object.fromEntries(
+          Object.entries(keybindingMap).filter(([id]) => id.startsWith("code")),
+        ),
+      );
       if (!actionId) return;
 
       switch (actionId) {

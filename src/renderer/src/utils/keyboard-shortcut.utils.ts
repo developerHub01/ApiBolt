@@ -1,3 +1,6 @@
+import { KeyboardEvent } from "react";
+import { MODIFIER_KEY_TRACK_ORDER } from "@/constant/keyboard-shortcut.constant";
+
 const KEY_LIST_SEPARATOR = "___________";
 
 export const areKeyListMatched = (
@@ -24,6 +27,9 @@ export const keyListStringify = (keyList: Array<string>) =>
   keyList.map(key => key[0].toUpperCase() + key.slice(1)).join("+");
 
 export const keyboardNormalizedKey = (code: string, key: string) => {
+  /* Letters: KeyA → A */
+  if (code === "Backquote") return "`";
+
   /* Letters: KeyA → A */
   if (code.startsWith("Key")) return code.slice(3).toLowerCase();
 
@@ -61,4 +67,29 @@ export const keyboardNormalizedKey = (code: string, key: string) => {
 
   if (specialKeys[code]) return specialKeys[code];
   return key;
+};
+
+export const getKeyboardTriggerKeyShortcutId = (
+  e: KeyboardEvent | globalThis.KeyboardEvent,
+  keybindingMap: Record<string, string | undefined>,
+) => {
+  const keyList: Array<string> = [];
+
+  MODIFIER_KEY_TRACK_ORDER.forEach(({ eventProperty, key }) => {
+    if (e[eventProperty]) keyList.push(key);
+  });
+  const key = keyboardNormalizedKey(e.code, e.key).toLowerCase();
+  if (key) keyList.push(key);
+
+  const keyString = keyList.join("+");
+  const actionId = Object.entries(keybindingMap).find(
+    ([, keyBindingString]) =>
+      keyBindingString && keyBindingString === keyString,
+  )?.[0];
+
+  return {
+    keyString,
+    keyList,
+    actionId,
+  };
 };

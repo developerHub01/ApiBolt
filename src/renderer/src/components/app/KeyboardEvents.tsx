@@ -20,7 +20,6 @@ import { selectApplyingKeyboardShortcutsStrFormated } from "@/context/redux/keyb
 import { handleChangeIsKeyboardShortcutPanelOpen } from "@/context/redux/keyboard-shortcuts/keyboard-shortcuts-slice";
 import { changeHeaderIsOpen as changeHeaderSearchIsOpen } from "@/context/redux/header/thunks/header";
 import type { TKeyboardShortcutKey } from "@shared/types/setting.types";
-import { MODIFIER_KEY_TRACK_ORDER } from "@/constant/keyboard-shortcut.constant";
 import useToggleSidebar from "@/hooks/sidebar/use-toggle-sidebar";
 import { useNavigate } from "react-router-dom";
 import { SIDEBAR_THEME_MENU_ITEMS } from "@/constant/sidebar.constant";
@@ -30,7 +29,7 @@ import {
   handleToggleTabListCollapse,
 } from "@/context/redux/request-response/request-response-slice";
 import { handleChangeIsLocalPasswordOpen } from "@/context/redux/local-password/local-password-slice";
-import { keyboardNormalizedKey } from "@/utils/keyboard-shortcut.utils";
+import { getKeyboardTriggerKeyShortcutId } from "@/utils/keyboard-shortcut.utils";
 
 const KeyboardEvents = () => {
   const dispatch = useAppDispatch();
@@ -45,19 +44,7 @@ const KeyboardEvents = () => {
 
   useEffect(() => {
     const handler = async (e: KeyboardEvent) => {
-      const keyList: Array<string> = [];
-
-      MODIFIER_KEY_TRACK_ORDER.forEach(({ eventProperty, key }) => {
-        if (e[eventProperty]) keyList.push(key);
-      });
-      const key = keyboardNormalizedKey(e.code, e.key).toLowerCase();
-      if (key) keyList.push(key);
-
-      const keyString = keyList.join("+");
-      const actionId = Object.entries(keybindingMap).find(
-        ([, keyBindingString]) =>
-          keyBindingString && keyBindingString === keyString,
-      )?.[0];
+      const { actionId } = getKeyboardTriggerKeyShortcutId(e, keybindingMap);
       if (!actionId) return;
 
       switch (actionId) {

@@ -2,9 +2,9 @@ import React, { memo, useCallback, useEffect } from "react";
 import { ResizablePanel } from "@/components/ui/resizable";
 import { handleToggleCollapse } from "@/context/redux/request-response/request-response-slice";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { MODIFIER_KEY_TRACK_ORDER } from "@/constant/keyboard-shortcut.constant";
 import { selectApplyingKeyboardShortcutsStrFormated } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
 import { useRequestResponse } from "@/context/collections/request/RequestResponseProvider";
+import { getKeyboardTriggerKeyShortcutId } from "@/utils/keyboard-shortcut.utils";
 
 interface ResponsePanelWrapperProps {
   children: React.ReactNode;
@@ -30,19 +30,7 @@ const ResponsePanelWrapper = memo(({ children }: ResponsePanelWrapperProps) => {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      const keyList: Array<string> = [];
-
-      MODIFIER_KEY_TRACK_ORDER.forEach(({ eventProperty, key }) => {
-        if (e[eventProperty]) keyList.push(key);
-      });
-      if (e.key) keyList.push(e.key.toLowerCase());
-
-      const keyString = keyList.join("+");
-
-      const actionId = Object.entries(keybindingMap).find(
-        ([, keyBindingString]) =>
-          keyBindingString && keyBindingString === keyString,
-      )?.[0];
+      const { actionId } = getKeyboardTriggerKeyShortcutId(e, keybindingMap);
       if (!actionId) return;
 
       switch (actionId) {
