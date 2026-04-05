@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { defineConfig } from "drizzle-kit";
-import path from "path";
+import path from "node:path";
 
 const dbPath = `file:${path.join("db", "api-bolt.db")}`;
 

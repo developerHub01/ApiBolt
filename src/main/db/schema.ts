@@ -32,6 +32,11 @@ export const DEFAULT_ACTIVE_SIDEBAR_TAB: TSidebarTab = "navigate_projects";
 export const DEFAULT_ACTIVE_CODE_SNIPPIT_TYPE: TRequestCodeType =
   "javascript-fetch";
 
+export const versionTable = sqliteTable("version_table", {
+  key: text().primaryKey().default("version"),
+  value: text(),
+});
+
 export const localPasswordTable = sqliteTable("local_password_table", {
   id: text("id").primaryKey().default(LOCAL_PASSWORD_ID),
   password: text(),

@@ -56,7 +56,7 @@ import { handleExternalUrl } from "@/main/utils/externalUrl";
 import { handleProtocol } from "@/main/utils/custom-protocol";
 import { getLocalPassword } from "@/main/db/localPasswordDB";
 import { applyingThemeBackground } from "@/main/utils/applyingTheme";
-import { runMigrations } from "@/main/db";
+import { prepareDB } from "@/main/db";
 import { responseHandler } from "@/main/ipc/responseHandler";
 import { sysmteHandler } from "@/main/ipc/sysmteHandler";
 import { WEBSITE_BASE_URL } from "@shared/constant/api-bolt";
@@ -158,7 +158,7 @@ if (!gotTheLock) {
     /***
      * First migrate the db
      */
-    await runMigrations();
+    await prepareDB();
 
     /***
      *  sessions security ===========

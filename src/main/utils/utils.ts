@@ -93,3 +93,20 @@ export const requestDataSize = ({
       return 0;
   }
 };
+
+export const compareVersions = (a: string, b: string): number => {
+  const aParts: Array<number> = a.split(".").map(Number);
+  const bParts: Array<number> = b.split(".").map(Number);
+
+  const length = Math.max(aParts.length, bParts.length);
+
+  for (let i = 0; i < length; i++) {
+    const aVal = aParts[i] ?? 0;
+    const bVal = bParts[i] ?? 0;
+
+    if (aVal > bVal) return 1;
+    if (aVal < bVal) return -1;
+  }
+
+  return 0;
+};

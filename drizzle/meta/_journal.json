@@ -8,6 +8,13 @@
       "when": 1774887367615,
       "tag": "0000_high_lockjaw",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1775387051699,
+      "tag": "0001_funny_reavers",
+      "breakpoints": true
     }
   ]
 }
