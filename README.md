@@ -35,7 +35,7 @@ ApiBolt comes packed with a wide range of features to supercharge your API devel
 
 ## 🌐 Website
 
-The official website for ApiBolt is available at [apibolt.com](https://apibolt.vercel.app/). Here you can find more information about the application, download the latest version, and stay up-to-date with the latest news and announcements.
+The official website for ApiBolt is available at [apibolt.vercel.app](https://apibolt.vercel.app/). Here you can find more information about the application, download the latest version, and stay up-to-date with the latest news and announcements.
 
 The source code for the website is available on GitHub: [ApiBolt-web](https://github.com/developerHub01/ApiBolt-web)
 
