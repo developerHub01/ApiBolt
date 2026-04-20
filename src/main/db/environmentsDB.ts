@@ -4,6 +4,7 @@ import { environmentTable } from "@/main/db/schema.js";
 import { getActiveProject } from "@/main/db/projectsDB.js";
 import { ElectronAPIEnvironmentsInterface } from "@shared/types/api/electron-environments";
 import { TEnvironmentFile } from "@shared/types/export-import/environments";
+import { TEnvironmentMap } from "@shared/types/environment.types";
 
 export const getAllEnvironments: ElectronAPIEnvironmentsInterface["getAllEnvironments"] =
   async () => {
@@ -31,6 +32,27 @@ export const getEnvironments: ElectronAPIEnvironmentsInterface["getEnvironments"
       return [];
     }
   };
+
+export const getEnvironmentsMap = async (
+  id?: Parameters<ElectronAPIEnvironmentsInterface["getEnvironments"]>[0],
+): Promise<TEnvironmentMap> => {
+  const envs = await getEnvironments(id);
+
+  const latestTime: Record<string, number> = {};
+
+  return envs.reduce<TEnvironmentMap>((acc, item) => {
+    if (!item.isCheck) return acc;
+
+    const time = new Date(item.createdAt).getTime();
+
+    if (!latestTime[item.variable] || time > latestTime[item.variable]) {
+      latestTime[item.variable] = time;
+      acc[item.variable] = item.value;
+    }
+
+    return acc;
+  }, {});
+};
 
 export const createEnvironments: ElectronAPIEnvironmentsInterface["createEnvironments"] =
   async payload => {

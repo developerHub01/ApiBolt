@@ -12,3 +12,5 @@ export type EnvironmentPayloadInterface = Omit<
   EnvironmentInterface,
   "createdAt"
 >;
+
+export type TEnvironmentMap = Record<string, EnvironmentInterface["value"]>;

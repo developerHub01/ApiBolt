@@ -2,12 +2,18 @@ import { VM } from "vm2";
 import { ABTestEngine } from "@/main/engine/testing/engine";
 import { ResponseInterface } from "@shared/types/request-response.types";
 import { RunTestScriptResultPayload } from "@shared/types/test-script.types";
+import { TEnvironmentMap } from "@shared/types/environment.types";
 
-export const executeTest = (
-  code: string,
-  response: ResponseInterface,
-): RunTestScriptResultPayload => {
-  const ab = new ABTestEngine(response);
+export const executeTest = ({
+  script,
+  response,
+  envs,
+}: {
+  script: string;
+  response: ResponseInterface;
+  envs: TEnvironmentMap;
+}): RunTestScriptResultPayload => {
+  const ab = new ABTestEngine(response, envs);
 
   const serveableAB = Object.freeze({
     addDemoResults: ab.addDemoResults.bind(ab),
@@ -22,6 +28,7 @@ export const executeTest = (
     group: ab.group.bind(ab),
     code: ab.code.bind(ab),
     response: ab.getResponse(),
+    env: ab.getEnvs(),
   });
 
   const vm = new VM({
@@ -32,7 +39,7 @@ export const executeTest = (
   });
 
   try {
-    vm.run(`"use strict";\n${code}`);
+    vm.run(`"use strict";\n${script}`);
     const result = ab.getResults();
     return {
       success: true,

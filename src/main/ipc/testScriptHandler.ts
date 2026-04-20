@@ -8,6 +8,7 @@ import {
 } from "@/main/db/testScriptDB";
 import { executeTest } from "@/main/engine/testing/executor";
 import { TEST_SCRIPT_DEFAULT_ERROR_MESSAGE } from "@shared/constant/test-script";
+import { getEnvironmentsMap } from "@/main/db/environmentsDB";
 
 export const testScriptHandler = (): void => {
   ipcMain.handle(
@@ -54,7 +55,13 @@ export const testScriptHandler = (): void => {
         const script = (await getTestScript(requestId))?.script ?? "";
         if (!script) throw new Error("Script not found");
 
-        return executeTest(script, response);
+        const envs = await getEnvironmentsMap();
+
+        return executeTest({
+          script,
+          response,
+          envs,
+        });
       } catch (error) {
         return {
           success: false,

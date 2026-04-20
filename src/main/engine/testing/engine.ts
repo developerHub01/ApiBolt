@@ -7,13 +7,18 @@ import {
   TTestResults,
 } from "@shared/types/test-script.types";
 import { CookieInterface } from "@shared/types/cookies.types";
+import { TEnvironmentMap } from "@shared/types/environment.types";
 
 export class ABTestEngine {
   private results: TTestResults = [];
   private currentInsideGroup: boolean = false;
 
-  constructor(private response: ResponseInterface) {
-    this.response = response;
+  constructor(
+    private response: ResponseInterface,
+    private envs: TEnvironmentMap,
+  ) {
+    this.response = Object.freeze(response);
+    this.envs = Object.freeze(envs);
   }
 
   private push = (result: TestResultInterface) => {
@@ -29,6 +34,8 @@ export class ABTestEngine {
   };
 
   getResponse = () => this.response;
+
+  getEnvs = () => this.envs;
 
   private pushTest = (name: string, success: boolean, message: string) =>
     this.push({
