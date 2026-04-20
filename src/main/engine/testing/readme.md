@@ -28,6 +28,7 @@ It combines:
 - ✅ Body assertions
 - ✅ Headers assertions
 - ✅ Cookies assertions
+- ✅ Properties response & env
 
 👉 You can test everything from a single interface.
 
@@ -320,15 +321,17 @@ Use `print()` to inspect the state of your response or environment variables dur
 
 ```ts
 // Log raw values
-ab.print("Status Code", ab.getResponse().status);
+ab.print("Status Code", ab.response.status);
+ab.print("Envs", ab.env);
 
 // Log objects (auto-stringified)
-ab.print("Response Payload", ab.getResponse().body);
+ab.print("Response Payload", ab.response.body);
 
 // Log specific parts of the response
-const user = ab.getResponse().body.user;
+const user = ab.response.body.user;
 if (user) {
   ab.print("User ID detected", user.id);
+  ab.print("User ID from env", ab.env.user_id);
 }
 ```
 
@@ -362,7 +365,7 @@ ab.group("Pagination Tests", () => {
   ab.expect("Is Array").toBeType("array");
   ab.expect("Has 10 items").toHaveLength(10);
 
-  const firstItem = ab.getResponse().body[0];
+  const firstItem = ab.response.body[0];
   ab.print("First Item ID", firstItem.id);
   ab.code("First Item ID", response.body, "javascript");
   ab.code("First Item ID", response, "json");
@@ -388,7 +391,7 @@ ab.group("Strict Security Check", () => {
 });
 ```
 
-### 3. Conditional Custom Logic (using getResponse)
+### 3. Conditional Custom Logic (using response)
 
 ```ts
 const res = ab.response;
