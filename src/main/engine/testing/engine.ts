@@ -52,67 +52,67 @@ export class ABTestEngine {
 
   /**
    * applies .not behavior to any assertion API
-   * 
+   *
    * idea is simple:
    * run the original function first,
    * then look at the last test that got created,
    * and flip its result
-   * 
+   *
    * this only works if a new test was actually pushed,
    * otherwise we ignore it
    */
-private applyNegation = <
-  T extends Record<string, (...args: Array<unknown>) => unknown>,
->(
-  api: T,
-) =>
-  Object.fromEntries(
-    Object.entries(api).map(([key, fn]) => [
-      key,
+  private applyNegation = <
+    T extends Record<string, (...args: Array<unknown>) => unknown>,
+  >(
+    api: T,
+  ) =>
+    Object.fromEntries(
+      Object.entries(api).map(([key, fn]) => [
+        key,
 
-      (...args: Parameters<T[keyof T]>) => {
-        const before = this.lastTest
+        (...args: Parameters<T[keyof T]>) => {
+          const before = this.lastTest;
 
-        /**
-         * taking snapshot of last test before running anything 
-         * so we can later detect if a new test was actually created
-        */
+          /**
+           * taking snapshot of last test before running anything
+           * so we can later detect if a new test was actually created
+           */
 
-        fn(...args)
+          fn(...args);
 
-        /**
-         * execute original assertion (toBe, toEqual, etc)
-         * this is where this.lastTest might get updated
-        */
+          /**
+           * execute original assertion (toBe, toEqual, etc)
+           * this is where this.lastTest might get updated
+           */
 
-        if (
-          !this.lastTest ||
-          /* checking lastTest ref equality */
-          this.lastTest === before ||
-          this.lastTest.type !== "test"
-        )
-          return
+          if (
+            !this.lastTest ||
+            /* checking lastTest ref equality */
+            this.lastTest === before ||
+            this.lastTest.type !== "test"
+          )
+            return;
 
-        /**
-         * safety checks:
-         *  - if nothing exists --> stop
-         *  - if nothing changed --> stop
-         *  - if it's not a test result --> stop
-        */
+          /**
+           * safety checks:
+           *  - if nothing exists --> stop
+           *  - if nothing changed --> stop
+           *  - if it's not a test result --> stop
+           */
 
-        this.lastTest.success = !this.lastTest.success
+          this.lastTest.success = !this.lastTest.success;
 
-        /**
-         * flip boolean result (true becomes false, false becomes true) 
-         * this is the actual .not behavior
-        */
+          /**
+           * flip boolean result (true becomes false, false becomes true)
+           * this is the actual .not behavior
+           */
 
-        this.lastTest.message = "NOT: " + this.lastTest.message
+          this.lastTest.message = "NOT: " + this.lastTest.message;
 
-        /* just marking it so we know this came through .not chain */
-      },
-    ]),
-  )
+          /* just marking it so we know this came through .not chain */
+        },
+      ]),
+    );
 
   addDemoResults = () => {
     this.results = [

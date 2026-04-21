@@ -168,7 +168,6 @@ const Code = ({
 
   useEffect(() => {
     const handleKeybaordEvent = (e: KeyboardEvent) => {
-      console.log(e.code);
       if (e.ctrlKey && keyboardEnterSet.has(e.code)) {
         onBlur?.();
         e.preventDefault();

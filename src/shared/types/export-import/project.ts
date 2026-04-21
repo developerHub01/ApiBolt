@@ -1,3 +1,4 @@
+import { TestScriptPayloadInterface } from "@shared/types/test-script.types";
 import { AuthorizationPayloadInterface } from "@shared/types/authorization.types";
 import {
   BodyBinaryInterface,
@@ -55,6 +56,7 @@ export interface ProjectExportFileInterface {
     string,
     Pick<BodyRawInterface, "requestOrFolderMetaId" | "type" | "rawData">
   >;
+  testScriptList: Record<string, TestScriptPayloadInterface>;
   requestMetaTabList: Record<string, RequestTabInterface>;
   authorization: Record<
     string,

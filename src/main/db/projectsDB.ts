@@ -17,6 +17,7 @@ import {
   requestMetaTabTable,
   authorizationTable,
   GLOBAL_PROJECT_ID,
+  testScriptTable,
 } from "@/main/db/schema.js";
 import { createAuth } from "@/main/db/authorizationDB.js";
 import { v4 as uuidv4 } from "uuid";
@@ -384,10 +385,21 @@ export const exportProject = async (id?: string | null) => {
         .where(inArray(bodyRawTable.requestOrFolderMetaId, requestIdList))) ??
       []
     )?.reduce((acc, curr) => {
-      if (!acc[curr.requestOrFolderMetaId])
-        acc[curr.requestOrFolderMetaId] = [];
-      acc[curr.requestOrFolderMetaId].push(curr);
+      acc[curr.requestOrFolderMetaId] = curr;
+      return acc;
+    }, {});
 
+    const testScriptList: ProjectExportFileInterface["testScriptList"] = (
+      (await tsx
+        .select(
+          (() => {
+            return getTableColumns(testScriptTable);
+          })(),
+        )
+        .from(testScriptTable)
+        .where(inArray(testScriptTable.requestId, requestIdList))) ?? []
+    )?.reduce((acc, curr) => {
+      acc[curr.requestId] = curr;
       return acc;
     }, {});
 
@@ -437,6 +449,7 @@ export const exportProject = async (id?: string | null) => {
       xWWWFormUrlencodedList,
       binaryDataList,
       rawDataList,
+      testScriptList,
       requestMetaTabList,
       authorization,
     };
@@ -455,6 +468,7 @@ export const importProject = async ({
   xWWWFormUrlencodedList = {},
   binaryDataList = {},
   rawDataList = {},
+  testScriptList = {},
   requestMetaTabList = {},
   authorization = {},
 }: ProjectExportFileInterface) => {
@@ -509,6 +523,9 @@ export const importProject = async ({
       ProjectExportFileInterface["rawDataList"][string] & {
         requestOrFolderMetaId: string;
       }
+    > = [];
+    const newTestScriptList: Array<
+      ProjectExportFileInterface["testScriptList"][string]
     > = [];
     const newAuthorization: Array<
       ProjectExportFileInterface["authorization"][string] & {
@@ -615,6 +632,13 @@ export const importProject = async ({
         });
       }
 
+      if (testScriptList[oldId]) {
+        newTestScriptList.push({
+          ...testScriptList[oldId],
+          requestId: newId,
+        });
+      }
+
       if (authorization[oldId]) {
         newAuthorization.push({
           ...authorization[oldId],
@@ -651,6 +675,8 @@ export const importProject = async ({
     if (newBinaryList.length)
       await tsx.insert(bodyBinaryTable).values(newBinaryList);
     if (newRawList.length) await tsx.insert(bodyRawTable).values(newRawList);
+    if (newTestScriptList.length)
+      await tsx.insert(testScriptTable).values(newTestScriptList);
     if (newAuthorization.length)
       await tsx.insert(authorizationTable).values(newAuthorization);
 
