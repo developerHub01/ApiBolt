@@ -12,6 +12,7 @@ import { TEnvironmentMap } from "@shared/types/environment.types";
 export class ABTestEngine {
   private results: TTestResults = [];
   private currentInsideGroup: boolean = false;
+  private lastTest: TestResultInterface | null = null;
 
   constructor(
     private response: ResponseInterface,
@@ -37,39 +38,81 @@ export class ABTestEngine {
 
   getEnvs = () => this.envs;
 
-  private pushTest = (name: string, success: boolean, message: string) =>
-    this.push({
+  private pushTest = (name: string, success: boolean, message: string) => {
+    const test: TestResultInterface = {
       type: "test",
       name,
       success,
       message,
-    });
+    };
 
-  private applyNegation = <
-    T extends Record<string, (...args: Array<unknown>) => unknown>,
-  >(
-    api: T,
-  ) =>
-    Object.fromEntries(
-      Object.entries(api).map(([key, fn]) => [
-        key,
-        (...args: Parameters<T[keyof T]>) => {
-          const beforeLength = this.results.length;
-          fn(...args);
+    this.lastTest = test;
+    this.push(test);
+  };
 
-          const last = this.results[this.results.length - 1];
-          if (
-            !last ||
-            this.results.length === beforeLength ||
-            last.type !== "test"
-          )
-            return;
+  /**
+   * applies .not behavior to any assertion API
+   * 
+   * idea is simple:
+   * run the original function first,
+   * then look at the last test that got created,
+   * and flip its result
+   * 
+   * this only works if a new test was actually pushed,
+   * otherwise we ignore it
+   */
+private applyNegation = <
+  T extends Record<string, (...args: Array<unknown>) => unknown>,
+>(
+  api: T,
+) =>
+  Object.fromEntries(
+    Object.entries(api).map(([key, fn]) => [
+      key,
 
-          last.success = !last.success;
-          last.message = "NOT: " + last.message;
-        },
-      ]),
-    );
+      (...args: Parameters<T[keyof T]>) => {
+        const before = this.lastTest
+
+        /**
+         * taking snapshot of last test before running anything 
+         * so we can later detect if a new test was actually created
+        */
+
+        fn(...args)
+
+        /**
+         * execute original assertion (toBe, toEqual, etc)
+         * this is where this.lastTest might get updated
+        */
+
+        if (
+          !this.lastTest ||
+          /* checking lastTest ref equality */
+          this.lastTest === before ||
+          this.lastTest.type !== "test"
+        )
+          return
+
+        /**
+         * safety checks:
+         *  - if nothing exists --> stop
+         *  - if nothing changed --> stop
+         *  - if it's not a test result --> stop
+        */
+
+        this.lastTest.success = !this.lastTest.success
+
+        /**
+         * flip boolean result (true becomes false, false becomes true) 
+         * this is the actual .not behavior
+        */
+
+        this.lastTest.message = "NOT: " + this.lastTest.message
+
+        /* just marking it so we know this came through .not chain */
+      },
+    ]),
+  )
 
   addDemoResults = () => {
     this.results = [
@@ -584,35 +627,152 @@ export class ABTestEngine {
   /*========================
    EXPECT ASSERTIONS
   ========================*/
-  expect = (name: string) => {
+  expect = (name: string, value?: unknown) => {
     const status = this.response.status;
     const body = this.response.body;
     const headers = this.response.headers;
     const cookies = this.response.cookies || [];
 
-    const api = {
-      toBe: (expected: number) =>
-        this.pushTest(
-          name,
-          status === expected,
-          `Expected ${status} to be ${expected}`,
-        ),
-      toBeOneOf: (list: Array<number>) =>
-        this.pushTest(
-          name,
-          list.includes(status),
-          `Expected ${status} to be one of ${list.join(", ")}`,
-        ),
-      toBeGreaterThan: (num: number) =>
-        this.pushTest(name, status > num, `Expected ${status} > ${num}`),
-      toBeLessThan: (num: number) =>
-        this.pushTest(name, status < num, `Expected ${status} < ${num}`),
-      toBeBetween: (min: number, max: number) =>
-        this.pushTest(
-          name,
-          status >= min && status <= max,
-          `Expected ${status} between ${min}-${max}`,
-        ),
+    const base = (value: unknown) =>
+      ({
+        toBe: (expected: unknown) =>
+          this.pushTest(
+            name,
+            value === expected,
+            `Expected ${value} to be ${expected}`,
+          ),
+        toBeOneOf: (list: Array<unknown>) =>
+          this.pushTest(
+            name,
+            list.includes(value),
+            `Expected ${value} to be one of ${list.join(", ")}`,
+          ),
+
+        toBeGreaterThan: (num: number) =>
+          this.pushTest(
+            name,
+            (value as number) > num,
+            typeof value === "number"
+              ? `Expected ${value} > ${num}`
+              : `${JSON.stringify(value, null, 2)} between is not number`,
+          ),
+        toBeLessThan: (num: number) =>
+          this.pushTest(
+            name,
+            (value as number) < num,
+            typeof value === "number"
+              ? `Expected ${value} < ${num}`
+              : `${JSON.stringify(value, null, 2)} between is not number`,
+          ),
+        toBeBetween: (min: number, max: number) =>
+          this.pushTest(
+            name,
+            (value as number) >= min && (value as number) <= max,
+            typeof value === "number"
+              ? `Expected ${value} between ${min}-${max}`
+              : `${JSON.stringify(value, null, 2)} between is not number`,
+          ),
+
+        toEqual: (expected: unknown) =>
+          this.pushTest(
+            name,
+            isDeepStrictEqual(value, expected),
+            `Expected ${JSON.stringify(value, null, 2)} to equal ${JSON.stringify(expected, null, 2)}`,
+          ),
+        toExist: () =>
+          this.pushTest(
+            name,
+            value !== undefined && value !== null,
+            `Expected value to exist`,
+          ),
+        toBeType: (
+          type: "string" | "number" | "boolean" | "object" | "array",
+        ) => {
+          const actualType = Array.isArray(value) ? "array" : typeof value;
+          this.pushTest(
+            name,
+            actualType === type,
+            `Expected type ${type}, got ${actualType}`,
+          );
+        },
+        toContain: (item: unknown) => {
+          let success = false;
+          if (typeof value === "string")
+            success = value.includes(item as string);
+          else if (Array.isArray(value))
+            success = (value as Array<unknown>).includes(item);
+          this.pushTest(
+            name,
+            success,
+            `Expected ${JSON.stringify(value, null, 2)} to contain ${JSON.stringify(item, null, 2)}`,
+          );
+        },
+        toHaveProperty: (key: string) => {
+          const keys = key.split(".");
+          let val: unknown = value;
+          for (const k of keys) {
+            if (
+              val &&
+              typeof val === "object" &&
+              k in (val as Record<string, unknown>)
+            )
+              val = (val as Record<string, unknown>)[k];
+            else {
+              this.pushTest(
+                name,
+                false,
+                `Expected property '${key}' not found`,
+              );
+              return;
+            }
+          }
+          this.pushTest(name, true, `Property '${key}' exists`);
+        },
+        toHaveLength: (len: number) =>
+          this.pushTest(
+            name,
+            Array.isArray(value) && (value as Array<unknown>).length === len,
+            `Expected length ${len}, got ${Array.isArray(value) ? (value as Array<unknown>).length : "not array"}`,
+          ),
+        toBeGreaterThanNumber: (num: number) =>
+          this.pushTest(
+            name,
+            typeof value === "number" && value > num,
+            `Expected ${typeof value === "object" ? JSON.stringify(value, null, 2) : value} > ${num}`,
+          ),
+        toBeLessThanNumber: (num: number) =>
+          this.pushTest(
+            name,
+            typeof value === "number" && value < num,
+            `Expected ${typeof value === "object" ? JSON.stringify(value, null, 2) : value} < ${num}`,
+          ),
+        toBeBetweenNumber: (min: number, max: number) =>
+          this.pushTest(
+            name,
+            typeof value === "number" && value >= min && value <= max,
+            `Expected ${typeof value === "object" ? JSON.stringify(value, null, 2) : value} between ${min}-${max}`,
+          ),
+      }) as Record<string, (...args: Array<unknown>) => void>;
+
+    const baseCore = value !== undefined ? base(value) : null;
+    const bodyCore = base(body);
+    const statusCore = base(status);
+
+    const bodyAPI = {
+      toBe: bodyCore.toBe,
+      toBeOneOf: bodyCore.toBeOneOf,
+      toEqual: bodyCore.toEqual,
+      toExist: bodyCore.toExist,
+      toBeType: bodyCore.toBeType,
+      toContain: bodyCore.toContain,
+      toHaveProperty: bodyCore.toHaveProperty,
+      toHaveLength: bodyCore.toHaveLength,
+    } as Record<string, (...args: Array<unknown>) => void>;
+
+    const statusAPI = {
+      toBe: statusCore.toBe,
+      toBeOneOf: statusCore.toBeOneOf,
+
       toBeSuccess: () =>
         this.pushTest(
           name,
@@ -651,82 +811,9 @@ export class ABTestEngine {
       toBeBadGateway: () => this.pushTest(name, status === 502, `Expected 502`),
       toBeServiceUnavailable: () =>
         this.pushTest(name, status === 503, `Expected 503`),
+    } as Record<string, (...args: Array<unknown>) => void>;
 
-      toEqual: (expected: unknown) =>
-        this.pushTest(
-          name,
-          isDeepStrictEqual(body, expected),
-          `Expected ${JSON.stringify(body, null, 2)} to equal ${JSON.stringify(expected, null, 2)}`,
-        ),
-      toExist: () =>
-        this.pushTest(
-          name,
-          body !== undefined && body !== null,
-          `Expected value to exist`,
-        ),
-      toBeType: (
-        type: "string" | "number" | "boolean" | "object" | "array",
-      ) => {
-        const actualType = Array.isArray(body) ? "array" : typeof body;
-        this.pushTest(
-          name,
-          actualType === type,
-          `Expected type ${type}, got ${actualType}`,
-        );
-      },
-      toContain: (item: unknown) => {
-        let success = false;
-        if (typeof body === "string") success = body.includes(item as string);
-        else if (Array.isArray(body))
-          success = (body as Array<unknown>).includes(item);
-        this.pushTest(
-          name,
-          success,
-          `Expected ${JSON.stringify(body, null, 2)} to contain ${JSON.stringify(item, null, 2)}`,
-        );
-      },
-      toHaveProperty: (key: string) => {
-        const keys = key.split(".");
-        let val: unknown = body;
-        for (const k of keys) {
-          if (
-            val &&
-            typeof val === "object" &&
-            k in (val as Record<string, unknown>)
-          )
-            val = (val as Record<string, unknown>)[k];
-          else {
-            this.pushTest(name, false, `Expected property '${key}' not found`);
-            return;
-          }
-        }
-        this.pushTest(name, true, `Property '${key}' exists`);
-      },
-      toHaveLength: (len: number) =>
-        this.pushTest(
-          name,
-          Array.isArray(body) && (body as Array<unknown>).length === len,
-          `Expected length ${len}, got ${Array.isArray(body) ? (body as Array<unknown>).length : "not array"}`,
-        ),
-      toBeGreaterThanNumber: (num: number) =>
-        this.pushTest(
-          name,
-          typeof body === "number" && body > num,
-          `Expected ${typeof body === "object" ? JSON.stringify(body, null, 2) : body} > ${num}`,
-        ),
-      toBeLessThanNumber: (num: number) =>
-        this.pushTest(
-          name,
-          typeof body === "number" && body < num,
-          `Expected ${typeof body === "object" ? JSON.stringify(body, null, 2) : body} < ${num}`,
-        ),
-      toBeBetweenNumber: (min: number, max: number) =>
-        this.pushTest(
-          name,
-          typeof body === "number" && body >= min && body <= max,
-          `Expected ${typeof body === "object" ? JSON.stringify(body, null, 2) : body} between ${min}-${max}`,
-        ),
-
+    const headerAPI = {
       toHaveHeader: (key: string) =>
         this.pushTest(
           name,
@@ -756,7 +843,9 @@ export class ABTestEngine {
           `Expected Content-Type to include '${type}', got ${val}`,
         );
       },
+    } as Record<string, (...args: Array<unknown>) => void>;
 
+    const cookieAPI = {
       toExistCookie: (cookieKey: string) => {
         this.pushTest(
           name,
@@ -772,11 +861,35 @@ export class ABTestEngine {
           `Expected cookie '${cookieKey}' to be '${value}', got '${c?.value}'`,
         );
       },
-    } as Record<string, (...args: Array<unknown>) => unknown>;
+    } as Record<string, (...args: Array<unknown>) => void>;
 
     return {
-      ...api,
-      not: this.applyNegation(api),
+      ...(baseCore ? baseCore : {}),
+      ...(baseCore
+        ? {
+            not: this.applyNegation(base(value!)),
+          }
+        : {}),
+
+      body: {
+        ...bodyAPI,
+        not: this.applyNegation(bodyAPI),
+      },
+
+      status: {
+        ...statusAPI,
+        not: this.applyNegation(statusAPI),
+      },
+
+      headers: {
+        ...headerAPI,
+        not: this.applyNegation(headerAPI),
+      },
+
+      cookies: {
+        ...cookieAPI,
+        not: this.applyNegation(cookieAPI),
+      },
     };
   };
 
