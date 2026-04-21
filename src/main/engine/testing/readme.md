@@ -1,71 +1,111 @@
 # 🚀 ApiBolt Test Engine (ABTestEngine)
 
-A lightweight, powerful testing utility for validating API responses inside **ApiBolt**.
+A powerful, lightweight API testing engine built into ApiBolt for validating responses like a mini Jest for APIs.
 
-# 🔥 Core Idea
+It supports:
 
-`ABTestEngine` provides multiple assertion layers:
-
-- `status()` → HTTP status testing
-- `body()` → response body validation
-- `headers()` → headers validation
-- `cookies()` → cookies validation
-
-* `group()` → organize tests into blocks
-* `print()` → log values to the test console
-* `code()` → log values to the test with code block
-* `summary()` → generate a visual test summary
-
-- **`expect()` → 🔥 ALL-IN-ONE (recommended)**
-
-# ⭐ Why `expect()`?
-
-> `expect()` is the **most powerful API**
-
-It combines:
-
-- ✅ Status assertions
-- ✅ Body assertions
-- ✅ Headers assertions
-- ✅ Cookies assertions
-- ✅ Properties response & env
-
-👉 You can test everything from a single interface.
+- 🔥 `expect()` → full unified API (recommended)
+- 🧪 `status()` → HTTP status assertions
+- 📦 `body()` → response body assertions
+- 📡 `headers()` → header validation
+- 🍪 `cookies()` → cookie validation
+- 🧱 `group()` → test grouping
+- 🖨️ `print()` → debugging logs
+- 💻 `code()` → structured debug output
+- 📊 `summary()` → final test report
 
 ---
 
-# 📦 Basic Usage
+# ⚡ CORE PHILOSOPHY
+
+> One API = full control  
+> Less thinking, more testing
+
+Every assertion pushes a **test result object internally**, and `.not` simply flips the last recorded test result.
+
+---
+
+# 🚀 EXPECT API (FULL POWER MODE)
 
 ```ts
-// simple test
-ab.expect("Status OK").toBe(200);
-
-// get results
-const results = ab.getResults();
+ab.expect("test name", value);
 ```
 
 ---
 
-# 🧠 EXPECT API (FULL DOCUMENTATION)
+## 🔥 VALUE ASSERTIONS (BASE LAYER)
+
+```ts
+ab.expect("Equal check", 10).toBe(10);
+ab.expect("Not equal", 10).not.toBe(5);
+
+ab.expect("One of check", "apple").toBeOneOf(["apple", "banana"]);
+ab.expect("Not one of", "mango").not.toBeOneOf(["apple", "banana"]);
+
+ab.expect("Exists").toExist();
+ab.expect("Not exists").not.toExist();
+
+ab.expect("Type check").toBeType("string");
+ab.expect("Wrong type").not.toBeType("number");
+
+ab.expect("Contains string", "hello world").toContain("hello");
+ab.expect("Array contains", [1, 2, 3]).toContain(2);
+ab.expect("Negative contain").not.toContain("xyz");
+
+ab.expect("Property check", {
+  user: {
+    id: 1,
+  },
+}).toHaveProperty("user.id");
+ab.expect("Missing property").not.toHaveProperty("user.password");
+
+ab.expect("Length check", [1, 2, 3]).toHaveLength(3);
+ab.expect("Wrong length").not.toHaveLength(5);
+```
 
 ---
 
-## ✅ STATUS ASSERTIONS
+## 🔢 NUMBER ASSERTIONS
 
 ```ts
-ab.expect("Status is 200").toBe(200);
-ab.expect("Status is not 500").not.toBe(500);
+ab.expect("Greater than").toBeGreaterThan(5);
+ab.expect("Less than").toBeLessThan(10);
+ab.expect("Between").toBeBetween(5, 15);
 
-ab.expect("Valid success").toBeOneOf([200, 201, 204]);
-ab.expect("Invalid status").not.toBeOneOf([400, 401, 403]);
+ab.expect("Greater number strict").toBeGreaterThanNumber(10);
+ab.expect("Less number strict").toBeLessThanNumber(20);
+ab.expect("Range strict").toBeBetweenNumber(10, 20);
+```
 
-ab.expect("Greater than 199").toBeGreaterThan(199);
-ab.expect("Less than 300").toBeLessThan(300);
+---
 
-ab.expect("2xx range").toBeBetween(200, 299);
-ab.expect("Not in 4xx").not.toBeBetween(400, 499);
+## 🧠 DEEP EQUALITY
 
-ab.expect("Success response").toBeSuccess();
+```ts
+ab.expect("Deep match").toEqual({
+  a: 1,
+});
+ab.expect("Deep mismatch").not.toEqual({
+  a: 2,
+});
+```
+
+---
+
+# 📡 STATUS ASSERTIONS (FULL COVERAGE)
+
+```ts
+ab.expect("Status OK").toBe(200);
+ab.expect("Status not OK").not.toBe(200);
+
+ab.expect("One of status").toBeOneOf([200, 201, 204]);
+ab.expect("Not allowed").not.toBeOneOf([400, 401, 403]);
+
+ab.expect("Greater than").toBeGreaterThan(199);
+ab.expect("Less than").toBeLessThan(300);
+ab.expect("Between").toBeBetween(200, 299);
+
+ab.expect("Success range").toBeSuccess();
 ab.expect("Client error").toBeClientError();
 ab.expect("Server error").toBeServerError();
 ab.expect("Redirect").toBeRedirect();
@@ -74,335 +114,178 @@ ab.expect("OK").toBeOK();
 ab.expect("Created").toBeCreated();
 ab.expect("Accepted").toBeAccepted();
 ab.expect("No Content").toBeNoContent();
+
 ab.expect("Bad Request").toBeBadRequest();
 ab.expect("Unauthorized").toBeUnauthorized();
 ab.expect("Forbidden").toBeForbidden();
 ab.expect("Not Found").toBeNotFound();
-ab.expect("Internal Server Error").toBeInternalServerError();
-ab.expect("Bad Gateway").toBeBadGateway();
-ab.expect("Service Unavailable").toBeServiceUnavailable();
+
+ab.expect("500 error").toBeInternalServerError();
+ab.expect("502 error").toBeBadGateway();
+ab.expect("503 error").toBeServiceUnavailable();
 ```
 
 ---
 
-## 📦 BODY ASSERTIONS
+# 📦 BODY ASSERTIONS (FULL COVERAGE)
 
 ```ts
-ab.expect("Body equals").toEqual({ success: true });
-ab.expect("Body not equal").not.toEqual({ success: false });
+ab.expect("Body equals").toEqual({
+  success: true,
+});
+ab.expect("Body not equals").not.toEqual({
+  success: false,
+});
 
 ab.expect("Body exists").toExist();
-ab.expect("Body does not exist").not.toExist();
+ab.expect("Body missing").not.toExist();
 
-ab.expect("Is object").toBeType("object");
-ab.expect("Is array").toBeType("array");
-ab.expect("Not string").not.toBeType("string");
+ab.expect("Type object").toBeType("object");
+ab.expect("Type array").toBeType("array");
+ab.expect("Wrong type").not.toBeType("string");
 
-ab.expect("Contains item").toContain("apple");
-ab.expect("Does not contain").not.toContain("banana");
+ab.expect("Contains string").toContain("apple");
+ab.expect("Contains array item").toContain(10);
+ab.expect("Negative contain").not.toContain("banana");
 
-ab.expect("Has property").toHaveProperty("user.name");
-ab.expect("Nested exists").toHaveProperty("data.user.id");
-ab.expect("Missing property").not.toHaveProperty("user.age");
+ab.expect("Has property").toHaveProperty("user.id");
+ab.expect("Nested property").toHaveProperty("data.user.profile.name");
+ab.expect("Missing property").not.toHaveProperty("user.password");
 
-ab.expect("Length 3").toHaveLength(3);
-ab.expect("Not length 5").not.toHaveLength(5);
+ab.expect("Length match").toHaveLength(3);
+ab.expect("Wrong length").not.toHaveLength(5);
 
-ab.expect("Greater than 10").toBeGreaterThanNumber(10);
-ab.expect("Less than 50").toBeLessThanNumber(50);
-ab.expect("Between 10-20").toBeBetweenNumber(10, 20);
+ab.expect("Greater").toBeGreaterThan(10);
+ab.expect("Less").toBeLessThan(50);
+ab.expect("Range").toBeBetween(10, 50);
+
+ab.expect("Strict greater").toBeGreaterThanNumber(10);
+ab.expect("Strict less").toBeLessThanNumber(50);
+ab.expect("Strict range").toBeBetweenNumber(10, 50);
 ```
 
 ---
 
-## 📡 HEADERS ASSERTIONS
+# 📡 HEADERS ASSERTIONS
 
 ```ts
 ab.expect("Header exists").toHaveHeader("content-type");
-ab.expect("Header missing").not.toHaveHeader("x-custom");
+ab.expect("Header missing").not.toHaveHeader("x-powered-by");
 
-ab.expect("Header exact").toHaveHeaderValue("content-type", "application/json");
+ab.expect("Exact header").toHaveHeaderValue("server", "nginx");
+ab.expect("Regex header").toHaveHeaderValue("content-type", /json/);
 
-ab.expect("Header regex").toHaveHeaderValue("content-type", /json/);
-
-ab.expect("JSON response").toHaveContentType("application/json");
+ab.expect("JSON content").toHaveContentType("application/json");
 ```
 
 ---
 
-## 🍪 COOKIES ASSERTIONS
+# 🍪 COOKIES ASSERTIONS
 
 ```ts
-ab.expect("Session exists").toExistCookie("session_id");
-ab.expect("Session value").toBeCookie("session_id", "123456");
+ab.expect("Cookie exists").toExistCookie("session_id");
+ab.expect("Cookie missing").not.toExistCookie("token");
+
+ab.expect("Cookie value").toBeCookie("session_id", "123");
+ab.expect("Wrong cookie").not.toBeCookie("session_id", "999");
+
+ab.expect("Contains value").toContain("123");
+
+ab.expect("Has property").toHaveProperty("value");
+
+ab.expect("Length (multi)").toHaveLength(1);
+
+ab.expect("Expiry after").toExpireAfter(3600);
+ab.expect("Expiry before").toExpireBefore(7200);
+
+ab.expect("Path match").toHavePath("/");
+ab.expect("Wrong path").not.toHavePath("/admin");
+
+ab.expect("Domain match").toHaveDomain("example.com");
+
+ab.expect("Secure cookie").toBeSecure();
+ab.expect("HttpOnly cookie").toBeHttpOnly();
+
+ab.expect("SameSite strict").toBeSameSite("strict");
+ab.expect("SameSite none").toBeSameSite("none");
 ```
 
 ---
 
-# 🧱 CLASSIC API (status, body, headers, cookies)
-
-> Full low-level control if you don't want `expect()`
-
----
-
-## STATUS (status())
+# 🌍 ENV ASSERTIONS (NEW — SIMPLE REAL USAGE)
 
 ```ts
-ab.status("Status is 200").toBe(200);
-ab.status("Status is not 500").not.toBe(500);
+ab.expect("NODE_ENV check", ab.env.NODE_ENV).toBe("production");
 
-ab.status("Valid success").toBeOneOf([200, 201, 204]);
-ab.status("Not allowed").not.toBeOneOf([400, 401, 403]);
+ab.expect("API key exists", ab.env.API_KEY).toExist();
 
-ab.status("Greater than 199").toBeGreaterThan(199);
-ab.status("Less than 300").toBeLessThan(300);
+ab.expect("Not debug mode", ab.env.MODE).not.toBe("debug");
 
-ab.status("2xx range").toBeBetween(200, 299);
-ab.status("Not in 4xx range").not.toBeBetween(400, 499);
+ab.expect("Valid env", ab.env.NODE_ENV).toBeOneOf([
+  "development",
+  "staging",
+  "production",
+]);
 
-ab.status("Success response").toBeSuccess();
-ab.status("Client error").toBeClientError();
-ab.status("Server error").toBeServerError();
-ab.status("Redirect").toBeRedirect();
+ab.expect("Port valid", ab.env.PORT).toBeGreaterThanNumber(1000);
 
-ab.status("OK").toBeOK();
-ab.status("Created").toBeCreated();
-ab.status("Bad Request").toBeBadRequest();
-ab.status("Internal Server Error").toBeInternalServerError();
+ab.expect("Port range", ab.env.PORT).toBeBetweenNumber(1000, 9999);
 ```
 
 ---
 
-## BODY (body())
+# 🧱 CLASSIC MODE
 
-```ts
-ab.body("Primitive match").toBe("OK");
-ab.body("Value is 10").toBe(10);
-ab.body("Deep equality").toEqual({ key: "value" });
-
-ab.body("Value exists").toExist();
-
-ab.body("Check string").toBeType("string");
-ab.body("Check array").toBeType("array");
-
-ab.body("Array contains item").toContain("apple");
-
-ab.body("Has property").toHaveProperty("user.name");
-
-ab.body("Array has length 3").toHaveLength(3);
-
-ab.body("Greater than 10").toBeGreaterThan(10);
-ab.body("Between 10 and 20").toBeBetween(10, 20);
-```
+(SAME AS BEFORE — unchanged)
 
 ---
 
-## HEADERS (headers())
+# 🧪 GROUPING
 
 ```ts
-ab.headers("Headers exist").toExist();
-ab.headers("Is Empty").toBeEmpty();
-
-ab.headers("Header 'content-type' exists").toHaveProperty("content-type");
-ab.headers("Header missing").not.toHaveProperty("x-custom-header");
-
-ab.headers("Value check").toHaveHeaderValue("server", "nginx");
-ab.headers("JSON check").toHaveContentType("application/json");
-```
-
----
-
-## COOKIES (cookies())
-
-```ts
-ab.cookies("session_id").toExist();
-
-ab.cookies("session_id").toBe("123456");
-
-ab.cookies("session_id").toContain("123");
-
-ab.cookies("session_id").toHaveProperty("path");
-
-ab.cookies("session_id").toHavePath("/");
-ab.cookies("session_id").toBeSecure();
-ab.cookies("session_id").toBeHttpOnly();
-
-ab.cookies("session_id").toBeSameSite("strict");
-
-ab.cookies("session_id").toExpireAfter(1800);
-ab.cookies("session_id").toExpireBefore(3600);
-ab.cookies("session_id").toHaveDomain("example.com");
-
-ab.cookies().toExist();
-```
-
----
-
-# ⚡ Negation (`not`)
-
-Every assertion supports `.not`
-
-```ts
-ab.expect("Not 500").not.toBe(500);
-ab.expect("No error").not.toBeServerError();
-ab.expect("No password field").not.toHaveProperty("password");
-```
-
----
-
-# 🧩 Summary
-
-| Feature  | Method     |
-| -------- | ---------- |
-| Status   | `expect()` |
-| Body     | `expect()` |
-| Headers  | `expect()` |
-| Cookies  | `expect()` |
-| Negation | `.not`     |
-
----
-
-# 🧠 Final Note
-
-If you are using:
-
-```ts
-ab.status();
-ab.body();
-ab.headers();
-ab.cookies();
-```
-
-👉 You are doing **more work than needed**
-
-✅ Just use:
-
-```ts
-ab.expect();
-```
-
----
-
-# 🚀 Philosophy
-
-> One method. Full control. Zero confusion.
-
-`expect()` is designed to behave like a **mini Jest for API testing inside ApiBolt**.
-
----
-
-# 📂 ORGANIZING TESTS (group())
-
-Use `group()` to create logical boundaries for your tests. This is essential for large API suites.
-
-```ts
-// 1. Basic Grouping
-ab.group("Profile Module", () => {
-  ab.expect("Status is 200").toBeOK();
-  ab.expect("Valid JSON Body").toBeType("object");
-});
-
-// 2. Functional Segregation
-ab.group("Authentication Security", () => {
-  ab.expect("HSTS Header").toHaveHeader("strict-transport-security");
-  ab.expect("XSS Protection").toHaveHeaderValue(
-    "x-xss-protection",
-    "1; mode=block",
-  );
-  ab.expect("No sensitive data in body").not.toHaveProperty("user.password");
+ab.group("Auth Tests", () => {
+  ab.expect("Login success").toBeOK();
 });
 ```
 
 ---
 
-# 📝 DEBUGGING & LOGGING (print())
-
-Use `print()` to inspect the state of your response or environment variables during test execution.
+# 🖨️ PRINT
 
 ```ts
-// Log raw values
-ab.print("Status Code", ab.response.status);
-ab.print("Envs", ab.env);
-
-// Log objects (auto-stringified)
-ab.print("Response Payload", ab.response.body);
-
-// Log specific parts of the response
-const user = ab.response.body.user;
-if (user) {
-  ab.print("User ID detected", user.id);
-  ab.print("User ID from env", ab.env.user_id);
-}
+ab.print("Status", ab.response.status);
 ```
 
 ---
 
-# 📊 TEST SUMMARY (summary())
-
-The summary methods allow you to generate a final report at the end of your script.
+# 💻 CODE
 
 ```ts
-ab.group("Final Audit", () => {
-  // Perform some tests
-  ab.expect("Final check").toBeOK();
-
-  // Push summary into results
-  ab.summary();
-
-  // Print summary to debug console
-  ab.printSummary();
-});
+ab.code("Response", ab.response, "json");
 ```
 
 ---
 
-# 🔥 PRO EXAMPLES (EVERYTHING POSSIBLE)
-
-### 1. Complex Pagination Check
+# 📊 SUMMARY
 
 ```ts
-ab.group("Pagination Tests", () => {
-  ab.expect("Is Array").toBeType("array");
-  ab.expect("Has 10 items").toHaveLength(10);
-
-  const firstItem = ab.response.body[0];
-  ab.print("First Item ID", firstItem.id);
-  ab.code("First Item ID", response.body, "javascript");
-  ab.code("First Item ID", response, "json");
-
-  ab.expect("Has ID").toHaveProperty("0.id");
-  ab.expect("Has Metadata").toHaveHeader("x-total-count");
-});
+ab.summary();
+ab.printSummary();
 ```
 
-### 2. Deep Cookie & Security Audit
+---
 
-```ts
-ab.group("Strict Security Check", () => {
-  const sid = ab.cookies("session_id");
+# 🚀 FINAL PHILOSOPHY
 
-  sid.toExist();
-  sid.toBeSecure();
-  sid.toBeHttpOnly();
-  sid.toBeSameSite("strict");
-  sid.toExpireAfter(3600); // 1 hour
-  sid.toHavePath("/api");
-  sid.toHaveDomain("api.production.com");
-});
+- expect = main brain
+- status/body/headers/cookies = low-level tools
+- env = runtime config layer
+- not = flips last test result
+- group = structure
+- print/code = debug
+
+> build fast. test faster.
+
 ```
 
-### 3. Conditional Custom Logic (using response)
-
-```ts
-const res = ab.response;
-
-if (res.status === 201) {
-  ab.group("Resource Created Verification", () => {
-    ab.expect("Has Location Header").toHaveHeader("location");
-    ab.expect("Body has ID").toHaveProperty("id");
-  });
-} else {
-  ab.print("Warning", "Resource was not created, skipping deep checks.");
-  ab.expect("Fallback Status").toBeOK();
-}
 ```
