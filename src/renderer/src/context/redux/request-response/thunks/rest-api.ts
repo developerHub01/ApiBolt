@@ -280,6 +280,10 @@ export const fetchApi = createAsyncThunk<
       }),
     );
 
+    /**===================================
+     *  Test script
+     * ===================================
+    */
     dispatch(
       runTestScript({
         id: requestId,

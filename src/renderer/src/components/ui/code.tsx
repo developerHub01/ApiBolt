@@ -36,6 +36,8 @@ export const getLangExtension = (contentType: string): LangFactory => {
   return langs[key] || (() => []);
 };
 
+const keyboardEnterSet = new Set(["Enter", "NumpadEnter"]);
+
 const getEditableOptions = ({
   editable,
   onChange,
@@ -166,7 +168,11 @@ const Code = ({
 
   useEffect(() => {
     const handleKeybaordEvent = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.code === "ENTER") onBlur?.();
+      console.log(e.code);
+      if (e.ctrlKey && keyboardEnterSet.has(e.code)) {
+        onBlur?.();
+        e.preventDefault();
+      }
     };
 
     window.addEventListener("keydown", handleKeybaordEvent);
