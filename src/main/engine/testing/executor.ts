@@ -27,8 +27,8 @@ export const executeTest = ({
     summary: ab.summary.bind(ab),
     group: ab.group.bind(ab),
     code: ab.code.bind(ab),
-    response: ab.getResponse(),
-    env: ab.getEnvs(),
+    response: Object.freeze(structuredClone(ab.getResponse())),
+    env: Object.freeze(structuredClone(ab.getEnvs())),
   });
 
   const vm = new VM({
