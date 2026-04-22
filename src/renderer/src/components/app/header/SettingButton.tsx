@@ -28,6 +28,7 @@ import {
   FAKE_API_DOCS_URL,
   MARKETPLACE_URL,
   WEBSITE_BASE_URL,
+  WEBSITE_DOCS,
 } from "@shared/constant/api-bolt";
 
 const SettingButton = () => {
@@ -90,6 +91,12 @@ const SettingButton = () => {
       label: "Official Website",
       isSeparatorAbove: true,
       link: WEBSITE_BASE_URL,
+      isExternalLink: true,
+    },
+    {
+      id: "navigate_docs",
+      label: "Explore Docs",
+      link: WEBSITE_DOCS,
       isExternalLink: true,
     },
     {
