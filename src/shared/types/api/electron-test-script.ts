@@ -16,4 +16,5 @@ export interface ElectronAPITestScriptInterface {
   runTestScript(
     payload: RunTestScriptPayload,
   ): Promise<RunTestScriptResultPayload>;
+  duplicateTestScript(payload: Record<string, string>): Promise<boolean>;
 }

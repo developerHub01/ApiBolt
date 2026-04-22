@@ -43,6 +43,25 @@ export const loadTestScript = createAsyncThunk<
   }
 });
 
+export const duplicateTestScriptByOldNewIds = createAsyncThunk<
+  boolean,
+  Record<string, string>,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>("test-script/duplicateTestScriptByOldNewIds", async oldNewIdMap => {
+  try {
+    const response =
+      await window.electronAPITestScript.duplicateTestScript(oldNewIdMap);
+
+    return response;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+});
+
 export const updateTestScript = createAsyncThunk<
   boolean,
   {

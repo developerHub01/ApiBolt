@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { db } from "@/main/db/index.js";
 import { testScriptTable } from "@/main/db/schema.js";
 import { getTabList } from "@/main/db/tabsDB.js";
@@ -96,3 +96,44 @@ export const deleteTestScript = async (
     return false;
   }
 };
+
+/* 
+payload = {
+  oldId: newId ---> newId means duplicatedId
+}
+*/
+export const duplicateTestScript: ElectronAPITestScriptInterface["duplicateTestScript"] =
+  async payload => {
+    try {
+      if (!payload) throw new Error();
+      const oldIds = Object.keys(payload);
+      if (!oldIds.length) throw new Error();
+
+      const existingBodyRawData = await db
+        .select()
+        .from(testScriptTable)
+        .where(inArray(testScriptTable.requestId, oldIds));
+
+      if (!existingBodyRawData.length) return true;
+
+      /**
+       * - Replacing oldId with duplicatedId
+       * and only keeping url so that other things automatically generate by default
+       */
+      const duplicatePayload = existingBodyRawData.map(raw => {
+        const { requestId, ...rest } = raw;
+        return {
+          ...rest,
+          requestId: payload[raw.requestId],
+        };
+      });
+
+      return (
+        (await db.insert(testScriptTable).values(duplicatePayload))
+          .rowsAffected > 0
+      );
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };

@@ -38,6 +38,7 @@ import { duplicateBodyFormDataByOldNewIds } from "@/context/redux/request-respon
 import { duplicateMetaShowColumnByOldNewIds } from "@/context/redux/request-response/thunks/meta-show-column";
 import { duplicateAuthorizationByOldNewIds } from "@/context/redux/request-response/thunks/auth";
 import { duplicateFolderByOldNewIds } from "@/context/redux/request-response/thunks/folder";
+import { duplicateTestScriptByOldNewIds } from "@/context/redux/request-response/thunks/test-script";
 
 /* ==============================
 ===== RequestList start =========
@@ -651,6 +652,8 @@ export const duplicateRequestOrFolder = createAsyncThunk<
         dispatch(duplicateBodyFormDataByOldNewIds(oldNewIdMap)),
         /* duplicate request meta show column */
         dispatch(duplicateMetaShowColumnByOldNewIds(oldNewIdMap)),
+        /* duplicate request test script */
+        dispatch(duplicateTestScriptByOldNewIds(oldNewIdMap)),
         /* duplicate request auth */
         dispatch(duplicateAuthorizationByOldNewIds(oldNewIdMap)),
         /* duplicate folder */

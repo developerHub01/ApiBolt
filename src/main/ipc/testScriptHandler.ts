@@ -3,6 +3,7 @@ import { ElectronAPITestScriptInterface } from "@shared/types/api/electron-test-
 import {
   createTestScript,
   deleteTestScript,
+  duplicateTestScript,
   getTestScript,
   updateTestScript,
 } from "@/main/db/testScriptDB";
@@ -72,5 +73,13 @@ export const testScriptHandler = (): void => {
         };
       }
     },
+  );
+  ipcMain.handle(
+    "duplicateTestScript",
+    async (
+      _,
+      ...rest: Parameters<ElectronAPITestScriptInterface["duplicateTestScript"]>
+    ): ReturnType<ElectronAPITestScriptInterface["duplicateTestScript"]> =>
+      await duplicateTestScript(...rest),
   );
 };

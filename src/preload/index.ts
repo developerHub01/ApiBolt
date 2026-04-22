@@ -590,6 +590,8 @@ if (process.contextIsolated) {
           await ipcRenderer.invoke("deleteTestScript", ...payload),
         runTestScript: async (...payload) =>
           await ipcRenderer.invoke("runTestScript", ...payload),
+        duplicateTestScript: async (...payload) =>
+          await ipcRenderer.invoke("duplicateTestScript", ...payload),
       };
 
     /**
