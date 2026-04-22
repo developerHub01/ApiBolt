@@ -99,6 +99,7 @@ export const clearRequest = async (id: string) => {
 };
 
 export const importRequest = async ({
+  type,
   requestId,
   parentId,
   name,
@@ -112,27 +113,22 @@ export const importRequest = async ({
   bodyBinary,
   bodyXWWWFormUrlencoded,
   bodyFormData,
+  testScript,
   authorization,
 }: RequestExportFileInterface & {
   requestId: string;
   parentId?: string | null;
 }): Promise<boolean> => {
   return await db.transaction(async tsx => {
+    if (type !== "request") throw new Error("Not valid request file.");
     const projectId = await getActiveProject();
-    if (!projectId) throw new Error();
+    if (!projectId) throw new Error("Project id not found.");
 
     /**
      * ===================
      * request-meta-data
      * ===================
      */
-    // await tsx
-    //   .update(requestOrFolderMetaTable)
-    //   .set({
-    //     name,
-    //     method,
-    //   })
-    //   .where(eq(requestOrFolderMetaTable.id, id));
     await tsx
       .insert(requestOrFolderMetaTable)
       .values({
@@ -149,12 +145,6 @@ export const importRequest = async ({
           method,
         },
       });
-    // .update(requestOrFolderMetaTable)
-    // .set({
-    //   name,
-    //   method,
-    // })
-    // .where(eq(requestOrFolderMetaTable.id, id));
 
     /**
      * ===================
@@ -326,6 +316,26 @@ export const importRequest = async ({
 
     /**
      * ===================
+     * test script
+     * ===================
+     */
+    await tsx
+      .insert(testScriptTable)
+      .values({
+        ...testScript,
+        requestId,
+      })
+      .onConflictDoUpdate({
+        target: [testScriptTable.requestId],
+        set: {
+          ...testScript,
+          /* this extra requestOrFolderMetaId so that it not remain empty so not fail the query */
+          requestId,
+        },
+      });
+
+    /**
+     * ===================
      * Authorization
      * ===================
      */
@@ -433,7 +443,8 @@ export const exportRequest = async (
         await tsx
           .select(
             (() => {
-              const { id, ...rest } = getTableColumns(requestMetaTabTable);
+              const { id, requestOrFolderMetaId, ...rest } =
+                getTableColumns(requestMetaTabTable);
               return rest;
             })(),
           )
@@ -497,6 +508,20 @@ export const exportRequest = async (
         .from(bodyFormDataTable)
         .where(eq(bodyFormDataTable.requestOrFolderMetaId, id))) ?? [];
 
+    const testScript =
+      (
+        await tsx
+          .select(
+            (() => {
+              const { requestId, ...rest } = getTableColumns(testScriptTable);
+              return rest;
+            })(),
+          )
+          .from(testScriptTable)
+          .where(eq(testScriptTable.requestId, id))
+          .limit(1)
+      )?.[0] ?? {};
+
     const authorization =
       (
         await tsx
@@ -513,6 +538,7 @@ export const exportRequest = async (
       )?.[0] ?? {};
 
     return {
+      type: "request",
       name,
       method,
       url,
@@ -524,255 +550,14 @@ export const exportRequest = async (
       bodyBinary,
       bodyXWWWFormUrlencoded,
       bodyFormData,
-      authorization,
-    };
-  });
-};
-
-export const exportFolder = async (
-  id: string,
-): Promise<FolderExportFileInterface | null> => {
-  return await db.transaction(async tsx => {
-    const projectId = await getActiveProject();
-    const requestTree = await getRequestOrFolderMeta();
-    if (!projectId || !requestTree[id]) return null;
-
-    const selectedReuestIds = findSelectedRequestIds(id, requestTree);
-
-    /**
-     * =========================
-     * Find out request-list
-     * =========================
-     */
-    const requestList: FolderExportFileInterface["requestList"] = {};
-    Object.keys(requestTree ?? {}).forEach(requestId => {
-      if (!selectedReuestIds.has(requestId)) return;
-      const { children, projectId, createdAt, ...rest } =
-        requestTree[requestId];
-      requestList[requestId] = rest;
-    });
-    requestList[id].parentId = null;
-
-    const requestIdList = [...selectedReuestIds];
-
-    const apiUrlList = (
-      (await tsx
-        .select(
-          (() => {
-            const { id, createdAt, ...rest } = getTableColumns(apiUrlTable);
-            return rest;
-          })(),
-        )
-        .from(apiUrlTable)
-        .where(inArray(apiUrlTable.requestOrFolderMetaId, requestIdList))) ?? []
-    )?.reduce((acc, curr) => {
-      if (!acc[curr.requestOrFolderMetaId])
-        acc[curr.requestOrFolderMetaId] = [];
-      acc[curr.requestOrFolderMetaId].push(curr);
-
-      return acc;
-    }, {});
-
-    const paramsList = (
-      (await tsx
-        .select(
-          (() => {
-            const { id, createdAt, ...rest } = getTableColumns(paramsTable);
-            return rest;
-          })(),
-        )
-        .from(paramsTable)
-        .where(inArray(paramsTable.requestOrFolderMetaId, requestIdList))) ?? []
-    )?.reduce((acc, curr) => {
-      if (!acc[curr.requestOrFolderMetaId])
-        acc[curr.requestOrFolderMetaId] = [];
-      acc[curr.requestOrFolderMetaId].push(curr);
-
-      return acc;
-    }, {});
-
-    const headersList = (
-      (await tsx
-        .select(
-          (() => {
-            const { id, createdAt, ...rest } = getTableColumns(headersTable);
-            return rest;
-          })(),
-        )
-        .from(headersTable)
-        .where(inArray(headersTable.requestOrFolderMetaId, requestIdList))) ??
-      []
-    )?.reduce((acc, curr) => {
-      if (!acc[curr.requestOrFolderMetaId])
-        acc[curr.requestOrFolderMetaId] = [];
-      acc[curr.requestOrFolderMetaId].push(curr);
-
-      return acc;
-    }, {});
-
-    const hiddenHeadersCheckList = (
-      (await tsx
-        .select(
-          (() => {
-            const { id, ...rest } = getTableColumns(hiddenHeadersCheckTable);
-            return rest;
-          })(),
-        )
-        .from(hiddenHeadersCheckTable)
-        .where(
-          inArray(hiddenHeadersCheckTable.requestOrFolderMetaId, requestIdList),
-        )) ?? []
-    )?.reduce((acc, curr) => {
-      if (!acc[curr.requestOrFolderMetaId])
-        acc[curr.requestOrFolderMetaId] = [];
-      acc[curr.requestOrFolderMetaId].push(curr);
-
-      return acc;
-    }, {});
-
-    const formDataList = (
-      (await tsx
-        .select(
-          (() => {
-            const { id, createdAt, ...rest } =
-              getTableColumns(bodyFormDataTable);
-            return rest;
-          })(),
-        )
-        .from(bodyFormDataTable)
-        .where(
-          inArray(bodyFormDataTable.requestOrFolderMetaId, requestIdList),
-        )) ?? []
-    )?.reduce((acc, curr) => {
-      if (!acc[curr.requestOrFolderMetaId])
-        acc[curr.requestOrFolderMetaId] = [];
-      acc[curr.requestOrFolderMetaId].push(curr);
-
-      return acc;
-    }, {});
-
-    const xWWWFormUrlencodedList = (
-      (await tsx
-        .select(
-          (() => {
-            const { id, createdAt, ...rest } = getTableColumns(
-              bodyXWWWFormUrlencodedTable,
-            );
-            return rest;
-          })(),
-        )
-        .from(bodyXWWWFormUrlencodedTable)
-        .where(
-          inArray(
-            bodyXWWWFormUrlencodedTable.requestOrFolderMetaId,
-            requestIdList,
-          ),
-        )) ?? []
-    )?.reduce((acc, curr) => {
-      if (!acc[curr.requestOrFolderMetaId])
-        acc[curr.requestOrFolderMetaId] = [];
-      acc[curr.requestOrFolderMetaId].push(curr);
-
-      return acc;
-    }, {});
-
-    const binaryDataList = (
-      (await tsx
-        .select(
-          (() => {
-            const { id, ...rest } = getTableColumns(bodyBinaryTable);
-            return rest;
-          })(),
-        )
-        .from(bodyBinaryTable)
-        .where(
-          inArray(bodyBinaryTable.requestOrFolderMetaId, requestIdList),
-        )) ?? []
-    )?.reduce((acc, curr) => {
-      if (!acc[curr.requestOrFolderMetaId])
-        acc[curr.requestOrFolderMetaId] = [];
-      acc[curr.requestOrFolderMetaId].push(curr);
-
-      return acc;
-    }, {});
-
-    const rawDataList = (
-      (await tsx
-        .select(
-          (() => {
-            const { id, lineWrap, ...rest } = getTableColumns(bodyRawTable);
-            return rest;
-          })(),
-        )
-        .from(bodyRawTable)
-        .where(inArray(bodyRawTable.requestOrFolderMetaId, requestIdList))) ??
-      []
-    )?.reduce((acc, curr) => {
-      if (!acc[curr.requestOrFolderMetaId])
-        acc[curr.requestOrFolderMetaId] = [];
-      acc[curr.requestOrFolderMetaId].push(curr);
-
-      return acc;
-    }, {});
-
-    const requestMetaTabList = (
-      (await tsx
-        .select(
-          (() => {
-            const { id, ...rest } = getTableColumns(requestMetaTabTable);
-            return rest;
-          })(),
-        )
-        .from(requestMetaTabTable)
-        .where(
-          inArray(requestMetaTabTable.requestOrFolderMetaId, requestIdList),
-        )) ?? []
-    )?.reduce((acc, curr) => {
-      if (!acc[curr.requestOrFolderMetaId])
-        acc[curr.requestOrFolderMetaId] = [];
-      acc[curr.requestOrFolderMetaId].push(curr);
-
-      return acc;
-    }, {});
-
-    const authorization = (
-      (await tsx
-        .select(
-          (() => {
-            const { id, projectId, ...rest } =
-              getTableColumns(authorizationTable);
-            return rest;
-          })(),
-        )
-        .from(authorizationTable)
-        .where(
-          inArray(authorizationTable.requestOrFolderMetaId, requestIdList),
-        )) ?? []
-    )?.reduce((acc, curr) => {
-      if (!acc[`${curr.requestOrFolderMetaId}`])
-        acc[`${curr.requestOrFolderMetaId}`] = [];
-      acc[`${curr.requestOrFolderMetaId}`].push(curr);
-
-      return acc;
-    }, {});
-
-    return {
-      requestList,
-      apiUrlList,
-      paramsList,
-      headersList,
-      hiddenHeadersCheckList,
-      formDataList,
-      xWWWFormUrlencodedList,
-      binaryDataList,
-      rawDataList,
-      requestMetaTabList,
+      testScript,
       authorization,
     };
   });
 };
 
 export const importFolder = async ({
+  type,
   requestId = null,
   projectId,
   requestList = {},
@@ -785,12 +570,16 @@ export const importFolder = async ({
   binaryDataList = {},
   rawDataList = {},
   requestMetaTabList = {},
+  testScriptList = {},
   authorization = {},
 }: FolderExportFileInterface & {
   requestId: string | null;
   projectId: string;
 }): Promise<boolean> => {
   return await db.transaction(async tsx => {
+    if (type !== "folder") throw new Error("Not valid folder file.");
+    if (!projectId) throw new Error("Project id not found.");
+
     const newRequestList: Array<
       ProjectExportFileInterface["requestList"][string] & {
         projectId: string;
@@ -833,6 +622,11 @@ export const importFolder = async ({
     const newRawList: Array<
       ProjectExportFileInterface["rawDataList"][string] & {
         requestOrFolderMetaId: string;
+      }
+    > = [];
+    const newTestScriptList: Array<
+      ProjectExportFileInterface["testScriptList"][string] & {
+        requestId: string;
       }
     > = [];
     const newAuthorization: Array<
@@ -933,6 +727,13 @@ export const importFolder = async ({
         });
       }
 
+      if (testScriptList[oldId]) {
+        newTestScriptList.push({
+          ...testScriptList[oldId],
+          requestId: newId,
+        });
+      }
+
       if (authorization[oldId]) {
         newAuthorization.push({
           ...authorization[oldId],
@@ -974,9 +775,266 @@ export const importFolder = async ({
     if (newBinaryList.length)
       await tsx.insert(bodyBinaryTable).values(newBinaryList);
     if (newRawList.length) await tsx.insert(bodyRawTable).values(newRawList);
+    if (newTestScriptList.length)
+      await tsx.insert(testScriptTable).values(newTestScriptList);
     if (newAuthorization.length)
       await tsx.insert(authorizationTable).values(newAuthorization);
 
     return true;
+  });
+};
+
+export const exportFolder = async (
+  id: string,
+): Promise<FolderExportFileInterface | null> => {
+  return await db.transaction(async tsx => {
+    const projectId = await getActiveProject();
+    const requestTree = await getRequestOrFolderMeta();
+    if (!projectId || !requestTree[id]) return null;
+
+    const selectedReuestIds = findSelectedRequestIds(id, requestTree);
+
+    /**
+     * =========================
+     * Find out request-list
+     * =========================
+     */
+    const requestList: FolderExportFileInterface["requestList"] = {};
+    Object.keys(requestTree ?? {}).forEach(requestId => {
+      if (!selectedReuestIds.has(requestId)) return;
+      const { children, projectId, createdAt, id, ...rest } =
+        requestTree[requestId];
+      requestList[requestId] = rest;
+    });
+    requestList[id].parentId = null;
+
+    const requestIdList = [...selectedReuestIds];
+
+    const apiUrlList = (
+      (await tsx
+        .select(
+          (() => {
+            const { id, createdAt, ...rest } = getTableColumns(apiUrlTable);
+            return rest;
+          })(),
+        )
+        .from(apiUrlTable)
+        .where(inArray(apiUrlTable.requestOrFolderMetaId, requestIdList))) ?? []
+    )?.reduce((acc, curr) => {
+      const { requestOrFolderMetaId, ...rest } = curr;
+      acc[requestOrFolderMetaId] = rest;
+      return acc;
+    }, {});
+
+    const paramsList = (
+      (await tsx
+        .select(
+          (() => {
+            const { id, createdAt, ...rest } = getTableColumns(paramsTable);
+            return rest;
+          })(),
+        )
+        .from(paramsTable)
+        .where(inArray(paramsTable.requestOrFolderMetaId, requestIdList))) ?? []
+    )?.reduce((acc, curr) => {
+      const { requestOrFolderMetaId, ...rest } = curr;
+
+      if (!acc[requestOrFolderMetaId]) acc[requestOrFolderMetaId] = [];
+      acc[requestOrFolderMetaId].push(rest);
+
+      return acc;
+    }, {});
+
+    const headersList = (
+      (await tsx
+        .select(
+          (() => {
+            const { id, createdAt, ...rest } = getTableColumns(headersTable);
+            return rest;
+          })(),
+        )
+        .from(headersTable)
+        .where(inArray(headersTable.requestOrFolderMetaId, requestIdList))) ??
+      []
+    )?.reduce((acc, curr) => {
+      const { requestOrFolderMetaId, ...rest } = curr;
+
+      if (!acc[requestOrFolderMetaId]) acc[requestOrFolderMetaId] = [];
+      acc[requestOrFolderMetaId].push(rest);
+
+      return acc;
+    }, {});
+
+    const hiddenHeadersCheckList = (
+      (await tsx
+        .select(
+          (() => {
+            const { id, ...rest } = getTableColumns(hiddenHeadersCheckTable);
+            return rest;
+          })(),
+        )
+        .from(hiddenHeadersCheckTable)
+        .where(
+          inArray(hiddenHeadersCheckTable.requestOrFolderMetaId, requestIdList),
+        )) ?? []
+    )?.reduce((acc, curr) => {
+      const { requestOrFolderMetaId, ...rest } = curr;
+
+      if (!acc[requestOrFolderMetaId]) acc[requestOrFolderMetaId] = [];
+      acc[requestOrFolderMetaId].push(rest);
+
+      return acc;
+    }, {});
+
+    const formDataList = (
+      (await tsx
+        .select(
+          (() => {
+            const { id, createdAt, ...rest } =
+              getTableColumns(bodyFormDataTable);
+            return rest;
+          })(),
+        )
+        .from(bodyFormDataTable)
+        .where(
+          inArray(bodyFormDataTable.requestOrFolderMetaId, requestIdList),
+        )) ?? []
+    )?.reduce((acc, curr) => {
+      const { requestOrFolderMetaId, ...rest } = curr;
+
+      if (!acc[requestOrFolderMetaId]) acc[requestOrFolderMetaId] = [];
+      acc[requestOrFolderMetaId].push(rest);
+
+      return acc;
+    }, {});
+
+    const xWWWFormUrlencodedList = (
+      (await tsx
+        .select(
+          (() => {
+            const { id, createdAt, ...rest } = getTableColumns(
+              bodyXWWWFormUrlencodedTable,
+            );
+            return rest;
+          })(),
+        )
+        .from(bodyXWWWFormUrlencodedTable)
+        .where(
+          inArray(
+            bodyXWWWFormUrlencodedTable.requestOrFolderMetaId,
+            requestIdList,
+          ),
+        )) ?? []
+    )?.reduce((acc, curr) => {
+      const { requestOrFolderMetaId, ...rest } = curr;
+
+      if (!acc[requestOrFolderMetaId]) acc[requestOrFolderMetaId] = [];
+      acc[requestOrFolderMetaId].push(rest);
+
+      return acc;
+    }, {});
+
+    const binaryDataList = (
+      (await tsx
+        .select(
+          (() => {
+            const { id, ...rest } = getTableColumns(bodyBinaryTable);
+            return rest;
+          })(),
+        )
+        .from(bodyBinaryTable)
+        .where(
+          inArray(bodyBinaryTable.requestOrFolderMetaId, requestIdList),
+        )) ?? []
+    )?.reduce((acc, curr) => {
+      const { requestOrFolderMetaId, ...rest } = curr;
+      acc[requestOrFolderMetaId] = rest;
+      return acc;
+    }, {});
+
+    const rawDataList = (
+      (await tsx
+        .select(
+          (() => {
+            const { id, lineWrap, ...rest } = getTableColumns(bodyRawTable);
+            return rest;
+          })(),
+        )
+        .from(bodyRawTable)
+        .where(inArray(bodyRawTable.requestOrFolderMetaId, requestIdList))) ??
+      []
+    )?.reduce((acc, curr) => {
+      const { requestOrFolderMetaId, ...rest } = curr;
+      acc[requestOrFolderMetaId] = rest;
+      return acc;
+    }, {});
+
+    const testScriptList: ProjectExportFileInterface["testScriptList"] = (
+      (await tsx
+        .select(
+          (() => {
+            return getTableColumns(testScriptTable);
+          })(),
+        )
+        .from(testScriptTable)
+        .where(inArray(testScriptTable.requestId, requestIdList))) ?? []
+    )?.reduce((acc, curr) => {
+      const { requestId, ...rest } = curr;
+      acc[requestId] = rest;
+      return acc;
+    }, {});
+
+    const requestMetaTabList = (
+      (await tsx
+        .select(
+          (() => {
+            const { id, ...rest } = getTableColumns(requestMetaTabTable);
+            return rest;
+          })(),
+        )
+        .from(requestMetaTabTable)
+        .where(
+          inArray(requestMetaTabTable.requestOrFolderMetaId, requestIdList),
+        )) ?? []
+    )?.reduce((acc, curr) => {
+      const { requestOrFolderMetaId, ...rest } = curr;
+      acc[requestOrFolderMetaId] = rest;
+      return acc;
+    }, {});
+
+    const authorization = (
+      (await tsx
+        .select(
+          (() => {
+            const { id, projectId, ...rest } =
+              getTableColumns(authorizationTable);
+            return rest;
+          })(),
+        )
+        .from(authorizationTable)
+        .where(
+          inArray(authorizationTable.requestOrFolderMetaId, requestIdList),
+        )) ?? []
+    )?.reduce((acc, curr) => {
+      const { requestOrFolderMetaId, ...rest } = curr;
+      acc[`${requestOrFolderMetaId}`] = rest;
+      return acc;
+    }, {});
+
+    return {
+      type: "folder",
+      requestList,
+      apiUrlList,
+      paramsList,
+      headersList,
+      hiddenHeadersCheckList,
+      formDataList,
+      xWWWFormUrlencodedList,
+      binaryDataList,
+      rawDataList,
+      requestMetaTabList,
+      testScriptList,
+      authorization,
+    };
   });
 };

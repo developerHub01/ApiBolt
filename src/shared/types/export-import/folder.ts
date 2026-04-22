@@ -10,6 +10,7 @@ import {
 } from "@shared/types/request-response.types";
 import { ApiUrlPayload } from "@shared/types/request-url.types";
 import { EnvironmentInterface } from "@shared/types/environment.types";
+import { TestScriptPayloadInterface } from "@shared/types/test-script.types";
 
 export type EnvironmentExportInterface = Omit<
   EnvironmentInterface,
@@ -17,9 +18,13 @@ export type EnvironmentExportInterface = Omit<
 >;
 
 export interface FolderExportFileInterface {
+  type: "folder";
   requestList: Record<
     string,
-    Omit<RequestListItemInterface, "createdAt" | "children" | "projectId">
+    Omit<
+      RequestListItemInterface,
+      "createdAt" | "children" | "projectId" | "id"
+    >
   >;
   apiUrlList: Record<
     string,
@@ -52,6 +57,7 @@ export interface FolderExportFileInterface {
     Pick<BodyRawInterface, "requestOrFolderMetaId" | "type" | "rawData">
   >;
   requestMetaTabList: Record<string, RequestTabInterface>;
+  testScriptList: Record<string, Pick<TestScriptPayloadInterface, "script">>;
   authorization: Record<
     string,
     Omit<AuthorizationPayloadInterface, "id" | "projectId">

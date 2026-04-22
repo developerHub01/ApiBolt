@@ -185,7 +185,9 @@ export const getActiveProjectDetails =
     }
   };
 
-export const exportProject = async (id?: string | null) => {
+export const exportProject = async (
+  id?: string | null,
+): Promise<ProjectExportFileInterface> => {
   return await db.transaction(async tsx => {
     id = id ?? (await getActiveProject());
     if (!id) throw new Error("No project specified");
@@ -227,7 +229,8 @@ export const exportProject = async (id?: string | null) => {
         .from(requestOrFolderMetaTable)
         .where(eq(requestOrFolderMetaTable.projectId, id))) ?? []
     ).reduce((acc, curr) => {
-      acc[curr.id] = curr;
+      const { id, ...rest } = curr;
+      acc[id] = rest;
       return acc;
     }, {});
 
@@ -244,7 +247,8 @@ export const exportProject = async (id?: string | null) => {
         .from(apiUrlTable)
         .where(inArray(apiUrlTable.requestOrFolderMetaId, requestIdList))) ?? []
     )?.reduce((acc, curr) => {
-      acc[curr.requestOrFolderMetaId] = curr;
+      const { requestOrFolderMetaId, ...rest } = curr;
+      acc[requestOrFolderMetaId] = rest;
       return acc;
     }, {});
 
@@ -259,9 +263,9 @@ export const exportProject = async (id?: string | null) => {
         .from(paramsTable)
         .where(inArray(paramsTable.requestOrFolderMetaId, requestIdList))) ?? []
     )?.reduce((acc, curr) => {
-      if (!acc[curr.requestOrFolderMetaId])
-        acc[curr.requestOrFolderMetaId] = [];
-      acc[curr.requestOrFolderMetaId].push(curr);
+      const { requestOrFolderMetaId, ...rest } = curr;
+      if (!acc[requestOrFolderMetaId]) acc[requestOrFolderMetaId] = [];
+      acc[requestOrFolderMetaId].push(rest);
 
       return acc;
     }, {});
@@ -278,9 +282,9 @@ export const exportProject = async (id?: string | null) => {
         .where(inArray(headersTable.requestOrFolderMetaId, requestIdList))) ??
       []
     )?.reduce((acc, curr) => {
-      if (!acc[curr.requestOrFolderMetaId])
-        acc[curr.requestOrFolderMetaId] = [];
-      acc[curr.requestOrFolderMetaId].push(curr);
+      const { requestOrFolderMetaId, ...rest } = curr;
+      if (!acc[requestOrFolderMetaId]) acc[requestOrFolderMetaId] = [];
+      acc[requestOrFolderMetaId].push(rest);
 
       return acc;
     }, {});
@@ -302,7 +306,8 @@ export const exportProject = async (id?: string | null) => {
             ),
           )) ?? []
       )?.reduce((acc, curr) => {
-        acc[curr.requestOrFolderMetaId] = curr;
+        const { requestOrFolderMetaId, ...rest } = curr;
+        acc[requestOrFolderMetaId] = rest;
         return acc;
       }, {});
 
@@ -320,9 +325,9 @@ export const exportProject = async (id?: string | null) => {
           inArray(bodyFormDataTable.requestOrFolderMetaId, requestIdList),
         )) ?? []
     )?.reduce((acc, curr) => {
-      if (!acc[curr.requestOrFolderMetaId])
-        acc[curr.requestOrFolderMetaId] = [];
-      acc[curr.requestOrFolderMetaId].push(curr);
+      const { requestOrFolderMetaId, ...rest } = curr;
+      if (!acc[requestOrFolderMetaId]) acc[requestOrFolderMetaId] = [];
+      acc[requestOrFolderMetaId].push(rest);
 
       return acc;
     }, {});
@@ -346,9 +351,9 @@ export const exportProject = async (id?: string | null) => {
             ),
           )) ?? []
       )?.reduce((acc, curr) => {
-        if (!acc[curr.requestOrFolderMetaId])
-          acc[curr.requestOrFolderMetaId] = [];
-        acc[curr.requestOrFolderMetaId].push(curr);
+        const { requestOrFolderMetaId, ...rest } = curr;
+        if (!acc[requestOrFolderMetaId]) acc[requestOrFolderMetaId] = [];
+        acc[requestOrFolderMetaId].push(rest);
 
         return acc;
       }, {});
@@ -366,9 +371,9 @@ export const exportProject = async (id?: string | null) => {
           inArray(bodyBinaryTable.requestOrFolderMetaId, requestIdList),
         )) ?? []
     )?.reduce((acc, curr) => {
-      if (!acc[curr.requestOrFolderMetaId])
-        acc[curr.requestOrFolderMetaId] = [];
-      acc[curr.requestOrFolderMetaId].push(curr);
+      const { requestOrFolderMetaId, ...rest } = curr;
+      if (!acc[requestOrFolderMetaId]) acc[requestOrFolderMetaId] = [];
+      acc[requestOrFolderMetaId].push(rest);
 
       return acc;
     }, {});
@@ -385,7 +390,8 @@ export const exportProject = async (id?: string | null) => {
         .where(inArray(bodyRawTable.requestOrFolderMetaId, requestIdList))) ??
       []
     )?.reduce((acc, curr) => {
-      acc[curr.requestOrFolderMetaId] = curr;
+      const { requestOrFolderMetaId, ...rest } = curr;
+      acc[requestOrFolderMetaId] = rest;
       return acc;
     }, {});
 
@@ -399,7 +405,8 @@ export const exportProject = async (id?: string | null) => {
         .from(testScriptTable)
         .where(inArray(testScriptTable.requestId, requestIdList))) ?? []
     )?.reduce((acc, curr) => {
-      acc[curr.requestId] = curr;
+      const { requestId, ...rest } = curr;
+      acc[requestId] = rest;
       return acc;
     }, {});
 
@@ -417,7 +424,8 @@ export const exportProject = async (id?: string | null) => {
             inArray(requestMetaTabTable.requestOrFolderMetaId, requestIdList),
           )) ?? []
       )?.reduce((acc, curr) => {
-        acc[curr.requestOrFolderMetaId] = curr;
+        const { requestOrFolderMetaId, ...rest } = curr;
+        acc[requestOrFolderMetaId] = rest;
         return acc;
       }, {});
 
@@ -433,11 +441,13 @@ export const exportProject = async (id?: string | null) => {
         .from(authorizationTable)
         .where(eq(authorizationTable.projectId, id))) ?? []
     )?.reduce((acc, curr) => {
-      acc[`${curr.requestOrFolderMetaId}`] = curr;
+      const { requestOrFolderMetaId, ...rest } = curr;
+      acc[`${requestOrFolderMetaId}`] = rest;
       return acc;
     }, {});
 
     return {
+      type: "project",
       project,
       environments,
       requestList,
@@ -457,6 +467,7 @@ export const exportProject = async (id?: string | null) => {
 };
 
 export const importProject = async ({
+  type,
   project,
   environments = [],
   requestList = {},
@@ -473,11 +484,17 @@ export const importProject = async ({
   authorization = {},
 }: ProjectExportFileInterface) => {
   return await db.transaction(async tsx => {
+    if (type !== "project") throw new Error("Not valid project file.");
+
     const projectId = (
       await tsx
         .insert(projectTable)
-        .values({ ...project })
-        .returning({ id: projectTable.id })
+        .values({
+          ...project,
+        })
+        .returning({
+          id: projectTable.id,
+        })
     )?.[0]?.id;
 
     const newRequestList: Array<
@@ -525,7 +542,9 @@ export const importProject = async ({
       }
     > = [];
     const newTestScriptList: Array<
-      ProjectExportFileInterface["testScriptList"][string]
+      ProjectExportFileInterface["testScriptList"][string] & {
+        requestId: string;
+      }
     > = [];
     const newAuthorization: Array<
       ProjectExportFileInterface["authorization"][string] & {

@@ -18,6 +18,7 @@ export type EnvironmentExportInterface = Omit<
 >;
 
 export interface ProjectExportFileInterface {
+  type: "project";
   project: {
     name: string;
   };
@@ -56,7 +57,7 @@ export interface ProjectExportFileInterface {
     string,
     Pick<BodyRawInterface, "requestOrFolderMetaId" | "type" | "rawData">
   >;
-  testScriptList: Record<string, TestScriptPayloadInterface>;
+  testScriptList: Record<string, Pick<TestScriptPayloadInterface, "script">>;
   requestMetaTabList: Record<string, RequestTabInterface>;
   authorization: Record<
     string,

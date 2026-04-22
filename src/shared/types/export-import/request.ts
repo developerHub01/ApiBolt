@@ -8,6 +8,7 @@ import {
   THTTPMethods,
 } from "@shared/types/request-response.types";
 import { AuthorizationPayloadInterface } from "@shared/types/authorization.types";
+import { TestScriptPayloadInterface } from "@shared/types/test-script.types";
 
 interface Param extends Omit<
   ParamHeaderBuildPayloadInterface,
@@ -20,6 +21,7 @@ interface Header extends Omit<
 > {}
 
 export interface RequestExportFileInterface {
+  type: "request";
   name: string;
   method: THTTPMethods;
   url: string;
@@ -36,6 +38,7 @@ export interface RequestExportFileInterface {
   };
   bodyXWWWFormUrlencoded: Array<Header>;
   bodyFormData: RequestExportFileInterface["params"];
+  testScript: Pick<TestScriptPayloadInterface, "script">;
   authorization: Omit<
     AuthorizationPayloadInterface,
     "id" | "projectId" | "requestOrFolderMetaId"
