@@ -739,6 +739,11 @@ if (process.contextIsolated) {
           await ipcRenderer.invoke("exportFolder", ...payload),
         importFolder: async (...payload) =>
           await ipcRenderer.invoke("importFolder", ...payload),
+        duplicateRequestOrFolderByOldNewIds: async (...payload) =>
+          await ipcRenderer.invoke(
+            "duplicateRequestOrFolderByOldNewIds",
+            ...payload,
+          ),
       };
     /**
      * ====================

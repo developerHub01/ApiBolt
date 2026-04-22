@@ -15,6 +15,37 @@ import { ElectronAPIRequestInterface } from "@shared/types/api/electron-request.
 import { RequestExportFileInterface } from "@shared/types/export-import/request";
 import { FolderExportFileInterface } from "@shared/types/export-import/folder";
 import { v4 as uuidv4 } from "uuid";
+import { duplicateApiUrl } from "@/main/db/apiUrlDB";
+import { duplicateParams } from "@/main/db/paramsDB";
+import { duplicateHeaders } from "@/main/db/headersDB";
+import { duplicateHiddenHeadersCheck } from "@/main/db/hiddenHeadersCheckDB";
+import { duplicateShowHiddenMetaData } from "@/main/db/showHiddenMetaDataDB";
+import { duplicateRequestMetaTab } from "@/main/db/requestMetaTabDB";
+import { duplicateBodyRaw } from "@/main/db/bodyRawDB";
+import { duplicateBodyBinary } from "@/main/db/bodyBinaryDB";
+import { duplicateBodyXWWWFormUrlencoded } from "@/main/db/bodyXWWWFormUrlencodedDB";
+import { duplicateBodyFormData } from "@/main/db/bodyFormDataDB";
+import { duplicateMetaShowColumn } from "@/main/db/metaShowColumnDB";
+import { duplicateTestScript } from "@/main/db/testScriptDB";
+import { duplicateAuth } from "@/main/db/authorizationDB";
+import { duplicateFolder } from "@/main/db/folderDB";
+
+const duplicationPipeline = [
+  duplicateApiUrl,
+  duplicateParams,
+  duplicateHeaders,
+  duplicateHiddenHeadersCheck,
+  duplicateShowHiddenMetaData,
+  duplicateRequestMetaTab,
+  duplicateBodyRaw,
+  duplicateBodyBinary,
+  duplicateBodyXWWWFormUrlencoded,
+  duplicateBodyFormData,
+  duplicateMetaShowColumn,
+  duplicateTestScript,
+  duplicateAuth,
+  duplicateFolder,
+] as const;
 
 export const requestHandler = (): void => {
   ipcMain.handle(
@@ -287,6 +318,31 @@ export const requestHandler = (): void => {
               ? error.message
               : "Something went wrong while exporting the folder.",
         };
+      }
+    },
+  );
+  ipcMain.handle(
+    "duplicateRequestOrFolderByOldNewIds",
+    async (
+      _: IpcMainInvokeEvent,
+      ...[oldNewIdMap]: Parameters<
+        ElectronAPIRequestInterface["duplicateRequestOrFolderByOldNewIds"]
+      >
+    ): Promise<
+      ReturnType<
+        ElectronAPIRequestInterface["duplicateRequestOrFolderByOldNewIds"]
+      >
+    > => {
+      try {
+        if (!mainWindow) throw new Error();
+        if (!oldNewIdMap) throw new Error("No folder selected");
+
+        for (const fn of duplicationPipeline) await fn(oldNewIdMap);
+
+        return true;
+      } catch (error: unknown) {
+        console.error(error);
+        return false;
       }
     },
   );

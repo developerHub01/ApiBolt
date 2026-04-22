@@ -629,36 +629,39 @@ export const duplicateRequestOrFolder = createAsyncThunk<
 
       if (!response) return false;
 
-      await Promise.all([
-        /* duplicate urls */
-        dispatch(duplicateRequestApiUrlsByOldNewIds(oldNewIdMap)),
-        /* duplicate params */
-        dispatch(duplicateParamsByOldNewIds(oldNewIdMap)),
-        /* duplicate headers */
-        dispatch(duplicateHeadersByOldNewIds(oldNewIdMap)),
-        /* duplicate hidden headers */
-        dispatch(duplicateHiddenHeadersByOldNewIds(oldNewIdMap)),
-        /* duplicate show hidden meta-data */
-        dispatch(duplicateShowHiddenMetaDataByOldNewIds(oldNewIdMap)),
-        /* duplicate request meta tab */
-        dispatch(duplicateRequestMetaTabByOldNewIds(oldNewIdMap)),
-        /* duplicate request body raw */
-        dispatch(duplicateBodyRawByOldNewIds(oldNewIdMap)),
-        /* duplicate request body binary */
-        dispatch(duplicateBodyBinaryByOldNewIds(oldNewIdMap)),
-        /* duplicate request body x-www-url-formencoded */
-        dispatch(duplicateBodyXWWWFormUrlencodedByOldNewIds(oldNewIdMap)),
-        /* duplicate request body form-data */
-        dispatch(duplicateBodyFormDataByOldNewIds(oldNewIdMap)),
-        /* duplicate request meta show column */
-        dispatch(duplicateMetaShowColumnByOldNewIds(oldNewIdMap)),
-        /* duplicate request test script */
-        dispatch(duplicateTestScriptByOldNewIds(oldNewIdMap)),
-        /* duplicate request auth */
-        dispatch(duplicateAuthorizationByOldNewIds(oldNewIdMap)),
-        /* duplicate folder */
-        dispatch(duplicateFolderByOldNewIds(oldNewIdMap)),
-      ]);
+      await window.electronAPIRequest.duplicateRequestOrFolderByOldNewIds(
+        oldNewIdMap,
+      );
+      // await Promise.all([
+      //   /* duplicate urls */
+      //   dispatch(duplicateRequestApiUrlsByOldNewIds(oldNewIdMap)),
+      //   /* duplicate params */
+      //   dispatch(duplicateParamsByOldNewIds(oldNewIdMap)),
+      //   /* duplicate headers */
+      //   dispatch(duplicateHeadersByOldNewIds(oldNewIdMap)),
+      //   /* duplicate hidden headers */
+      //   dispatch(duplicateHiddenHeadersByOldNewIds(oldNewIdMap)),
+      //   /* duplicate show hidden meta-data */
+      //   dispatch(duplicateShowHiddenMetaDataByOldNewIds(oldNewIdMap)),
+      //   /* duplicate request meta tab */
+      //   dispatch(duplicateRequestMetaTabByOldNewIds(oldNewIdMap)),
+      //   /* duplicate request body raw */
+      //   dispatch(duplicateBodyRawByOldNewIds(oldNewIdMap)),
+      //   /* duplicate request body binary */
+      //   dispatch(duplicateBodyBinaryByOldNewIds(oldNewIdMap)),
+      //   /* duplicate request body x-www-url-formencoded */
+      //   dispatch(duplicateBodyXWWWFormUrlencodedByOldNewIds(oldNewIdMap)),
+      //   /* duplicate request body form-data */
+      //   dispatch(duplicateBodyFormDataByOldNewIds(oldNewIdMap)),
+      //   /* duplicate request meta show column */
+      //   dispatch(duplicateMetaShowColumnByOldNewIds(oldNewIdMap)),
+      //   /* duplicate request test script */
+      //   dispatch(duplicateTestScriptByOldNewIds(oldNewIdMap)),
+      //   /* duplicate request auth */
+      //   dispatch(duplicateAuthorizationByOldNewIds(oldNewIdMap)),
+      //   /* duplicate folder */
+      //   dispatch(duplicateFolderByOldNewIds(oldNewIdMap)),
+      // ]);
 
       dispatch(handleChangeIsRequestListLoaded(false));
 

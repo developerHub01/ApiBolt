@@ -16,4 +16,7 @@ export interface ElectronAPIRequestInterface {
   importFolder(
     requestOrFolderMetaId?: string | null,
   ): Promise<ElectronResponseInterface>;
+  duplicateRequestOrFolderByOldNewIds(
+    oldNewIdMap: Record<string, string>,
+  ): Promise<boolean>;
 }
