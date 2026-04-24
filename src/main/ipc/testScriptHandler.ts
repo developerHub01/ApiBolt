@@ -60,8 +60,8 @@ export const testScriptHandler = (): void => {
 
         return executeTest({
           script,
-          response,
-          envs,
+          response: structuredClone(response),
+          envs: structuredClone(envs),
         });
       } catch (error) {
         return {

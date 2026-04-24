@@ -337,7 +337,7 @@ export const requestHandler = (): void => {
         if (!mainWindow) throw new Error();
         if (!oldNewIdMap) throw new Error("No folder selected");
 
-        for (const fn of duplicationPipeline){ 
+        for (const fn of duplicationPipeline) {
           await fn(oldNewIdMap);
         }
 

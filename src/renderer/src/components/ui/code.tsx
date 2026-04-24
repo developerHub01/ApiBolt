@@ -26,6 +26,8 @@ export type TLanguageType =
   | "python"
   | "java";
 
+const keyDownPreventerAndBlurActivatorSet = new Set(["enter", "s"]);
+
 /**
  * Returns the language factory for a given content type
  */
@@ -35,8 +37,6 @@ export const getLangExtension = (contentType: string): LangFactory => {
     "text") as keyof typeof langs;
   return langs[key] || (() => []);
 };
-
-const keyboardEnterSet = new Set(["Enter", "NumpadEnter"]);
 
 const getEditableOptions = ({
   editable,
@@ -168,14 +168,20 @@ const Code = ({
 
   useEffect(() => {
     const handleKeybaordEvent = (e: KeyboardEvent) => {
-      if (e.ctrlKey && keyboardEnterSet.has(e.code)) {
+      const key = e.key.toLowerCase();
+      if (e.ctrlKey && keyDownPreventerAndBlurActivatorSet.has(key)) {
+        if (e.key === "Enter") e.preventDefault();
         onBlur?.();
-        e.preventDefault();
       }
     };
 
-    window.addEventListener("keydown", handleKeybaordEvent);
-    return () => window.removeEventListener("keydown", handleKeybaordEvent);
+    window.addEventListener("keydown", handleKeybaordEvent, {
+      capture: true,
+    });
+    return () =>
+      window.removeEventListener("keydown", handleKeybaordEvent, {
+        capture: true,
+      });
   }, [onBlur]);
 
   const theme = themeType !== "custom" ? themeType : "dark";
