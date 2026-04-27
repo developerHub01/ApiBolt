@@ -9,6 +9,7 @@ import {
   KeyRound as AuthorizationIcon,
   Store as ThemeMarketIcon,
   PencilRuler as ThemeEditorIcon,
+  Server as MockServerIcon,
 } from "lucide-react";
 
 export const SIDEBAR_MENU_LIST: Array<SidebarMenuItemInterface> = [
@@ -35,6 +36,12 @@ export const SIDEBAR_MENU_LIST: Array<SidebarMenuItemInterface> = [
     Icon: AuthorizationIcon,
     label: "Authorization",
     path: "/authorization",
+  },
+  {
+    id: "navigate_mock",
+    Icon: MockServerIcon,
+    label: "Mock Server",
+    path: "/mock",
   },
   {
     id: "navigate_themes_marketplace",

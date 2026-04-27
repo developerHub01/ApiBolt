@@ -52,7 +52,8 @@ const KeyboardEvents = () => {
         case "navigate_projects":
         case "navigate_collections":
         case "navigate_environments":
-        case "navigate_authorization": {
+        case "navigate_authorization":
+        case "navigate_mock": {
           e.preventDefault();
           return await dispatch(changeActiveTab(actionId));
         }

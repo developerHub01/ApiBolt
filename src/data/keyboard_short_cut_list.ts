@@ -23,6 +23,10 @@ export const keyboardBindings: Record<
     label: "Navigate to authorization",
     key: ["ctrl", "shift", "a"],
   },
+  navigate_mock: {
+    label: "Navigate to mock server",
+    key: ["ctrl", "shift", "s"],
+  },
   navigate_themes_marketplace: {
     label: "Navigate to theme marketplace",
     key: ["ctrl", "shift", "m"],

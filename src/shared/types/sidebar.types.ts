@@ -5,6 +5,7 @@ export type TSidebarTab =
   | "navigate_collections"
   | "navigate_environments"
   | "navigate_authorization"
+  | "navigate_mock"
   | "navigate_themes"
   | "navigate_themes_marketplace"
   | "navigate_themes_editor"

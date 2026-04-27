@@ -5,13 +5,21 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { isElectron } from "@/utils/electron";
-import RootLayout from "@/pages/layout";
-import AppLayout from "@/pages/app/layout";
-import AppPage from "@/pages/app/page";
-import FolderLayout from "@/pages/app/collections/folder/[id]/layout";
-import FolderPage from "@/pages/app/collections/folder/[id]/page";
-import RequestLayout from "@/pages/app/collections/request/[id]/layout";
-import RequestPage from "@/pages/app/collections/request/[id]/page";
+const RootLayout = lazy(() => import("@/pages/layout"));
+const AppLayout = lazy(() => import("@/pages/app/layout"));
+const AppPage = lazy(() => import("@/pages/app/page"));
+const FolderLayout = lazy(
+  () => import("@/pages/app/collections/folder/[id]/layout"),
+);
+const FolderPage = lazy(
+  () => import("@/pages/app/collections/folder/[id]/page"),
+);
+const RequestLayout = lazy(
+  () => import("@/pages/app/collections/request/[id]/layout"),
+);
+const RequestPage = lazy(
+  () => import("@/pages/app/collections/request/[id]/page"),
+);
 const EnvironmentLayout = lazy(() => import("@/pages/app/environment/layout"));
 const EnvironmentPage = lazy(() => import("@/pages/app/environment/page"));
 const ProjectsLayout = lazy(() => import("@/pages/app/projects/layout"));
@@ -20,9 +28,17 @@ const AuthorizationLayout = lazy(
   () => import("@/pages/app/authorization/layout"),
 );
 const AuthorizationPage = lazy(() => import("@/pages/app/authorization/page"));
-import CollectionsLayout from "@/pages/app/collections/layout";
-import CollectionPage from "@/pages/app/collections/page";
-import ThemesLayout from "@/pages/app/themes/layout";
+const CollectionsLayout = lazy(() => import("@/pages/app/collections/layout"));
+const CollectionPage = lazy(() => import("@/pages/app/collections/page"));
+const ThemesLayout = lazy(() => import("@/pages/app/themes/layout"));
+const MockLayout = lazy(() => import("@/pages/app/mock/layout"));
+const MockPage = lazy(() => import("@/pages/app/mock/page"));
+const MockRequestLayout = lazy(
+  () => import("@/pages/app/mock/request/[id]/layout"),
+);
+const MockRequestPage = lazy(
+  () => import("@/pages/app/mock/request/[id]/page"),
+);
 const ThemeMarketPlaceLayout = lazy(
   () => import("@/pages/app/themes/marketplace/layout"),
 );
@@ -137,6 +153,26 @@ const routes = [
                     <AuthorizationPage />
                   </Suspense>
                 ),
+              },
+            ],
+          },
+          {
+            path: "mock",
+            element: <MockLayout />,
+            children: [
+              {
+                index: true,
+                element: <MockPage />,
+              },
+              {
+                path: "request/:id",
+                element: <MockRequestLayout />,
+                children: [
+                  {
+                    index: true,
+                    element: <MockRequestPage />,
+                  },
+                ],
               },
             ],
           },
