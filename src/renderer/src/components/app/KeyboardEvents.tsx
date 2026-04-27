@@ -30,6 +30,7 @@ import {
 } from "@/context/redux/request-response/request-response-slice";
 import { handleChangeIsLocalPasswordOpen } from "@/context/redux/local-password/local-password-slice";
 import { getKeyboardTriggerKeyShortcutId } from "@/utils/keyboard-shortcut.utils";
+import { handleChangeIsInfoOpen } from "@/context/redux/app-info/app-info-slice";
 
 const KeyboardEvents = () => {
   const dispatch = useAppDispatch();
@@ -85,6 +86,10 @@ const KeyboardEvents = () => {
         case "toggle_fullscreen": {
           e.preventDefault();
           return toggleFullscreen();
+        }
+        case "open_app_info": {
+          e.preventDefault();
+          return dispatch(handleChangeIsInfoOpen(true));
         }
         case "open_cookies": {
           e.preventDefault();

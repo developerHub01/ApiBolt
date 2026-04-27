@@ -33,6 +33,7 @@ import { ElectronAPISettingsRequestInterface } from "@shared/types/api/electron-
 import { ElectronAPIResponseInterface } from "@shared/types/api/electron-response";
 import { ElectronAPIPathParamsInterface } from "@shared/types/api/electron-path-params";
 import { ElectronAPITestScriptInterface } from "@shared/types/api/electron-test-script";
+import { ElectronAPIAppInfoInterface } from "@shared/types/api/electron-app-info";
 
 export interface ElectronResponseInterface {
   success: boolean;
@@ -53,6 +54,7 @@ export type AllNotNull<T> = {
 
 export interface WindowElectronAPIInterface {
   electronAPI: ElectronAPIInterface;
+  electronAPIAppInfo: ElectronAPIAppInfoInterface;
   electronAPISplashWindow: ElectronAPISplashWindowInterface;
   electronAPIFileSystem: electronAPIFileSystemInterface;
   electronAPILocalPassword: ElectronAPILocalPasswordInterface;

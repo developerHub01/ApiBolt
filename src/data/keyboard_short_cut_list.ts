@@ -43,6 +43,10 @@ export const keyboardBindings: Record<
     label: "Toggle fullscreen",
     key: ["f11"],
   },
+  open_app_info: {
+    label: "Open App Info",
+    key: ["ctrl", "alt", "i"],
+  },
   open_cookies: {
     label: "Open Cookies",
     key: ["ctrl", "alt", "c"],

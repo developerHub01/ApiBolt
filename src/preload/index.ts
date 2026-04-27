@@ -94,6 +94,16 @@ if (process.contextIsolated) {
 
     /**
      * ====================
+     * App info
+     * ====================
+     */
+    const electronAPIAppInfoBridge: WindowElectronAPIInterface["electronAPIAppInfo"] =
+      {
+        getAppInfo: async () => await ipcRenderer.invoke("getAppInfo"),
+      };
+
+    /**
+     * ====================
      * File system handling
      * ====================
      */
@@ -803,6 +813,10 @@ if (process.contextIsolated) {
      * ===========================
      */
     contextBridge.exposeInMainWorld("electronAPI", basicAPIBridge);
+    contextBridge.exposeInMainWorld(
+      "electronAPIAppInfo",
+      electronAPIAppInfoBridge,
+    );
     contextBridge.exposeInMainWorld(
       "electronAPIFileSystem",
       electronAPIFileSystemBridge,

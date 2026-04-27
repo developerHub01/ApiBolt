@@ -62,6 +62,7 @@ import { sysmteHandler } from "@/main/ipc/sysmteHandler";
 import { WEBSITE_BASE_URL } from "@shared/constant/api-bolt";
 import { pathParamsHandlers } from "@/main/ipc/pathParamsHandlers";
 import { testScriptHandler } from "@/main/ipc/testScriptHandler";
+import { appInfoHandlers } from "@/main/ipc/appInfoHandler";
 
 /***
  * App basic setup declaration
@@ -285,6 +286,7 @@ if (!gotTheLock) {
      * Initiallizing all IPC handlers
      */
     sysmteHandler();
+    appInfoHandlers();
     localPasswordHandler();
     httpStatusHandler();
     registerCookieHandlers();

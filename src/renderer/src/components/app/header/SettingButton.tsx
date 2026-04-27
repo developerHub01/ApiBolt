@@ -30,12 +30,16 @@ import {
   WEBSITE_BASE_URL,
   WEBSITE_DOCS,
 } from "@shared/constant/api-bolt";
+import { handleChangeIsInfoOpen } from "@/context/redux/app-info/app-info-slice";
 
 const SettingButton = () => {
   const dispatch = useAppDispatch();
 
   const isEnabled = useAppSelector(selectIsSettingButtonEnabled);
 
+  const appInfoShortcuts = useAppSelector(state =>
+    selectApplyingKeyboardShortcutsById(state, "open_app_info"),
+  );
   const cookiesShortcuts = useAppSelector(state =>
     selectApplyingKeyboardShortcutsById(state, "open_cookies"),
   );
@@ -50,6 +54,7 @@ const SettingButton = () => {
   );
 
   const shortcutsMap: Record<string, TShortcutKey> = {
+    open_app_info: appInfoShortcuts,
     open_cookies: cookiesShortcuts,
     open_keyboard_shortcut: keyboardShortcuts,
     open_settings: settingsShortcuts,
@@ -65,9 +70,15 @@ const SettingButton = () => {
 
   const menuItems = [
     {
+      id: "open_app_info",
+      label: "App Info",
+      onClick: () => dispatch(handleChangeIsInfoOpen()),
+    },
+    {
       id: "open_cookies",
       label: "Cookies",
       onClick: () => dispatch(handleChangeIsCookiesOpen()),
+      isSeparatorAbove: true,
     },
     {
       id: "open_keyboard_shortcut",

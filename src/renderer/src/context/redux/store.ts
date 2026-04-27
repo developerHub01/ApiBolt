@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import appInfoReducer from "@/context/redux/app-info/app-info-slice";
 import localPasswordReducer from "@/context/redux/local-password/local-password-slice";
 import projectReducer from "@/context/redux/project/project-slice";
 import environmentsReducer from "@/context/redux/environments/environments-slice";
@@ -20,6 +21,7 @@ import { requestResponseWindowMiddleware } from "@/context/redux/middleware/requ
 
 export const store = configureStore({
   reducer: {
+    appInfo: appInfoReducer,
     localPassword: localPasswordReducer,
     project: projectReducer,
     environments: environmentsReducer,

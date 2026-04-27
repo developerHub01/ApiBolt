@@ -1,10 +1,21 @@
 {
   "name": "api-bolt",
   "version": "2.1.0",
-  "description": "A REST API testing platform.",
+  "description": "A REST API testing platform. Test and debug APIs on your machine. No cloud, no tracking, no BS.Just a powerful desktop app that respects your privacy.",
   "main": "./out/main/index.js",
   "author": "https://github.com/developerHub01",
   "homepage": "https://apibolt.vercel.app",
+  "appInfo": {
+    "name": "APIBolt",
+    "tagline": "Build and test APIs easily",
+    "website": "https://apibolt.vercel.app/",
+    "docs": "https://apibolt.vercel.app/docs",
+    "developerName": "Abdus Shohid Shakil",
+    "developer": "https://shakil102043.vercel.app/",
+    "developerGithub": "https://github.com/developerHub01",
+    "githubRepo": "https://github.com/developerHub01/ApiBolt",
+    "supportEmail": "shakil102043@gmail.com"
+  },
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint --cache .",

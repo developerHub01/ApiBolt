@@ -17,6 +17,7 @@ import History from "@/components/app/history-details/History";
 import LocalPassword from "@/components/app/local-password/LocalPassword";
 import ThemePreviewMode from "@/components/ThemePreviewMode";
 import ClearnRequestWarningDialog from "@/components/app/collections/request/ClearnRequestWarningDialog";
+import AppInfo from "@/components/app/app-info/AppInfo";
 
 const AppLayout = () => {
   return (
@@ -82,6 +83,7 @@ const InnerLayout = ({ children }: CustomizedBgWrapperProps) => {
 const DialogsAnchor = memo(() => {
   return (
     <>
+      <AppInfo />
       <LocalPassword />
       <Setting />
       <Cookies />

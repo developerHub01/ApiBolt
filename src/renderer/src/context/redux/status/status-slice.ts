@@ -31,8 +31,11 @@ import {
   loadTestScript,
   runTestScript,
 } from "@/context/redux/request-response/thunks/test-script";
+import { loadAppInfo } from "@/context/redux/app-info/thunks/app-info";
 
 export interface StatusInterface {
+  isAppInfoLoading: boolean;
+
   isLocalPasswordLoading: boolean;
   isProjectLoading: boolean;
   isRequestListLoading: boolean;
@@ -69,6 +72,8 @@ export interface StatusInterface {
 
 // Define the initial state using that type
 const initialState: StatusInterface = {
+  isAppInfoLoading: true,
+
   isLocalPasswordLoading: true,
   isProjectLoading: true,
   isRequestListLoading: true,
@@ -135,6 +140,21 @@ const statusSlice = createSlice({
 
   extraReducers: builder => {
     builder
+      /**
+       * =======================
+       * app info
+       * =======================
+       */
+      .addCase(loadAppInfo.pending, state => {
+        state.isAppInfoLoading = true;
+      })
+      .addCase(loadAppInfo.fulfilled, state => {
+        state.isAppInfoLoading = false;
+      })
+      .addCase(loadAppInfo.rejected, state => {
+        state.isAppInfoLoading = false;
+      })
+
       /**
        * =======================
        * Local password
