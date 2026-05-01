@@ -47,6 +47,8 @@ const TestResultTop = memo(() => {
     });
   }, [dispatch, toast]);
 
+  if (!resultCount) return null;
+
   return (
     <div className="flex items-center gap-2 justify-between">
       <p className="text-sm mr-auto">Total result: {resultCount} </p>

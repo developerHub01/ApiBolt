@@ -54,8 +54,6 @@ export const testScriptHandler = (): void => {
     ): ReturnType<ElectronAPITestScriptInterface["runTestScript"]> => {
       try {
         const script = (await getTestScript(requestId))?.script ?? "";
-        if (!script) throw new Error("Script not found");
-
         const envs = await getEnvironmentsMap();
 
         return executeTest({

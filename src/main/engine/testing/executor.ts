@@ -13,6 +13,12 @@ export const executeTest = ({
   response: ResponseInterface;
   envs: TEnvironmentMap;
 }): RunTestScriptResultPayload => {
+  if (!script)
+    return {
+      success: true,
+      result: [],
+    };
+
   const ab = new ABTestEngine(response, envs);
 
   const serveableAB = Object.freeze({
