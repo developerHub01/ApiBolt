@@ -5,7 +5,8 @@
     "src/main/**/*",
     "src/preload/**/*",
     "src/data/**/*",
-    "src/shared/**/*"
+    "src/shared/**/*",
+    "drizzle.config.ts"
   ],
   "compilerOptions": {
     "composite": true,
