@@ -7,7 +7,7 @@ export default defineConfig({
   main: {
     plugins: [externalizeDepsPlugin()],
     esbuild: {
-      // drop: ["console", "debugger"],
+      drop: ["console", "debugger"],
     },
     resolve: {
       alias: {
