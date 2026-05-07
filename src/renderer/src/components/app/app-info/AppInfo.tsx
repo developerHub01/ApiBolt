@@ -20,7 +20,7 @@ const AppInfo = () => {
 
   return (
     <AnimatedDialog isOpen={isOpen} onClose={handleClose}>
-      <AnimatedDialogContentWrapper className="max-w-3xl">
+      <AnimatedDialogContentWrapper className="max-w-md">
         <Suspense fallback={<SettingFallback />}>
           <AppInfoRoot />
         </Suspense>

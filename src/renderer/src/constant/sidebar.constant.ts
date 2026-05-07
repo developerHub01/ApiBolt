@@ -37,12 +37,12 @@ export const SIDEBAR_MENU_LIST: Array<SidebarMenuItemInterface> = [
     label: "Authorization",
     path: "/authorization",
   },
-  {
-    id: "navigate_mock",
-    Icon: MockServerIcon,
-    label: "Mock Server",
-    path: "/mock",
-  },
+  // {
+  //   id: "navigate_mock",
+  //   Icon: MockServerIcon,
+  //   label: "Mock Server",
+  //   path: "/mock",
+  // },
   {
     id: "navigate_themes_marketplace",
     label: "Theme marketplace",
