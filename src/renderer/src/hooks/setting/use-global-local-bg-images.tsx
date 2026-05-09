@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type {
-  BackgroundImagesInterface,
   SettingsInterface,
   SettingType,
   UpdateBackgroundImagePayloadMethodType,
@@ -52,6 +51,7 @@ const useGlobalLocalBgImages = ({
     } else {
       if (!globalSetting || checkIsDefaultType(globalSetting)) type = "default";
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSettingType(type);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -95,6 +95,7 @@ const useGlobalLocalBgImages = ({
   useEffect(() => {
     if (!isUpdate) return;
     handleChange();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsUpdate(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUpdate]);

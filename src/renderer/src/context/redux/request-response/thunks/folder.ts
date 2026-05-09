@@ -80,14 +80,14 @@ export const updateFolder = createAsyncThunk<
 
     delete payload["requestOrFolderMetaId"];
 
-    if (response) {
+    if (response)
       dispatch(
         handleUpdateFolder({
           id: selectedTab,
           payload,
         }),
       );
-    }
+
     return response;
   } catch (error) {
     console.error(error);

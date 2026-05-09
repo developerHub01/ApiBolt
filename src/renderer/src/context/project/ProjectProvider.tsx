@@ -2,7 +2,6 @@ import React, {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useState,
 } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
@@ -47,7 +46,15 @@ const ProjectProvider = ({ children }: ProjectProviderProps) => {
 
   const [deletionCandidate, setDeletionCandidate] = useState<string | null>();
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState<boolean>(false);
-  const [projectList, setProjectList] = useState<Array<ProjectInterface>>([]);
+  const [projectList, setProjectList] =
+    useState<Array<ProjectInterface>>(projectListFromStore);
+  const [prevStoreList, setPrevStoreList] =
+    useState<Array<ProjectInterface>>(projectListFromStore);
+
+  if (projectListFromStore !== prevStoreList) {
+    setPrevStoreList(projectListFromStore);
+    setProjectList(projectListFromStore);
+  }
 
   const handleChangeActiveProject = useCallback(
     (value: string) => {
@@ -60,13 +67,9 @@ const ProjectProvider = ({ children }: ProjectProviderProps) => {
     setIsCreateDialogOpen(prev => (value === undefined ? !prev : value));
   }, []);
 
-  useEffect(() => {
-    setProjectList(projectListFromStore);
-  }, [projectListFromStore]);
-
   const handleSearchProjects = useCallback(
     (term: string) => {
-      if (!term) return setProjectList(projectListFromStore);
+      if (!term.trim()) return setProjectList(projectListFromStore);
 
       setProjectList(prev =>
         prev.filter(project =>

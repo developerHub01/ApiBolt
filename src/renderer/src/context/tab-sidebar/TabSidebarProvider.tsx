@@ -65,6 +65,8 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
   const [localTabList, setLocalTabList] = useState<Array<string>>(
     tabList ?? [],
   );
+  const [prevTabList, setPrevTabList] = useState<Array<string>>(tabList);
+
   const isTabListOpen = useMemo(
     () => (isCollapsed ? false : isContextMenuOpen ? true : isTabListHovering),
     [isCollapsed, isContextMenuOpen, isTabListHovering],
@@ -77,9 +79,10 @@ const TabSidebarProvider = ({ children }: TabSidebarProviderProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
+  if (tabList !== prevTabList) {
+    setPrevTabList(tabList);
     setLocalTabList(tabList);
-  }, [tabList]);
+  }
 
   useEffect(() => {
     if (changeTabDataTimeout.current)
