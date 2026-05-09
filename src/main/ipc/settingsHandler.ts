@@ -3,7 +3,7 @@ import {
   getApplyingZoomLevel,
   getSettings,
   updateSettings,
-} from "@/main/db/settingsDB.js";
+} from "@/main/db/settingsDB";
 import { ElectronAPISettingsInterface } from "@shared/types/api/electron-settings";
 import { mainWindow } from "@/main/index";
 import { getImageFilesFromFolder } from "@/main/utils/images";

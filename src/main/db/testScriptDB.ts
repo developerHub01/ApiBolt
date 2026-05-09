@@ -1,7 +1,7 @@
 import { eq, inArray } from "drizzle-orm";
-import { db } from "@/main/db/index.js";
-import { testScriptTable } from "@/main/db/schema.js";
-import { getTabList } from "@/main/db/tabsDB.js";
+import { db } from "@/main/db/index";
+import { testScriptTable } from "@/main/db/schema";
+import { getTabList } from "@/main/db/tabsDB";
 import { ElectronAPITestScriptInterface } from "@shared/types/api/electron-test-script";
 
 export const getTestScript = async (

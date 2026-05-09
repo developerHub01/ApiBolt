@@ -1,8 +1,8 @@
 import { eq, inArray } from "drizzle-orm";
-import { db } from "@/main/db/index.js";
-import { requestOrFolderMetaTable } from "@/main/db/schema.js";
-import { getActiveProject } from "@/main/db/projectsDB.js";
-import { updateTablistBasedRequestOrFolderMetaDeletion } from "@/main/db/tabsDB.js";
+import { db } from "@/main/db/index";
+import { requestOrFolderMetaTable } from "@/main/db/schema";
+import { getActiveProject } from "@/main/db/projectsDB";
+import { updateTablistBasedRequestOrFolderMetaDeletion } from "@/main/db/tabsDB";
 import { RequestListItemInterface } from "@shared/types/request-response.types";
 import { ElectronAPIRequestOrFolderMetaInterface } from "@shared/types/api/electron-request-or-folder-meta";
 import { RequestOrFolderMetaTableInterface } from "@/main/types";

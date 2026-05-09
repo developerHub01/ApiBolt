@@ -15,7 +15,7 @@ import {
 import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 import { selectThemeActiveId } from "@/context/redux/theme/selectors/theme";
 import { DEFAULT_THEME_ID } from "@shared/constant/theme";
-import { WEBSITE_BASE_URL } from "@renderer/constant/api-bolt";
+import { WEBSITE_BASE_URL } from "@shared/constant/api-bolt";
 
 const ThemeDetailsTop = memo(() => {
   const isLoading = useAppSelector(selectThemeMarketplaceThemeDetailsLoading);

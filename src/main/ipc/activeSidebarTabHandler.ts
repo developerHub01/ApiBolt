@@ -4,7 +4,7 @@ import {
   deleteActiveSidebarTab,
   getActiveSidebarTab,
   updateActiveSidebarTab,
-} from "@/main/db/activeSidebarTabDB.js";
+} from "@/main/db/activeSidebarTabDB";
 import { ElectronAPIActiveSidebarTabInterface } from "@shared/types/api/electron-api-active-sidebar-tab";
 
 export const activeSidebarTabHandler = (): void => {

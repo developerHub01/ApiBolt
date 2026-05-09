@@ -1,5 +1,5 @@
 import { ipcMain } from "electron";
-import { generateJWT } from "@/main/utils/utils.js";
+import { generateJWT } from "@/main/utils/utils";
 import { ElectronAPIInterface } from "@shared/types/api/electron-api";
 
 export const jsonWebTokenHandlers = (): void => {

@@ -1,10 +1,10 @@
 import { eq } from "drizzle-orm";
-import { db } from "@/main/db/index.js";
+import { db } from "@/main/db/index";
 import {
   ACTIVE_SIDEBAR_TAB_ID,
   activeSidebarTabTable,
   DEFAULT_ACTIVE_SIDEBAR_TAB,
-} from "@/main/db/schema.js";
+} from "@/main/db/schema";
 import { ElectronAPIActiveSidebarTabInterface } from "@shared/types/api/electron-api-active-sidebar-tab";
 
 export const getActiveSidebarTab: ElectronAPIActiveSidebarTabInterface["getActiveSidebarTab"] =

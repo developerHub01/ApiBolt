@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
-import { db } from "@/main/db/index.js";
-import { cookiesTable } from "@/main/db/schema.js";
-import { getActiveProject } from "@/main/db/projectsDB.js";
+import { db } from "@/main/db/index";
+import { cookiesTable } from "@/main/db/schema";
+import { getActiveProject } from "@/main/db/projectsDB";
 import { ElectronAPICookiesInterface } from "@shared/types/api/electron-cookies";
 import { ToughCookieSerializedInterface } from "@/main/types";
 import { CookieJar, SerializedCookieJar } from "tough-cookie";

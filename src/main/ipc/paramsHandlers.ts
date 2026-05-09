@@ -8,7 +8,7 @@ import {
   getParams,
   replaceParams,
   updateParams,
-} from "@/main/db/paramsDB.js";
+} from "@/main/db/paramsDB";
 import { ElectronAPIParamsInterface } from "@shared/types/api/electron-params";
 
 export const paramsHandlers = (): void => {

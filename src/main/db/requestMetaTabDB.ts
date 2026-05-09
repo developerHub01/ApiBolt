@@ -1,7 +1,7 @@
 import { eq, inArray } from "drizzle-orm";
-import { db } from "@/main/db/index.js";
-import { requestMetaTabTable } from "@/main/db/schema.js";
-import { getTabList } from "@/main/db/tabsDB.js";
+import { db } from "@/main/db/index";
+import { requestMetaTabTable } from "@/main/db/schema";
+import { getTabList } from "@/main/db/tabsDB";
 import { ElectronAPIRequestMetaTabInterface } from "@shared/types/api/electron-request-meta-tab";
 
 export const getRequestMetaTab: ElectronAPIRequestMetaTabInterface["getRequestMetaTab"] =

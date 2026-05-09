@@ -5,7 +5,7 @@ import {
   duplicateMetaShowColumn,
   getMetaShowColumn,
   updateMetaShowColumn,
-} from "@/main/db/metaShowColumnDB.js";
+} from "@/main/db/metaShowColumnDB";
 import { ElectronAPIMetaShowColumnInterface } from "@shared/types/api/electron-meta-show-column";
 
 export const metaShowColumnHandlers = (): void => {

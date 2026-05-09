@@ -9,7 +9,7 @@ import {
   getBodyBinary,
   replaceBodyBinary,
   updateBodyBinary,
-} from "@/main/db/bodyBinaryDB.js";
+} from "@/main/db/bodyBinaryDB";
 import { mainWindow } from "@/main/index";
 
 export const bodyBinaryHandler = (): void => {

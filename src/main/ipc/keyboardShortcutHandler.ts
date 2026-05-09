@@ -5,7 +5,7 @@ import {
   inheritGlobalKeyboardShortcuts,
   resetKeyboardShortcuts,
   updateKeyboardShortcuts,
-} from "@/main/db/keyboardShortcutDB.js";
+} from "@/main/db/keyboardShortcutDB";
 import { ElectronAPIKeyboardShortcutInterface } from "@shared/types/api/electron-keyboard-shortcuts";
 
 export const keyboardShortcutHandler = (): void => {

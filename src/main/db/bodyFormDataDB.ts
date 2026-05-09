@@ -1,7 +1,7 @@
 import { and, eq, inArray, like, not } from "drizzle-orm";
-import { db } from "@/main/db/index.js";
-import { bodyFormDataTable } from "@/main/db/schema.js";
-import { getTabList } from "@/main/db/tabsDB.js";
+import { db } from "@/main/db/index";
+import { bodyFormDataTable } from "@/main/db/schema";
+import { getTabList } from "@/main/db/tabsDB";
 import { ElectronAPIBodyFormDataInterface } from "@shared/types/api/electron-body-form";
 
 export const getBodyFormDataByFormId = async (id: string) => {

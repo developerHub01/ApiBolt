@@ -1,6 +1,6 @@
 import { asc, desc, eq, inArray, sql } from "drizzle-orm";
-import { db } from "@/main/db/index.js";
-import { historyTable } from "@/main/db/schema.js";
+import { db } from "@/main/db/index";
+import { historyTable } from "@/main/db/schema";
 import { ElectronAPIHistoryInterface } from "@shared/types/api/electron-history";
 import {
   HistoryItemInterface,

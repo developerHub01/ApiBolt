@@ -1,16 +1,16 @@
 import { eq } from "drizzle-orm";
-import { db } from "@/main/db/index.js";
+import { db } from "@/main/db/index";
 import {
   activeThemeTable,
   GLOBAL_PROJECT_ID,
   themeTable,
-} from "@/main/db/schema.js";
-import { getActiveProject } from "@/main/db/projectsDB.js";
+} from "@/main/db/schema";
+import { getActiveProject } from "@/main/db/projectsDB";
 import {
   defaultActiveTheme,
   defaultActiveThemeId,
   defaultActiveThemePalette,
-} from "@/data/themes.js";
+} from "@/data/themes";
 import { ElectronAPIActiveThemeInterface } from "@shared/types/api/electron-active-theme";
 import {
   ActiveThemePaletteInterface,

@@ -7,8 +7,8 @@ import {
   getCookiesByProject,
   getParsedCookiesByProject,
   updateCookiesByProject,
-} from "@/main/db/cookiesDB.js";
-import { jarManager } from "@/main/utils/cookieManager.js";
+} from "@/main/db/cookiesDB";
+import { jarManager } from "@/main/utils/cookieManager";
 import { ElectronAPICookiesInterface } from "@shared/types/api/electron-cookies";
 
 export const cookiesHandler = (): void => {

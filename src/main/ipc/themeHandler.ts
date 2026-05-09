@@ -7,11 +7,11 @@ import {
   getThemePaletteById,
   getTotalInstalledThemeCount,
   updateTheme,
-} from "@/main/db/themeDB.js";
+} from "@/main/db/themeDB";
 import {
   importThemePaletteInEditor,
   saveThemePaletteLocal,
-} from "@/main/utils/theme.js";
+} from "@/main/utils/theme";
 import { ElectronAPIThemeInterface } from "@shared/types/api/electron-theme";
 import { app } from "electron/main";
 import path, { dirname } from "node:path";

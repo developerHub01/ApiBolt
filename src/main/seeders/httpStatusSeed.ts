@@ -1,6 +1,6 @@
-import { httpStatus } from "@/data/http_status_details.js";
-import { db } from "@/main/db/index.js";
-import { httpStatusTable } from "@/main/db/schema.js";
+import { httpStatus } from "@/data/http_status_details";
+import { db } from "@/main/db/index";
+import { httpStatusTable } from "@/main/db/schema";
 
 export const generateHttpStatusSeed = async () => {
   try {

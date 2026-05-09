@@ -4,7 +4,7 @@ import {
   deleteTabListByProjectId,
   getTabList,
   updateTabList,
-} from "@/main/db/tabsDB.js";
+} from "@/main/db/tabsDB";
 import { ElectronAPITabsInterface } from "@shared/types/api/electron-tabs";
 
 export const tabsHandler = (): void => {

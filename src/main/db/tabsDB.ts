@@ -1,7 +1,7 @@
-import { tabsTable } from "@/main/db/schema.js";
+import { tabsTable } from "@/main/db/schema";
 import { eq } from "drizzle-orm";
-import { db } from "@/main/db/index.js";
-import { getActiveProject } from "@/main/db/projectsDB.js";
+import { db } from "@/main/db/index";
+import { getActiveProject } from "@/main/db/projectsDB";
 import { ElectronAPITabsInterface } from "@shared/types/api/electron-tabs";
 import { TabsInterface } from "@shared/types/tabs";
 

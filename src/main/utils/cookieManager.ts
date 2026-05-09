@@ -1,9 +1,9 @@
 import { CookieJar } from "tough-cookie";
-import { jar as defaultJar } from "@/main/index.js";
+import { jar as defaultJar } from "@/main/index";
 import {
   getCookiesByProject,
   replaceCookiesByProject,
-} from "@/main/db/cookiesDB.js";
+} from "@/main/db/cookiesDB";
 
 export const clearJar = async (jar: CookieJar | null) => {
   const targetJar = jar ?? defaultJar;

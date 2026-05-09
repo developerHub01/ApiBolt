@@ -1,7 +1,7 @@
 import { eq, inArray } from "drizzle-orm";
-import { db } from "@/main/db/index.js";
-import { API_URL_DEFAULT_VALUE, apiUrlTable } from "@/main/db/schema.js";
-import { getTabList } from "@/main/db/tabsDB.js";
+import { db } from "@/main/db/index";
+import { API_URL_DEFAULT_VALUE, apiUrlTable } from "@/main/db/schema";
+import { getTabList } from "@/main/db/tabsDB";
 import { ElectronAPIApiUrlInterface } from "@shared/types/api/electron-api-url";
 
 /* id === requestOrFolderMetaId */

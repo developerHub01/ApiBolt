@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { DEFAULT_THEME_ID } from "@shared/constant/theme";
-import { WEBSITE_BASE_URL } from "@renderer/constant/api-bolt";
+import { WEBSITE_BASE_URL } from "@shared/constant/api-bolt";
 
 const useGetThemeWebLinkByThemeId = (id: string | null | string) => {
   return useMemo(

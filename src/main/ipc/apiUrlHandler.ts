@@ -4,7 +4,7 @@ import {
   duplicateApiUrl,
   getApiUrlDB,
   updateApiUrl,
-} from "@/main/db/apiUrlDB.js";
+} from "@/main/db/apiUrlDB";
 import { ElectronAPIApiUrlInterface } from "@shared/types/api/electron-api-url";
 
 export const apiUrlHandler = (): void => {

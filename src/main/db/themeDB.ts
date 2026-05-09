@@ -1,6 +1,6 @@
 import { count, eq } from "drizzle-orm";
-import { db } from "@/main/db/index.js";
-import { themeTable } from "@/main/db/schema.js";
+import { db } from "@/main/db/index";
+import { themeTable } from "@/main/db/schema";
 import { ElectronAPIThemeInterface } from "@shared/types/api/electron-theme";
 import {
   ThemeInterface,

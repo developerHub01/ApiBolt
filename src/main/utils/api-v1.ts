@@ -3,22 +3,22 @@ import {
   getPayloadSize,
   getRawContentType,
   requestDataSize,
-} from "@/main/utils/utils.js";
-import { parseSetCookie } from "@/main/utils/cookies.js";
-import { client, jar } from "@/main/index.js";
-import { jarManager } from "@/main/utils/cookieManager.js";
-import { getBodyBinary } from "@/main/db/bodyBinaryDB.js";
+} from "@/main/utils/utils";
+import { parseSetCookie } from "@/main/utils/cookies";
+import { client, jar } from "@/main/index";
+import { jarManager } from "@/main/utils/cookieManager";
+import { getBodyBinary } from "@/main/db/bodyBinaryDB";
 import path from "node:path";
 import fs, { constants } from "node:fs";
 import { access } from "node:fs/promises";
 import FormData from "form-data";
 import mime from "mime-types";
-import { getBodyFormDataByFormId } from "@/main/db/bodyFormDataDB.js";
-import { getHttpStatusByCode } from "@/main/db/httpStatusDB.js";
+import { getBodyFormDataByFormId } from "@/main/db/bodyFormDataDB";
+import { getHttpStatusByCode } from "@/main/db/httpStatusDB";
 import {
   APIPayloadBody,
   ResponseInterface,
-} from "@shared/types/request-response.types.js";
+} from "@shared/types/request-response.types";
 import { ElectronAPIInterface } from "@shared/types/api/electron-api";
 
 const noResponseBodyMethods = new Set(["get", "head", "options", "delete"]);

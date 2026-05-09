@@ -8,11 +8,11 @@ import {
   deleteAllEnvironments,
   deleteEnvironments,
   importEnvironments,
-} from "@/main/db/environmentsDB.js";
+} from "@/main/db/environmentsDB";
 import { mainWindow } from "@/main/index";
-import { getActiveProjectDetails } from "@/main/db/projectsDB.js";
+import { getActiveProjectDetails } from "@/main/db/projectsDB";
 import { readFile, writeFile } from "node:fs/promises";
-import { filterValidEnvironments } from "@/main/utils/environments.js";
+import { filterValidEnvironments } from "@/main/utils/environments";
 import { ElectronAPIEnvironmentsInterface } from "@shared/types/api/electron-environments";
 import { TEnvironmentFile } from "@shared/types/export-import/environments";
 
@@ -99,7 +99,7 @@ export const enviromentsHandlers = (): void => {
           title: "Save environment variable list",
           defaultPath: path.join(
             app.getPath("downloads"),
-            `${projectName.replaceAll(" ", "_")}_environments.json`,
+            `${projectName.replaceAll(" ", "_")}_environmentson`,
           ),
           filters: [
             {

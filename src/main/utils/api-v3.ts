@@ -4,17 +4,17 @@ import fs, { constants } from "node:fs";
 import zlib from "zlib";
 import { access } from "node:fs/promises";
 import FormData from "form-data";
-import { getRawContentType } from "@/main/utils/utils.js";
-import { parseSetCookie } from "@/main/utils/cookies.js";
-import { jar } from "@/main/index.js";
-import { jarManager } from "@/main/utils/cookieManager.js";
-import { getBodyBinary } from "@/main/db/bodyBinaryDB.js";
-import { getBodyFormDataByFormId } from "@/main/db/bodyFormDataDB.js";
-import { getHttpStatusByCode } from "@/main/db/httpStatusDB.js";
+import { getRawContentType } from "@/main/utils/utils";
+import { parseSetCookie } from "@/main/utils/cookies";
+import { jar } from "@/main/index";
+import { jarManager } from "@/main/utils/cookieManager";
+import { getBodyBinary } from "@/main/db/bodyBinaryDB";
+import { getBodyFormDataByFormId } from "@/main/db/bodyFormDataDB";
+import { getHttpStatusByCode } from "@/main/db/httpStatusDB";
 import {
   APIPayloadBody,
   ResponseInterface,
-} from "@shared/types/request-response.types.js";
+} from "@shared/types/request-response.types";
 import { ElectronAPIInterface } from "@shared/types/api/electron-api";
 
 interface NodeJSSystemError extends Error {

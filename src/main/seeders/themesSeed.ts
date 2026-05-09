@@ -1,11 +1,11 @@
 import { eq } from "drizzle-orm";
-import { defaultThemeList, defaultActiveThemeId } from "@/data/themes.js";
-import { db } from "@/main/db/index.js";
+import { defaultThemeList, defaultActiveThemeId } from "@/data/themes";
+import { db } from "@/main/db/index";
 import {
   activeThemeTable,
   GLOBAL_PROJECT_ID,
   themeTable,
-} from "@/main/db/schema.js";
+} from "@/main/db/schema";
 
 export const generateThemesSeed = async () => {
   try {

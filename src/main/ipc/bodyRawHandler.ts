@@ -5,7 +5,7 @@ import {
   getBodyRaw,
   replaceBodyRaw,
   updateBodyRaw,
-} from "@/main/db/bodyRawDB.js";
+} from "@/main/db/bodyRawDB";
 import { ElectronAPIBodyRawInterface } from "@shared/types/api/electron-body-raw";
 
 export const bodyRawHandler = (): void => {

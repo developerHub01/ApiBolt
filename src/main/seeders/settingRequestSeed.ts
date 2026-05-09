@@ -1,5 +1,5 @@
-import { db } from "@/main/db/index.js";
-import { GLOBAL_PROJECT_ID, settingRequestTable } from "@/main/db/schema.js";
+import { db } from "@/main/db/index";
+import { GLOBAL_PROJECT_ID, settingRequestTable } from "@/main/db/schema";
 import { defaultSettingsRequest } from "@/data/settings_request";
 // import { eq } from "drizzle-orm";
 

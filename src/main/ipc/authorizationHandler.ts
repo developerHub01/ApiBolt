@@ -6,7 +6,7 @@ import {
   deleteAuth,
   getInheritedAuthFromId,
   duplicateAuth,
-} from "@/main/db/authorizationDB.js";
+} from "@/main/db/authorizationDB";
 import { ElectronAPIAuthorizationInterface } from "@shared/types/api/electron-authorization";
 
 export const authorizationHandler = (): void => {

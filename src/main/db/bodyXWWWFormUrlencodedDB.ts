@@ -1,7 +1,7 @@
 import { eq, inArray } from "drizzle-orm";
-import { db } from "@/main/db/index.js";
-import { bodyXWWWFormUrlencodedTable } from "@/main/db/schema.js";
-import { getTabList } from "@/main/db/tabsDB.js";
+import { db } from "@/main/db/index";
+import { bodyXWWWFormUrlencodedTable } from "@/main/db/schema";
+import { getTabList } from "@/main/db/tabsDB";
 import { ElectronAPIBodyXWWWFormUrlencodedInterface } from "@shared/types/api/electron-body-x-www-form-urlencoded";
 
 export const getBodyXWWWFormUrlencoded: ElectronAPIBodyXWWWFormUrlencodedInterface["getBodyXWWWFormUrlencoded"] =

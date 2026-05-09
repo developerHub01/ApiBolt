@@ -8,7 +8,7 @@ import {
   getBodyXWWWFormUrlencoded,
   replaceBodyXWWWFormUrlencoded,
   updateBodyXWWWFormUrlencoded,
-} from "@/main/db/bodyXWWWFormUrlencodedDB.js";
+} from "@/main/db/bodyXWWWFormUrlencodedDB";
 import { ElectronAPIBodyXWWWFormUrlencodedInterface } from "@shared/types/api/electron-body-x-www-form-urlencoded";
 
 export const bodyXWWWFormUrlencodedHandlers = (): void => {

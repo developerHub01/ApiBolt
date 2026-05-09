@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { ThemeInterface } from "@shared/types/theme.types";
-import { WEBSITE_BASE_URL } from "@renderer/constant/api-bolt";
+import { WEBSITE_BASE_URL } from "@shared/constant/api-bolt";
 
 const useGetAuthorProfileByTheme = (theme: ThemeInterface | null | string) => {
   return useMemo(

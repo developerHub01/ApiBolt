@@ -5,13 +5,13 @@ import {
   exportRequest,
   importFolder,
   importRequest,
-} from "@/main/db/requestDB.js";
-import { getRequestOrFolderMetaById } from "@/main/db/requestOrFolderMetaDB.js";
+} from "@/main/db/requestDB";
+import { getRequestOrFolderMetaById } from "@/main/db/requestOrFolderMetaDB";
 import path from "node:path";
 import { readFile, writeFile } from "node:fs/promises";
 import { mainWindow } from "@/main/index";
-import { getActiveProject } from "@/main/db/projectsDB.js";
-import { ElectronAPIRequestInterface } from "@shared/types/api/electron-request.js";
+import { getActiveProject } from "@/main/db/projectsDB";
+import { ElectronAPIRequestInterface } from "@shared/types/api/electron-request";
 import { RequestExportFileInterface } from "@shared/types/export-import/request";
 import { FolderExportFileInterface } from "@shared/types/export-import/folder";
 import { v4 as uuidv4 } from "uuid";
@@ -181,8 +181,8 @@ export const requestHandler = (): void => {
         if (!payload) throw new Error();
 
         const fileName = payload.name
-          ? `${payload.name.replaceAll(" ", "_")}_request.json`
-          : "request.json";
+          ? `${payload.name.replaceAll(" ", "_")}_requeston`
+          : "requeston";
 
         const { canceled, filePath } = await dialog.showSaveDialog(mainWindow, {
           title: "Save request data",
@@ -288,7 +288,7 @@ export const requestHandler = (): void => {
 
         const folderName =
           (await getRequestOrFolderMetaById(id))?.name ?? "folder";
-        const exportFileName = `${folderName.replaceAll(" ", "_")}_request_folder.json`;
+        const exportFileName = `${folderName.replaceAll(" ", "_")}_request_folderon`;
 
         const { canceled, filePath } = await dialog.showSaveDialog(mainWindow, {
           title: "Save request folder data",

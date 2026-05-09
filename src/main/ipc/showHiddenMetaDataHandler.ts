@@ -4,7 +4,7 @@ import {
   duplicateShowHiddenMetaData,
   getShowHiddenMetaData,
   updateShowHiddenMetaData,
-} from "@/main/db/showHiddenMetaDataDB.js";
+} from "@/main/db/showHiddenMetaDataDB";
 import { ElectronAPIShowHiddenMetaDataInterface } from "@shared/types/api/electron-show-hidden-meta-data";
 
 export const showHiddenMetaDataHandler = (): void => {

@@ -1,8 +1,8 @@
 import { eq, inArray } from "drizzle-orm";
-import { db } from "@/main/db/index.js";
-import { showHiddenMetaDataTable } from "@/main/db/schema.js";
-import { getRequestOrFolderMetaById } from "@/main/db/requestOrFolderMetaDB.js";
-import { getTabList } from "@/main/db/tabsDB.js";
+import { db } from "@/main/db/index";
+import { showHiddenMetaDataTable } from "@/main/db/schema";
+import { getRequestOrFolderMetaById } from "@/main/db/requestOrFolderMetaDB";
+import { getTabList } from "@/main/db/tabsDB";
 import { ElectronAPIShowHiddenMetaDataInterface } from "@shared/types/api/electron-show-hidden-meta-data";
 
 /* id === requestOrFolderMetaId */
