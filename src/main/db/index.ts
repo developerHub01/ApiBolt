@@ -5,7 +5,7 @@ import path from "node:path";
 import fs from "node:fs/promises";
 import { app } from "electron";
 import { migrate } from "drizzle-orm/libsql/migrator";
-import { getAppVersion, setAppVersion } from "@/main/db/versionDB";
+import { doFirstStartUpWork, getAppVersion } from "@/main/db/appBasicMetaDB";
 import { compareVersions } from "@/main/utils/utils";
 
 const userDataPath = app.isPackaged
@@ -85,7 +85,10 @@ export const prepareDB = async () => {
 
   await runMigrations();
 
-  if (dbVersion !== currentVersion) await setAppVersion(currentVersion);
+  if (dbVersion !== currentVersion)
+    await doFirstStartUpWork({
+      currentVersion,
+    });
 
   cleanupOldDBs(2);
 };
