@@ -1,3 +1,3 @@
 export type TDoFirstStartUpWork = (payload: {
-  currentVersion: string;
-}) => Promise<boolean>;
+  dbVersion: string;
+}) => Promise<void>;

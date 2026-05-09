@@ -1,7 +1,10 @@
 import { TDoFirstStartUpWork } from "@/main/types/basic-meta-db.types";
 import { eq } from "drizzle-orm";
-import { db } from "@/main/db/index.js";
-import { APP_BASIC_META_ID, appBasicMetaTable } from "@/main/db/schema.js";
+import { db } from "@/main/db/index";
+import { APP_BASIC_META_ID, appBasicMetaTable } from "@/main/db/schema";
+import { axiosServerClient } from "@shared/libs/utils";
+import { MACHINE_ID } from "@/main/constant";
+import { app } from "electron";
 
 export const getAppVersion = async () => {
   try {
@@ -80,11 +83,24 @@ export const inableAppInstallReported = async () => {
 };
 
 export const doFirstStartUpWork: TDoFirstStartUpWork = async ({
-  currentVersion,
+  dbVersion,
 }) => {
-  await setAppVersion(currentVersion);
+  const currentVersion = app.getVersion();
+  if (dbVersion !== currentVersion) await setAppVersion(currentVersion);
 
-  // if (!(await isAppInstallReported())) await inableAppInstallReported();
+  (async () => {
+    if (await isAppInstallReported()) return;
 
-  return true;
+    try {
+      const response = await axiosServerClient.post("/app-install/report", {
+        deviceId: MACHINE_ID,
+        version: currentVersion,
+      });
+
+      const isSuccess = response?.data?.success ?? false;
+      if (isSuccess) await inableAppInstallReported();
+    } catch (error) {
+      console.error(error);
+    }
+  })();
 };

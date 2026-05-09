@@ -74,21 +74,20 @@ export const runMigrations = async () => {
 };
 
 export const prepareDB = async () => {
-  const currentVersion = app.getVersion();
-  let dbVersion: string | null = null;
+  let dbVersion = "";
 
   try {
-    dbVersion = await getAppVersion();
+    dbVersion = (await getAppVersion()) ?? "";
   } catch {
     console.warn("⚠️ Could not read DB version (probably old DB)");
   }
 
   await runMigrations();
 
-  if (dbVersion !== currentVersion)
-    await doFirstStartUpWork({
-      currentVersion,
-    });
+  await doFirstStartUpWork({
+    dbVersion,
+  });
 
+  console.log("hell world=========");
   cleanupOldDBs(2);
 };

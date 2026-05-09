@@ -1,9 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
-import { axiosServerClient } from "@/lib/utils";
 import {
   ThemeInterface,
-  ThemeMetaInterface,
   ThemesSearchResultInterface,
 } from "@shared/types/theme.types";
 import {
@@ -27,6 +25,7 @@ import {
 } from "@shared/constant/theme";
 import axios from "axios";
 import { THEME_MARKETPLACE_PAGE_SIZE } from "@/constant/theme.constant";
+import { axiosServerClient } from "@shared/libs/utils";
 
 export const loadThemesSearchResult = createAsyncThunk<
   void,

@@ -1,8 +1,11 @@
-export const APP_NAME = "ApiBolt";
+export const APP_NAME = "APIBolt";
 export const APP_VERSION = "1.0.0";
 
-export const WEBSITE_BASE_URL = "https://apibolt.vercel.app";
-export const SERVER_API_BASE_URL = "https://apibolt.vercel.app/api/v1/client";
-export const FAKE_API_DOCS_URL = "https://apibolt.vercel.app/fake";
-export const WEBSITE_DOCS = "https://apibolt.vercel.app/docs";
-export const MARKETPLACE_URL = "https://apibolt.vercel.app/marketplace";
+const WEBSITE_ORIGIN = "http://localhost:3000";
+// const WEBSITE_ORIGIN = "https://apibolt.vercel.app";
+
+export const WEBSITE_BASE_URL = WEBSITE_ORIGIN;
+export const SERVER_API_BASE_URL = `${WEBSITE_ORIGIN}/api/v1/client`;
+export const FAKE_API_DOCS_URL = `${WEBSITE_ORIGIN}/fake`;
+export const WEBSITE_DOCS = `${WEBSITE_ORIGIN}/docs`;
+export const MARKETPLACE_URL = `${WEBSITE_ORIGIN}/marketplace`;

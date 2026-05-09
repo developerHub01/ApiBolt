@@ -11,7 +11,7 @@ import { useAppSelector } from "@/context/redux/hooks";
 import { selectSelectedThemeDetails } from "@/context/redux/theme-marketplace/selectors/theme-marketplace";
 import ThemeActions from "@/components/app/themes/marketplace/theme-details/theme-content/ThemeActions";
 import { DEFAULT_THEME_ID } from "@shared/constant/theme";
-import { WEBSITE_BASE_URL } from "@shared/constant/api-bolt";
+import { WEBSITE_BASE_URL } from "@renderer/constant/api-bolt";
 
 const ThemeMeta = () => {
   const themeDetails = useAppSelector(selectSelectedThemeDetails);
