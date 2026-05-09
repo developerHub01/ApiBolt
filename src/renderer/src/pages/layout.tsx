@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { isElectron } from "@/utils/electron";
 import Redirector from "@/components/app/Redirector";
+import LoadBasicData from "@/components/app/LoadBasicData";
 import { motion } from "motion/react";
 
 const RootLayout = () => {
@@ -25,6 +26,7 @@ const RootLayout = () => {
     >
       <Outlet />
       <Redirector />
+      <LoadBasicData />
     </motion.section>
   );
 };

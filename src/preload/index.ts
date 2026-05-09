@@ -100,6 +100,8 @@ if (process.contextIsolated) {
     const electronAPIAppInfoBridge: WindowElectronAPIInterface["electronAPIAppInfo"] =
       {
         getAppInfo: async () => await ipcRenderer.invoke("getAppInfo"),
+        getAppBasicInfo: async () =>
+          await ipcRenderer.invoke("getAppBasicInfo"),
       };
 
     /**

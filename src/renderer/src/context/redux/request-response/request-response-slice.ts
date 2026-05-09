@@ -819,15 +819,18 @@ const requestResponseSlice = createSlice({
     /* ================ Headers start =================== */
     handleLoadHeaders: (
       state,
-      action: PayloadAction<Array<ParamHeaderPayloadInterface>>,
+      action: PayloadAction<{
+        payload: Array<ParamHeaderPayloadInterface>;
+        hiddenHeaders: Array<ParamInterface>;
+      }>,
     ) => {
       const selectedTab = state.selectedTab;
       if (!selectedTab) return;
 
-      state.headers[selectedTab] = action.payload;
+      state.headers[selectedTab] = action.payload.payload;
 
       if (!state.hiddenHeaders[selectedTab])
-        state.hiddenHeaders[selectedTab] = INITIAL_HIDDEN_HEADERS_DATA;
+        state.hiddenHeaders[selectedTab] = action.payload.hiddenHeaders;
     },
     handleSetHeaders: (
       state,
