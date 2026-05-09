@@ -1,9 +1,4 @@
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useState,
-} from "react";
+import React, { createContext, useCallback, useContext, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import type { ProjectInterface } from "@shared/types/project.types";
 import {

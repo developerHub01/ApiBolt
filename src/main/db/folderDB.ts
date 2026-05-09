@@ -34,8 +34,6 @@ export const getFolder: ElectronAPIFolderInterface["getFolder"] =
 export const updateFolder: ElectronAPIFolderInterface["updateFolder"] =
   async payload => {
     try {
-      console.log(payload);
-
       if (!payload || typeof payload !== "object") throw new Error();
       const requestOrFolderMetaId =
         payload.requestOrFolderMetaId ?? (await getTabList())?.selectedTab;

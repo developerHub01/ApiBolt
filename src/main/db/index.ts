@@ -88,6 +88,5 @@ export const prepareDB = async () => {
     dbVersion,
   });
 
-  console.log("hell world=========");
   cleanupOldDBs(2);
 };
