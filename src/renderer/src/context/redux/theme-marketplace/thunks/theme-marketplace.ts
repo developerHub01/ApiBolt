@@ -1,10 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
 import {
-  ThemeInterface,
-  ThemesSearchResultInterface,
-} from "@shared/types/theme.types";
-import {
   handleChangeIsInstallMaxCountAlertOpen,
   handleChangeSelectedThemeDetails,
   handleChangeTotalPages,
@@ -25,7 +21,7 @@ import {
 } from "@shared/constant/theme";
 import axios from "axios";
 import { THEME_MARKETPLACE_PAGE_SIZE } from "@/constant/theme.constant";
-import { axiosServerClient } from "@shared/libs/utils";
+import { HttpErrorInterface } from "@shared/types/http.types";
 
 export const loadThemesSearchResult = createAsyncThunk<
   void,
@@ -49,19 +45,13 @@ export const loadThemesSearchResult = createAsyncThunk<
       return;
     } else {
       try {
-        const response = await axiosServerClient.get("/themes/meta", {
-          params: {
+        const { meta, data } =
+          await window.electronAPITheme.getThemeListMetaServer({
             searchTerm: state.themeMarketplace.searchTerm,
             searchFilter: state.themeMarketplace.searchFilter,
             page: state.themeMarketplace.page,
             pageSize: THEME_MARKETPLACE_PAGE_SIZE,
-          },
-        });
-
-        if (response.status !== 200 || !response.data?.data) throw new Error();
-
-        const { meta, data } = response.data
-          ?.data as ThemesSearchResultInterface;
+          });
 
         dispatch(handleLoadThemeList(data));
         dispatch(handleChangeTotalPages(meta.totalPages));
@@ -91,18 +81,18 @@ export const loadThemesDetails = createAsyncThunk<
     if (!id) throw new Error("Theme id not passed");
     if (id === DEFAULT_THEME_ID) throw new Error("it is the default theme");
 
-    const response = await axiosServerClient.get(`/themes/details/${id}`);
-
-    const data = response.data?.data as ThemeInterface;
-    dispatch(handleChangeSelectedThemeDetails(data));
+    const response =
+      await window.electronAPITheme.getThemeDetailsByIdServer(id);
+    dispatch(handleChangeSelectedThemeDetails(response));
   } catch (error) {
+    const err = error as HttpErrorInterface;
+
     if (!id) throw new Error();
     const themeDetails = await window.electronAPITheme.getThemeById(id);
     dispatch(handleChangeSelectedThemeDetails(themeDetails));
-    if (axios.isAxiosError(error)) {
-      if (error.code === "ERR_NETWORK") throw new Error("ERR_NETWORK");
-      else if (error.status === 404) throw new Error("NOT_FOUND");
-    }
+
+    if (err.code === "ERR_NETWORK") throw new Error("ERR_NETWORK");
+    else if (err.status === 404) throw new Error("NOT_FOUND");
   }
 });
 
@@ -122,10 +112,7 @@ export const installTheme = createAsyncThunk<
       throw new Error();
     }
 
-    const themeResponse = await axiosServerClient.get(`/themes/details/${id}`);
-    const theme = themeResponse.data?.data as ThemeInterface;
-
-    if (themeResponse.status !== 200 || !theme) throw new Error();
+    const theme = await window.electronAPITheme.getThemeDetailsByIdServer(id);
 
     const response = await window.electronAPITheme.installTheme({
       id: theme.id,
@@ -138,17 +125,6 @@ export const installTheme = createAsyncThunk<
       preview: theme.preview,
       version: theme.version,
     });
-
-    try {
-      const matchineId = await window.electronAPI.getMachineId();
-      await axiosServerClient.post("/themes/install", {
-        themeId: theme.id,
-        deviceId: matchineId,
-        actionType: "install",
-      });
-    } catch (error) {
-      /*  console.error(error); */
-    }
 
     dispatch(loadInstalledThemeMetaList());
 
@@ -191,17 +167,6 @@ export const unInstallTheme = createAsyncThunk<
     ) {
       dispatch(loadActiveThemeId());
       dispatch(applyThemeInApp());
-    }
-
-    try {
-      const matchineId = await window.electronAPI.getMachineId();
-      await axiosServerClient.post("/themes/install", {
-        themeId: id,
-        deviceId: matchineId,
-        actionType: "uninstall",
-      });
-    } catch (error) {
-      /* console.error(error); */
     }
 
     return response;

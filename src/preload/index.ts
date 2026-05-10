@@ -173,6 +173,10 @@ if (process.contextIsolated) {
           await ipcRenderer.invoke("installTheme", ...payload),
         unInstallTheme: async (...payload) =>
           await ipcRenderer.invoke("unInstallTheme", ...payload),
+        getThemeListMetaServer: async (...payload) =>
+          await ipcRenderer.invoke("getThemeListMetaServer", ...payload),
+        getThemeDetailsByIdServer: async (...payload) =>
+          await ipcRenderer.invoke("getThemeDetailsByIdServer", ...payload),
       };
 
     /**

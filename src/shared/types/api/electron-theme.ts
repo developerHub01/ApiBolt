@@ -1,8 +1,11 @@
 import {
   ActiveThemeMetaInterface,
   ThemeCreatePayloadInterface,
+  ThemeInterface,
   ThemeMetaDBInterface,
   ThemeMetaInterface,
+  ThemeMetaServerParamsInterface,
+  ThemesSearchResultInterface,
 } from "@shared/types/theme.types";
 
 export interface ElectronAPIThemeInterface {
@@ -19,4 +22,8 @@ export interface ElectronAPIThemeInterface {
   importThemePaletteInEditor(): Promise<ThemeMetaDBInterface["palette"] | null>;
   installTheme(payload: ThemeMetaDBInterface): Promise<boolean>;
   unInstallTheme(id: string): Promise<boolean>;
+  getThemeListMetaServer(
+    params: ThemeMetaServerParamsInterface,
+  ): Promise<ThemesSearchResultInterface>;
+  getThemeDetailsByIdServer(id: string): Promise<ThemeInterface>;
 }
