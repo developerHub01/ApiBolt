@@ -180,24 +180,6 @@ const routes = [
             path: "themes",
             element: <ThemesLayout />,
             children: [
-              // {
-              //   path: "marketplace/:id?",
-              //   element: (
-              //     <Suspense fallback={<ThemeMarketplaceFallback />}>
-              //       <ThemeMarketPlaceLayout />
-              //     </Suspense>
-              //   ),
-              //   children: [
-              //     {
-              //       index: true,
-              //       element: (
-              //         <Suspense fallback={<ThemeMarketplaceFallback />}>
-              //           <ThemeMarketPlacePage />
-              //         </Suspense>
-              //       ),
-              //     },
-              //   ],
-              // },
               {
                 path: "marketplace",
                 element: (

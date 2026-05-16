@@ -37,12 +37,12 @@ export const SIDEBAR_MENU_LIST: Array<SidebarMenuItemInterface> = [
     label: "Authorization",
     path: "/authorization",
   },
-  // {
-  //   id: "navigate_mock",
-  //   Icon: MockServerIcon,
-  //   label: "Mock Server",
-  //   path: "/mock",
-  // },
+  {
+    id: "navigate_mock",
+    Icon: MockServerIcon,
+    label: "Mock Server",
+    path: "/mock",
+  },
   {
     id: "navigate_themes_marketplace",
     label: "Theme marketplace",
@@ -93,6 +93,7 @@ export const HIDDEN_TABS_WHEN_NOT_PROJECT_SELECTED: Array<TSidebarTab> = [
   "navigate_collections",
   "navigate_environments",
   "navigate_authorization",
+  "navigate_mock",
 ];
 
 export const LOCAL_STORAGE_SIDEBAR_ACTIVE_TAB_KEY = "sidebar-active-tab";
