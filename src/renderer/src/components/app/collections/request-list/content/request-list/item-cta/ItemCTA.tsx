@@ -11,7 +11,6 @@ import { EllipsisVertical as ThreeDotIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 import { useAppDispatch } from "@/context/redux/hooks";
-import { useRequestListItem } from "@/context/collections/request-list/RequestListItemProvider";
 import useCheckApplyingLayoutDirection from "@/hooks/setting/use-check-applying-layout-direction";
 import type { TLayoutSetting } from "@shared/types/setting.types";
 import {
@@ -29,6 +28,7 @@ import {
 } from "@/context/redux/request-response/thunks/request";
 import useCustomToast from "@/hooks/ui/use-custom-toast";
 import { handleChangeDeleteFolderOrRequestId } from "@/context/redux/request-response/request-response-slice";
+import { useTreeListItem } from "@/context/tree-view/TreeListItemProvider";
 
 type TActionType =
   | "add_request"
@@ -141,7 +141,7 @@ const ItemCTA = memo(() => {
     isContextMenuOpen,
     handleToggleContextMenu,
     handleRenameAction,
-  } = useRequestListItem();
+  } = useTreeListItem();
   const layoutTypes: TLayoutSetting = useCheckApplyingLayoutDirection();
 
   const handleCTAAction = useCallback(

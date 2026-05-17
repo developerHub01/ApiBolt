@@ -5,38 +5,32 @@ import React, {
   useState,
   type DragEvent,
 } from "react";
-import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { cn } from "@/lib/utils";
-import RequestListItemExpendedContent from "@/components/app/collections/request-list/content/request-list/request-list-item/RequestListItemExpendedContent";
-import RequestListItemContentWrapperParent from "@/components/app/collections/request-list/content/request-list/request-list-item/RequestListItemContentWrapperParent";
-import { useRequestListItem } from "@/context/collections/request-list/RequestListItemProvider";
-import { moveRequestOrFolder } from "@/context/redux/request-response/thunks/request-list";
 import { REQUEST_ITEM_SPACE_SIZE } from "@/constant/request-response.constant";
-import useRequestItemDetails from "@/hooks/request-response/request-list/use-request-item-details";
-import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
-import { changeSelectedTab } from "@/context/redux/request-response/thunks/tab-list";
+import { useTreeListItem } from "@/context/tree-view/TreeListItemProvider";
+import { useTreeView } from "@/context/tree-view/TreeViewProvider";
+import TreeView from "@/components/ui/tree-view/TreeView";
 
 interface RequestListItemContentWrapperProps {
-  setIsHovering: React.Dispatch<React.SetStateAction<boolean>>;
   children: React.ReactNode;
 }
 
-const RequestListItemContentWrapper = memo(
-  ({ setIsHovering, children }: RequestListItemContentWrapperProps) => {
-    const dispatch = useAppDispatch();
+const TreeItemWrapper = memo(
+  ({ children }: RequestListItemContentWrapperProps) => {
+    const { selectedTab, handleChangeSelectedTab, checkIsRequestDropable } =
+      useTreeView();
     const {
       id,
-      parentId,
       method,
       isExpended,
       lavel,
       isRenameActive,
       handleToggleContextMenu,
       handleRenameAction,
-    } = useRequestListItem();
-    const selectedTab = useAppSelector(selectSelectedTab);
+      handleChangeHovering,
+      handleMove,
+    } = useTreeListItem();
     const [isDragging, setIsDragging] = useState<boolean>(false);
-    const { checkIsRequestDropable } = useRequestItemDetails();
 
     const handleDragStart = useCallback(
       (e: DragEvent<HTMLDivElement>) => {
@@ -66,14 +60,9 @@ const RequestListItemContentWrapper = memo(
         setIsDragging(false);
         if (!isDropAble || draggedId === id) return;
 
-        dispatch(
-          moveRequestOrFolder({
-            requestId: draggedId,
-            parentId: children ? id : parentId,
-          }),
-        );
+        handleMove(draggedId);
       },
-      [checkIsRequestDropable, children, dispatch, id, lavel, parentId],
+      [checkIsRequestDropable, handleMove, id, lavel],
     );
 
     const handleDragLeave = useCallback(() => setIsDragging(false), []);
@@ -81,16 +70,16 @@ const RequestListItemContentWrapper = memo(
     const handleRequestClick = useCallback(
       (e: MouseEvent<HTMLElement>) => {
         if (e.ctrlKey || e.metaKey) return handleRenameAction();
-        dispatch(changeSelectedTab(id));
+        handleChangeSelectedTab(id);
       },
-      [dispatch, handleRenameAction, id],
+      [handleChangeSelectedTab, handleRenameAction, id],
     );
 
     const leftSpace = REQUEST_ITEM_SPACE_SIZE * lavel;
 
     return (
       <>
-        <RequestListItemContentWrapperParent
+        <TreeView.ListItemContentWrapperParent
           className={cn({
             /* active tab style */
             "bg-accent/80": selectedTab === id,
@@ -116,8 +105,8 @@ const RequestListItemContentWrapper = memo(
                 "ring-transparent": !isDragging,
               },
             )}
-            onMouseEnter={() => setIsHovering(true)}
-            onMouseLeave={() => setIsHovering(false)}
+            onMouseEnter={() => handleChangeHovering(true)}
+            onMouseLeave={() => handleChangeHovering(false)}
             draggable={!isRenameActive}
             onDragStart={handleDragStart}
             onDragOver={handleDragOver}
@@ -129,11 +118,11 @@ const RequestListItemContentWrapper = memo(
           >
             {children}
           </div>
-        </RequestListItemContentWrapperParent>
-        {isExpended && <RequestListItemExpendedContent />}
+        </TreeView.ListItemContentWrapperParent>
+        {isExpended && <TreeView.ItemExpendedContent />}
       </>
     );
   },
 );
 
-export default RequestListItemContentWrapper;
+export default TreeItemWrapper;

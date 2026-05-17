@@ -29,6 +29,4 @@ const RequestListPanelWrapper = memo(() => {
   );
 });
 
-RequestListPanelWrapper.displayName = "Request list panel wrapper";
-
 export default RequestListPanelWrapper;

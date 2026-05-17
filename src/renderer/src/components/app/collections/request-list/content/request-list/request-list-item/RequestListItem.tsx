@@ -1,6 +1,12 @@
-import { memo } from "react";
-import RequestListProvider from "@/context/collections/request-list/RequestListItemProvider";
-import RequestListItemContent from "@/components/app/collections/request-list/content/request-list/request-list-item/RequestListItemContent";
+import { memo, useMemo } from "react";
+import { useAppSelector } from "@/context/redux/hooks";
+import {
+  getFolderChildren,
+  getRequestType,
+} from "@/utils/request-response.utils";
+import TreeView from "@/components/ui/tree-view/TreeView";
+import ItemCTA from "@/components/app/collections/request-list/content/request-list/item-cta/ItemCTA";
+import RequestMethodTag from "@/components/app/RequestMethodTag";
 
 interface Props {
   id: string;
@@ -10,16 +16,57 @@ interface Props {
 }
 
 const RequestListItem = memo(
-  ({ id, lavel = 0, isLastChild, isRootLastChild = false }: Props) => {
+  ({ id, lavel = 0, isLastChild, isRootLastChild = true }: Props) => {
+    const requestDetails = useAppSelector(
+      state => state.requestResponse.requestList[id],
+    );
+
+    const childrenElements = useMemo(
+      () => getFolderChildren(requestDetails) ?? undefined,
+      [requestDetails],
+    );
+    const parentId = useMemo(
+      () => requestDetails?.parentId ?? undefined,
+      [requestDetails?.parentId],
+    );
+    const type = useMemo(
+      () => getRequestType(requestDetails),
+      [requestDetails],
+    );
+    const isExpended = useMemo(
+      () => requestDetails?.isExpended ?? false,
+      [requestDetails?.isExpended],
+    );
+    const method = useMemo(
+      () =>
+        getRequestType(requestDetails) === "request"
+          ? requestDetails?.method
+          : null,
+      [requestDetails],
+    );
+
     return (
-      <RequestListProvider
+      <TreeView.ListItem
         id={id}
         lavel={lavel}
         isLastChild={isLastChild}
         isRootLastChild={isRootLastChild}
-      >
-        <RequestListItemContent />
-      </RequestListProvider>
+        parentId={parentId}
+        childrenElements={childrenElements}
+        type={type}
+        isExpended={isExpended}
+        itemCTA={<ItemCTA />}
+        tagEle={
+          method && (
+            <RequestMethodTag
+              method={method ?? "get"}
+              shortCut={true}
+              shortCutSizeForAll={3}
+              className="w-full px-0.5"
+            />
+          )
+        }
+      />
     );
   },
 );

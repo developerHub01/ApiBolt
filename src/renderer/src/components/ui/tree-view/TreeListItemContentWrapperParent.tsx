@@ -6,7 +6,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-const RequestListItemContentWrapperParent = memo(
+const TreeListItemContentWrapperParent = memo(
   ({
     className = "",
     children,
@@ -26,4 +26,4 @@ const RequestListItemContentWrapperParent = memo(
   },
 );
 
-export default RequestListItemContentWrapperParent;
+export default TreeListItemContentWrapperParent;

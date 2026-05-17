@@ -6,7 +6,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-const RestArea = memo(({ children }: Props) => {
+const TreeRestArea = memo(({ children }: Props) => {
   const dispatch = useAppDispatch();
 
   const handleDrop = useCallback(
@@ -33,4 +33,4 @@ const RestArea = memo(({ children }: Props) => {
   );
 });
 
-export default RestArea;
+export default TreeRestArea;

@@ -1,19 +1,8 @@
 import { memo } from "react";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { deleteRequestOrFolder } from "@/context/redux/request-response/thunks/request-list";
 import useCustomToast from "@/hooks/ui/use-custom-toast";
+import TreeView from "@/components/ui/tree-view/TreeView";
 
 const RequestListDeleteAlertDialog = memo(() => {
   const dispatch = useAppDispatch();
@@ -44,39 +33,13 @@ const RequestListDeleteAlertDialog = memo(() => {
   };
 
   return (
-    <AlertDialog open={Boolean(deleteFolderOrRequestId)}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>
-            Delete {`"${folderOrRequestName}"`}?
-          </AlertDialogTitle>
-          <AlertDialogDescription>
-            Are you sure you want to delete {folderOrRequestName}?
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel asChild>
-            <Button
-              variant={"secondary"}
-              onClick={() => dispatch(deleteRequestOrFolder(false))}
-            >
-              Cancel
-            </Button>
-          </AlertDialogCancel>
-          <AlertDialogAction asChild>
-            <Button
-              onClick={handleDelete}
-              className={cn(
-                "text-foreground bg-red-500",
-                "hover:text-foreground hover:bg-red-700",
-              )}
-            >
-              Delete
-            </Button>
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+    <TreeView.ListItemDeleteAlertDialog
+      isOpen={Boolean(deleteFolderOrRequestId)}
+      handleDelete={handleDelete}
+      handleCancle={() => dispatch(deleteRequestOrFolder(false))}
+      title={`Delete "${folderOrRequestName}"?`}
+      description={`Are you sure you want to delete ${folderOrRequestName}?`}
+    />
   );
 });
 

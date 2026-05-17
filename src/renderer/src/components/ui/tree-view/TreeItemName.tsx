@@ -8,10 +8,10 @@ import {
   type FocusEvent,
   type KeyboardEvent,
 } from "react";
-import { useRequestListItem } from "@/context/collections/request-list/RequestListItemProvider";
+import { useTreeListItem } from "@/context/tree-view/TreeListItemProvider";
 
-const RequestListItemName = memo(() => {
-  const { id, name, isRenameActive, handleChangeName } = useRequestListItem();
+const TreeItemName = memo(() => {
+  const { id, name, isRenameActive, handleChangeName } = useTreeListItem();
   const [nameState, setNameState] = useState<string>(name ?? "");
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -77,4 +77,4 @@ const RequestListItemName = memo(() => {
   );
 });
 
-export default RequestListItemName;
+export default TreeItemName;

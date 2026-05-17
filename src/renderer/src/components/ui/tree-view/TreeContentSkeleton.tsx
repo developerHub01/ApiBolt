@@ -1,6 +1,7 @@
+import { memo } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const RequestListSkeleton = () => {
+const TreeContentSkeleton = memo(() => {
   return (
     <div className="flex flex-col gap-1 px-1">
       {Array.from({ length: 20 }, (_, index) => (
@@ -8,6 +9,6 @@ const RequestListSkeleton = () => {
       ))}
     </div>
   );
-};
+});
 
-export default RequestListSkeleton;
+export default TreeContentSkeleton;

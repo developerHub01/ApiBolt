@@ -17,6 +17,11 @@ export const selectRequestOrFolderList = createSelector(
   (requestOrFolder): RequestListInterface => requestOrFolder,
 );
 
+export const selectRequestOrFolderListCount = createSelector(
+  [(state: RootState) => state.requestResponse.requestList],
+  (requestOrFolder): number => Object.keys(requestOrFolder).length,
+);
+
 export const selectActiveRequestOrFolder = createSelector(
   [
     (state: RootState) =>

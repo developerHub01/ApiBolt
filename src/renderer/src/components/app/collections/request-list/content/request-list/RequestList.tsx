@@ -1,13 +1,12 @@
 import { memo, useMemo } from "react";
-import RequestListItem from "@/components/app/collections/request-list/content/request-list/request-list-item/RequestListItem";
 import { useAppSelector } from "@/context/redux/hooks";
-import AutoScrollActiveWrapper from "@/components/ui/auto-scroll-active-wrapper";
-import EmptyBox from "@/components/app/collections/request-list/content/request-list/EmptyBox";
-import RestArea from "@/components/app/collections/request-list/content/request-list/RestArea";
 import { selectRequestOrFolderList } from "@/context/redux/request-response/selectors/request-list";
+import { useTreeView } from "@/context/tree-view/TreeViewProvider";
 
 const RequestList = memo(() => {
   const requestList = useAppSelector(selectRequestOrFolderList);
+  const { itemComponent: ItemComponent } = useTreeView();
+
   const rootList = useMemo(
     () =>
       Object.values(requestList)
@@ -20,14 +19,19 @@ const RequestList = memo(() => {
   );
 
   return (
-    <div className="h-full flex flex-col w-full gap-0.5">
-      <AutoScrollActiveWrapper>
-        {rootList.map(({ id }) => (
-          <RequestListItem key={id} id={id} lavel={0} isRootLastChild={true} />
-        ))}
-      </AutoScrollActiveWrapper>
-      <RestArea>{!rootList?.length && <EmptyBox />}</RestArea>
-    </div>
+    <>
+      {rootList.map(({ id }, index) => (
+        <ItemComponent
+          key={id}
+          id={id}
+          lavel={0}
+          isLastChild={index === rootList.length - 1}
+          isRootLastChild={
+            true
+          } /* this is very important to have true because this are root routes and recursion will call from them. */
+        />
+      ))}
+    </>
   );
 });
 

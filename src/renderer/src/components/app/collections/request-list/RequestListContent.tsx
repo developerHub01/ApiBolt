@@ -1,12 +1,13 @@
 import { memo, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import RequestList from "@/components/app/collections/request-list/content/request-list/RequestList";
 import { loadRequestList } from "@/context/redux/request-response/thunks/request-list";
 import { selectRequestListIsLoading } from "@/context/redux/status/selectors/request-list";
-import RequestListSkeleton from "@/components/app/collections/request-list/content/skeleton/RequestListSkeleton";
 import useShowSkeleton from "@/hooks/ui/use-show-skeleton";
+import RequestList from "@/components/app/collections/request-list/content/request-list/RequestList";
+import TreeView from "@/components/ui/tree-view/TreeView";
+import RequestListRestArea from "@/components/app/collections/request-list/RequestListRestArea";
 
-const RequestListWrapper = memo(() => {
+const RequestListContent = memo(() => {
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(selectRequestListIsLoading);
   const showSkeleton = useShowSkeleton(isLoading, 80);
@@ -16,11 +17,18 @@ const RequestListWrapper = memo(() => {
 
   useEffect(() => {
     if (isRequestListLoaded) return;
-
     dispatch(loadRequestList());
   }, [dispatch, isRequestListLoaded]);
 
-  return showSkeleton ? <RequestListSkeleton /> : <RequestList />;
+  return (
+    <TreeView.ContentWrapper
+      showSkeleton={showSkeleton}
+      haveAutoActiveScroll
+      restArea={<RequestListRestArea />}
+    >
+      <RequestList />
+    </TreeView.ContentWrapper>
+  );
 });
 
-export default RequestListWrapper;
+export default RequestListContent;
