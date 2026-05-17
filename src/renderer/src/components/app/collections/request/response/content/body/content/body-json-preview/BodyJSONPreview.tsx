@@ -14,10 +14,10 @@ const BodyJSONPreview = ({ data }: BodyJSONPreviewProps) => {
     <ScrollArea className="flex-1 min-h-0 h-full overflow-hidden">
       <div className={cn("w-full h-full select-text")}>
         {typeof data === "object" && Array.isArray(data) && (
-          <ArrayBodyPreview data={data} lavel={0} />
+          <ArrayBodyPreview data={data} level={0} />
         )}
         {typeof data === "object" && !Array.isArray(data) && (
-          <ObjectPreview data={data} lavel={0} />
+          <ObjectPreview data={data} level={0} />
         )}
       </div>
       <ScrollBar orientation="horizontal" />

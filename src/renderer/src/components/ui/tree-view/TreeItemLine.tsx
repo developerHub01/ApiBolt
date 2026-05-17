@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 const leftSpace = REQUEST_ITEM_SPACE_SIZE / 2;
 
 interface Props {
-  lavel: number;
+  level: number;
   isExpended?: boolean;
   isLastChild?: boolean;
   isRootLastChild?: boolean;
@@ -16,14 +16,14 @@ interface Props {
 
 const RequestListItemLine = memo(
   ({
-    lavel,
+    level,
     isExpended = false,
     isLastChild = false,
     isRootLastChild = false,
     className,
     children,
   }: Props) => {
-    if (!lavel) return children;
+    if (!level) return children;
 
     /* is this is the last collapsed or request of the collection */
     const isLastVisibleOfCollection = isRootLastChild && !isExpended;
@@ -31,13 +31,13 @@ const RequestListItemLine = memo(
     return (
       <div className={cn("relative h-full select-none", className)}>
         <Horizontal
-          lavel={lavel}
+          level={level}
           isExpended={isExpended}
           isLastChild={isLastChild}
           isLastVisibleOfCollection={isLastVisibleOfCollection}
         />
         {Array.from({
-          length: lavel,
+          length: level,
         }).map((_, index) => (
           <Vertical
             key={index}
@@ -55,20 +55,20 @@ const RequestListItemLine = memo(
 );
 
 interface HorizontalProps {
-  lavel: number;
+  level: number;
   isLastChild?: boolean;
   isExpended?: boolean;
   isLastVisibleOfCollection?: boolean;
 }
 
 const Horizontal = ({
-  lavel,
+  level,
   isLastChild,
   isExpended,
   isLastVisibleOfCollection,
 }: HorizontalProps) => {
   const singleStepLineWidth = leftSpace;
-  const fullStepLineWidth = leftSpace * 2 * (lavel - 1) + singleStepLineWidth;
+  const fullStepLineWidth = leftSpace * 2 * (level - 1) + singleStepLineWidth;
   const extraPaddingWidth = isLastChild && !isExpended ? 0 : 2;
   const width =
     (isLastVisibleOfCollection ? fullStepLineWidth : singleStepLineWidth) -

@@ -9,10 +9,10 @@ const TreeItemFolderEmpty = memo(() => {
   const {
     emtpyFolderContent: { startText, actionText, endText },
   } = useTreeView();
-  const { lavel, isRootLastChild, handleAddSingle } = useTreeListItem();
+  const { level, isRootLastChild, handleAddSingle } = useTreeListItem();
 
   const emptyLeftSpace =
-    REQUEST_ITEM_SPACE_SIZE + REQUEST_ITEM_SPACE_SIZE * lavel;
+    REQUEST_ITEM_SPACE_SIZE + REQUEST_ITEM_SPACE_SIZE * level;
 
   return (
     <TreeView.ListItemContentWrapperParent className="h-auto cursor-auto">
@@ -23,7 +23,7 @@ const TreeItemFolderEmpty = memo(() => {
         }}
       >
         <TreeView.Line
-          lavel={lavel + 1}
+          level={level + 1}
           isLastChild={true}
           isExpended={false}
           isRootLastChild={isRootLastChild}

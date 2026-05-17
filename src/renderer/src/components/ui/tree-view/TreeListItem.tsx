@@ -3,7 +3,7 @@ import TreeView from "@/components/ui/tree-view/TreeView";
 
 interface Props {
   id: string;
-  lavel: number;
+  level: number;
   isLastChild?: boolean;
   isRootLastChild?: boolean;
   childrenElements?: Array<string>;
@@ -17,7 +17,7 @@ interface Props {
 const TreeListItem = memo(
   ({
     id,
-    lavel = 0,
+    level = 0,
     isLastChild,
     isRootLastChild = false,
     childrenElements = [],
@@ -30,7 +30,7 @@ const TreeListItem = memo(
     return (
       <TreeView.ListItemProvider
         id={id}
-        lavel={lavel}
+        level={level}
         isLastChild={isLastChild}
         isRootLastChild={isRootLastChild}
         parentId={parentId}
@@ -40,7 +40,7 @@ const TreeListItem = memo(
       >
         <TreeView.ItemWrapper>
           <TreeView.Line
-            lavel={lavel}
+            level={level}
             isExpended={isExpended}
             isLastChild={isLastChild}
             isRootLastChild={isRootLastChild}

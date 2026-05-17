@@ -73,18 +73,18 @@ export const getNodeParentsIdList = ({
 export const getRequestNodeLevel = ({
   source,
   id,
-  lavel = 0,
+  level = 0,
 }: {
   source: RequestListInterface;
   id: string;
-  lavel?: number;
+  level?: number;
 }): number => {
   const data = source[id];
-  if (!data || !data.parentId) return lavel;
+  if (!data || !data.parentId) return level;
 
-  lavel++;
+  level++;
 
-  return getRequestNodeLevel({ source, id: data.parentId, lavel });
+  return getRequestNodeLevel({ source, id: data.parentId, level });
 };
 
 export const duplicateRequestOrFolderNode = ({
@@ -136,8 +136,8 @@ export const duplicateRequestOrFolderNode = ({
   return result;
 };
 
-export const checkPermissionToAddFolderAsChildren = (lavel: number = 0) =>
-  lavel + 1 <= MAX_REQUEST_LIST_NESTED_FOLDER_COUNT;
+export const checkPermissionToAddFolderAsChildren = (level: number = 0) =>
+  level + 1 <= MAX_REQUEST_LIST_NESTED_FOLDER_COUNT;
 
 export const paramsTableToString = (
   params: Array<ParamInterface> = [],

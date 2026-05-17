@@ -136,7 +136,7 @@ const ItemCTA = memo(() => {
   const toast = useCustomToast();
   const {
     id,
-    lavel,
+    level,
     type,
     isContextMenuOpen,
     handleToggleContextMenu,
@@ -248,7 +248,7 @@ const ItemCTA = memo(() => {
 
   const menuList = useMemo(() => {
     if (type === "request") return requestCTAList;
-    if (checkPermissionToAddFolderAsChildren(lavel)) return folderCTAList;
+    if (checkPermissionToAddFolderAsChildren(level)) return folderCTAList;
 
     const menu: TMenuListType = {};
     Object.keys(folderCTAList).forEach(key => {
@@ -259,7 +259,7 @@ const ItemCTA = memo(() => {
       menu[key] = subMenuList;
     });
     return menu;
-  }, [lavel, type]);
+  }, [level, type]);
 
   return (
     <motion.div

@@ -40,7 +40,7 @@ export const selectRequestOrFolderById = createSelector(
   (request, id): RequestListItemInterface => request[id],
 );
 
-export const selectRequestOrFolderLavelById = createSelector(
+export const selectRequestOrFolderlevelById = createSelector(
   [
     (state: RootState) => state.requestResponse.requestList,
     (_, id: string) => id,

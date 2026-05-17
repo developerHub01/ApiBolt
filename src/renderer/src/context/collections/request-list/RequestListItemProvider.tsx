@@ -17,7 +17,7 @@ interface RequestListItemContext extends Pick<
   isRenameActive: boolean;
   isRootLastChild?: boolean;
   isLastChild?: boolean;
-  lavel: number;
+  level: number;
   handleToggleContextMenu: (value?: boolean) => void;
   handleRenameAction: () => void;
   handleChangeName: (id: string, name: string) => void;
@@ -44,7 +44,7 @@ interface RequestListItemProviderProps {
   children: React.ReactNode;
   isRootLastChild?: boolean;
   isLastChild?: boolean;
-  lavel?: number;
+  level?: number;
 }
 
 const RequestListItemProvider = ({
@@ -52,7 +52,7 @@ const RequestListItemProvider = ({
   children,
   isRootLastChild = false,
   isLastChild = false,
-  lavel = 0,
+  level = 0,
 }: RequestListItemProviderProps) => {
   const dispatch = useAppDispatch();
 
@@ -95,7 +95,7 @@ const RequestListItemProvider = ({
         isRenameActive,
         isRootLastChild,
         isLastChild,
-        lavel,
+        level,
         children: childrenElements,
         ...requestDetails,
         ...(!requestDetails.name

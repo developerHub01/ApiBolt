@@ -10,13 +10,13 @@ import RequestMethodTag from "@/components/app/RequestMethodTag";
 
 interface Props {
   id: string;
-  lavel: number;
+  level: number;
   isLastChild?: boolean;
   isRootLastChild?: boolean;
 }
 
 const RequestListItem = memo(
-  ({ id, lavel = 0, isLastChild, isRootLastChild = true }: Props) => {
+  ({ id, level = 0, isLastChild, isRootLastChild = true }: Props) => {
     const requestDetails = useAppSelector(
       state => state.requestResponse.requestList[id],
     );
@@ -48,7 +48,7 @@ const RequestListItem = memo(
     return (
       <TreeView.ListItem
         id={id}
-        lavel={lavel}
+        level={level}
         isLastChild={isLastChild}
         isRootLastChild={isRootLastChild}
         parentId={parentId}

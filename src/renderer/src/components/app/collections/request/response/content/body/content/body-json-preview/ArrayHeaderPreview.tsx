@@ -2,7 +2,7 @@ import { TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 interface ArrayHeaderPreviewProps {
   data: Array<Record<string, unknown>>;
-  lavel?: number;
+  level?: number;
 }
 
 const ArrayHeaderPreview = ({ data = [] }: ArrayHeaderPreviewProps) => {

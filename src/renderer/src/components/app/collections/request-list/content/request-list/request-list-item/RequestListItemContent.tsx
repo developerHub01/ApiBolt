@@ -4,12 +4,12 @@ import TreeView from "@/components/ui/tree-view/TreeView";
 import { useTreeListItem } from "@/context/tree-view/TreeListItemProvider";
 
 const RequestListItemContent = memo(() => {
-  const { lavel, isExpended, isLastChild, isRootLastChild } = useTreeListItem();
+  const { level, isExpended, isLastChild, isRootLastChild } = useTreeListItem();
 
   return (
     <TreeView.ItemWrapper>
       <TreeView.Line
-        lavel={lavel}
+        level={level}
         isExpended={isExpended}
         isLastChild={isLastChild}
         isRootLastChild={isRootLastChild}

@@ -5,10 +5,10 @@ import CellPreview from "@/components/app/collections/request/response/content/b
 
 interface ArrayBodyPreviewProps {
   data: Array<Record<string, unknown>>;
-  lavel?: number;
+  level?: number;
 }
 
-const ArrayBodyPreview = ({ data, lavel }: ArrayBodyPreviewProps) => {
+const ArrayBodyPreview = ({ data, level }: ArrayBodyPreviewProps) => {
   if (!data?.length) return null;
 
   return (
@@ -19,12 +19,12 @@ const ArrayBodyPreview = ({ data, lavel }: ArrayBodyPreviewProps) => {
         "[&_td]:border-r [&_td]:last:border-r-0",
         "[&_th]:border-r [&_th]:last:border-r-0",
         {
-          border: lavel === 0,
+          border: level === 0,
         },
       )}
     >
       {data.every(item => typeof item === "object") && (
-        <ArrayHeaderPreview data={data} lavel={lavel} />
+        <ArrayHeaderPreview data={data} level={level} />
       )}
       <TableBody>
         {data.map((row, index) => (

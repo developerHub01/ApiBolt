@@ -4,7 +4,7 @@ import TreeView from "@/components/ui/tree-view/TreeView";
 import { useTreeView } from "@/context/tree-view/TreeViewProvider";
 
 const TreeItemExpendedContent = memo(() => {
-  const { children, lavel, isRootLastChild } = useTreeListItem();
+  const { children, level, isRootLastChild } = useTreeListItem();
   const { itemComponent: ItemComponent } = useTreeView();
 
   return (
@@ -17,7 +17,7 @@ const TreeItemExpendedContent = memo(() => {
             <ItemComponent
               key={id}
               id={id}
-              lavel={lavel + 1}
+              level={level + 1}
               isLastChild={index === children.length - 1}
               isRootLastChild={isRootLastChild && index === children.length - 1}
             />

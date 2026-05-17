@@ -12,7 +12,7 @@ const useRequestItemDetails = () => {
   const selectedTab = useAppSelector(selectSelectedTab);
   const requestList = useAppSelector(selectRequestOrFolderList);
 
-  const getRequestLavel = useCallback(
+  const getRequestlevel = useCallback(
     (id: string) =>
       getRequestNodeLevel({
         id,
@@ -35,19 +35,19 @@ const useRequestItemDetails = () => {
     ({
       dragRequestId,
       dropRequestId,
-      lavel,
+      level,
     }: {
       dragRequestId: string;
       dropRequestId: string;
-      lavel?: number;
+      level?: number;
     }) => {
       if (getRequestTypeById(dragRequestId) === "request") return true;
 
-      if (typeof lavel === "undefined") lavel = getRequestLavel(dropRequestId);
+      if (typeof level === "undefined") level = getRequestlevel(dropRequestId);
 
-      return checkPermissionToAddFolderAsChildren(lavel);
+      return checkPermissionToAddFolderAsChildren(level);
     },
-    [getRequestLavel, getRequestTypeById],
+    [getRequestlevel, getRequestTypeById],
   );
 
   const checkIsFolderAddable = useCallback(
@@ -61,13 +61,13 @@ const useRequestItemDetails = () => {
       // fallback safety check
       if (!id) return true;
 
-      return checkPermissionToAddFolderAsChildren(getRequestLavel(id));
+      return checkPermissionToAddFolderAsChildren(getRequestlevel(id));
     },
-    [getRequestLavel, selectedTab],
+    [getRequestlevel, selectedTab],
   );
 
   return {
-    getRequestLavel,
+    getRequestlevel,
     getRequestDetails,
     getRequestTypeById,
     checkIsRequestDropable,

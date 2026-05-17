@@ -20,7 +20,7 @@ interface TreeListItemContext extends Pick<
   isRenameActive: boolean;
   isRootLastChild?: boolean;
   isLastChild?: boolean;
-  lavel: number;
+  level: number;
   isHovering: boolean;
   handleChangeHovering: (value?: boolean) => void;
   handleToggleContextMenu: (value?: boolean) => void;
@@ -50,7 +50,7 @@ interface TreeListItemProviderProps {
   children: React.ReactNode;
   isRootLastChild?: boolean;
   isLastChild?: boolean;
-  lavel?: number;
+  level?: number;
   parentId?: string;
   childrenElements?: Array<string>;
   type: "folder" | "request";
@@ -62,7 +62,7 @@ const TreeListItemProvider = ({
   children,
   isRootLastChild = false,
   isLastChild = false,
-  lavel = 0,
+  level = 0,
   parentId,
   childrenElements,
   type,
@@ -141,7 +141,7 @@ const TreeListItemProvider = ({
       isRenameActive,
       isRootLastChild,
       isLastChild,
-      lavel,
+      level,
       isHovering,
       handleChangeHovering,
       children: childrenElements,
@@ -169,7 +169,7 @@ const TreeListItemProvider = ({
       isLastChild,
       isRenameActive,
       isRootLastChild,
-      lavel,
+      level,
       requestDetails,
       type,
       handleMove,

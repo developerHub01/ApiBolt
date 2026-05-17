@@ -23,7 +23,7 @@ const TreeItemWrapper = memo(
       id,
       method,
       isExpended,
-      lavel,
+      level,
       isRenameActive,
       handleToggleContextMenu,
       handleRenameAction,
@@ -54,7 +54,7 @@ const TreeItemWrapper = memo(
         const isDropAble = checkIsRequestDropable({
           dragRequestId: draggedId,
           dropRequestId: id,
-          lavel,
+          level,
         });
 
         setIsDragging(false);
@@ -62,7 +62,7 @@ const TreeItemWrapper = memo(
 
         handleMove(draggedId);
       },
-      [checkIsRequestDropable, handleMove, id, lavel],
+      [checkIsRequestDropable, handleMove, id, level],
     );
 
     const handleDragLeave = useCallback(() => setIsDragging(false), []);
@@ -75,7 +75,7 @@ const TreeItemWrapper = memo(
       [handleChangeSelectedTab, handleRenameAction, id],
     );
 
-    const leftSpace = REQUEST_ITEM_SPACE_SIZE * lavel;
+    const leftSpace = REQUEST_ITEM_SPACE_SIZE * level;
 
     return (
       <>

@@ -4,10 +4,10 @@ import CellPreview from "@/components/app/collections/request/response/content/b
 
 interface ObjectPreviewProps {
   data: Record<string, unknown>;
-  lavel?: number;
+  level?: number;
 }
 
-const ObjectPreview = ({ data, lavel }: ObjectPreviewProps) => {
+const ObjectPreview = ({ data, level }: ObjectPreviewProps) => {
   const tableData = Object.entries(data);
 
   if (!tableData) return null;
@@ -21,7 +21,7 @@ const ObjectPreview = ({ data, lavel }: ObjectPreviewProps) => {
         "[&_td]:border-r [&_td]:last:border-r-0",
         "[&_th]:border-r [&_th]:last:border-r-0",
         {
-          border: lavel === 0,
+          border: level === 0,
         },
       )}
     >

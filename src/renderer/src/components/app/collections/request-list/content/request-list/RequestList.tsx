@@ -24,7 +24,7 @@ const RequestList = memo(() => {
         <ItemComponent
           key={id}
           id={id}
-          lavel={0}
+          level={0}
           isLastChild={index === rootList.length - 1}
           isRootLastChild={
             true

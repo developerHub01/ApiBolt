@@ -24,7 +24,7 @@ import { changeSelectedTab } from "@/context/redux/request-response/thunks/tab-l
 
 interface TreeItemProps {
   id: string;
-  lavel: number;
+  level: number;
   isLastChild: boolean;
   isRootLastChild?: boolean;
 }
@@ -37,13 +37,13 @@ interface TreeViewContext {
     actionText: string;
     endText: string;
   };
-  getRequestLavel: (id: string) => number;
+  getRequestlevel: (id: string) => number;
   getRequestDetails: (id: string) => RequestListItemInterface;
   getRequestTypeById: (id: string) => "folder" | "request";
   checkIsRequestDropable: (payload: {
     dragRequestId: string;
     dropRequestId: string;
-    lavel?: number;
+    level?: number;
   }) => boolean;
   checkIsFolderAddable: (payload: { id?: string }) => boolean;
   handleMoveItem: (payload: {
@@ -119,7 +119,7 @@ const TreeViewProvider = ({
   );
 
   /* tracker start ======================*/
-  const getRequestLavel = useCallback(
+  const getRequestlevel = useCallback(
     (id: string) =>
       getRequestNodeLevel({
         id,
@@ -142,19 +142,19 @@ const TreeViewProvider = ({
     ({
       dragRequestId,
       dropRequestId,
-      lavel,
+      level,
     }: {
       dragRequestId: string;
       dropRequestId: string;
-      lavel?: number;
+      level?: number;
     }) => {
       if (getRequestTypeById(dragRequestId) === "request") return true;
 
-      if (typeof lavel === "undefined") lavel = getRequestLavel(dropRequestId);
+      if (typeof level === "undefined") level = getRequestlevel(dropRequestId);
 
-      return checkPermissionToAddFolderAsChildren(lavel);
+      return checkPermissionToAddFolderAsChildren(level);
     },
-    [getRequestLavel, getRequestTypeById],
+    [getRequestlevel, getRequestTypeById],
   );
 
   const checkIsFolderAddable = useCallback(
@@ -168,9 +168,9 @@ const TreeViewProvider = ({
       // fallback safety check
       if (!id) return true;
 
-      return checkPermissionToAddFolderAsChildren(getRequestLavel(id));
+      return checkPermissionToAddFolderAsChildren(getRequestlevel(id));
     },
-    [getRequestLavel, selectedTab],
+    [getRequestlevel, selectedTab],
   );
   /* tracker end ======================*/
 
@@ -179,7 +179,7 @@ const TreeViewProvider = ({
       selectedTab,
       handleMoveItem,
       handleChangeSelectedTab,
-      getRequestLavel,
+      getRequestlevel,
       getRequestDetails,
       getRequestTypeById,
       checkIsRequestDropable,
@@ -197,7 +197,7 @@ const TreeViewProvider = ({
       selectedTab,
       handleMoveItem,
       handleChangeSelectedTab,
-      getRequestLavel,
+      getRequestlevel,
       getRequestDetails,
       getRequestTypeById,
       checkIsRequestDropable,
