@@ -2,9 +2,9 @@ import { memo, useCallback } from "react";
 import type { BottomActionButtonInterface } from "@shared/types/request-list";
 import { Trash2 as DeleteIcon } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { handleChangeDeleteFolderOrRequestId } from "@/context/redux/request-response/request-response-slice";
+import { handleChangeDeleteFolderOrRequestId } from "@/context/redux/mock/mock-slice";
 import ActionButton from "@/components/app/mock/request-list/list-bottom-action/ActionButton";
-import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
+import { selectSelectedTab } from "@/context/redux/mock/selectors/tab-list";
 
 const deleteButton: BottomActionButtonInterface = {
   id: "delete",

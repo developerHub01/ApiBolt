@@ -409,6 +409,55 @@ if (process.contextIsolated) {
 
     /**
      * ====================
+     * Mock request or folder meta
+     * ====================
+     */
+    const electronAPIMockRequestOrFolderMetaBridge: WindowElectronAPIInterface["electronAPIMockRequestOrFolderMeta"] =
+      {
+        getMockRequestOrFolderMeta: async () =>
+          await ipcRenderer.invoke("getMockRequestOrFolderMeta"),
+        getMockRequestOrFolderMetaById: async (...payload) =>
+          await ipcRenderer.invoke(
+            "getMockRequestOrFolderMetaById",
+            ...payload,
+          ),
+        createMockRequestOrFolderMeta: async (...payload) =>
+          await ipcRenderer.invoke("createMockRequestOrFolderMeta", ...payload),
+        updateMockRequestOrFolderMeta: async (...payload) =>
+          await ipcRenderer.invoke("updateMockRequestOrFolderMeta", ...payload),
+        collapseAllMockRequestOrFolderMeta: async (...payload) =>
+          await ipcRenderer.invoke(
+            "collapseAllMockRequestOrFolderMeta",
+            ...payload,
+          ),
+        moveMockRequestOrFolderMeta: async (...payload) =>
+          await ipcRenderer.invoke("moveMockRequestOrFolderMeta", ...payload),
+        deleteMockRequestOrFolderMetaById: async (...payload) =>
+          await ipcRenderer.invoke(
+            "deleteMockRequestOrFolderMetaById",
+            ...payload,
+          ),
+        deleteMockRequestOrFolderMetaByProjectId: async (...payload) =>
+          await ipcRenderer.invoke(
+            "deleteMockRequestOrFolderMetaByProjectId",
+            ...payload,
+          ),
+        duplicateMockRequestOrFolderMeta: async (...payload) =>
+          await ipcRenderer.invoke(
+            "duplicateMockRequestOrFolderMeta",
+            ...payload,
+          ),
+        deleteMockRequestOrFolderMetaAll: async () =>
+          await ipcRenderer.invoke("deleteMockRequestOrFolderMetaAll"),
+        expendOrCollapseMockRequestOrFolderMetaAll: async (...payload) =>
+          await ipcRenderer.invoke(
+            "expendOrCollapseMockRequestOrFolderMetaAll",
+            ...payload,
+          ),
+      };
+
+    /**
+     * ====================
      * Tabs
      * ====================
      */
@@ -421,6 +470,22 @@ if (process.contextIsolated) {
           await ipcRenderer.invoke("deleteAllTabList"),
         deleteTabListByProjectId: async (...payload) =>
           await ipcRenderer.invoke("deleteTabListByProjectId", ...payload),
+      };
+
+    /**
+     * ====================
+     * Mock tabs
+     * ====================
+     */
+    const electronAPIMockTabsBridge: WindowElectronAPIInterface["electronAPIMockTabs"] =
+      {
+        getMockTabList: async () => await ipcRenderer.invoke("getMockTabList"),
+        updateMockTabList: async (...payload) =>
+          await ipcRenderer.invoke("updateMockTabList", ...payload),
+        deleteAllMockTabList: async () =>
+          await ipcRenderer.invoke("deleteAllMockTabList"),
+        deleteMockTabListByProjectId: async (...payload) =>
+          await ipcRenderer.invoke("deleteMockTabListByProjectId", ...payload),
       };
 
     /**
@@ -462,12 +527,12 @@ if (process.contextIsolated) {
         duplicateParams: async (...payload) =>
           await ipcRenderer.invoke("duplicateParams", ...payload),
       };
+
     /**
      * ====================
-     * Params
+     * Path Params
      * ====================
      */
-
     const electronAPIPathParamsBridge: WindowElectronAPIInterface["electronAPIPathParams"] =
       {
         getPathParams: async (...payload) =>
@@ -877,10 +942,18 @@ if (process.contextIsolated) {
       electronAPIAuthorizationBridge,
     );
     contextBridge.exposeInMainWorld(
+      "electronAPIMockRequestOrFolderMeta",
+      electronAPIMockRequestOrFolderMetaBridge,
+    );
+    contextBridge.exposeInMainWorld(
       "electronAPIRequestOrFolderMeta",
       electronAPIRequestOrFolderMetaBridge,
     );
     contextBridge.exposeInMainWorld("electronAPITabs", electronAPITabsBridge);
+    contextBridge.exposeInMainWorld(
+      "electronAPIMockTabs",
+      electronAPIMockTabsBridge,
+    );
     contextBridge.exposeInMainWorld(
       "electronAPIFolder",
       electronAPIFolderBridge,

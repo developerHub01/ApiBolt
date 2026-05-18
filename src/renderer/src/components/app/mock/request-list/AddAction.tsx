@@ -14,11 +14,11 @@ import {
   createCollection,
   createRestApiBasic,
   createSingleRequest,
-} from "@/context/redux/request-response/thunks/request-list";
+} from "@/context/redux/mock/thunks/request-list";
 import {
   importFolder,
   importRequest,
-} from "@/context/redux/request-response/thunks/request";
+} from "@/context/redux/mock/thunks/request";
 import useCustomToast from "@/hooks/ui/use-custom-toast";
 
 type TAction =

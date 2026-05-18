@@ -1,6 +1,6 @@
 import { memo, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { loadRequestList } from "@/context/redux/request-response/thunks/request-list";
+import { loadRequestList } from "@/context/redux/mock/thunks/request-list";
 import { selectRequestListIsLoading } from "@/context/redux/status/selectors/request-list";
 import useShowSkeleton from "@/hooks/ui/use-show-skeleton";
 import RequestList from "@/components/app/mock/request-list/content/request-list/RequestList";

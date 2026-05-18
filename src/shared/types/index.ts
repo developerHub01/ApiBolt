@@ -34,6 +34,8 @@ import { ElectronAPIResponseInterface } from "@shared/types/api/electron-respons
 import { ElectronAPIPathParamsInterface } from "@shared/types/api/electron-path-params";
 import { ElectronAPITestScriptInterface } from "@shared/types/api/electron-test-script";
 import { ElectronAPIAppInfoInterface } from "@shared/types/api/electron-app-info";
+import { ElectronAPIMockRequestOrFolderMetaInterface } from "@shared/types/api/electron-mock-request-or-folder-meta";
+import { ElectronAPIMockTabsInterface } from "@shared/types/api/electron-mock-tabs";
 
 export interface ElectronResponseInterface {
   success: boolean;
@@ -69,8 +71,10 @@ export interface WindowElectronAPIInterface {
   electronAPISettingsRequest: ElectronAPISettingsRequestInterface;
   electronAPIEnvironments: ElectronAPIEnvironmentsInterface;
   electronAPIAuthorization: ElectronAPIAuthorizationInterface;
+  electronAPIMockRequestOrFolderMeta: ElectronAPIMockRequestOrFolderMetaInterface;
   electronAPIRequestOrFolderMeta: ElectronAPIRequestOrFolderMetaInterface;
   electronAPITabs: ElectronAPITabsInterface;
+  electronAPIMockTabs: ElectronAPIMockTabsInterface;
   electronAPIFolder: ElectronAPIFolderInterface;
   electronAPIParams: ElectronAPIParamsInterface;
   electronAPIPathParams: ElectronAPIPathParamsInterface;

@@ -1,6 +1,6 @@
 import TreeView from "@/components/ui/tree-view/TreeView";
 import { useAppSelector } from "@/context/redux/hooks";
-import { selectRequestOrFolderListCount } from "@/context/redux/request-response/selectors/request-list";
+import { selectRequestOrFolderListCount } from "@/context/redux/mock/selectors/request-list";
 
 const RequestListRestArea = () => {
   const requestListCount = useAppSelector(selectRequestOrFolderListCount);

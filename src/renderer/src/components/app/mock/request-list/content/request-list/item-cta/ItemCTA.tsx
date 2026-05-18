@@ -18,16 +18,16 @@ import {
   createRestApiBasic,
   createSingleRequest,
   duplicateRequestOrFolder,
-} from "@/context/redux/request-response/thunks/request-list";
+} from "@/context/redux/mock/thunks/request-list";
 import { checkPermissionToAddFolderAsChildren } from "@/utils/request-response.utils";
 import {
   exportFolder,
   exportRequest,
   importFolder,
   importRequest,
-} from "@/context/redux/request-response/thunks/request";
+} from "@/context/redux/mock/thunks/request";
 import useCustomToast from "@/hooks/ui/use-custom-toast";
-import { handleChangeDeleteFolderOrRequestId } from "@/context/redux/request-response/request-response-slice";
+import { handleChangeDeleteFolderOrRequestId } from "@/context/redux/mock/mock-slice";
 import { useTreeListItem } from "@/context/tree-view/TreeListItemProvider";
 
 type TActionType =

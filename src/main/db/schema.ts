@@ -204,7 +204,53 @@ export const requestOrFolderMetaTable = sqliteTable(
   },
 );
 
+export const mockRequestOrFolderMetaTable = sqliteTable(
+  "mock_request_or_folder_meta_table",
+  {
+    id: text()
+      .primaryKey()
+      .$defaultFn(() => uuidv4()),
+    method: text()
+      .$type<THTTPMethods | null>()
+      .default(null) /* "get" | "post" | "put" | "patch" | "delete"; */,
+    name: text().notNull().default(""),
+    projectId: text()
+      .notNull()
+      .references(() => projectTable.id, {
+        onDelete: "cascade",
+      }),
+    parentId: text().references(() => requestOrFolderMetaTable.id, {
+      onDelete: "cascade",
+    }),
+    isExpended: int({
+      mode: "boolean",
+    })
+      .notNull()
+      .default(false),
+    createdAt: text()
+      .notNull()
+      .default(sql`(current_timestamp)`),
+  },
+);
+
 export const tabsTable = sqliteTable("tabs_table", {
+  id: text()
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  openTabs: text().notNull().default("[]"),
+  selectedTab: text(),
+  projectId: text()
+    .notNull()
+    .unique()
+    .references(() => projectTable.id, {
+      onDelete: "cascade",
+    }),
+  createdAt: text()
+    .notNull()
+    .default(sql`(current_timestamp)`),
+});
+
+export const mockTabsTable = sqliteTable("mock_tabs_table", {
   id: text()
     .primaryKey()
     .$defaultFn(() => uuidv4()),

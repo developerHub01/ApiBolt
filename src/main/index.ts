@@ -63,6 +63,8 @@ import { WEBSITE_BASE_URL } from "@shared/constant/api-bolt";
 import { pathParamsHandlers } from "@/main/ipc/pathParamsHandlers";
 import { testScriptHandler } from "@/main/ipc/testScriptHandler";
 import { appInfoHandlers } from "@/main/ipc/appInfoHandler";
+import { mockRequestOrFolderMetaHandler } from "@/main/ipc/mockRequestOrFolderMetaHandler";
+import { mockTabsHandler } from "@/main/ipc/mockTabsHandler";
 
 /***
  * App basic setup declaration
@@ -301,7 +303,9 @@ if (!gotTheLock) {
     enviromentsHandlers();
     authorizationHandler();
     requestOrFolderMetaHandler();
+    mockRequestOrFolderMetaHandler();
     tabsHandler();
+    mockTabsHandler();
     settingsHandler();
     settingsRequestHandler();
     folderHandlers();

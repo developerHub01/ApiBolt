@@ -7,6 +7,7 @@ import themeReducer from "@/context/redux/theme/theme-slice";
 import themeMarketplaceReducer from "@/context/redux/theme-marketplace/theme-marketplace-slice";
 import keyboardShortcutsReducer from "@/context/redux/keyboard-shortcuts/keyboard-shortcuts-slice";
 import requestResponseReducer from "@/context/redux/request-response/request-response-slice";
+import mockReducer from "@/context/redux/mock/mock-slice";
 import sidebarReducer from "@/context/redux/sidebar/sidebar-slice";
 import headerReducer from "@/context/redux/header/header-slice";
 import settingReducer from "@/context/redux/setting/setting-slice";
@@ -28,6 +29,7 @@ export const store = configureStore({
     theme: themeReducer,
     themeMarketplace: themeMarketplaceReducer,
     keyboardShortcuts: keyboardShortcutsReducer,
+    mock: mockReducer,
     requestResponse: requestResponseReducer,
     sidebar: sidebarReducer,
     header: headerReducer,

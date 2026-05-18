@@ -1,6 +1,6 @@
 import { lazy, memo, Suspense, useCallback } from "react";
-import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
-import { selectIsRequestListCollapsed } from "@/context/redux/request-response/selectors/request-list";
+import { handleToggleRequestList } from "@/context/redux/mock/mock-slice";
+import { selectIsRequestListCollapsed } from "@/context/redux/mock/selectors/request-list";
 import { ApiBoltResizableLeftPanel } from "@/components/ui/api-bolt-resizable";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 const RequestListPanel = lazy(

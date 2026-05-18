@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { deleteRequestOrFolder } from "@/context/redux/request-response/thunks/request-list";
+import { deleteRequestOrFolder } from "@/context/redux/mock/thunks/request-list";
 import useCustomToast from "@/hooks/ui/use-custom-toast";
 import TreeView from "@/components/ui/tree-view/TreeView";
 
