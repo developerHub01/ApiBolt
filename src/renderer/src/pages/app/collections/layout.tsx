@@ -12,15 +12,13 @@ const CollectionsLayout = () => {
     <ApiBoltResizableWrapper leftPanel={<RequestListPanelWrapper />}>
       <TabListLayoutWrapper>
         {requestId ? (
-          <>
-            <ResizablePanelGroup direction="vertical">
-              <ResizablePanel defaultSize={25}>
-                <ProviderStack>
-                  <Outlet />
-                </ProviderStack>
-              </ResizablePanel>
-            </ResizablePanelGroup>
-          </>
+          <ResizablePanelGroup direction="vertical">
+            <ResizablePanel defaultSize={25}>
+              <ProviderStack>
+                <Outlet />
+              </ProviderStack>
+            </ResizablePanel>
+          </ResizablePanelGroup>
         ) : (
           <Outlet />
         )}

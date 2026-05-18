@@ -5,7 +5,7 @@ interface Props {
   onClick: () => void;
 }
 
-const RequestListItemFolderButton = memo(({ isExpended, onClick }: Props) => {
+const FolderButton = memo(({ isExpended, onClick }: Props) => {
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     onClick();
@@ -26,4 +26,4 @@ const RequestListItemFolderButton = memo(({ isExpended, onClick }: Props) => {
   );
 });
 
-export default RequestListItemFolderButton;
+export default FolderButton;
