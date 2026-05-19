@@ -100,7 +100,7 @@ export const keyboardBindings: Record<
   },
   close_left_tabs: {
     label: "Close Left Tabs",
-    key: ["ctrl", "alt", "q"],
+    key: ["ctrl", "alt", "l"],
   },
   close_right_tabs: {
     label: "Close Right Tabs",
