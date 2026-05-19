@@ -219,7 +219,7 @@ export const mockRequestOrFolderMetaTable = sqliteTable(
       .references(() => projectTable.id, {
         onDelete: "cascade",
       }),
-    parentId: text().references(() => requestOrFolderMetaTable.id, {
+    parentId: text().references(() => mockRequestOrFolderMetaTable.id, {
       onDelete: "cascade",
     }),
     isExpended: int({
