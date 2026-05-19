@@ -5,19 +5,22 @@ import ListBottomAction from "@/components/app/collections/request-list/list-bot
 import RequestListDeleteAlertDialog from "@/components/app/collections/request-list/content/request-list/RequestListDeleteAlertDialog";
 import AddAction from "@/components/app/collections/request-list/AddAction";
 import RequestListPanelProviderWrapper from "@/components/app/collections/request-list/RequestListPanelProviderWrapper";
+import RequestListTreeProvider from "@/context/request-list-tree/RequestListTreeProvider";
 
 const RequestListPanel = memo(() => {
   return (
-    <RequestListPanelProviderWrapper>
-      <TreeView>
-        <TreeView.TopBar showTitle>
-          <AddAction />
-        </TreeView.TopBar>
-        <RequestListContent />
-        <ListBottomAction />
-        <RequestListDeleteAlertDialog />
-      </TreeView>
-    </RequestListPanelProviderWrapper>
+    <RequestListTreeProvider>
+      <RequestListPanelProviderWrapper>
+        <TreeView>
+          <TreeView.TopBar showTitle>
+            <AddAction />
+          </TreeView.TopBar>
+          <RequestListContent />
+          <ListBottomAction />
+          <RequestListDeleteAlertDialog />
+        </TreeView>
+      </RequestListPanelProviderWrapper>
+    </RequestListTreeProvider>
   );
 });
 

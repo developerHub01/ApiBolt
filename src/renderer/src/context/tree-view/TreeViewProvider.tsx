@@ -5,11 +5,6 @@ import React, {
   useMemo,
   type ComponentType,
 } from "react";
-import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import {
-  createSingleRequest,
-  moveRequestOrFolder,
-} from "@/context/redux/request-response/thunks/request-list";
 import type {
   RequestListInterface,
   RequestListItemInterface,
@@ -19,8 +14,6 @@ import {
   getRequestNodeLevel,
   getRequestType,
 } from "@/utils/request-response.utils";
-import { selectSelectedTab } from "@/context/redux/request-response/selectors/tab-list";
-import { changeSelectedTab } from "@/context/redux/request-response/thunks/tab-list";
 
 interface TreeItemProps {
   id: string;
@@ -31,6 +24,7 @@ interface TreeItemProps {
 
 interface TreeViewContext {
   selectedTab: string | null;
+  requestList: RequestListInterface;
   itemComponent: ComponentType<TreeItemProps>;
   emtpyFolderContent: {
     startText: string;
@@ -52,6 +46,11 @@ interface TreeViewContext {
   }) => Promise<void>;
   handleChangeSelectedTab: (id: string) => Promise<void>;
   handleAddSingleItem: (id: string) => Promise<void>;
+  handleChangeName: (payload: { id: string; name: string }) => Promise<void>;
+  handleToggleExpended: (payload: {
+    id: string;
+    isExpended: boolean;
+  }) => Promise<void>;
 }
 
 const TreeViewContext = createContext<TreeViewContext | null>(null);
@@ -67,57 +66,30 @@ export const useTreeView = () => {
 };
 
 interface TreeViewProviderProps {
+  selectedTab: TreeViewContext["selectedTab"];
   children: React.ReactNode;
-  requestList: RequestListInterface;
+  requestList: TreeViewContext["requestList"];
+  handleMoveItem: TreeViewContext["handleMoveItem"];
+  handleChangeSelectedTab: TreeViewContext["handleChangeSelectedTab"];
+  handleAddSingleItem: TreeViewContext["handleAddSingleItem"];
+  handleChangeName: TreeViewContext["handleChangeName"];
+  handleToggleExpended: TreeViewContext["handleToggleExpended"];
   itemComponent: ComponentType<TreeItemProps>;
-  emtpyFolderContent?: {
-    startText?: string;
-    actionText?: string;
-    endText?: string;
-  };
+  emtpyFolderContent?: Partial<TreeViewContext["emtpyFolderContent"]>;
 }
 
 const TreeViewProvider = ({
   children,
   requestList,
+  selectedTab,
   itemComponent,
   emtpyFolderContent = {},
+  handleAddSingleItem,
+  handleChangeSelectedTab,
+  handleMoveItem,
+  handleChangeName,
+  handleToggleExpended,
 }: TreeViewProviderProps) => {
-  const dispatch = useAppDispatch();
-  const selectedTab = useAppSelector(selectSelectedTab);
-
-  const handleMoveItem = useCallback(
-    async ({
-      requestId,
-      parentId,
-    }: {
-      requestId: string;
-      parentId?: string;
-    }) => {
-      await dispatch(
-        moveRequestOrFolder({
-          requestId,
-          parentId,
-        }),
-      );
-    },
-    [dispatch],
-  );
-
-  const handleChangeSelectedTab = useCallback(
-    async (id: string) => {
-      await dispatch(changeSelectedTab(id));
-    },
-    [dispatch],
-  );
-
-  const handleAddSingleItem = useCallback(
-    async (id: string) => {
-      await dispatch(createSingleRequest(id));
-    },
-    [dispatch],
-  );
-
   /* tracker start ======================*/
   const getRequestlevel = useCallback(
     (id: string) =>
@@ -176,6 +148,7 @@ const TreeViewProvider = ({
 
   const value = useMemo(
     () => ({
+      requestList,
       selectedTab,
       handleMoveItem,
       handleChangeSelectedTab,
@@ -186,6 +159,8 @@ const TreeViewProvider = ({
       checkIsFolderAddable,
       itemComponent,
       handleAddSingleItem,
+      handleChangeName,
+      handleToggleExpended,
       emtpyFolderContent: {
         startText: "This folder is empty",
         actionText: "Add a item",
@@ -194,6 +169,7 @@ const TreeViewProvider = ({
       },
     }),
     [
+      requestList,
       selectedTab,
       handleMoveItem,
       handleChangeSelectedTab,
@@ -205,6 +181,8 @@ const TreeViewProvider = ({
       itemComponent,
       handleAddSingleItem,
       emtpyFolderContent,
+      handleChangeName,
+      handleToggleExpended,
     ],
   );
 

@@ -5,19 +5,22 @@ import ListBottomAction from "@/components/app/mock/request-list/list-bottom-act
 import RequestListDeleteAlertDialog from "@/components/app/mock/request-list/content/request-list/RequestListDeleteAlertDialog";
 import AddAction from "@/components/app/mock/request-list/AddAction";
 import RequestListPanelProviderWrapper from "@/components/app/mock/request-list/RequestListPanelProviderWrapper";
+import MockListTreeProvider from "@/context/request-list-tree/MockListTreeProvider";
 
 const RequestListPanel = memo(() => {
   return (
-    <RequestListPanelProviderWrapper>
-      <TreeView>
-        <TreeView.TopBar showTitle>
-          <AddAction />
-        </TreeView.TopBar>
-        <RequestListContent />
-        <ListBottomAction />
-        <RequestListDeleteAlertDialog />
-      </TreeView>
-    </RequestListPanelProviderWrapper>
+    <MockListTreeProvider>
+      <RequestListPanelProviderWrapper>
+        <TreeView>
+          <TreeView.TopBar showTitle>
+            <AddAction />
+          </TreeView.TopBar>
+          <RequestListContent />
+          <ListBottomAction />
+          <RequestListDeleteAlertDialog />
+        </TreeView>
+      </RequestListPanelProviderWrapper>
+    </MockListTreeProvider>
   );
 });
 

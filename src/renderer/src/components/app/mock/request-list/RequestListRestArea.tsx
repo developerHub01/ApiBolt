@@ -9,7 +9,7 @@ const RequestListRestArea = () => {
       {!requestListCount && (
         <TreeView.EmptyBox
           title="No request available. Create one."
-          description="Your currently request list is empty. You can start by clicking on the '+' add button or from right side tab list."
+          description="Your currently mock request list is empty. You can start by clicking on the '+' add button or from right side tab list."
         />
       )}
     </TreeView.RestArea>

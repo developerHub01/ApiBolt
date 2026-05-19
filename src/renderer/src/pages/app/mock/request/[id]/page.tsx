@@ -1,13 +1,9 @@
-import { lazy, Suspense } from "react";
-import RequestFallback from "@/fallback/collection/request/request/RequestFallback";
-const RequestRoot = lazy(
-  () => import("@/components/app/collections/request/RequestRoot"),
-);
+import { Suspense } from "react";
 
 const MockRequestPage = () => {
   return (
-    <Suspense fallback={<RequestFallback />}>
-      <RequestRoot />
+    <Suspense fallback={<></>}>
+      <>Mock page</>
     </Suspense>
   );
 };

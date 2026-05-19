@@ -16,6 +16,10 @@ import { v4 as uuidv4 } from "uuid";
 import { getNodeParentsIdList } from "@/utils/request-response.utils";
 import { handleClearHistoryCache } from "@/context/redux/history/history-slice";
 import { rotateIndex } from "@/utils";
+import {
+  TTabsAddNewTOLeftOrRightType,
+  TTabsRemoveType,
+} from "@shared/types/tabs";
 
 /* ==============================
 ========= TabList start =========
@@ -129,7 +133,7 @@ export const addNewTabsToLeftOrRight = createAsyncThunk<
   void,
   {
     id?: string | null;
-    type: "left" | "right";
+    type: TTabsAddNewTOLeftOrRightType;
   },
   {
     state: RootState;
@@ -194,7 +198,7 @@ export const removeTab = createAsyncThunk<
   void,
   {
     id?: string | null;
-    type: "current" | "others" | "all-left" | "all-right";
+    type: TTabsRemoveType;
   },
   {
     state: RootState;

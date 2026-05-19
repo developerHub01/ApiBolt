@@ -1,25 +1,9 @@
 import { useEffect } from "react";
 import { Outlet, useParams } from "react-router-dom";
-import RequestResponseProvider from "@/context/collections/request/RequestResponseProvider";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { loadParams } from "@/context/redux/request-response/thunks/params";
-import {
-  loadHeaders,
-  loadHiddenHeaders,
-} from "@/context/redux/request-response/thunks/headers";
-import { loadRequestBodyRaw } from "@/context/redux/request-response/thunks/body-raw";
-import { loadRequestBodyBinary } from "@/context/redux/request-response/thunks/body-binary";
-import { loadRequestMetaTab } from "@/context/redux/request-response/thunks/request-meta-tab";
-import { loadBodyXWWWFormUrlencoded } from "@/context/redux/request-response/thunks/body-x-www-form-urlencoded";
-import { loadBodyFormData } from "@/context/redux/request-response/thunks/body-form-data";
-import { loadMetaShowColumn } from "@/context/redux/request-response/thunks/meta-show-column";
-import { loadApiUrl } from "@/context/redux/request-url/thunks/request-url";
-import { loadAuthorization } from "@/context/redux/request-response/thunks/auth";
-import { loadShowHiddenMetaData } from "@/context/redux/request-response/thunks/show-hidden-meta-data";
-import { selectIsRequestOrFolderExist } from "@/context/redux/request-response/selectors/request-list";
-import RequestOrFolderNotFound from "@/components/app/collections/RequestOrFolderNotFound";
-import { loadPathParams } from "@/context/redux/request-response/thunks/path-params";
-import { loadTestScript } from "@/context/redux/request-response/thunks/test-script";
+import { selectIsRequestOrFolderExist } from "@/context/redux/mock/selectors/request-list";
+import RequestOrFolderNotFound from "@/components/app/mock/RequestOrFolderNotFound";
+import MockRequestProvider from "@/context/mock/MockRequestProvider";
 
 const MockRequestLayout = () => {
   const dispatch = useAppDispatch();
@@ -30,34 +14,19 @@ const MockRequestLayout = () => {
 
   useEffect(() => {
     if (!isExist) return;
-    const payload = {
-      requestOrFolderId: requestOrFolderId,
-      once: true,
-    };
-    [
-      loadAuthorization,
-      loadParams,
-      loadPathParams,
-      loadHeaders,
-      loadHiddenHeaders,
-      loadRequestMetaTab,
-      loadMetaShowColumn,
-      loadShowHiddenMetaData,
-      loadBodyFormData,
-      loadBodyXWWWFormUrlencoded,
-      loadRequestBodyRaw,
-      loadRequestBodyBinary,
-      loadTestScript,
-      loadApiUrl,
-    ].forEach(action => dispatch(action(payload)));
+    // const payload = {
+    //   requestOrFolderId: requestOrFolderId,
+    //   once: true,
+    // };
+    // [].forEach(action => dispatch(action(payload)));
   }, [dispatch, isExist, requestOrFolderId]);
 
   if (!isExist) return <RequestOrFolderNotFound type="request" />;
 
   return (
-    <RequestResponseProvider>
+    <MockRequestProvider>
       <Outlet />
-    </RequestResponseProvider>
+    </MockRequestProvider>
   );
 };
 

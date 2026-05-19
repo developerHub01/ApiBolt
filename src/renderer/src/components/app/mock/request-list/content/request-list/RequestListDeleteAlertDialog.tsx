@@ -9,14 +9,12 @@ const RequestListDeleteAlertDialog = memo(() => {
   const toast = useCustomToast();
 
   const deleteFolderOrRequestId = useAppSelector(
-    state => state.requestResponse.deleteFolderOrRequestId,
+    state => state.mock.deleteFolderOrRequestId,
   );
 
   const folderOrRequestName = useAppSelector(
     state =>
-      state.requestResponse.requestList[
-        state.requestResponse.deleteFolderOrRequestId
-      ]?.name ?? "",
+      state.mock.requestList[state.mock.deleteFolderOrRequestId]?.name ?? "",
   );
 
   const handleDelete = async () => {

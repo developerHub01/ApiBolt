@@ -18,6 +18,7 @@ import {
   loadThemePalette,
 } from "@/context/redux/theme/thunks/theme";
 import { loadRequestList } from "@/context/redux/request-response/thunks/request-list";
+import { loadRequestList as loadMockRequestList } from "@/context/redux/mock/thunks/request-list";
 import { loadFolder } from "@/context/redux/request-response/thunks/folder";
 import { loadLocalPassword } from "@/context/redux/local-password/thunks/local-password";
 import {
@@ -57,6 +58,8 @@ export interface StatusInterface {
   isTestScriptRunning: boolean;
   testScriptError: string | null;
 
+  isMockRequestListLoading: boolean;
+
   isThemesSearchResultLoading: boolean;
   themesSearchResultError: string | null;
 
@@ -94,6 +97,8 @@ const initialState: StatusInterface = {
   isTestScriptLoading: true,
   isTestScriptRunning: false,
   testScriptError: null,
+
+  isMockRequestListLoading: true,
 
   isThemesSearchResultLoading: true,
   themesSearchResultError: null,
@@ -389,6 +394,21 @@ const statusSlice = createSlice({
       })
       .addCase(inActiveTheme.rejected, state => {
         state.isThemeInActivatingLoading = false;
+      })
+
+      /**
+       * =======================
+       * Mock request-list
+       * =======================
+       */
+      .addCase(loadMockRequestList.pending, state => {
+        state.isMockRequestListLoading = true;
+      })
+      .addCase(loadMockRequestList.fulfilled, state => {
+        state.isMockRequestListLoading = false;
+      })
+      .addCase(loadMockRequestList.rejected, state => {
+        state.isMockRequestListLoading = false;
       })
 
       /**

@@ -1,18 +1,18 @@
 import { memo, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { loadRequestList } from "@/context/redux/mock/thunks/request-list";
-import { selectRequestListIsLoading } from "@/context/redux/status/selectors/request-list";
 import useShowSkeleton from "@/hooks/ui/use-show-skeleton";
 import RequestList from "@/components/app/mock/request-list/content/request-list/RequestList";
 import TreeView from "@/components/ui/tree-view/TreeView";
 import RequestListRestArea from "@/components/app/mock/request-list/RequestListRestArea";
+import { selectMockRequestListIsLoading } from "@/context/redux/status/selectors/mock-request-list";
 
 const RequestListContent = memo(() => {
   const dispatch = useAppDispatch();
-  const isLoading = useAppSelector(selectRequestListIsLoading);
+  const isLoading = useAppSelector(selectMockRequestListIsLoading);
   const showSkeleton = useShowSkeleton(isLoading, 80);
   const isRequestListLoaded = useAppSelector(
-    state => state.requestResponse.isRequestListLoaded,
+    state => state.mock.isRequestListLoaded,
   );
 
   useEffect(() => {

@@ -15,6 +15,7 @@ import type {
   TSidebarTab,
 } from "@shared/types/sidebar.types";
 import { handleToggleRequestList } from "@/context/redux/request-response/request-response-slice";
+import { handleToggleRequestList as handleToggleMockRequestList } from "@/context/redux/mock/mock-slice";
 import { selectSidebarActiveTab } from "@/context/redux/sidebar/selectors/sidebar";
 import { selectActiveProjectId } from "@/context/redux/project/selectors/project";
 import { selectApplyingKeyboardShortcuts } from "@/context/redux/keyboard-shortcuts/selectors/keyboard-shortcuts";
@@ -44,6 +45,9 @@ const SidebarMenu = memo(() => {
     async (id: TSidebarTab) => {
       if ([id, activeTab].every(item => item === "navigate_collections")) {
         dispatch(handleToggleRequestList());
+        return;
+      } else if ([id, activeTab].every(item => item === "navigate_mock")) {
+        dispatch(handleToggleMockRequestList());
         return;
       } else if (
         [id, activeTab].every(item => item === "navigate_themes_marketplace")

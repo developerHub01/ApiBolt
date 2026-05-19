@@ -11,7 +11,7 @@ import {
   handleRemoveAllRightTabs,
   handleRemoveOtherTabs,
   handleRemoveTab,
-} from "@/context/redux/request-response/request-response-slice";
+} from "@/context/redux/mock/mock-slice";
 import { v4 as uuidv4 } from "uuid";
 import { getNodeParentsIdList } from "@/utils/request-response.utils";
 import { handleClearHistoryCache } from "@/context/redux/history/history-slice";
@@ -29,7 +29,7 @@ export const loadTabsData = createAsyncThunk<
   }
 >("mock/loadTabsData", async (_, { dispatch }) => {
   try {
-    const tabsListData = await window.electronAPITabs.getTabList();
+    const tabsListData = await window.electronAPIMockTabs.getMockTabList();
 
     dispatch(handleChangeTabList(tabsListData?.openTabs ?? []));
     dispatch(handleChangeSelectedTab(tabsListData?.selectedTab ?? null));
@@ -54,7 +54,7 @@ export const changeSelectedTab = createAsyncThunk<
      * Clearing history cache for freeing in-memory
      * =============================================
      * **/
-    const previousSelectedTab = state.requestResponse.selectedTab;
+    const previousSelectedTab = state.mock.selectedTab;
     if (previousSelectedTab) dispatch(handleClearHistoryCache());
   } catch (error) {
     console.error(error);
@@ -70,9 +70,9 @@ export const changeTabsData = createAsyncThunk<
 >("mock/changeTabsData", async (_, { getState }) => {
   const state = getState() as RootState;
   try {
-    await window.electronAPITabs.updateTabList({
-      openTabs: state.requestResponse.tabList,
-      selectedTab: state.requestResponse.selectedTab,
+    await window.electronAPIMockTabs.updateMockTabList({
+      openTabs: state.mock.tabList,
+      selectedTab: state.mock.selectedTab,
     });
   } catch (error) {
     console.error(error);
@@ -116,7 +116,7 @@ export const addNewTabsData = createAsyncThunk<
       );
       if (autoSelect) dispatch(handleChangeSelectedTab(newTabId));
       dispatch(handleCreateSingleRequest(createPayload));
-      await window.electronAPIRequestOrFolderMeta.createRequestOrFolderMeta(
+      await window.electronAPIMockRequestOrFolderMeta.createMockRequestOrFolderMeta(
         createPayload,
       );
     } catch (error) {
@@ -140,8 +140,8 @@ export const addNewTabsToLeftOrRight = createAsyncThunk<
   async ({ id, type }, { getState, dispatch }) => {
     try {
       const state = getState() as RootState;
-      id = id ?? state.requestResponse.selectedTab;
-      const tabList = state.requestResponse.tabList;
+      id = id ?? state.mock.selectedTab;
+      const tabList = state.mock.tabList;
       const tabIndex = tabList.findIndex(item => item === id);
       if (tabIndex < 0) throw new Error();
 
@@ -168,7 +168,7 @@ export const expendParentsOnSelectedChangeTabsData = createAsyncThunk<
   async (id, { dispatch, getState }) => {
     try {
       const state = getState() as RootState;
-      const requestList = state.requestResponse.requestList;
+      const requestList = state.mock.requestList;
 
       const payload = getNodeParentsIdList({
         source: requestList,
@@ -178,7 +178,7 @@ export const expendParentsOnSelectedChangeTabsData = createAsyncThunk<
       if (!payload?.length) return;
 
       const response =
-        await window.electronAPIRequestOrFolderMeta.expendOrCollapseRequestOrFolderMetaAll(
+        await window.electronAPIMockRequestOrFolderMeta.expendOrCollapseMockRequestOrFolderMetaAll(
           payload,
           true,
         );
@@ -203,7 +203,7 @@ export const removeTab = createAsyncThunk<
 >("mock/removeTab", ({ id, type }, { dispatch, getState }) => {
   try {
     const state = getState() as RootState;
-    id = id ?? state.requestResponse.selectedTab;
+    id = id ?? state.mock.selectedTab;
     const activeTab = state.sidebar.activeTab;
     if (!id || activeTab !== "navigate_collections") throw new Error();
 
@@ -238,8 +238,8 @@ export const shiftSelectedTab = createAsyncThunk<
 >("mock/shiftSelectedTab", ({ type }, { dispatch, getState }) => {
   try {
     const state = getState() as RootState;
-    const selectedTab = state.requestResponse.selectedTab;
-    const tabList = state.requestResponse.tabList;
+    const selectedTab = state.mock.selectedTab;
+    const tabList = state.mock.tabList;
     const activeTab = state.sidebar.activeTab;
     if (!selectedTab || activeTab !== "navigate_collections") throw new Error();
 

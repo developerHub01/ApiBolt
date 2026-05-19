@@ -22,7 +22,10 @@ const RequestListItem = memo(
     );
 
     const childrenElements = useMemo(
-      () => getFolderChildren(requestDetails) ?? undefined,
+      () =>
+        requestDetails
+          ? (getFolderChildren(requestDetails) ?? undefined)
+          : undefined,
       [requestDetails],
     );
     const parentId = useMemo(
@@ -30,7 +33,7 @@ const RequestListItem = memo(
       [requestDetails?.parentId],
     );
     const type = useMemo(
-      () => getRequestType(requestDetails),
+      () => (requestDetails ? getRequestType(requestDetails) : undefined),
       [requestDetails],
     );
     const isExpended = useMemo(
@@ -45,6 +48,8 @@ const RequestListItem = memo(
       [requestDetails],
     );
 
+    if (!requestDetails) return null;
+
     return (
       <TreeView.ListItem
         id={id}
@@ -53,7 +58,7 @@ const RequestListItem = memo(
         isRootLastChild={isRootLastChild}
         parentId={parentId}
         childrenElements={childrenElements}
-        type={type}
+        type={type!}
         isExpended={isExpended}
         itemCTA={<ItemCTA />}
         tagEle={

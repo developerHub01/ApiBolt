@@ -4,7 +4,7 @@ import type { RequestListItemInterface } from "@shared/types/request-response.ty
 import { useAppDispatch } from "@/context/redux/hooks";
 import { handleChangeSelectedTab } from "@/context/redux/request-response/request-response-slice";
 import { expendParentsOnSelectedChangeTabsData } from "@/context/redux/request-response/thunks/tab-list";
-import CollectionTabType from "@/components/app/tab-sidebar/CollectionTabType";
+import TabsView from "@/components/ui/tabs-view/TabsView";
 
 interface Props extends RequestListItemInterface {
   selectedTab?: string | null;
@@ -48,7 +48,7 @@ const SearchResultItem = ({
     >
       <div className="w-full h-full flex items-center gap-2 px-1">
         {(children || method) && (
-          <CollectionTabType
+          <TabsView.Type
             haveChildren={Boolean(children)}
             isShort={true}
             method={method}

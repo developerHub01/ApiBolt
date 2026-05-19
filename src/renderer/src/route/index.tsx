@@ -56,6 +56,8 @@ import ThemeEditorFallback from "@/fallback/theme/ThemeEditorFallback";
 import AuthorizationFallback from "@/fallback/AuthorizationFallback";
 import EnvironmentFallback from "@/fallback/EnvironmentFallback";
 import ErrorBoundary from "@/pages/error-boundary";
+import MockFolderLayout from "@/pages/app/mock/folder/[id]/layout";
+import MockFolderPage from "@/pages/app/mock/folder/[id]/page";
 
 const routes = [
   {
@@ -171,6 +173,16 @@ const routes = [
                   {
                     index: true,
                     element: <MockRequestPage />,
+                  },
+                ],
+              },
+              {
+                path: "folder/:id",
+                element: <MockFolderLayout />,
+                children: [
+                  {
+                    index: true,
+                    element: <MockFolderPage />,
                   },
                 ],
               },

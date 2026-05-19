@@ -37,7 +37,7 @@ export const loadRequestList = createAsyncThunk<
 >("mock/loadRequestList", async (_, { getState, dispatch }) => {
   try {
     const state = getState() as RootState;
-    if (state.requestResponse.isRequestListLoaded) return;
+    if (state.mock.isRequestListLoaded) return;
 
     const list =
       await window.electronAPIMockRequestOrFolderMeta.getMockRequestOrFolderMeta();
@@ -77,7 +77,7 @@ export const loadSingleRequestMeta = createAsyncThunk<
 >("mock/loadSingleRequestMeta", async (id, { getState, dispatch }) => {
   try {
     const state = getState() as RootState;
-    id = id ?? state.requestResponse.selectedTab;
+    id = id ?? state.mock.selectedTab;
 
     const requestMeta =
       await window.electronAPIMockRequestOrFolderMeta.getMockRequestOrFolderMetaById(
@@ -231,13 +231,13 @@ export const createSingleRequestBySelectedTab = createAsyncThunk<
     try {
       const state = getState() as RootState;
       const projectId = state.project.activeProjectId;
-      const selectedTab = state.requestResponse.selectedTab;
+      const selectedTab = state.mock.selectedTab;
       if (!projectId) throw new Error();
 
       let parentId = selectedTab;
       /* if selected tab exist then check is it a request or not. if then take it's parent else take that */
       if (selectedTab) {
-        const selectedDetails = state.requestResponse.requestList[selectedTab];
+        const selectedDetails = state.mock.requestList[selectedTab];
         if (selectedDetails && getRequestType(selectedDetails) === "request")
           parentId = selectedDetails.parentId ?? null;
       }
@@ -275,14 +275,14 @@ export const createCollectionBySelectedTab = createAsyncThunk<
 >("mock/createCollectionBySelectedTab", async (_, { dispatch, getState }) => {
   try {
     const state = getState() as RootState;
-    const selectedTab = state.requestResponse.selectedTab;
+    const selectedTab = state.mock.selectedTab;
     const projectId = state.project.activeProjectId;
     if (!projectId) throw new Error();
 
     let parentId = selectedTab;
     /* if selected tab exist then check is it a request or not. if then take it's parent else take that */
     if (selectedTab) {
-      const selectedDetails = state.requestResponse.requestList[selectedTab];
+      const selectedDetails = state.mock.requestList[selectedTab];
       if (selectedDetails && getRequestType(selectedDetails) === "request")
         parentId = selectedDetails.parentId ?? null;
     }
@@ -321,14 +321,14 @@ export const createRestApiBasicBySelectedTab = createAsyncThunk<
 >("mock/createRestApiBasicBySelectedTab", async (_, { dispatch, getState }) => {
   try {
     const state = getState() as RootState;
-    const selectedTab = state.requestResponse.selectedTab;
+    const selectedTab = state.mock.selectedTab;
     const projectId = state.project.activeProjectId;
     if (!projectId) throw new Error();
 
     let parentId = selectedTab;
     /* if selected tab exist then check is it a request or not. if then take it's parent else take that */
     if (selectedTab) {
-      const selectedDetails = state.requestResponse.requestList[selectedTab];
+      const selectedDetails = state.mock.requestList[selectedTab];
       if (selectedDetails && getRequestType(selectedDetails) === "request")
         parentId = selectedDetails.parentId ?? null;
     }
@@ -407,8 +407,8 @@ export const expendRequestOrFolder = createAsyncThunk<
 
     if (
       !id ||
-      !state.requestResponse.requestList[id] ||
-      getRequestType(state.requestResponse.requestList[id]) !== "folder"
+      !state.mock.requestList[id] ||
+      getRequestType(state.mock.requestList[id]) !== "folder"
     )
       return;
 
@@ -441,8 +441,8 @@ export const moveRequestOrFolder = createAsyncThunk<
       const projectId = state.project.activeProjectId;
       if (!projectId) throw new Error();
 
-      const parentDetails = state.requestResponse.requestList[parentId ?? ""];
-      const requestDetails = state.requestResponse.requestList[requestId];
+      const parentDetails = state.mock.requestList[parentId ?? ""];
+      const requestDetails = state.mock.requestList[requestId];
 
       /**
        * Here first finding the list of children of requested item
@@ -450,7 +450,7 @@ export const moveRequestOrFolder = createAsyncThunk<
        * if child then we are not going further
        */
       const requestAllChildrenList = getNestedIds({
-        source: state.requestResponse.requestList,
+        source: state.mock.requestList,
         id: requestId,
       });
       if (parentId && requestAllChildrenList.includes(parentId)) return false;
@@ -515,13 +515,11 @@ export const deleteRequestOrFolder = createAsyncThunk<
 
     /* if true then get the id else take passed id as payload */
     const rootId =
-      payload === true
-        ? state.requestResponse.deleteFolderOrRequestId
-        : payload;
+      payload === true ? state.mock.deleteFolderOrRequestId : payload;
     dispatch(handleChangeDeleteFolderOrRequestId(""));
 
     const idsToDelete = getNestedIds({
-      source: state.requestResponse.requestList,
+      source: state.mock.requestList,
       id: rootId,
     });
 
@@ -553,7 +551,7 @@ export const duplicateRequestOrFolder = createAsyncThunk<
     try {
       const state = getState() as RootState;
       const projectId = state.project.activeProjectId;
-      const requestList = state.requestResponse.requestList;
+      const requestList = state.mock.requestList;
       if (!projectId) throw new Error();
 
       const { newParentId, nodes: duplicatedNodes } =

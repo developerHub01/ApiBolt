@@ -48,9 +48,9 @@ export const clearRequest = createAsyncThunk<
   async ({ id, clearTestScript = false } = {}, { getState, dispatch }) => {
     try {
       const state = getState() as RootState;
-      const requestId = id ?? state.requestResponse.selectedTab;
+      const requestId = id ?? state.mock.selectedTab;
 
-      if (!requestId || !state.requestResponse.requestList[requestId].method)
+      if (!requestId || !state.mock.requestList[requestId].method)
         return {
           success: false,
           message: "No request active",
@@ -128,8 +128,8 @@ export const exportRequest = createAsyncThunk<
 >("mock/exportRequest", async (id, { getState }) => {
   try {
     const state = getState() as RootState;
-    const requestId = id ?? state.requestResponse.selectedTab;
-    if (!requestId || !state.requestResponse.requestList[requestId].method)
+    const requestId = id ?? state.mock.selectedTab;
+    if (!requestId || !state.mock.requestList[requestId].method)
       return {
         success: false,
         message: "No request active",
@@ -161,9 +161,7 @@ export const importRequest = createAsyncThunk<
      * if requestId exist then check do it have in requestlist
      * and if requestId dont have means have to import in root
      */
-    const meta = requestId
-      ? state.requestResponse.requestList[requestId]
-      : null;
+    const meta = requestId ? state.mock.requestList[requestId] : null;
     if (requestId && !meta)
       return {
         success: false,
@@ -265,8 +263,8 @@ export const exportFolder = createAsyncThunk<
 >("mock/exportFolder", async (id, { getState }) => {
   try {
     const state = getState() as RootState;
-    const requestId = id ?? state.requestResponse.selectedTab;
-    if (!requestId || state.requestResponse.requestList[requestId].method)
+    const requestId = id ?? state.mock.selectedTab;
+    if (!requestId || state.mock.requestList[requestId].method)
       return {
         success: false,
         message: "No request active",
@@ -295,7 +293,7 @@ export const importFolder = createAsyncThunk<
   try {
     const state = getState() as RootState;
     /* if pass any request id and if it is not folder then exit */
-    if (id && !state.requestResponse.requestList[id])
+    if (id && !state.mock.requestList[id])
       return {
         success: false,
         message: "Folder not found.",

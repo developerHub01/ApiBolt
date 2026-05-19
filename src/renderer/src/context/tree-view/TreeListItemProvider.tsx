@@ -5,8 +5,6 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
-import { updateRequestOrFolder } from "@/context/redux/request-response/thunks/request-list";
 import type { TRequestListItemType } from "@shared/types/request-list";
 import type { RequestListItemInterface } from "@shared/types/request-response.types";
 import { useTreeView } from "@/context/tree-view/TreeViewProvider";
@@ -29,6 +27,7 @@ interface TreeListItemContext extends Pick<
   handleMove: (draggedId: string) => void;
   handleToggleExpended: () => void;
   handleAddSingle: () => void;
+  handleSelectTab: () => Promise<void>;
 }
 
 const TreeListItemContext = createContext<TreeListItemContext | null>(null);
@@ -68,16 +67,19 @@ const TreeListItemProvider = ({
   type,
   isExpended,
 }: TreeListItemProviderProps) => {
-  const dispatch = useAppDispatch();
-  const { handleMoveItem, handleAddSingleItem } = useTreeView();
+  const {
+    handleMoveItem,
+    handleAddSingleItem,
+    requestList,
+    handleToggleExpended: toggleExpended,
+    handleChangeName: changeName,
+    handleChangeSelectedTab,
+  } = useTreeView();
   const [isHovering, setIsHovering] = useState<boolean>(false);
-
-  const requestDetails = useAppSelector(
-    state => state.requestResponse.requestList[id],
-  );
-
   const [isContextMenuOpen, setIsContextMenuOpen] = useState<boolean>(false);
   const [isRenameActive, setIsRenameActive] = useState<boolean>(false);
+
+  const requestDetails = useMemo(() => requestList[id], [id, requestList]);
 
   const handleChangeHovering = useCallback(
     (value?: boolean) =>
@@ -98,14 +100,12 @@ const TreeListItemProvider = ({
   const handleChangeName = useCallback(
     (id: string, name: string) => {
       setIsRenameActive(false);
-      dispatch(
-        updateRequestOrFolder({
-          id,
-          name,
-        }),
-      );
+      changeName({
+        id,
+        name,
+      });
     },
-    [dispatch],
+    [changeName],
   );
 
   const handleMove = useCallback(
@@ -120,18 +120,21 @@ const TreeListItemProvider = ({
 
   const handleToggleExpended = useCallback(
     (itemId?: string) =>
-      dispatch(
-        updateRequestOrFolder({
-          id: itemId ?? id,
-          isExpended: !isExpended,
-        }),
-      ),
-    [dispatch, id, isExpended],
+      toggleExpended({
+        id: itemId ?? id,
+        isExpended: !isExpended,
+      }),
+    [id, isExpended, toggleExpended],
   );
 
   const handleAddSingle = useCallback(
     () => handleAddSingleItem(id),
     [handleAddSingleItem, id],
+  );
+
+  const handleSelectTab = useCallback(
+    () => handleChangeSelectedTab(id),
+    [id, handleChangeSelectedTab],
   );
 
   const value = useMemo(
@@ -157,6 +160,7 @@ const TreeListItemProvider = ({
       handleMove,
       handleToggleExpended,
       handleAddSingle,
+      handleSelectTab,
     }),
     [
       childrenElements,
@@ -175,6 +179,7 @@ const TreeListItemProvider = ({
       handleMove,
       handleToggleExpended,
       handleAddSingle,
+      handleSelectTab,
     ],
   );
 

@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { useAppDispatch } from "@/context/redux/hooks";
-import { addNewTabsData } from "@/context/redux/request-response/thunks/tab-list";
+import { addNewTabsData } from "@/context/redux/mock/thunks/tab-list";
 import Logo from "@/components/ui/logo";
 
 const MockPage = () => {
@@ -17,7 +17,7 @@ const MockPage = () => {
         <Logo className="w-full h-full" color="accent" />
       </div>
       <Button variant={"secondary"} onClick={handleAdd}>
-        Create a new request
+        Create a new mock request
       </Button>
     </section>
   );

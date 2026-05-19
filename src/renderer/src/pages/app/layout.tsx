@@ -1,7 +1,6 @@
 import { memo } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "@/components/app/sidebar/Sidebar";
-import TabSidebarProvider from "@/context/tab-sidebar/TabSidebarProvider";
 import Header from "@/components/app/header/header/Header";
 import Setting from "@/components/app/setting/Setting";
 import KeyboardEvents from "@/components/app/KeyboardEvents";
@@ -43,10 +42,8 @@ const AppLayout = () => {
 const ProviderStack = ({ children }: { children: React.ReactNode }) => {
   return (
     <GlobalProvider>
-      <TabSidebarProvider>
-        {children}
-        <KeyboardEvents />
-      </TabSidebarProvider>
+      {children}
+      <KeyboardEvents />
     </GlobalProvider>
   );
 };

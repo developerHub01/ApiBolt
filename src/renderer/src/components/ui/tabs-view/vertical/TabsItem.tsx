@@ -1,0 +1,205 @@
+import {
+  memo,
+  useCallback,
+  useState,
+  type DragEvent,
+  type MouseEvent,
+} from "react";
+import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from "motion/react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip-custom";
+import { useTabsView } from "@/context/tabs-view/TabsViewProvider";
+import { useTabsItem } from "@/context/tabs-view/TabsItemProvider";
+import TabsView from "@/components/ui/tabs-view/TabsView";
+
+const TabsItem = memo(() => {
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [isTabHovering, setIsTabHovering] = useState<boolean>(false);
+  const { id, index } = useTabsItem();
+
+  const {
+    selectedTab,
+    isTabListOpen,
+    handleMoveTab,
+    handleChangeSelectedTab,
+    handleExpendParentsOnSelectedChangeTabsData,
+    handleRemove,
+  } = useTabsView();
+  const { tabDetails } = useTabsItem();
+
+  const handleDragStart = (e: DragEvent<HTMLDivElement>) => {
+    e.dataTransfer.setData("text/plain", id);
+    e.dataTransfer.effectAllowed = "move";
+  };
+
+  const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    setIsDragging(true);
+  };
+
+  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const draggedId = e.dataTransfer.getData("text/plain");
+
+    setIsDragging(false);
+    if (draggedId === id) return;
+
+    handleMoveTab({
+      id: draggedId,
+      index,
+    });
+  };
+
+  const handleDragLeave = () => setIsDragging(false);
+
+  const handleCloseBtnClick = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    handleRemove({
+      id,
+      type: "current",
+    });
+  };
+
+  const handleClick = useCallback(async () => {
+    handleChangeSelectedTab(id);
+
+    if (selectedTab === id) return;
+    handleExpendParentsOnSelectedChangeTabsData(id);
+  }, [
+    handleChangeSelectedTab,
+    handleExpendParentsOnSelectedChangeTabsData,
+    id,
+    selectedTab,
+  ]);
+
+  if (!tabDetails) return null;
+
+  /* children represent is it a folder or request | if children at least empty array then folder. so for that we will asign a [] in children if it is a folder to represent */
+  const children = tabDetails.method ? undefined : (tabDetails.children ?? []);
+
+  const method = tabDetails.method;
+  const name = tabDetails.name ?? (method ? "Request" : "Folder");
+
+  return (
+    <div
+      key={id}
+      data-tab-id={id}
+      data-active={selectedTab === id}
+      className={cn("cursor-pointer border-x-2 border-transparent group", {
+        /* active tab style */
+        "bg-accent/80 hover:bg-accent/60": selectedTab === id,
+        /* active tab border color */
+        "bg-transparent hover:bg-accent/60": selectedTab !== id,
+        "border-green-500": selectedTab === id && method === "get",
+        "border-blue-500": selectedTab === id && method === "post",
+        "border-yellow-500": selectedTab === id && method === "put",
+        "border-orange-500": selectedTab === id && method === "patch",
+        "border-red-500": selectedTab === id && method === "delete",
+        "border-primary": selectedTab === id && !method,
+      })}
+      onMouseEnter={() => setIsTabHovering(true)}
+      onMouseLeave={() => setIsTabHovering(false)}
+      onClick={handleClick}
+      draggable
+      onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
+      onDragLeave={handleDragLeave}
+    >
+      <div
+        className={cn(
+          "w-full h-9 flex items-center justify-center px-1.5 ring-2",
+          {
+            "ring-primary/50": isDragging,
+            "ring-transparent": !isDragging,
+          },
+        )}
+      >
+        <TabsView.Type
+          haveChildren={Boolean(children)}
+          isShort={true}
+          method={method}
+          isFlexibleSize={false}
+        />
+        <motion.div
+          className={cn(
+            "cursor-pointer flex items-center transition-all duration-300",
+            {
+              "flex-1": isTabListOpen,
+            },
+          )}
+          style={{
+            transformOrigin: "left",
+          }}
+          key={id}
+          animate={{
+            opacity: isTabListOpen ? 1 : 0,
+            width: isTabListOpen ? "100%" : "0px",
+            paddingLeft: isTabListOpen ? "8px" : "0px",
+            scaleX: isTabListOpen ? 1 : 0.8,
+          }}
+          transition={{
+            duration: 0.3,
+            ease: "easeInOut",
+          }}
+        >
+          <input
+            type="text"
+            value={name}
+            readOnly
+            className="w-full h-full outline-0 rounded-md text-sm whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer select-none pointer-events-none"
+          />
+        </motion.div>
+        {isTabListOpen && (
+          <AnimatePresence>
+            {isTabHovering && (
+              <motion.div
+                initial={{
+                  opacity: 0,
+                  scale: 0.85,
+                }}
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                }}
+                exit={{
+                  opacity: 0,
+                  scale: 0.85,
+                }}
+                transition={{
+                  duration: 0.15,
+                  ease: "easeInOut",
+                }}
+                className="flex justify-center items-center"
+              >
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <TabsView.CloseButton
+                      onClick={handleCloseBtnClick}
+                      className="relative translate-y-0 right-auto"
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent
+                    align="end"
+                    side="bottom"
+                    variant={"secondary"}
+                  >
+                    <TabsView.ShortcutText />
+                  </TooltipContent>
+                </Tooltip>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        )}
+      </div>
+    </div>
+  );
+});
+
+export default TabsItem;

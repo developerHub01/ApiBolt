@@ -1,7 +1,7 @@
 import { memo } from "react";
 import ActionButton from "@/components/app/mock/request-list/list-bottom-action/ActionButton";
 import DeleteButton from "@/components/app/mock/request-list/list-bottom-action/DeleteButton";
-import useRequestListAction from "@/hooks/request-response/request-list/use-request-list-action";
+import useRequestListAction from "@/hooks/mock/request-list/use-request-list-action";
 import TreeView from "@/components/ui/tree-view/TreeView";
 
 const ListBottomAction = memo(() => {

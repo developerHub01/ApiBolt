@@ -17,8 +17,7 @@ interface RequestListItemContentWrapperProps {
 
 const TreeItemWrapper = memo(
   ({ children }: RequestListItemContentWrapperProps) => {
-    const { selectedTab, handleChangeSelectedTab, checkIsRequestDropable } =
-      useTreeView();
+    const { selectedTab, checkIsRequestDropable } = useTreeView();
     const {
       id,
       method,
@@ -29,6 +28,7 @@ const TreeItemWrapper = memo(
       handleRenameAction,
       handleChangeHovering,
       handleMove,
+      handleSelectTab,
     } = useTreeListItem();
     const [isDragging, setIsDragging] = useState<boolean>(false);
 
@@ -70,9 +70,9 @@ const TreeItemWrapper = memo(
     const handleRequestClick = useCallback(
       (e: MouseEvent<HTMLElement>) => {
         if (e.ctrlKey || e.metaKey) return handleRenameAction();
-        handleChangeSelectedTab(id);
+        handleSelectTab();
       },
-      [handleChangeSelectedTab, handleRenameAction, id],
+      [handleRenameAction, handleSelectTab],
     );
 
     const leftSpace = REQUEST_ITEM_SPACE_SIZE * level;
