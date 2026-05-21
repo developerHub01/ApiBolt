@@ -223,12 +223,6 @@ if (!gotTheLock) {
 
     /* handle deep linking (open app from website) */
     initDeepLink(mainWindow);
-    /**
-     * =============================================
-     * ================= T O D O ===================
-     * =============================================
-     */
-    // forwardDeepLink(process.argv, () => mainWindow);
 
     /***
      * by default setting all windows closing reasone as "user"
