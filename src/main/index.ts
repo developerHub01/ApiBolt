@@ -63,8 +63,7 @@ import { WEBSITE_BASE_URL } from "@shared/constant/api-bolt";
 import { pathParamsHandlers } from "@/main/ipc/pathParamsHandlers";
 import { testScriptHandler } from "@/main/ipc/testScriptHandler";
 import { appInfoHandlers } from "@/main/ipc/appInfoHandler";
-import { mockRequestOrFolderMetaHandler } from "@/main/ipc/mockRequestOrFolderMetaHandler";
-import { mockTabsHandler } from "@/main/ipc/mockTabsHandler";
+import { initDeepLink, forwardDeepLink } from "@/main/utils/deepLink";
 
 /***
  * App basic setup declaration
@@ -131,6 +130,7 @@ const enterMainApp = () => {
       showMainWindow();
     });
   else showMainWindow();
+  forwardDeepLink(process.argv, () => mainWindow);
 
   closeLocalPassword();
 };
@@ -140,7 +140,10 @@ const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) {
   app.quit();
 } else {
-  app.on("second-instance", () => {
+  app.on("second-instance", (_, commandLine) => {
+    /* Forward deep link if user clicked link while app was open */
+    forwardDeepLink(commandLine, () => mainWindow);
+
     if (mainWindow) {
       if (mainWindow.isMinimized()) mainWindow.restore();
       else mainWindow.focus();
@@ -218,6 +221,9 @@ if (!gotTheLock) {
     mainWindow = createMainWindow();
     mainWindow.setBackgroundColor(backgroundColor);
 
+    /* handle deep linking (open app from website) */
+    initDeepLink(mainWindow);
+
     /***
      * by default setting all windows closing reasone as "user"
      */
@@ -236,9 +242,6 @@ if (!gotTheLock) {
     app.on("browser-window-created", (_, window) => {
       optimizer.watchWindowShortcuts(window);
     });
-
-    // IPC test
-    ipcMain.on("ping", () => console.info("pong"));
 
     /***
      * Render main window or local-password window if splash loading finished

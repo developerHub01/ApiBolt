@@ -1,5 +1,5 @@
 export const DEFAULT_APP_NAME = "APIBolt";
-export const DEFAULT_APP_VERSION = "1.0.0";
+export const DEFAULT_APP_VERSION = "2.2.1";
 
 const WEBSITE_ORIGIN_DEV = "http://localhost:3000";
 const WEBSITE_ORIGIN_PROD = "https://apibolt.vercel.app";

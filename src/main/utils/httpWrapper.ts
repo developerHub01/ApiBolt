@@ -1,12 +1,10 @@
 import { axiosServerClient } from "@shared/libs/utils";
-import { HttpErrorInterface } from "@shared/types/http.types";
+import {
+  HttpErrorInterface,
+  HttpSuccessInterface,
+  TApiServerResponse,
+} from "@shared/types/http-wrapper.types";
 import axios, { AxiosRequestConfig } from "axios";
-
-export interface HttpRequestResponseInterface<T> {
-  data: T;
-  success: boolean;
-  status: number;
-}
 
 export const httpFallbackError = (): HttpErrorInterface => ({
   success: false,
@@ -15,14 +13,18 @@ export const httpFallbackError = (): HttpErrorInterface => ({
 
 export const httpRequest = async <T = undefined>(
   config: AxiosRequestConfig,
-): Promise<HttpRequestResponseInterface<T>> => {
+): Promise<TApiServerResponse<T>> => {
   try {
     const response =
-      await axiosServerClient.request<HttpRequestResponseInterface<T>>(config);
-    return response.data;
+      await axiosServerClient.request<HttpSuccessInterface<T>>(config);
+    return {
+      success: true,
+      data: response.data.data,
+      status: response.data.status,
+    };
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      throw {
+      return {
         success: false,
         message: error.message,
         code: error.code,
@@ -33,6 +35,6 @@ export const httpRequest = async <T = undefined>(
       } satisfies HttpErrorInterface;
     }
 
-    throw httpFallbackError();
+    return httpFallbackError();
   }
 };
