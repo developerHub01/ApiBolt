@@ -64,6 +64,8 @@ import { pathParamsHandlers } from "@/main/ipc/pathParamsHandlers";
 import { testScriptHandler } from "@/main/ipc/testScriptHandler";
 import { appInfoHandlers } from "@/main/ipc/appInfoHandler";
 import { initDeepLink, forwardDeepLink } from "@/main/utils/deepLink";
+import { mockRequestOrFolderMetaHandler } from "@/main/ipc/mockRequestOrFolderMetaHandler";
+import { mockTabsHandler } from "@/main/ipc/mockTabsHandler";
 
 /***
  * App basic setup declaration
