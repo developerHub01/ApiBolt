@@ -90,6 +90,16 @@ if (process.contextIsolated) {
        * Matchine level utils
        */
       getMachineId: () => ipcRenderer.invoke("getMachineId"),
+
+      /**
+       * Deeplinking
+       */
+      onDeepLink: (callback: (url: string) => void) => {
+        const listener = (_: Electron.IpcRendererEvent, url: string): void =>
+          callback(url);
+        ipcRenderer.on("deep-link", listener);
+        return () => ipcRenderer.removeListener("deep-link", listener);
+      },
     };
 
     /**

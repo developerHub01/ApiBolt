@@ -3,6 +3,7 @@ import type { AppDispatch, RootState } from "@/context/redux/store";
 import {
   handleChangeIsInstallMaxCountAlertOpen,
   handleChangeSelectedThemeDetails,
+  handleChangeSelectedThemeId,
   handleChangeTotalPages,
   handleChangeTotalThemes,
   handleClearThemeMarketCache,
@@ -19,9 +20,11 @@ import {
   DEFAULT_THEME_ID,
   MAX_INSTALLED_THEME_COUNT,
 } from "@shared/constant/theme";
-import axios from "axios";
 import { THEME_MARKETPLACE_PAGE_SIZE } from "@/constant/theme.constant";
-import { HttpErrorInterface } from "@shared/types/http.types";
+import { handleChangeActiveTab } from "@/context/redux/sidebar/sidebar-slice";
+import { HttpErrorInterface } from "@shared/types/http-wrapper.types";
+
+const networkErrorCodeSet = new Set(["ERR_NETWORK", "ECONNREFUSED"]);
 
 export const loadThemesSearchResult = createAsyncThunk<
   void,
@@ -45,22 +48,25 @@ export const loadThemesSearchResult = createAsyncThunk<
       return;
     } else {
       try {
-        const { meta, data } =
-          await window.electronAPITheme.getThemeListMetaServer({
-            searchTerm: state.themeMarketplace.searchTerm,
-            searchFilter: state.themeMarketplace.searchFilter,
-            page: state.themeMarketplace.page,
-            pageSize: THEME_MARKETPLACE_PAGE_SIZE,
-          });
+        const response = await window.electronAPITheme.getThemeListMetaServer({
+          searchTerm: state.themeMarketplace.searchTerm,
+          searchFilter: state.themeMarketplace.searchFilter,
+          page: state.themeMarketplace.page,
+          pageSize: THEME_MARKETPLACE_PAGE_SIZE,
+        });
+
+        if (!response.success) throw response;
+
+        const { meta, data } = response.data;
 
         dispatch(handleLoadThemeList(data));
         dispatch(handleChangeTotalPages(meta.totalPages));
         dispatch(handleChangeTotalThemes(meta.total));
-        return;
       } catch (error) {
-        if (axios.isAxiosError(error)) {
-          if (error.code === "ERR_NETWORK") throw new Error("ERR_NETWORK");
-        }
+        const err = error as HttpErrorInterface;
+        if (err.code && networkErrorCodeSet.has(err.code))
+          throw new Error("ERR_NETWORK");
+
         dispatch(handleClearThemeMarketCache());
       }
     }
@@ -83,7 +89,9 @@ export const loadThemesDetails = createAsyncThunk<
 
     const response =
       await window.electronAPITheme.getThemeDetailsByIdServer(id);
-    dispatch(handleChangeSelectedThemeDetails(response));
+    if (!response.success) throw response;
+
+    dispatch(handleChangeSelectedThemeDetails(response.data));
   } catch (error) {
     const err = error as HttpErrorInterface;
 
@@ -91,7 +99,8 @@ export const loadThemesDetails = createAsyncThunk<
     const themeDetails = await window.electronAPITheme.getThemeById(id);
     dispatch(handleChangeSelectedThemeDetails(themeDetails));
 
-    if (err.code === "ERR_NETWORK") throw new Error("ERR_NETWORK");
+    if (err.code && networkErrorCodeSet.has(err.code))
+      throw new Error("ERR_NETWORK");
     else if (err.status === 404) throw new Error("NOT_FOUND");
   }
 });
@@ -112,7 +121,11 @@ export const installTheme = createAsyncThunk<
       throw new Error();
     }
 
-    const theme = await window.electronAPITheme.getThemeDetailsByIdServer(id);
+    const themeResponse =
+      await window.electronAPITheme.getThemeDetailsByIdServer(id);
+    if (!themeResponse.success) throw themeResponse;
+
+    const theme = themeResponse.data;
 
     const response = await window.electronAPITheme.installTheme({
       id: theme.id,
@@ -236,3 +249,28 @@ export const exitPreviewTheme = createAsyncThunk<
     return false;
   }
 });
+
+export const protocolUrlOpenTheme = createAsyncThunk<
+  boolean,
+  string,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>(
+  "theme-marketplace/protocolUrlOpenTheme",
+  async (themeId, { dispatch, getState }) => {
+    try {
+      const state = getState() as RootState;
+
+      if (state.sidebar.activeTab !== "navigate_themes_marketplace")
+        dispatch(handleChangeActiveTab("navigate_themes_marketplace"));
+      dispatch(handleChangeSelectedThemeId(themeId));
+
+      return true;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+);

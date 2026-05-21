@@ -27,7 +27,7 @@ import {
   getActiveThemeMeta,
 } from "@/main/db/activeThemeDB";
 import { MAX_INSTALLED_THEME_COUNT } from "@shared/constant/theme";
-import { httpFallbackError, httpRequest } from "@/main/utils/httpWrapper";
+import { httpRequest } from "@/main/utils/httpWrapper";
 import { MACHINE_ID } from "@/main/constant";
 
 const getNewThumbnailPath = (id: string): string => {
@@ -310,18 +310,12 @@ export const themeHandler = (): void => {
       ...[params]: Parameters<
         ElectronAPIThemeInterface["getThemeListMetaServer"]
       >
-    ): ReturnType<ElectronAPIThemeInterface["getThemeListMetaServer"]> => {
-      const response = await httpRequest<ThemesSearchResultInterface>({
+    ): ReturnType<ElectronAPIThemeInterface["getThemeListMetaServer"]> =>
+      await httpRequest<ThemesSearchResultInterface>({
         method: "GET",
         url: `/themes/meta`,
         params,
-      });
-
-      const data = response.data as ThemesSearchResultInterface;
-
-      if (response.status !== 200 || !data) throw httpFallbackError();
-      return data;
-    },
+      }),
   );
   ipcMain.handle(
     "getThemeDetailsByIdServer",
@@ -330,15 +324,10 @@ export const themeHandler = (): void => {
       ...[id]: Parameters<
         ElectronAPIThemeInterface["getThemeDetailsByIdServer"]
       >
-    ): ReturnType<ElectronAPIThemeInterface["getThemeDetailsByIdServer"]> => {
-      const response = await httpRequest<ThemeInterface>({
+    ): ReturnType<ElectronAPIThemeInterface["getThemeDetailsByIdServer"]> =>
+      await httpRequest<ThemeInterface>({
         method: "GET",
         url: `/themes/details/${id}`,
-      });
-      const data = response.data as ThemeInterface;
-
-      if (response.status !== 200 || !data) throw httpFallbackError();
-      return data;
-    },
+      }),
   );
 };

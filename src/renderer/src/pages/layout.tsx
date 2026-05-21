@@ -4,6 +4,7 @@ import { isElectron } from "@/utils/electron";
 import Redirector from "@/components/app/Redirector";
 import LoadBasicData from "@/components/app/LoadBasicData";
 import { motion } from "motion/react";
+import ProtocolUrlExecutor from "@/components/ux/ProtocolUrlExecutor";
 
 const RootLayout = () => {
   return (
@@ -26,6 +27,7 @@ const RootLayout = () => {
     >
       <Outlet />
       <Redirector />
+      <ProtocolUrlExecutor />
       <LoadBasicData />
     </motion.section>
   );

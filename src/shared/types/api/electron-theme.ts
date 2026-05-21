@@ -7,6 +7,7 @@ import {
   ThemeMetaServerParamsInterface,
   ThemesSearchResultInterface,
 } from "@shared/types/theme.types";
+import { TApiServerResponse } from "@shared/types/http-wrapper.types";
 
 export interface ElectronAPIThemeInterface {
   getThemeListMeta(): Promise<Array<ThemeMetaInterface>>;
@@ -24,6 +25,8 @@ export interface ElectronAPIThemeInterface {
   unInstallTheme(id: string): Promise<boolean>;
   getThemeListMetaServer(
     params: ThemeMetaServerParamsInterface,
-  ): Promise<ThemesSearchResultInterface>;
-  getThemeDetailsByIdServer(id: string): Promise<ThemeInterface>;
+  ): Promise<TApiServerResponse<ThemesSearchResultInterface>>;
+  getThemeDetailsByIdServer(
+    id: string,
+  ): Promise<TApiServerResponse<ThemeInterface>>;
 }
