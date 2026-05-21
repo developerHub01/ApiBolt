@@ -36,7 +36,8 @@ export const createMainWindow = () => {
     },
   });
 
-  if (is.dev) win.webContents.openDevTools();
+  // if (is.dev) win.webContents.openDevTools();
+  win.webContents.openDevTools();
 
   win.webContents.setWindowOpenHandler(details => {
     shell.openExternal(details.url);

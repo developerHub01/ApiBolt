@@ -9,3 +9,5 @@ export const HTTP_VERSIONS: Array<THttpVersionSetting> = [
 ];
 
 export const API_BOLT_APP_ID = "com.api-bolt";
+
+export const API_BOLT_PROTOCOL = "api-bolt";
