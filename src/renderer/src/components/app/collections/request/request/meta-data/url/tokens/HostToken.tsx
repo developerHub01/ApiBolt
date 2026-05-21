@@ -1,7 +1,6 @@
 import {
   memo,
   useCallback,
-  useEffect,
   useRef,
   useState,
   type ClipboardEvent,
@@ -36,21 +35,18 @@ const HostToken = memo(({ hostType }: HostTokenProps) => {
   const dispatch = useAppDispatch();
   const host = useAppSelector(selectRequestUrlTokenHost);
   const [hostState, setHostState] = useState<string>(host);
-  const [isError, setIsError] = useState<boolean>(false);
+  const [prevHost, setPrevHost] = useState<string>(host);
   const hostnameRef = useRef<HTMLInputElement>(null);
+  const isError = isInvalidToken(hostState);
 
-  useEffect(() => {
-    if (host === hostState) return;
+  if (host !== prevHost) {
+    setPrevHost(host);
     setHostState(host);
-    setIsError(isInvalidToken(host));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [host]);
+  }
 
   const handleUpdate = (value: string) => {
     const haveError = isInvalidToken(value);
     setHostState(value);
-    setIsError(haveError);
-
     if (haveError || value === hostState) return;
 
     dispatch(
@@ -67,7 +63,6 @@ const HostToken = memo(({ hostType }: HostTokenProps) => {
   const handleKeydown = (e: KeyboardEvent<HTMLHeadingElement>) => {
     if (["Enter", "?", " ", "Tab"].includes(e.key)) e.preventDefault();
     if (e.key === "Enter") return handleUpdate(hostState);
-    setIsError(isInvalidToken(hostState));
   };
 
   const handlePaste = (e: ClipboardEvent<HTMLHeadingElement>) => {

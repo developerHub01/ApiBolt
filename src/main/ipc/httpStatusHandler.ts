@@ -3,7 +3,7 @@ import {
   getHttpStatus,
   getHttpStatusByCode,
   updateHttpStatus,
-} from "@/main/db/httpStatusDB.js";
+} from "@/main/db/httpStatusDB";
 import { ElectronAPIHttpStatusInterface } from "@shared/types/api/electron-http-status";
 
 export const httpStatusHandler = (): void => {

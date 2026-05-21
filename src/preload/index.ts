@@ -90,6 +90,16 @@ if (process.contextIsolated) {
        * Matchine level utils
        */
       getMachineId: () => ipcRenderer.invoke("getMachineId"),
+
+      /**
+       * Deeplinking
+       */
+      onDeepLink: (callback: (url: string) => void) => {
+        const listener = (_: Electron.IpcRendererEvent, url: string): void =>
+          callback(url);
+        ipcRenderer.on("deep-link", listener);
+        return () => ipcRenderer.removeListener("deep-link", listener);
+      },
     };
 
     /**
@@ -100,6 +110,8 @@ if (process.contextIsolated) {
     const electronAPIAppInfoBridge: WindowElectronAPIInterface["electronAPIAppInfo"] =
       {
         getAppInfo: async () => await ipcRenderer.invoke("getAppInfo"),
+        getAppBasicInfo: async () =>
+          await ipcRenderer.invoke("getAppBasicInfo"),
       };
 
     /**
@@ -171,6 +183,10 @@ if (process.contextIsolated) {
           await ipcRenderer.invoke("installTheme", ...payload),
         unInstallTheme: async (...payload) =>
           await ipcRenderer.invoke("unInstallTheme", ...payload),
+        getThemeListMetaServer: async (...payload) =>
+          await ipcRenderer.invoke("getThemeListMetaServer", ...payload),
+        getThemeDetailsByIdServer: async (...payload) =>
+          await ipcRenderer.invoke("getThemeDetailsByIdServer", ...payload),
       };
 
     /**

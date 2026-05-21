@@ -1,7 +1,7 @@
 import { pathParamsTable } from "@/main/db/schema";
 import { eq } from "drizzle-orm";
-import { db } from "@/main/db/index.js";
-import { getTabList } from "@/main/db/tabsDB.js";
+import { db } from "@/main/db/index";
+import { getTabList } from "@/main/db/tabsDB";
 import { ElectronAPIPathParamsInterface } from "@shared/types/api/electron-path-params";
 
 /* id === requestOrFolderMetaId */

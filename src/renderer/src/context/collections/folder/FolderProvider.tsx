@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { createContext, useCallback, useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { updateFolder } from "@/context/redux/request-response/thunks/folder";
@@ -43,30 +37,30 @@ interface RequestFolderProviderProps {
 const RequestFolderProvider = ({ children }: RequestFolderProviderProps) => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
-  const description = useAppSelector(selectRequestFolderDescription);
+  const description = useAppSelector(selectRequestFolderDescription) ?? "";
   const isLineWrap = useAppSelector(selectIsFolderDescriptionLineWrap);
-  const [folderDescription, setFolderDescription] = useState<string>("");
+  const [folderDescription, setFolderDescription] =
+    useState<string>(description);
+  const [prevDescription, setPrevDescription] = useState<string>(description);
 
-  useEffect(() => {
-    if (description === folderDescription) return;
+  if (description !== prevDescription) {
+    setPrevDescription(description);
     setFolderDescription(description ?? "");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [description]);
+  }
 
   const handleChangeDescription = useCallback(
     (value: string) => setFolderDescription(value),
     [],
   );
 
-  const handleBlurDescription = useCallback(
-    () =>
-      dispatch(
-        updateFolder({
-          description: folderDescription ?? "",
-        }),
-      ),
-    [dispatch, folderDescription],
-  );
+  const handleBlurDescription = useCallback(() => {
+    if (folderDescription === description) return;
+    dispatch(
+      updateFolder({
+        description: folderDescription ?? "",
+      }),
+    );
+  }, [description, dispatch, folderDescription]);
 
   const handleLineWrap = useCallback(
     () => dispatch(handleToggleFolderDescriptionLineWrap()),

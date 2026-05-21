@@ -5,7 +5,7 @@ import path from "node:path";
 import fs from "node:fs/promises";
 import { app } from "electron";
 import { migrate } from "drizzle-orm/libsql/migrator";
-import { getAppVersion, setAppVersion } from "@/main/db/versionDB";
+import { doFirstStartUpWork, getAppVersion } from "@/main/db/appBasicMetaDB";
 import { compareVersions } from "@/main/utils/utils";
 
 const userDataPath = app.isPackaged
@@ -74,18 +74,19 @@ export const runMigrations = async () => {
 };
 
 export const prepareDB = async () => {
-  const currentVersion = app.getVersion();
-  let dbVersion: string | null = null;
+  let dbVersion = "";
 
   try {
-    dbVersion = await getAppVersion();
+    dbVersion = (await getAppVersion()) ?? "";
   } catch {
     console.warn("⚠️ Could not read DB version (probably old DB)");
   }
 
   await runMigrations();
 
-  if (dbVersion !== currentVersion) await setAppVersion(currentVersion);
+  await doFirstStartUpWork({
+    dbVersion,
+  });
 
   cleanupOldDBs(2);
 };

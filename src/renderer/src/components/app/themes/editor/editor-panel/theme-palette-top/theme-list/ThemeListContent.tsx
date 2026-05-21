@@ -1,4 +1,4 @@
-import { useEffect, useState, type MouseEvent } from "react";
+import { useState, type MouseEvent } from "react";
 import {
   AnimatedDialogContent,
   AnimatedDialogContentScroll,
@@ -28,13 +28,17 @@ const ThemeListContent = ({ onClose }: Props) => {
   const [selectedId, setSelectedId] = useState<string | null>(
     activeTheme ?? null,
   );
+  const [prevActiveTheme, setPrevActiveTheme] = useState<string | null>(
+    activeTheme ?? null,
+  );
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const metaList = useAppSelector(selectThemeMetaList);
   const isLoaded = useAppSelector(selectThemeMetaLoaded);
 
-  useEffect(() => {
+  if (activeTheme !== prevActiveTheme) {
+    setPrevActiveTheme(activeTheme);
     setSelectedId(activeTheme);
-  }, [activeTheme]);
+  }
 
   const handleClick = (e: MouseEvent<HTMLDivElement>) =>
     setSelectedId(e.currentTarget.id);

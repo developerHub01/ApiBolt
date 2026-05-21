@@ -1,7 +1,7 @@
-import { GLOBAL_PROJECT_ID, settingTable } from "@/main/db/schema.js";
+import { GLOBAL_PROJECT_ID, settingTable } from "@/main/db/schema";
 import { eq } from "drizzle-orm";
-import { db } from "@/main/db/index.js";
-import { getActiveProject } from "@/main/db/projectsDB.js";
+import { db } from "@/main/db/index";
+import { getActiveProject } from "@/main/db/projectsDB";
 import { ElectronAPISettingsInterface } from "@shared/types/api/electron-settings";
 import { defaultSettings } from "@/data/settings";
 

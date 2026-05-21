@@ -1,9 +1,5 @@
 import { ipcMain } from "electron";
-import {
-  duplicateFolder,
-  getFolder,
-  updateFolder,
-} from "@/main/db/folderDB.js";
+import { duplicateFolder, getFolder, updateFolder } from "@/main/db/folderDB";
 import { ElectronAPIFolderInterface } from "@shared/types/api/electron-folder";
 
 export const folderHandlers = (): void => {

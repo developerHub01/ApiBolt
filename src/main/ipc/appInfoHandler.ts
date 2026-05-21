@@ -23,4 +23,13 @@ export const appInfoHandlers = (): void => {
       };
     },
   );
+  ipcMain.handle(
+    "getAppBasicInfo",
+    async (_): ReturnType<ElectronAPIAppInfoInterface["getAppBasicInfo"]> => {
+      return {
+        name: app.getName(),
+        version: app.getVersion(),
+      };
+    },
+  );
 };

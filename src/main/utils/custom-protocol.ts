@@ -1,11 +1,12 @@
 import { net, protocol, session } from "electron";
 import { pathToFileURL } from "node:url";
 import path from "node:path";
+import { API_BOLT_PROTOCOL } from "@shared/constant";
 
 /* Register custom protocol as privileged */
 protocol.registerSchemesAsPrivileged([
   {
-    scheme: "api-bolt",
+    scheme: API_BOLT_PROTOCOL,
     privileges: {
       standard: true,
       secure: true,
@@ -19,9 +20,9 @@ protocol.registerSchemesAsPrivileged([
  * Protocol handler for api-bolt:// URLs
  */
 export const handleProtocol = () => {
-  session.defaultSession.protocol.handle("api-bolt", async request => {
+  session.defaultSession.protocol.handle(API_BOLT_PROTOCOL, async request => {
     try {
-      let relPath = request.url.replace("api-bolt://", "");
+      let relPath = request.url.replace(`${API_BOLT_PROTOCOL}://`, "");
 
       /* Decode characters (like %20 for spaces) */
       relPath = decodeURIComponent(relPath);

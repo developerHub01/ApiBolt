@@ -1,4 +1,5 @@
 import {
+  ParamHeaderPayloadInterface,
   type HiddenHeadersCheckInterface,
   type ParamHeaderBuildPayloadInterface,
 } from "@shared/types/request-response.types";
@@ -9,10 +10,46 @@ import {
   handleLoadHiddenHeadersIsCheck,
   handleUpdateHiddenHeadersIsCheck,
 } from "@/context/redux/request-response/request-response-slice";
+import { INITIAL_HIDDEN_HEADERS_DATA } from "@/constant/request-response.constant";
+import { he } from "@faker-js/faker";
 
 /* ==============================
 ======== Headers start ===========
 ================================= */
+export const loadFullHeaders = createAsyncThunk<
+  void,
+  Array<ParamHeaderPayloadInterface>,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>(
+  "request-response/loadFullHeaders",
+  async (payload, { getState, dispatch }) => {
+    try {
+      const state = getState() as RootState;
+
+      const appName = state.appInfo.info.name;
+      const appVersion = state.appInfo.info.version;
+
+      const hiddenHeaders = structuredClone(INITIAL_HIDDEN_HEADERS_DATA);
+      const index = hiddenHeaders.findIndex(
+        header => header.id === "userAgent",
+      );
+      hiddenHeaders[index].value = `${appName}/${appVersion}`;
+
+      dispatch(
+        handleLoadHeaders({
+          payload: payload,
+          hiddenHeaders,
+        }),
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  },
+);
+
 export const loadHeaders = createAsyncThunk<
   void,
   void | {
@@ -38,7 +75,7 @@ export const loadHeaders = createAsyncThunk<
 
     const response = await window.electronAPIHeaders.getHeaders(selectedTab);
 
-    dispatch(handleLoadHeaders(response));
+    dispatch(loadFullHeaders(response));
   } catch (error) {
     console.error(error);
   }
@@ -148,7 +185,7 @@ export const deleteHeadersByRequestMetaId = createAsyncThunk<
       const response =
         await window.electronAPIHeaders.deleteHeadersByRequestMetaId(id);
 
-      if (response) dispatch(handleLoadHeaders([]));
+      if (response) dispatch(loadFullHeaders([]));
       return response;
     } catch (error) {
       console.error(error);

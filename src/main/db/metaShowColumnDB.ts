@@ -1,7 +1,7 @@
 import { eq, inArray } from "drizzle-orm";
-import { db } from "@/main/db/index.js";
-import { metaShowColumnTable } from "@/main/db/schema.js";
-import { getTabList } from "@/main/db/tabsDB.js";
+import { db } from "@/main/db/index";
+import { metaShowColumnTable } from "@/main/db/schema";
+import { getTabList } from "@/main/db/tabsDB";
 import { ElectronAPIMetaShowColumnInterface } from "@shared/types/api/electron-meta-show-column";
 
 export const getMetaShowColumn: ElectronAPIMetaShowColumnInterface["getMetaShowColumn"] =

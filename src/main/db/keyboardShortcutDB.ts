@@ -1,8 +1,8 @@
 import { and, eq } from "drizzle-orm";
-import { db } from "@/main/db/index.js";
-import { GLOBAL_PROJECT_ID, keyboardShortcutTable } from "@/main/db/schema.js";
-import { getActiveProject } from "@/main/db/projectsDB.js";
-import { keyboardBindings } from "@/data/keyboard_short_cut_list.js";
+import { db } from "@/main/db/index";
+import { GLOBAL_PROJECT_ID, keyboardShortcutTable } from "@/main/db/schema";
+import { getActiveProject } from "@/main/db/projectsDB";
+import { keyboardBindings } from "@/data/keyboard_short_cut_list";
 import { ElectronAPIKeyboardShortcutInterface } from "@shared/types/api/electron-keyboard-shortcuts";
 import {
   KeybaordShortCutInterface,

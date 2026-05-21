@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
-import { keyboardBindings } from "@/data/keyboard_short_cut_list.js";
-import { db } from "@/main/db/index.js";
-import { GLOBAL_PROJECT_ID, keyboardShortcutTable } from "@/main/db/schema.js";
+import { keyboardBindings } from "@/data/keyboard_short_cut_list";
+import { db } from "@/main/db/index";
+import { GLOBAL_PROJECT_ID, keyboardShortcutTable } from "@/main/db/schema";
 
 export const generateKeyboardBindingsSeed = async () => {
   try {

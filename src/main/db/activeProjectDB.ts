@@ -1,6 +1,6 @@
-import { db } from "@/main/db/index.js";
+import { db } from "@/main/db/index";
 import { eq } from "drizzle-orm";
-import { ACTIVE_PROJECT_ID, activeProjectTable } from "@/main/db/schema.js";
+import { ACTIVE_PROJECT_ID, activeProjectTable } from "@/main/db/schema";
 
 export const getActiveProject = async (): Promise<string | null> => {
   try {

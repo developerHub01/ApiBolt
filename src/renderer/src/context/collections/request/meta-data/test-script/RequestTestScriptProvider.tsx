@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { createContext, useCallback, useContext, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/context/redux/hooks";
 import { updateTestScript } from "@/context/redux/request-response/thunks/test-script";
 import { selectSelectedScript } from "@/context/redux/request-response/selectors/test-script";
@@ -39,12 +33,14 @@ const RequestTestScriptProvider = ({
   children,
 }: RequestTestScriptProviderProps) => {
   const dispatch = useAppDispatch();
-  const [code, setCode] = useState<string | null>(null);
   const codeScript = useAppSelector(selectSelectedScript) ?? "";
+  const [code, setCode] = useState<string>(codeScript);
+  const [prevCodeScript, setPrevCodeScript] = useState<string>(codeScript);
 
-  useEffect(() => {
+  if (codeScript !== prevCodeScript) {
+    setPrevCodeScript(codeScript);
     setCode(codeScript);
-  }, [codeScript]);
+  }
 
   const handleChangeScript = useCallback(
     (newCode: string) => setCode(newCode),

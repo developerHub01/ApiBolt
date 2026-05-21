@@ -1,14 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "@/context/redux/store";
-import { axiosServerClient } from "@/lib/utils";
-import {
-  ThemeInterface,
-  ThemeMetaInterface,
-  ThemesSearchResultInterface,
-} from "@shared/types/theme.types";
 import {
   handleChangeIsInstallMaxCountAlertOpen,
   handleChangeSelectedThemeDetails,
+  handleChangeSelectedThemeId,
   handleChangeTotalPages,
   handleChangeTotalThemes,
   handleClearThemeMarketCache,
@@ -25,8 +20,11 @@ import {
   DEFAULT_THEME_ID,
   MAX_INSTALLED_THEME_COUNT,
 } from "@shared/constant/theme";
-import axios from "axios";
 import { THEME_MARKETPLACE_PAGE_SIZE } from "@/constant/theme.constant";
+import { handleChangeActiveTab } from "@/context/redux/sidebar/sidebar-slice";
+import { HttpErrorInterface } from "@shared/types/http-wrapper.types";
+
+const networkErrorCodeSet = new Set(["ERR_NETWORK", "ECONNREFUSED"]);
 
 export const loadThemesSearchResult = createAsyncThunk<
   void,
@@ -50,28 +48,25 @@ export const loadThemesSearchResult = createAsyncThunk<
       return;
     } else {
       try {
-        const response = await axiosServerClient.get("/themes/meta", {
-          params: {
-            searchTerm: state.themeMarketplace.searchTerm,
-            searchFilter: state.themeMarketplace.searchFilter,
-            page: state.themeMarketplace.page,
-            pageSize: THEME_MARKETPLACE_PAGE_SIZE,
-          },
+        const response = await window.electronAPITheme.getThemeListMetaServer({
+          searchTerm: state.themeMarketplace.searchTerm,
+          searchFilter: state.themeMarketplace.searchFilter,
+          page: state.themeMarketplace.page,
+          pageSize: THEME_MARKETPLACE_PAGE_SIZE,
         });
 
-        if (response.status !== 200 || !response.data?.data) throw new Error();
+        if (!response.success) throw response;
 
-        const { meta, data } = response.data
-          ?.data as ThemesSearchResultInterface;
+        const { meta, data } = response.data;
 
         dispatch(handleLoadThemeList(data));
         dispatch(handleChangeTotalPages(meta.totalPages));
         dispatch(handleChangeTotalThemes(meta.total));
-        return;
       } catch (error) {
-        if (axios.isAxiosError(error)) {
-          if (error.code === "ERR_NETWORK") throw new Error("ERR_NETWORK");
-        }
+        const err = error as HttpErrorInterface;
+        if (err.code && networkErrorCodeSet.has(err.code))
+          throw new Error("ERR_NETWORK");
+
         dispatch(handleClearThemeMarketCache());
       }
     }
@@ -92,18 +87,21 @@ export const loadThemesDetails = createAsyncThunk<
     if (!id) throw new Error("Theme id not passed");
     if (id === DEFAULT_THEME_ID) throw new Error("it is the default theme");
 
-    const response = await axiosServerClient.get(`/themes/details/${id}`);
+    const response =
+      await window.electronAPITheme.getThemeDetailsByIdServer(id);
+    if (!response.success) throw response;
 
-    const data = response.data?.data as ThemeInterface;
-    dispatch(handleChangeSelectedThemeDetails(data));
+    dispatch(handleChangeSelectedThemeDetails(response.data));
   } catch (error) {
+    const err = error as HttpErrorInterface;
+
     if (!id) throw new Error();
     const themeDetails = await window.electronAPITheme.getThemeById(id);
     dispatch(handleChangeSelectedThemeDetails(themeDetails));
-    if (axios.isAxiosError(error)) {
-      if (error.code === "ERR_NETWORK") throw new Error("ERR_NETWORK");
-      else if (error.status === 404) throw new Error("NOT_FOUND");
-    }
+
+    if (err.code && networkErrorCodeSet.has(err.code))
+      throw new Error("ERR_NETWORK");
+    else if (err.status === 404) throw new Error("NOT_FOUND");
   }
 });
 
@@ -123,10 +121,11 @@ export const installTheme = createAsyncThunk<
       throw new Error();
     }
 
-    const themeResponse = await axiosServerClient.get(`/themes/details/${id}`);
-    const theme = themeResponse.data?.data as ThemeInterface;
+    const themeResponse =
+      await window.electronAPITheme.getThemeDetailsByIdServer(id);
+    if (!themeResponse.success) throw themeResponse;
 
-    if (themeResponse.status !== 200 || !theme) throw new Error();
+    const theme = themeResponse.data;
 
     const response = await window.electronAPITheme.installTheme({
       id: theme.id,
@@ -139,17 +138,6 @@ export const installTheme = createAsyncThunk<
       preview: theme.preview,
       version: theme.version,
     });
-
-    try {
-      const matchineId = await window.electronAPI.getMachineId();
-      await axiosServerClient.post("/themes/install", {
-        themeId: theme.id,
-        deviceId: matchineId,
-        actionType: "install",
-      });
-    } catch (error) {
-      /*  console.error(error); */
-    }
 
     dispatch(loadInstalledThemeMetaList());
 
@@ -192,17 +180,6 @@ export const unInstallTheme = createAsyncThunk<
     ) {
       dispatch(loadActiveThemeId());
       dispatch(applyThemeInApp());
-    }
-
-    try {
-      const matchineId = await window.electronAPI.getMachineId();
-      await axiosServerClient.post("/themes/install", {
-        themeId: id,
-        deviceId: matchineId,
-        actionType: "uninstall",
-      });
-    } catch (error) {
-      /* console.error(error); */
     }
 
     return response;
@@ -272,3 +249,28 @@ export const exitPreviewTheme = createAsyncThunk<
     return false;
   }
 });
+
+export const protocolUrlOpenTheme = createAsyncThunk<
+  boolean,
+  string,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>(
+  "theme-marketplace/protocolUrlOpenTheme",
+  async (themeId, { dispatch, getState }) => {
+    try {
+      const state = getState() as RootState;
+
+      if (state.sidebar.activeTab !== "navigate_themes_marketplace")
+        dispatch(handleChangeActiveTab("navigate_themes_marketplace"));
+      dispatch(handleChangeSelectedThemeId(themeId));
+
+      return true;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+);

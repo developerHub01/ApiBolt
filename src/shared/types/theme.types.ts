@@ -92,3 +92,10 @@ export interface ThemesSearchResultInterface {
     totalPages: number;
   };
 }
+
+export interface ThemeMetaServerParamsInterface {
+  searchTerm: string;
+  searchFilter: TThemeMarketplaceSearchFilter;
+  page: number;
+  pageSize: number;
+}

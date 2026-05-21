@@ -8,7 +8,7 @@ import {
   getHeaders,
   replaceHeaders,
   updateHeaders,
-} from "@/main/db/headersDB.js";
+} from "@/main/db/headersDB";
 import { ElectronAPIHeadersInterface } from "@shared/types/api/electron-headers";
 
 export const headersHandlers = (): void => {

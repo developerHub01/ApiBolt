@@ -4,7 +4,7 @@ import {
   duplicateHiddenHeadersCheck,
   getHiddenHeadersCheck,
   updateHiddenHeadersCheck,
-} from "@/main/db/hiddenHeadersCheckDB.js";
+} from "@/main/db/hiddenHeadersCheckDB";
 import { ElectronAPIHiddenHeadersCheckInterface } from "@shared/types/api/electron-hidden-headers-check";
 
 export const hiddenHeadersCheckHandler = (): void => {

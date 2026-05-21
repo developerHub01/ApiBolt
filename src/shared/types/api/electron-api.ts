@@ -40,4 +40,5 @@ export interface ElectronAPIInterface {
   applyTestTheme(palette: ThemeInterface["palette"]): void;
 
   getMachineId(): Promise<string>;
+  onDeepLink(callback: (url: string) => void): () => void;
 }

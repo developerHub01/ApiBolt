@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type JSX } from "react";
-import CodeMirror, { EditorState } from "@uiw/react-codemirror";
+import CodeMirror, { EditorState, EditorView } from "@uiw/react-codemirror";
 import type { Extension } from "@uiw/react-codemirror";
-import { EditorView } from "@codemirror/view";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Copy as CopyIcon } from "lucide-react";

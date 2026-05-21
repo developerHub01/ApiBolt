@@ -1,5 +1,11 @@
-import { APP_NAME, APP_VERSION } from "@shared/constant/api-bolt";
-import type { TMetaTableType } from "@shared/types/request-response.types";
+import {
+  DEFAULT_APP_NAME,
+  DEFAULT_APP_VERSION,
+} from "@shared/constant/api-bolt";
+import type {
+  ParamInterface,
+  TMetaTableType,
+} from "@shared/types/request-response.types";
 import { v4 as uuidv4 } from "uuid";
 
 export const REQUEST_ITEM_SPACE_SIZE = 32;
@@ -41,11 +47,11 @@ export const initialHiddenCookie = () => ({
   calculateDynamicly: true,
 });
 
-export const INITIAL_HIDDEN_HEADERS_DATA = [
+export const INITIAL_HIDDEN_HEADERS_DATA: Array<ParamInterface> = [
   {
     id: "userAgent",
     key: "User-Agent",
-    value: `${APP_NAME}/${APP_VERSION}`,
+    value: `${DEFAULT_APP_NAME}/${DEFAULT_APP_VERSION}`,
     prevent: true,
     isCheck: true,
   },

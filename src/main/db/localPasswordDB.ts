@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
-import { db } from "@/main/db/index.js";
-import { LOCAL_PASSWORD_ID, localPasswordTable } from "@/main/db/schema.js";
+import { db } from "@/main/db/index";
+import { LOCAL_PASSWORD_ID, localPasswordTable } from "@/main/db/schema";
 import { ElectronAPILocalPasswordInterface } from "@shared/types/api/electron-local-password";
 
 export const getLocalPassword: ElectronAPILocalPasswordInterface["getLocalPassword"] =

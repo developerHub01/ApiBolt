@@ -26,15 +26,21 @@ export const ACTIVE_PROJECT_ID = "singleton";
 export const ACTIVE_SIDEBAR_TAB_ID = "singleton";
 export const ACTIVE_CODE_SNIPPIT_TYPE_ID = "singleton";
 export const LOCAL_PASSWORD_ID = "singleton";
+export const APP_BASIC_META_ID = "singleton";
 export const GLOBAL_PROJECT_ID = "__global__";
 export const API_URL_DEFAULT_VALUE = "http://localhost:3000";
 export const DEFAULT_ACTIVE_SIDEBAR_TAB: TSidebarTab = "navigate_projects";
 export const DEFAULT_ACTIVE_CODE_SNIPPIT_TYPE: TRequestCodeType =
   "javascript-fetch";
 
-export const versionTable = sqliteTable("version_table", {
-  key: text().primaryKey().default("version"),
-  value: text(),
+export const appBasicMetaTable = sqliteTable("app_basic_meta_table", {
+  id: text().primaryKey().default(APP_BASIC_META_ID),
+  version: text(),
+  installReported: int({
+    mode: "boolean",
+  })
+    .notNull()
+    .default(false),
 });
 
 export const localPasswordTable = sqliteTable("local_password_table", {

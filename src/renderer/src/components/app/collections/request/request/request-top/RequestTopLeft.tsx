@@ -18,16 +18,18 @@ const RequestTopLeft = () => {
   const requestName = useAppSelector(selectRequestName);
   const selectedTab = useAppSelector(selectSelectedTab)!;
   const [requestNameState, setRequestNameState] = useState<string>(requestName);
+  const [prevRequestName, setPrevRequestName] = useState<string>(requestName);
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const nameInputRef = useRef<HTMLInputElement>(null);
+
+  if (requestName !== prevRequestName) {
+    setPrevRequestName(requestName);
+    setRequestNameState(requestName);
+  }
 
   useEffect(() => {
     if (isFocused && nameInputRef.current) nameInputRef.current.focus();
   }, [isFocused]);
-
-  useEffect(() => {
-    setRequestNameState(requestName);
-  }, [requestName]);
 
   const handleInputFocus = useCallback(() => setIsFocused(true), []);
 

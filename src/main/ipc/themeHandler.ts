@@ -7,23 +7,28 @@ import {
   getThemePaletteById,
   getTotalInstalledThemeCount,
   updateTheme,
-} from "@/main/db/themeDB.js";
+} from "@/main/db/themeDB";
 import {
   importThemePaletteInEditor,
   saveThemePaletteLocal,
-} from "@/main/utils/theme.js";
+} from "@/main/utils/theme";
 import { ElectronAPIThemeInterface } from "@shared/types/api/electron-theme";
 import { app } from "electron/main";
 import path, { dirname } from "node:path";
 import { mkdir, unlink, writeFile } from "node:fs/promises";
 import axios from "axios";
 import { getImageFileFromPath } from "@/main/utils/images";
-import { ThemeInterface } from "@shared/types/theme.types";
+import {
+  ThemeInterface,
+  ThemesSearchResultInterface,
+} from "@shared/types/theme.types";
 import {
   createActiveGlobalThemeIfNotExist,
   getActiveThemeMeta,
 } from "@/main/db/activeThemeDB";
 import { MAX_INSTALLED_THEME_COUNT } from "@shared/constant/theme";
+import { httpRequest } from "@/main/utils/httpWrapper";
+import { MACHINE_ID } from "@/main/constant";
 
 const getNewThumbnailPath = (id: string): string => {
   const userDataPath = app.getPath("userData");
@@ -238,6 +243,22 @@ export const themeHandler = (): void => {
         } catch {
           /*  */
         }
+      } else {
+        try {
+          await httpRequest<{
+            data: ThemesSearchResultInterface;
+          }>({
+            method: "POST",
+            url: `/themes/install`,
+            data: {
+              themeId: themeMeta.id,
+              deviceId: MACHINE_ID,
+              actionType: "install",
+            },
+          });
+        } catch (error) {
+          /*  console.error(error); */
+        }
       }
 
       return createResponse;
@@ -260,6 +281,18 @@ export const themeHandler = (): void => {
             unlink(getNewThumbnailPath(themeId)),
             unlink(getNewPreviewPath(themeId)),
           ]);
+
+          await httpRequest<{
+            data: ThemesSearchResultInterface;
+          }>({
+            method: "POST",
+            url: `/themes/install`,
+            data: {
+              themeId,
+              deviceId: MACHINE_ID,
+              actionType: "uninstall",
+            },
+          });
         } catch {
           /*  */
         }
@@ -268,5 +301,33 @@ export const themeHandler = (): void => {
       await createActiveGlobalThemeIfNotExist();
       return deletedResponse;
     },
+  );
+
+  ipcMain.handle(
+    "getThemeListMetaServer",
+    async (
+      _,
+      ...[params]: Parameters<
+        ElectronAPIThemeInterface["getThemeListMetaServer"]
+      >
+    ): ReturnType<ElectronAPIThemeInterface["getThemeListMetaServer"]> =>
+      await httpRequest<ThemesSearchResultInterface>({
+        method: "GET",
+        url: `/themes/meta`,
+        params,
+      }),
+  );
+  ipcMain.handle(
+    "getThemeDetailsByIdServer",
+    async (
+      _,
+      ...[id]: Parameters<
+        ElectronAPIThemeInterface["getThemeDetailsByIdServer"]
+      >
+    ): ReturnType<ElectronAPIThemeInterface["getThemeDetailsByIdServer"]> =>
+      await httpRequest<ThemeInterface>({
+        method: "GET",
+        url: `/themes/details/${id}`,
+      }),
   );
 };

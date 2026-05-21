@@ -1,5 +1,5 @@
 import { eq, count, getTableColumns, inArray, ne } from "drizzle-orm";
-import { db } from "@/main/db/index.js";
+import { db } from "@/main/db/index";
 import {
   projectTable,
   activeProjectTable,
@@ -18,14 +18,14 @@ import {
   authorizationTable,
   GLOBAL_PROJECT_ID,
   testScriptTable,
-} from "@/main/db/schema.js";
-import { createAuth } from "@/main/db/authorizationDB.js";
+} from "@/main/db/schema";
+import { createAuth } from "@/main/db/authorizationDB";
 import { v4 as uuidv4 } from "uuid";
 import {
   CreateProjectPayloadInterface,
   ProjectInterface,
-} from "@shared/types/project.types.js";
-import { ProjectExportFileInterface } from "@shared/types/export-import/project.js";
+} from "@shared/types/project.types";
+import { ProjectExportFileInterface } from "@shared/types/export-import/project";
 import { ElectronAPIProjectsInterface } from "@shared/types/api/electron-projects";
 
 export const getProjects = async () => {

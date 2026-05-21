@@ -33,6 +33,12 @@ CREATE TABLE `api_url_table` (
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `api_url_table_requestOrFolderMetaId_unique` ON `api_url_table` (`requestOrFolderMetaId`);--> statement-breakpoint
+CREATE TABLE `app_basic_meta_table` (
+	`id` text PRIMARY KEY DEFAULT 'singleton' NOT NULL,
+	`version` text,
+	`installReported` integer DEFAULT false NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE `authorization_table` (
 	`id` text PRIMARY KEY NOT NULL,
 	`type` text DEFAULT 'no-auth' NOT NULL,

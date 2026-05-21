@@ -1,5 +1,5 @@
 import { dialog, shell } from "electron";
-import { mainWindow } from "@/main/index.js";
+import { mainWindow } from "@/main/index";
 
 const allowedProtocols = new Set(["http:", "https:"]);
 

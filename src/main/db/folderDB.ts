@@ -1,8 +1,8 @@
 import { eq, inArray } from "drizzle-orm";
-import { db } from "@/main/db/index.js";
-import { folderTable } from "@/main/db/schema.js";
-import { getActiveProject } from "@/main/db/projectsDB.js";
-import { getTabList } from "@/main/db/tabsDB.js";
+import { db } from "@/main/db/index";
+import { folderTable } from "@/main/db/schema";
+import { getActiveProject } from "@/main/db/projectsDB";
+import { getTabList } from "@/main/db/tabsDB";
 import { ElectronAPIFolderInterface } from "@shared/types/api/electron-folder";
 
 /* folder meta id */

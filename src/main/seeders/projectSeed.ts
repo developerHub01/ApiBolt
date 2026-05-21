@@ -1,5 +1,5 @@
-import { db } from "@/main/db/index.js";
-import { GLOBAL_PROJECT_ID, projectTable } from "@/main/db/schema.js";
+import { db } from "@/main/db/index";
+import { GLOBAL_PROJECT_ID, projectTable } from "@/main/db/schema";
 
 export const generateProjectSeed = async () => {
   try {

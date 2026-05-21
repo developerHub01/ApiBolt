@@ -11,7 +11,7 @@ import {
   expendOrCollapseRequestOrFolderMetaAll,
   collapseAllRequestOrFolderMeta,
   getRequestOrFolderMetaById,
-} from "@/main/db/requestOrFolderMetaDB.js";
+} from "@/main/db/requestOrFolderMetaDB";
 import { ElectronAPIRequestOrFolderMetaInterface } from "@shared/types/api/electron-request-or-folder-meta";
 
 export const requestOrFolderMetaHandler = (): void => {

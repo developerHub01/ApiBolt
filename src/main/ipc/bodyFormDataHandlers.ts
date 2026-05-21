@@ -13,7 +13,7 @@ import {
   replaceBodyFormData,
   replaceFullBodyFormData,
   updateBodyFormData,
-} from "@/main/db/bodyFormDataDB.js";
+} from "@/main/db/bodyFormDataDB";
 import { ElectronAPIBodyFormDataInterface } from "@shared/types/api/electron-body-form";
 import {
   FileDataInterface,

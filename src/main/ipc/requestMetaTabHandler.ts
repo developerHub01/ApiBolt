@@ -6,7 +6,7 @@ import {
   deleteRequestMetaTab,
   duplicateRequestMetaTab,
   replaceRequestMetaTab,
-} from "@/main/db/requestMetaTabDB.js";
+} from "@/main/db/requestMetaTabDB";
 import { ElectronAPIRequestMetaTabInterface } from "@shared/types/api/electron-request-meta-tab";
 
 export const requestMetaTabHandler = (): void => {

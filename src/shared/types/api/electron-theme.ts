@@ -1,9 +1,13 @@
 import {
   ActiveThemeMetaInterface,
   ThemeCreatePayloadInterface,
+  ThemeInterface,
   ThemeMetaDBInterface,
   ThemeMetaInterface,
+  ThemeMetaServerParamsInterface,
+  ThemesSearchResultInterface,
 } from "@shared/types/theme.types";
+import { TApiServerResponse } from "@shared/types/http-wrapper.types";
 
 export interface ElectronAPIThemeInterface {
   getThemeListMeta(): Promise<Array<ThemeMetaInterface>>;
@@ -19,4 +23,10 @@ export interface ElectronAPIThemeInterface {
   importThemePaletteInEditor(): Promise<ThemeMetaDBInterface["palette"] | null>;
   installTheme(payload: ThemeMetaDBInterface): Promise<boolean>;
   unInstallTheme(id: string): Promise<boolean>;
+  getThemeListMetaServer(
+    params: ThemeMetaServerParamsInterface,
+  ): Promise<TApiServerResponse<ThemesSearchResultInterface>>;
+  getThemeDetailsByIdServer(
+    id: string,
+  ): Promise<TApiServerResponse<ThemeInterface>>;
 }

@@ -1,11 +1,8 @@
 import { and, eq, inArray, isNull } from "drizzle-orm";
-import { db } from "@/main/db/index.js";
-import {
-  authorizationTable,
-  requestOrFolderMetaTable,
-} from "@/main/db/schema.js";
-import { getActiveProject } from "@/main/db/projectsDB.js";
-import { generateJWT, hasValue } from "@/main/utils/utils.js";
+import { db } from "@/main/db/index";
+import { authorizationTable, requestOrFolderMetaTable } from "@/main/db/schema";
+import { getActiveProject } from "@/main/db/projectsDB";
+import { generateJWT, hasValue } from "@/main/utils/utils";
 import { ElectronAPIAuthorizationInterface } from "@shared/types/api/electron-authorization";
 import { getTabList } from "@/main/db/tabsDB";
 import { AuthorizationPayloadInterface } from "@shared/types/authorization.types";

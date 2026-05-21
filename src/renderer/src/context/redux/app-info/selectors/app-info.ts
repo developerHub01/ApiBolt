@@ -10,3 +10,8 @@ export const selectAppInfo = createSelector(
   [(state: RootState) => state.appInfo.info],
   info => info,
 );
+
+export const selectAppVersion = createSelector(
+  [(state: RootState) => state.appInfo.info],
+  info => info.version,
+);

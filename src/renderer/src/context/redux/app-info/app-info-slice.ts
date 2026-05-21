@@ -1,4 +1,8 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import {
+  DEFAULT_APP_NAME,
+  DEFAULT_APP_VERSION,
+} from "@shared/constant/api-bolt";
 import { AppInfoInterface } from "@shared/types/app-info.types";
 
 export interface AppInfoStateInterface {
@@ -10,8 +14,8 @@ export interface AppInfoStateInterface {
 const initialState: AppInfoStateInterface = {
   isOpen: false,
   info: {
-    name: "",
-    version: "",
+    name: DEFAULT_APP_NAME,
+    version: DEFAULT_APP_VERSION,
     description: "",
     tagline: "",
     website: "",
@@ -36,8 +40,14 @@ const appInfoSlice = createSlice({
       if (state.isOpen === action.payload) return;
       state.isOpen = action.payload ?? !state.isOpen;
     },
-    handleLoadAppInfo: (state, action: PayloadAction<AppInfoInterface>) => {
-      state.info = structuredClone(action.payload);
+    handleLoadAppInfo: (
+      state,
+      action: PayloadAction<Partial<AppInfoInterface>>,
+    ) => {
+      state.info = {
+        ...state.info,
+        ...action.payload,
+      };
     },
   },
 });
