@@ -29,7 +29,10 @@ import { duplicateMetaShowColumn } from "@/main/db/metaShowColumnDB";
 import { duplicateTestScript } from "@/main/db/testScriptDB";
 import { duplicateAuth } from "@/main/db/authorizationDB";
 import { duplicateFolder } from "@/main/db/folderDB";
-import { RequestFileSchema } from "@shared/schema/export-import/index.schema";
+import {
+  FolderFileSchema,
+  RequestFileSchema,
+} from "@shared/schema/export-import/index.schema";
 
 const duplicationPipeline = [
   duplicateApiUrl,
@@ -246,16 +249,18 @@ export const requestHandler = (): void => {
 
         const fileStringData = await readFile(filePath, "utf-8");
         try {
-          const fileData = JSON.parse(
-            fileStringData,
-          ) as FolderExportFileInterface;
+          const fileData = (await FolderFileSchema.parseAsync(
+            JSON.parse(fileStringData),
+          )) as FolderExportFileInterface;
+
           const response = await importFolder({
             requestId: id,
             projectId,
             ...fileData,
           });
           if (!response) throw new Error();
-        } catch {
+        } catch (error) {
+          console.error(error);
           throw new Error("Not valid folder-request-file.");
         }
 
