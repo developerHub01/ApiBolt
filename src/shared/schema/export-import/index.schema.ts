@@ -17,7 +17,7 @@ const EnvironmentFileSchema = z.object({
 });
 
 /* ========================================
-==============   ENVIRONMENT    ================
+============== ENVIRONMENT ================
 =========================================== */
 export const EnvironmentsFileSchema = z.array(EnvironmentFileSchema);
 
