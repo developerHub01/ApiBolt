@@ -9,13 +9,7 @@ import {
   RequestTabInterface,
 } from "@shared/types/request-response.types";
 import { ApiUrlPayload } from "@shared/types/request-url.types";
-import { EnvironmentInterface } from "@shared/types/environment.types";
 import { TestScriptPayloadInterface } from "@shared/types/test-script.types";
-
-export type EnvironmentExportInterface = Omit<
-  EnvironmentInterface,
-  "id" | "projectId" | "createdAt"
->;
 
 export interface FolderExportFileInterface {
   type: "folder";

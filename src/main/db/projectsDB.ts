@@ -372,8 +372,7 @@ export const exportProject = async (
         )) ?? []
     )?.reduce((acc, curr) => {
       const { requestOrFolderMetaId, ...rest } = curr;
-      if (!acc[requestOrFolderMetaId]) acc[requestOrFolderMetaId] = [];
-      acc[requestOrFolderMetaId].push(rest);
+      acc[requestOrFolderMetaId] = rest;
 
       return acc;
     }, {});

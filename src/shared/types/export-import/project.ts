@@ -10,12 +10,7 @@ import {
   RequestTabInterface,
 } from "@shared/types/request-response.types";
 import { ApiUrlPayload } from "@shared/types/request-url.types";
-import { EnvironmentInterface } from "@shared/types/environment.types";
-
-export type EnvironmentExportInterface = Omit<
-  EnvironmentInterface,
-  "id" | "projectId" | "createdAt"
->;
+import { EnvironmentExportInterface } from "@shared/types/export-import/environments";
 
 export interface ProjectExportFileInterface {
   type: "project";
@@ -57,8 +52,8 @@ export interface ProjectExportFileInterface {
     string,
     Pick<BodyRawInterface, "requestOrFolderMetaId" | "type" | "rawData">
   >;
-  testScriptList: Record<string, Pick<TestScriptPayloadInterface, "script">>;
   requestMetaTabList: Record<string, RequestTabInterface>;
+  testScriptList: Record<string, Pick<TestScriptPayloadInterface, "script">>;
   authorization: Record<
     string,
     Omit<AuthorizationPayloadInterface, "id" | "projectId">

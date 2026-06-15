@@ -9,14 +9,14 @@ import {
   requestBodyType,
 } from "@shared/constant/request-response";
 
-export const EnvironmentFileSchema = z.array(
-  z.object({
-    variable: z.string(),
-    type: z.enum(["default", "secret"]),
-    value: z.string(),
-    isCheck: z.boolean(),
-  }),
-);
+const EnvironmentFileSchema = z.object({
+  variable: z.string(),
+  type: z.enum(["default", "secret"]),
+  value: z.string(),
+  isCheck: z.boolean(),
+});
+
+export const EnvironmentsFileSchema = z.array(EnvironmentFileSchema);
 
 const RequestFileParamSchema = z.object({
   isCheck: z.boolean(),
@@ -113,6 +113,67 @@ const FolderHeaderListSchema = z.record(
 
 export const FolderFileSchema = z.object({
   type: z.literal("folder"),
+  requestList: z.record(z.string(), RequestListItemSchema),
+  apiUrlList: z.record(
+    z.string(),
+    z.object({
+      url: z.string().optional(),
+    }),
+  ),
+  paramsList: z.record(
+    z.string(),
+    z.array(
+      z.object({
+        isCheck: z.boolean().optional(),
+        key: z.string(),
+        value: z.string(),
+        keyType: z.enum(paramContentType).optional(),
+        valueType: z.enum(paramContentType).optional(),
+        description: z.string(),
+        requestOrFolderMetaId: z.union([z.string(), z.null()]).optional(),
+      }),
+    ),
+  ),
+  headersList: FolderHeaderListSchema,
+  hiddenHeadersCheckList: z.record(z.string(), RequestFileHiddenHeaderSchema),
+  formDataList: FolderHeaderListSchema,
+  xWWWFormUrlencodedList: FolderHeaderListSchema,
+  binaryDataList: z.record(
+    z.string(),
+    z.object({
+      path: z.string(),
+    }),
+  ),
+  rawDataList: z.record(
+    z.string(),
+    z.object({
+      type: z.enum(contentType),
+      rawData: z.string(),
+    }),
+  ),
+  requestMetaTabList: z.record(
+    z.string(),
+    z.object({
+      requestOrFolderMetaId: z.union([z.string(), z.null()]).optional(),
+      activeMetaTab: z.enum(activeTabType),
+      requestBodyType: z.enum(requestBodyType),
+    }),
+  ),
+  testScriptList: z.record(
+    z.string(),
+    z.object({
+      script: z.string(),
+    }),
+  ),
+  authorization: z.record(z.string(), RequestFileAuthSchema),
+});
+
+export const ProjectFileSchema = z.object({
+  type: z.literal("project"),
+  project: z.object({
+    name: z.string(),
+  }),
+  environments: z.array(EnvironmentFileSchema),
   requestList: z.record(z.string(), RequestListItemSchema),
   apiUrlList: z.record(
     z.string(),

@@ -14,7 +14,7 @@ import { getActiveProjectDetails } from "@/main/db/projectsDB";
 import { readFile, writeFile } from "node:fs/promises";
 import { ElectronAPIEnvironmentsInterface } from "@shared/types/api/electron-environments";
 import { TEnvironmentFile } from "@shared/types/export-import/environments";
-import { EnvironmentFileSchema } from "@shared/schema/export-import/index.schema";
+import { EnvironmentsFileSchema } from "@shared/schema/export-import/index.schema";
 
 export const enviromentsHandlers = (): void => {
   ipcMain.handle(
@@ -161,7 +161,7 @@ export const enviromentsHandlers = (): void => {
         let fileData: TEnvironmentFile | null = null;
         try {
           const fileStringData = await readFile(filePath, "utf-8");
-          fileData = await EnvironmentFileSchema.parseAsync(
+          fileData = await EnvironmentsFileSchema.parseAsync(
             JSON.parse(fileStringData),
           );
           if (!fileData) throw new Error();

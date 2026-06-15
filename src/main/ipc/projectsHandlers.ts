@@ -17,6 +17,7 @@ import { CreateProjectPayloadInterface } from "@shared/types/project.types";
 import { ElectronAPIProjectsInterface } from "@shared/types/api/electron-projects";
 import { ProjectExportFileInterface } from "@shared/types/export-import/project";
 import { SettingRequestState } from "@/main/state/settingRequest";
+import { ProjectFileSchema } from "@shared/schema/export-import/index.schema";
 
 export const projectsHandlers = (): void => {
   ipcMain.handle(
@@ -134,16 +135,21 @@ export const projectsHandlers = (): void => {
         const filePath = filePaths?.[0];
         if (!filePath) throw new Error("No file selected.");
 
-        let fileData: ProjectExportFileInterface | null = null;
         try {
           const fileStringData = await readFile(filePath, "utf-8");
-          fileData = JSON.parse(fileStringData);
+
+          const fileData = (await ProjectFileSchema.parseAsync(
+            JSON.parse(fileStringData),
+          )) as ProjectExportFileInterface;
+
           if (!fileData) throw new Error();
-        } catch {
+
+          const response = await importProject(fileData);
+          if (!response) throw new Error();
+        } catch (error) {
+          console.error(error);
           throw new Error("Not valid JSON data");
         }
-        const response = await importProject(fileData);
-        if (!response) throw new Error();
 
         return {
           success: true,
