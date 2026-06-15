@@ -12,9 +12,9 @@ import {
 import { mainWindow } from "@/main/index";
 import { getActiveProjectDetails } from "@/main/db/projectsDB";
 import { readFile, writeFile } from "node:fs/promises";
-import { filterValidEnvironments } from "@/main/utils/environments";
 import { ElectronAPIEnvironmentsInterface } from "@shared/types/api/electron-environments";
 import { TEnvironmentFile } from "@shared/types/export-import/environments";
+import { EnvironmentFileSchema } from "@shared/schema/export-import/index.schema";
 
 export const enviromentsHandlers = (): void => {
   ipcMain.handle(
@@ -158,26 +158,21 @@ export const enviromentsHandlers = (): void => {
         const filePath = filePaths?.[0];
         if (!filePath) throw new Error("No file selected");
 
-        try {
-          let fileData = await readFile(filePath, "utf-8");
-          fileData = JSON.parse(fileData);
-        } catch (error) {
-          throw new Error("Not valid JSON data");
-        }
-
         let fileData: TEnvironmentFile | null = null;
         try {
           const fileStringData = await readFile(filePath, "utf-8");
-          fileData = JSON.parse(fileStringData);
+          fileData = await EnvironmentFileSchema.parseAsync(
+            JSON.parse(fileStringData),
+          );
           if (!fileData) throw new Error();
-        } catch {
+        } catch (error) {
+          console.error(error);
           throw new Error("Not valid JSON data");
         }
 
-        const cleanedData = filterValidEnvironments(fileData);
-        if (!cleanedData) throw new Error("Not valid environment data");
+        console.log(fileData);
 
-        const response = await importEnvironments(cleanedData);
+        const response = await importEnvironments(fileData);
         if (!response) throw new Error();
 
         return {
