@@ -29,6 +29,7 @@ import { duplicateMetaShowColumn } from "@/main/db/metaShowColumnDB";
 import { duplicateTestScript } from "@/main/db/testScriptDB";
 import { duplicateAuth } from "@/main/db/authorizationDB";
 import { duplicateFolder } from "@/main/db/folderDB";
+import { RequestFileSchema } from "@shared/schema/export-import/index.schema";
 
 const duplicationPipeline = [
   duplicateApiUrl,
@@ -126,9 +127,9 @@ export const requestHandler = (): void => {
 
         const fileStringData = await readFile(filePath, "utf-8");
         try {
-          const fileData = JSON.parse(
-            fileStringData,
-          ) as RequestExportFileInterface;
+          const fileData = (await RequestFileSchema.parseAsync(
+            JSON.parse(fileStringData),
+          )) as RequestExportFileInterface;
 
           if (Array.isArray(fileData?.bodyFormData)) {
             fileData.bodyFormData.map((form, index) => {
