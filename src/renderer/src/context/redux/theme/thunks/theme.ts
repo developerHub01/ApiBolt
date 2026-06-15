@@ -13,7 +13,7 @@ import type {
   ThemeColorId,
   ThemeInterface,
 } from "@shared/types/theme.types";
-import { isValidColor } from "@/utils/color.utils";
+import { isValidColor } from "@shared/utils/color.utils";
 import Color from "color";
 import { DEFAULT_THEME_PALETTE } from "@/constant/theme.constant";
 import { THEME_PALETTE_PROPERTIES } from "@shared/constant/theme";

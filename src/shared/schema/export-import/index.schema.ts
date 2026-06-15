@@ -8,6 +8,9 @@ import {
   paramContentType,
   requestBodyType,
 } from "@shared/constant/request-response";
+import { THEME_PALETTE_PROPERTIES } from "@shared/constant/theme";
+import { isValidColor } from "@shared/utils/color.utils";
+import { ThemeColorId } from "@shared/types/theme.types";
 
 const EnvironmentFileSchema = z.object({
   variable: z.string(),
@@ -223,3 +226,16 @@ export const ProjectFileSchema = z.object({
     RequestFileAuthSchema,
   ),
 });
+
+/* ========================================
+===============   THEME   =================
+=========================================== */
+export const ThemePaletteFileSchema = z.object(
+  Array.from(THEME_PALETTE_PROPERTIES).reduce(
+    (acc, curr) => {
+      acc[curr] = z.string().refine(isValidColor);
+      return acc;
+    },
+    {} as Record<ThemeColorId, z.ZodString>,
+  ),
+);

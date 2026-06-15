@@ -1,6 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit";
 import type { RootState } from "@/context/redux/store";
-import { isValidColor } from "@/utils/color.utils";
+import { isValidColor } from "@shared/utils/color.utils";
 import { DEFAULT_THEME_PALETTE } from "@/constant/theme.constant";
 
 export const selectIsThemeListCollapsed = createSelector(

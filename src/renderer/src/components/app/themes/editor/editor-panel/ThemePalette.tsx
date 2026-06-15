@@ -15,7 +15,7 @@ const ThemePalette = memo(() => {
         ([key, value], index, arr) => {
           const n = arr.length;
 
-          // Mobile (1 column): show bottom border if not last item
+          // Mobile show bottom border if not last item
           const mobileBottom = index < n - 1;
 
           const cols = 2;

@@ -3,6 +3,7 @@ import { mainWindow } from "@/main/index";
 import path from "node:path";
 import { readFile, writeFile } from "node:fs/promises";
 import { ThemeInterface } from "@shared/types/theme.types";
+import { ThemePaletteFileSchema } from "@shared/schema/export-import/index.schema";
 
 export const saveThemePaletteLocal = async (palette: string) => {
   try {
@@ -49,7 +50,9 @@ export const importThemePaletteInEditor = async () => {
     const filePath = filePaths?.[0];
     if (!filePath) throw new Error("No file selected.");
     const fileStringData = await readFile(filePath, "utf-8");
-    const fileData = JSON.parse(fileStringData) as ThemeInterface["palette"];
+    const fileData = (await ThemePaletteFileSchema.parseAsync(
+      JSON.parse(fileStringData),
+    )) as ThemeInterface["palette"];
 
     return fileData;
   } catch (error) {

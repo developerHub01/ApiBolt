@@ -15,7 +15,7 @@ import { SketchPicker, type ColorResult } from "react-color";
 import { useAppDispatch } from "@/context/redux/hooks";
 import { handleChangeThemePalette } from "@/context/redux/theme/theme-slice";
 import type { ThemeColorId } from "@shared/types/theme.types";
-import { getRgbToHex, isValidColor } from "@/utils/color.utils";
+import { getRgbToHex, isValidColor } from "@shared/utils/color.utils";
 import { cn } from "@/lib/utils";
 
 interface Props extends ComponentProps<"div"> {

@@ -1,21 +1,4 @@
-export type ThemeColorId =
-  | "background"
-  | "foreground"
-  | "popover"
-  | "popover-foreground"
-  | "primary"
-  | "primary-foreground"
-  | "secondary"
-  | "secondary-foreground"
-  | "muted"
-  | "muted-foreground"
-  | "accent"
-  | "accent-foreground"
-  | "destructive"
-  | "border"
-  | "input"
-  | "ring"
-  | "line";
+import { ThemeColorId } from "@shared/types/theme.types";
 
 export const THEME_PALETTE_PROPERTIES = new Set<ThemeColorId>([
   "background",
