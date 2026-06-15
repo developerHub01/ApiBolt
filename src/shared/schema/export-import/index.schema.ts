@@ -16,8 +16,14 @@ const EnvironmentFileSchema = z.object({
   isCheck: z.boolean(),
 });
 
+/* ========================================
+==============   ENVIRONMENT    ================
+=========================================== */
 export const EnvironmentsFileSchema = z.array(EnvironmentFileSchema);
 
+/* ========================================
+==============   REQUEST    ===============
+=========================================== */
 const RequestFileParamSchema = z.object({
   isCheck: z.boolean(),
   key: z.string(),
@@ -57,7 +63,7 @@ const RequestFileHiddenHeaderSchema = z.object({
   accept: z.boolean().optional(),
   acceptEncoding: z.boolean().optional(),
   connection: z.boolean().optional(),
-  requestOrFolderMetaId: z.union([z.string(), z.null()]).optional(),
+  requestOrFolderMetaId: z.union([z.uuid(), z.null()]).optional(),
 });
 
 export const RequestFileSchema = z.object({
@@ -90,16 +96,15 @@ export const RequestFileSchema = z.object({
 /* ========================================
 ==============   FOLDER    ================
 =========================================== */
-
 const RequestListItemSchema = z.object({
   name: z.string(),
   method: z.union([z.enum(methodList), z.null()]),
-  parentId: z.union([z.string(), z.null()]).optional(),
+  parentId: z.union([z.uuid(), z.null()]).optional(),
   isExpended: z.boolean().optional(),
 });
 
 const FolderHeaderListSchema = z.record(
-  z.string(),
+  z.uuid(),
   z.array(
     z.object({
       isCheck: z.boolean().optional(),
@@ -111,120 +116,110 @@ const FolderHeaderListSchema = z.record(
   ),
 );
 
+const FolderProjectParamSchema = z.object({
+  isCheck: z.boolean().optional(),
+  key: z.string(),
+  value: z.string(),
+  keyType: z.enum(paramContentType).optional(),
+  valueType: z.enum(paramContentType).optional(),
+  description: z.string(),
+  requestOrFolderMetaId: z.union([z.uuid(), z.null()]).optional(),
+});
+
 export const FolderFileSchema = z.object({
   type: z.literal("folder"),
-  requestList: z.record(z.string(), RequestListItemSchema),
+  requestList: z.record(z.uuid(), RequestListItemSchema),
   apiUrlList: z.record(
-    z.string(),
+    z.uuid(),
     z.object({
       url: z.string().optional(),
     }),
   ),
-  paramsList: z.record(
-    z.string(),
-    z.array(
-      z.object({
-        isCheck: z.boolean().optional(),
-        key: z.string(),
-        value: z.string(),
-        keyType: z.enum(paramContentType).optional(),
-        valueType: z.enum(paramContentType).optional(),
-        description: z.string(),
-        requestOrFolderMetaId: z.union([z.string(), z.null()]).optional(),
-      }),
-    ),
-  ),
+  paramsList: z.record(z.uuid(), z.array(FolderProjectParamSchema)),
   headersList: FolderHeaderListSchema,
-  hiddenHeadersCheckList: z.record(z.string(), RequestFileHiddenHeaderSchema),
+  hiddenHeadersCheckList: z.record(z.uuid(), RequestFileHiddenHeaderSchema),
   formDataList: FolderHeaderListSchema,
   xWWWFormUrlencodedList: FolderHeaderListSchema,
   binaryDataList: z.record(
-    z.string(),
+    z.uuid(),
     z.object({
       path: z.string(),
     }),
   ),
   rawDataList: z.record(
-    z.string(),
+    z.uuid(),
     z.object({
       type: z.enum(contentType),
       rawData: z.string(),
     }),
   ),
   requestMetaTabList: z.record(
-    z.string(),
+    z.uuid(),
     z.object({
-      requestOrFolderMetaId: z.union([z.string(), z.null()]).optional(),
+      requestOrFolderMetaId: z.union([z.uuid(), z.null()]).optional(),
       activeMetaTab: z.enum(activeTabType),
       requestBodyType: z.enum(requestBodyType),
     }),
   ),
   testScriptList: z.record(
-    z.string(),
+    z.uuid(),
     z.object({
       script: z.string(),
     }),
   ),
-  authorization: z.record(z.string(), RequestFileAuthSchema),
+  authorization: z.record(z.uuid(), RequestFileAuthSchema),
 });
 
+/* ========================================
+==============   PROJECT   ================
+=========================================== */
 export const ProjectFileSchema = z.object({
   type: z.literal("project"),
   project: z.object({
     name: z.string(),
   }),
   environments: z.array(EnvironmentFileSchema),
-  requestList: z.record(z.string(), RequestListItemSchema),
+  requestList: z.record(z.uuid(), RequestListItemSchema),
   apiUrlList: z.record(
-    z.string(),
+    z.uuid(),
     z.object({
       url: z.string().optional(),
     }),
   ),
-  paramsList: z.record(
-    z.string(),
-    z.array(
-      z.object({
-        isCheck: z.boolean().optional(),
-        key: z.string(),
-        value: z.string(),
-        keyType: z.enum(paramContentType).optional(),
-        valueType: z.enum(paramContentType).optional(),
-        description: z.string(),
-        requestOrFolderMetaId: z.union([z.string(), z.null()]).optional(),
-      }),
-    ),
-  ),
+  paramsList: z.record(z.uuid(), z.array(FolderProjectParamSchema)),
   headersList: FolderHeaderListSchema,
-  hiddenHeadersCheckList: z.record(z.string(), RequestFileHiddenHeaderSchema),
+  hiddenHeadersCheckList: z.record(z.uuid(), RequestFileHiddenHeaderSchema),
   formDataList: FolderHeaderListSchema,
   xWWWFormUrlencodedList: FolderHeaderListSchema,
   binaryDataList: z.record(
-    z.string(),
+    z.uuid(),
     z.object({
       path: z.string(),
     }),
   ),
   rawDataList: z.record(
-    z.string(),
+    z.uuid(),
     z.object({
       type: z.enum(contentType),
       rawData: z.string(),
     }),
   ),
   requestMetaTabList: z.record(
-    z.string(),
+    z.uuid(),
     z.object({
-      requestOrFolderMetaId: z.union([z.string(), z.null()]).optional(),
+      requestOrFolderMetaId: z.union([z.uuid(), z.null()]).optional(),
       activeMetaTab: z.enum(activeTabType),
       requestBodyType: z.enum(requestBodyType),
     }),
   ),
   testScriptList: z.record(
-    z.string(),
+    z.uuid(),
     z.object({
       script: z.string(),
     }),
   ),
-  authorization: z.record(z.string(), RequestFileAuthSchema),
+  authorization: z.record(
+    z.union([z.uuid(), z.literal("null")]),
+    RequestFileAuthSchema,
+  ),
 });
