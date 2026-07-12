@@ -87,25 +87,22 @@ export const doFirstStartUpWork: TDoFirstStartUpWork = async ({
 }) => {
   const currentVersion = app.getVersion();
   if (dbVersion !== currentVersion) await setAppVersion(currentVersion);
+  if (await isAppInstallReported()) return;
 
-  (async () => {
-    if (await isAppInstallReported()) return;
-
-    try {
-      const response = await httpRequest<{
-        data: undefined;
-      }>({
-        method: "POST",
-        url: `/app-install/report`,
-        data: {
-          deviceId: MACHINE_ID,
-          version: currentVersion,
-        },
-      });
-
-      if (response.success) await inableAppInstallReported();
-    } catch (error) {
-      console.error(error);
-    }
-  })();
+  try {
+    const response = await httpRequest<{
+      data: undefined;
+    }>({
+      method: "POST",
+      url: `/app-install/report`,
+      data: {
+        deviceId: MACHINE_ID,
+        version: currentVersion,
+      },
+    });
+    
+    if (response.success) await inableAppInstallReported();
+  } catch (error) {
+    console.error(error);
+  }
 };
