@@ -100,7 +100,7 @@ export const doFirstStartUpWork: TDoFirstStartUpWork = async ({
         version: currentVersion,
       },
     });
-    
+
     if (response.success) await inableAppInstallReported();
   } catch (error) {
     console.error(error);
