@@ -7,7 +7,7 @@ import {
   getTestScript,
   updateTestScript,
 } from "@/main/db/testScriptDB";
-import { executeTest } from "@/main/engine/testing/executor";
+import { executeABTestEngine } from "@/main/engine/testing/ab-test-engine/executor";
 import { TEST_SCRIPT_DEFAULT_ERROR_MESSAGE } from "@shared/constant/test-script";
 import { getEnvironmentsMap } from "@/main/db/environmentsDB";
 
@@ -56,7 +56,7 @@ export const testScriptHandler = (): void => {
         const script = (await getTestScript(requestId))?.script ?? "";
         const envs = await getEnvironmentsMap();
 
-        return executeTest({
+        return executeABTestEngine({
           script,
           response: structuredClone(response),
           envs: structuredClone(envs),

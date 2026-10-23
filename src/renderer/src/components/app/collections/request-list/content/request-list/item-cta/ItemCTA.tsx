@@ -40,7 +40,8 @@ type TActionType =
   | "export"
   | "import"
   | "import-request"
-  | "import-folder";
+  | "import-folder"
+  | "copy-id";
 
 const folderAddActionList: Array<TActionType> = [
   "add_folder",
@@ -101,6 +102,12 @@ const folderCTAList: TMenuListType = {
       label: "Import Folder",
     },
   ],
+  info: [
+    {
+      id: "copy-id",
+      label: "Copy Id",
+    },
+  ],
 };
 
 const requestCTAList: TMenuListType = {
@@ -127,6 +134,12 @@ const requestCTAList: TMenuListType = {
       id: "import",
       label: "Import",
       sublabel: "replace current",
+    },
+  ],
+  info: [
+    {
+      id: "copy-id",
+      label: "Copy Id",
     },
   ],
 };
@@ -235,6 +248,22 @@ const ItemCTA = memo(() => {
             type: success ? "success" : "error",
             title: success ? "Import folder success" : "Import folder error",
             description: message,
+          });
+        }
+        case "copy-id": {
+          let isSuccess = false;
+          try {
+            await navigator.clipboard.writeText(id);
+            isSuccess = true;
+          } catch {
+            isSuccess = false;
+          }
+          return toast({
+            type: isSuccess ? "success" : "error",
+            title: isSuccess ? "Id copy success" : "Copy id error",
+            description: isSuccess
+              ? "Id copied successfully"
+              : "Couldn't copy the id, something went wrong.",
           });
         }
       }

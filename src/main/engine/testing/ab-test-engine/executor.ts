@@ -1,10 +1,10 @@
 import { VM } from "vm2";
-import { ABTestEngine } from "@/main/engine/testing/engine";
+import { ABTestEngine } from "@/main/engine/testing/ab-test-engine/engine";
 import { ResponseInterface } from "@shared/types/request-response.types";
 import { RunTestScriptResultPayload } from "@shared/types/test-script.types";
 import { TEnvironmentMap } from "@shared/types/environment.types";
 
-export const executeTest = ({
+export const executeABTestEngine = ({
   script,
   response,
   envs,
