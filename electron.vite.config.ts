@@ -18,6 +18,12 @@ export default defineConfig({
     },
     build: {
       rollupOptions: {
+        input: {
+          index: resolve("src/main/index.ts"),
+          "test-script-worker": resolve(
+            "src/main/engine/testing/test-script-worker.ts",
+          ),
+        },
         external: [
           "@libsql/client",
           "@libsql/win32-x64-msvc",
