@@ -1,8 +1,10 @@
-import { VM } from "vm2";
-import { ABTestEngine } from "@/main/engine/testing/engine";
-import { ResponseInterface } from "@shared/types/request-response.types";
-import { RunTestScriptResultPayload } from "@shared/types/test-script.types";
-import { TEnvironmentMap } from "@shared/types/environment.types";
+import { utilityProcess } from "electron";
+import { resolve } from "node:path";
+import type { ResponseInterface } from "@shared/types/request-response.types";
+import type { RunTestScriptResultPayload } from "@shared/types/test-script.types";
+import type { TEnvironmentMap } from "@shared/types/environment.types";
+
+const EXECUTION_TIMEOUT_MS = 1500;
 
 export const executeTest = ({
   script,
@@ -12,51 +14,64 @@ export const executeTest = ({
   script: string;
   response: ResponseInterface;
   envs: TEnvironmentMap;
-}): RunTestScriptResultPayload => {
+}): Promise<RunTestScriptResultPayload> => {
   if (!script)
-    return {
+    return Promise.resolve({
       success: true,
       result: [],
+    });
+
+  return new Promise((resolveResult) => {
+    let settled = false;
+    let timeout: NodeJS.Timeout | undefined;
+
+    const finish = (result: RunTestScriptResultPayload) => {
+      if (settled) return;
+      settled = true;
+      if (timeout) clearTimeout(timeout);
+      child.kill();
+      resolveResult(result);
     };
 
-  const ab = new ABTestEngine(response, envs);
+    const child = utilityProcess.fork(
+      resolve(__dirname, "test-script-worker.js"),
+      [],
+      {
+        serviceName: "API Bolt test script",
+        stdio: "ignore",
+      },
+    );
 
-  const serveableAB = Object.freeze({
-    addDemoResults: ab.addDemoResults.bind(ab),
-    status: ab.status.bind(ab),
-    body: ab.body.bind(ab),
-    headers: ab.headers.bind(ab),
-    cookies: ab.cookies.bind(ab),
-    expect: ab.expect.bind(ab),
-    print: ab.print.bind(ab),
-    getSummary: ab.getSummary.bind(ab),
-    summary: ab.summary.bind(ab),
-    group: ab.group.bind(ab),
-    code: ab.code.bind(ab),
-    response: Object.freeze(structuredClone(ab.getResponse())),
-    env: Object.freeze(structuredClone(ab.getEnvs())),
+    child.on("message", (event) => {
+      finish(event.data as RunTestScriptResultPayload);
+    });
+
+    child.on("exit", (code) => {
+      if (settled) return;
+      finish({
+        success: false,
+        message: `Test script worker exited before returning a result (code: ${code ?? "unknown"}).`,
+      });
+    });
+
+    child.on("error", (error) => {
+      finish({
+        success: false,
+        message: error.message || "Failed to start the test script worker.",
+      });
+    });
+
+    timeout = setTimeout(() => {
+      finish({
+        success: false,
+        message: `Test script exceeded the ${EXECUTION_TIMEOUT_MS}ms execution limit.`,
+      });
+    }, EXECUTION_TIMEOUT_MS);
+
+    child.postMessage({
+      script,
+      response: structuredClone(response),
+      envs: structuredClone(envs),
+    });
   });
-
-  const vm = new VM({
-    timeout: 1000,
-    sandbox: {
-      ab: serveableAB,
-    },
-  });
-
-  try {
-    vm.run(`"use strict";\n${script}`);
-    const result = ab.getResults();
-    return {
-      success: true,
-      result,
-    };
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Unknown error";
-    console.error(message);
-    return {
-      success: false,
-      message,
-    };
-  }
 };
